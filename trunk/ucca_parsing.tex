@@ -10,7 +10,6 @@
 \usepackage{latexsym}
 \usepackage{pgfplotstable}
 \usepackage{filecontents}
-\usepackage{biblatex}
 \usepackage[]{algorithm2e}
 \usepackage{ifpdf}
 \ifpdf
@@ -18,7 +17,7 @@
 \else
   \usepackage[hypertex]{hyperref}
 \fi
-\addbibresource{ucca.bib}
+\bibliographystyle{acl}
 
 \title{Transition-based Parsing of Universal Conceptual Cognitive Annotation}
 
@@ -68,11 +67,11 @@ Although the labels in a UCCA graph are on the edges, it is similar to phrase st
 
 Methods for constituent parsing can also be useful for UCCA parsing, but the common chart-based approach is also $\mathcal{O}(n^3)$ at best. However, there are also transition-based constituent parsers~\cite{zhu2013fast} with linear run-time complexity.
 
-As standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontinuous constituents} (the equivalent of non-projective dependency trees).~\textcite{maier2015discontinuous}.
+As standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontinuous constituents} (the equivalent of non-projective dependency trees)~\cite{maier2015discontinuous}.
 
 \subsection{AMR parsing}
 
-UCCA is similar to AMR.
+UCCA is similar to AMR~\cite{flanigan2014discriminative,artzi2015broad}.
 
 \section{Baselines}
 
@@ -197,7 +196,7 @@ Future work:
 \item find the best conversion rules automatically
 \end{itemize}
 
-\printbibliography
+\bibliography{ucca}
 
 \begin{filecontents}{ucca.bib}
 @InProceedings{nivre2004incrementality,
@@ -225,7 +224,7 @@ Future work:
 }
 @InProceedings{abend2013universal,
   author    = {Abend, Omri  and  Rappoport, Ari},
-  title     = {Universal Conceptual Cognitive Annotation (UCCA)},
+  title     = {{U}niversal {C}onceptual {C}ognitive {A}nnotation ({UCCA})},
   booktitle = {Proceedings of the 51st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   month     = {August},
   year      = {2013},
@@ -246,7 +245,7 @@ Future work:
 }
 @InProceedings{flanigan2014discriminative,
   author    = {Flanigan, Jeffrey  and  Thomson, Sam  and  Carbonell, Jaime  and  Dyer, Chris  and  Smith, Noah A.},
-  title     = {A Discriminative Graph-Based Parser for the Abstract Meaning Representation},
+  title     = {A Discriminative Graph-Based Parser for the {A}bstract {M}eaning {R}epresentation},
   booktitle = {Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   month     = {June},
   year      = {2014},
@@ -254,6 +253,17 @@ Future work:
   publisher = {Association for Computational Linguistics},
   pages     = {1426--1436},
   url       = {http://aclweb.org/anthology/P14-1134}
+}
+@InProceedings{artzi2015broad,
+  author    = {Artzi, Yoav  and  Lee, Kenton  and  Zettlemoyer, Luke},
+  title     = {Broad-coverage {CCG} Semantic Parsing with {AMR}},
+  booktitle = {Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing},
+  month     = {September},
+  year      = {2015},
+  address   = {Lisbon, Portugal},
+  publisher = {Association for Computational Linguistics},
+  pages     = {1699--1710},
+  url       = {http://aclweb.org/anthology/D15-1198}
 }
 @InProceedings{maier2015discontinuous,
   author    = {Maier, Wolfgang},
