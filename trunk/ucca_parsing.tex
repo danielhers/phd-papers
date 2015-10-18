@@ -8,7 +8,6 @@
 \usepackage{times}
 \usepackage{url}
 \usepackage{latexsym}
-\usepackage{natbib}
 \usepackage{pgfplotstable}
 \usepackage{filecontents}
 \usepackage{biblatex}
@@ -19,7 +18,6 @@
 \else
   \usepackage[hypertex]{hyperref}
 \fi
-\bibliographystyle{acl}
 \addbibresource{ucca.bib}
 
 \title{Transition-based Parsing of Universal Conceptual Cognitive Annotation}
@@ -44,7 +42,7 @@
 
 \section{Introduction}
 
-Universal Conceptual Cognitive Annotation (UCCA) is a recently introduced semantic annotation scheme. It takes a semantic approach to grammatical representation, describing relations between words and phrases in natural language text. The foundational layer can potentially be extended by any number of additional layers to provide refinements to the existing scheme, but it already covers many of the basic semantic relations in language. The annotation is represented as a directed acyclic graph (DAG), where edges denote semantic dependencies between abstract units. UCCA can be easily annotated manually without expert knowledge in linguistics, making it attractive as a resource for semantic tasks---an alternative to syntactic annotation, which is costly. A corpus containing 160K words from the English Wikipedia has been manually annotated~\citep{abend2013universal}.
+Universal Conceptual Cognitive Annotation (UCCA) is a recently introduced semantic annotation scheme. It takes a semantic approach to grammatical representation, describing relations between words and phrases in natural language text. The foundational layer can potentially be extended by any number of additional layers to provide refinements to the existing scheme, but it already covers many of the basic semantic relations in language. The annotation is represented as a directed acyclic graph (DAG), where edges denote semantic dependencies between abstract units. UCCA can be easily annotated manually without expert knowledge in linguistics, making it attractive as a resource for semantic tasks---an alternative to syntactic annotation, which is costly. A corpus containing 160K words from the English Wikipedia has been manually annotated~\cite{abend2013universal}.
 
 This work is the first attempt at automatic UCCA parsing.
 
@@ -60,17 +58,17 @@ Dependency parsers can be divided to \textit{graph-based} and \textit{transition
 
 Graph-based parsers attempt to find a maximal sub-graph of the full graph on the nodes according to some objective function, and tend to scale as $\mathcal{O}(n^3)$ where $n$ is the sentence length. A UCCA parser should parse a whole passage at once, since there may be sentence-crossing edges. This makes it impractical to use graph-based parsers for UCCA parsing.
 
-Transition-based parsers treat parsing as a series of \textit{transitions}, each evoked by an \textit{action} typically chosen by a local classifier. Actions may manipulate data structures or add edges to the result set, which eventually determines the graph produced by the parser. The number of transitions in the simple form of transition-based dependency parsing is always $2n$~\citep{nivre2004incrementality}.
+Transition-based parsers treat parsing as a series of \textit{transitions}, each evoked by an \textit{action} typically chosen by a local classifier. Actions may manipulate data structures or add edges to the result set, which eventually determines the graph produced by the parser. The number of transitions in the simple form of transition-based dependency parsing is always $2n$~\cite{nivre2004incrementality}.
 
-Standard transition-based dependency parsers produce \textit{projective} graphs, but dependency graphs may in general be \textit{non-projective}. Intuitively, this means there are edges crossing each other in a planar arrangement of the graph. In English, only a very small part of sentences exhibit a non-projective dependency graph, so many parsers choose to ignore the problem, suffering a small loss in performance. However, some parsers are capable of producing non-projective graphs, with a number of transitions that is $\mathcal{O}(n^2)$ in the worst case, but $\mathcal{O}(n)$ on average~\citep{nivre2009non}.
+Standard transition-based dependency parsers produce \textit{projective} graphs, but dependency graphs may in general be \textit{non-projective}. Intuitively, this means there are edges crossing each other in a planar arrangement of the graph. In English, only a very small part of sentences exhibit a non-projective dependency graph, so many parsers choose to ignore the problem, suffering a small loss in performance. However, some parsers are capable of producing non-projective graphs, with a number of transitions that is $\mathcal{O}(n^2)$ in the worst case, but $\mathcal{O}(n)$ on average~\cite{nivre2009non}.
 
 \subsection{Constituent parsing}
 
 Although the labels in a UCCA graph are on the edges, it is similar to phrase structure grammar: non-terminal units are internal nodes in the graph, rather than all the edges being between words in the original sentence. In a constituency tree, constituents form a hierarchy above the words of the sentence.
 
-Methods for constituent parsing can also be useful for UCCA parsing, but the common chart-based approach is also $\mathcal{O}(n^3)$ at best. However, there are also transition-based constituent parsers~\citep{zhu2013fast} with linear run-time complexity.
+Methods for constituent parsing can also be useful for UCCA parsing, but the common chart-based approach is also $\mathcal{O}(n^3)$ at best. However, there are also transition-based constituent parsers~\cite{zhu2013fast} with linear run-time complexity.
 
-As standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontinuous constituents} (the equivalent of non-projective dependency trees).~\citet{maier2015discontinuous}.
+As standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontinuous constituents} (the equivalent of non-projective dependency trees).~\textcite{maier2015discontinuous}.
 
 \subsection{AMR parsing}
 
@@ -147,10 +145,10 @@ In order to provide a baseline for UCCA parsing, we trained two state-of-the-art
 
 \section{Direct Parsing}
 
-Many approaches could be used to create a parser for UCCA, such as the graph-based approach employed in JAMR~\citep{flanigan2014discriminative}.
+Many approaches could be used to create a parser for UCCA, such as the graph-based approach employed in JAMR~\cite{flanigan2014discriminative}.
 However, UCCA is annotated over whole passages. A passage can contains hundreds and even thousands of tokens, so it is not feasibly to keep a dense graph over all of them in memory. Therefore, we chose to adopt the transition-based approach for parsing UCCA.
 
-A simple dependency parser uses the arc-standard transition system~\citep{nivre2004incrementality}:
+A simple dependency parser uses the arc-standard transition system~\cite{nivre2004incrementality}:
 
 \texttt{Left-Reduce, Right-Reduce, Shift}
 
@@ -160,9 +158,9 @@ or the arc-eager transition system:
 
 We chose the arg-eager system, because it allows adding parents to nodes before all their children have been attached to them. This is crucial to reduce the number of actions required for parsing a passage.
 
-The transition systems above only work for projective graphs. Since the UCCA graph is in general non-projective, we added a \texttt{Swap} operation~\citep{nivre2009non}.
+The transition systems above only work for projective graphs. Since the UCCA graph is in general non-projective, we added a \texttt{Swap} operation~\cite{nivre2009non}.
 
-However, this is not sufficient since in contrast to normal dependency parsing, in UCCA there are internal nodes (non-terminal units). we could reduce them to their head terminals if there was a one-to-one correspondence, but this is not possible since there are also nodes with a single child. This is similar to constituency parsing, so we added the \texttt{Node} operation (adding a unary parent) and the \texttt{Finish} operation~\citep{zhu2013fast}.
+However, this is not sufficient since in contrast to normal dependency parsing, in UCCA there are internal nodes (non-terminal units). we could reduce them to their head terminals if there was a one-to-one correspondence, but this is not possible since there are also nodes with a single child. This is similar to constituency parsing, so we added the \texttt{Node} operation (adding a unary parent) and the \texttt{Finish} operation~\cite{zhu2013fast}.
 
 Unlike constituency parsing, in UCCA there may be long-distance edges, called remote edges. We added actions to create remote edges, namely \texttt{Left-Remote} and \texttt{Right-Remote}.
 
@@ -198,6 +196,8 @@ Future work:
 \item \texttt{smatch} for scoring
 \item find the best conversion rules automatically
 \end{itemize}
+
+\printbibliography
 
 \begin{filecontents}{ucca.bib}
 @InProceedings{nivre2004incrementality,
