@@ -1,0 +1,77 @@
+Introduction
+============
+Universal Conceptual Cognitive Annotation (UCCA) [1,7] is a semantic grammatical scheme that represents the meaning of natural language directly. It is portable across domains and languages, extensible, intuitive and supported by typological theories.
+An annotated corpus containing 160K tokens from English Wikipedia is available.
+
+Related Work
+============
+In semantic role labeling (SRL), predicates and their arguments are annotated, but only a subset of predicates, and without internal structure.
+AMR [2] includes entities, events, properties and states. It is heavily English-centric and does not incorporate the text itself into its structure.
+Syntactic schemes vary, but generally model the surface structure explicitly. UCCA represents meaning directly, abstracting syntax away.
+== Dependency Graphs with Multiple Parents ==
+Previous work [6,8] developed transition-based
+dependency parsers capable of producing
+DAGs (directed acyclic graphs), but they do
+not allow discontinuities or non-terminal units.
+Discontinuous Constituency Trees
+Transition-based parsers have also been extended [4]
+to handle discontinuous constituents, which are
+non-terminal units. However, multiple parents
+are not allowed in this approach.
+
+Structural Properties
+=====================
+Current approaches to linguistic representation include semantic and syntactic schemes. We refer to those that consist of graphs where the text is part of the annotation as grammatical schemes.
+In general, grammatical schemes may have the following properties:
+1. Multiple parents. A unit may be an argument or relation in more than one parent.
+2. Discontinuity. The tokens a unit spans may contain gaps, or edges may cross.
+3. Non-terminal units. There are abstract units of meaning, covering multiple tokens.
+UCCA is the first scheme to combine all of these desirable properties, which are necessary for understanding natural language and its cognitive processing.
+
+Corpus Statistics
+=================
+In the UCCA corpus, 74% of all nodes are non-terminal nodes.
+Out of all non-terminal nodes, 8% have multiple parents and 0.9% span a discontinuous set of tokens.
+
+Parser
+======
+We present the first parser for UCCA: a novel transition-based system. Transition-based (also called shift-reduce) parsers build the graph structure incrementally, maintaining the following data structures:
+Q:	Queue of nodes to process, initialized to the list of tokens.
+S:	Stack of nodes being processed, initially containing just the root.
+G:	Graph of already constructed nodes and edges.
+
+The parser advances incrementally by predicting and applying actions:
+* Shift moves one node from the queue to the top of the stack.
+* Reduce discards the node at the top of the stack.
+* Left/Right-Edge[X] create an X-edge between the top two stack elements.
+* Left/Right-Remote[X] are the same, but they create remote edges.
+* Node[X] creates a parent for the top of the stack, with an X-edge.
+* Implicit[X] creates an implicit child for the top of the stack, with an X-edge.
+* Swap places the second stack item back on the queue.
+* Finish ends the parse and returns the constructed graph.
+Actions are learned from the corpus using a structured perceptron.
+
+Results
+=======
+State-of-the-art dependency parsers pose a strong baseline. We converted UCCA to dependency annotation for running them, by removing remote and linkage edges (leaving at most one parent for each node), and omitting non-terminal nodes (yielding a graph on the tokens only).
+Performance is measured by F1 score on the graph’s regular edges.
+
+	Parser			labeled F1	unlabeled F1
+	MaltParser [5]	0.589		0.782
+	LSTM Parser [3]	0.695		0.845
+
+These baselines are incapable of producing the removed remote and linkage edges, and our parser should be able to surpass them.
+
+References
+==========
+[1] Abend, Omri, and Ari Rappoport. "Universal Conceptual Cognitive Annotation (UCCA)." ACL 2013.
+[2] Banarescu et al. “Abstract Meaning Representation for Sembanking”. ACL LAW & ID 2013.
+[3] Dyer, Chris, Miguel Ballesteros, Wang Ling, Austin Matthews and Noah A. Smith. “Transition-based Dependeny Parsing with Stack Long Short-Term Memory.” ACL 2015.
+[4] Maier, Wolfgang. "Discontinuous Incremental Shift-Reduce Parsing." ACL-IJCNLP 2015.
+[5] Nivre, Joakim, Johan Hall, and Jens Nilsson. “MaltParser: A Data-Driven Parser-Generator for Dependency Parsing.” LREC 2006.
+[6] Sagae, Kenji, and Jun'ichi Tsujii. "Shift-reduce dependency DAG parsing." COLING 2008.
+[7] Sulem, Elior, Omri Abend and Ari Rappoport. “Conceptual Annotations Preserve Structure Across Translations: A French-English Case Study.” ACL S2MT 2015.
+[8] Alper Tokgöz, Gülşen Eryiğit. “Transition-based Dependency DAG Parsing Using Dynamic Oracles.” ACL-IJCNLP SRW 2015.
+
+UCCA resource page: www.cs.huji.ac.il/~oabend/ucca.html
+UCCA parser source code: github.com/danielhers/ucca

@@ -1,0 +1,397 @@
+%
+% File ucca_parsing.tex
+%
+
+\documentclass[11pt]{article}
+
+\usepackage{acl2015}
+\usepackage{times}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{pgfplotstable}
+\usepackage{filecontents}
+\usepackage[]{algorithm2e}
+\usepackage{hyperref}
+\bibliographystyle{acl}
+
+\title{General Transition-Based Broad-Coverage Semantic Parsing}
+
+\author{Daniel Hershcovich \\
+  Institute of Computer Science \\
+  Hebrew University of Jerusalem \\
+  {\tt danielh@cs.huji.ac.il} \\\And
+  Second Author \\
+  Affiliation / Address line 1 \\
+  Affiliation / Address line 2 \\
+  Affiliation / Address line 3 \\
+  {\tt email@domain} \\}
+
+\date{}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  Universal Conceptual Cognitive Annotation (UCCA) is a semantic grammatical scheme that assigns a complete structure to natural language text. We present the first automatic UCCA parser, a transition-based parser using a novel transition system. We compare the results to baselines obtained by converting UCCA to CoNNL-X, and training syntactic parsers on the converted dependency trees.
+\end{abstract}
+
+\section{Introduction}
+
+Universal Conceptual Cognitive Annotation (UCCA) is a recently introduced semantic annotation scheme. It takes a semantic approach to grammatical representation, describing relations between words and phrases in natural language text. The foundational layer can potentially be extended by any number of additional layers to provide refinements to the existing scheme, but it already covers many of the basic semantic relations in language. The annotation is represented as a directed acyclic graph (DAG), where edges denote semantic dependencies between abstract units. UCCA can be easily annotated manually without expert knowledge in linguistics, making it attractive as a resource for semantic tasks---an alternative to syntactic annotation, which is costly. A corpus containing 160K words from the English Wikipedia has been manually annotated~\cite{abend2013universal}.
+
+UCCA exhibits three properties that are generally absent in syntactic schemes:
+\begin{description}
+\item[Multiple parents.] In general, the UCCA graph is a DAG and not a tree.
+\item[Discontinuity.] The yield of a node may have gaps.
+\item[Non-terminal units.] There are units representing abstract entities or events, and not all nodes correspond to tokens.
+\end{description}
+
+This work is the first attempt at automatic UCCA parsing.
+
+\section{Related work}
+
+UCCA parsing is a novel task. Nevertheless, it resembles other parsing tasks in natural language processing. The techniques used in this work are inspired by some of them.
+
+\subsection{Non-projective dependency parsing}
+
+Syntactic dependency trees can in general be non-projective. Graph-based parsers are able to produce such trees, but many transition-based parsers assume projectivity to improve the performance and efficiency of the parser: the number of transitions in such parsers is always $2n$ where $n$ is the number of tokens \cite{nivre2004incrementality}. However, non-projective dependency trees can also be parsed by transition-based parsers in linear time \cite{nivre2009non}.
+
+In a UCCA graph, labels appear on the edges, whereas nodes are unlabeled. If all the nodes are known, parsing is the same as inducing a graph on them with the correct edge labels. In dependency parsing, a graph is induced on the set of nodes consisting of the tokens in the sentence (and the \textsc{ROOT} symbol). Therefore, it seems that techniques from dependency parsing can be used for UCCA parsing as well.
+
+\subsection{Discontinuous constituent parsing}
+
+Although the labels in a UCCA graph are on the edges, it is similar to phrase structure grammar: non-terminal units are internal nodes in the graph, rather than all the edges being between words in the original sentence. In a constituency tree, constituents form a hierarchy above the words of the sentence.
+
+Methods for constituent parsing can also be useful for UCCA parsing, but the common chart-based approach is also $\mathcal{O}(n^3)$ at best. However, there are also transition-based constituent parsers~\cite{zhu2013fast} with linear run-time complexity.
+
+Like standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontinuous constituents} (the equivalent of non-projective dependency trees). However, Maier~\shortcite{maier2015discontinuous} introduced a transition-based constituent parsing with a \textsc{swap} transition to allow discontinuous parsing.\footnote{https://github.com/wmaier/uparse}
+
+\subsection{AMR parsing}
+
+UCCA is similar to AMR~\cite{flanigan2014discriminative,artzi2015broad}.
+
+\section{Structural characterization}
+
+\begin{table}[ht]
+\begin{tabular}{lccc}
+Node type & count & \% multiple parents & \% discontinuous \\
+\hline
+All &  & \\
+Foundational &  & \\
+Non-terminals &  & \\
+Terminals &  &
+\end{tabular}
+\caption{Quantitative characterization of structure in the UCCA corpus}
+\end{table}
+
+\section{Baselines}
+
+To our knowledge, there is no existing model to learn the general structure of UCCA graphs. Instead, as a baseline, we use models originally designed for syntactic dependency parsing, and train them on converted UCCA graphs. Since the converted annotation is not as rich as the UCCA scheme, some information is lost and has to be recovered as part of the conversion, so the accuracy of this method is bounded by the conversion accuracy.
+
+\subsection{Conversion to dependency tree}
+
+Since existing dependency parsers rely on specific annotation formats that are different from the UCCA graph annotation, we had to perform a conversion. We chose the CoNLL-X format, which is common among dependency parsers.
+The top two rows in Table~\ref{table:convert} show the accuracy of conversion from UCCA to CoNLL-X and then back to UCCA.
+
+\subsubsection{Conversion from UCCA to CoNLL-X}
+
+The conversion relies on several concepts: since UCCA has non-terminal units, whereas in CoNLL-X all edges are between tokens, each non-terminal unit $u$ in UCCA requires a representative terminal unit $t$ to be selected for it. $t$ is referred to as the \textit{head terminal} of $u$, and denoted $head(u)$. The edges on the path from $u$ to $t$ are referred to as \textit{head edges}, and the target of a head edge is a \textit{head child}. The head terminal of a unit is selected by selecting a head child iteratively. The head child tag of $u$ is the first among a pre-determined list of tags of which $u$ has outgoing edges, and the head child is any child of that type. The list of tags is: \textsc{C,H,P,S,A,D,E,R,F,L,LR,LA,G,T,U}.
+
+Since UCCA forms a DAG and not necessarily a tree, $t$ can be the head terminal of more than one unit. A \textit{top headed unit} of $t$ is any non-terminal unit $u$ such that $t$ is a head terminal of $u$, but not of any of $u$'s parents (if there are any). Denote by $top(t)$ an arbitrarily selected top headed unit of $t$.
+
+The conversion is shown in Algorithm~\ref{alg:ucca2conll}.
+
+\begin{algorithm}
+ \KwData{UCCA graph}
+ \KwResult{CoNLL-X dependency tree}
+ $nodes \leftarrow []$\;
+ \ForEach{terminal unit t}{
+  $u \leftarrow top(t)$\;
+  $p \leftarrow parent(u)$\;
+  $t^\prime \leftarrow head(p)$\;
+  $e \leftarrow (p, u)$\;
+  add $t$ to $nodes$ with $t^\prime$ as parent, and $tag(e)$ as relation\;
+ }
+ \caption{UCCA to CoNLL-X Conversion}
+ \label{alg:ucca2conll}
+\end{algorithm}
+
+\subsubsection{Conversion from CoNLL-X to UCCA}
+
+A UCCA graph is created from a CoNLL-X dependency annotation using the following procedure: first, the dependency nodes (the tokens) are sorted topologically.
+
+When a new edge is added, its tag is either the relation associated with the corresponding dependency arc, or, if no such arc exists, determined heuristically:
+\begin{itemize}
+\item If the child is a punctuation terminal, the tag is $U$;
+\item otherwise, if the parent has a child with an $H$ tag, the tag is also $H$;
+\item otherwise, if the parent has a child with an $A$ tag, the tag is $P$;
+\item otherwise, the tag is $C$.
+\end{itemize}
+
+Algorithm~\ref{alg:conll2ucca} shows the conversion.
+
+\begin{algorithm}
+ \KwData{CoNLL-X dependency tree}
+ \KwResult{UCCA graph}
+ add root unit $r$\;
+ \ForEach{node t}{
+  add terminal unit $t$\;
+  add non-terminal unit $u$\;
+  add edge $(u,t)$\;
+  \eIf{$rel(t) = $ROOT}{
+   add edge $(r,u)$
+  }{
+   $p \leftarrow preterminal(parent(t))$\;
+   add edge $(p,u)$\;
+  }
+ }
+ \caption{CoNLL-X to UCCA Conversion}
+ \label{alg:conll2ucca}
+\end{algorithm}
+
+\subsection{Parsing using dependency parsers}
+
+In order to provide a baseline for UCCA parsing, we trained two state-of-the-art dependency parsers on a dataset resulting from conversion of the UCCA corpus to CoNLL-X format. Then we ran the resulting parser models, converted the results to the UCCA format, and evaluated using the labeled F1, unlabeled F1 and weakly labeled F1 measures. The results are shown in Table~\ref{table:convert}.
+
+\subsection{Conversion to dependency DAG}
+
+TODO: convert to (projective) dependency DAG
+
+\subsection{Parsing using DAG parsers}
+
+TODO: use Tokg\"oz and Eryi\u{g}it's parser to parse converted DAGs \cite{tokgoz2015transition}
+
+\subsection{Conversion to constituency tree}
+
+TODO: convert to (discontinuous) constituency trees
+
+\subsection{Parsing using constituency parsers}
+
+TODO: use Maier's parsers to parse converted trees
+
+\section{Transition-based UCCA parsing}
+
+Many approaches could be used to create a parser for UCCA, such as the graph-based approach employed in JAMR~\cite{flanigan2014discriminative}.
+However, UCCA is annotated over whole passages. A passage can contains hundreds and even thousands of tokens, so it is not feasible to keep a dense graph over all of them in memory. Therefore, we chose to adopt the transition-based approach for parsing UCCA.
+
+Our parser architecture follows the transition-based constituency parser in Maier~\shortcite{maier2015discontinuous}, with some variations:
+
+\begin{itemize}
+	\item Parsing starts with the root node on the stack, as is the practice in dependency parsing.
+	\item \textsc{Unary-X} is renamed \textsc{Node$_X$}. It creates a new node on the buffer head as a parent of the first element on the stack (with edge tag $X$), but it does not reduce the first element on the stack; since nodes in UCCA may have multiple parents, they should only be reduced after all their edges have been created.
+	\item \textsc{Binary-X-L} and \textsc{Binary-X-R} are renamed \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} respectively. They create a new edge between the first two elements on the stack, but again, they do not reduce any of them, to allow for multiple parents.
+	\item Unlike normal constituency parsing, in UCCA there may be long-distance edges, called remote edges. We added actions to create these edges, namely \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$}. They are identical to \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$}, except that the edges they create are marked as remote.
+	\item In UCCA, some non-terminal units are implicit units, meaning they do not correspond to any terminals. We added the \textsc{Implicit$_X$} action: it is just like the \textsc{Node$_X$} action, except that the node created by it becomes the child of the stack top rather than its parent, and is marked implicit. We add the constraint that implicit nodes cannot have any children.
+\end{itemize}
+
+The action set is:
+
+\textsc{Node$_X$, Implicit$_X$, Left-Edge$_X$, Right-Edge$_X$, Left-Remote$_X$, Right-Remote$_X$, Reduce, Shift, Swap, Finish}
+
+\subsection{Constraints}
+Each action has a set of constraint that must be met for that action to be possible. If any of the constraint is not met, the parser may not take that action. The constraints are:
+\begin{description}
+	\item[\textsc{Finish}] the root node has at least one child.
+	\item[\textsc{Shift}] buffer is not empty.
+	\item[\textsc{Node$_X$}] stack is not empty, $s_0$ is not the root node, and $X$ is T iff $s_0$ is a terminal.
+	\item[\textsc{Implicit$_X$}] stack is not empty, and $s_0$ is not a terminal and not an implicit node.
+	\item[\textsc{Reduce$_X$}] stack is not empty, and if $s_0$ is the root node, it has at least one child.
+	\item[\textsc{Left-Edge$_X$}] stack has at least two elements, $s_0$ is not a terminal, $s_1$ is not the root node, $s_0$ is not the root node if $s_1$ is a terminal, the edge does not already exist, and $X$ is T iff $s_1$ is a terminal.
+	\item[\textsc{Right-Edge$_X$}] stack has at least two elements, $s_1$ is not a terminal, $s_0$ is not the root node, $s_1$ is not the root node if $s_0$ is a terminal, the edge does not already exist, and $X$ is T iff $s_0$ is a terminal.
+	\item[\textsc{Left-Remote$_X$}] stack has at least two elements, $s_0$ is not a terminal, $s_1$ is not the root node, $s_0$ is not the root node if $s_1$ is a terminal, the edge does not already exist, $X$ is T iff $s_1$ is a terminal, $s_0$ has at least one child, and $s_1$ has at least one parent.
+	\item[\textsc{Right-Remote$_X$}] stack has at least two elements, $s_1$ is not a terminal, $s_0$ is not the root node, $s_1$ is not the root node if $s_0$ is a terminal, the edge does not already exist, $X$ is T iff $s_0$ is a terminal, $s_1$ has at least one child, and $s_0$ has at least one parent.
+	\item[\textsc{Swap}] stack has at least two elements, .
+\end{description}
+
+\subsection{Feature representation}
+\label{subsec:features}
+
+Fig.~\ref{fig:features} shows the features templates adapted from Maier~\shortcite{maier2015discontinuous}. $s_i$ and $b_i$ stand for the $i$th stack and buffer items respectively, $w$ stands for the head word (see~\ref{subsec:head_rules}), $t$ for its POS tag, $e$ for the head incoming edge label. Note that $e$ replaces $c$ (consituent label) from Maier~\shortcite{maier2015discontinuous}, since in UCCA the labels are on the edges rather than the units; and a unit may have more than one incoming edge. $l$ and $r$ ($ll$ and $rr$) represent the leftmost and rightmost children (grand-children) of the element; $u$ handles the unary case.
+Concerning the separator features, $p$ is a unique separator feature between the head words of $s_0$ and $s_1$; $q$ is the count of any separator features between them.
+$x$ denotes the gap type of a subgraph. There are three possible values, either "none" (fully continuous), "pass" (there is a gap at the root, i.e., this gap must be filled later further up in the graph), or "gap" (the root of this graph fills a gap, i.e., its children have gaps, but the root does not). Finally, $y$ is the sum of all gap lengths.
+
+Fig.~\ref{fig:new_features} shows the features templates introduced in this work. $P$ stands for the number of parents a node currently has, and $C$ for the number of children.
+
+% FEATURES
+\begin{figure}[t]
+\begin{description}
+	\item[unigrams] \hfill \\
+	$s_0te, s_0we, s_1te, s_1we, s_2te, s_2we, s_3te, s_3we,$ \\
+	$b_0wt, b_1wt, b_2wt, b_3wt,$ \\
+	$s_0lwe, s_0rwe, s_0uwe, s_1lwe, s_1rwe, s_1uwe$
+	\item[bigrams] \hfill \\
+	$s_0ws_1w, s_0ws_1e, s_0es_1w, s_0es_1e, s_0wb_0w, s_0wb_0t,$ \\
+	$s_0eb_0w, s_0eb_0t, s_1wb_0w, s_1wb_0t, s_1eb_0w, s_1eb_0t,$ \\
+	$b_0wb_1w, b_0wb_1t, b_0tb_1w, b_0tb_1t$
+	\item[trigrams] \hfill \\
+	$s_0es_1es_2w, s_0es_1es_2e, s_0es_1eb_0w, s_0es_1eb_0t,$ \\
+	$s_0es_1wb_0w, s_0es_1wb_0t, s_0ws_1es_2e, s_0ws_1eb_0t$
+	\item[extended] \hfill \\
+	$s_0llwe, s_0lrwe, s_0luwe, s_0rlwe, s_0rrwe,$ \\
+	$s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
+	$s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$
+	\item[separator] \hfill \\
+	$s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
+	$s_1wp, s_1wep, s_1wq, s_1weq$
+	\item[\textsc{Disco} unigrams] \hfill \\
+	$s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
+	$s_0xte, s_1xte, s_2xte, s_3xte,$ \\
+	$s_0xy, s_1xy, s_2xy, s_3xy$
+	\item[\textsc{Disco} bigrams] \hfill \\
+	$s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
+	$s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
+	$s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$
+\end{description}
+\caption{Feature Templates}
+\medskip
+\small
+Feature from \cite{maier2015discontinuous}.
+$s_i$, $b_i$: stack and buffer items.
+$w$: head word. $t$: POS tag.
+$e$: main incoming edge label.
+$l$, $r$ ($ll$, $rr$): leftmost and rightmost children (grand-children).
+$u$ ($uu$): unary child (grandchild).
+$p$: unique separator between $s_0$ and $s_1$.
+$q$: separator count.
+$x$: gap type.
+$y$: sum of gap lengths.
+\label{fig:features}
+\end{figure}
+
+% NEW FEATURES
+\begin{figure}[t]
+\begin{description}
+	\item[degree] \hfill \\
+	$s_0P, s_0C$
+\end{description}
+\caption{New Feature Templates}
+\medskip
+\small
+Feature introduced in this work.
+\label{fig:new_features}
+\end{figure}
+
+\subsection{Head rules}
+\label{subsec:head_rules}
+
+The following rules were used to determine the head of a unit.
+
+\section{Experiments}
+
+\begin{table*}
+\pgfplotstabletypeset[col sep=comma,
+     columns={Method,LAS,LAS (sentences),UAS,UAS (sentences),labeled F1,labeled F1 (sentences),unlabeled F1,unlabeled F1 (sentences),weak labeled F1,weak labeled F1 (sentences)},
+     columns/Method/.style={string type, column type=l,
+         postproc cell content/.code={%
+             \pgfplotsutilstrreplace{_}{\_}{##1}%
+             \pgfkeyslet{/pgfplots/table/@cell content}\pgfplotsretval
+         },}
+    ]{results.csv}
+\caption{Results of Conversion and Annotation using Dependency Parsers}
+\label{table:convert}
+\end{table*}
+
+
+\section{Conclusion}
+
+We have presented a transition-based parser for UCCA, which is a semantic 
+
+Future work:
+\begin{itemize}
+\item \textsc{smatch} for scoring
+\item find the best conversion rules automatically
+\end{itemize}
+
+\bibliography{ucca}
+
+\begin{filecontents}{ucca.bib}
+@InProceedings{nivre2004incrementality,
+  author    = {Nivre, Joakim},
+  title     = {Incrementality in Deterministic Dependency Parsing},
+  booktitle = {Proceedings of the ACL Workshop Incremental Parsing: Bringing Engineering and Cognition Together},
+  editor    = {Frank Keller and Stephen Clark and Matthew Crocker and Mark Steedman},
+  year      = 2004,
+  month     = {July},
+  address   = {Barcelona, Spain},
+  publisher = {Association for Computational Linguistics},
+  pages     = {50--57},
+  url       = {http://aclweb.org/anthology/W04-0308}
+}
+@InProceedings{nivre2009non,
+  author    = {Nivre, Joakim},
+  title     = {Non-Projective Dependency Parsing in Expected Linear Time},
+  booktitle = {Proceedings of the Joint Conference of the 47th Annual Meeting of the ACL and the 4th International Joint Conference on Natural Language Processing of the AFNLP},
+  month     = {August},
+  year      = {2009},
+  address   = {Suntec, Singapore},
+  publisher = {Association for Computational Linguistics},
+  pages     = {351--359},
+  url       = {http://aclweb.org/anthology/P09-1040}
+}
+@InProceedings{abend2013universal,
+  author    = {Abend, Omri  and  Rappoport, Ari},
+  title     = {{U}niversal {C}onceptual {C}ognitive {A}nnotation ({UCCA})},
+  booktitle = {Proceedings of the 51st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  month     = {August},
+  year      = {2013},
+  address   = {Sofia, Bulgaria},
+  publisher = {Association for Computational Linguistics},
+  pages     = {228--238},
+  url       = {http://aclweb.org/anthology/P13-1023}
+}
+@InProceedings{zhu2013fast,
+  title     = {Fast and Accurate Shift-Reduce Constituent Parsing},
+  author    = {Zhu, Muhua and Zhang, Yue and Chen, Wenliang and Zhang, Min and Zhu, Jingbo},
+  booktitle = {Proceedings of the 51st Annual Meeting of the Association for Computational Linguistics},
+  year      = {2013},
+  address   = {Sofia, Bulgaria},
+  publisher = {Association for Computational Linguistics},
+  pages     = {434--443},
+  url       = {http://aclweb.org/anthology/P13-1043}
+}
+@InProceedings{flanigan2014discriminative,
+  author    = {Flanigan, Jeffrey  and  Thomson, Sam  and  Carbonell, Jaime  and  Dyer, Chris  and  Smith, Noah A.},
+  title     = {A Discriminative Graph-Based Parser for the {A}bstract {M}eaning {R}epresentation},
+  booktitle = {Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  month     = {June},
+  year      = {2014},
+  address   = {Baltimore, Maryland},
+  publisher = {Association for Computational Linguistics},
+  pages     = {1426--1436},
+  url       = {http://aclweb.org/anthology/P14-1134}
+}
+@InProceedings{artzi2015broad,
+  author    = {Artzi, Yoav  and  Lee, Kenton  and  Zettlemoyer, Luke},
+  title     = {Broad-coverage {CCG} Semantic Parsing with {AMR}},
+  booktitle = {Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing},
+  month     = {September},
+  year      = {2015},
+  address   = {Lisbon, Portugal},
+  publisher = {Association for Computational Linguistics},
+  pages     = {1699--1710},
+  url       = {http://aclweb.org/anthology/D15-1198}
+}
+@InProceedings{tokgoz2015transition,
+  author    = {Tokg{\"o}z, Alper and Eryi\u{g}it, G{\"u}lsen},
+  title     = {Transition-based Dependency DAG Parsing Using Dynamic Oracles},
+  booktitle = {Proceedings of the ACL-IJCNLP 2015 Student Research Workshop},
+  month     = {July},
+  year      = {2015},
+  address   = {Beijing, China},
+  publisher = {Association for Computational Linguistics},
+  pages     = {22--27},
+  url       = {http://aclweb.org/anthology/P15-3004}
+}
+@InProceedings{maier2015discontinuous,
+  author    = {Maier, Wolfgang},
+  title     = {Discontinuous Incremental Shift-reduce Parsing},
+  booktitle = {Proceedings of the 53rd Annual Meeting of the Association for Computational Linguistics and the 7th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)},
+  month     = {July},
+  year      = {2015},
+  address   = {Beijing, China},
+  publisher = {Association for Computational Linguistics},
+  pages     = {1202--1212},
+  url       = {http://aclweb.org/anthology/P15-1116}
+}
+\end{filecontents}
+
+\end{document}
