@@ -13,28 +13,101 @@
 \usepackage[]{algorithm2e}
 \usepackage{hyperref}
 \bibliographystyle{acl}
+\newcommand{\oa}[1]{\textcolor{red}{#1}}
+\newcommand{\com}[1]{}
 
-\title{General Transition-Based Broad-Coverage Semantic Parsing}
+
+\title{Broad-Coverage Semantic Constituency Parsing: A Transition-based Approach}
+  %General Transition-Based Broad-Coverage Semantic Parsing
 
 \author{Daniel Hershcovich \\
   Institute of Computer Science \\
   Hebrew University of Jerusalem \\
-  {\tt danielh@cs.huji.ac.il} \\\And
+  {\tt danielh@cs.huji.ac.il} \\
+  \And
   Second Author \\
   Affiliation / Address line 1 \\
   Affiliation / Address line 2 \\
   Affiliation / Address line 3 \\
-  {\tt email@domain} \\}
+  {\tt email@domain} \\
+}
 
 \date{}
 
 \begin{document}
 \maketitle
 \begin{abstract}
-  Universal Conceptual Cognitive Annotation (UCCA) is a semantic grammatical scheme that assigns a complete structure to natural language text. We present the first automatic UCCA parser, a transition-based parser using a novel transition system. We compare the results to baselines obtained by converting UCCA to CoNNL-X, and training syntactic parsers on the converted dependency trees.
+
+  Universal Conceptual Cognitive Annotation (UCCA) is a semantic grammatical scheme that assigns 
+  a complete structure to natural language text. We present the first automatic UCCA parser, 
+  a transition-based parser using a novel transition system. We compare the results to baselines 
+  obtained by converting UCCA to CoNNL-X, and training syntactic parsers on the converted
+  dependency trees.
+  
 \end{abstract}
 
 \section{Introduction}
+
+% (1) there has been much interest lately in broad-coverage semantic parsing.
+%  (2) semantic parsing requires the development of new parsing technology
+% (beyond syntactic parsers), as they are formally different. importantly, they
+%  are not trees, but DAGs (e.g., argument sharing in control structures;
+% see Oepen et al., 2015, AMR).
+Research in statistical syntactic parsing has yieled an abundance of methods
+for constructing a parser given annotated text, and has thus made enormous impact
+on NLP. However, the formal constraints imposed by standard parsers, such as enforcing
+a tree structure, which are arguably reasonable for describing the syntax of natural language
+are clearly lacking when it comes to semantic parsing \cite{oepen2015semeval}, as they are
+unable to capture argument sharing phenomena, such as control or coordination. Indeed,
+all broad-coverage semantic schemes used in NLP we are aware of, allow multiple parents.
+
+Most work on broad-coverage semantic parsing has focused on semantic role labeling, which
+is confined to shallow argument structures, with specific emphasis on verbal structures.
+The Abstract Meaning Representation (AMR) \cite{Banerescu:13}, which has attracted considerable
+attention recently, provides a more complete semantic annotation in the form of
+elaborate graphs, which represent the semantics of an entire sentence, without grounding
+semantic sub-parts in the sentence's words and constituents.
+Another important line of work that focuses on more elaborate structures, is that
+of broad-coverage semantic dependency parsing, that seeks to represent 
+all types of argument structures (including verbal, nominal and adjectival ones),
+and the inter-relations between them. Three major approaches of this ilk have been
+explored in two recent SemEval tasks \cite{oepen2014semeval,oepen2015semeval}: the Prague
+Dependency Treebank tectogrammatical layer \cite{}, the Enju predicate-argument structures,
+and dependencies derived from the Lingo ERG Minimal Recursion Semantics represenations \cite{}.
+
+In this work, we propose the task of broad-coverage semantic {\it constituency} parsing. 
+Constituency representation of semantics parsing has considerable advantages for semantic
+representation, as it is able to represent constructions that have more than a single
+head (e.g., coordination), to naturally represent cases where the identity of the head is disputed
+(e.g., determiner-noun, preposition-noun etc.), and multi-word expressions (which are semantically
+opaque and hence clearly have no head). \oa{mention Ivanovo et al., 2012}.
+
+A parser for this setting must have support for: (1) multiple heads, (2) discontiguous units (which are
+common even in the syntactic structures of some languages, and, as will be discussed, is important even
+for English. 
+  
+\com{
+  (3) It further requires support for discontiguous units (or non-projective parses), even in
+  English, and other projective or mostly projective languages (e.g., extraposition, idiomatic
+  discontiguous expressions, verb-particle constructions).
+  (4) Recent work (notably, Semeval 14-task 8, Semeval 15-task 18) explored this broad-coverage
+  semantic dependency parsing, compiling corpora from the PDT, Lingo ERG and ???.
+  (5) 
+  notably coordination, and leads to arbitrary parsing decisions).
+  (6) there is currently no parser for the task.
+  we propose one based on recent advances in transition-based parsing
+  (both Wolfgang's and in NN embeddings). transition-based parsing is appealing for its
+  conceptual simplicity, its high performance, and its speed.
+  (7) since this is the first parser for the task, we compare the results to partial
+  implementations of the algorithm. we also conduct a comparison with existing parsers for similar
+  parsing tasks.
+  (8) we expriment with the UCCA corpus...
+  (9) our contribution: \#1 defining the constituency broad-coverage semantic parsing task
+  \#2 first parser for broad-coverage consituency-based parsing; \#3 first parser for UCCA;
+  Previous work: the work has interesting connections to syntactic parsing, to SRL (which also has both dependency
+  and constituency versions), and to semantic parsing into logical forms, but is different from the,
+  see discussion in (Oepen et al., 2015). Also AMR parsing.
+}
 
 Universal Conceptual Cognitive Annotation (UCCA) is a recently introduced semantic annotation scheme. It takes a semantic approach to grammatical representation, describing relations between words and phrases in natural language text. The foundational layer can potentially be extended by any number of additional layers to provide refinements to the existing scheme, but it already covers many of the basic semantic relations in language. The annotation is represented as a directed acyclic graph (DAG), where edges denote semantic dependencies between abstract units. UCCA can be easily annotated manually without expert knowledge in linguistics, making it attractive as a resource for semantic tasks---an alternative to syntactic annotation, which is costly. A corpus containing 160K words from the English Wikipedia has been manually annotated~\cite{abend2013universal}.
 
@@ -80,7 +153,9 @@ Foundational &  & \\
 Non-terminals &  & \\
 Terminals &  &
 \end{tabular}
-\caption{Quantitative characterization of structure in the UCCA corpus}
+\caption{Quantitative characterization of structure in the UCCA corpus
+\oa{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
+}
 \end{table}
 
 \section{Baselines}
@@ -303,6 +378,7 @@ Future work:
 
 \bibliography{ucca}
 
+\com{
 \begin{filecontents}{ucca.bib}
 @InProceedings{nivre2004incrementality,
   author    = {Nivre, Joakim},
@@ -393,5 +469,6 @@ Future work:
   url       = {http://aclweb.org/anthology/P15-1116}
 }
 \end{filecontents}
-
+}
+  
 \end{document}
