@@ -103,22 +103,25 @@ Korean and many others \cite{kallmeyer2013data}), and can even be found in Engli
 speech: ``'The dog', John said, 'is back again''', and are even more pervasive in English semantic parses
 (see \secref{sec:data}).
 
-We present a constituency parser that supports both discontiguious constituents and multiple parents.
-To our knowledge, this is the first parser to tackle the task. We take a transition-based approach,
-motivated by the effectiveness of the approach in related parsing tasks,
-as well as its computational efficiency and its conceptual simplicity.
 The only corpora we are aware of that annotates text with constituency semantic annotation are
-corpora annotated according to the UCCA scheme \cite{abend2013universal,sulem2015conceptual}, which
-we use to train and test our parser, both in an in-domain and out-of-domain scenario.
-In order to provide a more complete picture of the task,
-we convert the UCCA annotation into CoNLL-style dependencies and NeGra-style discontiguous trees,
-and \my{add more here on the type of experiments we conduct and their significance}
+corpora annotated according to the UCCA scheme \cite{abend2013universal,sulem2015conceptual}.
+In order to assess the ability of existing technology to tackle the task,
+we create converters between the UCCA annotation and CoNLL-style dependencies, as well as
+discontiguous constituency trees, apply state-of-the-art parsers to these formalisms on
+the converted representations, and convert them back into UCCA annotations.
+We take a transition-based approach, motivated by the effectiveness of the approach in
+related parsing tasks, as well as its computational efficiency and its conceptual simplicity.
+Finally, we present a novel transition-based constituency parser that supports both discontiguious
+constituents and multiple parents. To our knowledge, this is the first parser to tackle the task.
+We apply the parser both to an in-domain and out-of-domain scenario.
+Our experimental results shed light on the difficulty of the task, as well as the ability of
+transition-based parsers to tackle it.
 
-The contribution of this work is three-fold. First, we motivate and tackle the constituency broad-coverage
-semantic parsing task. Second, we propose a first parser for the task, as well as a first parser for UCCA.
-Third, we conduct extensive experiments with various transition-based techniques to both explore the
-effectiveness of our parsing approach and to better assess the difficulties the task involves.
-
+The contribution of this work is thus three-fold. First, we motivate and tackle the constituency broad-coverage
+semantic parsing task. Second, we create converters, and assess the ability of existing parsing technology
+for formally related settings to address the task, focusing on transition-based methods.
+Third, we present the first parser for the task, as well as a first parser for UCCA.
+All converters, parsers and datasets will be made publicly available upon publication.
 
 \section{Related work}
 
