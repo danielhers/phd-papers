@@ -4,7 +4,7 @@
 
 \documentclass[11pt]{article}
 
-\usepackage{acl2015}
+\usepackage{acl2016}
 \usepackage{times}
 \usepackage{url}
 \usepackage{latexsym}
@@ -12,12 +12,13 @@
 \usepackage{filecontents}
 \usepackage[]{algorithm2e}
 \usepackage{hyperref}
-\bibliographystyle{acl}
-\newcommand{\oa}[1]{\textcolor{red}{#1}}
+\bibliographystyle{acl2016}
+\newcommand{\my}[1]{\footnote{\bf #1}}
 \newcommand{\com}[1]{}
+\newcommand{\secref}[1]{Section \ref{#1}}
 
 
-\title{Broad-Coverage Semantic Constituency Parsing: A Transition-based Approach}
+\title{Broad-Coverage Semantic Constituency Parsing: \\ A Transition-based Approach}
   %General Transition-Based Broad-Coverage Semantic Parsing
 
 \author{Daniel Hershcovich \\
@@ -53,78 +54,89 @@
 % (beyond syntactic parsers), as they are formally different. importantly, they
 %  are not trees, but DAGs (e.g., argument sharing in control structures;
 % see Oepen et al., 2015, AMR).
-Research in statistical syntactic parsing has yieled an abundance of methods
-for constructing a parser given annotated text, and has thus made enormous impact
-on NLP. However, the formal constraints imposed by standard parsers, such as enforcing
-a tree structure, which are arguably reasonable for describing the syntax of natural language
-are clearly lacking when it comes to semantic parsing \cite{oepen2015semeval}, as they are
-unable to capture argument sharing phenomena, such as control or coordination. Indeed,
-all broad-coverage semantic schemes used in NLP we are aware of, allow multiple parents.
+The formal constraints imposed by available statistical parsers are insufficient for
+broad-coverage semantic parsing \cite{oepen2015semeval}.
+Commonly imposed constraints, such as that the parse is a tree, are arguably reasonable for
+accounting for the syntax of natural language, but are lacking when applied to semantic parsing,
+as they are unable to capture argument sharing phenomena, such as control or coordination.
+Indeed, all broad-coverage semantic schemes used in NLP we are aware of allow multiple parents.
 
-Most work on broad-coverage semantic parsing has focused on semantic role labeling, which
-is confined to shallow argument structures, with specific emphasis on verbal structures.
-The Abstract Meaning Representation (AMR) \cite{Banerescu:13}, which has attracted considerable
-attention recently, provides a more complete semantic annotation in the form of
-elaborate graphs, which represent the semantics of an entire sentence, without grounding
+Most work on broad-coverage semantic parsing has focused on semantic role labeling,
+which is limited by its focus on shallow predicate-argument structures and predominantly on verbal
+predicates. The Abstract Meaning Representation (AMR) \cite{banarescu2013abstract},
+which has attracted considerable attention recently,
+provides a more complete semantic annotation in the form of elaborate graphs,
+which account for a wider range of predicates, linkage and coreference phenomena.
+Formally, it represents sentences as DAGs, without grounding its
 semantic sub-parts in the sentence's words and constituents.
-Another important line of work that focuses on more elaborate structures, is that
-of broad-coverage semantic dependency parsing, that seeks to represent 
-all types of argument structures (including verbal, nominal and adjectival ones),
-and the inter-relations between them. Three major approaches of this ilk have been
-explored in two recent SemEval tasks \cite{oepen2014semeval,oepen2015semeval}: the Prague
-Dependency Treebank tectogrammatical layer \cite{}, the Enju predicate-argument structures,
-and dependencies derived from the Lingo ERG Minimal Recursion Semantics represenations \cite{}.
+Another line of work that addresses parsing into elaborate semantic structures,
+is that of Broad-coverage Semantic Dependency Parsing \cite{oepen2014semeval,oepen2015semeval} (SDP).
+Like AMR, SDP also addresses a wide range of argument structures (including verbal, nominal and adjectival ones)
+and the inter-relations between them, but uses word-to-word dependencdy structures.
+The tasks has been explored in two recent SemEval tasks, exploring three approaches
+for semantic representation: the Prague
+Dependency Treebank tectogrammatical layer \cite{bohmova2003prague},
+HSPG-derived parsers using the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
+and dependencies derived from the Lingo ERG
+Minimal Recursion Semantics represenations \cite{Flic:02}.
 
 In this work, we propose the task of broad-coverage semantic {\it constituency} parsing. 
-Constituency representation of semantics parsing has considerable advantages for semantic
-representation, as it is able to represent constructions that have more than a single
-head (e.g., coordination), to naturally represent cases where the identity of the head is disputed
-(e.g., determiner-noun, preposition-noun etc.), and multi-word expressions (which are semantically
-opaque and hence clearly have no head). \oa{mention Ivanovo et al., 2012}.
+Constituency representation of semantics has considerable advantage over dependecy representations as
+it allows for the representation (1) of constructions that have more than a single
+head (e.g., coordination), (2) of cases where the identity of the head is disputed
+(e.g., determiner-noun, preposition-noun etc.), and (3) of multi-word expressions,
+which are semantically opaque and hence have no clear head). Under dependency representation
+the treatment of these costructions is often unsystematic, yielding both conceptual
+and practical problems \cite{schwartz2011neutralizing,Ivanova2012who,tsarfaty2012cross}.
 
-A parser for this setting must have support for: (1) multiple heads, (2) discontiguous units (which are
-common even in the syntactic structures of some languages, and, as will be discussed, is important even
-for English. 
-  
-\com{
-  (3) It further requires support for discontiguous units (or non-projective parses), even in
-  English, and other projective or mostly projective languages (e.g., extraposition, idiomatic
-  discontiguous expressions, verb-particle constructions).
-  (4) Recent work (notably, Semeval 14-task 8, Semeval 15-task 18) explored this broad-coverage
-  semantic dependency parsing, compiling corpora from the PDT, Lingo ERG and ???.
-  (5) 
-  notably coordination, and leads to arbitrary parsing decisions).
-  (6) there is currently no parser for the task.
-  we propose one based on recent advances in transition-based parsing
-  (both Wolfgang's and in NN embeddings). transition-based parsing is appealing for its
-  conceptual simplicity, its high performance, and its speed.
-  (7) since this is the first parser for the task, we compare the results to partial
-  implementations of the algorithm. we also conduct a comparison with existing parsers for similar
-  parsing tasks.
-  (8) we expriment with the UCCA corpus...
-  (9) our contribution: \#1 defining the constituency broad-coverage semantic parsing task
-  \#2 first parser for broad-coverage consituency-based parsing; \#3 first parser for UCCA;
-  Previous work: the work has interesting connections to syntactic parsing, to SRL (which also has both dependency
-  and constituency versions), and to semantic parsing into logical forms, but is different from the,
-  see discussion in (Oepen et al., 2015). Also AMR parsing.
-}
+A general parser for this setting must support the prediction of multiple parents,
+as well as of discontiguous constituents, both pervasive phenomena even in semantic
+structures even in English. Multiple parents show up frequently in the context of argument
+sharing, where a certain argument participates in several relations but is only mentioned once.
+Common examples are coordination structures
+(e.g., in ``John went home and took a shower'', ``John'' is an argument of both ``went'' and ``took'')
+or nominalizations (e.g., ``After graduation, John moved to London'', where ``John'' is an argument
+of both ``graduation'' and ``moved'').
+Discontiguous units are common even in syntactic structures in some languages (e.g., German, Bulgarian,
+Korean and many others \cite{kallmeyer2013data}), and can even be found in English, e.g., in reported
+speech: ``'The dog', John said, 'is back again''', and are even more pervasive in English semantic parses
+(see \secref{sec:data}).
 
-Universal Conceptual Cognitive Annotation (UCCA) is a recently introduced semantic annotation scheme. It takes a semantic approach to grammatical representation, describing relations between words and phrases in natural language text. The foundational layer can potentially be extended by any number of additional layers to provide refinements to the existing scheme, but it already covers many of the basic semantic relations in language. The annotation is represented as a directed acyclic graph (DAG), where edges denote semantic dependencies between abstract units. UCCA can be easily annotated manually without expert knowledge in linguistics, making it attractive as a resource for semantic tasks---an alternative to syntactic annotation, which is costly. A corpus containing 160K words from the English Wikipedia has been manually annotated~\cite{abend2013universal}.
+We present a constituency parser that supports both discontiguious constituents and multiple parents.
+To our knowledge, this is the first parser to tackle the task. We take a transition-based approach,
+motivated by the effectiveness of the approach in related parsing tasks,
+as well as its computational efficiency and its conceptual simplicity.
+The only corpora we are aware of that annotates text with constituency semantic annotation are
+corpora annotated according to the UCCA scheme \cite{abend2013universal,sulem2015conceptual}, which
+we use to train and test our parser, both in an in-domain and out-of-domain scenario.
+In order to provide a more complete picture of the task,
+we convert the UCCA annotation into CoNLL-style dependencies and NeGra-style discontiguous trees,
+and \my{add more here on the type of experiments we conduct and their significance}
 
-UCCA exhibits three properties that are generally absent in syntactic schemes:
-\begin{description}
-\item[Multiple parents.] In general, the UCCA graph is a DAG and not a tree.
-\item[Discontinuity.] The yield of a node may have gaps.
-\item[Non-terminal units.] There are units representing abstract entities or events, and not all nodes correspond to tokens.
-\end{description}
+The contribution of this work is three-fold. First, we motivate and tackle the constituency broad-coverage
+semantic parsing task. Second, we propose a first parser for the task, as well as a first parser for UCCA.
+Third, we conduct extensive experiments with various transition-based techniques to both explore the
+effectiveness of our parsing approach and to better assess the difficulties the task involves.
 
-This work is the first attempt at automatic UCCA parsing.
 
 \section{Related work}
 
-UCCA parsing is a novel task. Nevertheless, it resembles other parsing tasks in natural language processing. The techniques used in this work are inspired by some of them.
+While no previous work has tackled the task of broad-coverage semantic constituency, 
+the task resembles other statistical and semanticparsing tasks. The techniques used
+in this work are closely related to some of them.
 
-\subsection{Non-projective dependency parsing}
+\paragraph{Non-projective dependency parsing.}
+\my{Who to compare to? (we take a transition-based approach; later we discuss, without comparing, to grammar-based
+  or graph-based approaches)
+  Constituency parsers that meet some of the critera: Wolfgang's (all but multiple parents),
+        which is state-of-the-art on Negra discontiguous units.
+        There are no multiple parent constituency parsers! (so we can't compare)
+  Dependency parsers: there are the standard ones (done!), there is MALT non-projective, and there is not MALT with mutliple parents. There are other dependency with multiple parents: tokgoez and erdigit (based on earlier work by sagae and tsujii) -- we're trying to get their code.
+  
+  We'll also say that future work will address other languages, ...
+  Evaluation specifically on multiple parents, and on discontiguous.
+  Future work: LSTM-version of our parser, conversion from t-layer parsers and such.
+}
 
 Syntactic dependency trees can in general be non-projective. Graph-based parsers are able to produce such trees, but many transition-based parsers assume projectivity to improve the performance and efficiency of the parser: the number of transitions in such parsers is always $2n$ where $n$ is the number of tokens \cite{nivre2004incrementality}. However, non-projective dependency trees can also be parsed by transition-based parsers in linear time \cite{nivre2009non}.
 
@@ -144,6 +156,8 @@ UCCA is similar to AMR~\cite{flanigan2014discriminative,artzi2015broad}.
 
 \section{Structural characterization}
 
+\my{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
+
 \begin{table}[ht]
 \begin{tabular}{lccc}
 Node type & count & \% multiple parents & \% discontinuous \\
@@ -153,8 +167,7 @@ Foundational &  & \\
 Non-terminals &  & \\
 Terminals &  &
 \end{tabular}
-\caption{Quantitative characterization of structure in the UCCA corpus
-\oa{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
+\caption{Quantitative characterization of structure in the UCCA corpus. 
 }
 \end{table}
 
@@ -350,6 +363,10 @@ Feature introduced in this work.
 
 The following rules were used to determine the head of a unit.
 
+\section{Data}\secref{sec:data}
+
+We should give some statistics about the pervasiveness of discontiguities and multiple parents in our corpora.
+
 \section{Experiments}
 
 \begin{table*}
@@ -376,7 +393,9 @@ Future work:
 \item find the best conversion rules automatically
 \end{itemize}
 
-\bibliography{ucca}
+
+\bibliography{references}
+
 
 \com{
 \begin{filecontents}{ucca.bib}
@@ -472,3 +491,27 @@ Future work:
 }
   
 \end{document}
+
+
+\com{
+  (8) we expriment with the UCCA corpus...
+  (7) since this is the first parser for the task, we compare the results to partial
+  implementations of the algorithm. we also conduct a comparison with existing parsers for similar
+  parsing tasks.
+  (9) our contribution: \#1 defining the 
+  \#2 first parser for broad-coverage consituency-based parsing; \#3 first parser for UCCA;
+  Previous work: the work has interesting connections to syntactic parsing, to SRL (which also has both dependency
+  and constituency versions), and to semantic parsing into logical forms, but is different from the,
+  see discussion in (Oepen et al., 2015). Also AMR parsing.
+
+Universal Conceptual Cognitive Annotation (UCCA) is a recently introduced semantic annotation scheme. It takes a semantic approach to grammatical representation, describing relations between words and phrases in natural language text. The foundational layer can potentially be extended by any number of additional layers to provide refinements to the existing scheme, but it already covers many of the basic semantic relations in language. The annotation is represented as a directed acyclic graph (DAG), where edges denote semantic dependencies between abstract units. UCCA can be easily annotated manually without expert knowledge in linguistics, making it attractive as a resource for semantic tasks---an alternative to syntactic annotation, which is costly. A corpus containing 160K words from the English Wikipedia has been manually annotated~\cite{abend2013universal}.
+
+UCCA exhibits three properties that are generally absent in syntactic schemes:
+\begin{description}
+\item[Multiple parents.] In general, the UCCA graph is a DAG and not a tree.
+\item[Discontinuity.] The yield of a node may have gaps.
+\item[Non-terminal units.] There are units representing abstract entities or events, and not all nodes correspond to tokens.
+\end{description}
+
+This work is the first attempt at automatic UCCA parsing.
+}
