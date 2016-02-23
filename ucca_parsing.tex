@@ -8,7 +8,6 @@
 \usepackage{url}
 \usepackage{latexsym}
 \usepackage{pgfplotstable}
-\usepackage{filecontents}
 \usepackage[]{algorithm2e}
 \usepackage{hyperref}
 \bibliographystyle{acl2016}
@@ -396,123 +395,8 @@ Future work:
 \item find the best conversion rules automatically
 \end{itemize}
 
-
 \bibliography{references}
 
-
-\begin{filecontents}{ucca.bib}
-@InProceedings{nivre2004incrementality,
-  author    = {Nivre, Joakim},
-  title     = {Incrementality in Deterministic Dependency Parsing},
-  booktitle = {Proceedings of the ACL Workshop Incremental Parsing: Bringing Engineering and Cognition Together},
-  editor    = {Frank Keller and Stephen Clark and Matthew Crocker and Mark Steedman},
-  year      = 2004,
-  month     = {July},
-  address   = {Barcelona, Spain},
-  publisher = {Association for Computational Linguistics},
-  pages     = {50--57},
-  url       = {http://aclweb.org/anthology/W04-0308}
-}
-@InProceedings{nivre2009non,
-  author    = {Nivre, Joakim},
-  title     = {Non-Projective Dependency Parsing in Expected Linear Time},
-  booktitle = {Proceedings of the Joint Conference of the 47th Annual Meeting of the ACL and the 4th International Joint Conference on Natural Language Processing of the AFNLP},
-  month     = {August},
-  year      = {2009},
-  address   = {Suntec, Singapore},
-  publisher = {Association for Computational Linguistics},
-  pages     = {351--359},
-  url       = {http://aclweb.org/anthology/P09-1040}
-}
-@InProceedings{abend2013universal,
-  author    = {Abend, Omri  and  Rappoport, Ari},
-  title     = {{U}niversal {C}onceptual {C}ognitive {A}nnotation ({UCCA})},
-  booktitle = {Proceedings of the 51st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-  month     = {August},
-  year      = {2013},
-  address   = {Sofia, Bulgaria},
-  publisher = {Association for Computational Linguistics},
-  pages     = {228--238},
-  url       = {http://aclweb.org/anthology/P13-1023}
-}
-@InProceedings{zhu2013fast,
-  title     = {Fast and Accurate Shift-Reduce Constituent Parsing},
-  author    = {Zhu, Muhua and Zhang, Yue and Chen, Wenliang and Zhang, Min and Zhu, Jingbo},
-  booktitle = {Proceedings of the 51st Annual Meeting of the Association for Computational Linguistics},
-  year      = {2013},
-  address   = {Sofia, Bulgaria},
-  publisher = {Association for Computational Linguistics},
-  pages     = {434--443},
-  url       = {http://aclweb.org/anthology/P13-1043}
-}
-@InProceedings{flanigan2014discriminative,
-  author    = {Flanigan, Jeffrey  and  Thomson, Sam  and  Carbonell, Jaime  and  Dyer, Chris  and  Smith, Noah A.},
-  title     = {A Discriminative Graph-Based Parser for the {A}bstract {M}eaning {R}epresentation},
-  booktitle = {Proceedings of the 52nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-  month     = {June},
-  year      = {2014},
-  address   = {Baltimore, Maryland},
-  publisher = {Association for Computational Linguistics},
-  pages     = {1426--1436},
-  url       = {http://aclweb.org/anthology/P14-1134}
-}
-@InProceedings{oepen2014semeval,
-  author    = {Oepen, Stephan and Kuhlmann, Marco and Miyao, Yusuke and Zeman, Daniel and Flickinger, Dan and Hajic, Jan and Ivanova, Angelina and Zhang, Yi},
-  title     = {SemEval 2014 Task 8: Broad-coverage semantic dependency parsing},
-  booktitle = {Proceedings of the 8th International Workshop on Semantic Evaluation (SemEval 2014)},
-  month     = {August},
-  year      = {2014},
-  address   = {Dublin, Ireland},
-  publisher = {Association for Computational Linguistics},
-  pages     = {63--72},
-  url       = {http://www.aclweb.org/anthology/S14-2008}
-}
-@InProceedings{oepen2015semeval,
-  author    = {Oepen, Stephan and Kuhlmann, Marco and Miyao, Yusuke and Zeman, Daniel and Cinkov{\'a}, Silvie and Flickinger, Dan and Hajic, Jan and Ure{\v{s}}ov{\'a}, Zdeˇnka},
-  title     = {SemEval 2015 Task 18: Broad-Coverage Semantic Dependency Parsing},
-  booktitle = {Proceedings of the 9th International Workshop on Semantic Evaluation (SemEval 2015)},
-  month     = {June},
-  year      = {2015},
-  address   = {Denver, Colorado},
-  publisher = {Association for Computational Linguistics},
-  pages     = {915},
-  url       = {http://www.aclweb.org/anthology/S15-2153}
-}
-@InProceedings{artzi2015broad,
-  author    = {Artzi, Yoav  and  Lee, Kenton  and  Zettlemoyer, Luke},
-  title     = {Broad-coverage {CCG} Semantic Parsing with {AMR}},
-  booktitle = {Proceedings of the 2015 Conference on Empirical Methods in Natural Language Processing},
-  month     = {September},
-  year      = {2015},
-  address   = {Lisbon, Portugal},
-  publisher = {Association for Computational Linguistics},
-  pages     = {1699--1710},
-  url       = {http://aclweb.org/anthology/D15-1198}
-}
-@InProceedings{tokgoz2015transition,
-  author    = {Tokg{\"o}z, Alper and Eryi\u{g}it, G{\"u}lsen},
-  title     = {Transition-based Dependency DAG Parsing Using Dynamic Oracles},
-  booktitle = {Proceedings of the ACL-IJCNLP 2015 Student Research Workshop},
-  month     = {July},
-  year      = {2015},
-  address   = {Beijing, China},
-  publisher = {Association for Computational Linguistics},
-  pages     = {22--27},
-  url       = {http://aclweb.org/anthology/P15-3004}
-}
-@InProceedings{maier2015discontinuous,
-  author    = {Maier, Wolfgang},
-  title     = {Discontinuous Incremental Shift-reduce Parsing},
-  booktitle = {Proceedings of the 53rd Annual Meeting of the Association for Computational Linguistics and the 7th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)},
-  month     = {July},
-  year      = {2015},
-  address   = {Beijing, China},
-  publisher = {Association for Computational Linguistics},
-  pages     = {1202--1212},
-  url       = {http://aclweb.org/anthology/P15-1116}
-}
-\end{filecontents}
-  
 \end{document}
 
 
