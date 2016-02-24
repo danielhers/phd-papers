@@ -36,18 +36,26 @@ A Transition-Based Approach}
 
 \date{}
 
+
 \begin{document}
 \maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%     Abstract
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-  Universal Conceptual Cognitive Annotation (UCCA) is a semantic grammatical scheme that assigns 
-  a complete structure to natural language text. We present the first automatic UCCA parser, 
-  a transition-based parser using a novel transition system. We compare the results to baselines 
-  obtained by converting UCCA to CoNNL-X, and training syntactic parsers on the converted
-  dependency trees.
+  %Universal Conceptual Cognitive Annotation (UCCA) is a semantic grammatical scheme that assigns 
+  %a complete structure to natural language text. We present the first automatic UCCA parser, 
+  %a transition-based parser using a novel transition system. We compare the results to baselines 
+  %obtained by converting UCCA to CoNNL-X, and training syntactic parsers on the converted
+  %dependency trees.
   
 \end{abstract}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
 % (1) there has been much interest lately in broad-coverage semantic parsing.
@@ -123,14 +131,25 @@ for formally related settings to address the task, focusing on transition-based 
 Third, we present the first parser for the task, as well as a first parser for UCCA.
 All converters, parsers and datasets will be made publicly available upon publication.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related work}
 
 While no previous work has tackled the task of broad-coverage semantic constituency, 
 the task resembles other statistical and semanticparsing tasks. The techniques used
 in this work are closely related to some of them.
 
-\paragraph{Non-projective dependency parsing.}
-\my{Who to compare to? (we take a transition-based approach; later we discuss, without comparing, to grammar-based
+\paragraph{Semantic Parsing.}
+
+% Brief, but broad. SRL, AMR, broad-coverage dependency, Boxer (and Groningen Meaning Bank), CCG-based.
+% mention various graph parsing methods here
+UCCA is similar to AMR~\cite{flanigan2014discriminative,artzi2015broad}.
+
+\paragraph{Transition-based Parsing.}
+
+\paragraph{Parsing with discontiguous untis.}
+% cover both constituency and dependency-based approaches
+\my{Who to compare to? (we take a transition-based approach; later we discuss,
+  without comparing, to grammar-based
   or graph-based approaches)
   Constituency parsers that meet some of the critera: Wolfgang's (all but multiple parents),
         which is state-of-the-art on Negra discontiguous units.
@@ -146,7 +165,7 @@ Syntactic dependency trees can in general be non-projective. Graph-based parsers
 
 In a UCCA graph, labels appear on the edges, whereas nodes are unlabeled. If all the nodes are known, parsing is the same as inducing a graph on them with the correct edge labels. In dependency parsing, a graph is induced on the set of nodes consisting of the tokens in the sentence (and the \textsc{ROOT} symbol). Therefore, it seems that techniques from dependency parsing can be used for UCCA parsing as well.
 
-\subsection{Discontinuous constituent parsing}
+\paragraph{Other Semantic Schemes.}
 
 Although the labels in a UCCA graph are on the edges, it is similar to phrase structure grammar: non-terminal units are internal nodes in the graph, rather than all the edges being between words in the original sentence. In a constituency tree, constituents form a hierarchy above the words of the sentence.
 
@@ -154,28 +173,9 @@ Methods for constituent parsing can also be useful for UCCA parsing, but the com
 
 Like standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontinuous constituents} (the equivalent of non-projective dependency trees). However, Maier~\shortcite{maier2015discontinuous} introduced a transition-based constituent parsing with a \textsc{swap} transition to allow discontinuous parsing.\footnote{https://github.com/wmaier/uparse}
 
-\subsection{AMR parsing}
 
-UCCA is similar to AMR~\cite{flanigan2014discriminative,artzi2015broad}.
-
-\section{Structural characterization}
-
-\my{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
-
-\begin{table}[ht]
-\begin{tabular}{lccc}
-Node type & count & \% multiple parents & \% discontinuous \\
-\hline
-All &  & \\
-Foundational &  & \\
-Non-terminals &  & \\
-Terminals &  &
-\end{tabular}
-\caption{Quantitative characterization of structure in the UCCA corpus. 
-}
-\end{table}
-
-\section{Baselines}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Coversion-based Approaches}
 
 To our knowledge, there is no existing model to learn the general structure of UCCA graphs. Instead, as a baseline, we use models originally designed for syntactic dependency parsing, and train them on converted UCCA graphs. Since the converted annotation is not as rich as the UCCA scheme, some information is lost and has to be recovered as part of the conversion, so the accuracy of this method is bounded by the conversion accuracy.
 
@@ -260,9 +260,11 @@ TODO: convert to (discontinuous) constituency trees
 
 TODO: use Maier's parsers to parse converted trees
 
-\section{Transition-based UCCA parsing}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Direct Approach}
 
-Many approaches could be used to create a parser for UCCA, such as the graph-based approach employed in JAMR~\cite{flanigan2014discriminative}.
+Many approaches could be used to create a parser for UCCA, such as the graph-based approach
+employed in JAMR~\cite{flanigan2014discriminative}.
 However, UCCA is annotated over whole passages. A passage can contains hundreds and even thousands of tokens, so it is not feasible to keep a dense graph over all of them in memory. Therefore, we chose to adopt the transition-based approach for parsing UCCA.
 
 Our parser architecture follows the transition-based constituency parser in Maier~\shortcite{maier2015discontinuous}, with some variations:
@@ -367,10 +369,27 @@ Feature introduced in this work.
 
 The following rules were used to determine the head of a unit.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data}\secref{sec:data}
+
+\my{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
+
+\begin{table}[ht]
+\begin{tabular}{lccc}
+Node type & count & \% multiple parents & \% discontinuous \\
+\hline
+All &  & \\
+Foundational &  & \\
+Non-terminals &  & \\
+Terminals &  &
+\end{tabular}
+\caption{Quantitative characterization of structure in the UCCA corpus. 
+}
+\end{table}
 
 We should give some statistics about the pervasiveness of discontiguities and multiple parents in our corpora.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experiments}
 
 \begin{table*}
@@ -386,7 +405,7 @@ We should give some statistics about the pervasiveness of discontiguities and mu
 \label{table:convert}
 \end{table*}
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 
 We have presented a transition-based parser for UCCA, which is a semantic 
