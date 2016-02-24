@@ -81,7 +81,7 @@ semantic sub-parts in the sentence's words and constituents.
 Another line of work that addresses parsing into elaborate semantic structures,
 is that of Broad-coverage Semantic Dependency Parsing \cite{oepen2014semeval,oepen2015semeval} (SDP).
 Like AMR, SDP also addresses a wide range of argument structures (including verbal, nominal and adjectival ones)
-and the inter-relations between them, but uses word-to-word dependencdy structures.
+and the inter-relations between them, but uses word-to-word dependency structures.
 The tasks has been explored in two recent SemEval tasks, exploring three approaches
 for semantic representation: the Prague
 Dependency Treebank tectogrammatical layer \cite{bohmova2003prague},
@@ -89,14 +89,14 @@ HSPG-derived parsers using the Enju parser\footnote{See \url{http://kmcs.nii.ac.
 and dependencies derived from the Lingo ERG
 Minimal Recursion Semantics represenations \cite{Flic:02}.
 
-In this work, we propose the task of broad-coverage semantic {\it constituency} parsing. 
-Constituency representation of semantics has considerable advantage over dependecy representations as
-it allows for the representation (1) of constructions that have more than a single
+Purely bi-lexical dependency representation necessarily requires arbitrary decisions regarding the representation (1) of constructions that have more than a single
 head (e.g., coordination), (2) of cases where the identity of the head is disputed
 (e.g., determiner-noun, preposition-noun etc.), and (3) of multi-word expressions,
-which are semantically opaque and hence have no clear head). Under dependency representation
-the treatment of these costructions is often unsystematic, yielding both conceptual
+which are semantically opaque and hence have no clear head. Under dependency representation
+the treatment of these constructions is often unsystematic, yielding both conceptual
 and practical problems \cite{schwartz2011neutralizing,Ivanova2012who,tsarfaty2012cross}.
+In this work, we propose the task of broad-coverage semantic {\it constituency} parsing. 
+Constituency representation of semantics has considerable advantage over dependency representation, as it does not force the idea of a single head: the units in a construction may simply be annotated as the children of a common non-terminal parent.
 
 A general parser for this setting must support the prediction of multiple parents,
 as well as of discontiguous constituents, both pervasive phenomena even in semantic
@@ -135,7 +135,7 @@ All converters, parsers and datasets will be made publicly available upon public
 \section{Related work}
 
 While no previous work has tackled the task of broad-coverage semantic constituency, 
-the task resembles other statistical and semanticparsing tasks. The techniques used
+the task resembles other statistical and semantic parsing tasks. The techniques used
 in this work are closely related to some of them.
 
 \paragraph{Semantic Parsing.}
