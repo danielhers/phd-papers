@@ -48,21 +48,18 @@ A Transition-Based Approach}
   Representing many common semantic phenomena requires more expressive formalisms
   than the ones commonly for syntactic parsing. For instance, arguments that are shared
   between predicates are often semantically represented as multi-parented nodes,
-  yielding DAG (rather than tree) representations.
+  yielding DAG (rather than tree) structures.
   %which has lead to renewed interest in DAG parsing in recent years.
   While recent work has focused on broad-coverage semantic parsing into dependency
-  (i.e., word-to-word) or abstract (i.e., not grounded at all in the words and phrases of the
-  sentence) representations, this paper defines and tackles a constituency-based variant of the task.
-  We experiment with the UCCA representation scheme --- the only broad-coverage constituency
-  semantic representation ({\it BCSR}) scheme we are aware of with a sizable corpus --- exploring
-  two transition-based approaches.
-  First, we construct coverters from UCCA to two related formalisms, and use existing
-  state-of-the-art parsers for these settings. Second, we construct a new transition-based
-  parser for the task,
-  building on recent advances in discontiguous constituency parsing.
-  To our knowledge, this is the first work to tackle the broad-coverage constituency semantic
-  parsing task.
-  
+  (i.e., word-to-word) or abstract (i.e., not grounded in the words and phrases of the
+  sentence) representations, we advocate a constituency-based formulation of the task.
+  We define the broad-coverage constituency semantic parsing task (henceforth, {\it BCSP}), and explore
+  two approaches to tackle it, using the English UCCA corpus for our experiments.
+  The first approach coverts the UCCA structures to two related formalisms, and use existing
+  state-of-the-art parsers for these settings. The second constructs a new parser for the task,
+  building on recent advances in discontiguous constituency parsing. Motivated by their high
+  performance and conceptual simplicity, we focus on transition-based approaches to the task.
+  We experiment with two types of semantic representations, obtaining encouraging results.
   
   %Universal Conceptual Cognitive Annotation (UCCA) is a semantic grammatical scheme
   % that assigns 
