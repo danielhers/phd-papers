@@ -10,7 +10,9 @@
 \usepackage{pgfplotstable}
 \usepackage[]{algorithm2e}
 \usepackage{hyperref}
-\newcommand{\my}[1]{\footnote{\bf #1}}
+\usepackage{color}
+\newcommand{\oa}[1]{\footnote{\color{red} #1}}
+\newcommand{\daniel}[1]{\footnote{\color{blue} #1}}
 \newcommand{\com}[1]{}
 \newcommand{\secref}[1]{Section \ref{#1}}
 
@@ -46,7 +48,7 @@ A Transition-Based Approach}
 \begin{abstract}
 
   Representing many common semantic phenomena requires more expressive formalisms
-  than the ones commonly for syntactic parsing. For instance, arguments that are shared
+  than the ones commonly used for syntactic parsing. For instance, arguments that are shared
   between predicates are often semantically represented as multi-parented nodes,
   yielding DAG (rather than tree) structures.
   %which has lead to renewed interest in DAG parsing in recent years.
@@ -55,7 +57,7 @@ A Transition-Based Approach}
   sentence) representations, we advocate a constituency-based formulation of the task.
   We define the broad-coverage constituency semantic parsing task (henceforth, {\it BCSP}), and explore
   two approaches to tackle it, using the English UCCA corpus for our experiments.
-  The first approach coverts the UCCA structures to two related formalisms, and use existing
+  The first approach converts the UCCA structures to two related formalisms, and use existing
   state-of-the-art parsers for these settings. The second constructs a new parser for the task,
   building on recent advances in discontiguous constituency parsing. Motivated by their high
   performance and conceptual simplicity, we focus on transition-based approaches to the task.
@@ -92,17 +94,17 @@ Indeed, all broad-coverage semantic schemes used in NLP we are aware of allow mu
 
 Most work on broad-coverage semantic parsing has focused on semantic role labeling,
 which is limited by its focus on shallow predicate-argument structures and predominantly on verbal
-predicates. The Abstract Meaning Representation (AMR) \cite{banarescu2013abstract},
+predicates. Abstract Meaning Representation (AMR) \cite{banarescu2013abstract},
 which has attracted considerable attention recently,
 provides a more complete semantic annotation in the form of elaborate graphs,
 which account for a wider range of predicates, linkage and coreference phenomena.
-Formally, it represents sentences as DAGs, without grounding its
+Formally, it represents sentences as directed graphs, without grounding its
 semantic sub-parts in the sentence's words and constituents.
 Another line of work that addresses parsing into elaborate semantic structures,
 is that of Broad-coverage Semantic Dependency Parsing \cite{oepen2014semeval,oepen2015semeval} (SDP).
 Like AMR, SDP also addresses a wide range of argument structures (including verbal, nominal and adjectival ones)
 and the inter-relations between them, but uses word-to-word dependency structures.
-The tasks has been explored in two recent SemEval tasks, exploring three approaches
+SDP has been explored in two recent SemEval tasks, exploring three approaches
 for semantic representation: the Prague
 Dependency Treebank tectogrammatical layer \cite{bohmova2003prague},
 HSPG-derived parsers using the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
@@ -119,7 +121,7 @@ In this work, we propose the task of broad-coverage semantic {\it constituency} 
 Constituency representation of semantics has considerable advantage over dependency representation, as it does not force the idea of a single head: the units in a construction may simply be annotated as the children of a common non-terminal parent.
 
 A general parser for this setting must support the prediction of multiple parents,
-as well as of discontiguous constituents, both pervasive phenomena even in semantic
+as well as of discontiguous constituents, both pervasive phenomena in semantic
 structures even in English. Multiple parents show up frequently in the context of argument
 sharing, where a certain argument participates in several relations but is only mentioned once.
 Common examples are coordination structures
@@ -139,7 +141,7 @@ discontiguous constituency trees, apply state-of-the-art parsers to these formal
 the converted representations, and convert them back into UCCA annotations.
 We take a transition-based approach, motivated by the effectiveness of the approach in
 related parsing tasks, as well as its computational efficiency and its conceptual simplicity.
-Finally, we present a novel transition-based constituency parser that supports both discontiguious
+Finally, we present a novel transition-based constituency parser that supports both discontiguous
 constituents and multiple parents. To our knowledge, this is the first parser to tackle the task.
 We apply the parser both to an in-domain and out-of-domain scenario.
 Our experimental results shed light on the difficulty of the task, as well as the ability of
@@ -168,7 +170,7 @@ UCCA is similar to AMR~\cite{flanigan2014discriminative,artzi2015broad}.
 
 \paragraph{Parsing with discontiguous untis.}
 % cover both constituency and dependency-based approaches
-\my{Who to compare to? (we take a transition-based approach; later we discuss,
+\oa{Who to compare to? (we take a transition-based approach; later we discuss,
   without comparing, to grammar-based
   or graph-based approaches)
   Constituency parsers that meet some of the critera: Wolfgang's (all but multiple parents),
@@ -181,7 +183,7 @@ UCCA is similar to AMR~\cite{flanigan2014discriminative,artzi2015broad}.
   Future work: LSTM-version of our parser, conversion from t-layer parsers and such.
 }
 
-Syntactic dependency trees can in general be non-projective. Graph-based parsers are able to produce such trees, but many transition-based parsers assume projectivity to improve the performance and efficiency of the parser: the number of transitions in such parsers is always $2n$ where $n$ is the number of tokens \cite{nivre2004incrementality}. However, non-projective dependency trees can also be parsed by transition-based parsers in linear time \cite{nivre2009non}.
+Syntactic dependency trees can in general be non-projective. Graph-based parsers are able to produce such trees, but many transition-based parsers assume projectivity to improve the performance and efficiency of the parser: the number of transitions in such parsers is always $2n$ where $n$ is the number of tokens \cite{nivre2004incrementality}. However, non-projective dependency trees can also be parsed by transition-based parsers in empirical linear time \cite{nivre2009non}.
 
 In a UCCA graph, labels appear on the edges, whereas nodes are unlabeled. If all the nodes are known, parsing is the same as inducing a graph on them with the correct edge labels. In dependency parsing, a graph is induced on the set of nodes consisting of the tokens in the sentence (and the \textsc{ROOT} symbol). Therefore, it seems that techniques from dependency parsing can be used for UCCA parsing as well.
 
@@ -195,7 +197,7 @@ Like standard dependency parsers, transition-based constituent parsers are gener
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Coversion-based Approaches}
+\section{Conversion-based Approaches}
 
 To our knowledge, there is no existing model to learn the general structure of UCCA graphs. Instead, as a baseline, we use models originally designed for syntactic dependency parsing, and train them on converted UCCA graphs. Since the converted annotation is not as rich as the UCCA scheme, some information is lost and has to be recovered as part of the conversion, so the accuracy of this method is bounded by the conversion accuracy.
 
@@ -206,22 +208,25 @@ The top two rows in Table~\ref{table:convert} show the accuracy of conversion fr
 
 \subsubsection{Conversion from UCCA to CoNLL-X}
 
-The conversion relies on several concepts: since UCCA has non-terminal units, whereas in CoNLL-X all edges are between tokens, each non-terminal unit $u$ in UCCA requires a representative terminal unit $t$ to be selected for it. $t$ is referred to as the \textit{head terminal} of $u$, and denoted $head(u)$. The edges on the path from $u$ to $t$ are referred to as \textit{head edges}, and the target of a head edge is a \textit{head child}. The head terminal of a unit is selected by selecting a head child iteratively. The head child tag of $u$ is the first among a pre-determined list of tags of which $u$ has outgoing edges, and the head child is any child of that type. The list of tags is: \textsc{C,H,P,S,A,D,E,R,F,L,LR,LA,G,T,U}.
+The conversion relies on several concepts: since UCCA has non-terminal units, whereas in CoNLL-X all edges are between tokens, each non-terminal unit $u$ in UCCA requires a representative terminal unit $t$ to be selected for it. $t$ is referred to as the \textit{head terminal} of $u$, and denoted $head(u)$. The edges on the path from $u$ to $t$ are referred to as \textit{head edges}, and the dependent of a head edge is a \textit{head child}. The head terminal of a unit is selected by selecting a head child iteratively. The head child tag of $u$ is the first among a pre-determined list of tags of which $u$ has outgoing edges, and the head child is any child of that type. The order of tags is: \textsc{C,N,H,P,S,A,D,T,E,R,F,L,LR,LA,G,Terminal} and \textsc{U}.
 
 Since UCCA forms a DAG and not necessarily a tree, $t$ can be the head terminal of more than one unit. A \textit{top headed unit} of $t$ is any non-terminal unit $u$ such that $t$ is a head terminal of $u$, but not of any of $u$'s parents (if there are any). Denote by $top(t)$ an arbitrarily selected top headed unit of $t$.
 
 The conversion is shown in Algorithm~\ref{alg:ucca2conll}.
+\daniel{Is it really important to show the algorithm? If so, I need to correct it a little bit. Also, why didn't I use McDonald et al.'s conversion with custom head rules? There is also a long description of the conversion process in \url{http://hall.maltparser.org/cv/pub/johan_hall_phdthesis.pdf}}
 
 \begin{algorithm}
- \KwData{UCCA graph}
- \KwResult{CoNLL-X dependency tree}
- $nodes \leftarrow []$\;
- \ForEach{terminal unit t}{
-  $u \leftarrow top(t)$\;
-  $p \leftarrow parent(u)$\;
-  $t^\prime \leftarrow head(p)$\;
-  $e \leftarrow (p, u)$\;
-  add $t$ to $nodes$ with $t^\prime$ as parent, and $tag(e)$ as relation\;
+ \KwData{UCCA graph $G$}
+ \KwResult{CoNLL-X dependency tree $T$}
+ $V(T) \leftarrow \emptyset$\\
+ $E(T) \leftarrow \emptyset$\\
+ \ForEach{$t \in \mathrm{terminals}(G)$}{
+  $u \leftarrow top(t)$\\
+  $p \leftarrow parent(u)$\\
+  $t^\prime \leftarrow head(p)$\\
+  $\ell \leftarrow \ell_G(p, u)$\\
+  $V(T) \leftarrow V(T) \cup \{t\}$\\
+  $E(T) \leftarrow E(T) \cup \{(t^\prime, t, \ell)\}$\\
  }
  \caption{UCCA to CoNLL-X Conversion}
  \label{alg:ucca2conll}
@@ -242,18 +247,20 @@ When a new edge is added, its tag is either the relation associated with the cor
 Algorithm~\ref{alg:conll2ucca} shows the conversion.
 
 \begin{algorithm}
- \KwData{CoNLL-X dependency tree}
- \KwResult{UCCA graph}
- add root unit $r$\;
- \ForEach{node t}{
-  add terminal unit $t$\;
-  add non-terminal unit $u$\;
-  add edge $(u,t)$\;
-  \eIf{$rel(t) = $ROOT}{
-   add edge $(r,u)$
+ \KwData{CoNLL-X dependency tree $T$}
+ \KwResult{UCCA graph $G$}
+ $r \leftarrow Node()$\\
+ $V(G) \leftarrow r$\\
+ $E(G) \leftarrow \emptyset$\\
+ \ForEach{$t \in V(T)$}{
+  $u \leftarrow Node()$\\
+  $V(G) \leftarrow V(G) \cup \{t, u\}$\\
+  $E(G) \leftarrow E(G) \cup \{(u, \textsc{Terminal}, t\}$\\
+  \eIf{$\ell_T(t) = \textsc{Root}$}{
+   $E(G) \leftarrow E(G) \cup \{(r, label(u), u\}$\\
   }{
-   $p \leftarrow preterminal(parent(t))$\;
-   add edge $(p,u)$\;
+   $p \leftarrow preterminal(parent(t))$\\
+   $E(G) \leftarrow E(G) \cup \{(p, label(u), u\}$\\
   }
  }
  \caption{CoNLL-X to UCCA Conversion}
@@ -264,40 +271,53 @@ Algorithm~\ref{alg:conll2ucca} shows the conversion.
 
 In order to provide a baseline for UCCA parsing, we trained two state-of-the-art dependency parsers on a dataset resulting from conversion of the UCCA corpus to CoNLL-X format. Then we ran the resulting parser models, converted the results to the UCCA format, and evaluated using the labeled F1, unlabeled F1 and weakly labeled F1 measures. The results are shown in Table~\ref{table:convert}.
 
-\subsection{Conversion to dependency DAG}
-
-TODO: convert to (projective) dependency DAG
-
-\subsection{Parsing using DAG parsers}
-
-TODO: use Tokg\"oz and Eryi\u{g}it's parser to parse converted DAGs \cite{tokgoz2015transition}
+%\subsection{Conversion to dependency DAG}
+%
+%TODO: convert to (projective) dependency DAG
+%
+%\subsection{Parsing using DAG parsers}
+%
+%TODO: use Tokg\"oz and Eryi\u{g}it's parser to parse converted DAGs \cite{tokgoz2015transition}
 
 \subsection{Conversion to constituency tree}
 
-TODO: convert to (discontinuous) constituency trees
+Another common format is constituency trees. Here, the conversion is relatively simple: we just remove remote and linkage edges, and all linkage and implicit nodes. This results in a tree that can be parsed by constituency parsers.
 
 \subsection{Parsing using constituency parsers}
 
-TODO: use Maier's parsers to parse converted trees
+The conversion results in constituency trees, but some of the nodes may have a discontinuous yield. Most transition-based parsers are unable to deal with such trees, but we used \textsc{uparse} \cite{maier2015discontinuous}, which is able to parser discontinuous structures. The results are shown in Table~\ref{table:convert}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Direct Approach}
 
+\subsection{Task definition}
+
+Assuming a pre-defined set $L$ of edge tags, a \textit{UCCA graph} for a text $x=w_1 \ldots w_n$ is a directed graph $G=(V,E)$, where:
+\begin{enumerate}
+ \item $V$ is a set of nodes s.t. $\{w_1, \ldots, w_n\} \subseteq V$,
+ \item $E \subseteq V \times L \times V$ is a set of labeled edges.
+\end{enumerate}
+The set $V$ of nodes consists of the \textit{terminal} nodes $w_1, \ldots, w_n$, and the non-terminal nodes. The set $E$ of edges is a set of triplets $(u, \ell, v)$, where $u$ and $v$ are nodes and $\ell$ is an edge tag.
+
+In UCCA parsing, $x$ is given and the task is to build $G$.
+
+\subsection{Transition-based UCCA parser}
+
 Many approaches could be used to create a parser for UCCA, such as the graph-based approach
 employed in JAMR~\cite{flanigan2014discriminative}.
-However, UCCA is annotated over whole passages. A passage can contains hundreds and even thousands of tokens, so it is not feasible to keep a dense graph over all of them in memory. Therefore, we chose to adopt the transition-based approach for parsing UCCA.
+We chose to adopt the transition-based approach for parsing UCCA.
 
-Our parser architecture follows the transition-based constituency parser in Maier~\shortcite{maier2015discontinuous}, with some variations:
+Our parser architecture combines transition-based constituency parsers \cite{zhu2013fast,maier2015discontinuous} with transition-based DAG dependency parsers \cite{sagae2008shift,tokgoz2015transition}:
 
 \begin{itemize}
-	\item Parsing starts with the root node on the stack, as is the practice in dependency parsing.
-	\item \textsc{Unary-X} is renamed \textsc{Node$_X$}. It creates a new node on the buffer head as a parent of the first element on the stack (with edge tag $X$), but it does not reduce the first element on the stack; since nodes in UCCA may have multiple parents, they should only be reduced after all their edges have been created.
-	\item \textsc{Binary-X-L} and \textsc{Binary-X-R} are renamed \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} respectively. They create a new edge between the first two elements on the stack, but again, they do not reduce any of them, to allow for multiple parents.
-	\item Unlike normal constituency parsing, in UCCA there may be long-distance edges, called remote edges. We added actions to create these edges, namely \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$}. They are identical to \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$}, except that the edges they create are marked as remote.
-	\item In UCCA, some non-terminal units are implicit units, meaning they do not correspond to any terminals. We added the \textsc{Implicit$_X$} action: it is just like the \textsc{Node$_X$} action, except that the node created by it becomes the child of the stack top rather than its parent, and is marked implicit. We add the constraint that implicit nodes cannot have any children.
+	\item Parsing starts with the root node on the stack.
+	\item \textsc{Node$_X$} creates a new node on the buffer head as a parent of the first element on the stack (with edge tag $X$), but it does not reduce the first element on the stack; since nodes in UCCA may have multiple parents, they should only be reduced after all their edges have been created.
+	\item \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new edge between the first two elements on the stack, but again, they do not reduce any of them, to allow for multiple parents.
+	\item \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} are identical to \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$}, except that the edges they create are marked as remote. In UCCA there may be long-distance edges, called remote edges.
+	\item \textsc{Implicit$_X$} is identical to \textsc{Node$_X$} action, except that the node created by it becomes the child of the stack top rather than its parent, and is marked implicit. Some non-terminal units are implicit units, meaning they do not correspond to any terminals. We add the constraint that implicit nodes cannot have any children.
 \end{itemize}
 
-The action set is:
+The transitions are:
 
 \textsc{Node$_X$, Implicit$_X$, Left-Edge$_X$, Right-Edge$_X$, Left-Remote$_X$, Right-Remote$_X$, Reduce, Shift, Swap, Finish}
 
@@ -392,7 +412,7 @@ The following rules were used to determine the head of a unit.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data}\secref{sec:data}
 
-\my{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
+\oa{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
 
 \begin{table}[ht]
 \begin{tabular}{lccc}
