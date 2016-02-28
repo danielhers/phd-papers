@@ -11,6 +11,13 @@
 \usepackage[]{algorithm2e}
 \usepackage{hyperref}
 \usepackage{color}
+\usepackage{lipsum,adjustbox}
+\usepackage{tikz}
+\usepackage{tikz-dependency}
+\usetikzlibrary{shapes,fit,calc,er,positioning,intersections,decorations.shapes,mindmap,trees}
+\tikzset{decorate sep/.style 2 args={decorate,decoration={shape backgrounds,shape=circle,shape size=#1,sha
+pe sep=#2}}}
+
 \newcommand{\oa}[1]{\footnote{\color{red} #1}}
 \newcommand{\daniel}[1]{\footnote{\color{blue} #1}}
 \newcommand{\com}[1]{}
@@ -152,6 +159,50 @@ semantic parsing task. Second, we create converters, and assess the ability of e
 for formally related settings to address the task, focusing on transition-based methods.
 Third, we present the first parser for the task, as well as a first parser for UCCA.
 All converters, parsers and datasets will be made publicly available upon publication.
+
+\begin {figure*}
+\begin{adjustbox}{width=\textwidth}
+  \begin{tikzpicture}[level distance=19mm, ->,
+  level 1/.style={sibling distance=8em},
+  level 2/.style={sibling distance=4em},
+  level 3/.style={sibling distance=4em}]
+    \label{fig:similar_technique}
+    \node (ROOT) [fill=black, circle] {}
+      child {node [fill=black, circle] {}
+      {
+        child {node {A} edge from parent node[left] {\scriptsize $E$}}
+        child {node {similar} edge from parent node[left] {\scriptsize $E$}}
+        child {node {technique} edge from parent node[right] {\scriptsize $C$}}
+      } edge from parent node[left] {\scriptsize $A\quad$ \hspace{1mm} } }
+      child {node {is} edge from parent node[left] {\scriptsize $F$}}
+      child {node [fill=black, circle] {}
+      {
+        child {node {almost} edge from parent node[left] {\scriptsize $E$}}
+        child {node {impossible} edge from parent node[right] {\scriptsize $C$}}
+      } edge from parent node[left] {\scriptsize $D$} }
+      child {node {to} edge from parent node[left] {\scriptsize $F$}}
+      child {node {apply} edge from parent node[right] {\scriptsize $\;P$}}
+      child {node [fill=black, circle] {}
+      {
+        child {node {to} edge from parent node[left] {\scriptsize $R$}}
+        child {node {other} edge from parent node[left] {\scriptsize $E$}}
+        child {node {crops} edge from parent node[left] {\scriptsize $C$}}
+        child {node {,} edge from parent node[left] {\scriptsize $U$}}
+        child {node [fill=black, circle] {}
+        {
+          child {node {such as} edge from parent node[left] {\scriptsize $R$}}
+          child {node {cotton} edge from parent node[left] {\scriptsize $C$}}
+          child {node {,} edge from parent node[left] {\scriptsize $U$}}
+          child {node {soybeans} edge from parent node[left] {\scriptsize $C$}}
+          child {node {and} edge from parent node[left] {\scriptsize $N$}}
+          child {node {rice} edge from parent node[right] {\scriptsize $\; C$}}
+        } edge from parent node[right] {\scriptsize $\; E$ \hspace{1mm} } }
+      } edge from parent node[left] {\scriptsize $A\;$ \hspace{1mm} } }
+      child {node {.} edge from parent node[right] {\scriptsize $\quad \quad U$}}
+      ;
+  \end{tikzpicture}
+\end{adjustbox}
+\end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related work}
@@ -306,6 +357,11 @@ In UCCA parsing, $x$ is given and the task is to build $G$.
 Many approaches could be used to create a parser for UCCA, such as the graph-based approach
 employed in JAMR~\cite{flanigan2014discriminative}.
 We chose to adopt the transition-based approach for parsing UCCA.
+
+We define a transition system for UCCA parsing as a quadruple $S=(C,T,c_s,C_t)$, where
+\begin{enumerate}
+ \item $C$ is a set of configurations.
+\end{enumerate}
 
 Our parser architecture combines transition-based constituency parsers \cite{zhu2013fast,maier2015discontinuous} with transition-based DAG dependency parsers \cite{sagae2008shift,tokgoz2015transition}:
 
