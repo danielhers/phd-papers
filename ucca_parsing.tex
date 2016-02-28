@@ -162,7 +162,7 @@ All converters, parsers and datasets will be made publicly available upon public
 
 \begin {figure*}
 \begin{adjustbox}{width=\textwidth}
-  \begin{tikzpicture}[level distance=19mm, ->,
+  \begin{tikzpicture}[level distance=20mm, ->,
   level 1/.style={sibling distance=8em},
   level 2/.style={sibling distance=4em},
   level 3/.style={sibling distance=4em}]
@@ -180,8 +180,9 @@ All converters, parsers and datasets will be made publicly available upon public
         child {node {almost} edge from parent node[left] {\scriptsize $E$}}
         child {node {impossible} edge from parent node[right] {\scriptsize $C$}}
       } edge from parent node[left] {\scriptsize $D$} }
+      child {node {\textbf{EMPTY}} edge from parent node[left] {\scriptsize $A$}}
       child {node {to} edge from parent node[left] {\scriptsize $F$}}
-      child {node {apply} edge from parent node[right] {\scriptsize $\;P$}}
+      child {node {apply} edge from parent node[left] {\scriptsize $P\quad$}}
       child {node [fill=black, circle] {}
       {
         child {node {to} edge from parent node[left] {\scriptsize $R$}}
