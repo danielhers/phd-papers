@@ -15,8 +15,7 @@
 \usepackage{tikz}
 \usepackage{tikz-dependency}
 \usetikzlibrary{shapes,fit,calc,er,positioning,intersections,decorations.shapes,mindmap,trees}
-\tikzset{decorate sep/.style 2 args={decorate,decoration={shape backgrounds,shape=circle,shape size=#1,sha
-pe sep=#2}}}
+\tikzset{decorate sep/.style 2 args={decorate,decoration={shape backgrounds,shape=circle,shape size=#1,shape sep=#2}}}
 
 \newcommand{\oa}[1]{\footnote{\color{red} #1}}
 \newcommand{\daniel}[1]{\footnote{\color{blue} #1}}
@@ -55,23 +54,22 @@ A Transition-Based Approach}
 \begin{abstract}
 
   Representing many common semantic phenomena requires more expressive formalisms
-  than the ones commonly used for syntactic parsing. For instance, arguments that are shared
-  between predicates are often semantically represented as multi-parented nodes,
-  yielding DAG, rather than tree, structures.
-  %which has lead to renewed interest in DAG parsing in recent years.
+  than those commonly used for syntactic parsing, motivating research into
+  more formally expressive parsers.
   Recent work has focused on broad-coverage semantic parsing into dependency
-  (i.e., word-to-word) or abstract (i.e., not grounded in the words and phrases of the sentence) representations.
-  We advocate a constituency-based formulation of the task and
-  define the broad-coverage constituency semantic parsing task (henceforth, {\it BCSP}),
-  and explore two approaches to tackle it, using the English UCCA corpus for our experiments.
-  In one, we covert the UCCA structures into two related formalisms, and use existing
-  state-of-the-art parsers for these settings.
-  In the other, we construct a novel parser for the task.
-  %  building on recent advances in discontiguous constituency parsing.
-  Motivated by their high performance and conceptual simplicity,
-  our exploration focuses on transition-based parsing.
-  %We experiment with two types of semantic representations, obtaining encouraging results.
+  (i.e., word-to-word) or abstract (i.e., not grounded in the words and phrases of
+  the sentence) representations.
+  Instead, we advocate a constituency-based formulation of the
+  task and define the broad-coverage constituency semantic parsing task
+  (henceforth, {\it BCSP}) using the UCCA semantic scheme and annotated corpora as a testbed.
+  We note that there are no existing methods for constituency DAG parsing,
+  and propose two transition-based approaches to tackle it:
+  (1) creating conversion tools for converting UCCA structures into related
+  formalisms and back, and using existing state-of-the-art parsers for
+  these settings, and (2) constructing a novel parser for the task.
   
+  %We experiment with two types of semantic representations, obtaining
+  %encouraging results.
   %Universal Conceptual Cognitive Annotation (UCCA) is a semantic grammatical scheme
   % that assigns 
   %a complete structure to natural language text. We present the first automatic
@@ -94,73 +92,78 @@ A Transition-Based Approach}
 %  are not trees, but DAGs (e.g., argument sharing in control structures;
 % see Oepen et al., 2015, AMR).
 
-The formal constraints imposed by available statistical parsers are insufficient for
+The formal constraints imposed by available statistical parsers are too restrictive
 broad-coverage semantic parsing \cite{oepen2015semeval}.
-Commonly imposed constraints, such as that the parse is a tree, are arguably reasonable for
-accounting for the syntax of natural language, but are lacking when applied to semantic parsing,
-as they are unable to capture argument sharing phenomena, such as control or coordination.
-Indeed, all broad-coverage semantic schemes used in NLP we are aware of allow multiple parents.
+For instance, arguments that are shared
+between predicates are generally represented as multi-parented nodes,
+yielding DAG, rather than tree structures. This has motivated much recent
+inquiry into semantic parsing with more expressive formalisms.
 
-Most work on broad-coverage semantic parsing has focused on semantic role labeling,
-which is limited by its focus on shallow predicate-argument structures and predominantly on verbal
-predicates. Abstract Meaning Representation (AMR) \cite{banarescu2013abstract},
-which has attracted considerable attention recently,
-provides a more complete semantic annotation in the form of elaborate graphs,
-which account for a wider range of predicates, linkage and coreference phenomena.
-Formally, it represents sentences as directed graphs, without grounding its
-semantic sub-parts in the sentence's words and constituents.
-Another line of work that addresses parsing into elaborate semantic structures,
-is that of Broad-coverage Semantic Dependency Parsing \cite{oepen2014semeval,oepen2015semeval} (SDP).
-Like AMR, SDP also addresses a wide range of argument structures (including verbal, nominal and adjectival ones)
-and the inter-relations between them, but uses word-to-word dependency structures.
-SDP has been explored in two recent SemEval tasks, exploring three approaches
-for semantic representation: the Prague
-Dependency Treebank tectogrammatical layer \cite{bohmova2003prague},
-HSPG-derived parsers using the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
-and dependencies derived from the Lingo ERG
-Minimal Recursion Semantics represenations \cite{Flic:02}.
+Earlier work on statistical broad-coverage semantic parsing has mostly
+concentrated on shallow semantic analysis, focusing on verb argument structure phenomena.
+Recently work has focused on parsing into a more elaborate representation, accounting
+for other phenomena, such as inter-clause relations and non-verbal predicates.
+Much recent interest has been placed on parsing sentences into abstract meaning representations,
+not grounded in the words and phrases, notably AMR \cite{banarescu2013abstract}.
+While sharing much of these works' motivation, AMR poses difficulties as it conflates
+a wide variety of linguistic phenomena into a single unlayered representation.
+Moreover, not embedding the text within the semantic representation,
+often requiring that the alignment between words and logical symbols will be automatically
+(and imprecisely) derived and potentially complicating the parsing task (see \secref{sec:realted}).
 
-Purely bi-lexical dependency representation necessarily requires arbitrary decisions regarding the representation (1) of constructions that have more than a single
-head (e.g., coordination), (2) of cases where the identity of the head is disputed
-(e.g., determiner-noun, preposition-noun etc.), and (3) of multi-word expressions,
-which are semantically opaque and hence have no clear head. Under dependency representation
-the treatment of these constructions is often unsystematic, yielding both conceptual
-and practical problems \cite{schwartz2011neutralizing,Ivanova2012who,tsarfaty2012cross}.
-In this work, we propose the task of broad-coverage semantic {\it constituency} parsing. 
-Constituency representation of semantics has considerable advantage over dependency representation, as it does not force the idea of a single head: the units in a construction may simply be annotated as the children of a common non-terminal parent.
+An alternative line of work tackles parsing into grounded semantic representations.
+This line of work has focused on semantic dependencies, and has been explored systematically
+in two recent Semeval shared tasks \cite{oepen2014semeval,oepen2015semeval}.
+Bi-lexical dependencies are appealing as semantic representations, partly as they are
+structurally and conceptually simple and lend themselves to strong and efficient
+parsing methods. However, the assumption that each semantic unit has a unique head encounters
+difficulties when applied to the representation of several frequent constructions,
+such as coordination, prepositional phrases, and multi-word expressions.
 
-A general parser for this setting must support the prediction of multiple parents,
-as well as of discontiguous constituents, both pervasive phenomena in semantic
-structures even in English. Multiple parents show up frequently in the context of argument
-sharing, where a certain argument participates in several relations but is only mentioned once.
-Common examples are coordination structures
-(e.g., in ``John went home and took a shower'', ``John'' is an argument of both ``went'' and ``took'')
-or nominalizations (e.g., ``After graduation, John moved to London'', where ``John'' is an argument
-of both ``graduation'' and ``moved'').
-Discontiguous units are common even in syntactic structures in some languages (e.g., German, Bulgarian,
-Korean and many others \cite{kallmeyer2013data}), and can even be found in English, e.g., in reported
-speech: ``'The dog', John said, 'is back again''', and are even more pervasive in English semantic parses
-(see \secref{sec:data}).
+In this work we define and tackle the constituency-based semantic parsing task.
+Constituency representation is appealing, as it is both grounded in the words of the sentence,
+and does not impose the limiting unique head assumption. Moreover, it still lends itself to
+efficient and effective transition-based methods \cite{sagae_lavie:05,zhu:13,mayer:15}. 
+We take a transition-based approach, motivated by their state-of-the-art performance on
+related parsing tasks \cite{lstm_parser}, as well as their computational efficiency.
 
-The only corpora we are aware of that annotates text with constituency semantic annotation are
-corpora annotated according to the UCCA scheme \cite{abend2013universal,sulem2015conceptual}.
-In order to assess the ability of existing technology to tackle the task,
-we create converters between the UCCA annotation and CoNLL-style dependencies, as well as
-discontiguous constituency trees, apply state-of-the-art parsers to these formalisms on
-the converted representations, and convert them back into UCCA annotations.
-We take a transition-based approach, motivated by the effectiveness of the approach in
-related parsing tasks, as well as its computational efficiency and its conceptual simplicity.
-Finally, we present a novel transition-based constituency parser that supports both discontiguous
-constituents and multiple parents. To our knowledge, this is the first parser to tackle the task.
-We apply the parser both to an in-domain and out-of-domain scenario.
-Our experimental results shed light on the difficulty of the task, as well as the ability of
-transition-based parsers to tackle it.
+We follow two complementary approaches.
+First, in order to assess the ability of existing technology to tackle the task,
+we build converters between the UCCA annotation and two related formalisms:
+CoNLL-style dependencies and discontiguous constituency trees.
+We are not aware of any statistical constituency DAG parsers, and specifically not
+ones that support discontiguous constituents, as required for a broad-coverage semantic
+parser (see related discussion on the persaviness of non-projective structures in dependency
+representations in \cite{}). Therefore, the conversion to these formalism and back will
+lose some information. The details of the conversion and of the parsers can be found in
+\secref{sec:conversion_approach}. 
+Second, we present the first transition-based constituency parser that supports both discontiguous
+constituents and multiple parents. We apply the parser both to an in-domain and out-of-domain
+scenario, with encouraging results.\oa{are they encouraging?}
 
-The contribution of this work is thus three-fold. First, we motivate and tackle the constituency broad-coverage
-semantic parsing task. Second, we create converters, and assess the ability of existing parsing technology
+%A general parser for this setting must support the prediction of multiple parents,
+%as well as of discontiguous constituents, both pervasive phenomena in semantic
+%structures even in English (see \secref{sec:data}.
+%Multiple parents show up frequently in the context of argument
+%sharing, where a certain argument participates in several relations but is only mentioned once.
+%Common examples are coordination structures
+%(e.g., in ``John went home and took a shower'', ``John'' is an argument of both ``went'' and ``took'')
+%or nominalizations (e.g., ``After graduation, John moved to London'', where ``John'' is an argument
+%of both ``graduation'' and ``moved'').
+%Discontiguous units are common even in syntactic structures in some languages (e.g., German, Bulgarian,
+%Korean and many others \cite{kallmeyer2013data}), and can even be found in English, e.g., in reported
+%speech: ``'The dog', John said, 'is back again''', and are even more pervasive in English semantic parses
+%(see \secref{sec:data}).
+
+The contribution of this work is thus three-fold. First, we motivate and tackle the
+constituency broad-coverage
+semantic parsing task. Second, we create converters and assess the ability of existing parsing technology
 for formally related settings to address the task, focusing on transition-based methods.
 Third, we present the first parser for the task, as well as a first parser for UCCA.
 All converters, parsers and datasets will be made publicly available upon publication.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related work}
 
 \begin {figure*}
 \begin{adjustbox}{width=\textwidth}
@@ -207,18 +210,59 @@ All converters, parsers and datasets will be made publicly available upon public
 \end{adjustbox}
 \end{figure*}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Related work}
 
-While no previous work has tackled the task of broad-coverage semantic constituency, 
-the task resembles other statistical and semantic parsing tasks. The techniques used
-in this work are closely related to some of them.
+\paragraph{Broad-coverge Semantic Parsing.}
 
-\paragraph{Semantic Parsing.}
+Most work on broad-coverage semantic parsing has focused on semantic role labeling,
+which is limited by its focus on shallow predicate-argument structures and
+predominantly on verbal predicates.
+Abstract Meaning Representation (AMR) \cite{banarescu2013abstract},
+which has attracted considerable attention recently,
+provides a more complete semantic annotation in the form of elaborate graphs,
+which account for a wider range of predicates, linkage and coreference phenomena.
+Formally, it represents sentences as directed graphs, without grounding its
+semantic sub-parts in the sentence's words and constituents.
+Another line of work that addresses parsing into elaborate semantic structures,
+is that of Broad-coverage Semantic Dependency Parsing \cite{oepen2014semeval,oepen2015semeval} (SDP).
+Like AMR, SDP also addresses a wide range of argument structures (including verbal, nominal and adjectival ones)
+and the inter-relations between them, but uses word-to-word dependency structures.
+SDP has been explored in two recent SemEval tasks, exploring three approaches
+for semantic representation: the Prague
+Dependency Treebank tectogrammatical layer \cite{bohmova2003prague},
+HSPG-derived parsers using the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
+and dependencies derived from the Lingo ERG
+Minimal Recursion Semantics represenations \cite{Flic:02}.
 
-% Brief, but broad. SRL, AMR, broad-coverage dependency, Boxer (and Groningen Meaning Bank), CCG-based.
-% mention various graph parsing methods here
-UCCA is similar to AMR~\cite{flanigan2014discriminative,artzi2015broad}.
+Purely bi-lexical dependency representation necessarily requires arbitrary decisions
+regarding the representation of (1) constructions that have more than a single
+head (e.g., coordination), (2) of cases where the identity of the head is disputed
+(e.g., determiner-noun, preposition-noun etc.), and (3) of multi-word expressions,
+which are semantically opaque and hence have no clear head. Under dependency representation
+the treatment of these constructions is often unsystematic, yielding both conceptual
+and practical problems \cite{schwartz2011neutralizing,Ivanova2012who,tsarfaty2012cross}.
+In this work, we propose the task of broad-coverage semantic {\it constituency} parsing. 
+Constituency representation of semantics has considerable advantage over dependency
+representation, as it does not force the idea of a single head: the units in a construction
+may simply be annotated as the children of a common non-terminal parent.
+
+
+
+Most work on sentence-level semantic parsing focused either on shallow methods, such as semantic
+role labeling, yielding shallow predicate-argument
+structures, or on highly restricted domains, such as parsing into factoid or database queries
+\cite{geoquery,freebase}.
+Recent years have seen much interest in 
+broadly applicable tools for deep semantic parsing.
+Two recent SemEval tasks have been devoted to a dependency variant of the task
+\cite{oepen2014semeval,oepen2015semeval}, converting three major resources of semantic representation
+into a common representation, namely the t-layer of the Prague Dependency Treebank, ... .
+This line of work bears a close relation to our thing, and indeed we use their parsers, but
+dependency representation entails several restricting assumptions that lead to difficulty for
+general semantic representation.
+
+A different line of work addressed AMR parsing \cite{flanigan2014discriminative,artzi2015broad}.
+
+Finally, CCG-based stuff, like Boxer. 
 
 \paragraph{Transition-based Parsing.}
 
@@ -470,6 +514,8 @@ The following rules were used to determine the head of a unit.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data}\secref{sec:data}
+
+Give examples of cases where multiple parents and/or discontiguous units show up.
 
 \oa{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
 
