@@ -365,64 +365,45 @@ We also perform oracle experiments, where instead of a trained parser's output w
 
 To evaluate dependency parsers in this scheme, we convert the semantic constituency graphs to dependency trees. This involves a constituency-to-dependency conversion process that is similar to what is done in syntactic treebanks (\cite{...}). In addition, the conversion to a tree structure requires pruning edges such that all nodes remain with a single incoming edge, and a single root remains in the graph.
 
-\subsubsection{Conversion from UCCA to CoNLL-X}
-
-The conversion relies on several concepts: since UCCA has non-terminal units, whereas in CoNLL-X all edges are between tokens, each non-terminal unit $u$ in UCCA requires a representative terminal unit $t$ to be selected for it. $t$ is referred to as the \textit{head terminal} of $u$, and denoted $head(u)$. The edges on the path from $u$ to $t$ are referred to as \textit{head edges}, and the dependent of a head edge is a \textit{head child}. The head terminal of a unit is selected by selecting a head child iteratively. The head child tag of $u$ is the first among a pre-determined list of tags of which $u$ has outgoing edges, and the head child is any child of that type. The order of tags is: \textsc{C,N,H,P,S,A,D,T,E,R,F,L,LR,LA,G,Terminal} and \textsc{U}.
-
-Since UCCA forms a DAG and not necessarily a tree, $t$ can be the head terminal of more than one unit. A \textit{top headed unit} of $t$ is any non-terminal unit $u$ such that $t$ is a head terminal of $u$, but not of any of $u$'s parents (if there are any). Denote by $top(t)$ an arbitrarily selected top headed unit of $t$.
-
-The conversion is shown in Algorithm~\ref{alg:ucca2conll}.
-\daniel{Is it really important to show the algorithm? If so, I need to correct it a little bit. Also, why didn't I use McDonald et al.'s conversion with custom head rules? There is also a long description of the conversion process in \url{http://hall.maltparser.org/cv/pub/johan_hall_phdthesis.pdf}}
+The conversion from constituency graph to dependency tree is shown in Algorithm~\ref{alg:ucca2conll}. For each node $u$, we define the terminal $\mathrm{head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a terminal. The order is determined by the edge labels. For each terminal $t$, let $u=\mathrm{top}(t)$ if $t=\mathrm{head}(u)$ but $t\neq \mathrm{head}(p)$ for all parents $p$ of $u$. If there is more than one such $u$, we select one of them according to the priority order.
 
 \begin{algorithm}
- \KwData{UCCA graph $G$}
- \KwResult{CoNLL-X dependency tree $T$}
- $V(T) \leftarrow \emptyset$\\
+ \KwData{semantic constituency graph $G$}
+ \KwResult{dependency tree $T$}
+ $V(T) \leftarrow \emptyset$,
  $E(T) \leftarrow \emptyset$\\
  \ForEach{$t \in \mathrm{terminals}(G)$}{
-  $u \leftarrow top(t)$\\
-  $p \leftarrow parent(u)$\\
-  $t^\prime \leftarrow head(p)$\\
+  $u \leftarrow \mathrm{top}(t)$\\
+  $p \leftarrow \mathrm{parent}(u)$\\
+  $t^\prime \leftarrow \mathrm{head}(p)$\\
   $\ell \leftarrow \ell_G(p, u)$\\
   $V(T) \leftarrow V(T) \cup \{t\}$\\
   $E(T) \leftarrow E(T) \cup \{(t^\prime, t, \ell)\}$\\
  }
- \caption{UCCA to CoNLL-X Conversion}
+ \caption{Conversion from semantic constituency graph to dependency tree}
  \label{alg:ucca2conll}
 \end{algorithm}
 
-\subsubsection{Conversion from CoNLL-X to UCCA}
-
-A UCCA graph is created from a CoNLL-X dependency annotation using the following procedure: first, the dependency nodes (the tokens) are sorted topologically.
-
-When a new edge is added, its tag is either the relation associated with the corresponding dependency arc, or, if no such arc exists, determined heuristically:
-\begin{itemize}
-\item If the child is a punctuation terminal, the tag is $U$;
-\item otherwise, if the parent has a child with an $H$ tag, the tag is also $H$;
-\item otherwise, if the parent has a child with an $A$ tag, the tag is $P$;
-\item otherwise, the tag is $C$.
-\end{itemize}
-
-Algorithm~\ref{alg:conll2ucca} shows the conversion.
+The conversion from dependency tree to constituency graph is shown in Algorithm~\ref{alg:conll2ucca}. We define $\mathrm{label}(u)$ heuristically.
 
 \begin{algorithm}
- \KwData{CoNLL-X dependency tree $T$}
- \KwResult{UCCA graph $G$}
+ \KwData{dependency tree $T$}
+ \KwResult{semantic constituency graph $G$}
  $r \leftarrow Node()$\\
- $V(G) \leftarrow r$\\
+ $V(G) \leftarrow \{r\}$,
  $E(G) \leftarrow \emptyset$\\
  \ForEach{$t \in V(T)$}{
   $u \leftarrow Node()$\\
   $V(G) \leftarrow V(G) \cup \{t, u\}$\\
   $E(G) \leftarrow E(G) \cup \{(u, \textsc{Terminal}, t\}$\\
   \eIf{$\ell_T(t) = \textsc{Root}$}{
-   $E(G) \leftarrow E(G) \cup \{(r, label(u), u\}$\\
+   $E(G) \leftarrow E(G) \cup \{(r, \mathrm{label}(u), u\}$\\
   }{
-   $p \leftarrow preterminal(parent(t))$\\
-   $E(G) \leftarrow E(G) \cup \{(p, label(u), u\}$\\
+   $p \leftarrow \mathrm{preterminal}(\mathrm{parent}(t))$\\
+   $E(G) \leftarrow E(G) \cup \{(p, \mathrm{label}(u), u\}$\\
   }
  }
- \caption{CoNLL-X to UCCA Conversion}
+ \caption{Conversion from dependency tree to semantic constituency graph}
  \label{alg:conll2ucca}
 \end{algorithm}
 
