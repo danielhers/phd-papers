@@ -21,7 +21,7 @@
 \newcommand{\oa}[1]{\footnote{\color{red} #1}}
 \newcommand{\daniel}[1]{\footnote{\color{blue} #1}}
 \newcommand{\com}[1]{}
-\newcommand{\secref}[1]{Section \ref{#1}}
+\newcommand{\secref}[1]{Section~\ref{#1}}
 \newcommand{\figref}[1]{Figure~\ref{#1}}
 \newcommand{\tabref}[1]{Table~\ref{#1}}
 
@@ -345,50 +345,57 @@ the prediction of discontiguous units.
 
 \subsection{Semantic Constituency Parsing}
 
-A \textit{semantic constituency graph} $G=(V,E)$ over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph (DAG), where for each $w_i$ ($i=1, \ldots, n$) there exists $t_i \in V$ such that $t_i$ has no children: there is no edge $(t_i, v)$ for any $v \in V$.
+For a given set $L$ of edge labels, a \textit{semantic constituency graph} $G=(V,E, \ell)$ over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph (DAG), where $V$ is a set of \textit{nodes}, $E \subseteq V\times V$ is a set of \textit{edges}, and $\ell:E\to L$ is a function of \textit{edge labels}. For each $w_i$ ($i=1, \ldots, n$) there exists a leaf (a node with no children) $t_i \in V$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conversion-based Parsing}\label{sec:conversion_approach}
 
-To our knowledge, no DAG constituency parser currently exists. Therefore, as a first attempt, we use state-of-the-art parsers for existing schemes, and evaluate them on converted data. Since the target schemes are more restrictive, the conversion is necessarily lossy. The accuracy of this method is bounded by the conversion accuracy.
-The semantic constituency parsers obtained this way are composed of three steps:
+To our knowledge, no DAG constituency parser currently exists. Therefore, as a start, we use state-of-the-art parsers for existing schemes, and evaluate them on converted data. We use dependency trees and discontinuous constituency trees as target representations. Since they are more restrictive than semantic constituency graphs, the conversion is necessarily lossy, and the accuracy of this method is bounded by the conversion accuracy.
+The parsers obtained this way are composed of three steps:
 \begin{enumerate}
-\item Semantic constituency graphs are converted to the parser's target representation
-\item The parser is trained on the converted graphs, and applied to new input using the trained model
-\item The output is converted to semantic constituency graphs
+\item Conversion to target representation.
+\item Training the underlying parser and applying it to test data in the target representation.
+\item Conversion to semantic constituency graphs.
 \end{enumerate}
-Graphs produced by this method for test data is then compared to the gold annotation.
+Graphs produced by this method for test data are then compared to the gold annotation.
 We also perform oracle experiments, where instead of a trained parser's output we use the gold annotation itself, converted to the target representation (and then converted back to semantic constituencies).
+
+
+\subsection{Conversion to constituency trees}
+
+In order to convert semantic constituency graphs to constituency trees, we remove edges such that all nodes are left with a single incoming edge, and a single root remains in the graph. This results in a tree that can be parsed by constituency parsers, but some of the nodes in the tree may have a discontinuous yield. We use \textsc{uparse} \cite{maier2015discontinuous}, which is able to parser discontinuous structures.
+\daniel{Try another SotA constituency parser. Berkeley parser? Stanford parser is hard to train on a new tag set.}
+
 
 \subsection{Conversion to dependency trees}
 
-To evaluate dependency parsers in this scheme, we convert the semantic constituency graphs to dependency trees. This involves a constituency-to-dependency conversion process that is similar to what is done in syntactic treebanks (\cite{...}). In addition, the conversion to a tree structure requires pruning edges such that all nodes remain with a single incoming edge, and a single root remains in the graph.
+To evaluate dependency parsers in this scheme, we convert the data to dependency trees. This involves a constituency-to-dependency conversion process \cite{...}.
 
-The conversion from constituency graph to dependency tree is shown in Algorithm~\ref{alg:ucca2conll}. For each node $u$, we define the terminal $\mathrm{head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a terminal. The order is determined by the edge labels. For each terminal $t$, let $u=\mathrm{top}(t)$ if $t=\mathrm{head}(u)$ but $t\neq \mathrm{head}(p)$ for all parents $p$ of $u$. If there is more than one such $u$, we select one of them according to the priority order.
+The conversion from constituency graph to dependency tree is shown in Algorithm~\ref{alg:ucca2conll}. For each node $u$, we define the terminal $\mathrm{head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a terminal. The order is determined by the edge labels. For each terminal $t$, define $u=\mathrm{top}(t)$ if $t=\mathrm{head}(u)$ but $t\neq \mathrm{head}(p)$ for all parents $p$ of $u$.
 
 \begin{algorithm}
- \KwData{semantic constituency graph $G$}
+ \KwData{constituency graph $G$}
  \KwResult{dependency tree $T$}
  $V(T) \leftarrow \emptyset$,
  $E(T) \leftarrow \emptyset$\\
  \ForEach{$t \in \mathrm{terminals}(G)$}{
   $u \leftarrow \mathrm{top}(t)$\\
-  $p \leftarrow \mathrm{parent}(u)$\\
+  $p \leftarrow \mathrm{parent}_G(u)$\\
   $t^\prime \leftarrow \mathrm{head}(p)$\\
   $\ell \leftarrow \ell_G(p, u)$\\
   $V(T) \leftarrow V(T) \cup \{t\}$\\
-  $E(T) \leftarrow E(T) \cup \{(t^\prime, t, \ell)\}$\\
+  $E(T) \leftarrow E(T) \cup \{(t^\prime, \ell, t)\}$\\
  }
- \caption{Conversion from semantic constituency graph to dependency tree}
+ \caption{Conversion from constituency graph to dependency tree}
  \label{alg:ucca2conll}
 \end{algorithm}
 
-The conversion from dependency tree to constituency graph is shown in Algorithm~\ref{alg:conll2ucca}. We define $\mathrm{label}(u)$ heuristically.
+The conversion from dependency tree to constituency graph is shown in Algorithm~\ref{alg:conll2ucca}. We define $\mathrm{label}(u)$ by a set of rules.
 
 \begin{algorithm}
  \KwData{dependency tree $T$}
- \KwResult{semantic constituency graph $G$}
+ \KwResult{constituency graph $G$}
  $r \leftarrow Node()$\\
  $V(G) \leftarrow \{r\}$,
  $E(G) \leftarrow \emptyset$\\
@@ -399,33 +406,15 @@ The conversion from dependency tree to constituency graph is shown in Algorithm~
   \eIf{$\ell_T(t) = \textsc{Root}$}{
    $E(G) \leftarrow E(G) \cup \{(r, \mathrm{label}(u), u\}$\\
   }{
-   $p \leftarrow \mathrm{preterminal}(\mathrm{parent}(t))$\\
+   $p \leftarrow \mathrm{parent}_G(\mathrm{parent}_T(t))$\\
    $E(G) \leftarrow E(G) \cup \{(p, \mathrm{label}(u), u\}$\\
   }
  }
- \caption{Conversion from dependency tree to semantic constituency graph}
+ \caption{Conversion from dependency tree to constituency graph}
  \label{alg:conll2ucca}
 \end{algorithm}
 
-\subsection{Parsing using dependency parsers}
-
-In order to provide a baseline for UCCA parsing, we trained two state-of-the-art dependency parsers on a dataset resulting from conversion of the UCCA corpus to CoNLL-X format. Then we ran the resulting parser models, converted the results to the UCCA format, and evaluated using the labeled F1, unlabeled F1 and weakly labeled F1 measures. The results are shown in Table~\ref{table:convert}.
-
-%\subsection{Conversion to dependency DAG}
-%
-%TODO: convert to (projective) dependency DAG
-%
-%\subsection{Parsing using DAG parsers}
-%
-%TODO: use Tokg\"oz and Eryi\u{g}it's parser to parse converted DAGs \cite{tokgoz2015transition}
-
-\subsection{Conversion to constituency tree}
-
-Another common format is constituency trees. Here, the conversion is relatively simple: we just remove remote and linkage edges, and all linkage and implicit nodes. This results in a tree that can be parsed by constituency parsers.
-
-\subsection{Parsing using constituency parsers}
-
-The conversion results in constituency trees, but some of the nodes may have a discontinuous yield. Most transition-based parsers are unable to deal with such trees, but we used \textsc{uparse} \cite{maier2015discontinuous}, which is able to parser discontinuous structures. The results are shown in Table~\ref{table:convert}.
+We use MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser by Dyer et al.~\shortcite{dyer2015transition} as the underlying parsers in this method.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Constituency DAG Parsing}\label{sec:direct_approach}
@@ -578,6 +567,8 @@ We should give some statistics about the pervasiveness of discontiguities and mu
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
+
+In the conversion to constituency trees, we remove remote and linkage edges, and all linkage and implicit nodes.
 
 Table~\ref{table:convert} shows the results.
 \begin{table*}
