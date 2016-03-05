@@ -153,7 +153,7 @@ in practice (\secref{sec:conversion_approach}).
 Second, we present a novel transition-based
 constituency DAG parser that supports both discontiguous constituents (\secref{sec:direct_approach}). 
 We apply the parser both to an in-domain and out-of-domain
-scenario, with encouraging results.\oa{are they encouraging?}
+scenario, with encouraging results.
 
 %A general parser for this setting must support the prediction of multiple parents,
 %as well as of discontiguous constituents, both pervasive phenomena in semantic
@@ -420,11 +420,9 @@ We define $\mathrm{Label}(u)$ by a set of rules.
 We use MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser by Dyer et al.~\shortcite{dyer2015transition} as the underlying parsers in this method.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Constituency DAG Parsing}\label{sec:direct_approach}
+\section{Transition-based Constituency DAG Parser}\label{sec:direct_approach}
 
 We now turn to the direct approach for parsing semantic constituency graphs. Given a sequence of tokens $w_1, \ldots, w_n$, we directly predict a semantic constituency graph $G$ over $w_1, \ldots, w_n$.
-
-\subsection{Transition-based constituency DAG parsing}
 
 We define a transition system for constituency DAG parsing as a quadruple $S=(C,T,c_s,C_t)$, where
 \begin{enumerate}
@@ -434,7 +432,8 @@ We define a transition system for constituency DAG parsing as a quadruple $S=(C,
  \item $C_t$ is a set of \textit{terminal configurations}.
 \end{enumerate}
 
-Our parser architecture is based on both transition-based constituency parsers \cite{zhu2013fast,maier2015discontinuous} and transition-based DAG dependency parsers \cite{sagae2008shift,tokgoz2015transition}:
+Our parser architecture is based on both transition-based constituency parsers \cite{zhu2013fast,maier2015discontinuous} and transition-based DAG dependency parsers \cite{sagae2008shift,tokgoz2015transition}.
+As in standard transition-based parsers, the date structures are a buffer $B$ of tokens to be processed, and a stack $S$ of graph nodes (representing sub-graphs of the final constituency graph).
 
 \begin{itemize}
 	\item Parsing starts with the root node on the stack.
