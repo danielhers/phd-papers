@@ -365,12 +365,14 @@ We also perform oracle experiments, where instead of a trained parser's output w
 \subsection{Conversion to constituency trees}
 
 In order to convert semantic constituency graphs to constituency trees, we remove edges such that all nodes are left with a single incoming edge, and a single root remains in the graph. This results in a tree that can be parsed by constituency parsers, but some of the nodes in the tree may have a discontinuous yield. We use \textsc{uparse} \cite{maier2015discontinuous}, which is able to parser discontinuous structures.
-\daniel{Try another SotA constituency parser. Berkeley parser? Stanford parser is hard to train on a new tag set.}
+\daniel{Try another SotA constituency parser. Berkeley parser? Stanford parser is hard to train on a new tag set. Omri: don't think we need to do that. We focus on transition-based approaches.
+  We might want to try another transition-based constituency parser, such as Zhu et al. 2013, but I don't
+  think it's necessary, since Wolfgang's work extends that, doesn't it?}
 
 
 \subsection{Conversion to dependency trees}
 
-To evaluate dependency parsers in this scheme, we convert the data to dependency trees and back by Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
+To evaluate dependency parsers in this scheme, we convert the data to dependency trees and back by Algorithms~\ref{lg:con2dep} and~\ref{alg:dep2con}.
 
 For each node $u$, we define the terminal $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a terminal. The order is determined by the edge labels. For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
 
@@ -432,7 +434,7 @@ We define a transition system for constituency DAG parsing as a quadruple $S=(C,
  \item $C_t$ is a set of \textit{terminal configurations}.
 \end{enumerate}
 
-Our parser architecture is based on both transition-based constituency parsers \cite{zhu2013fast,maier2015discontinuous} and transition-based DAG dependency parsers \cite{sagae2008shift,tokgoz2015transition}.
+Our parser architecture\oa{transition set? perhaps in this point it would make sense to define transition set vs. classifier, for the benefit of readers not versed in trans-based parsing.} is based on both transition-based constituency parsers \cite{zhu2013fast,maier2015discontinuous} and transition-based DAG dependency parsers \cite{sagae2008shift,tokgoz2015transition}.
 As in standard transition-based parsers, the date structures are a buffer $B$ of tokens to be processed, and a stack $S$ of graph nodes (representing sub-graphs of the final constituency graph).
 
 \begin{itemize}
@@ -465,11 +467,11 @@ Each action has a set of constraint that must be met for that action to be possi
 \subsection{Feature representation}
 \label{subsec:features}
 
-Fig.~\ref{fig:features} shows the features templates adapted from Maier~\shortcite{maier2015discontinuous}. $s_i$ and $b_i$ stand for the $i$th stack and buffer items respectively, $w$ stands for the head word (see~\ref{subsec:head_rules}), $t$ for its POS tag, $e$ for the head incoming edge label. Note that $e$ replaces $c$ (consituent label) from Maier~\shortcite{maier2015discontinuous}, since in UCCA the labels are on the edges rather than the units; and a unit may have more than one incoming edge. $l$ and $r$ ($ll$ and $rr$) represent the leftmost and rightmost children (grand-children) of the element; $u$ handles the unary case.
+Fig.~\ref{fig:features} shows the features templates adapted from Maier~\shortcite{maier2015discontinuous}\oa{are all features from maier? i thought you also had new features, no?}. $s_i$ and $b_i$ stand for the $i$th stack and buffer items respectively, $w$ stands for the head word (see~\ref{subsec:head_rules}), $t$ for its POS tag, $e$ for the head incoming edge label. Note that $e$ replaces $c$ (consituent label) from Maier~\shortcite{maier2015discontinuous}, since in UCCA the labels are on the edges rather than the units; and a unit may have more than one incoming edge. $l$ and $r$ ($ll$ and $rr$) represent the leftmost and rightmost children (grand-children) of the element; $u$ handles the unary case.
 Concerning the separator features, $p$ is a unique separator feature between the head words of $s_0$ and $s_1$; $q$ is the count of any separator features between them.
 $x$ denotes the gap type of a subgraph. There are three possible values, either "none" (fully continuous), "pass" (there is a gap at the root, i.e., this gap must be filled later further up in the graph), or "gap" (the root of this graph fills a gap, i.e., its children have gaps, but the root does not). Finally, $y$ is the sum of all gap lengths.
 
-Fig.~\ref{fig:new_features} shows the features templates introduced in this work. $P$ stands for the number of parents a node currently has, and $C$ for the number of children.
+\figref{fig:new_features} shows the features templates introduced in this work. $P$ stands for the number of parents a node currently has, and $C$ for the number of children.
 
 % FEATURES
 \begin{figure}[t]
@@ -583,8 +585,9 @@ We have presented a transition-based parser for UCCA, which is a semantic
 
 Future work:
 \begin{itemize}
-\item \textsc{smatch} for scoring
+%\item \textsc{smatch} for scoring
 \item find the best conversion rules automatically
+\item NN-based classifers for the parser, dynamtic oracles and in general or the heavy machinary of transition-based methods.
 \end{itemize}
 
 \bibliography{references}
