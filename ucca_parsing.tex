@@ -351,7 +351,7 @@ For a given set $L$ of edge labels, a \textit{semantic constituency graph} $G=(V
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conversion-based Parsing}\label{sec:conversion_approach}
 
-To our knowledge, no DAG constituency parser currently exists. Therefore, as a start, we use state-of-the-art parsers for existing schemes, and evaluate them on converted data. We use dependency trees and discontinuous constituency trees as target representations. Since they are more restrictive than semantic constituency graphs, the conversion is necessarily lossy, and the accuracy of this method is bounded by the conversion accuracy.
+To our knowledge, no DAG constituency parser currently exists. Therefore, as a start, we use state-of-the-art parsers for existing schemes, and evaluate them on converted data. We use constituency and dependency trees as target representations. Since they are more restrictive than semantic constituency graphs, the conversion is necessarily lossy, and the accuracy of this method is bounded by the conversion accuracy.
 The parsers obtained this way are composed of three steps:
 \begin{enumerate}
 \item Conversion to target representation.
@@ -370,48 +370,51 @@ In order to convert semantic constituency graphs to constituency trees, we remov
 
 \subsection{Conversion to dependency trees}
 
-To evaluate dependency parsers in this scheme, we convert the data to dependency trees. This involves a constituency-to-dependency conversion process \cite{...}.
+To evaluate dependency parsers in this scheme, we convert the data to dependency trees and back by Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
 
-The conversion from constituency graph to dependency tree is shown in Algorithm~\ref{alg:ucca2conll}. For each node $u$, we define the terminal $\mathrm{head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a terminal. The order is determined by the edge labels. For each terminal $t$, define $u=\mathrm{top}(t)$ if $t=\mathrm{head}(u)$ but $t\neq \mathrm{head}(p)$ for all parents $p$ of $u$.
+For each node $u$, we define the terminal $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a terminal. The order is determined by the edge labels. For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
 
-\begin{algorithm}
- \KwData{constituency graph $G$}
+We define $\mathrm{Label}(u)$ by a set of rules.
+
+\begin{algorithm}[t]
+ \KwData{constituency tree $G$}
  \KwResult{dependency tree $T$}
- $V(T) \leftarrow \emptyset$,
- $E(T) \leftarrow \emptyset$\\
- \ForEach{$t \in \mathrm{terminals}(G)$}{
-  $u \leftarrow \mathrm{top}(t)$\\
-  $p \leftarrow \mathrm{parent}_G(u)$\\
-  $t^\prime \leftarrow \mathrm{head}(p)$\\
-  $\ell \leftarrow \ell_G(p, u)$\\
-  $V(T) \leftarrow V(T) \cup \{t\}$\\
-  $E(T) \leftarrow E(T) \cup \{(t^\prime, \ell, t)\}$\\
+ $V_T \leftarrow \emptyset$,
+ $E_T \leftarrow \emptyset$\\
+ \ForEach{$t \in \mathrm{TopologicalSort}(\mathrm{Terminals}(G))$}{
+  $u \leftarrow \mathrm{Top}(t)$\\
+  $p \leftarrow \mathrm{Parent}_G(u)$\\
+  $t^\prime \leftarrow \mathrm{Head}(p)$\\
+  $V_T \leftarrow V_T \cup \{t\}$\\
+  $E_T \leftarrow E_T \cup \{(t^\prime, t)\}$\\
+  $\ell_T (t^\prime, t) \leftarrow \ell_G(p, u)\}$\\
  }
- \caption{Conversion from constituency graph to dependency tree}
- \label{alg:ucca2conll}
+ \caption{Constituency to dependency conversion}
+ \label{alg:con2dep}
 \end{algorithm}
-
-The conversion from dependency tree to constituency graph is shown in Algorithm~\ref{alg:conll2ucca}. We define $\mathrm{label}(u)$ by a set of rules.
 
 \begin{algorithm}
  \KwData{dependency tree $T$}
- \KwResult{constituency graph $G$}
- $r \leftarrow Node()$\\
- $V(G) \leftarrow \{r\}$,
- $E(G) \leftarrow \emptyset$\\
- \ForEach{$t \in V(T)$}{
-  $u \leftarrow Node()$\\
-  $V(G) \leftarrow V(G) \cup \{t, u\}$\\
-  $E(G) \leftarrow E(G) \cup \{(u, \textsc{Terminal}, t\}$\\
+ \KwResult{constituency tree $G$}
+ $r \leftarrow \mathrm{Node()}$\\
+ $V_G \leftarrow \{r\}$,
+ $E_G \leftarrow \emptyset$\\
+ \ForEach{$t \in V_T$}{
+  $u \leftarrow \mathrm{Node()}$\\
+  $V_G \leftarrow V_G \cup \{u, t\}$\\
+  $E_G \leftarrow E_G \cup \{(u, t)\}$\\
+  $\ell_G(u,t)\leftarrow\textsc{Terminal}$\\
   \eIf{$\ell_T(t) = \textsc{Root}$}{
-   $E(G) \leftarrow E(G) \cup \{(r, \mathrm{label}(u), u\}$\\
+   $E_G \leftarrow E_G \cup \{(r, u)\}$\\
+   $\ell_G(r, u) \leftarrow \mathrm{Label}(u)$\\
   }{
-   $p \leftarrow \mathrm{parent}_G(\mathrm{parent}_T(t))$\\
-   $E(G) \leftarrow E(G) \cup \{(p, \mathrm{label}(u), u\}$\\
+   $p \leftarrow \mathrm{Parent}_G(\mathrm{Parent}_T(t))$\\
+   $E_G \leftarrow E_G \cup \{(p, u)\}$\\
+   $\ell_G(p, u) \leftarrow \mathrm{Label}(u)$\\
   }
  }
- \caption{Conversion from dependency tree to constituency graph}
- \label{alg:conll2ucca}
+ \caption{Dependency to constituency conversion}
+ \label{alg:dep2con}
 \end{algorithm}
 
 We use MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser by Dyer et al.~\shortcite{dyer2015transition} as the underlying parsers in this method.
@@ -419,29 +422,19 @@ We use MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser by 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Constituency DAG Parsing}\label{sec:direct_approach}
 
-\subsection{Task definition}
+We now turn to the direct approach for parsing semantic constituency graphs. Given a sequence of tokens $w_1, \ldots, w_n$, we directly predict a semantic constituency graph $G$ over $w_1, \ldots, w_n$.
 
-Assuming a pre-defined set $L$ of edge tags, a \textit{UCCA graph} for a text $x=w_1 \ldots w_n$ is a directed graph $G=(V,E)$, where:
+\subsection{Transition-based constituency DAG parsing}
+
+We define a transition system for constituency DAG parsing as a quadruple $S=(C,T,c_s,C_t)$, where
 \begin{enumerate}
- \item $V$ is a set of nodes s.t. $\{w_1, \ldots, w_n\} \subseteq V$,
- \item $E \subseteq V \times L \times V$ is a set of labeled edges.
-\end{enumerate}
-The set $V$ of nodes consists of the \textit{terminal} nodes $w_1, \ldots, w_n$, and the non-terminal nodes. The set $E$ of edges is a set of triplets $(u, \ell, v)$, where $u$ and $v$ are nodes and $\ell$ is an edge tag.
-
-In UCCA parsing, $x$ is given and the task is to build $G$.
-
-\subsection{Transition-based UCCA parser}
-
-Many approaches could be used to create a parser for UCCA, such as the graph-based approach
-employed in JAMR~\cite{flanigan2014discriminative}.
-We chose to adopt the transition-based approach for parsing UCCA.
-
-We define a transition system for UCCA parsing as a quadruple $S=(C,T,c_s,C_t)$, where
-\begin{enumerate}
- \item $C$ is a set of configurations.
+ \item $C$ is a set of \textit{configurations}.
+ \item $T$ is a set of \textit{transitions}.
+ \item $c_s$ is a function mapping a sequence of tokens to an \textit{initial state} in $C$.
+ \item $C_t$ is a set of \textit{terminal configurations}.
 \end{enumerate}
 
-Our parser architecture combines transition-based constituency parsers \cite{zhu2013fast,maier2015discontinuous} with transition-based DAG dependency parsers \cite{sagae2008shift,tokgoz2015transition}:
+Our parser architecture is based on both transition-based constituency parsers \cite{zhu2013fast,maier2015discontinuous} and transition-based DAG dependency parsers \cite{sagae2008shift,tokgoz2015transition}:
 
 \begin{itemize}
 	\item Parsing starts with the root node on the stack.
