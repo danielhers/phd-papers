@@ -6,10 +6,12 @@
 \usepackage{acl2016}
 \usepackage{times}
 \usepackage{url}
+\usepackage{amsmath}
 \usepackage{latexsym}
 \usepackage{subfigure}
 \usepackage{pgfplotstable}
 \usepackage[]{algorithm2e}
+\usepackage{multirow}
 \usepackage{hyperref}
 \usepackage{color}
 \usepackage{lipsum,adjustbox}
@@ -431,8 +433,6 @@ We now turn to the direct approach for parsing semantic constituency graphs. Giv
 % \item $C_t$ is a set of \textit{terminal configurations}.
 %\end{enumerate}
 
-Our parser architecture follows previous work in transition-based constituency parsing \cite{zhu2013fast,maier2015discontinuous} and transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transition}.
-
 In transition-based (also called \textit{shift-reduce}) parsing, the input is scanned from left to right. The output is created incrementally by applying \textit{transitions} to the parser state, which comprises of three data structures: a buffer $B$ of tokens and nodes to be processed, a stack $S$ of nodes currently being processed, and a graph $G=(V,E)$ of constructed nodes and edges. In addition, the state may be marked as \textit{terminal}, meaning that $G$ is the final output. A classifier is used at each step to select the next transition based on the current parser state. We use an averaged structured perceptron \cite{Coll:04} with \textsc{MinUpdate} \cite{cai2011language}.
 
 \subsection{Transitions}
@@ -440,36 +440,43 @@ In transition-based (also called \textit{shift-reduce}) parsing, the input is sc
 Parsing starts with a single node on the stack (the root node), and the input tokens on the buffer.
 The transition set is given in \figref{fig:transitions}.
 
-\textsc{Shift} removes a node from the top of the buffer and pushes it onto the stack.
-\textsc{Reduce} pops the stack and discards the popped node.
-\textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with edge tag $X$. \textsc{Implicit$_X$} does the same, but the created node is a child instead, and is marked as \textit{implicit}, representing it does not appear explicitly in the text.
-\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new edge between the first two elements on the stack, where the parent is the left or the right node, respectively. \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}, meaning the relation it represents is not explicit.
-\textsc{Swap} pops the second node on the stack and adds it to the top of the buffer.
-\textsc{Finish} pops the root node and marks the state as terminal.
-
 \begin{figure*}
-\begin{adjustbox}{width=\textwidth,frame}
-\begin{tabular}{llll|l|llllc|l}
+\begin{adjustbox}{width=\textwidth,margin=3pt,frame}
+\begin{tabular}{llll|l|llllc|c}
 \multicolumn{5}{c|}{\textbf{\small Initial State}} & \multicolumn{6}{c}{\textbf{\small Final State}} \\
-\textbf{\small Stack} & \textbf{\small Buffer} & \textbf{\small Nodes} & \multicolumn{1}{l}{\textbf{\small Edges}} & \multicolumn{1}{c|}{\textbf{\small Terminal?}} & \textbf{\small Stack} & \textbf{\small Buffer} & \textbf{\small Nodes} & \textbf{\small Edges} & \multicolumn{1}{c}{\textbf{\small Terminal?}} \\
-$[r]$ & $w_{1:n}$ & $\{r\} \cup w_{1:n}$ & \multicolumn{1}{l}{$\emptyset$} & \multicolumn{1}{c|}{$-$} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & \multicolumn{1}{c}{$+$} & \\
-\multicolumn{5}{c|}{}\\
+\textbf{\tiny Stack} & \textbf{\tiny Buffer} & \textbf{\tiny Nodes} & \multicolumn{1}{l}{\textbf{\tiny Edges}} & \multicolumn{1}{c|}{\textbf{\tiny Terminal?}} & \textbf{\tiny Stack} & \textbf{\tiny Buffer} & \textbf{\tiny Nodes} & \textbf{\tiny Edges} & \multicolumn{1}{c}{\textbf{\tiny Terminal?}} \\
+$[\mathrm{root}]$ & $w_{1:n}$ & \multirow{2}{40pt}{$\{\mathrm{root}\} \cup w_{1:n}$} & \multicolumn{1}{l}{$\emptyset$} & \multicolumn{1}{c|}{$-$} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & \multicolumn{1}{c}{$+$} \\ 
+\multicolumn{5}{c|}{} \\
+\multicolumn{5}{c|}{} \\
 \hline
 %\end{tabular}
 %\end{adjustbox}
 %\begin{adjustbox}{width=\textwidth,frame}
 %\begin{tabular}{llll|l|llllc|l}
 \multicolumn{4}{c|}{\textbf{\small Before Transition}} & \textbf{\small Transition} & \multicolumn{5}{c|}{\textbf{\small After Transition}} & \textbf{\small Condition} \\
-\textbf{\small Stack} & \textbf{\small Buffer} & \textbf{\small Nodes} & \textbf{\small Edges} & & \textbf{\small Stack} & \textbf{\small Buffer} & \textbf{\small Nodes} & \textbf{\small Edges} & \textbf{\small Terminal?} & \\
+\textbf{\tiny Stack} & \textbf{\tiny Buffer} & \textbf{\tiny Nodes} & \textbf{\tiny Edges} & & \textbf{\tiny Stack} & \textbf{\tiny Buffer} & \textbf{\tiny Nodes} & \textbf{\tiny Edges} & \textbf{\tiny Terminal?} & \\
 $S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ & $-$ & \\
 $S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & \\
-$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ & $x \neq r$ \\
-$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Implicit$_X$} & $S \;|\; x$ & $y^* \;|\; B$ & $V \cup \{ y^* \}$ & $E \cup \{ (x,y^*)_X \}$ & $-$ & \\
-$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (y,x)_X \}$ & $-$ & \\
+\cline{11-11}
+$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ &
+$x \neq \mathrm{root}$ \\
+\cline{11-11}
+$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Implicit$_X$} & $S \;|\; x$ & $y^* \;|\; B$ & $V \cup \{ y^* \}$ & $E \cup \{ (x,y^*)_X \}$ & $-$ &
+$x \not\in w_{1:n}$ \\
+\cline{11-11}
+$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ &
+\multirow{4}{50pt}{$\begin{aligned}
+x \not\in w_{1:n},\\
+y \neq \mathrm{root},\\
+x \not\leadsto_G y
+\end{aligned}$} \\
 $S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ & \\
-$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (y,x)_X^* \}$ & $-$ & \\
+$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
 $S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
-$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ & $-$ & \\
+\cline{11-11}
+$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ & $-$ &
+$\mathrm{i}(x) < \mathrm{i}(y)$ \\
+\cline{11-11}
 $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & $+$ & \\
 \end{tabular}
 \end{adjustbox}
@@ -477,8 +484,18 @@ $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & 
   Transitions for UCCA parsing.
   As usual, we write the stack with its head (top) to the right and the buffer with its head to the left.
   $(\cdot,\cdot)_X$ denotes an $X$-labeled edge, $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge, and $x^*$ an implicit node.
+  $\mathrm{i}(x)$ is a running index for created nodes.
 }
 \end{figure*}
+
+\textsc{Shift} removes a node from the top of the buffer and pushes it onto the stack.
+\textsc{Reduce} pops the stack and discards the popped node.
+\textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge. \textsc{Implicit$_X$} does the same, but the created node is a child instead, and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}, meaning the relation it represents is not explicit.
+\textsc{Swap} pops the second node on the stack and adds it to the top of the buffer.
+\textsc{Finish} pops the root node and marks the state as terminal.
+
+Following previous work in transition-based constituency parsing \cite{zhu2013fast}, \textsc{Node$_X$} and \textsc{Implicit$_X$} create new non-terminal nodes. \textsc{Swap} is necessary to be able to handle discontinuous nodes \cite{maier2015discontinuous}. In order to allow multiple parents, all node and edge transitions leave the stack and buffer as they are and do not reduce them, following work in transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transition}. Once all edges for a particular node have been created, it is discarded by \textsc{Reduce}.
 
 \subsection{Constraints}
 Each action has a set of constraint that must be met for that action to be possible. If any of the constraint is not met, the parser may not take that action. The constraints are:
