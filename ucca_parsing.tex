@@ -180,7 +180,7 @@ All converters, parsers and datasets will be made publicly available upon public
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}\label{sec:related}
 
-\begin {figure*}
+\begin{figure*}
 \begin{adjustbox}{width=\textwidth}
   \begin{tikzpicture}[level distance=20mm, ->,
   level 1/.style={sibling distance=8em},
@@ -365,14 +365,11 @@ We also perform oracle experiments, where instead of a trained parser's output w
 \subsection{Conversion to constituency trees}
 
 In order to convert semantic constituency graphs to constituency trees, we remove edges such that all nodes are left with a single incoming edge, and a single root remains in the graph. This results in a tree that can be parsed by constituency parsers, but some of the nodes in the tree may have a discontinuous yield. We use \textsc{uparse} \cite{maier2015discontinuous}, which is able to parser discontinuous structures.
-\daniel{Try another SotA constituency parser. Berkeley parser? Stanford parser is hard to train on a new tag set. Omri: don't think we need to do that. We focus on transition-based approaches.
-  We might want to try another transition-based constituency parser, such as Zhu et al. 2013, but I don't
-  think it's necessary, since Wolfgang's work extends that, doesn't it?}
 
 
 \subsection{Conversion to dependency trees}
 
-To evaluate dependency parsers in this scheme, we convert the data to dependency trees and back by Algorithms~\ref{lg:con2dep} and~\ref{alg:dep2con}.
+To evaluate dependency parsers in this scheme, we convert the data to dependency trees and back by Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
 
 For each node $u$, we define the terminal $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a terminal. The order is determined by the edge labels. For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
 
@@ -391,7 +388,7 @@ We define $\mathrm{Label}(u)$ by a set of rules.
   $E_T \leftarrow E_T \cup \{(t^\prime, t)\}$\\
   $\ell_T (t^\prime, t) \leftarrow \ell_G(p, u)\}$\\
  }
- \caption{Constituency to dependency conversion}
+ \caption{Constituency to dependency conversion.}
  \label{alg:con2dep}
 \end{algorithm}
 
@@ -415,39 +412,73 @@ We define $\mathrm{Label}(u)$ by a set of rules.
    $\ell_G(p, u) \leftarrow \mathrm{Label}(u)$\\
   }
  }
- \caption{Dependency to constituency conversion}
+ \caption{Dependency to constituency conversion.}
  \label{alg:dep2con}
 \end{algorithm}
 
 We use MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser by Dyer et al.~\shortcite{dyer2015transition} as the underlying parsers in this method.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Transition-based Constituency DAG Parser}\label{sec:direct_approach}
+\section{Greedy Transition-based Constituency DAG Parser}\label{sec:direct_approach}
 
 We now turn to the direct approach for parsing semantic constituency graphs. Given a sequence of tokens $w_1, \ldots, w_n$, we directly predict a semantic constituency graph $G$ over $w_1, \ldots, w_n$.
 
-We define a transition system for constituency DAG parsing as a quadruple $S=(C,T,c_s,C_t)$, where
-\begin{enumerate}
- \item $C$ is a set of \textit{configurations}.
- \item $T$ is a set of \textit{transitions}.
- \item $c_s$ is a function mapping a sequence of tokens to an \textit{initial state} in $C$.
- \item $C_t$ is a set of \textit{terminal configurations}.
-\end{enumerate}
+%We define a transition system for constituency DAG parsing as a quadruple $S=(C,T,c_s,C_t)$, where
+%\begin{enumerate}
+% \item $C$ is a set of \textit{configurations}.
+% \item $T$ is a set of \textit{transitions}.
+% \item $c_s$ is a function mapping a sequence of tokens to an \textit{initial state} in $C$.
+% \item $C_t$ is a set of \textit{terminal configurations}.
+%\end{enumerate}
 
-Our parser architecture\oa{transition set? perhaps in this point it would make sense to define transition set vs. classifier, for the benefit of readers not versed in trans-based parsing.} is based on both transition-based constituency parsers \cite{zhu2013fast,maier2015discontinuous} and transition-based DAG dependency parsers \cite{sagae2008shift,tokgoz2015transition}.
-As in standard transition-based parsers, the date structures are a buffer $B$ of tokens to be processed, and a stack $S$ of graph nodes (representing sub-graphs of the final constituency graph).
+Our parser architecture follows previous work in transition-based constituency parsing \cite{zhu2013fast,maier2015discontinuous} and transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transition}.
 
-\begin{itemize}
-	\item Parsing starts with the root node on the stack.
-	\item \textsc{Node$_X$} creates a new node on the buffer head as a parent of the first element on the stack (with edge tag $X$), but it does not reduce the first element on the stack; since nodes in UCCA may have multiple parents, they should only be reduced after all their edges have been created.
-	\item \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new edge between the first two elements on the stack, but again, they do not reduce any of them, to allow for multiple parents.
-	\item \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} are identical to \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$}, except that the edges they create are marked as remote. In UCCA there may be long-distance edges, called remote edges.
-	\item \textsc{Implicit$_X$} is identical to \textsc{Node$_X$} action, except that the node created by it becomes the child of the stack top rather than its parent, and is marked implicit. Some non-terminal units are implicit units, meaning they do not correspond to any terminals. We add the constraint that implicit nodes cannot have any children.
-\end{itemize}
+In transition-based (also called \textit{shift-reduce}) parsing, the input is scanned from left to right. The output is created incrementally by applying \textit{transitions} to the parser state, which comprises of three data structures: a buffer $B$ of tokens and nodes to be processed, a stack $S$ of nodes currently being processed, and a graph $G=(V,E)$ of constructed nodes and edges. In addition, the state may be marked as \textit{terminal}, meaning that $G$ is the final output. A classifier is used at each step to select the next transition based on the current parser state. We use an averaged structured perceptron \cite{Coll:04} with \textsc{MinUpdate} \cite{cai2011language}.
 
-The transitions are:
+\subsection{Transitions}
 
-\textsc{Node$_X$, Implicit$_X$, Left-Edge$_X$, Right-Edge$_X$, Left-Remote$_X$, Right-Remote$_X$, Reduce, Shift, Swap, Finish}
+Parsing starts with a single node on the stack (the root node), and the input tokens on the buffer.
+The transition set is given in \figref{fig:transitions}.
+
+\textsc{Shift} removes a node from the top of the buffer and pushes it onto the stack.
+\textsc{Reduce} pops the stack and discards the popped node.
+\textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with edge tag $X$. \textsc{Implicit$_X$} does the same, but the created node is a child instead, and is marked as \textit{implicit}, representing it does not appear explicitly in the text.
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new edge between the first two elements on the stack, where the parent is the left or the right node, respectively. \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}, meaning the relation it represents is not explicit.
+\textsc{Swap} pops the second node on the stack and adds it to the top of the buffer.
+\textsc{Finish} pops the root node and marks the state as terminal.
+
+\begin{figure*}
+\begin{adjustbox}{width=\textwidth,frame}
+\begin{tabular}{llll|l|llllc|l}
+\multicolumn{5}{c|}{\textbf{\small Initial State}} & \multicolumn{6}{c}{\textbf{\small Final State}} \\
+\textbf{\small Stack} & \textbf{\small Buffer} & \textbf{\small Nodes} & \multicolumn{1}{l}{\textbf{\small Edges}} & \multicolumn{1}{c|}{\textbf{\small Terminal?}} & \textbf{\small Stack} & \textbf{\small Buffer} & \textbf{\small Nodes} & \textbf{\small Edges} & \multicolumn{1}{c}{\textbf{\small Terminal?}} \\
+$[r]$ & $w_{1:n}$ & $\{r\} \cup w_{1:n}$ & \multicolumn{1}{l}{$\emptyset$} & \multicolumn{1}{c|}{$-$} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & \multicolumn{1}{c}{$+$} & \\
+\multicolumn{5}{c|}{}\\
+\hline
+%\end{tabular}
+%\end{adjustbox}
+%\begin{adjustbox}{width=\textwidth,frame}
+%\begin{tabular}{llll|l|llllc|l}
+\multicolumn{4}{c|}{\textbf{\small Before Transition}} & \textbf{\small Transition} & \multicolumn{5}{c|}{\textbf{\small After Transition}} & \textbf{\small Condition} \\
+\textbf{\small Stack} & \textbf{\small Buffer} & \textbf{\small Nodes} & \textbf{\small Edges} & & \textbf{\small Stack} & \textbf{\small Buffer} & \textbf{\small Nodes} & \textbf{\small Edges} & \textbf{\small Terminal?} & \\
+$S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ & $-$ & \\
+$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & \\
+$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ & $x \neq r$ \\
+$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Implicit$_X$} & $S \;|\; x$ & $y^* \;|\; B$ & $V \cup \{ y^* \}$ & $E \cup \{ (x,y^*)_X \}$ & $-$ & \\
+$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (y,x)_X \}$ & $-$ & \\
+$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ & \\
+$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (y,x)_X^* \}$ & $-$ & \\
+$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
+$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ & $-$ & \\
+$[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & $+$ & \\
+\end{tabular}
+\end{adjustbox}
+\caption{\label{fig:transitions}
+  Transitions for UCCA parsing.
+  As usual, we write the stack with its head (top) to the right and the buffer with its head to the left.
+  $(\cdot,\cdot)_X$ denotes an $X$-labeled edge, $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge, and $x^*$ an implicit node.
+}
+\end{figure*}
 
 \subsection{Constraints}
 Each action has a set of constraint that must be met for that action to be possible. If any of the constraint is not met, the parser may not take that action. The constraints are:
@@ -544,7 +575,8 @@ Give examples of cases where multiple parents and/or discontiguous units show up
 
 \oa{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
 
-\begin{table}[ht]
+\begin{table}
+\begin{adjustbox}{width=\textwidth}
 \begin{tabular}{lccc}
 Node type & count & \% multiple parents & \% discontinuous \\
 \hline
@@ -553,6 +585,7 @@ Foundational &  & \\
 Non-terminals &  & \\
 Terminals &  &
 \end{tabular}
+\end{adjustbox}
 \caption{Quantitative characterization of structure in the UCCA corpus. 
 }
 \end{table}
@@ -566,6 +599,7 @@ In the conversion to constituency trees, we remove remote and linkage edges, and
 
 Table~\ref{table:convert} shows the results.
 \begin{table*}
+\begin{adjustbox}{width=\textwidth}
 \pgfplotstabletypeset[col sep=comma,
      columns={Method,LAS,LAS (sentences),UAS,UAS (sentences),labeled F1,labeled F1 (sentences),unlabeled F1,unlabeled F1 (sentences),weak labeled F1,weak labeled F1 (sentences)},
      columns/Method/.style={string type, column type=l,
@@ -574,6 +608,7 @@ Table~\ref{table:convert} shows the results.
              \pgfkeyslet{/pgfplots/table/@cell content}\pgfplotsretval
          },}
     ]{results.csv}
+\end{adjustbox}
 \caption{Results of Conversion and Annotation using Dependency Parsers}
 \label{table:convert}
 \end{table*}
