@@ -8,10 +8,11 @@
 \usepackage{url}
 \usepackage{amsmath}
 \usepackage{latexsym}
-\usepackage{subfigure}
 \usepackage{pgfplotstable}
 \usepackage[]{algorithm2e}
 \usepackage{multirow}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage{color}
 \usepackage{lipsum,adjustbox}
@@ -481,10 +482,11 @@ $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & 
 \end{tabular}
 \end{adjustbox}
 \caption{\label{fig:transitions}
-  Transitions for UCCA parsing.
-  As usual, we write the stack with its head (top) to the right and the buffer with its head to the left.
-  $(\cdot,\cdot)_X$ denotes an $X$-labeled edge, $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge, and $x^*$ an implicit node.
-  $\mathrm{i}(x)$ is a running index for created nodes.
+Transitions for UCCA parsing.\\
+\small
+As usual, we write the stack with its head (top) to the right and the buffer with its head to the left.
+$(\cdot,\cdot)_X$ denotes an $X$-labeled edge, $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge, and $x^*$ an implicit node.
+$\mathrm{i}(x)$ is a running index for created nodes.
 }
 \end{figure*}
 
@@ -500,15 +502,19 @@ Following previous work in transition-based constituency parsing \cite{zhu2013fa
 \subsection{Features}
 \label{subsec:features}
 
-\figref{fig:features} shows the feature templates adapted from Maier~\shortcite{maier2015discontinuous}. $s_i$ and $b_i$ stand for the $i$th stack and buffer items respectively, $w$ stands for the head word (see~\ref{subsec:head_rules}), $t$ for its POS tag, $e$ for the head incoming edge label. Note that $e$ replaces $c$ (consituent label) from Maier~\shortcite{maier2015discontinuous}, since in UCCA the labels are on the edges rather than the units; and a unit may have more than one incoming edge. $l$ and $r$ ($ll$ and $rr$) represent the leftmost and rightmost children (grand-children) of the element; $u$ handles the unary case.
-Concerning the separator features, $p$ is a unique separator feature between the head words of $s_0$ and $s_1$; $q$ is the count of any separator features between them.
-$x$ denotes the gap type of a subgraph. There are three possible values, either "none" (fully continuous), "pass" (there is a gap at the root, i.e., this gap must be filled later further up in the graph), or "gap" (the root of this graph fills a gap, i.e., its children have gaps, but the root does not). Finally, $y$ is the sum of all gap lengths.
+\figref{fig:features} shows the feature templates used in our parser.
 
-\figref{fig:new_features} shows the features templates introduced in this work. $P$ stands for the number of parents a node currently has, and $C$ for the number of children.
+%$s_i$ and $b_i$ stand for the $i$th stack and buffer items respectively, $w$ stands for the head word, $t$ for its POS tag, $e$ for the head incoming edge label. Note that $e$ replaces $c$ (consituent label) from Maier~\shortcite{maier2015discontinuous}, since in UCCA the labels are on the edges rather than the units; and a unit may have more than one incoming edge. $l$ and $r$ ($ll$ and $rr$) represent the leftmost and rightmost children (grand-children) of the element; $u$ handles the unary case.
+%Concerning the separator features, $p$ is a unique separator feature between the head words of $s_0$ and $s_1$; $q$ is the count of any separator features between them.
+%$x$ denotes the gap type of a subgraph. There are three possible values, either "none" (fully continuous), "pass" (there is a gap at the root, i.e., this gap must be filled later further up in the graph), or "gap" (the root of this graph fills a gap, i.e., its children have gaps, but the root does not). Finally, $y$ is the sum of all gap lengths.
 
 % FEATURES
 \begin{figure*}
 \begin{adjustbox}{width=\textwidth}
+\small
+\begin{minipage}[c][11cm][t]{.5\textwidth}
+\vspace*{\fill}
+\centering
 \begin{tabular}{l}
 \textbf{unigrams} \\
 $s_0te, s_0we, s_1te, s_1we, s_2te, s_2we, s_3te, s_3we,$ \\
@@ -529,6 +535,11 @@ $s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
 $s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
 $s_1wp, s_1wep, s_1wq, s_1weq$
 \end{tabular}
+\subcaption{Features from Zhu et al.~\shortcite{zhu2013fast}.}
+\end{minipage}
+\begin{minipage}[c][11cm][t]{.5\textwidth}
+\vspace*{\fill}
+\centering
 \begin{tabular}{l}
 \textbf{unigrams} \\
 $s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
@@ -542,8 +553,19 @@ $s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$ \\
 $s_0P, s_0C, s_0wP, s_0wC$ \\
 $b_0P, b_0C, b_0wP, b_0wC$ \\
 \end{tabular}
+\subcaption{Features from Maier~\shortcite{maier2015discontinuous}.}
+\begin{tabular}{l}
+\textbf{history} \\
+\end{tabular}
+\subcaption{Features from Tokg{\"o}z and Eryi\u{g}it~\shortcite{tokgoz2015transition}.}
+\begin{tabular}{l}
+\textbf{ratio} \\
+\end{tabular}
+\subcaption{New features.}
+\end{minipage}
 \end{adjustbox}
-\caption{Feature Templates.\label{fig:features}
+\caption{\label{fig:features}
+Feature Templates. \\
 \small
 $s_i$, $b_i$: stack and buffer items.
 $w$: head word. $t$: POS tag.
@@ -554,29 +576,11 @@ $p$: unique separator between $s_0$ and $s_1$.
 $q$: separator count.
 $x$: gap type.
 $y$: sum of gap lengths.
-Features on the left are from Zhu~\shortcite{zhu2013fast}.
-Discontinuous features are from Maier~\shortcite{maier2015discontinuous}.
-Counts, existing edges and past actions features are from \cite{tokgoz2015transition}.
+$P$: number of parents.
+$C$: number of children.
 }
 \end{figure*}
 
-% NEW FEATURES
-\begin{figure}[t]
-\begin{description}
-	\item[degree] \hfill \\
-	$s_0P, s_0C$
-\end{description}
-\caption{New Feature Templates}
-\medskip
-\small
-Feature introduced in this work.
-\label{fig:new_features}
-\end{figure}
-
-\subsection{Head rules}
-\label{subsec:head_rules}
-
-The following rules were used to determine the head of a unit.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data}\label{sec:data}
@@ -586,7 +590,7 @@ Give examples of cases where multiple parents and/or discontiguous units show up
 \oa{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
 
 \begin{table}
-\begin{adjustbox}{width=\textwidth}
+\begin{adjustbox}{width=0.5\textwidth}
 \begin{tabular}{lccc}
 Node type & count & \% multiple parents & \% discontinuous \\
 \hline
@@ -632,7 +636,7 @@ Future work:
 \begin{itemize}
 %\item \textsc{smatch} for scoring
 \item find the best conversion rules automatically
-\item NN-based classifers for the parser, dynamtic oracles and in general or the heavy machinary of transition-based methods.
+\item NN-based classifiers for the parser, dynamic oracles and in general or the heavy machinery of transition-based methods.
 \end{itemize}
 
 \bibliography{references}
@@ -647,7 +651,7 @@ Future work:
   implementations of the algorithm. we also conduct a comparison with existing parsers for similar
   parsing tasks.
   (9) our contribution: \#1 defining the 
-  \#2 first parser for broad-coverage consituency-based parsing; \#3 first parser for UCCA;
+  \#2 first parser for broad-coverage constituency-based parsing; \#3 first parser for UCCA;
   Previous work: the work has interesting connections to syntactic parsing, to SRL (which also has both dependency
   and constituency versions), and to semantic parsing into logical forms, but is different from the,
   see discussion in (Oepen et al., 2015). Also AMR parsing.
