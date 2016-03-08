@@ -486,8 +486,7 @@ $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & 
 \end{tabular}
 \end{adjustbox}
 \caption{\label{fig:transitions}
-Transitions for UCCA parsing. \\
-\small
+Transitions for UCCA parsing.
 As usual, we write the stack with its head (top) to the right and the buffer with its head to the left.
 $(\cdot,\cdot)_X$ denotes an $X$-labeled edge, $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge, and $x^*$ an implicit node.
 $\mathrm{i}(x)$ is a running index for created nodes.
@@ -609,19 +608,24 @@ We base our experiments on the UCCA Wiki corpus as the main corpus, the UCCA \te
 \oa{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
 
 \begin{table}
-\begin{tabular}{lccc}
+\begin{tabular}{l|ccc}
 & Wiki & o-o-d \\
 \hline
-\multicolumn{3}{l}{\textbf{Over whole corpus:}} \\
-\# terminals & 158,771 & 12,355 \\
+\multicolumn{3}{l}{\footnotesize Over whole corpus} \\
+\# terminal nodes & 158,771 & 12,355 \\
 \# nodes & 379,051 & 30,487 \\
 \# edges & 388,589 & 31,215 \\
-\# non-terminals & 220,280 & 18,132 \\
-\% non-terminals & 58.11 & 59.47 \\
-\multicolumn{3}{l}{\textbf{Out of non-terminals:}} \\
+\# remote edges & 5,745 & 629 \\
+\# non-terminal nodes & 220,280 & 18,132 \\
+\# implicit nodes & 1,099 & 241 \\
+%\% non-terminals & 58.11 & 59.47 \\
+\multicolumn{3}{l}{\footnotesize Out of edges} \\
+\% remote & 1.48 & 2.02 \\
+\multicolumn{3}{l}{\footnotesize Out of non-terminals} \\
 \% multiple parents & 7.66 & 7.91 \\
 \% discontinuous & 0.88 & 1.31 \\
-\multicolumn{3}{l}{\textbf{Average over non-terminals:}} \\
+\% implicit & 0.5 & 1.33 \\
+\multicolumn{3}{l}{\footnotesize Average over non-terminals} \\
 \# parents & 1.07 & 1.07 \\
 \# children & 1.7 & 1.63 \\
 \end{tabular}
@@ -632,23 +636,32 @@ We base our experiments on the UCCA Wiki corpus as the main corpus, the UCCA \te
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 
-\tabref{table:convert} shows the precision, recall and F1 scores of the different methods.
-\begin{table*}
-\begin{tabular}{lccc}
-\textbf{Method} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\tabref{table:convert} shows the labeled precision, recall and F1 scores of the different methods. We evaluate the scores by comparing the predict edges against the edges in the gold annotation.
+The conversion to constituency format gets almost a perfect score on the regular edges, as it only omits extra linkage parents and implicit nodes. The conversion to dependency format is more lossy, since all of the non-terminal nodes are lost and have to be reconstructed on the conversion back. Of course, both conversions have a zero score on remote edges, since they are always removed when converting to trees.
+
+Our parser reaches scores that are nearly identical to Maier~\shortcite{maier2015discontinuous} and Nivre et al.~\shortcite{nivre2007maltparser} on regular edges, but also correctly predicts remote edges when trained on them.
+Training without linkage edges and implicit nodes improve the scores on regular edges, as a more simple model is easier to learn. Furthermore, removing remote edges too practically turns the structure into a constituency tree, and raises the scores above two of the conversion-based parsers. However, the stack LSTM-based parser of Dyer et al.~\shortcite{dyer2015transition} still reaches the highest score.
+
+\begin{table*}[ht]
+\begin{tabular}{l|ccc|ccc}
+& \multicolumn{3}{c|}{Regular} & \multicolumn{3}{c}{Remote} \\
+& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\multicolumn{4}{l}{\textbf{Constituency format}} \\
-Oracle & & & \\
-\textsc{uparse} & & & \\
+\multicolumn{4}{l}{\footnotesize Constituency format} \\
+\textit{Oracle} &  &  & 99.7 & $-$ & 0 & 0 \\
+Maier~\shortcite{maier2015discontinuous} &  &  & 58.7 & $-$ & 0 & 0 \\
 \hline
-\multicolumn{4}{l}{\textbf{Constituency format}} \\
-Oracle & & & \\
-MaltParser & & & \\
-LSTM Parser & & & \\
+\multicolumn{4}{l}{\footnotesize Dependency format} \\
+\textit{Oracle} &  &  & 88.7 & $-$ & 0 & 0 \\
+Nivre et al.~\shortcite{nivre2007maltparser} &  &  & 58.7 & $-$ & 0 & 0 \\
+Dyer et al.~\shortcite{dyer2015transition} &  &  & 69.3 & $-$ & 0 & 0 \\
 \hline
-\multicolumn{4}{l}{\textbf{Direct approach}} \\
-UCCA Parser & & & \\
-UCCA Parser (o-o-d) & & & \\
+\multicolumn{4}{l}{\footnotesize Direct approach} \\
+$S$ &  &  & 56.5 &  &  & 18.5 \\
+$S_{LI}$ &  &  & 58 &  &  & 16.6 \\
+$S_{LIR}$ &  &  & 60.2 &  &  & 0 \\
+$S$ (o-o-d) &  &  & 53.6 &  &  & 8.5 \\
+$S_{LI}$ (o-o-d) &  &  & 55.8 &  &  & 13.1 \\
 \end{tabular}
 %\begin{adjustbox}{width=\textwidth}
 %\pgfplotstabletypeset[col sep=comma,
@@ -661,7 +674,9 @@ UCCA Parser (o-o-d) & & & \\
 %    ]{results.csv}
 %\end{adjustbox}
 \caption{Parsing scores.
-LP, LR and LF are labeled precision, recall and F1, respectively.}
+LP, LR and LF are labeled precision, recall and F1, respectively.
+$S$ is our parser when trained on the whole data set; $S_{LI}$ is our parser when trained without linkage edges and implicit nodes, and $S_{LIR}$ is without linkage, implicit and remote.
+o-o-d is out-of-domain.}
 \label{table:convert}
 \end{table*}
 
@@ -670,7 +685,22 @@ LP, LR and LF are labeled precision, recall and F1, respectively.}
 
 We have presented the task Broad-Coverage Semantic Constituency parsing (BSCP), and shown that the Universal Conceptual Cognitive Annotation (UCCA) scheme is a target representation for this task. Based on high-level statistics over two UCCA corpora, we demonstrated that they are indeed structurally unrestricted.
 We claim UCCA is more appropriate than other semantic parsing tasks, since it is not bounded by arbitrary head selection rules, and is grounded on the tokens of the text.
+
 We present two approaches for UCCA parsing and BSCP in general: conversion to constituency and dependency formats, and a direct transition-based parsing approach with a novel transition system.
+The parsers we evaluated on this tasks vary on several parameters: transition system and classifier. \tabref{table:parser_variation} shows the different parameters of each of these parsers.
+
+\begin{table*}[ht]
+\begin{tabular}{l|ll}
+Parser & Transition System & Classifier \\
+\hline
+Maier~\shortcite{maier2015discontinuous} & constituency + \textsc{Swap} & linear \\
+Nivre et al.~\shortcite{nivre2007maltparser} & arc-eager & SVM \\
+Dyer et al.~\shortcite{dyer2015transition} & arc-standard & LSTM \\
+Our work & constituency DAG + \textsc{Swap} & linear
+\end{tabular}
+\caption{Parameters of variation across parsers evaluated in this work.}
+\label{table:parser_variation}
+\end{table*}
 
 Future work:
 \begin{itemize}
