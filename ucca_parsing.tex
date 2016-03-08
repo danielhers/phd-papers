@@ -367,7 +367,9 @@ We also perform oracle experiments, where instead of a trained parser's output w
 
 \subsection{Conversion to constituency trees}
 
-In order to convert semantic constituency graphs to constituency trees, we remove edges such that all nodes are left with a single incoming edge, and a single root remains in the graph. This results in a tree that can be parsed by constituency parsers, but some of the nodes in the tree may have a discontinuous yield. We use \textsc{uparse} \cite{maier2015discontinuous}, which is able to parser discontinuous structures.
+In order to convert semantic constituency graphs to constituency trees, we remove edges such that all nodes are left with a single incoming edge, and a single root remains in the graph. This results in a tree that can be parsed by constituency parsers, but some of the nodes in the tree may have a discontinuous yield. We use \textsc{uparse} \cite{maier2015discontinuous}, which is able to parse discontinuous structures.
+
+In the conversion of UCCA to constituency trees, we remove remote and linkage edges, and all linkage and implicit nodes.
 
 
 \subsection{Conversion to dependency trees}
@@ -602,16 +604,15 @@ $I,R$: number of implicit, remote children.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data}\label{sec:data}
 
-Give examples of cases where multiple parents and/or discontiguous units show up.
-
-We base our experiments on the UCCA Wiki corpus, and in addition, the UCCA \textit{Twenty Thousand Leagues Under the Sea} corpus as out-of-domain data.
-
+We base our experiments on the UCCA Wiki corpus as the main corpus, the UCCA \textit{Twenty Thousand Leagues Under the Sea} corpus as out-of-domain data. As evident in \tabref{table:data}, the Wiki corpus is over ten times larger, but the overall statistics are similar.
+\oa{Give examples of cases where multiple parents and/or discontiguous units show up.}
 \oa{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
 
 \begin{table}
 \begin{tabular}{lccc}
 & Wiki & o-o-d \\
 \hline
+\multicolumn{3}{l}{\textbf{Over whole corpus:}} \\
 \# terminals & 158,771 & 12,355 \\
 \# nodes & 379,051 & 30,487 \\
 \# edges & 388,589 & 31,215 \\
@@ -620,46 +621,61 @@ We base our experiments on the UCCA Wiki corpus, and in addition, the UCCA \text
 \multicolumn{3}{l}{\textbf{Out of non-terminals:}} \\
 \% multiple parents & 7.66 & 7.91 \\
 \% discontinuous & 0.88 & 1.31 \\
+\multicolumn{3}{l}{\textbf{Average over non-terminals:}} \\
 \# parents & 1.07 & 1.07 \\
 \# children & 1.7 & 1.63 \\
 \end{tabular}
-\caption{High-level graph statistics in the UCCA corpora. Percentages are over the whole corpus; absolute numbers are averages across nodes.
-}
+\caption{High-level graph statistics in the UCCA corpora.}
+\label{table:data}
 \end{table}
-
-In the Wiki corpus, $8\%$ of non-terminal nodes have multiple parents, and $0.9\%$ are discontinuous nodes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 
-In the conversion to constituency trees, we remove remote and linkage edges, and all linkage and implicit nodes.
-
-Table~\ref{table:convert} shows the results.
+\tabref{table:convert} shows the precision, recall and F1 scores of the different methods.
 \begin{table*}
-\begin{adjustbox}{width=\textwidth}
-\pgfplotstabletypeset[col sep=comma,
-     columns={Method,LAS,LAS (sentences),UAS,UAS (sentences),labeled F1,labeled F1 (sentences),unlabeled F1,unlabeled F1 (sentences),weak labeled F1,weak labeled F1 (sentences)},
-     columns/Method/.style={string type, column type=l,
-         postproc cell content/.code={%
-             \pgfplotsutilstrreplace{_}{\_}{##1}%
-             \pgfkeyslet{/pgfplots/table/@cell content}\pgfplotsretval
-         },}
-    ]{results.csv}
-\end{adjustbox}
-\caption{Results of Conversion and Annotation using Dependency Parsers}
+\begin{tabular}{lccc}
+\textbf{Method} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\hline
+\multicolumn{4}{l}{\textbf{Constituency format}} \\
+Oracle & & & \\
+\textsc{uparse} & & & \\
+\hline
+\multicolumn{4}{l}{\textbf{Constituency format}} \\
+Oracle & & & \\
+MaltParser & & & \\
+LSTM Parser & & & \\
+\hline
+\multicolumn{4}{l}{\textbf{Direct approach}} \\
+UCCA Parser & & & \\
+UCCA Parser (o-o-d) & & & \\
+\end{tabular}
+%\begin{adjustbox}{width=\textwidth}
+%\pgfplotstabletypeset[col sep=comma,
+%     columns={Method,LAS,LAS (sentences),UAS,UAS (sentences),labeled F1,labeled F1 (sentences),unlabeled F1,unlabeled F1 (sentences),weak labeled F1,weak labeled F1 (sentences)},
+%     columns/Method/.style={string type, column type=l,
+%         postproc cell content/.code={%
+%             \pgfplotsutilstrreplace{_}{\_}{##1}%
+%             \pgfkeyslet{/pgfplots/table/@cell content}\pgfplotsretval
+%         },}
+%    ]{results.csv}
+%\end{adjustbox}
+\caption{Parsing scores.
+LP, LR and LF are labeled precision, recall and F1, respectively.}
 \label{table:convert}
 \end{table*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conclusion}
+\section{Discussion}
 
-We have presented a transition-based parser for UCCA, which is a semantic 
+We have presented the task Broad-Coverage Semantic Constituency parsing (BSCP), and shown that the Universal Conceptual Cognitive Annotation (UCCA) scheme is a target representation for this task. Based on high-level statistics over two UCCA corpora, we demonstrated that they are indeed structurally unrestricted.
+We claim UCCA is more appropriate than other semantic parsing tasks, since it is not bounded by arbitrary head selection rules, and is grounded on the tokens of the text.
+We present two approaches for UCCA parsing and BSCP in general: conversion to constituency and dependency formats, and a direct transition-based parsing approach with a novel transition system.
 
 Future work:
 \begin{itemize}
-%\item \textsc{smatch} for scoring
-\item find the best conversion rules automatically
-\item NN-based classifiers for the parser, dynamic oracles and in general or the heavy machinery of transition-based methods.
+\item Improve the conversion procedure to learn the missing labels when converting from dependency to constituency, and the best head when converting from constituency to dependency.
+\item Improve the parser by using beam search and a classifier based on neural networks.
 \end{itemize}
 
 \bibliography{references}
