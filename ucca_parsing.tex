@@ -604,24 +604,30 @@ $I,R$: number of implicit, remote children.}
 
 Give examples of cases where multiple parents and/or discontiguous units show up.
 
+We base our experiments on the UCCA Wiki corpus, and in addition, the UCCA \textit{Twenty Thousand Leagues Under the Sea} corpus as out-of-domain data.
+
 \oa{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
 
 \begin{table}
-\begin{adjustbox}{width=0.5\textwidth}
 \begin{tabular}{lccc}
-Node type & count & \% multiple parents & \% discontinuous \\
+& Wiki & o-o-d \\
 \hline
-All &  & \\
-Foundational &  & \\
-Non-terminals &  & \\
-Terminals &  &
+\# terminals & 158,771 & 12,355 \\
+\# nodes & 379,051 & 30,487 \\
+\# edges & 388,589 & 31,215 \\
+\# non-terminals & 220,280 & 18,132 \\
+\% non-terminals & 58.11 & 59.47 \\
+\multicolumn{3}{l}{\textbf{Out of non-terminals:}} \\
+\% multiple parents & 7.66 & 7.91 \\
+\% discontinuous & 0.88 & 1.31 \\
+\# parents & 1.07 & 1.07 \\
+\# children & 1.7 & 1.63 \\
 \end{tabular}
-\end{adjustbox}
-\caption{Quantitative characterization of structure in the UCCA corpus. 
+\caption{High-level graph statistics in the UCCA corpora. Percentages are over the whole corpus; absolute numbers are averages across nodes.
 }
 \end{table}
 
-We should give some statistics about the pervasiveness of discontiguities and multiple parents in our corpora.
+In the Wiki corpus, $8\%$ of non-terminal nodes have multiple parents, and $0.9\%$ are discontinuous nodes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
