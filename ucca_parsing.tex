@@ -371,6 +371,7 @@ In order to convert semantic constituency graphs to constituency trees, we remov
 
 
 \subsection{Conversion to dependency trees}
+\label{subsec:con2dep}
 
 To evaluate dependency parsers in this scheme, we convert the data to dependency trees and back by Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
 
@@ -445,7 +446,7 @@ The transition set is given in \figref{fig:transitions}.
 \begin{adjustbox}{width=\textwidth,margin=3pt,frame}
 \begin{tabular}{llll|l|llllc|c}
 \multicolumn{5}{c|}{\textbf{\small Initial State}} & \multicolumn{6}{c}{\textbf{\small Final State}} \\
-\textbf{\tiny Stack} & \textbf{\tiny Buffer} & \textbf{\tiny Nodes} & \multicolumn{1}{l}{\textbf{\tiny Edges}} & \multicolumn{1}{c|}{\textbf{\tiny Terminal?}} & \textbf{\tiny Stack} & \textbf{\tiny Buffer} & \textbf{\tiny Nodes} & \textbf{\tiny Edges} & \multicolumn{1}{c}{\textbf{\tiny Terminal?}} \\
+\textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \multicolumn{1}{l}{\textbf{\footnotesize Edges}} & \multicolumn{1}{c|}{\textbf{\footnotesize Terminal?}} & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & \multicolumn{1}{c}{\textbf{\footnotesize Terminal?}} \\
 $[\mathrm{root}]$ & $w_{1:n}$ & \multirow{2}{40pt}{$\{\mathrm{root}\} \cup w_{1:n}$} & \multicolumn{1}{l}{$\emptyset$} & \multicolumn{1}{c|}{$-$} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & \multicolumn{1}{c}{$+$} \\ 
 \multicolumn{5}{c|}{} \\
 \multicolumn{5}{c|}{} \\
@@ -455,7 +456,7 @@ $[\mathrm{root}]$ & $w_{1:n}$ & \multirow{2}{40pt}{$\{\mathrm{root}\} \cup w_{1:
 %\begin{adjustbox}{width=\textwidth,frame}
 %\begin{tabular}{llll|l|llllc|l}
 \multicolumn{4}{c|}{\textbf{\small Before Transition}} & \textbf{\small Transition} & \multicolumn{5}{c|}{\textbf{\small After Transition}} & \textbf{\small Condition} \\
-\textbf{\tiny Stack} & \textbf{\tiny Buffer} & \textbf{\tiny Nodes} & \textbf{\tiny Edges} & & \textbf{\tiny Stack} & \textbf{\tiny Buffer} & \textbf{\tiny Nodes} & \textbf{\tiny Edges} & \textbf{\tiny Terminal?} & \\
+\textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & \textbf{\footnotesize Terminal?} & \\
 $S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ & $-$ & \\
 $S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & \\
 \cline{11-11}
@@ -502,7 +503,9 @@ Following previous work in transition-based constituency parsing \cite{zhu2013fa
 \subsection{Features}
 \label{subsec:features}
 
-\figref{fig:features} shows the feature templates used in our parser.
+\figref{fig:features} shows the feature templates used in our parser. For some of the features, we used the notion of \textit{head word}: although meaningless in UCCA, it proved beneficial to have some sort of lexicalized features, but future work will generalize this. The head word of a node is defined as the first terminal reachable by following outgoing edges in a specific priority order (similar to the one used by the conversion in \secref{subsec:con2dep}). The same priority order defines a \textit{head incoming edge} for each node.
+
+In addition to the binary features defined by those feature templates, we use a continuous feature defined as the ratio of terminals to nodes in the graph, in order to regulate the creation of new nodes.
 
 %$s_i$ and $b_i$ stand for the $i$th stack and buffer items respectively, $w$ stands for the head word, $t$ for its POS tag, $e$ for the head incoming edge label. Note that $e$ replaces $c$ (consituent label) from Maier~\shortcite{maier2015discontinuous}, since in UCCA the labels are on the edges rather than the units; and a unit may have more than one incoming edge. $l$ and $r$ ($ll$ and $rr$) represent the leftmost and rightmost children (grand-children) of the element; $u$ handles the unary case.
 %Concerning the separator features, $p$ is a unique separator feature between the head words of $s_0$ and $s_1$; $q$ is the count of any separator features between them.
@@ -510,11 +513,11 @@ Following previous work in transition-based constituency parsing \cite{zhu2013fa
 
 % FEATURES
 \begin{figure*}
+\captionsetup[subfigure]{justification=centering}
 \begin{adjustbox}{width=\textwidth}
 \small
 \begin{minipage}[c][11cm][t]{.5\textwidth}
 \vspace*{\fill}
-\centering
 \begin{tabular}{l}
 \textbf{unigrams} \\
 $s_0te, s_0we, s_1te, s_1we, s_2te, s_2we, s_3te, s_3we,$ \\
@@ -535,50 +538,63 @@ $s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
 $s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
 $s_1wp, s_1wep, s_1wq, s_1weq$
 \end{tabular}
-\subcaption{Features from Zhu et al.~\shortcite{zhu2013fast}.}
+\subcaption{Features from Zhu et al.~\shortcite{zhu2013fast}. \\
+\footnotesize
+$s_i$, $b_i$: stack and buffer items. \\
+$w$: head word form. \\
+$t$: head word part-of-speech tag. \\
+$e$: head incoming edge label. \\
+$l$, $r$ ($ll$, $rr$): leftmost, rightmost (grand)children. \\
+$u$ ($uu$): unary (grand)child. \\
+$p$: unique separator between $s_0$ and $s_1$. \\
+$q$: separator count.}
 \end{minipage}
+
 \begin{minipage}[c][11cm][t]{.5\textwidth}
 \vspace*{\fill}
-\centering
 \begin{tabular}{l}
-\textbf{unigrams} \\
+\textbf{unigrams} (discontinuous) \\
 $s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
 $s_0xte, s_1xte, s_2xte, s_3xte,$ \\
 $s_0xy, s_1xy, s_2xy, s_3xy$ \\
 \textbf{bigrams} (discontinuous) \\
 $s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
 $s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
-$s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$ \\
+$s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$
+\end{tabular}
+\subcaption{Features from Maier~\shortcite{maier2015discontinuous}. \\
+\footnotesize
+$x$: gap type. \\
+$y$: sum of gap lengths.}
+
+\vspace*{\fill}
+\begin{tabular}{l}
 \textbf{counts} \\
-$s_0P, s_0C, s_0wP, s_0wC$ \\
+$s_0P, s_0C, s_0wP, s_0wC,$ \\
 $b_0P, b_0C, b_0wP, b_0wC$ \\
+\textbf{existing edges} \\
+$s_0s_1, s_1s_0, s_0b_0, b_0s_0,$ \\
+$s_0b_0e, b_0s_0e$ \\
+\textbf{past actions} \\
+$a_0we, a_1we$
 \end{tabular}
-\subcaption{Features from Maier~\shortcite{maier2015discontinuous}.}
+\subcaption{Features from Tokg{\"o}z and Eryi\u{g}it~\shortcite{tokgoz2015transition}. \\
+\footnotesize
+$P,C$: number of parents, children. \\
+$a_i$: past actions (in reverse order).}
+
+\vspace*{\fill}
 \begin{tabular}{l}
-\textbf{history} \\
+\textbf{implicit and remote} \\
+$s_0I, s_0R, s_0wI, s_0wR,$ \\
+$b_0I, b_0R, b_0wI, b_0wR$
 \end{tabular}
-\subcaption{Features from Tokg{\"o}z and Eryi\u{g}it~\shortcite{tokgoz2015transition}.}
-\begin{tabular}{l}
-\textbf{ratio} \\
-\end{tabular}
-\subcaption{New features.}
+\subcaption{New, UCCA-specific features. \\
+\footnotesize
+$I,R$: number of implicit, remote children.}
 \end{minipage}
 \end{adjustbox}
-\caption{\label{fig:features}
-Feature Templates. \\
-\small
-$s_i$, $b_i$: stack and buffer items.
-$w$: head word. $t$: POS tag.
-$e$: main incoming edge label.
-$l$, $r$ ($ll$, $rr$): leftmost and rightmost children (grand-children).
-$u$ ($uu$): unary child (grandchild).
-$p$: unique separator between $s_0$ and $s_1$.
-$q$: separator count.
-$x$: gap type.
-$y$: sum of gap lengths.
-$P$: number of parents.
-$C$: number of children.
-}
+\caption{Feature Templates.\label{fig:features}}
 \end{figure*}
 
 
