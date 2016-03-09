@@ -249,6 +249,7 @@ the Prague Dependency Treebank tectogrammatical layer \cite{bohmova2003prague},
 HSPG-derived parsers using the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
 and dependencies derived from the Lingo ERG Minimal Recursion Semantics represenations \cite{Flic:02}.
 
+\paragraph{Universal Conceptual Cognitive Annotation.}
 Taking a constituency-based approach to semantic parsing,
 we use the annotated UCCA corpora, a broad-coverage semantic annotation scheme,
 which focuses on predicate-argument structures (verbal, nominal, adjectival and others)
@@ -702,11 +703,15 @@ Our work & constituency DAG + \textsc{Swap} & linear
 \label{table:parser_variation}
 \end{table*}
 
-Future work:
-\begin{itemize}
-\item Improve the conversion procedure to learn the missing labels when converting from dependency to constituency, and the best head when converting from constituency to dependency.
-\item Improve the parser by using beam search and a classifier based on neural networks.
-\end{itemize}
+\subsection{Future work}
+\paragraph{Improving the conversion procedure.}
+Several decision have to be made in the conversion between dependency and constituency annotation.
+In the conversion from constituency to dependency, a head terminal has to be selected for each node. When converting in the other direction, labels for the added edges have to be determined.
+Currently, we handle these decisions by crude heuristics, but a more sophisticated way can be devised. These will be reflected by higher scores for the oracle experiments.
+
+\paragraph{Improving the direct parser.}
+Our parser reaches promising results, but it is very basic in terms of the techniques used in it. Using beam search rather than greedy inference tends to improve the parsing scores significantly.
+In terms of machine learning, we use a linear classifier with hand-crafted features. As the experiment with the LSTM parser shows, implementing a parser based on neural networks should also give a significant improvement to our parsing scores.
 
 \bibliography{references}
 \bibliographystyle{acl2016}
