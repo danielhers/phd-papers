@@ -178,7 +178,7 @@ Second, we create converters and assess the ability of existing parsing technolo
 for formally related settings to address the task, focusing on transition-based methods.
 Third, we present the first constituency DAG parser, which is also the
 first parser for UCCA. 
-All converters, parsers and datasets will be made publicly available upon publication.
+All converters, parsers and data sets will be made publicly available upon publication.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}\label{sec:related}
@@ -353,7 +353,7 @@ For a given set $L$ of edge labels, a \textit{semantic constituency graph} $G=(V
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conversion-based Parsing}\label{sec:conversion_approach}
+\section{Conversion-Based Parsing}\label{sec:conversion_approach}
 
 To our knowledge, no DAG constituency parser currently exists. Therefore, as a start, we use state-of-the-art parsers for existing schemes, and evaluate them on converted data. We use constituency and dependency trees as target representations. Since they are more restrictive than semantic constituency graphs, the conversion is necessarily lossy, and the accuracy of this method is bounded by the conversion accuracy.
 The parsers obtained this way are composed of three steps:
@@ -366,14 +366,14 @@ Graphs produced by this method for test data are then compared to the gold annot
 We also perform oracle experiments, where instead of a trained parser's output we use the gold annotation itself, converted to the target representation (and then converted back to semantic constituencies).
 
 
-\subsection{Conversion to constituency trees}
+\subsection{Conversion to Constituency Trees}
 
 In order to convert semantic constituency graphs to constituency trees, we remove edges such that all nodes are left with a single incoming edge, and a single root remains in the graph. This results in a tree that can be parsed by constituency parsers, but some of the nodes in the tree may have a discontinuous yield. We use \textsc{uparse} \cite{maier2015discontinuous}, which is able to parse discontinuous structures.
 
 In the conversion of UCCA to constituency trees, we remove remote and linkage edges, and all linkage and implicit nodes.
 
 
-\subsection{Conversion to dependency trees}
+\subsection{Conversion to Dependency Trees}
 \label{subsec:con2dep}
 
 To evaluate dependency parsers in this scheme, we convert the data to dependency trees and back by Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
@@ -426,7 +426,7 @@ We define $\mathrm{Label}(u)$ by a set of rules.
 We use MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser by Dyer et al.~\shortcite{dyer2015transition} as the underlying parsers in this method.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Greedy Transition-based Constituency DAG Parser}\label{sec:direct_approach}
+\section{Greedy Transition-Based Constituency DAG Parser}\label{sec:direct_approach}
 
 We now turn to the direct approach for parsing semantic constituency graphs. Given a sequence of tokens $w_1, \ldots, w_n$, we directly predict a semantic constituency graph $G$ over $w_1, \ldots, w_n$.
 
@@ -602,7 +602,8 @@ $I,R$: number of implicit, remote children.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Data}\label{sec:data}
+\section{Experiments}
+\subsection{Data}\label{sec:data}
 
 We base our experiments on the UCCA Wiki corpus as the main corpus, the UCCA \textit{Twenty Thousand Leagues Under the Sea} corpus as out-of-domain data. As evident in \tabref{table:data}, the Wiki corpus is over ten times larger, but the overall statistics are similar.
 \oa{Give examples of cases where multiple parents and/or discontiguous units show up.}
@@ -635,7 +636,13 @@ We base our experiments on the UCCA Wiki corpus as the main corpus, the UCCA \te
 \end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Results}
+\subsection{Experimental Setup}
+
+Our conversion tools and direct parser are implemented in Python. In all experiments, we use passages up to 655 of the UCCA corpus as our training set, passages 656 to 700 as development set, and passages 701 to 695 as test set. We split the passages to sentences, such that each UCCA graph is over one sentence.
+For evaluation, we use the \texttt{evaluate\_standard.py} script.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Results}
 
 \tabref{table:convert} shows the labeled precision, recall and F1 scores of the different methods. We evaluate the scores by comparing the predict edges against the edges in the gold annotation.
 The conversion to constituency format gets almost a perfect score on the regular edges, as it only omits extra linkage parents and implicit nodes. The conversion to dependency format is more lossy, since all of the non-terminal nodes are lost and have to be reconstructed on the conversion back. Of course, both conversions have a zero score on remote edges, since they are always removed when converting to trees.
@@ -703,7 +710,7 @@ Our work & constituency DAG + \textsc{Swap} & linear
 \label{table:parser_variation}
 \end{table*}
 
-\subsection{Future work}
+\subsection{Future Work}
 \paragraph{Improving the conversion procedure.}
 Several decision have to be made in the conversion between dependency and constituency annotation.
 In the conversion from constituency to dependency, a head terminal has to be selected for each node. When converting in the other direction, labels for the added edges have to be determined.
