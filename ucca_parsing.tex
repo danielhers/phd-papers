@@ -746,11 +746,11 @@ Nivre et al.~\shortcite{nivre2007maltparser} & 61.1 & 56.5 & 58.7 & $-$ & 0 & 0 
 Dyer et al.~\shortcite{dyer2015transition} & 71.8 & 67 & 69.3 & $-$ & 0 & 0 \\
 \hline
 \multicolumn{4}{l}{\footnotesize Direct approach} \\
-%$S$ &  &  & 56.5 &  &  & 18.5 \\
-$S_{LI}$ &  &  & 58 &  &  & 16.6 \\
-$S_{LIR}$ &  &  & 60.2 &  &  & 0 \\
-%$S$ (o-o-d) &  &  & 53.6 &  &  & 8.5 \\
-$S_{LI}$ (o-o-d) &  &  & 55.8 &  &  & 13.1 \\
+%\textit{BCP} &  &  & 56.5 &  &  & 18.5 \\
+\textit{BCP} &  &  & 58 &  &  & 16.6 \\
+\textit{BCP}$-R$ &  &  & 60.2 &  &  & 0 \\
+%\textit{BCP} (o-o-d) &  &  & 53.6 &  &  & 8.5 \\
+\textit{BCP} (o-o-d) &  &  & 55.8 &  &  & 13.1 \\
 \end{tabular}
 %\begin{adjustbox}{width=\textwidth}
 %\pgfplotstabletypeset[col sep=comma,
@@ -764,7 +764,7 @@ $S_{LI}$ (o-o-d) &  &  & 55.8 &  &  & 13.1 \\
 %\end{adjustbox}
 \caption{Parsing scores.
 LP, LR and LF are labeled precision, recall and F1, respectively.
-$S$ is our parser when trained on the whole data set; $S_{LI}$ is our parser when trained without linkage edges and implicit nodes, and $S_{LIR}$ is without linkage, implicit and remote.
+\textit{BCP} is our parser when trained on the whole data set, and \textit{BCP}$-R$ is our parser when trained without remote edges.
 o-o-d is out-of-domain.}
 \label{table:convert}
 \end{table*}
