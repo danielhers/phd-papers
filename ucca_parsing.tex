@@ -365,38 +365,40 @@ Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
 
 %Like standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontinuous constituents} (the equivalent of non-projective dependency trees). However, Maier~\shortcite{maier2015discontinuous} introduced a transition-based constituent parsing with a \textsc{swap} transition to allow discontinuous parsing.\footnote{https://github.com/wmaier/uparse}
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conversion-based Parsing}\label{sec:conversion_approach}
 
-For a given set $L$ of edge labels, a \textit{semantic constituency graph} $G=(V,E, \ell)$ over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph (DAG), where $V$ is a set of \textit{nodes}, $E \subseteq V\times V$ is a set of \textit{edges}, and $\ell:E\to L$ is a function of \textit{edge labels}. For each $w_i$ ($i=1, \ldots, n$) there exists a leaf (a node with no children) $t_i \in V$.
+For a given set $L$ of edge labels, a \textit{semantic constituency graph} $G=(V,E, \ell)$ over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph (DAG), where $V$ is a set of \textit{nodes}, $E \subseteq V\times V$ is a set of \textit{edges}, and $\ell:E\to L$ is a function of \textit{edge labels}. For each token $w_i$ ($i=1, \ldots, n$) there exists a leaf  $t_i \in V$. {\it Units} are defined as the set of leaf descendants of the nodes in $V$. 
 
-To our knowledge, no DAG constituency parser currently exists.
-Therefore, as a start, we use state-of-the-art parsers for existing schemes, and evaluate them on converted data. We use constituency and dependency trees as target representations. Since they are more restrictive than semantic constituency graphs, the conversion is necessarily lossy, and the accuracy of this method is bounded by the conversion accuracy.
-
-The parsers obtained this way are composed of three steps:
-\begin{enumerate}
-\item Conversion to target representation.
-\item Training the underlying parser and applying it to test data in the target representation.
-\item Conversion to semantic constituency graphs.
-\end{enumerate}
-Graphs produced by this method for test data are then compared to the gold annotation.
-We also perform oracle experiments, where instead of a trained parser's output we use the gold annotation itself, converted to the target representation (and then converted back to semantic constituencies).
+Conversion-based parsers are obtained by converting the semantic constituency graphs into the mediating representation,
+training a parser for the mediating representation, applying the resulting poarser
+to the test set, converted to the mediating representation as well, and converting back
+to the original semantic constituency graphs.
 
 
-\subsection{Conversion to Constituency Trees}
+\paragraph{Conversion to Constituency Trees.}
+In order to convert semantic constituency graphs to constituency trees, we remove edges such that
+all nodes are left with a single incoming edge, and a single root remains in the graph.
+This results in a tree that can be parsed by constituency parsers.
+As semantic constituency graphs may have distinguous units, the resulting tree may have
+discontiguous constituents as well. The reverse conversion from trees to graphs
+is simply the identity function.
+Specifically, in converting UCCA structures, we note that UCCA marks one of the incoming edges
+for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges.
+We thus remove all remote remote and linkage edges, in addition to nodes that are disconnected
+from the graph as a result of this removal, and leaves that do not correspond to a token in the
+text\footnote{Such implicit units serve in UCCA to represent implicit relations and participants, such as
+the agent in passive sentences.}.
 
-In order to convert semantic constituency graphs to constituency trees, we remove edges such that all nodes are left with a single incoming edge, and a single root remains in the graph. This results in a tree that can be parsed by constituency parsers, but some of the nodes in the tree may have a discontinuous yield. We use \textsc{uparse} \cite{maier2015discontinuous}, which is able to parse discontinuous structures.
+We use the \textsc{uparse} parser \cite{maier2015discontinuous}, the only transition-based
+constituency parser, to our knowledge, able to parse trees with discontiguous constituents.
 
-In the conversion of UCCA to constituency trees, we remove remote and linkage edges, and all linkage and implicit nodes.
-
-
-\subsection{Conversion to Dependency Trees}
-\label{subsec:con2dep}
-
-To evaluate dependency parsers in this scheme, we convert the data to dependency trees and back by Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
-
-For each node $u$, we define the terminal $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a terminal. The order is determined by the edge labels. For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
+\paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
+The conversion and reverse conversion algorithms are given in Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
+For each node $u \in V$, we define its parent node $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$
+in priority order, until we reach a leaf. The order is determined by the edge labels.
+For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but
+$t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
 
 We define $\mathrm{Label}(u)$ by a set of rules.
 
@@ -660,6 +662,13 @@ Our conversion tools and direct parser are implemented in Python. In all experim
 For evaluation, we use the \texttt{evaluate\_standard.py} script, and report the labeled precision, recall and F1 when comparing the edges present in the predicted graph against the gold-standard graph. We report the scores on regular (non-remote) and remote edges separately.
 
 For MaltParser, we use \texttt{nivreeager} as the transition system and \texttt{libsvm} as the classifier, as it reaches the highest scores (although with a close margin) among configurations.
+
+\oa{this belongs in the exp setup}
+Graphs produced by this method for test data are then compared to the gold annotation.
+We also perform oracle experiments, where instead of a trained parser's output we use the
+gold annotation itself, converted to the target representation
+(and then converted back to semantic constituencies).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Results}
