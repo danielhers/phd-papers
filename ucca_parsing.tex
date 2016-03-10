@@ -363,21 +363,23 @@ to the original semantic constituency graphs.
 In order to convert semantic constituency graphs to constituency trees, we remove edges such that
 all nodes are left with a single incoming edge, and a single root remains in the graph.
 This results in a tree that can be parsed by constituency parsers.
-As semantic constituency graphs may have distinguous units, the resulting tree may have
-discontiguous constituents as well. The reverse conversion from trees to graphs
-is simply the identity function.
+As semantic constituency graphs may have discontiguous units, the resulting tree may have
+discontiguous constituents as well.
+
 Specifically, in converting UCCA structures, we note that UCCA marks one of the incoming edges
 for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges.
 We thus remove all remote remote and linkage edges, in addition to nodes that are disconnected
 from the graph as a result of this removal, and leaves that do not correspond to a token in the
 text\footnote{Such implicit units serve in UCCA to represent implicit relations and participants, such as
-the agent in passive sentences.}.
+the agent in passive sentences (if not explicitly mentioned).}.
+
+The reverse conversion from trees to graphs is simply the identity function.
 
 We use the \textsc{uparse} parser \cite{maier2015discontinuous}, the only transition-based
 constituency parser, to our knowledge, able to parse trees with discontiguous constituents.
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
-The conversion and reverse conversion algorithms are given in Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
+In the conversion to dependency trees, we first convert semantic constituency graphs to constituency trees using the above procedure. We then convert these constituency trees to dependency trees. The conversion and reverse conversion algorithms are given in Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
 
 For each node $u \in V$, we define the terminal $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a leaf. The order is determined by the edge labels.
 For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
