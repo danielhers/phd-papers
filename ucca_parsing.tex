@@ -292,10 +292,11 @@ discontiguous constituency parsing \cite{maier2015discontinuous},
 yielding improvements over in the parsing of discontiguous constituents in German.
 Transition-based parsers have also been developed for dependency DAG structures
 \cite{sagae2008shift,tokgoz2015transition}, AMR parsing \cite{wang2015transition}
-and CCG parsing \cite{ambati2015}.
+and CCG parsing \cite{ambati2015incremental}.
 Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
 
-%Despite the greediness\daniel{is beam search greedy too?} and simplicity of transition-based methods, they have yielded excellent
+%Despite the greediness\daniel{is beam search greedy too?} and simplicity of transition-based methods,
+%they have yielded excellent
 %results in a variety of parsing tasks. Within syntactic dependencies parsing, transition-based methods
 %have been successfully applied to corproa in many languages and domains, yielding some
 %of the best reported results on this core task \cite{dyer2015transition,ballesteros2015improved}. 
@@ -531,9 +532,21 @@ Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 \subsection{Features}
 \label{subsec:features}
 
-\figref{fig:features} presents the feature templates used by the parser. For some of the features, we used the notion of \textit{head word}: although meaningless in UCCA, it proved beneficial to have some sort of lexicalized features, but future work will generalize this. The head word of a node is defined as the first terminal reachable by following outgoing edges in a specific priority order (similar to the one used by the conversion in \secref{subsec:con2dep}). The same priority order defines a \textit{head incoming edge} for each node.
+\figref{fig:features} presents the feature templates used by the parser.
+For some of the features, we used the notion of \textit{head word}, defined 
+as the first terminal reachable by following outgoing edges following a priority order
+over the edge labels (similar to the one used by the conversion in \secref{subsec:con2dep}\oa{the same one?}).
+While head words is not explicitly represented in the UCCA scheme, these
+features proved beneficial as means of encoding bi-lexical features.
 
-In addition to the binary features defined by those feature templates, we use a continuous feature defined as the ratio of terminals to nodes in the graph, in order to regulate the creation of new nodes.
+In addition to the binary features defined by those feature templates,
+we employ a real-valued feature corresponding to the number of terminals to number of nodes
+ratio in the graph $G$. The feature serves as a regularizer for the creation of new nodes.\oa{did you take it
+  from somewhere?}
+Features are generally adapted from the related parsers of \newcite{zhu2013fast,tokgoz2015transition} and
+\newcite{maier2015discontinuous}, with a small additional set of features encoding relevant information
+for the novel \textsc{Left-Remote$_X$}, \textsc{Right-Remote$_X$} and \textsc{IMPLICIT$_X$} operations.
+\oa{what information exactly? Figure 3 is a bit disorganized. Better to put all the notation in the caption.}
 
 %$s_i$ and $b_i$ stand for the $i$th stack and buffer items respectively, $w$ stands for the head word, $t$ for its POS tag, $e$ for the head incoming edge label. Note that $e$ replaces $c$ (consituent label) from Maier~\shortcite{maier2015discontinuous}, since in UCCA the labels are on the edges rather than the units; and a unit may have more than one incoming edge. $l$ and $r$ ($ll$ and $rr$) represent the leftmost and rightmost children (grand-children) of the element; $u$ handles the unary case.
 %Concerning the separator features, $p$ is a unique separator feature between the head words of $s_0$ and $s_1$; $q$ is the count of any separator features between them.
