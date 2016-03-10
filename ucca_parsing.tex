@@ -508,7 +508,7 @@ $S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & 
 $x \neq \mathrm{root}$ \\
 \cline{11-11}
 %$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Implicit$_X$} & $S \;|\; x$ & $y^* \;|\; B$ & $V \cup \{ y^* \}$ & $E \cup \{ (x,y^*)_X \}$ & $-$ &
-$x \not\in w_{1:n}$ \\
+%$x \not\in w_{1:n}$ \\
 \cline{11-11}
 $S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ &
 \multirow{4}{50pt}{$\begin{aligned}
@@ -574,7 +574,6 @@ for the novel \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} transitions
 
 % FEATURES
 \begin{figure*}
-\captionsetup[subfigure]{justification=centering}
 \begin{adjustbox}{width=\textwidth}
 \small
 \begin{minipage}[c][11cm][t]{.5\textwidth}
@@ -719,6 +718,7 @@ gold annotation itself, converted to the target representation
 (and then converted back to semantic constituencies).
 
 For our parser, we use a \textsc{MinUpdate} of 5.
+We omit linkage edges and nodes, as these are not handled by the evaluation metrics yet and are not an essential part of the semantic parsing scheme. We also omit implicit nodes, leaving them for future work.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
