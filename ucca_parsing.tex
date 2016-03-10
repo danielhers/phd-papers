@@ -27,6 +27,7 @@
 \newcommand{\secref}[1]{Section~\ref{#1}}
 \newcommand{\figref}[1]{Figure~\ref{#1}}
 \newcommand{\tabref}[1]{Table~\ref{#1}}
+
 %\aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
 
@@ -57,24 +58,21 @@ A Transition-Based Approach}
 %%%%%%%%%%%%%%%%%     Abstract
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-  
-  The representation of many common semantic phenomena requires
-  more expressive formalisms than those commonly used for syntactic parsing.
-  %motivating research into   more formally expressive parsers.
+
+  Representing many common semantic phenomena requires more expressive formalisms
+  than those commonly used for syntactic parsing, motivating research into
+  more formally expressive parsers.
   Recent work has focused on broad-coverage semantic parsing into dependency
   (i.e., word-to-word) or abstract (i.e., not grounded in the words and phrases of
   the sentence) representations.
   Instead, we advocate a constituency-based formulation of the
-  task and define the Broad-coverage Constituency Semantic Parsing task
-  (henceforth, {\it BCSP}) using the UCCA semantic scheme and
-  annotated corpora as a testbed.
+  task and define the broad-coverage constituency semantic parsing task
+  (henceforth, {\it BCSP}) using the UCCA semantic scheme and annotated corpora as a testbed.
   We note that there are no existing methods for constituency DAG parsing,
   and propose two transition-based approaches to tackle it:
-  (1) developing procedures for converting UCCA structures into related
-  formalisms, using existing state-of-the-art parsers on the converted representations,
-  and converting them back, and (2) constructing a novel parser for the task.
-  Results are comparable to state-of-the-art results in related
-  semantic parsing tasks, and suggest future directions for improvement.
+  (1) creating conversion tools for converting UCCA structures into related
+  formalisms and back, and using existing state-of-the-art parsers for
+  these settings, and (2) constructing a novel parser for the task.
   
   %We experiment with two types of semantic representations, obtaining
   %encouraging results.
@@ -100,53 +98,65 @@ A Transition-Based Approach}
 %  are not trees, but DAGs (e.g., argument sharing in control structures;
 % see Oepen et al., 2015, AMR).
 
-The formal constraints imposed by available statistical parsers are
-too restrictive for broad-coverage semantic parsing \cite{oepen2015semeval}.
-For instance, arguments that are
-shared between predicates are often represented as multi-parented nodes,
+The formal constraints imposed by available statistical parsers are too restrictive
+broad-coverage semantic parsing \cite{oepen2015semeval}.
+For instance, arguments that are shared
+between predicates are generally represented as multi-parented nodes,
 yielding DAG, rather than tree structures. This has motivated much recent
-inquiry into statistical parsing with more expressive formalisms.
+inquiry into semantic parsing with more expressive formalisms.
+
+Earlier work on statistical broad-coverage semantic parsing has mostly
+concentrated on shallow semantic analysis, focusing on verb argument structure phenomena.
+Recently work has focused on parsing into a more elaborate representation, accounting
+for other phenomena, such as inter-clause relations and non-verbal predicates.
+Much recent interest has been placed on parsing sentences into abstract meaning representations,
+not grounded in the words and phrases, notably AMR \cite{banarescu2013abstract}.
+While sharing much of these works' motivation, AMR poses difficulties as it conflates
+a wide variety of linguistic phenomena into a single unlayered representation.
+Moreover, not grounding the text within the semantic representation,
+requires that the alignment between words and logical symbols be automatically
+(and imprecisely) detected, and may consequently complicate the parsing task.
+
+An alternative line of work tackles parsing into grounded semantic representations.
+Most work of this strand represented semantics using dependency structures.
+Various methods have been systematically explored
+in two recent SemEval shared tasks \cite{oepen2014semeval,oepen2015semeval}.
+Bi-lexical dependencies are indeed an appealing means for representing semantics, partly due to
+their structural and conceptual simplicity and the strong and efficient
+methods they allow for (see \secref{sec:related}).
+However, the assumption that each semantic unit has a unique head is
+problematic for representing several frequent constructions that have no clear
+head, such as coordination, prepositional phrases and multi-word expressions,
+leading to unsystematic treatment of these cases, which yields both conceptual
+and practical problems \cite{schwartz2011neutralizing,Ivanova2012who,tsarfaty2012cross}.
 
 In this work we define and tackle the constituency-based semantic parsing task.
-Constituency semantic representation is appealing in two ways.
-First, it does not impose the unique head assumption, imposed
-by bi-lexical dependencies, which is problematic for representing several
-frequent constructions that have no clear
-head, such as coordination, prepositional phrases and multi-word expressions.
-Second, grounding the representation in the text, unlike more abstract representations
-such as AMR \cite{banarescu2013abstract},
-allows for the use of strong and efficient parsing methods.
+Constituency semantic representation is motivated both as it does not
+impose the limiting unique head assumption, and its grounding in the text,
+which allows for the use of strong and efficient parsing methods.
 Indeed, transition-based methods, which have recently produced some of the best
-results in syntactic dependency
-parsing \cite{dyer2015transition,ballesteros2015improved},
-have been shown to be effective for other settings as well,
-including constituency parsing \cite{sagae2005classifier,zhu2013fast,maier2015discontinuous}. 
-We follow the transition-based approach, motivated by
-its conceptual simplicity, efficiency and high performance.
+results in syntactic dependency parsing \cite{dyer2015transition,ballesteros2015improved},
+can be applied
+for constituency parsing as well \cite{sagae2005classifier,zhu2013fast,maier2015discontinuous}. 
+We follow the transition-based approach, motivated by its conceptual simplicity,
+efficiency and high performance.
 
-We use the English UCCA-annotated corpora \cite{abend2013universal} as a test
-case\footnote{While the BCSP task is not specific to UCCA,
+We use corpora annotated with the UCCA scheme \cite{abend2013universal} as a test
+case\footnote{In fact, while the task definition is not specific to UCCA,
   to the best of our knowledge, these are the only
   semantically annotated corpora that use constituency structures.}
 and pursue two complementary parsing strategies.
-First, we assess the ability of existing technology to tackle the task,
-by designing converters between the UCCA annotation and two related formalisms:
-CoNLL-style dependencies and discontiguous constituency trees.
+First, in order to assess the ability of existing technology to tackle the task,
+we build converters between the UCCA annotation and two related formalisms:
+\textsc{CoNLL}-style dependencies and discontiguous constituency trees.
 We are not aware of any statistical constituency DAG parsers, and specifically not
-ones that support discontiguous constituents, as required for a broad-coverage
-parser (for discussion of this point in the context of syntactic parsing, see
-\cite{kallmeyer2013data,pitler2015linear}).
-This approach is thus inherently incomplete as a BCSP method, but we find that it is
-nonetheless effective in practice (\secref{sec:conversion_approach}).
+ones that support discontiguous constituents, as required for a broad-coverage semantic
+parser (see, e.g., \cite{pitler2015linear,maier2015discontinuous}, for parsers motivated by discontiguous units). Therefore, the conversion is necessarily lossy, but, as we show, is still effective
+in practice (\secref{sec:conversion_approach}).
 Second, we present a novel transition-based
-constituency DAG parser that supports discontiguous constituents, named
-the {\it BCS Parser} (\secref{sec:direct_approach}).
-
-We apply the parsing approaches both to an in-domain and out-of-domain scenarios,
-and obtain results comparable to the state-of-the-art in other broad-coverage semantic parsing
-tasks. For example, the best performing parser obtains an F-score of nearly 70\% in
-the in-domain scenario, on par with state-of-the-art results on other semantic
-parsing tasks (e.g., \cite{artzi2015broad}). 
+constituency DAG parser that supports discontiguous constituents (\secref{sec:direct_approach}). 
+We apply the parser both to an in-domain and out-of-domain
+scenario, with encouraging results.
 
 %A general parser for this setting must support the prediction of multiple parents,
 %as well as of discontiguous constituents, both pervasive phenomena in semantic
@@ -164,14 +174,14 @@ parsing tasks (e.g., \cite{artzi2015broad}).
 
 The contribution of this work is thus three-fold.
 First, we motivate and define the constituency broad-coverage semantic parsing task.
-Second, we create converters and study the ability of existing parsing technology
+Second, we create converters and assess the ability of existing parsing technology
 for formally related settings to address the task, focusing on transition-based methods.
-Third, we present the BCS parser, novel both in being the first constituency DAG parser, as well as the first UCCA parser. 
-All converters, parsers and datasets will be made publicly available upon publication.
+Third, we present the first constituency DAG parser, which is also the
+first parser for UCCA. 
+All converters, parsers and data sets will be made publicly available upon publication.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}\label{sec:related}
-
 
 \begin{figure*}
 \begin{adjustbox}{width=\textwidth}
@@ -224,30 +234,11 @@ All converters, parsers and datasets will be made publicly available upon public
 \end{figure*}
 
 \paragraph{Broad-coverage Deep Semantic Representation.}
-Earlier work on statistical broad-coverage semantic parsing has mostly
-concentrated on shallow semantic analysis, mainly focusing on semantic
-role labeling of verbal argument structures. 
-Recently, work has shifted to parsing of more elaborate representations, that account
-for a wider range of phenomena, such as inter-clause relations and non-verbal predicates.
-Most work has been placed on parsing sentences into Abstract Meaning Representations (AMRs),
-which represents sentences as directed graphs, without
-grounding their semantic sub-parts in the sentence's words and constituents
-\cite{banarescu2013abstract}.
-
-Examples of AMR parsers include
-\cite{flanigan2014discriminative,wang2015transition,vanderwende2015amr,pust2015parsing,artzi2015broad}. 
-While sharing much of this work's motivation, AMR parsing differs from BCSP in
-two important ways.
-First, AMR uses an open-ended and fine-grained onthology for defining its categories,
-rather than a uniform closed inventory.
-%It poses difficulties as it conflates
-%a wide variety of linguistic phenomena into a single representation.
-Second, not grounding the text within the semantic representation, 
-requires that the alignment between words and logical symbols be automatically
-(and imprecisely) detected, and complicates the parsing task.
-Transition-based approach has been applied to AMR parsing by \newcite{wang2015transition},
-but their approach involved first syntactically parsing the input, and then converting
-the resulting tree into an AMR, unlike the BCS parser which performs parsing in a single step.
+The Abstract Meaning Representation (AMR) scheme \cite{banarescu2013abstract},
+provides deep semantic annotation in the form of elaborate graphs,
+which account for a wider range of predicates, linkage and coreference phenomena.
+Formally, it represents sentences as directed graphs, without grounding their
+semantic sub-parts in the sentence's words and constituents.
 
 Another line of work that addresses parsing into elaborate semantic structures
 is that of Broad-coverage Semantic Dependency Parsing (SDP) \cite{oepen2014semeval,oepen2015semeval}.
@@ -257,78 +248,68 @@ Three major approaches have been explored:
 the Prague Dependency Treebank tectogrammatical layer \cite{bohmova2003prague},
 HSPG-derived parsers using the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
 and dependencies derived from the Lingo ERG Minimal Recursion Semantics represenations \cite{Flic:02}.
-%An alternative line of work tackles parsing into grounded semantic representations.
-%Most work of this strand represent semantics using dependency structures,
-%as has been explored in two recent SemEval shared tasks \cite{oepen2014semeval,oepen2015semeval}.
-Bi-lexical dependencies are indeed an appealing means for representing semantics, partly due to
-their structural and conceptual simplicity and the strong and efficient
-methods they allow for. However, the assumption that each semantic unit has a unique head is
-problematic for representing several frequent constructions which have no clear
-head, such as coordination, prepositional phrases and multi-word expressions,
-leading to unsystematic treatment of these cases, which yields both conceptual
-and practical problems \cite{schwartz2011neutralizing,Ivanova2012who,tsarfaty2012cross}.
 
 \paragraph{Universal Conceptual Cognitive Annotation.}
 Taking a constituency-based approach to semantic parsing,
-we use the annotated UCCA corpora, a broad-coverage semantic annotation scheme that
-represents predicate-argument structures (verbal, nominal, adjectival and others),
-the inter-relations between them, in addition to other major semanitc phenomena.
-UCCA \cite{abend2013universal} builds on an established framework
-for typological description, ``Basic Linguistic Theory''
-\cite{Dixon:10b,Dixon:10a,Dixon:12}, as well as on the Cognitive Linguistics literature,
-and defines a set of coarse-grained, cross-linguistically applicable distinctions.
-has been shown to be applicable to multiple languages, including English, French, German and
-Czech, to support rapid annotation, and to be semantically stable in translation: UCCA
+we use the annotated UCCA corpora, a broad-coverage semantic annotation scheme,
+which focuses on predicate-argument structures (verbal, nominal, adjectival and others)
+and the inter-relations between them. UCCA \cite{abend2013universal} builds on an established
+framework for typological description, ``Basic Linguistic Theory''
+\cite{Dixon:10b,Dixon:10a,Dixon:12}, as well as on the Cognitive Linguistics literature. The scheme
+has been shown to support rapid annotation and to be semantically stable in translation: UCCA
 annotations of translated text usually contain the same set of relationships
 \cite{sulem2015conceptual}.
 
-Formally, a UCCA structure is a constituency DAG, whose leaves (or a subset of them) correspond to the words of the text. The nodes of the graph, called ``units'', are either terminals or several elements (not necessarily contiguous) jointly viewed as a single entity according to some semantic or cognitive consideration.
-Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents. 
+Formally, a UCCA structure is a constituency DAG, whose leaves (or a subset of them) correspond to the words of the text. The nodes of the graph, called ``units'', are either terminals or several elements (not necessarily contiguous) jointly viewed as a single entity according to some semantic or cognitive consideration. The edges bear a category, indicating the role of the sub-unit in the relation that the parent represents. 
 The most basic notion is the ``Scene'', which describes a movement, an action or a state.
 Each Scene contains one main relation, or anchor, as well as one or more participants. 
-For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes, whose main relations are ``graduation'' and ``moved''. The participant ``John'' is a part of both Scenes, while ``Paris'' only of the latter. Further categories account for relations between Scenes and the internal structures of complex arguments (e.g., coordination) and relations (e.g., complex adverbials, such as ``very clearly''). \figref{fig:ucca_example} presents another example of a UCCA-annotated sentence. 
+For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes, whose main relations are ``graduation'' and ``moved''. The participant ``John'' is a part of both Scenes, while ``Paris'' only of the latter. Further categories account for relations between Scenes and the internal structures of complex arguments (e.g., coordination) and relations (e.g., complex adverbials, such as ``very clearly'').
+\figref{fig:ucca_example} presents another example of a UCCA-annotated sentence. 
 
 \paragraph{Related Semantic and Syntactic Parsing Work.}
 Semantic parsing methods can be largely partitioned into grammar-based and grammarless methods.
 Within the grammar-based literature, most work relied on Combinatory Categorial Grammar (CCG)
 \cite{Steedman:00}, which allows to compute semantic structure compositionally from the
 syntactic derivations. Notable examples include the Boxer parser \cite{bos2005towards}
-and the AMR parser by \newcite{artzi2015broad}.
-Other examples include parsing with Hyperedge Replacement Grammars
+and the AMR parser 
+by \newcite{artzi2015broad}. Other examples include parsing with Hyperedge Replacement Grammars
 \cite{jones2012semantics,chiang2013parsing,peng2015synchronous} and
 graph grammars \cite{koller2015semantic}.
 A different line of work takes a discriminative, grammarless approach,
 pursuing either graph-based methods that predict the highest ranking graph
-(tree or DAG) that satisfies a given set of constraints
-(e.g., \newcite{flanigan2014discriminative} for AMR parsing)
+(tree or DAG) that satisfies a given set of constraints (e.g., \newcite{flanigan2014discriminative}
+for AMR parsing)
 or a transition-based method that builds the parse incrementally following a series of local
 decisions \cite[and much subsequent work]{Nivre03anefficient}.
 
-Despite being based on local decisions, transition-based methods have yielded excellent
+Despite the greediness\daniel{is beam search greedy too?} and simplicity of transition-based methods, they have yielded excellent
 results in a variety of parsing tasks. Within syntactic dependencies parsing, transition-based methods
 have been successfully applied to corproa in many languages and domains, yielding some
-of the best reported results \cite{dyer2015transition,ballesteros2015improved}. 
+of the best reported results on this core task \cite{dyer2015transition,ballesteros2015improved}. 
 The approach has also yielded results comparable with the state-of-the-art when applied
 to constituency parsing \cite{sagae2005classifier,zhu2013fast}, and has been recently extended to
 discontiguous constituency parsing \cite{maier2015discontinuous},
 yielding improvements over in the parsing of discontiguous constituents in German.
 Transition-based parsers have also been developed for dependency DAG structures
-\cite{sagae2008shift,tokgoz2015transition}, AMR parsing \cite{wang2015transition} and
-CCG parsing \cite{ambati2015}.
-Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
+\cite{sagae2008shift,tokgoz2015transition}, including a transition-based parser for transforming
+syntactic dependencies into AMR parses \cite{wang2015transition}.
+Nevertheless, to our knowledge no statistical parser has
+been constructed for constituency DAG parsing, a gap which
+we address in this work, presenting a transition-based constituency DAG parser that supports
+the prediction of discontiguous units.
 
-%\oa{Who to compare to? (we take a transition-based approach; later we discuss,
-%  without comparing, to grammar-based
-%  or graph-based approaches)
-%  Constituency parsers that meet some of the criteria: Wolfgang's (all but multiple parents),
-%        which is state-of-the-art on Negra discontiguous units.
-%        There are no multiple parent constituency parsers! (so we can't compare)
-%%  Dependency parsers: there are the standard ones (done!), there is MALT non-projective, and there is not MALT with multiple parents. There are other dependency with multiple parents: tokgoez and erdigit (based on earlier work by sagae and tsujii) -- we're trying to get their code.
-%  
-%  We'll also say that future work will address other languages, ...
-%  Evaluation specifically on multiple parents, and on discontiguous.
-%  Future work: LSTM-version of our parser, conversion from t-layer parsers and such.
-%}
+\oa{Who to compare to? (we take a transition-based approach; later we discuss,
+  without comparing, to grammar-based
+  or graph-based approaches)
+  Constituency parsers that meet some of the criteria: Wolfgang's (all but multiple parents),
+        which is state-of-the-art on Negra discontiguous units.
+        There are no multiple parent constituency parsers! (so we can't compare)
+  Dependency parsers: there are the standard ones (done!), there is MALT non-projective, and there is not MALT with multiple parents. There are other dependency with multiple parents: tokgoez and erdigit (based on earlier work by sagae and tsujii) -- we're trying to get their code.
+  
+  We'll also say that future work will address other languages, ...
+  Evaluation specifically on multiple parents, and on discontiguous.
+  Future work: LSTM-version of our parser, conversion from t-layer parsers and such.
+}
 
 % ADL comment: I removed these paragraphs because I think the text should zero in on precisely what our research methods, without dwelling on background/ previous work, esp. this early in the text. If this appears at all it should be briefly summarized at the end; say how it informs UCCA, but don't dwell on it.
 
@@ -365,6 +346,7 @@ Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
 
 %Like standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontinuous constituents} (the equivalent of non-projective dependency trees). However, Maier~\shortcite{maier2015discontinuous} introduced a transition-based constituent parsing with a \textsc{swap} transition to allow discontinuous parsing.\footnote{https://github.com/wmaier/uparse}
 
+<<<<<<< HEAD
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conversion-based Parsing}\label{sec:conversion_approach}
 
@@ -399,6 +381,40 @@ For each node $u \in V$, we define its parent node $\mathrm{Head}(u)$, by traver
 in priority order, until we reach a leaf. The order is determined by the edge labels.
 For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but
 $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
+=======
+
+\subsection{Semantic Constituency Parsing}
+
+For a given set $L$ of edge labels, a \textit{semantic constituency graph} $G=(V,E, \ell)$ over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph (DAG), where $V$ is a set of \textit{nodes}, $E \subseteq V\times V$ is a set of \textit{edges}, and $\ell:E\to L$ is a function of \textit{edge labels}. For each $w_i$ ($i=1, \ldots, n$) there exists a leaf (a node with no children) $t_i \in V$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conversion-Based Parsing}\label{sec:conversion_approach}
+
+To our knowledge, no DAG constituency parser currently exists. Therefore, as a start, we use state-of-the-art parsers for existing schemes, and evaluate them on converted data. We use constituency and dependency trees as target representations. Since they are more restrictive than semantic constituency graphs, the conversion is necessarily lossy, and the accuracy of this method is bounded by the conversion accuracy.
+The parsers obtained this way are composed of three steps:
+\begin{enumerate}
+\item Conversion to target representation.
+\item Training the underlying parser and applying it to test data in the target representation.
+\item Conversion to semantic constituency graphs.
+\end{enumerate}
+Graphs produced by this method for test data are then compared to the gold annotation.
+We also perform oracle experiments, where instead of a trained parser's output we use the gold annotation itself, converted to the target representation (and then converted back to semantic constituencies).
+
+
+\subsection{Conversion to Constituency Trees}
+
+In order to convert semantic constituency graphs to constituency trees, we remove edges such that all nodes are left with a single incoming edge, and a single root remains in the graph. This results in a tree that can be parsed by constituency parsers, but some of the nodes in the tree may have a discontinuous yield. We use \textsc{uparse} \cite{maier2015discontinuous}, which is able to parse discontinuous structures.
+
+In the conversion of UCCA to constituency trees, we remove remote and linkage edges, and all linkage and implicit nodes.
+
+
+\subsection{Conversion to Dependency Trees}
+\label{subsec:con2dep}
+
+To evaluate dependency parsers in this scheme, we convert the data to dependency trees and back by Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
+
+For each node $u$, we define the terminal $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a terminal. The order is determined by the edge labels. For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
 
 We define $\mathrm{Label}(u)$ by a set of rules.
 
@@ -658,8 +674,10 @@ We base our experiments on the UCCA Wiki corpus as the main corpus, the UCCA \te
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experimental Setup}
 
-Our conversion tools and direct parser are implemented in Python. In all experiments, we use passages up to 655 of the UCCA corpus as our training set, passages 656-700 as development set, and passages 701-695 as test set. We split the passages to sentences, such that each UCCA graph is annotated on one sentence.
+Our conversion tools and direct parser are implemented in Python. In all experiments, we use passages up to 655 of the UCCA Wiki corpus as our training set, passages 656-700 as development set, and passages 701-695 as test set. We split the passages to sentences, such that each UCCA graph is annotated on one sentence. In the out-of-domain experiments, we use the same training and development sets, but use the whole UCCA \textit{Twenty Thousand Leagues Under the Sea} corpus as test set.
 For evaluation, we use the \texttt{evaluate\_standard.py} script, and report the labeled precision, recall and F1 when comparing the edges present in the predicted graph against the gold-standard graph. We report the scores on regular (non-remote) and remote edges separately.
+
+For the conversions, we use \textsc{NeGra export} as the format for constituency representation and \textsc{CoNLL-X} as the format for dependency representation.
 
 For MaltParser, we use \texttt{nivreeager} as the transition system and \texttt{libsvm} as the classifier, as it reaches the highest scores (although with a close margin) among configurations.
 
@@ -685,11 +703,11 @@ Training without linkage edges and implicit nodes improve the scores on regular 
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
 \multicolumn{4}{l}{\footnotesize Constituency format} \\
-\textit{Oracle} &  &  & 99.7 & $-$ & 0 & 0 \\
+\textit{Oracle} & 1 & 99.5 & 99.7 & $-$ & 0 & 0 \\
 Maier~\shortcite{maier2015discontinuous} & 58 & 59.8 & 58.7 & $-$ & 0 & 0 \\
 \hline
 \multicolumn{4}{l}{\footnotesize Dependency format} \\
-\textit{Oracle} &  &  & 88.7 & $-$ & 0 & 0 \\
+\textit{Oracle} & 93.7 & 86 & 89.6 & $-$ & 0 & 0 \\
 Nivre et al.~\shortcite{nivre2007maltparser} & 61.1 & 56.5 & 58.7 & $-$ & 0 & 0 \\
 Dyer et al.~\shortcite{dyer2015transition} & 71.8 & 67 & 69.3 & $-$ & 0 & 0 \\
 \hline
@@ -739,9 +757,7 @@ Our work & constituency DAG + \textsc{Swap} & linear
 \label{table:parser_variation}
 \end{table*}
 
-
-\subsection{Future work}
-
+\subsection{Future Work}
 \paragraph{Improving the conversion procedure.}
 Several decision have to be made in the conversion between dependency and constituency annotation.
 In the conversion from constituency to dependency, a head terminal has to be selected for each node. When converting in the other direction, labels for the added edges have to be determined.
@@ -750,12 +766,6 @@ Currently, we handle these decisions by crude heuristics, but a more sophisticat
 \paragraph{Improving the direct parser.}
 Our parser reaches promising results, but it is very basic in terms of the techniques used in it. Using beam search rather than greedy inference tends to improve the parsing scores significantly.
 In terms of machine learning, we use a linear classifier with hand-crafted features. As the experiment with the LSTM parser shows, implementing a parser based on neural networks should also give a significant improvement to our parsing scores.
-
-Results further suggest that
-the integration of the BCS parser with the LSTM training procedure
-pioneered by \newcite{dyer2015transition} will considerably boost results.
-
-
 
 \bibliography{references}
 \bibliographystyle{acl2016}
