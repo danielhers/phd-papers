@@ -641,11 +641,18 @@ $I,R$: number of implicit, remote children.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experiments}
-\subsection{Data}\label{sec:data}
 
-We base our experiments on the UCCA Wiki corpus as the main corpus, the UCCA \textit{Twenty Thousand Leagues Under the Sea} corpus as out-of-domain data. As evident in \tabref{table:data}, the Wiki corpus is over ten times larger, but the overall statistics are similar.
-\oa{Give examples of cases where multiple parents and/or discontiguous units show up.}
-\oa{put statistics here similar to table 1 in the semeval 2015 paper; specifically, treewidth may be interesting}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Experimental Setup}
+
+\paragraph{Data.}\label{sec:data}
+We conduct our main experiments on the UCCA Wikipedia corpus, and use
+the English part of the
+UCCA \textit{Twenty Thousand Leagues Under the Sea} English-French parallel corpus as
+out-of-domain data\footnote{Both can be found here \url{http://www.cs.huji.ac.il/~oabend/ucca.html}}.
+\tabref{table:data} presents some statitics for the two corpora, demonstrating that while
+the Wikipedia corpus is over ten times bigger, the overall statistics are
+similar. \oa{Give examples of cases where multiple parents and/or discontiguous units show up.}
 
 \begin{table}
 \begin{tabular}{l|ccc}
@@ -673,17 +680,59 @@ We base our experiments on the UCCA Wiki corpus as the main corpus, the UCCA \te
 \label{table:data}
 \end{table}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Experimental Setup}
+%Our conversion tools and direct parser are implemented in Python.
+In all experiments, we use passages of indices not greater than 655
+of the Wikipedia corpus as our training set, passages 656-700 as development set,
+and passages 701-695 as test set.\oa{how many tokens per passage on average?}
+While UCCA annotation applies can cross sentence boundaries, we adhere to the common
+practice in semantic parsing and train our parsers on individual sentences,
+discarding inter-relations between them.\oa{how many of the edges do we discard?}
+In the out-of-domain experiments, we use the same parser, trained on the Wikipedia
+corpus to the entire English \textit{Twenty Thousand Leagues Under the Sea} corpus as test set,
+without any parameter re-tuning.
 
-Our conversion tools and direct parser are implemented in Python. In all experiments, we use passages up to 655 of the UCCA Wiki corpus as our training set, passages 656-700 as development set, and passages 701-695 as test set. We split the passages to sentences, such that each UCCA graph is annotated on one sentence. In the out-of-domain experiments, we use the same training and development sets, but use the whole UCCA \textit{Twenty Thousand Leagues Under the Sea} corpus as test set.z`
-For evaluation, we use the \texttt{evaluate\_standard.py} script, and report the labeled precision, recall and F1 when comparing the edges present in the predicted graph against the gold-standard graph. We report the scores on regular (non-remote) and remote edges separately.
+Since there are no standard evaluation measures for comparing constituency DAGs, we define
+two simple measures for comparing them.
+Assume $G_P=(V_P,E_p)$ and $G_G=(V_G,E_{G})$
+are the predicted and gold-standard DAGs over the same
+set of terminals $W = \{w_1,\ldots,w_n\}$, respectively.
+For an edge $e=(p,c)$ in either the graphs,
+where $p$ is the parent, and $c$ is the child, define $yield(e) \subset W$ as the
+set of terminals in $W$ which are descendants of $c$. We define:
 
-For the conversions, we use \textsc{NeGra export} as the format for constituency representation and \textsc{CoNLL-X} as the format for dependency representation.
+{\scriptsize
+  \begin{align*}
+    \begin{aligned}
+      M(G_P,G_G) = \\
+      |\{(e_1,e_2) \in E_{P} \times E_{G} | yield(e_1) = yield(e_2) \& label(e_1)=label(e_2)\}| \\
+    \end{aligned}
+  \end{align*}
+}
 
-For MaltParser, we use \texttt{nivreeager} as the transition system and \texttt{libsvm} as the classifier, as it reaches the highest scores (although with a close margin) among configurations.
+Precision and Recall are defined by dividing $M(G_P,G_G)$ with $|E_P|$ and $E_G$ respectively.
+We report two variants of this measure, one where we consider only non-remote edges,
+and another where we consider remote edges. We note that the measure collapses to the standard
+PARSEVAL constituency evaluation measure if $G_P$ are $G_G$ are trees.
+In all cases, punctuation marks are excluded from the evaluation, but not from the datasets.
 
-\oa{this belongs in the exp setup}
+%For the conversions, we use \textsc{NeGra export} as the format for
+%constituency representation and \textsc{CoNLL-X} as the format for dependency representation.
+
+We explore two conversion scenarios: one into (possible discontiguous) constituency trees,
+and one into CoNLL-style dependencies. In the first setting, we experiment with the {\sc UPARSE}
+parser\oa{add url, citation}, and in the second with the MALT
+parser\oa{add url, citation} and the LSTM parser \oa{add url, citation}.
+We experiment with different settings of the MALT parser, including
+different transition systems and local classifiers. As the different
+settings yield comparable results, we only report those of the highest
+scoring configuration, using the \texttt{nivreeager} transitions
+and the \texttt{libsvm} SVM classifier.
+We note that the LSTM parser uses a similar set of transitions to the
+MALT parser, and only differs in terms of its classifier.\oa{is that true?}
+
+We further report upper bounds for the conversion-based methods, by applying
+the conversion and reverse conversion on the gold standard graphs and comparing
+them to the original gold standard.
 Graphs produced by this method for test data are then compared to the gold annotation.
 We also perform oracle experiments, where instead of a trained parser's output we use the
 gold annotation itself, converted to the target representation
@@ -739,6 +788,8 @@ o-o-d is out-of-domain.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}
+
+\oa{add paragraph-level scores, to show the reader we have done varied work. also possible linkage prediction scores and implicit prediction scores}
 
 We have presented the task Broad-Coverage Semantic Constituency parsing (BSCP), and shown that the Universal Conceptual Cognitive Annotation (UCCA) scheme is a target representation for this task. Based on high-level statistics over two UCCA corpora, we demonstrated that they are indeed structurally unrestricted.
 We claim UCCA is more appropriate than other semantic parsing tasks, since it is not bounded by arbitrary head selection rules, and is grounded on the tokens of the text.
