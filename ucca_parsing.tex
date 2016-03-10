@@ -282,6 +282,19 @@ for AMR parsing)
 or a transition-based method that builds the parse incrementally following a series of local
 decisions \cite[and much subsequent work]{Nivre03anefficient}.
 
+Despite being based on local decisions, transition-based methods have yielded excellent
+results in a variety of parsing tasks. Within syntactic dependencies parsing, transition-based methods
+have been successfully applied to corproa in many languages and domains, yielding some
+of the best reported results \cite{dyer2015transition,ballesteros2015improved}. 
+The approach has also yielded results comparable with the state-of-the-art when applied
+to constituency parsing \cite{sagae2005classifier,zhu2013fast}, and has been recently extended to
+discontiguous constituency parsing \cite{maier2015discontinuous},
+yielding improvements over in the parsing of discontiguous constituents in German.
+Transition-based parsers have also been developed for dependency DAG structures
+\cite{sagae2008shift,tokgoz2015transition}, AMR parsing \cite{wang2015transition}
+and CCG parsing \cite{ambati2015}.
+Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
+
 %Despite the greediness\daniel{is beam search greedy too?} and simplicity of transition-based methods, they have yielded excellent
 %results in a variety of parsing tasks. Within syntactic dependencies parsing, transition-based methods
 %have been successfully applied to corproa in many languages and domains, yielding some
@@ -298,18 +311,6 @@ decisions \cite[and much subsequent work]{Nivre03anefficient}.
 %we address in this work, presenting a transition-based constituency DAG parser that supports
 %the prediction of discontiguous units.
 
-\oa{Who to compare to? (we take a transition-based approach; later we discuss,
-  without comparing, to grammar-based
-  or graph-based approaches)
-  Constituency parsers that meet some of the criteria: Wolfgang's (all but multiple parents),
-        which is state-of-the-art on Negra discontiguous units.
-        There are no multiple parent constituency parsers! (so we can't compare)
-  Dependency parsers: there are the standard ones (done!), there is MALT non-projective, and there is not MALT with multiple parents. There are other dependency with multiple parents: tokgoez and erdigit (based on earlier work by sagae and tsujii) -- we're trying to get their code.
-  
-  We'll also say that future work will address other languages, ...
-  Evaluation specifically on multiple parents, and on discontiguous.
-  Future work: LSTM-version of our parser, conversion from t-layer parsers and such.
-}
 
 % ADL comment: I removed these paragraphs because I think the text should zero in on precisely what our research methods, without dwelling on background/ previous work, esp. this early in the text. If this appears at all it should be briefly summarized at the end; say how it informs UCCA, but don't dwell on it.
 
