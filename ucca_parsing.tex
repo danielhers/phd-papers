@@ -421,7 +421,10 @@ However, the rules used here are simpler, as the head child $h(u)$ of a node $u$
  \label{alg:con2dep}
 \end{algorithm}
 
-In the conversion from dependency to constituency, we define $\ell(u)$ by a set of rules.
+In the conversion from dependency to constituency, we need to introduce the non-terminal nodes back.
+First, we add an artificial root node $r$.
+Iterating through the dependency nodes in topological order, we add them as terminals to the constituency tree and create pre-terminal parents for them, with a \textsc{Terminal}-labeled edge between them. We then attach the pre-terminal to its parent in the constituency tree: if the dependency node is a child of the root, then the constituency node will also be a child of the root node. Otherwise, we attach it to the pre-terminal node associated with the dependency node's head.
+We define the labels for newly-introduced edges according to a function defined by heuristic rules, $\mathrm{Label}(u)$. For example, in UCCA, if a node has a sibling that is annotated as a \textsc{ParallelScene}, we annotate it as a \textsc{ParallelScene} too.
 
 \begin{algorithm}
  \KwData{dependency tree $T_d=(V_d,E_d,\ell_d)$}
@@ -434,13 +437,13 @@ In the conversion from dependency to constituency, we define $\ell(u)$ by a set 
   $V_c \leftarrow V_c \cup \{u, t\}$\;
   $E_c \leftarrow E_c \cup \{(u, t)\}$\;
   $\ell_c(u,t)\leftarrow\textsc{Terminal}$\;
-  \eIf{$\ell_{T_d}(t) = \textsc{Root}$} {
+  \eIf{$\ell_d(t) = \textsc{Root}$} {
    $E_c \leftarrow E_c \cup \{(r, u)\}$\;
-   $\ell_c(r, u) \leftarrow \mathrm{Label}(u)$\;
+   $\ell_c(r, u) \leftarrow \mathrm{Label}(r,u)$\;
   } {
    $p \leftarrow \mathrm{Parent}_c(\mathrm{Parent}_d(t))$\;
    $E_c \leftarrow E_c \cup \{(p, u)\}$\;
-   $\ell_c(p, u) \leftarrow \mathrm{Label}(u)$\;
+   $\ell_c(p, u) \leftarrow \mathrm{Label}(p,u)$\;
   }
  }
  \caption{Dependency to constituency.}
@@ -720,6 +723,7 @@ Training without linkage edges and implicit nodes improve the scores on regular 
 
 \begin{table*}[ht]
 \begin{tabular}{l|ccc|ccc}
+\daniel{These scores need to be updated to use the modified evaluation script}
 & \multicolumn{3}{c|}{Regular} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
