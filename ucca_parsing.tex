@@ -346,7 +346,6 @@ the prediction of discontiguous units.
 
 %Like standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontinuous constituents} (the equivalent of non-projective dependency trees). However, Maier~\shortcite{maier2015discontinuous} introduced a transition-based constituent parsing with a \textsc{swap} transition to allow discontinuous parsing.\footnote{https://github.com/wmaier/uparse}
 
-<<<<<<< HEAD
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conversion-based Parsing}\label{sec:conversion_approach}
 
@@ -381,14 +380,15 @@ For each node $u \in V$, we define its parent node $\mathrm{Head}(u)$, by traver
 in priority order, until we reach a leaf. The order is determined by the edge labels.
 For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but
 $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
-=======
+
+
+\com{
 
 \subsection{Semantic Constituency Parsing}
 
 For a given set $L$ of edge labels, a \textit{semantic constituency graph} $G=(V,E, \ell)$ over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph (DAG), where $V$ is a set of \textit{nodes}, $E \subseteq V\times V$ is a set of \textit{edges}, and $\ell:E\to L$ is a function of \textit{edge labels}. For each $w_i$ ($i=1, \ldots, n$) there exists a leaf (a node with no children) $t_i \in V$.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conversion-Based Parsing}\label{sec:conversion_approach}
 
 To our knowledge, no DAG constituency parser currently exists. Therefore, as a start, we use state-of-the-art parsers for existing schemes, and evaluate them on converted data. We use constituency and dependency trees as target representations. Since they are more restrictive than semantic constituency graphs, the conversion is necessarily lossy, and the accuracy of this method is bounded by the conversion accuracy.
@@ -417,6 +417,7 @@ To evaluate dependency parsers in this scheme, we convert the data to dependency
 For each node $u$, we define the terminal $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a terminal. The order is determined by the edge labels. For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
 
 We define $\mathrm{Label}(u)$ by a set of rules.
+}
 
 \begin{algorithm}[t]
  \KwData{constituency tree $G$}
