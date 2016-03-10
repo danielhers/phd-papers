@@ -483,7 +483,7 @@ to be included in the model).
 
 \paragraph{Transition Set.}
 Parsing starts with a single node in the stack (the root node), and the input tokens
-$w_1, \ldots, w_n$ in the buufer $B$. The transition set is given in \figref{fig:transitions}.
+$w_1, \ldots, w_n$ in the buffer $B$. The transition set is given in \figref{fig:transitions}.
 
 \begin{figure*}
 \captionsetup{justification=centering}
@@ -507,7 +507,7 @@ $S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & 
 $S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ &
 $x \neq \mathrm{root}$ \\
 \cline{11-11}
-$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Implicit$_X$} & $S \;|\; x$ & $y^* \;|\; B$ & $V \cup \{ y^* \}$ & $E \cup \{ (x,y^*)_X \}$ & $-$ &
+%$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Implicit$_X$} & $S \;|\; x$ & $y^* \;|\; B$ & $V \cup \{ y^* \}$ & $E \cup \{ (x,y^*)_X \}$ & $-$ &
 $x \not\in w_{1:n}$ \\
 \cline{11-11}
 $S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ &
@@ -536,39 +536,37 @@ $\mathrm{i}(x)$ is a running index for created nodes.
 
 In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
 we follow previous work in transition-based constituency parsing \cite{zhu2013fast}, and include the \textsc{Node} transition for creating new non-terminal nodes.
-Concretely, \textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge. \textsc{Implicit$_X$} acts similarly, but the created node is a child instead,
-and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
+Concretely, \textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge.
+%\textsc{Implicit$_X$} acts similarly, but the created node is a child instead,
+%and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
 
-\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}, meaning the relation it represents is not explicit.
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}, meaning the relation it represents is not explicit. We include these two transitions as distinct from the regular edge transitions, since in UCCA there is a distinction between regular and remote edges, and this distinction has to be made in the parser too.
 In order to allow nodes to have multiple parents, all node and edge transitions leave the
 stack and buffer as they are and do not reduce them,
 as in work on transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transition}.
 Once all edges for a particular node have been created, it is removed from the stack
 by the transition \textsc{Reduce}.
 
-\textsc{Swap} allows to handle discontinuous nodes, by popping the second
-node on the stack and addding it to the top of the buffer, similar to a
+\textsc{Swap} allows handling discontinuous nodes, by popping the second
+node on the stack and adding it to the top of the buffer, like a
 similarly named transition in \cite{maier2015discontinuous}.
 Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 
-\subsection{Features}
+\paragraph{Features.}
 \label{subsec:features}
 
 \figref{fig:features} presents the feature templates used by the parser.
-For some of the features, we used the notion of \textit{head word}, defined 
-as the first terminal reachable by following outgoing edges following a priority order
-over the edge labels (similar to the one used by the conversion in \secref{subsec:con2dep}\oa{the same one?}).
-While head words is not explicitly represented in the UCCA scheme, these
+For some of the features, we used the notion of \textit{head word}, defined in the same way as $h^*(u)$ in \secref{subsec:con2dep}).
+While head word are not explicitly represented in the UCCA scheme, these
 features proved beneficial as means of encoding bi-lexical features.
 
 In addition to the binary features defined by those feature templates,
-we employ a real-valued feature corresponding to the number of terminals to number of nodes
-ratio in the graph $G$. The feature serves as a regularizer for the creation of new nodes.\oa{did you take it
-  from somewhere?}
+we employ a real-valued feature corresponding to the ratio between the number of terminals to number of nodes
+in the graph $G$. This novel feature serves as a regularizer for the creation of new nodes.
 Features are generally adapted from the related parsers of \newcite{zhu2013fast,tokgoz2015transition} and
 \newcite{maier2015discontinuous}, with a small additional set of features encoding relevant information
-for the novel \textsc{Left-Remote$_X$}, \textsc{Right-Remote$_X$} and \textsc{IMPLICIT$_X$} operations.
-\oa{what information exactly? Figure 3 is a bit disorganized. Better to put all the notation in the caption.}
+for the novel \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} transitions, shown in \figref{fig:new_features}.
+% and \textsc{Implicit$_X$}
 
 %$s_i$ and $b_i$ stand for the $i$th stack and buffer items respectively, $w$ stands for the head word, $t$ for its POS tag, $e$ for the head incoming edge label. Note that $e$ replaces $c$ (consituent label) from Maier~\shortcite{maier2015discontinuous}, since in UCCA the labels are on the edges rather than the units; and a unit may have more than one incoming edge. $l$ and $r$ ($ll$ and $rr$) represent the leftmost and rightmost children (grand-children) of the element; $u$ handles the unary case.
 %Concerning the separator features, $p$ is a unique separator feature between the head words of $s_0$ and $s_1$; $q$ is the count of any separator features between them.
@@ -646,19 +644,29 @@ $a_0we, a_1we$
 $P,C$: number of parents, children. \\
 $a_i$: past actions (in reverse order).}
 
-\vspace*{\fill}
-\begin{tabular}{l}
-\textbf{implicit and remote} \\
-$s_0I, s_0R, s_0wI, s_0wR,$ \\
-$b_0I, b_0R, b_0wI, b_0wR$
-\end{tabular}
-\subcaption{New, UCCA-specific features. \\
-\footnotesize
-$I,R$: number of implicit, remote children.}
+%\vspace*{\fill}
+%\begin{tabular}{l}
+%\textbf{implicit and remote} \\
+%$s_0I, s_0R, s_0wI, s_0wR,$ \\
+%$b_0I, b_0R, b_0wI, b_0wR$
+%\end{tabular}
+%\subcaption{New, UCCA-specific features. \\
+%\footnotesize
+%$I,R$: number of implicit, remote children.}
 \end{minipage}
 \end{adjustbox}
-\caption{Feature Templates.\label{fig:features}}
+\caption{Feature templates.\label{fig:features}}
 \end{figure*}
+
+\begin{figure}
+\begin{tabular}{l}
+\textbf{remote} \\
+$s_0R, s_0wR, b_0R, b_0wR$
+\end{tabular}\\\\
+\footnotesize
+$R$: number of remote children.
+\caption{Novel feature templates.\label{fig:new_features}}
+\end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -705,11 +713,12 @@ For the conversions, we use \textsc{NeGra export} as the format for constituency
 
 For MaltParser, we use \texttt{nivreeager} as the transition system and \texttt{libsvm} as the classifier, as it reaches the highest scores (although with a close margin) among configurations.
 
-\oa{this belongs in the exp setup}
 Graphs produced by this method for test data are then compared to the gold annotation.
 We also perform oracle experiments, where instead of a trained parser's output we use the
 gold annotation itself, converted to the target representation
 (and then converted back to semantic constituencies).
+
+For our parser, we use a \textsc{MinUpdate} of 5.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -737,10 +746,10 @@ Nivre et al.~\shortcite{nivre2007maltparser} & 61.1 & 56.5 & 58.7 & $-$ & 0 & 0 
 Dyer et al.~\shortcite{dyer2015transition} & 71.8 & 67 & 69.3 & $-$ & 0 & 0 \\
 \hline
 \multicolumn{4}{l}{\footnotesize Direct approach} \\
-$S$ &  &  & 56.5 &  &  & 18.5 \\
+%$S$ &  &  & 56.5 &  &  & 18.5 \\
 $S_{LI}$ &  &  & 58 &  &  & 16.6 \\
 $S_{LIR}$ &  &  & 60.2 &  &  & 0 \\
-$S$ (o-o-d) &  &  & 53.6 &  &  & 8.5 \\
+%$S$ (o-o-d) &  &  & 53.6 &  &  & 8.5 \\
 $S_{LI}$ (o-o-d) &  &  & 55.8 &  &  & 13.1 \\
 \end{tabular}
 %\begin{adjustbox}{width=\textwidth}
