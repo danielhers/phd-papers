@@ -381,11 +381,6 @@ in priority order, until we reach a leaf. The order is determined by the edge la
 For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but
 $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
 
-<<<<<<< 48ccaafaca742a1fc8a15f593650cf8f58ff712c
-
-\com{
-=======
->>>>>>> Remove conflict markers
 
 \subsection{Semantic Constituency Parsing}
 
@@ -420,7 +415,6 @@ To evaluate dependency parsers in this scheme, we convert the data to dependency
 For each node $u$, we define the terminal $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a terminal. The order is determined by the edge labels. For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
 
 We define $\mathrm{Label}(u)$ by a set of rules.
-}
 
 \begin{algorithm}[t]
  \KwData{constituency tree $G$}
