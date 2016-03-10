@@ -346,16 +346,18 @@ the prediction of discontiguous units.
 
 %Like standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontinuous constituents} (the equivalent of non-projective dependency trees). However, Maier~\shortcite{maier2015discontinuous} introduced a transition-based constituent parsing with a \textsc{swap} transition to allow discontinuous parsing.\footnote{https://github.com/wmaier/uparse}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conversion-based Parsing}\label{sec:conversion_approach}
 
-For a given set $L$ of edge labels, a \textit{semantic constituency graph} $G=(V,E, \ell)$ over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph (DAG), where $V$ is a set of \textit{nodes}, $E \subseteq V\times V$ is a set of \textit{edges}, and $\ell:E\to L$ is a function of \textit{edge labels}. For each token $w_i$ ($i=1, \ldots, n$) there exists a leaf  $t_i \in V$. {\it Units} are defined as the set of leaf descendants of the nodes in $V$. 
+\subsection{Semantic Constituency Parsing}
+
+For a given set $L$ of edge labels, a \textit{semantic constituency graph} $G=(V,E, \ell)$ over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph (DAG), where $V$ is a set of \textit{nodes}, $E \subseteq V\times V$ is a set of \textit{edges}, and $\ell:E\to L$ is a function of \textit{edge labels}. For each token $w_i$ ($i=1, \ldots, n$) there exists a leaf  $t_i \in V$. {\it Terminal units} are defined as the set of leaf descendants of the nodes in $V$. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conversion-Based Parsing}\label{sec:conversion_approach}
 
 Conversion-based parsers are obtained by converting the semantic constituency graphs into the mediating representation,
-training a parser for the mediating representation, applying the resulting poarser
-to the test set, converted to the mediating representation as well, and converting back
+training a parser for the mediating representation, applying the resulting parser
+to the test set (converted to the mediating representation as well), and converting back
 to the original semantic constituency graphs.
-
 
 \paragraph{Conversion to Constituency Trees.}
 In order to convert semantic constituency graphs to constituency trees, we remove edges such that
@@ -376,56 +378,21 @@ constituency parser, to our knowledge, able to parse trees with discontiguous co
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
 The conversion and reverse conversion algorithms are given in Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
-For each node $u \in V$, we define its parent node $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$
-in priority order, until we reach a leaf. The order is determined by the edge labels.
-For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but
-$t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
 
-
-\subsection{Semantic Constituency Parsing}
-
-For a given set $L$ of edge labels, a \textit{semantic constituency graph} $G=(V,E, \ell)$ over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph (DAG), where $V$ is a set of \textit{nodes}, $E \subseteq V\times V$ is a set of \textit{edges}, and $\ell:E\to L$ is a function of \textit{edge labels}. For each $w_i$ ($i=1, \ldots, n$) there exists a leaf (a node with no children) $t_i \in V$.
-
-
-\section{Conversion-Based Parsing}\label{sec:conversion_approach}
-
-To our knowledge, no DAG constituency parser currently exists. Therefore, as a start, we use state-of-the-art parsers for existing schemes, and evaluate them on converted data. We use constituency and dependency trees as target representations. Since they are more restrictive than semantic constituency graphs, the conversion is necessarily lossy, and the accuracy of this method is bounded by the conversion accuracy.
-The parsers obtained this way are composed of three steps:
-\begin{enumerate}
-\item Conversion to target representation.
-\item Training the underlying parser and applying it to test data in the target representation.
-\item Conversion to semantic constituency graphs.
-\end{enumerate}
-Graphs produced by this method for test data are then compared to the gold annotation.
-We also perform oracle experiments, where instead of a trained parser's output we use the gold annotation itself, converted to the target representation (and then converted back to semantic constituencies).
-
-
-\subsection{Conversion to Constituency Trees}
-
-In order to convert semantic constituency graphs to constituency trees, we remove edges such that all nodes are left with a single incoming edge, and a single root remains in the graph. This results in a tree that can be parsed by constituency parsers, but some of the nodes in the tree may have a discontinuous yield. We use \textsc{uparse} \cite{maier2015discontinuous}, which is able to parse discontinuous structures.
-
-In the conversion of UCCA to constituency trees, we remove remote and linkage edges, and all linkage and implicit nodes.
-
-
-\subsection{Conversion to Dependency Trees}
-\label{subsec:con2dep}
-
-To evaluate dependency parsers in this scheme, we convert the data to dependency trees and back by Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
-
-For each node $u$, we define the terminal $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a terminal. The order is determined by the edge labels. For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
+For each node $u \in V$, we define the terminal $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a leaf. The order is determined by the edge labels.
+For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
 
 We define $\mathrm{Label}(u)$ by a set of rules.
 
 \begin{algorithm}[t]
  \KwData{constituency tree $G$}
  \KwResult{dependency tree $T$}
- $V_T \leftarrow \emptyset$,
+ $V_T \leftarrow \mathrm{Terminals}(G)$,
  $E_T \leftarrow \emptyset$\\
  \ForEach{$t \in \mathrm{TopologicalSort}(\mathrm{Terminals}(G))$}{
   $u \leftarrow \mathrm{Top}(t)$\\
   $p \leftarrow \mathrm{Parent}_G(u)$\\
   $t^\prime \leftarrow \mathrm{Head}(p)$\\
-  $V_T \leftarrow V_T \cup \{t\}$\\
   $E_T \leftarrow E_T \cup \{(t^\prime, t)\}$\\
   $\ell_T (t^\prime, t) \leftarrow \ell_G(p, u)\}$\\
  }
@@ -439,7 +406,7 @@ We define $\mathrm{Label}(u)$ by a set of rules.
  $r \leftarrow \mathrm{Node()}$\\
  $V_G \leftarrow \{r\}$,
  $E_G \leftarrow \emptyset$\\
- \ForEach{$t \in V_T$}{
+ \ForEach{$t \in \mathrm{TopologicalSort}(V_T)$}{
   $u \leftarrow \mathrm{Node()}$\\
   $V_G \leftarrow V_G \cup \{u, t\}$\\
   $E_G \leftarrow E_G \cup \{(u, t)\}$\\
