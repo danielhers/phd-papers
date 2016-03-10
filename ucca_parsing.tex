@@ -27,6 +27,9 @@
 \newcommand{\secref}[1]{Section~\ref{#1}}
 \newcommand{\figref}[1]{Figure~\ref{#1}}
 \newcommand{\tabref}[1]{Table~\ref{#1}}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+\SetKwRepeat{Do}{do}{while}
 
 %\aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
@@ -383,48 +386,64 @@ constituency parser, to our knowledge, able to parse trees with discontiguous co
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
 In the conversion to dependency trees, we first convert semantic constituency graphs to constituency trees using the above procedure. We then convert these constituency trees to dependency trees. The conversion and reverse conversion algorithms are given in Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
 
-For each node $u \in V$, we define the terminal $\mathrm{Head}(u)$, by traversing the nodes reachable form $u$ in priority order, until we reach a leaf. The order is determined by the edge labels.
-For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but $t\neq \mathrm{Head}(p)$ for all parents $p$ of $u$.
-
-We define $\mathrm{Label}(u)$ by a set of rules.
+In the conversion from constituency to dependency, we need to remove the non-terminals from the tree and connect the terminals themselves with edges.
+We define a priority order over the possible edge labels.
+For each node $u \in V$, denote by $h(u)$ its child with the highest-priority edge label.
+We then define $h^*(u)$ as the terminal reachable from $u$ by following only highest-priority edges.
+For each terminal $t$, we define $n(t)$ as the highest non-terminal $u$ such that $t=h^*(u)$.
+The nodes of the converted dependency tree are just the terminal of the constituency tree,
+and the edge are then defined in a similar manner to head percolation rules used in the conversion of syntactic treebanks.
+However, the rules used here are simpler, as the head child $h(u)$ of a node $u$ depends only on the label of the edge between them, and not on the edges below $u$. This is appropriate, since edges in a semantic constituency graph express the relation between units, whereas in syntactic constituency trees the identity of a node depends on the nodes below it.
 
 \begin{algorithm}[t]
- \KwData{constituency tree ${T_c}$}
- \KwResult{dependency tree $T_d$}
- $V_{T_d} \leftarrow \mathrm{Terminals}({T_c})$,
- $E_{T_d} \leftarrow \emptyset$\\
- \ForEach{$t \in \mathrm{TopologicalSort}(\mathrm{Terminals}({T_c}))$}{
-  $u \leftarrow \mathrm{Top}(t)$\\
-  $p \leftarrow \mathrm{Parent}_G(u)$\\
-  $t^\prime \leftarrow \mathrm{Head}(p)$\\
-  $E_{T_d} \leftarrow E_{T_d} \cup \{(t^\prime, t)\}$\\
-  $\ell_{T_d} (t^\prime, t) \leftarrow \ell_G(p, u)\}$\\
+ \KwData{constituency tree ${T_c}=(V_c,E_c,\ell_c)$}
+ \KwResult{dependency tree $T_d=(V_d,E_d,\ell_d)$}
+ \ForEach{$u \in V_c$} {
+  $h(u) \leftarrow \argmin_v \mathrm{Priority}(\ell_c(u,v))$\;
  }
- \caption{Constituency to dependency conversion.}
+ $V_d \leftarrow \mathrm{Terminals}({T_c})$,
+ $E_d \leftarrow \emptyset$\;
+ \ForEach{$t \in V_d$} {
+  $u \leftarrow t$\;
+  \While{$u=h(\mathrm{Parent}_c(u))$} {
+  	$h^*(u) \leftarrow t$\;
+  	$u \leftarrow \mathrm{Parent}_c(u)$\;
+  }
+  $n(t) \leftarrow h(u)$\;
+ }
+ \ForEach{$t \in V_d$} {
+  $u \leftarrow \mathrm{Parent}_c(n(t))$\;
+  $t^\prime \leftarrow h^*(u)$\;
+  $E_d \leftarrow E_d \cup \{(t^\prime, t)\}$\;
+  $\ell_d (t^\prime, t) \leftarrow \ell_c(u, n(t))\}$\;
+ }
+ \caption{Constituency to dependency.}
  \label{alg:con2dep}
 \end{algorithm}
 
+In the conversion from dependency to constituency, we define $\ell(u)$ by a set of rules.
+
 \begin{algorithm}
- \KwData{dependency tree $T_d$}
- \KwResult{constituency tree $T_c$}
- $r \leftarrow \mathrm{Node()}$\\
- $V_{T_c} \leftarrow \{r\}$,
- $E_{T_c} \leftarrow \emptyset$\\
- \ForEach{$t \in \mathrm{TopologicalSort}(V_{T_d})$}{
-  $u \leftarrow \mathrm{Node()}$\\
-  $V_{T_c} \leftarrow V_{T_c} \cup \{u, t\}$\\
-  $E_{T_c} \leftarrow E_{T_c} \cup \{(u, t)\}$\\
-  $\ell_{T_c}(u,t)\leftarrow\textsc{Terminal}$\\
-  \eIf{$\ell_{T_d}(t) = \textsc{Root}$}{
-   $E_{T_c} \leftarrow E_{T_c} \cup \{(r, u)\}$\\
-   $\ell_{T_c}(r, u) \leftarrow \mathrm{Label}(u)$\\
-  }{
-   $p \leftarrow \mathrm{Parent}_{T_c}(\mathrm{Parent}_{T_d}(t))$\\
-   $E_{T_c} \leftarrow E_{T_c} \cup \{(p, u)\}$\\
-   $\ell_{T_c}(p, u) \leftarrow \mathrm{Label}(u)$\\
+ \KwData{dependency tree $T_d=(V_d,E_d,\ell_d)$}
+ \KwResult{constituency tree $T_c=(V_c,E_c,\ell_c)$}
+ $r \leftarrow \mathrm{Node()}$\;
+ $V_c \leftarrow \{r\}$,
+ $E_c \leftarrow \emptyset$\;
+ \ForEach{$t \in \mathrm{TopologicalSort}(V_d)$} {
+  $u \leftarrow \mathrm{Node()}$\;
+  $V_c \leftarrow V_c \cup \{u, t\}$\;
+  $E_c \leftarrow E_c \cup \{(u, t)\}$\;
+  $\ell_c(u,t)\leftarrow\textsc{Terminal}$\;
+  \eIf{$\ell_{T_d}(t) = \textsc{Root}$} {
+   $E_c \leftarrow E_c \cup \{(r, u)\}$\;
+   $\ell_c(r, u) \leftarrow \mathrm{Label}(u)$\;
+  } {
+   $p \leftarrow \mathrm{Parent}_c(\mathrm{Parent}_d(t))$\;
+   $E_c \leftarrow E_c \cup \{(p, u)\}$\;
+   $\ell_c(p, u) \leftarrow \mathrm{Label}(u)$\;
   }
  }
- \caption{Dependency to constituency conversion.}
+ \caption{Dependency to constituency.}
  \label{alg:dep2con}
 \end{algorithm}
 
@@ -705,7 +724,7 @@ Training without linkage edges and implicit nodes improve the scores on regular 
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
 \multicolumn{4}{l}{\footnotesize Constituency format} \\
-\textit{Oracle} & 1 & 99.5 & 99.7 & $-$ & 0 & 0 \\
+\textit{Oracle} & 100 & 99.5 & 99.7 & $-$ & 0 & 0 \\
 Maier~\shortcite{maier2015discontinuous} & 58 & 59.8 & 58.7 & $-$ & 0 & 0 \\
 \hline
 \multicolumn{4}{l}{\footnotesize Dependency format} \\
