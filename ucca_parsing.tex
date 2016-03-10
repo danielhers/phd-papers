@@ -387,39 +387,39 @@ For each terminal $t$, define $u=\mathrm{Top}(t)$ if $t=\mathrm{Head}(u)$ but $t
 We define $\mathrm{Label}(u)$ by a set of rules.
 
 \begin{algorithm}[t]
- \KwData{constituency tree $G$}
- \KwResult{dependency tree $T$}
- $V_T \leftarrow \mathrm{Terminals}(G)$,
- $E_T \leftarrow \emptyset$\\
- \ForEach{$t \in \mathrm{TopologicalSort}(\mathrm{Terminals}(G))$}{
+ \KwData{constituency tree ${T_c}$}
+ \KwResult{dependency tree $T_d$}
+ $V_{T_d} \leftarrow \mathrm{Terminals}({T_c})$,
+ $E_{T_d} \leftarrow \emptyset$\\
+ \ForEach{$t \in \mathrm{TopologicalSort}(\mathrm{Terminals}({T_c}))$}{
   $u \leftarrow \mathrm{Top}(t)$\\
   $p \leftarrow \mathrm{Parent}_G(u)$\\
   $t^\prime \leftarrow \mathrm{Head}(p)$\\
-  $E_T \leftarrow E_T \cup \{(t^\prime, t)\}$\\
-  $\ell_T (t^\prime, t) \leftarrow \ell_G(p, u)\}$\\
+  $E_{T_d} \leftarrow E_{T_d} \cup \{(t^\prime, t)\}$\\
+  $\ell_{T_d} (t^\prime, t) \leftarrow \ell_G(p, u)\}$\\
  }
  \caption{Constituency to dependency conversion.}
  \label{alg:con2dep}
 \end{algorithm}
 
 \begin{algorithm}
- \KwData{dependency tree $T$}
- \KwResult{constituency tree $G$}
+ \KwData{dependency tree $T_d$}
+ \KwResult{constituency tree $T_c$}
  $r \leftarrow \mathrm{Node()}$\\
- $V_G \leftarrow \{r\}$,
- $E_G \leftarrow \emptyset$\\
- \ForEach{$t \in \mathrm{TopologicalSort}(V_T)$}{
+ $V_{T_c} \leftarrow \{r\}$,
+ $E_{T_c} \leftarrow \emptyset$\\
+ \ForEach{$t \in \mathrm{TopologicalSort}(V_{T_d})$}{
   $u \leftarrow \mathrm{Node()}$\\
-  $V_G \leftarrow V_G \cup \{u, t\}$\\
-  $E_G \leftarrow E_G \cup \{(u, t)\}$\\
-  $\ell_G(u,t)\leftarrow\textsc{Terminal}$\\
-  \eIf{$\ell_T(t) = \textsc{Root}$}{
-   $E_G \leftarrow E_G \cup \{(r, u)\}$\\
-   $\ell_G(r, u) \leftarrow \mathrm{Label}(u)$\\
+  $V_{T_c} \leftarrow V_{T_c} \cup \{u, t\}$\\
+  $E_{T_c} \leftarrow E_{T_c} \cup \{(u, t)\}$\\
+  $\ell_{T_c}(u,t)\leftarrow\textsc{Terminal}$\\
+  \eIf{$\ell_{T_d}(t) = \textsc{Root}$}{
+   $E_{T_c} \leftarrow E_{T_c} \cup \{(r, u)\}$\\
+   $\ell_{T_c}(r, u) \leftarrow \mathrm{Label}(u)$\\
   }{
-   $p \leftarrow \mathrm{Parent}_G(\mathrm{Parent}_T(t))$\\
-   $E_G \leftarrow E_G \cup \{(p, u)\}$\\
-   $\ell_G(p, u) \leftarrow \mathrm{Label}(u)$\\
+   $p \leftarrow \mathrm{Parent}_{T_c}(\mathrm{Parent}_{T_d}(t))$\\
+   $E_{T_c} \leftarrow E_{T_c} \cup \{(p, u)\}$\\
+   $\ell_{T_c}(p, u) \leftarrow \mathrm{Label}(u)$\\
   }
  }
  \caption{Dependency to constituency conversion.}
