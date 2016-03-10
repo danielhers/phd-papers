@@ -282,21 +282,21 @@ for AMR parsing)
 or a transition-based method that builds the parse incrementally following a series of local
 decisions \cite[and much subsequent work]{Nivre03anefficient}.
 
-Despite the greediness\daniel{is beam search greedy too?} and simplicity of transition-based methods, they have yielded excellent
-results in a variety of parsing tasks. Within syntactic dependencies parsing, transition-based methods
-have been successfully applied to corproa in many languages and domains, yielding some
-of the best reported results on this core task \cite{dyer2015transition,ballesteros2015improved}. 
-The approach has also yielded results comparable with the state-of-the-art when applied
-to constituency parsing \cite{sagae2005classifier,zhu2013fast}, and has been recently extended to
-discontiguous constituency parsing \cite{maier2015discontinuous},
-yielding improvements over in the parsing of discontiguous constituents in German.
-Transition-based parsers have also been developed for dependency DAG structures
-\cite{sagae2008shift,tokgoz2015transition}, including a transition-based parser for transforming
-syntactic dependencies into AMR parses \cite{wang2015transition}.
-Nevertheless, to our knowledge no statistical parser has
-been constructed for constituency DAG parsing, a gap which
-we address in this work, presenting a transition-based constituency DAG parser that supports
-the prediction of discontiguous units.
+%Despite the greediness\daniel{is beam search greedy too?} and simplicity of transition-based methods, they have yielded excellent
+%results in a variety of parsing tasks. Within syntactic dependencies parsing, transition-based methods
+%have been successfully applied to corproa in many languages and domains, yielding some
+%of the best reported results on this core task \cite{dyer2015transition,ballesteros2015improved}. 
+%The approach has also yielded results comparable with the state-of-the-art when applied
+%to constituency parsing \cite{sagae2005classifier,zhu2013fast}, and has been recently extended to
+%discontiguous constituency parsing \cite{maier2015discontinuous},
+%yielding improvements over in the parsing of discontiguous constituents in German.
+%Transition-based parsers have also been developed for dependency DAG structures
+%\cite{sagae2008shift,tokgoz2015transition}, including a transition-based parser for transforming
+%syntactic dependencies into AMR parses \cite{wang2015transition}.
+%Nevertheless, to our knowledge no statistical parser has
+%been constructed for constituency DAG parsing, a gap which
+%we address in this work, presenting a transition-based constituency DAG parser that supports
+%the prediction of discontiguous units.
 
 \oa{Who to compare to? (we take a transition-based approach; later we discuss,
   without comparing, to grammar-based
@@ -463,9 +463,11 @@ We define $\mathrm{Label}(u)$ by a set of rules.
 We use MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser by Dyer et al.~\shortcite{dyer2015transition} as the underlying parsers in this method.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Greedy Transition-Based Constituency DAG Parser}\label{sec:direct_approach}
+\section{Constituency DAG Parsing}\label{sec:direct_approach}
 
-We now turn to the direct approach for parsing semantic constituency graphs. Given a sequence of tokens $w_1, \ldots, w_n$, we directly predict a semantic constituency graph $G$ over $w_1, \ldots, w_n$.
+We now turn to the direct approach for parsing semantic constituency graphs. Given a sequence
+of tokens $w_1, \ldots, w_n$, we directly predict a DAG $G$ whose leaves
+correspond to  $w_1, \ldots, w_n$.
 
 %We define a transition system for constituency DAG parsing as a quadruple $S=(C,T,c_s,C_t)$, where
 %\begin{enumerate}
@@ -475,12 +477,23 @@ We now turn to the direct approach for parsing semantic constituency graphs. Giv
 % \item $C_t$ is a set of \textit{terminal configurations}.
 %\end{enumerate}
 
-In transition-based (also called \textit{shift-reduce}) parsing, the input is scanned from left to right. The output is created incrementally by applying \textit{transitions} to the parser state, which comprises of three data structures: a buffer $B$ of tokens and nodes to be processed, a stack $S$ of nodes currently being processed, and a graph $G=(V,E)$ of constructed nodes and edges. In addition, the state may be marked as \textit{terminal}, meaning that $G$ is the final output. A classifier is used at each step to select the next transition based on the current parser state. We use an averaged structured perceptron \cite{Coll:04} with \textsc{MinUpdate} \cite{cai2011language}.
+In transition-based (also called \textit{shift-reduce}) parsing, the input is scanned from left to right.
+The output is created incrementally by applying a \textit{transition} to the parser state,
+defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
+a stack $S$ of nodes currently being processed,
+and a graph $G=(V,E)$ of constructed nodes and edges.
+In addition, some states are marked as \textit{terminal}, meaning that $G$ is the final output.
+A classifier is used at each step to select the next transition based on features
+which encode the parser's current state.
+Following \newcite{maier2015discontinuous}, we use a linear classifier, using
+the averaged structured perceptron algorithm for training it
+\cite{Coll:04} with the \textsc{MinUpdate} \cite{cai2011language} procedure
+(i.e., a minimum number of updates to a feature has to oocur in training for it
+to be included in the model).
 
-\subsection{Transitions}
-
-Parsing starts with a single node on the stack (the root node), and the input tokens on the buffer.
-The transition set is given in \figref{fig:transitions}.
+\paragraph{Transition Set.}
+Parsing starts with a single node in the stack (the root node), and the input tokens
+$w_1, \ldots, w_n$ in the buufer $B$. The transition set is given in \figref{fig:transitions}.
 
 \begin{figure*}
 \captionsetup{justification=centering}
@@ -531,19 +544,27 @@ $\mathrm{i}(x)$ is a running index for created nodes.
 }
 \end{figure*}
 
-\textsc{Shift} removes a node from the top of the buffer and pushes it onto the stack.
-\textsc{Reduce} pops the stack and discards the popped node.
-\textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge. \textsc{Implicit$_X$} does the same, but the created node is a child instead, and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
-\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}, meaning the relation it represents is not explicit.
-\textsc{Swap} pops the second node on the stack and adds it to the top of the buffer.
-\textsc{Finish} pops the root node and marks the state as terminal.
+In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
+we follow previous work in transition-based constituency parsing \cite{zhu2013fast}, and include the \textsc{Node} transition for creating new non-terminal nodes.
+Concretely, \textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge. \textsc{Implicit$_X$} acts similarly, but the created node is a child instead,
+and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
 
-Following previous work in transition-based constituency parsing \cite{zhu2013fast}, \textsc{Node$_X$} and \textsc{Implicit$_X$} create new non-terminal nodes. \textsc{Swap} is necessary to be able to handle discontinuous nodes \cite{maier2015discontinuous}. In order to allow multiple parents, all node and edge transitions leave the stack and buffer as they are and do not reduce them, following work in transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transition}. Once all edges for a particular node have been created, it is discarded by \textsc{Reduce}.
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}, meaning the relation it represents is not explicit.
+In order to allow nodes to have multiple parents, all node and edge transitions leave the
+stack and buffer as they are and do not reduce them,
+as in work on transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transition}.
+Once all edges for a particular node have been created, it is removed from the stack
+by the transition \textsc{Reduce}.
+
+\textsc{Swap} allows to handle discontinuous nodes, by popping the second
+node on the stack and addding it to the top of the buffer, similar to a
+similarly named transition in \cite{maier2015discontinuous}.
+Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 
 \subsection{Features}
 \label{subsec:features}
 
-\figref{fig:features} shows the feature templates used in our parser. For some of the features, we used the notion of \textit{head word}: although meaningless in UCCA, it proved beneficial to have some sort of lexicalized features, but future work will generalize this. The head word of a node is defined as the first terminal reachable by following outgoing edges in a specific priority order (similar to the one used by the conversion in \secref{subsec:con2dep}). The same priority order defines a \textit{head incoming edge} for each node.
+\figref{fig:features} presents the feature templates used by the parser. For some of the features, we used the notion of \textit{head word}: although meaningless in UCCA, it proved beneficial to have some sort of lexicalized features, but future work will generalize this. The head word of a node is defined as the first terminal reachable by following outgoing edges in a specific priority order (similar to the one used by the conversion in \secref{subsec:con2dep}). The same priority order defines a \textit{head incoming edge} for each node.
 
 In addition to the binary features defined by those feature templates, we use a continuous feature defined as the ratio of terminals to nodes in the graph, in order to regulate the creation of new nodes.
 
