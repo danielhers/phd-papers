@@ -729,7 +729,7 @@ In the out-of-domain experiments, we apply the same parser (trained on the \text
 corpus) to the entire \textit{20K Leagues} corpus as test set,
 without any parameter re-tuning.
 
-\paragraph{Evaluation.}\label{sec:evaluation}
+\paragraph{Evaluation.}
 Since there are no standard evaluation measures for comparing constituency DAGs, we define
 two simple measures for comparing them.
 Assume $G_p=(V_p,E_p,\ell_p)$ and $G_g=(V_g,E_g,\ell_g)$
@@ -761,6 +761,7 @@ In all cases, punctuation marks are excluded from the evaluation, but not from t
 %For the conversions, we use \textsc{NeGra export} as the format for
 %constituency representation and \textsc{CoNLL-X} as the format for dependency representation.
 
+\paragraph{Conversions.}
 We explore two conversion scenarios: one into (possible discontiguous) constituency trees,
 and one into CoNLL-style dependencies. In the first setting, we experiment with the \textsc{uparse}
 parser \cite{maier2015discontinuous}, and in the second with the MALT
@@ -783,6 +784,7 @@ We further report upper bounds for the conversion-based methods, by applying
 the conversion and reverse conversion on the gold standard graphs and comparing
 them to the original gold standard.
 
+\paragraph{Direct parser.}
 In the \textsc{BCS} parser, we use a \textsc{MinUpdate}
 value of 5 and a constant learning rate of 1.
 We use an \textsc{Importance} value of 2, doubling the weight updates for gold \textsc{Swap} transitions to address the sparseness of discontinuous structures \cite{maier2015discontinuous}.
