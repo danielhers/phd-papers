@@ -803,8 +803,9 @@ of the presented approach for semantic constituency parsing.
 %predicts remote edges when trained on them.
 %Training without linkage edges and implicit nodes improve the scores on primary edges, as a more simple model is easier to learn.
 
-The conversion to constituency format allows an upper bound of almost a perfect score on the
-primary edges, as it only omits extra linkage parents and implicit nodes (the evaluation metric ignores linkage edges but not edges to implicit nodes). The conversion to dependency format loses considerably more information, since all of the non-terminal nodes are lost and have to be reconstructed by a simple rule-based inverse conversion.
+The conversion to constituency format allows a perfect score on the
+primary edges, as it only omits linkage parents and implicit nodes (which the evaluation metric ignores).
+The conversion to dependency format loses considerably more information, since all of the non-terminal nodes are lost and have to be reconstructed by a simple rule-based inverse conversion.
 Both conversions yield zero scores on remote edges, since these are invariably removed when converting to trees.
 
 \begin{table}[ht]
@@ -815,7 +816,7 @@ Both conversions yield zero scores on remote edges, since these are invariably r
 \hline
 \multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Constituency Tree Conversion} \\
 \textsc{uparse} & 58 & 59.8 & 58.7 & $-$ & 0 & 0 \\
-Upper Bound & 100 & 99.5 & 99.7 & $-$ & 0 & 0 \\
+Upper Bound & 100 & 100 & 100 & $-$ & 0 & 0 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Dependency Tree Conversion} \\
 Malt & 61.1 & 56.5 & 58.7 & $-$ & 0 & 0 \\
