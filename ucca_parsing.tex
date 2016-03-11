@@ -732,8 +732,9 @@ Assume $G_P=(V_P,E_p)$ and $G_G=(V_G,E_{G})$
 are the predicted and gold-standard DAGs over the same
 set of terminals $W = \{w_1,\ldots,w_n\}$, respectively.
 For an edge $e=(p,c)$ in either the graphs,
-where $p$ is the parent, and $c$ is the child, define $yield(e) \subset W$ as the
-set of terminals in $W$ which are descendants of $c$. We define:
+where $p$ is the parent, and $c$ is the child, define its yield $yld(e) \subset W$ as the
+set of terminals in $W$ which are descendants of $c$. We mark $e$'s label with $l(e)$, and
+define:
 
 \vspace{-.5cm}
 
@@ -747,7 +748,7 @@ set of terminals in $W$ which are descendants of $c$. We define:
 
 \vspace{-.5cm}
 
-Precision and Recall are defined by dividing $M(G_P,G_G)$ with $|E_P|$ and $|E_G|$ respectively.
+Labeled precision and recall are defined by dividing $M(G_P,G_G)$ with $|E_P|$ and $|E_G|$ respectively.
 We report two variants of this measure, one where we consider only non-remote edges,
 and another where we consider remote edges. We note that the measure collapses to the standard
 PARSEVAL constituency evaluation measure if $G_P$ are $G_G$ are trees.
