@@ -864,6 +864,15 @@ Experiments demonstrate that UCCA can already be parsed with 69.3 F1 score, not 
 feat for first work on a semantic, structural task, and suggests means for
 improvement by taking an LSTM-based approach to the local classifier of \textsc{bcs}.
 
+The LSTM parser uses the arc-standard transition set, and
+running MALT parser with arc-standard yielded nearly the same scores as arc-eager.
+\textsc{uparse}, in contrast, uses a larger transition set that allows discontinuous constituency parsing.
+\textsc{bcs} uses a different transition set, allowing for DAG parsing and UCCA-specific features.
+
+Another parameter of variation is the classifier used by each of the parser.
+The LSTM parser is based on neural networks, whereas the highest scores for the MALT parser were obtained with an SVM classifier.
+Both \textsc{uparse} and \textsc{bcs} use a linear classifier.
+
 Further experiments we have conducted, but did not include for shortage of space, are
 (1) parsing complete paragraphs without splitting to sentences,
 (2) including linkage edges and implicit nodes (by an additional transition) in the \textsc{bcs} parser,
@@ -893,20 +902,6 @@ representing semantic structure in NLP.
 %\paragraph{Improving the direct parser.}
 %%Our parser reaches promising results, but it is very basic in terms of the techniques used in it. Using beam search rather than greedy inference tends to improve the parsing scores significantly.
 %In terms of machine learning, we use a linear classifier with hand-crafted features. As the experiment with the LSTM parser shows, implementing a parser based on neural networks should also give a significant improvement to our parsing scores.
-
-
-\begin{table*}[ht]
-\begin{tabular}{l|ll}
-Parser & Transition System & Classifier \\
-\hline
-Maier~\shortcite{maier2015discontinuous} & constituency + \textsc{Swap} & linear \\
-Nivre et al.~\shortcite{nivre2007maltparser} & arc-eager & SVM \\
-Dyer et al.~\shortcite{dyer2015transition} & arc-standard & LSTM \\
-Our work & constituency DAG + \textsc{Swap} & linear
-\end{tabular}
-\caption{Parameters of variation across parsers evaluated in this work.}
-\label{table:parser_variation}
-\end{table*}
 
 
 \bibliography{references}
