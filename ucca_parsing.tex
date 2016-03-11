@@ -579,7 +579,7 @@ for the novel \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} transitions
 
 % FEATURES
 \begin{figure}
-\begin{tabular}{l}
+\begin{tabular}{>{\small}l}
 {\footnotesize Features from \cite{zhu2013fast}:} \\
 \textbf{unigrams} \\
 $s_0te, s_0we, s_1te, s_1we, s_2te, s_2we, s_3te, s_3we,$ \\
@@ -648,7 +648,7 @@ $a_i$: past actions (in reverse order).
 \end{figure}
 
 \begin{figure}
-\begin{tabular}{l}
+\begin{tabular}{>{\small}l}
 \textbf{remote} \\
 $s_0R, s_0wR, b_0R, b_0wR$
 \end{tabular}\\\\
@@ -749,15 +749,14 @@ In all cases, punctuation marks are excluded from the evaluation, but not from t
 \paragraph{Conversions.}
 We explore two conversion scenarios: one into (possible discontiguous) constituency trees,
 and one into CoNLL-style dependencies. In the first setting, we experiment with the \textsc{uparse}
-parser \cite{maier2015discontinuous}, and in the second with the MALT
-parser \cite{nivre2007maltparser} and the stack LSTM-based parser \cite{dyer2015transition}.
-We experiment with different settings of the MALT parser, including
+parser \cite{maier2015discontinuous}, and in the second with MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser \cite{dyer2015transition}.
+We experiment with different settings of MaltParser, including
 different transition systems and local classifiers. As the different
 settings yield comparable results, we only report those of the highest
 scoring configuration, using the \texttt{nivreeager} transitions
 and the \texttt{libsvm} SVM classifier.
-We note that the LSTM parser uses a different set of transitions (arc-standard) to the
-MALT parser (arc-eager),
+We note that the LSTM parser uses a different set of transitions (arc-standard) to
+MaltParser (arc-eager),
 in addition to the fact that it differs in terms of its classifier.
 
 We omit linkage edges and nodes, as these are not evaluated
@@ -783,7 +782,7 @@ predict trees.
 
 \tabref{table:convert} presents the results of our main experiments, as well as
 upper bounds for the conversion-based methods.
-\textsc{bcs} obtains comparable F-scores to the MALT and \textsc{uparse} parsers
+\textsc{bcs} obtains comparable F-scores to MaltParser and \textsc{uparse}
 in terms of primary edges, but unlike them, is able to predict some
 of the remote edges as well. 
 Removing remote edges from the training data of \textsc{bcs} allows it to focus
@@ -792,7 +791,7 @@ the out-of-domain settings are largely comparable with the in-domain
 results, supporting the robustness of the \textsc{bcs} results.
 
 The LSTM parser obtains the best results on primary edges, with a considerable margin.
-Importantly, it obtains a 10.6\% higher F-score than the MALT parser.
+Importantly, it obtains a 10.6\% higher F-score than MaltParser.
 This suggests that applying a similar LSTM-based approach to training \textsc{bcs} is
 likely to boost results considerably, and further underscores the feasibility
 of the presented approach for semantic constituency parsing. 
@@ -819,7 +818,7 @@ Both conversions yield zero scores on remote edges, since these are invariably r
 Upper Bound & 100 & 99.5 & 99.7 & $-$ & 0 & 0 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Dependency Tree Conversion} \\
-MALT & 61.1 & 56.5 & 58.7 & $-$ & 0 & 0 \\
+Malt & 61.1 & 56.5 & 58.7 & $-$ & 0 & 0 \\
 LSTM & {\bf 71.8} & {\bf 67} & {\bf 69.3} & $-$ & 0 & 0 \\
 Upper Bound & 93.7 & 86 & 89.6 & $-$ & 0 & 0 \\
 \hline
@@ -838,7 +837,7 @@ Upper Bound & 93.7 & 86 & 89.6 & $-$ & 0 & 0 \\
   recall and F-score for the different parsers, for both primary (left-hand side)
   and remote (right-hand side) edges. Top: results for \textsc{uparse}
   after conversion to constituency tree annotation. Upper middle: results for
-  the MALT and LSTM parsers after conversion to dependency tree annotation.
+  MaltParser and the LSTM parsers after conversion to dependency tree annotation.
   Lower middle: results for our \textsc{bcs} parser, when trained on the complete UCCA DAGs (\textsc{bcs}),
   and when trained on UCCA trees, obtained by removing remote edges (\textsc{bcs}$_{\mathrm{Tree}}$).
   Bottom: results for \textsc{bcs} and \textsc{bcs}$_{\mathrm{Tree}}$ when tested on out-of-domain data.
@@ -865,12 +864,12 @@ feat for first work on a semantic, structural task, and suggests means for
 improvement by taking an LSTM-based approach to the local classifier of \textsc{bcs}.
 
 The LSTM parser uses the arc-standard transition set, and
-running MALT parser with arc-standard yielded nearly the same scores as arc-eager.
+running MaltParser with arc-standard yielded nearly the same scores as arc-eager.
 \textsc{uparse}, in contrast, uses a larger transition set that allows discontinuous constituency parsing.
 \textsc{bcs} uses a different transition set, allowing for DAG parsing and UCCA-specific features.
 
 Another parameter of variation is the classifier used by each of the parser.
-The LSTM parser is based on neural networks, whereas the highest scores for the MALT parser were obtained with an SVM classifier.
+The LSTM parser is based on neural networks, whereas the highest scores for MaltParser were obtained with an SVM classifier.
 Both \textsc{uparse} and \textsc{bcs} use a linear classifier.
 
 Further experiments we have conducted, but did not include for shortage of space, are
