@@ -11,7 +11,7 @@
 \usepackage{latexsym}
 \usepackage{pgfplotstable}
 \usepackage[]{algorithm2e}
-
+\usepackage{hhline}
 \usepackage{multirow}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -532,7 +532,7 @@ $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & 
 \end{tabular}
 \end{adjustbox}
 \caption{\label{fig:transitions}
-  The transition set of the \textsc{BCS} parser. Following standard practice,
+  The transition set of the \textsc{bcs} parser. Following standard practice,
   we write the stack with its top to the right and the buffer with its head to the left.
   $(\cdot,\cdot)_X$ denotes an $X$-labeled edge, $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge,
   and $x^*$ an implicit node. $\mathrm{i}(x)$ is a running index for the created nodes.
@@ -545,7 +545,7 @@ Concretely, \textsc{Node$_X$} creates a new node on the buffer as a parent of th
 %\textsc{Implicit$_X$} acts similarly, but the created node is a child instead,
 %and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
 
-\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}, meaning the relation it represents is not explicit. We include these two transitions as distinct from the regular edge transitions, since in UCCA there is a distinction between regular and remote edges, and this distinction has to be made in the parser too.
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}, meaning the relation it represents is not explicit. We include these two transitions as distinct from the primary edge transitions, since in UCCA there is a distinction between primary and remote edges, and this distinction has to be made in the parser too.
 In order to allow nodes to have multiple parents, all node and edge transitions leave the
 stack and buffer as they are and do not reduce them,
 as in work on transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transition}.
@@ -578,12 +578,9 @@ for the novel \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} transitions
 %$x$ denotes the gap type of a subgraph. There are three possible values, either "none" (fully continuous), "pass" (there is a gap at the root, i.e., this gap must be filled later further up in the graph), or "gap" (the root of this graph fills a gap, i.e., its children have gaps, but the root does not). Finally, $y$ is the sum of all gap lengths.
 
 % FEATURES
-\begin{figure*}
-\begin{adjustbox}{width=\textwidth}
-\small
-\begin{minipage}[c][11cm][t]{.5\textwidth}
-\vspace*{\fill}
+\begin{figure}
 \begin{tabular}{l}
+{\footnotesize Features from \cite{zhu2013fast}:} \\
 \textbf{unigrams} \\
 $s_0te, s_0we, s_1te, s_1we, s_2te, s_2we, s_3te, s_3we,$ \\
 $b_0wt, b_1wt, b_2wt, b_3wt,$ \\
@@ -601,23 +598,9 @@ $s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
 $s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
 \textbf{separator} \\
 $s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
-$s_1wp, s_1wep, s_1wq, s_1weq$
-\end{tabular}
-\subcaption{Features from Zhu et al.~\shortcite{zhu2013fast}. \\
-\footnotesize
-$s_i$, $b_i$: stack and buffer items. \\
-$w$: head word form. \\
-$t$: head word part-of-speech tag. \\
-$e$: head incoming edge label. \\
-$l$, $r$ ($ll$, $rr$): leftmost, rightmost (grand)children. \\
-$u$ ($uu$): unary (grand)child. \\
-$p$: unique separator between $s_0$ and $s_1$. \\
-$q$: separator count.}
-\end{minipage}
-
-\begin{minipage}[c][11cm][t]{.5\textwidth}
-\vspace*{\fill}
-\begin{tabular}{l}
+$s_1wp, s_1wep, s_1wq, s_1weq$ \\
+\\
+{\footnotesize Features from \cite{maier2015discontinuous}:} \\
 \textbf{unigrams} (discontinuous) \\
 $s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
 $s_0xte, s_1xte, s_2xte, s_3xte,$ \\
@@ -625,15 +608,9 @@ $s_0xy, s_1xy, s_2xy, s_3xy$ \\
 \textbf{bigrams} (discontinuous) \\
 $s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
 $s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
-$s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$
-\end{tabular}
-\subcaption{Features from Maier~\shortcite{maier2015discontinuous}. \\
-\footnotesize
-$x$: gap type. \\
-$y$: sum of gap lengths.}
-
-\vspace*{\fill}
-\begin{tabular}{l}
+$s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$ \\
+\\
+{\footnotesize Features from \cite{tokgoz2015transition}:} \\
 \textbf{counts} \\
 $s_0P, s_0C, s_0wP, s_0wC,$ \\
 $b_0P, b_0C, b_0wP, b_0wC$ \\
@@ -643,10 +620,6 @@ $s_0b_0e, b_0s_0e$ \\
 \textbf{past actions} \\
 $a_0we, a_1we$
 \end{tabular}
-\subcaption{Features from Tokg{\"o}z and Eryi\u{g}it~\shortcite{tokgoz2015transition}. \\
-\footnotesize
-$P,C$: number of parents, children. \\
-$a_i$: past actions (in reverse order).}
 
 %\vspace*{\fill}
 %\begin{tabular}{l}
@@ -657,10 +630,22 @@ $a_i$: past actions (in reverse order).}
 %\subcaption{New, UCCA-specific features. \\
 %\footnotesize
 %$I,R$: number of implicit, remote children.}
-\end{minipage}
-\end{adjustbox}
-\caption{Feature templates for the \textsc{BCS} parser.\label{fig:features}}
-\end{figure*}
+\caption{Feature templates for the \textsc{bcs} parser.\label{fig:features}\\
+\footnotesize
+$s_i$, $b_i$: stack and buffer items. \\
+$w$: head word form. \\
+$t$: head word part-of-speech tag. \\
+$e$: head incoming edge label. \\
+$l$, $r$ ($ll$, $rr$): leftmost, rightmost (grand)children. \\
+$u$ ($uu$): unary (grand)child. \\
+$p$: unique separator between $s_0$ and $s_1$. \\
+$q$: separator count. \\
+$x$: gap type. \\
+$y$: sum of gap lengths. \\
+$P,C$: number of parents, children. \\
+$a_i$: past actions (in reverse order).
+}
+\end{figure}
 
 \begin{figure}
 \begin{tabular}{l}
@@ -785,10 +770,10 @@ the conversion and reverse conversion on the gold standard graphs and comparing
 them to the original gold standard.
 
 \paragraph{Direct parser.}
-In the \textsc{BCS} parser, we use a \textsc{MinUpdate}
+In the \textsc{bcs} parser, we use a \textsc{MinUpdate}
 value of 5 and a constant learning rate of 1.
 We use an \textsc{Importance} value of 2, doubling the weight updates for gold \textsc{Swap} transitions to address the sparseness of discontinuous structures \cite{maier2015discontinuous}.
-We train \textsc{BCS} both where remote edges
+We train \textsc{bcs} both where remote edges
 are included, and when they are excluded from the training data, to allow
 more direct comparison with the conversion-based methods that can only
 predict trees.
@@ -798,29 +783,29 @@ predict trees.
 
 \tabref{table:convert} presents the results of our main experiments, as well as
 upper bounds for the conversion-based methods.
-\textsc{BCS} obtains comparable F-scores to the MALT and \textsc{uparse} parsers
+\textsc{bcs} obtains comparable F-scores to the MALT and \textsc{uparse} parsers
 in terms of primary edges, but unlike them, is able to predict some
 of the remote edges as well. 
-Removing remote edges from the training data of \textsc{BCS} allows it to focus
+Removing remote edges from the training data of \textsc{bcs} allows it to focus
 on the primary edges, and improves the F-score by 2.2\%. Results on
 the out-of-domain settings are largely comparable with the in-domain
-results, supporting the robustness of the \textsc{BCS} results.
+results, supporting the robustness of the \textsc{bcs} results.
 
 The LSTM parser obtains the best results on primary edges, with a considerable margin.
 Importantly, it obtains a 10.6\% higher F-score than the MALT parser.
-This suggests that applying a similar LSTM-based approach to training \textsc{BCS} is
+This suggests that applying a similar LSTM-based approach to training \textsc{bcs} is
 likely to boost results considerably, and further underscores the feasibility
 of the presented approach for semantic constituency parsing. 
 
 %too practically turns the structure into a constituency tree, and raises the scores above two of the conversion-based parsers. However, the stack LSTM-based parser of Dyer et al.~\shortcite{dyer2015transition} still reaches the highest score.
 
-%The \textsc{BCS} parser obtains scores that are nearly identical to \newcite{maier2015discontinuous}
-%and Nivre et al.~\shortcite{nivre2007maltparser} on regular edges, but also correctly
+%The \textsc{bcs} parser obtains scores that are nearly identical to \newcite{maier2015discontinuous}
+%and Nivre et al.~\shortcite{nivre2007maltparser} on primary edges, but also correctly
 %predicts remote edges when trained on them.
-%Training without linkage edges and implicit nodes improve the scores on regular edges, as a more simple model is easier to learn.
+%Training without linkage edges and implicit nodes improve the scores on primary edges, as a more simple model is easier to learn.
 
 The conversion to constituency format allows an upper bound of almost a perfect score on the
-regular edges, as it only omits extra linkage parents and implicit nodes (the evaluation metric ignores linkage edges but not edges to implicit nodes). The conversion to dependency format loses considerably more information, since all of the non-terminal nodes are lost and have to be reconstructed by a simple rule-based inverse conversion.
+primary edges, as it only omits extra linkage parents and implicit nodes (the evaluation metric ignores linkage edges but not edges to implicit nodes). The conversion to dependency format loses considerably more information, since all of the non-terminal nodes are lost and have to be reconstructed by a simple rule-based inverse conversion.
 Both conversions yield zero scores on remote edges, since these are invariably removed when converting to trees.
 
 \begin{table}[ht]
@@ -829,25 +814,24 @@ Both conversions yield zero scores on remote edges, since these are invariably r
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\multicolumn{4}{l}{\footnotesize Constituency Tree Conversion} \\
+\multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Constituency Tree Conversion} \\
 \textsc{uparse} & 58 & 59.8 & 58.7 & $-$ & 0 & 0 \\
 Upper Bound & 100 & 99.5 & 99.7 & $-$ & 0 & 0 \\
 \hline
-\multicolumn{4}{l}{\footnotesize Dependency Tree Conversion} \\
+\multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Dependency Tree Conversion} \\
 MALT & 61.1 & 56.5 & 58.7 & $-$ & 0 & 0 \\
 LSTM & {\bf 71.8} & {\bf 67} & {\bf 69.3} & $-$ & 0 & 0 \\
 Upper Bound & 93.7 & 86 & 89.6 & $-$ & 0 & 0 \\
 \hline
-\multicolumn{4}{l}{\footnotesize Direct Approach} \\
+\multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Direct Approach} \\
 %\textit{BCP} &  &  & 56.5 &  &  & 18.5 \\
-\textsc{BCS} &  &  & 58 &  &  & 16.6 \\
-\textsc{BCS}$_{\mathrm{Tree}}$ &  &  & 60.2 &  &  & 0 \\
+\textsc{bcs} &  &  & 58 &  &  & 16.6 \\
+\textsc{bcs}$_{\mathrm{Tree}}$ &  &  & 60.2 &  &  & 0 \\
 %\textit{BCP} (o-o-d) &  &  & 53.6 &  &  & 8.5 \\
-\hline
-\hline
-\multicolumn{4}{l}{\footnotesize Out-of-domain} \\
-\textsc{BCS} &  &  & 55.8 &  &  & 13.1 \\
-\textsc{BCS}$_{\mathrm{Tree}}$ &  &  &  &  &  &  \\
+\hhline{=======}
+\multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Out-of-domain} \\
+\textsc{bcs} &  &  & 55.8 &  &  & 13.1 \\
+\textsc{bcs}$_{\mathrm{Tree}}$ &  &  &  &  &  &  \\
 \end{tabular}
 \caption{\small
   Results of the main experiments. The columns correspond to labeled precision,
@@ -855,9 +839,9 @@ Upper Bound & 93.7 & 86 & 89.6 & $-$ & 0 & 0 \\
   and remote (right-hand side) edges. Top: results for \textsc{uparse}
   after conversion to constituency tree annotation. Upper middle: results for
   the MALT and LSTM parsers after conversion to dependency tree annotation.
-  Lower middle: results for our \textsc{BCS} parser, when trained on the complete UCCA DAGs (\textsc{BCS}),
-  and when trained on UCCA trees, obtained by removing remote edges (\textsc{BCS}$_{\mathrm{Tree}}$).
-  Bottom: results for \textsc{BCS} and \textsc{BCS}$_{\mathrm{Tree}}$ when tested on out-of-domain data.
+  Lower middle: results for our \textsc{bcs} parser, when trained on the complete UCCA DAGs (\textsc{bcs}),
+  and when trained on UCCA trees, obtained by removing remote edges (\textsc{bcs}$_{\mathrm{Tree}}$).
+  Bottom: results for \textsc{bcs} and \textsc{bcs}$_{\mathrm{Tree}}$ when tested on out-of-domain data.
   Results are in percents.
 }
 
@@ -872,21 +856,20 @@ Upper Bound & 93.7 & 86 & 89.6 & $-$ & 0 & 0 \\
 We have defined the broad-coverage semantic constituency parsing,
 and explored two complementary parsing approaches to tackle it, by applying
 conversion-based parsing procedures that assess the ability of existing
-technology to address the task, and by constructing a novel semantic parser, \textsc{BCS}, for
+technology to address the task, and by constructing a novel semantic parser, \textsc{bcs}, for
 the task. The work makes further contributions
 by first defining a statistical constituency DAG parser,
 and by presenting the first experiments with UCCA parsing.
-Experiments demonstrate that UCCA can already be parsed with 69.3\%, not a small
+Experiments demonstrate that UCCA can already be parsed with 69.3 F1 score, not a small
 feat for first work on a semantic, structural task, and suggests means for
-improvement by taking an LSTM-based approach to the local classifier of \textsc{BCS}.
+improvement by taking an LSTM-based approach to the local classifier of \textsc{bcs}.
 
-Based on high-level statistics over two UCCA corpora, we demonstrated that they are indeed
-structurally unrestricted\oa{what does that mean?}.
-
-\oa{talk about further experiments here,
-  such as paragraph-level scores, scores with implicit/linkage units, and anything else that
-  strikes you as interesting. this will show the reviewer we have done serious
-  and comprehensive work.}
+Further experiments we have conducted, but did not include for shortage of space, are
+(1) parsing complete paragraphs without splitting to sentences,
+(2) including linkage edges and implicit nodes (by an additional transition) in the \textsc{bcs} parser,
+(3) removing features from the \textsc{bcs} parser to evaluate their importance,
+and (4) conversion to other formats (specifically, semantic dependency parsing \cite{oepen2015semeval}, which allows multiple parents).
+We did not evaluate a DAG parser \cite{tokgoz2015transition} on the dependency format, since we could not find an available one.
 
 The availability of a UCCA parser first allows to apply UCCA to downstream applications,
 and to further empirically test its support for semantic tasks. Major efforts to incorporate
@@ -896,7 +879,7 @@ representations into these inquiries is thus appealing and timely.
 
 Future work will further explore improvements to the two presented approaches.
 As our experiments suggest that a neural network classifier is likely to substantially boost the parser
-results of the \textsc{BCS} parser, we intend to explore this angle, as well as explore its applicability
+results of the \textsc{bcs} parser, we intend to explore this angle, as well as explore its applicability
 to other related parsing tasks. Second, we intend to conduct further studies of the relations
 between the different annotation schemes, both to allow more effective conversion tools between
 them, and thus better re-use of technology, and for gaining insight into the optimal means for
