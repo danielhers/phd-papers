@@ -198,7 +198,11 @@ All converters, parsers and datasets will be made publicly available upon public
         } edge from parent node[left] {\scriptsize $A$} }
       } edge from parent node[left] {\scriptsize $H$} }
       ;
+    \node (LKG) at (-2,0) [fill=black!20, circle] {};
     \draw[bend left,dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+    \draw (LKG) to node [auto] {\scriptsize $LR$} (After);
+    \draw (LKG) to node [auto] {\scriptsize $LA$} (graduation);
+    \draw (LKG) to node [auto] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
   \\
   \begin{tikzpicture}[level distance=12mm, ->,
