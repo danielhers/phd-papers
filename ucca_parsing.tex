@@ -795,6 +795,8 @@ different transition systems and local classifiers. As the different
 settings yield comparable results, we only report those of the highest
 scoring configuration, using the \texttt{nivreeager} transitions
 and the \texttt{libsvm} SVM classifier.
+Apart from that, we use the default settings for all parsers.
+\footnote{We note that only \textsc{uparse} uses beam search by default, with a beam size of 4.}
 We note that the LSTM parser uses a different set of transitions (arc-standard) to
 MaltParser (arc-eager),
 in addition to the fact that it differs in terms of its classifier.
