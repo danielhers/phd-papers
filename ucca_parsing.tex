@@ -107,7 +107,7 @@ The formal constraints imposed by common statistical parsers are
 too restrictive for broad-coverage semantic parsing \cite{oepen2015semeval}.
 For instance, arguments that are shared
 between predicates are generally represented as multi-parented nodes,
-yielding DAG, rather than tree structures. This has motivated much recent
+yielding DAG (directed acyclic graph), rather than tree structures. This has motivated much recent
 inquiry into semantic parsing with more expressive formalisms.
 
 Earlier work on statistical broad-coverage semantic parsing has mostly
@@ -188,13 +188,62 @@ All converters, parsers and data sets will be made publicly available upon publi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}\label{sec:related}
 
+\begin{figure}
+  \begin{tikzpicture}[level distance=12mm, ->]
+    \node (ROOT) [fill=black, circle] {}
+      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
+      child {node (graduation) [fill=black, circle] {}
+      {
+        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
+      } edge from parent node[left] {\scriptsize $H$} }
+      child {node {,} edge from parent node[left] {\scriptsize $U$}}
+      child {node (moved) [fill=black, circle] {}
+      {
+        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
+        child {node [fill=black, circle] {}
+        {
+          child {node {to} edge from parent node[left] {\scriptsize $R$}}
+          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
+        } edge from parent node[left] {\scriptsize $A$} }
+      } edge from parent node[left] {\scriptsize $H$} }
+      ;
+    \draw[bend left,dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+  \end{tikzpicture}
+  \\
+  \begin{tikzpicture}[level distance=12mm, ->,
+      every node/.append style={midway}]
+    \node (ROOT) [fill=black, circle] {}
+      child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+      child {node {decided} edge from parent node[left] {\scriptsize $P$}}
+      child {node (totakeaquickshower) [fill=black, circle] {}
+      {
+        child {node {to} edge from parent node[left] {\scriptsize $F$}}
+        child {node (takeashower) [fill=black, circle] {}
+        {
+          child {node {take} edge from parent node[left] {\scriptsize $C$}}
+          child {node {a} edge from parent node[right] {\scriptsize $F$}}
+          child {node (quick) {quick} edge from parent[white]}
+          child {node {shower} edge from parent node[right] {\scriptsize $C$}}
+        } edge from parent node[right] {\scriptsize $P$} }
+      } edge from parent node[left] {\scriptsize $A$} }
+      ;
+    \draw[bend left,dashed,->] (takeashower) to node [auto] {\scriptsize $A$} (John);
+    \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
+  \end{tikzpicture}
+\caption{\label{fig:ucca_example1}
+  UCCA graphs for the sentences ``After graduation, John moved to Paris.'' and ``John decided to take a quick shower.''
+  The first sentence demonstrates a linkage relation, and the second sentence exhibits a discontinuous unit (``take a shower'').
+  Both sentences have a remote edge (the dashed lines), where the node ``John'' has multiple parents.
+}
+\end{figure}
+
 \begin{figure*}
 \begin{adjustbox}{width=\textwidth}
   \begin{tikzpicture}[level distance=20mm, ->,
   level 1/.style={sibling distance=8em},
   level 2/.style={sibling distance=4em},
   level 3/.style={sibling distance=4em}]
-    \label{fig:similar_technique}
     \node (ROOT) [fill=black, circle] {}
       child {node [fill=black, circle] {}
       {
@@ -231,41 +280,12 @@ All converters, parsers and data sets will be made publicly available upon publi
       ;
   \end{tikzpicture}
 \end{adjustbox}
-\caption{\label{fig:ucca_example}
+\caption{\label{fig:ucca_example2}
   UCCA graph for the sentence ``A similar technique is almost impossible to
   apply to other crops, such as cotton, soybeans and rice.''
   The sentence was used by Oepen et al. (2015) to compare between the difference schemes. The sentence includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
 }
 \end{figure*}
-
-
-\begin{figure}
-  \begin{tikzpicture}[level distance=12mm, ->,
-      every node/.append style={midway}]
-    \node (ROOT) [fill=black, circle] {}
-      child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
-      child {node {decided} edge from parent node[left] {\scriptsize $P$}}
-      child {node (totakeaquickshower) [fill=black, circle] {}
-      {
-        child {node {to} edge from parent node[left] {\scriptsize $F$}}
-        child {node (takeashower) [fill=black, circle] {}
-        {
-          child {node {take} edge from parent node[left] {\scriptsize $C$}}
-          child {node {a} edge from parent node[right] {\scriptsize $F$}}
-          child {node (quick) {quick} edge from parent[white]}
-          child {node {shower} edge from parent node[right] {\scriptsize $C$}}
-        } edge from parent node[right] {\scriptsize $P$} }
-      } edge from parent node[left] {\scriptsize $A$} }
-      ;
-    \draw[bend left,dashed,->] (takeashower) to node [auto] {\scriptsize $A$} (John);
-    \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
-  \end{tikzpicture}
-\caption{\label{fig:ucca_example_dag}
-  UCCA graph for the sentence ``John decided to take a quick shower.''
-  This sentence exhibits both a discontinuous unit (``take a shower'') and a remote edge (the dashed line).
-  The node ``John'' has multiple parents.
-}
-\end{figure}
 
 \paragraph{Broad-coverage Deep Semantic Representation.}
 The Abstract Meaning Representation (AMR) scheme \cite{banarescu2013abstract},
@@ -283,7 +303,7 @@ the Prague Dependency Treebank tectogrammatical layer \cite{bohmova2003prague},
 HSPG-derived parsers using the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
 and dependencies derived from the Lingo ERG Minimal Recursion Semantics represenations \cite{Flic:02}.
 
-\paragraph{Universal Conceptual Cognitive Annotation.}
+\paragraph{Universal Conceptual Cognitive Annotation.}\label{subsec:ucca}
 Taking a constituency-based approach to semantic parsing,
 we use the annotated UCCA corpora, a broad-coverage semantic annotation scheme,
 which focuses on predicate-argument structures (verbal, nominal, adjectival and others)
@@ -296,9 +316,12 @@ annotations of translated text usually contain the same set of relationships
 
 Formally, a UCCA structure is a constituency DAG, whose leaves (or a subset of them) correspond to the words of the text. The nodes of the graph, called ``units'', are either terminals or several elements (not necessarily contiguous) jointly viewed as a single entity according to some semantic or cognitive consideration. The edges bear a category, indicating the role of the sub-unit in the relation that the parent represents. 
 The most basic notion is the ``Scene'', which describes a movement, an action or a state.
-Each Scene contains one main relation, or anchor, as well as one or more participants. 
-For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes, whose main relations are ``graduation'' and ``moved''. The participant ``John'' is a part of both Scenes, while ``Paris'' only of the latter. Further categories account for relations between Scenes and the internal structures of complex arguments (e.g., coordination) and relations (e.g., complex adverbials, such as ``very clearly'').
-\figref{fig:ucca_example} presents another example of a UCCA-annotated sentence. 
+Each Scene contains one main relation, or anchor, as well as one or more participants.
+For example, the sentence ``After graduation, John moved to Paris'' (\figref{fig:ucca_example1}) contains two Scenes, whose main relations are ``graduation'' and ``moved''. The participant ``John'' is a part of both Scenes, while ``Paris'' only of the latter.
+Another example is the sentence ``John decided to take a shower'', which contains two Scenes, whose main relations are ``decided'' and ``take a shower'', and the second Scene is a participant in the first.
+The participant ``John'' is a part of both Scenes, but is marked as a \textit{remote} participant in the second, since this relation is not explicit in the sentence.
+Further categories account for relations between Scenes and the internal structures of complex arguments (e.g., coordination) and relations (e.g., complex adverbials, such as ``very clearly'').
+%Another example for a UCCA-annotated sentence is shown in \figref{fig:ucca_example2}.
 
 \paragraph{Related Semantic and Syntactic Parsing Work.}
 Semantic parsing methods can be largely partitioned into grammar-based and grammarless methods.
@@ -400,12 +423,11 @@ with the gold standard. The ``lossiness'' of the conversion procedures is assess
 \secref{sec:experiments}.
 
 \paragraph{Conversion to Constituency Trees.}
-We convert constituency DAGs into constituency trees by removing a sub-set of the edges.
+We convert constituency DAGs into constituency trees by removing a subset of the edges.
 As the original constituency DAGs may contain discontiguous units, the resulting trees
 may also have contain such units.
 Specifically, when converting UCCA structures, we note that UCCA marks one of the incoming edges
-for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges.\oa{should we
-  say a word about which edges are primary and which are remote?}
+for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges (\secref{subsec:ucca}).
 We thus remove all remote and linkage edges, in addition to nodes that are disconnected
 from the graph as a result of this removal. We further remove leaves that do not correspond to
 a token in the text\footnote{Such units serve in UCCA to represent implicit relations and
@@ -415,7 +437,7 @@ The inverse conversion from trees to graphs is simply the identity function.
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
 In the conversion to dependency trees, we first convert semantic constituency graphs
-to constituency trees using the above procedure, and then conver the result to dependency trees. 
+to constituency trees using the above procedure, and then convert the result to dependency trees. 
 Assume $T_c=(V_c,E_c,\ell_c)$ is a constituency tree with labels $\ell_c:E_c~\rightarrow~L$,
 where $L$ is the set of possible labels.
 The conversion from $T$ to a dependency tree involves the removal of
