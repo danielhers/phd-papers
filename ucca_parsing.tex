@@ -68,12 +68,11 @@ A Transition-Based Approach}
   more expressive formalisms than those commonly used for syntactic parsing.
   %motivating research into   more formally expressive parsers.
   Recent work has focused on broad-coverage semantic parsing into dependency
-  (i.e., word-to-word) or abstract (i.e., not grounded in the words and phrases of
-  the sentence) representations.
+  (word to word) or abstract (i.e., not grounded in the sentence's
+  words and phrases) representations.
   Instead, we advocate a constituency-based formulation of the
   task and define the Broad-coverage Constituency Semantic Parsing task
-  (henceforth, {\it BCSP}) using the UCCA semantic scheme and
-  annotated corpora as a testbed.
+  using the UCCA semantic scheme and annotated corpora as a testbed.
   We note that there are no existing methods for constituency DAG parsing,
   and propose two transition-based approaches to tackle it:
   (1) developing procedures for converting UCCA structures into related
@@ -114,36 +113,36 @@ yielding DAG, rather than tree structures. This has motivated much recent
 inquiry into statistical parsing with more expressive formalisms.
 
 In this work we define and tackle the constituency-based semantic parsing task.
-Constituency semantic representation is appealing in two ways.
+Constituency semantic representation differ from previous broad-coverage semantic parsing
+work in two ways.
 First, it does not impose the unique head assumption, imposed
 by bi-lexical dependencies, which is problematic for representing several
-frequent constructions that have no clear
-head, such as coordination, prepositional phrases and multi-word expressions.
-Second, grounding the representation in the text, unlike more abstract representations
-such as AMR \cite{banarescu2013abstract},
-allows for the use of strong and efficient parsing methods.
+frequent constructions that have no clear head.
+Second, it grounds the representation in the text,
+unlike more abstract approach such as AMR \cite{banarescu2013abstract},
+which allows for the use of strong and efficient parsing methods.
 Indeed, transition-based methods, which have recently produced some of the best
 results in syntactic dependency
 parsing \cite{dyer2015transition,ballesteros2015improved},
 have been shown to be effective for other settings as well,
 including constituency parsing \cite{sagae2005classifier,zhu2013fast,maier2015discontinuous}. 
-We follow the transition-based approach, motivated by
-its conceptual simplicity, efficiency and high performance.
+We thus adopt a transition-based approach in this work.
 
 We use the English UCCA-annotated corpora \cite{abend2013universal} as a test
-case\footnote{While the BCSP task is not specific to UCCA,
-  to the best of our knowledge, these are the only
-  semantically annotated corpora that use constituency structures.}
+case\footnote{While the task is not specific to UCCA,
+  to the best of our knowledge, UCCA's are the only
+  semantically annotated corpora that use constituency graphs.}
 and pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
-by designing converters between the UCCA annotation and two related formalisms:
-\textsc{CoNLL}-style dependencies and discontiguous constituency trees.
+by developing conversion protocols between UCCA structures and two related formalisms:
+dependency trees and discontiguous constituency trees.
 We are not aware of any statistical constituency DAG parsers, and specifically not
 ones that support discontiguous constituents, as required for a broad-coverage
 parser (for discussion of this point in the context of syntactic parsing, see
 \cite{kallmeyer2013data,pitler2015linear}).
-This approach is thus inherently incomplete as a BCSP method, but we find that it is
-nonetheless effective in practice (\secref{sec:conversion_approach}).
+Consequently, the conversion necessarily loses information, but 
+we find that it is nonetheless effective
+in practice (\secref{sec:conversion_approach}).
 Second, we present a novel transition-based
 constituency DAG parser that supports discontiguous constituents, named
 the \textsc{bcs} parser (\secref{sec:direct_approach}).
@@ -179,6 +178,7 @@ All converters, parsers and datasets will be made publicly available upon public
 \section{Background}\label{sec:related}
 
 \begin{figure}
+
   \begin{tikzpicture}[level distance=12mm, ->]
     \node (ROOT) [fill=black, circle] {}
       child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
@@ -228,6 +228,7 @@ All converters, parsers and datasets will be made publicly available upon public
 }
 \end{figure}
 
+\com{
 \begin{figure*}
 \begin{adjustbox}{width=\textwidth}
   \begin{tikzpicture}[level distance=20mm, ->,
@@ -276,22 +277,22 @@ All converters, parsers and datasets will be made publicly available upon public
   The sentence was used by Oepen et al. (2015) to compare between the difference schemes. The sentence includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
 }
 \end{figure*}
+}
 
-\paragraph{Broad-coverage Deep Semantic Representation.}
+\paragraph{Broad-coverage Semantic Representation.}
 Earlier work on statistical broad-coverage semantic parsing has mostly
-concentrated on shallow semantic analysis, mainly focusing on semantic
+concentrated on shallow semantic analysis, mainly addressing semantic
 role labeling of verbal argument structures. 
 Recently, work has shifted to parsing of more elaborate representations, that account
 for a wider range of phenomena, such as inter-clause relations and non-verbal predicates.
-Most work has been placed on parsing sentences into Abstract Meaning Representations (AMRs),
+Most work has addressed parsing sentences into Abstract Meaning Representations (AMRs),
 which represents sentences as directed graphs, without
-grounding their semantic sub-parts in the sentence's words and constituents
-\cite{banarescu2013abstract}.
-
-Examples of AMR parsers include
+grounding their semantic sub-parts in the sentence's words and constituents.
+Examples of AMR parsers include 
 \cite{flanigan2014discriminative,wang2015transition,vanderwende2015amr,pust2015parsing,artzi2015broad}. 
-While sharing much of this work's motivation, AMR parsing differs from BCSP in
-two important ways.
+
+While sharing much of this work's motivation, AMR parsing differs from broad-coverage
+semantic constituency parsing in two important ways.
 First, AMR uses an open-ended and fine-grained onthology for defining its categories,
 rather than a uniform closed inventory.
 %It poses difficulties as it conflates
@@ -301,22 +302,22 @@ requires that the alignment between words and logical symbols be automatically
 (and imprecisely) detected, and complicates the parsing task.
 Transition-based approach has been applied to AMR parsing by \newcite{wang2015transition},
 but their approach involved first syntactically parsing the input, and then converting
-the resulting tree into an AMR, unlike the BCS parser which performs parsing in a single step.
+the resulting tree into an AMR, unlike the \textsc{BCS} parser which performs parsing in a single step.
 
 Another line of work that addresses parsing into elaborate semantic structures
 is that of Broad-coverage Semantic Dependency Parsing (SDP) \cite{oepen2014semeval,oepen2015semeval}.
 Like AMR, SDP also addresses a wide range of argument structures (including verbal, nominal and
 adjectival ones) and the inter-relations between them, but uses word-to-word dependency structures.
-Three major approaches have been explored:
+Three representation approaches have been studied:
 the Prague Dependency Treebank tectogrammatical layer \cite{bohmova2003prague},
 HSPG-derived parsers using the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
 and dependencies derived from the Lingo ERG Minimal Recursion Semantics represenations \cite{Flic:02}.
 %An alternative line of work tackles parsing into grounded semantic representations.
 %Most work of this strand represent semantics using dependency structures,
 %as has been explored in two recent SemEval shared tasks \cite{oepen2014semeval,oepen2015semeval}.
-Bi-lexical dependencies are indeed an appealing means for representing semantics, partly due to
-their structural and conceptual simplicity and the strong and efficient
-methods they allow for. However, the assumption that each semantic unit has a unique head is
+Bi-lexical dependencies are appealing for semantic representation, partly due to
+their structural simplicity and the strong parsing methods they allow for.
+However, the assumption that each semantic unit has a unique head is
 problematic for representing several frequent constructions which have no clear
 head, such as coordination, prepositional phrases and multi-word expressions,
 leading to unsystematic treatment of these cases, which yields both conceptual
@@ -331,8 +332,8 @@ UCCA \cite{abend2013universal} builds on an established framework
 for typological description, ``Basic Linguistic Theory''
 \cite{Dixon:10b,Dixon:10a,Dixon:12}, as well as on the Cognitive Linguistics literature,
 and defines a set of coarse-grained, cross-linguistically applicable distinctions.
-has been shown to be applicable to multiple languages, including English, French, German and
-Czech, to support rapid annotation, and to be semantically stable in translation: UCCA
+UCCA has demonstrated applicability to multiple languages, including English, French, German and
+Czech, support for rapid annotation, and semantic stability in translation: UCCA
 annotations of translated text usually contain the same set of relationships
 \cite{sulem2015conceptual}.
 
@@ -340,11 +341,18 @@ Formally, a UCCA structure is a constituency DAG, whose leaves (or a subset of t
 Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents. 
 The most basic notion is the ``Scene'', which describes a movement, an action or a state.
 Each Scene contains one main relation, or anchor, as well as one or more participants.
-For example, the sentence ``After graduation, John moved to Paris'' (\figref{fig:ucca_example1}) contains two Scenes, whose main relations are ``graduation'' and ``moved''. The participant ``John'' is a part of both Scenes, while ``Paris'' only of the latter.
+For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes, whose main relations are ``graduation'' and ``moved''. The participant ``John'' is a part of both Scenes, while ``Paris'' only of the latter.
 The two Scenes in this sentence are both arguments in the \textit{linkage relation} ``After'', in this case expressing temporal linkage between them.
-Another example is the sentence ``John decided to take a shower'', which contains two Scenes, whose main relations are ``decided'' and ``take a shower'', and the second Scene is a participant in the first.
-The participant ``John'' is a part of both Scenes, but is marked as a \textit{remote} participant in the second, since this relation is not explicit in the sentence.
-Further categories account for relations between Scenes and the internal structures of complex arguments (e.g., coordination) and relations (e.g., complex adverbials, such as ``very clearly'').
+For example, the sentence ``John decided to take a shower'' contains two Scenes, whose main relations are ``decided'' and ``take a shower'', and where the second Scene is a participant in the first.
+The participant ``John'' is a part of both Scenes, but is marked as a \textit{remote} participant in
+the second, since it is not explicit in the second clause.
+Further categories account for relations between Scenes and
+the internal structures of complex arguments (e.g., coordination) and relations (e.g., complex adverbials, such a ``very clearly'').
+UCCA graphs for both examples are given in \figref{fig:ucca_example1}\footnote{UCCA graphs may contain
+  that do not correspond to a token in the text. Such units serve in UCCA to represent implicit relations
+  and participants, such as the agent in passive sentences. Parsing these empty units
+  is generally beyond the scope of this work.}.
+  
 %Another example for a UCCA-annotated sentence is shown in \figref{fig:ucca_example2}.
 
 \paragraph{Related Semantic and Syntactic Parsing Work.}
@@ -373,7 +381,7 @@ discontiguous constituency parsing \cite{maier2015discontinuous},
 yielding improvements over in the parsing of discontiguous constituents in German.
 Transition-based parsers have also been developed for dependency DAG structures
 \cite{sagae2008shift,tokgoz2015transition}, AMR parsing \cite{wang2015transition} and
-CCG parsing \cite{ambati2015}.
+CCG parsing \cite{ambati2015incremental}.
 Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
 
 %\oa{Who to compare to? (we take a transition-based approach; later we discuss,
@@ -425,9 +433,7 @@ Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
 %Like standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontinuous constituents} (the equivalent of non-projective dependency trees). However, Maier~\shortcite{maier2015discontinuous} introduced a transition-based constituent parsing with a \textsc{swap} transition to allow discontinuous parsing.\footnote{https://github.com/wmaier/uparse}
 
 
-\subsection{Semantic Constituency Parsing}
 
-For a given set $L$ of edge labels, a \textit{semantic constituency graph} $G=(V,E, \ell)$ over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph (DAG), where $V$ is a set of \textit{nodes}, $E \subseteq V\times V$ is a set of \textit{edges}, and $\ell:E\to L$ is a function of \textit{edge labels}. For each token $w_i$ ($i=1, \ldots, n$) there exists a leaf  $t_i \in V$. {\it Terminal units} are defined as the set of leaf descendants of the nodes in $V$. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conversion-Based Parsing}\label{sec:conversion_approach}
@@ -436,22 +442,27 @@ We begin by assessing the ability of existing technology to address the task,
 by taking a conversion-based approach. Training proceeds by 
 convering the constituency DAGs into the target representation,
 and training an existing parser for that representation on the converted representations.
-We test the parsers by applying the resulting parser to the text of the text set,
+We test the parsers by applying the resulting parser to the text of the test set,
 and converting back to the original constituency DAG format, where they are compared
-with the gold standard. The ``lossiness'' of the conversion procedures is assessed in
+with the gold standard.
+The amount of information lost by this back and forth conversion is discussed in
 \secref{sec:experiments}.
+
+\paragraph{Notation.}
+For a given set $L$ of possible edge labels,
+a \textit{semantic constituency DAG} $G=(V,E, \ell)$ over a sequence of tokens $w_1, \ldots, w_n$
+is a directed acyclic graph, where $\ell:E\to L$ is a function of \textit{edge labels}.
+For each token $w_i$ ($i=1, \ldots, n$) there exists a leaf  $t_i \in V$.
+{\it Terminals} are the leaf nodes in $V$.
 
 \paragraph{Conversion to Constituency Trees.}
 We convert constituency DAGs into constituency trees by removing a subset of the edges.
 As the original constituency DAGs may contain discontiguous units, the resulting trees
 may also have contain such units.
 Specifically, when converting UCCA structures, we note that UCCA marks one of the incoming edges
-for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges (\secref{subsec:ucca}).
+for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges.
 We thus remove all remote and linkage edges, in addition to nodes that are disconnected
-from the graph as a result of this removal. We further remove leaves that do not correspond to
-a token in the text\footnote{Such units serve in UCCA to represent implicit relations and
-  participants, such as the agent in passive sentences (if not explicitly mentioned). The parsing
-  of these empty elements is discussed in \secref{sec:discussion}.}.
+from the graph as a result of this removal. 
 The inverse conversion from trees to graphs is simply the identity function.
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
@@ -728,18 +739,18 @@ $a_0we, a_1we$ \\
 {\footnotesize Novel, UCCA-specific features:} \\
 $s_0R, s_0wR, b_0R, b_0wR$
 \end{tabular}
-\caption{Feature templates for the \textsc{bcs} parser.\label{fig:features}\\
-\footnotesize
-$s_i$, $b_i$ are the $i$th stack and buffer items, respectively.
-$w$ and $t$ are the word form and part-of-speech tag of the terminal returned by the $h^*(\cdot)$ function (\secref{subsec:con2dep}).
-$e$ is the edge label to the node returned by the $h(\cdot)$ function.
-$l$, $r$ ($ll$, $rr$) are the leftmost and rightmost (grand)children, respectively.
-$u$ ($uu$) is the unary (grand)child, when only one exists.
-$p$ is a unique separator punctuation and $q$ is the separator count between $s_0$ and $s_1$.
-$x$ is the gap type (``none'', ``pass'' or ``gap'') at the sub-graph under the current node, and $y$ is the sum of gap lengths \protect\cite{maier2009characterizing}.
-$P$ and $C$ are the number of parents and children, respectively.
-$a_i$ is the transition taken $i$ steps back.
-All feature templates correspond to binary features.
+\caption{\small\label{fig:features}
+  Feature templates for the \textsc{bcs} parser. Notation:
+  $s_i$, $b_i$ are the $i$th stack and buffer items, respectively.
+  $w$ and $t$ are the word form and part-of-speech tag of the terminal returned by the $h^*(\cdot)$ function (\secref{subsec:con2dep}).
+  $\emph{}$ is the edge label to the node returned by the $h(\cdot)$ function.
+  $l$, $r$ ($ll$, $rr$) are the leftmost and rightmost (grand)children, respectively.
+  $u$ ($uu$) is the unary (grand)child, when only one exists.
+  $p$ is a unique separator punctuation and $q$ is the separator count between $s_0$ and $s_1$.
+  $x$ is the gap type (``none'', ``pass'' or ``gap'') at the sub-graph under the current node, and $y$ is the sum of gap lengths \protect\cite{maier2009characterizing}.
+  $P$ and $C$ are the number of parents and children, respectively.
+  $a_i$ is the transition taken $i$ steps back.
+  All feature templates correspond to binary features.
 }
 \end{figure}
 
