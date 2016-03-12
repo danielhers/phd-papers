@@ -240,21 +240,25 @@ All converters, parsers and data sets will be made publicly available upon publi
 
 
 \begin{figure}
-  \begin{tikzpicture}[level distance=20mm, ->,
+  \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway}]
     \node (ROOT) [fill=black, circle] {}
       child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
       child {node {decided} edge from parent node[left] {\scriptsize $P$}}
-      child {node (remote) [fill=black, circle] {}
+      child {node (totakeaquickshower) [fill=black, circle] {}
       {
         child {node {to} edge from parent node[left] {\scriptsize $F$}}
-        child {node (take) {take} edge from parent node[left] {\scriptsize $P$}}
-        child {node {a} edge from parent node[right] {\scriptsize $F$}}
-        child {node {quick} edge from parent node[right] {\scriptsize $D$}}
-        child {node {shower} edge from parent node[right] {\scriptsize $P$}}
-      } edge from parent node[left] {\scriptsize $A\quad$ \hspace{1mm} } }
+        child {node (takeashower) [fill=black, circle] {}
+        {
+          child {node {take} edge from parent node[left] {\scriptsize $C$}}
+          child {node {a} edge from parent node[right] {\scriptsize $F$}}
+          child {node (quick) {quick} edge from parent[white]}
+          child {node {shower} edge from parent node[right] {\scriptsize $C$}}
+        } edge from parent node[right] {\scriptsize $P$} }
+      } edge from parent node[left] {\scriptsize $A$} }
       ;
-    \draw[dashed] (take) -- (John) node[left] {\scriptsize $A$};
+    \draw[bend left,dashed,->] (takeashower) to node [auto] {\scriptsize $A$} (John);
+    \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
   \end{tikzpicture}
 \caption{\label{fig:ucca_example_dag}
   UCCA graph for the sentence ``John decided to take a quick shower.''
