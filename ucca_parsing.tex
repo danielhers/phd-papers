@@ -232,11 +232,41 @@ All converters, parsers and data sets will be made publicly available upon publi
   \end{tikzpicture}
 \end{adjustbox}
 \caption{\label{fig:ucca_example}
-  UCCA annotation of the sentence ``A similar technique is almost impossible to
-  apply to other crops, such as cotton, soybeans and rice.''.
-  The sentence was used by Oepen et al. (2015) to compare between the difference schemes. The sentence includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice''.
+  UCCA graph for the sentence ``A similar technique is almost impossible to
+  apply to other crops, such as cotton, soybeans and rice.''
+  The sentence was used by Oepen et al. (2015) to compare between the difference schemes. The sentence includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
 }
 \end{figure*}
+
+
+\begin{figure}
+  \begin{tikzpicture}[level distance=20mm, ->,
+  level 1/.style={sibling distance=8em},
+  level 2/.style={sibling distance=4em},
+  level 3/.style={sibling distance=4em}]
+    \node (ROOT) [fill=black, circle] {}
+      child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+      child {node {decided} edge from parent node[left] {\scriptsize $P$}}
+      child {node (remote) [fill=black, circle] {}
+      {
+        child {node {to} edge from parent node[left] {\scriptsize $F$}}
+        child {node [fill=black, circle] {}
+        {
+          child {node {take} edge from parent node[left] {\scriptsize $P$}}
+        }
+        child {node {a} edge from parent node[right] {\scriptsize $F$}}
+        child {node {quick} edge from parent node[right] {\scriptsize $D$}}
+        child {node {shower} edge from parent node[right] {\scriptsize $P$}}
+      } edge from parent node[left] {\scriptsize $A\quad$ \hspace{1mm} } }
+      %\draw (remote) -- (John);
+      ;
+  \end{tikzpicture}
+\caption{\label{fig:ucca_example_dag}
+  UCCA graph for the sentence ``John decided to take a quick shower.''
+  This sentence exhibits both a discontinuous unit and remote edges.
+  The node ``John'' has multiple parents.
+}
+\end{figure}
 
 \paragraph{Broad-coverage Deep Semantic Representation.}
 The Abstract Meaning Representation (AMR) scheme \cite{banarescu2013abstract},
