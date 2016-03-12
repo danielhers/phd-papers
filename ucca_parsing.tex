@@ -646,7 +646,7 @@ for the novel \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} transitions
 % FEATURES
 \begin{figure}
 \begin{tabular}{>{\small}l}
-{\footnotesize Features from \cite{zhu2013fast}:} \\
+{\footnotesize Features from \cite{zhang2009transition}:} \\
 \textbf{unigrams} \\
 $s_0te, s_0we, s_1te, s_1we, s_2te, s_2we, s_3te, s_3we,$ \\
 $b_0wt, b_1wt, b_2wt, b_3wt,$ \\
@@ -658,13 +658,15 @@ $b_0wb_1w, b_0wb_1t, b_0tb_1w, b_0tb_1t$ \\
 \textbf{trigrams} \\
 $s_0es_1es_2w, s_0es_1es_2e, s_0es_1eb_0w, s_0es_1eb_0t,$ \\
 $s_0es_1wb_0w, s_0es_1wb_0t, s_0ws_1es_2e, s_0ws_1eb_0t$ \\
+\textbf{separator} \\
+$s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
+$s_1wp, s_1wep, s_1wq, s_1weq$ \\
+\\
+{\footnotesize Features from \cite{zhu2013fast}:} \\
 \textbf{extended} \\
 $s_0llwe, s_0lrwe, s_0luwe, s_0rlwe, s_0rrwe,$ \\
 $s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
 $s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
-\textbf{separator} \\
-$s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
-$s_1wp, s_1wep, s_1wq, s_1weq$ \\
 \\
 {\footnotesize Features from \cite{maier2015discontinuous}:} \\
 \textbf{unigrams} (discontinuous) \\
@@ -677,43 +679,25 @@ $s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
 $s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$ \\
 \\
 {\footnotesize Features from \cite{tokgoz2015transition}:} \\
-\textbf{counts} \\
-$s_0P, s_0C, s_0wP, s_0wC,$ \\
-$b_0P, b_0C, b_0wP, b_0wC$ \\
-\textbf{existing edges} \\
-$s_0s_1, s_1s_0, s_0b_0, b_0s_0,$ \\
-$s_0b_0e, b_0s_0e$ \\
-\textbf{past actions} \\
+$s_0P, s_0C, s_0wP, s_0wC, b_0P, b_0C, b_0wP, b_0wC$ \\
+$s_0s_1, s_1s_0, s_0b_0, b_0s_0, s_0b_0e, b_0s_0e$ \\
 $a_0we, a_1we$ \\
 \\
 {\footnotesize Novel, UCCA-specific features:} \\
-\textbf{remote} \\
 $s_0R, s_0wR, b_0R, b_0wR$
 \end{tabular}
-
-%\vspace*{\fill}
-%\begin{tabular}{l}
-%\textbf{implicit and remote} \\
-%$s_0I, s_0R, s_0wI, s_0wR,$ \\
-%$b_0I, b_0R, b_0wI, b_0wR$
-%\end{tabular}
-%\subcaption{New, UCCA-specific features. \\
-%\footnotesize
-%$I,R$: number of implicit, remote children.}
 \caption{Feature templates for the \textsc{bcs} parser.\label{fig:features}\\
 \footnotesize
-$s_i$, $b_i$: stack and buffer items. \\
-$w$: head word form. \\
-$t$: head word part-of-speech tag. \\
-$e$: head incoming edge label. \\
-$l$, $r$ ($ll$, $rr$): leftmost, rightmost (grand)children. \\
-$u$ ($uu$): unary (grand)child. \\
-$p$: unique separator between $s_0$ and $s_1$. \\
-$q$: separator count. \\
-$x$: gap type. \\
-$y$: sum of gap lengths. \\
-$P,C$: number of parents, children. \\
-$a_i$: past actions (in reverse order).
+$s_i$, $b_i$ are the $i$th stack and buffer items, respectively.
+$w$ and $t$ are the word form and part-of-speech tag of the terminal returned by the $h^*(\cdot)$ function (\secref{subsec:con2dep}).
+$e$ is the edge label to the node returned by the $h(\cdot)$ function.
+$l$, $r$ ($ll$, $rr$) are the leftmost and rightmost (grand)children, respectively.
+$u$ ($uu$) is the unary (grand)child, when only one exists.
+$p$ is a unique separator punctuation and $q$ is the separator count between $s_0$ and $s_1$.
+$x$ is the gap type (``none'', ``pass'' or ``gap'') at the sub-graph under the current node, and $y$ is the sum of gap lengths \protect\cite{maier2009characterizing}.
+$P$ and $C$ are the number of parents and children, respectively.
+$a_i$ is the transition taken $i$ steps back.
+All feature templates correspond to binary features.
 }
 \end{figure}
 
