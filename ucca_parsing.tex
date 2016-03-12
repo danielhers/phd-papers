@@ -496,11 +496,10 @@ we heuristically assume that attachments are always high-attaching.
 Assume $T_d=(V_d,E_d,\ell_d)$ is a dependency tree. We begin by creating a root node $r$.
 Then, iterating over $V_d$ in topological order,
 we add them as terminals to the constituency tree and create a pre-terminal parent for each,
-with an edge labeled as $Terminal$ between them.
+with an edge labeled as \textit{Terminal} between them.
 The parents of the pre-terminals are determined by the terminal's parent in the dependency
-tree: if a dependency node $v$ is a child of the root in $T_d$, then $v$'s pre-terminal will also be a child of the root node. Otherwise, $v$'s pre-terminal is the child of the pre-terminal associated
-with $v$'s head in $T_d$. Edge labels edges according to a function defined are defined heuristic rules, $\mathrm{Label}(u)$.\oa{this last sentence is unclear. what heuristics? why are they needed?}
-%For example, in UCCA, if a node has a sibling that is annotated as a \textsc{ParallelScene}, we annotate it as a \textsc{ParallelScene} too.
+tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $T_d$. We add an intermediate node inbetween if $t$ has any dependents in $T_d$, to allow adding their pre-terminals as children.
+We need to determine the label for all of the intermediate edges introduced in this process, since they were not originally in $T_d$. We use a set of rules for this purpose (denoted by $\mathrm{Label}(u)$; we choose the label $C$ (\textit{center}) in most cases).
 
 \begin{algorithm}
  \KwData{dependency tree $T_d=(V_d,E_d,\ell_d)$}
@@ -512,14 +511,22 @@ with $v$'s head in $T_d$. Edge labels edges according to a function defined are 
   $u \leftarrow \mathrm{Node()}$\;
   $V_c \leftarrow V_c \cup \{u, t\}$\;
   $E_c \leftarrow E_c \cup \{(u, t)\}$\;
-  $\ell_c(u,t)\leftarrow\textsc{Terminal}$\;
-  \eIf{$\ell_d(t) = \textsc{Root}$} {
+  $\ell_c(u,t)\leftarrow\mathit{Terminal}$\;
+  $t^\prime \leftarrow \mathrm{Parent}_d(t)$\;
+  \eIf{$t^\prime = \textsc{Root}$} {
    $E_c \leftarrow E_c \cup \{(r, u)\}$\;
    $\ell_c(r, u) \leftarrow \mathrm{Label}(r,u)$\;
   } {
-   $p \leftarrow \mathrm{Parent}_c(\mathrm{Parent}_d(t))$\;
-   $E_c \leftarrow E_c \cup \{(p, u)\}$\;
-   $\ell_c(p, u) \leftarrow \mathrm{Label}(p,u)$\;
+   \eIf{$\exists v \in V_d : (t,v) \in E_d$} {
+    $u^\prime \leftarrow \mathrm{Node()}$\;
+    $E_c \leftarrow E_c \cup \{(u^\prime, u)\}$\;
+    $\ell_c(u^\prime, u) \leftarrow \mathrm{Label}(u^\prime, u)$\;
+   } {
+    $u' \leftarrow u$\;
+   }
+   $p \leftarrow \mathrm{Parent}_c(t^\prime)$\;
+   $E_c \leftarrow E_c \cup \{(p, u^\prime)\}$\;
+   $\ell_c(p, u^\prime) \leftarrow \ell_d(t^\prime, t)$\;
   }
  }
  \caption{Dependency to constituency conversion procedure.}
