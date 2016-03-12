@@ -749,11 +749,13 @@ In all cases, punctuation marks are excluded from the evaluation, but not from t
 We explore two conversion scenarios: one into (possible discontiguous) constituency trees,
 and one into CoNLL-style dependencies. In the first setting, we experiment with the \textsc{uparse}
 parser \cite{maier2015discontinuous}, and in the second with MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser \cite{dyer2015transition}.
-We experiment with different settings of MaltParser, including
+We experiment with different settings of MaltParser:
 different transition systems and local classifiers. As the different
 settings yield comparable results, we only report those of the highest
 scoring configuration, using the \texttt{nivreeager} transitions
 and the \texttt{libsvm} SVM classifier.
+Apart from that, we use the default settings for all parsers.
+\footnote{We note that only \textsc{uparse} uses beam search by default, with a beam size of 4.}
 We note that the LSTM parser uses a different set of transitions (arc-standard) to
 MaltParser (arc-eager),
 in addition to the fact that it differs in terms of its classifier.
