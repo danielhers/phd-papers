@@ -361,41 +361,55 @@ For a given set $L$ of edge labels, a \textit{semantic constituency graph} $G=(V
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conversion-Based Parsing}\label{sec:conversion_approach}
 
-Conversion-based parsers are obtained by converting the semantic constituency graphs into the mediating representation,
-training a parser for the mediating representation, applying the resulting parser
-to the test set (converted to the mediating representation as well), and converting back
-to the original semantic constituency graphs.
+We begin by assessing the ability of existing technology to address the task,
+by taking a conversion-based approach. Training proceeds by 
+convering the constituency DAGs into the target representation,
+and training an existing parser for that representation on the converted representations.
+We test the parsers by applying the resulting parser to the text of the text set,
+and converting back to the original constituency DAG format, where they are compared
+with the gold standard. The ``lossiness'' of the conversion procedures is assessed in
+\secref{sec:experiments}.
 
 \paragraph{Conversion to Constituency Trees.}
-In order to convert semantic constituency graphs to constituency trees, we remove edges such that
-all nodes are left with a single incoming edge, and a single root remains in the graph.
-This results in a tree that can be parsed by constituency parsers.
-As semantic constituency graphs may have discontiguous units, the resulting tree may have
-discontiguous constituents as well.
-
-Specifically, in converting UCCA structures, we note that UCCA marks one of the incoming edges
-for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges.
+We convert constituency DAGs into constituency trees by removing a sub-set of the edges.
+As the original constituency DAGs may contain discontiguous units, the resulting trees
+may also have contain such units.
+Specifically, when converting UCCA structures, we note that UCCA marks one of the incoming edges
+for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges.\oa{should we
+  say a word about which edges are primary and which are remote?}
 We thus remove all remote and linkage edges, in addition to nodes that are disconnected
-from the graph as a result of this removal, and leaves that do not correspond to a token in the
-text\footnote{Such implicit units serve in UCCA to represent implicit relations and participants, such as
-the agent in passive sentences (if not explicitly mentioned).}.
-
-The reverse conversion from trees to graphs is simply the identity function.
-
-We use the \textsc{uparse} parser \cite{maier2015discontinuous}, the only transition-based
-constituency parser, to our knowledge, able to parse trees with discontiguous constituents.
+from the graph as a result of this removal. We further remove leaves that do not correspond to
+a token in the text\footnote{Such units serve in UCCA to represent implicit relations and
+  participants, such as the agent in passive sentences (if not explicitly mentioned). The parsing
+  of these empty elements is discussed in \secref{sec:discussion}.}.
+The inverse conversion from trees to graphs is simply the identity function.
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
-In the conversion to dependency trees, we first convert semantic constituency graphs to constituency trees using the above procedure. We then convert these constituency trees to dependency trees. The conversion and reverse conversion algorithms are given in Algorithms~\ref{alg:con2dep} and~\ref{alg:dep2con}.
+In the conversion to dependency trees, we first convert semantic constituency graphs
+to constituency trees using the above procedure, and then conver the result to dependency trees. 
+Assume $T_c=(V_c,E_c,\ell_c)$ is a constituency tree with labels $\ell_c:E_c~\rightarrow~L$,
+where $L$ is the set of possible labels.
+The conversion from $T$ to a dependency tree involves the removal of
+all non-terminals from $T$ and the addition of edges between terminals.
+The nodes of the converted dependency tree are simply the terminals of $T$.
 
-In the conversion from constituency to dependency, we need to remove the non-terminals from the tree and connect the terminals themselves with edges.
-We define a priority order over the possible edge labels.
-For each node $u \in V$, denote by $h(u)$ its child with the highest-priority edge label.
-We then define $h^*(u)$ as the terminal reachable from $u$ by following only highest-priority edges.
-For each terminal $t$, we define $n(t)$ as the highest non-terminal $u$ such that $t=h^*(u)$.
-The nodes of the converted dependency tree are just the terminal of the constituency tree,
-and the edge are then defined in a similar manner to head percolation rules used in the conversion of syntactic treebanks.
-However, the rules used here are simpler, as the head child $h(u)$ of a node $u$ depends only on the label of the edge between them, and not on the edges below $u$. This is appropriate, since edges in a semantic constituency graph express the relation between units, whereas in syntactic constituency trees the identity of a node depends on the nodes below it.
+We define a linear order over possible edge labels $L$.
+For each node $u \in V$, denote with $h(u)$ its child with the highest edge label.
+Denote with $h^*(u)$ the terminal reached by recursively applying of $h(\cdot)$ over $u$.
+For each terminal $t$, we define $n(t)$ as the highest non-terminal $u$ such that $t=h^*(n(t))$, i.e.,
+$n(t)$ is the only node such that $t=h^*(n(t))$ and $t \neq h^*(Parent_c(n(t)))$.
+The head terminal of $t$ is now defined to be the terminal $h^*(Parent_c(n(t)))$.
+The complete algorithm is given in Algorithm~\ref{alg:con2dep}.
+
+We note that this conversion procedure is simpler than the
+head percolation procedure used for converting syntactic constituency trees to dependency trees.
+This is because $h(u)$ of a node $u$ (similar to $u$'s head-containing child),
+depends only on the label of the edge $(h(u),u)$, and not on the sub-tree spanned by $u$,
+because edge labels in UCCA directly express the role of the child in the parent unit, and
+is thus sufficient for determining which of $u$'s children contains the head node.
+%This is appropriate, since edges in a semantic constituency graph express the relation between units,
+%whereas in syntactic constituency trees the identity of a node depends on the nodes below it.
+
 
 \begin{algorithm}[t]
  \KwData{constituency tree ${T_c}=(V_c,E_c,\ell_c)$}
@@ -419,14 +433,22 @@ However, the rules used here are simpler, as the head child $h(u)$ of a node $u$
   $E_d \leftarrow E_d \cup \{(t^\prime, t)\}$\;
   $\ell_d (t^\prime, t) \leftarrow \ell_c(u, n(t))\}$\;
  }
- \caption{Constituency to dependency.}
+ \caption{Constituency to dependency conversion procedure.}
  \label{alg:con2dep}
 \end{algorithm}
 
-In the conversion from dependency to constituency, we need to introduce the non-terminal nodes back.
-First, we add an artificial root node $r$.
-Iterating through the dependency nodes in topological order, we add them as terminals to the constituency tree and create pre-terminal parents for them, with a \textsc{Terminal}-labeled edge between them. We then attach the pre-terminal to its parent in the constituency tree: if the dependency node is a child of the root, then the constituency node will also be a child of the root node. Otherwise, we attach it to the pre-terminal node associated with the dependency node's head.
-We define the labels for newly-introduced edges according to a function defined by heuristic rules, $\mathrm{Label}(u)$. For example, in UCCA, if a node has a sibling that is annotated as a \textsc{ParallelScene}, we annotate it as a \textsc{ParallelScene} too.
+The inverse conversion introduces non-terminal nodes back into the tree. As the distinction
+between low- and high-attaching nodes is lost in the constituency to dependency conversion,
+we heuristically assume that attachments are always high-attaching.
+
+Assume $T_d=(V_d,E_d,\ell_d)$ is a dependency tree. We begin by creating a root node $r$.
+Then, iterating over $V_d$ in topological order,
+we add them as terminals to the constituency tree and create a pre-terminal parent for each,
+with an edge labeled as $Terminal$ between them.
+The parents of the pre-terminals are determined by the terminal's parent in the dependency
+tree: if a dependency node $v$ is a child of the root in $T_d$, then $v$'s pre-terminal will also be a child of the root node. Otherwise, $v$'s pre-terminal is the child of the pre-terminal associated
+with $v$'s head in $T_d$. Edge labels edges according to a function defined are defined heuristic rules, $\mathrm{Label}(u)$.\oa{this last sentence is unclear. what heuristics? why are they needed?}
+%For example, in UCCA, if a node has a sibling that is annotated as a \textsc{ParallelScene}, we annotate it as a \textsc{ParallelScene} too.
 
 \begin{algorithm}
  \KwData{dependency tree $T_d=(V_d,E_d,\ell_d)$}
@@ -448,11 +470,10 @@ We define the labels for newly-introduced edges according to a function defined 
    $\ell_c(p, u) \leftarrow \mathrm{Label}(p,u)$\;
   }
  }
- \caption{Dependency to constituency.}
+ \caption{Dependency to constituency conversion procedure.}
  \label{alg:dep2con}
 \end{algorithm}
 
-We use MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser by Dyer et al.~\shortcite{dyer2015transition} as the underlying parsers in this method.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Constituency DAG Parsing}\label{sec:direct_approach}
@@ -477,18 +498,31 @@ and a graph $G=(V,E,\ell)$ of constructed nodes and labeled edges.
 In addition, some states are marked as \textit{terminal}, meaning that $G$ is the final output.
 A classifier is used at each step to select the next transition based on features
 which encode the parser's current state.
+
 Following \newcite{maier2015discontinuous}, we use a linear classifier, using
 the averaged structured perceptron algorithm for training it
 \cite{Coll:04} with the \textsc{MinUpdate} \cite{cai2011language} procedure
 (i.e., a minimum number of updates to a feature has to occur in training for it
-to be included in the model).
-We use greedy inference without beam search.
-For training, we use a dynamic oracle \cite{goldberg2012dynamic}: the oracle sees the gold graph and the current parser state, and outputs a set of optimal transitions (for example, a \textsc{Node} transition if the stack top has a parent in the gold graph that has not been created yet, and a \textsc{Right-Edge} transition if the second stack element is a parent of the first in the gold graph, and the edge between them has not been created yet). The classifier's decision is treated as correct and is taken if it is contained in the oracle's output. Otherwise, a random optimal transition is taken and the classifier's weights are updated.
+to be included in the model). Inference is performed greedily (i.e., without beam search).
 
+For training the local classifier, we use a dynamic oracle \cite{goldberg2012dynamic},
+i.e., an oracle that outputs a set of optimal transitions, based on the gold graph and
+the current parser state\oa{unclear. optimal in what sense?}.
+For example, the orcale would predict a \textsc{Node} transition if the stack 
+has on its top a parent in the gold graph that hasn't been created,
+but would predict a \textsc{Right-Edge} transition if the second stack element is a parent of the
+first element according to the gold graph and the edge between them hasn't been created.
+The transition predicted by the classifier prediction is deemed correct
+and is taken\oa{what do you mean ``is taken''?} if it is a member of the oracle's set
+of optimal transitions. Otherwise, a random optimal transition is taken and the
+classifier's weights are updated.
+
+\oa{much better. make sure that there aren't any other {\bf major} technical
+  that you didn't mention}
 
 \paragraph{Transition Set.}
 Parsing starts with a single node in the stack (the root node), and the input tokens
-$w_1, \ldots, w_n$ in the buffer $B$. The transition set is given in \figref{fig:transitions}.
+$w_1, \ldots, w_n$ in the buffer. The set of transitions is given in \figref{fig:transitions}.
 
 \begin{figure*}
 \captionsetup{justification=centering}
@@ -545,32 +579,36 @@ Concretely, \textsc{Node$_X$} creates a new node on the buffer as a parent of th
 %\textsc{Implicit$_X$} acts similarly, but the created node is a child instead,
 %and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
 
-\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}, meaning the relation it represents is not explicit. We include these two transitions as distinct from the primary edge transitions, since in UCCA there is a distinction between primary and remote edges, and this distinction has to be made in the parser too.
-In order to allow nodes to have multiple parents, all node and edge transitions leave the
-stack and buffer as they are and do not reduce them,
-as in work on transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transition}.
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}. We distinguish between these two pairs of transitions, for the parser to be able to predict whether an edge is a primary or a remote one.
+In order to allow nodes to have multiple parents, node and edge transitions do not automatically
+apply \textsc{Reduce}. This is in line with other work on
+transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transition}.
 Once all edges for a particular node have been created, it is removed from the stack
-by the transition \textsc{Reduce}.
+by applying \textsc{Reduce}.
 
 \textsc{Swap} allows handling discontinuous nodes, by popping the second
-node on the stack and adding it to the top of the buffer, like a
-similarly named transition in \cite{maier2015discontinuous}.
+node on the stack and adding it to the top of the buffer, as with the similarly
+named transition in \cite{maier2015discontinuous}.\oa{maybe also cite nivre's work that used SWAP for dep
+  parsing?}
 Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 
 \paragraph{Features.}
 \label{subsec:features}
 
 \figref{fig:features} presents the feature templates used by the parser.
-For some of the features, we used the notion of \textit{head word}, defined in the same way as $h^*(u)$ in \secref{subsec:con2dep}).
+For some of the features, we used the notion of \textit{head word},
+defined by the $h^*(\cdot)$ function (\secref{subsec:con2dep}).
 While head words are not explicitly represented in the UCCA scheme, these
-features proved beneficial as means of encoding bi-lexical features.
+features proved useful as means of encoding bi-lexical dependencies.
 
-In addition to the binary features defined by those feature templates,
+In addition to the binary features defined by the feature templates,
 we employ a real-valued feature corresponding to the ratio between the number of terminals to number of nodes
-in the graph $G$. This novel feature serves as a regularizer for the creation of new nodes.
+in the graph $G$. This novel feature\oa{is it novel? why do we need it then, where others didn't? or should
+  they have used it too?} serves as a regularizer for the creation of new nodes.
 Features are generally adapted from the related parsers of \newcite{zhu2013fast,tokgoz2015transition} and
 \newcite{maier2015discontinuous}, with a small additional set of features encoding relevant information
-for the novel \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} transitions, shown in \figref{fig:new_features}.
+for the novel \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} transitions.
+
 % and \textsc{Implicit$_X$}
 
 %$s_i$ and $b_i$ stand for the $i$th stack and buffer items respectively, $w$ stands for the head word, $t$ for its POS tag, $e$ for the head incoming edge label. Note that $e$ replaces $c$ (consituent label) from Maier~\shortcite{maier2015discontinuous}, since in UCCA the labels are on the edges rather than the units; and a unit may have more than one incoming edge. $l$ and $r$ ($ll$ and $rr$) represent the leftmost and rightmost children (grand-children) of the element; $u$ handles the unary case.
@@ -659,7 +697,7 @@ $R$: number of remote children.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Experiments}
+\section{Experiments}\label{sec:experiments}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Experimental Setup}
@@ -747,8 +785,11 @@ In all cases, punctuation marks are excluded from the evaluation, but not from t
 
 \paragraph{Conversions.}
 We explore two conversion scenarios: one into (possible discontiguous) constituency trees,
-and one into CoNLL-style dependencies. In the first setting, we experiment with the \textsc{uparse}
-parser \cite{maier2015discontinuous}, and in the second with MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser \cite{dyer2015transition}.
+and one into CoNLL-style dependencies. In the first setting we experiment with the \textsc{uparse},
+the only transition-based constituency parser, to our knowledge, able to parse trees with
+discontiguous constituents.
+In the second setting we use the MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser by
+\newcite{dyer2015transition}.
 We experiment with different settings of MaltParser, including
 different transition systems and local classifiers. As the different
 settings yield comparable results, we only report those of the highest
@@ -764,7 +805,7 @@ semantic parsing scheme.
 We also omit implicit nodes, leaving them for future work.
 
 We further report upper bounds for the conversion-based methods, by applying
-the conversion and reverse conversion on the gold standard graphs and comparing
+the conversion and inverse conversion on the gold standard graphs and comparing
 them to the original gold standard.
 
 \paragraph{Direct parser.}
@@ -880,7 +921,8 @@ We did not evaluate a DAG parser \cite{tokgoz2015transition} on the dependency f
 The availability of a UCCA parser first allows to apply UCCA to downstream applications,
 and to further empirically test its support for semantic tasks. Major efforts to incorporate
 semantic structure within downstream NLP application is currently underway in several
-domains, such as machine translation \cite{} and summarization{}. Introducing further candidate
+domains, such as machine translation \cite{jones2012semantics} and summarization \cite{liu2015toward}.
+Introducing further candidate
 representations into these inquiries is thus appealing and timely.
 
 Future work will further explore improvements to the two presented approaches.
