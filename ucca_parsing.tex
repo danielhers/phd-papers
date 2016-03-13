@@ -312,7 +312,7 @@ Examples of AMR parsers include
 
 While sharing much of this work's motivation, AMR parsing differs from broad-coverage
 semantic constituency parsing in two important ways.
-First, AMR uses an open-ended and fine-grained onthology for defining its categories,
+First, AMR uses an open-ended and fine-grained ontology for defining its categories,
 rather than a uniform closed inventory.
 %It poses difficulties as it conflates
 %a wide variety of linguistic phenomena into a single representation.
@@ -503,9 +503,9 @@ For each node $u \in V$, denote with $h(u)$ its child with the highest edge labe
 Denote with $h^*(u)$ the terminal reached by recursively applying of $h(\cdot)$ over $u$.
 For each terminal $t$, we define $n(t)$ as the highest
 non-terminal such that $t=h^*(n(t))$, i.e.,
-$n(t)$ is the only node such that $t=h^*(n(t))$ and $t \neq h^*(Parent_c(n(t)))$.
+$n(t)$ is the only node such that $t=h^*(n(t))$ and $t \neq h^*(\mathrm{Parent}_c(n(t)))$.
 The head of $t$ according to the dependency graph is
-the terminal $h^*(Parent_c(n(t)))$.
+the terminal $h^*(\mathrm{Parent}_c(n(t)))$.
 The complete algorithm is given in Algorithm~\ref{alg:con2dep}.
 
 We note that this conversion procedure is simpler than the
@@ -674,7 +674,7 @@ Concretely, \textsc{Node$_X$} creates a new node on the buffer as a parent of th
 
 \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a primary new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. As a UCCA node may only
 have one incoming primary edge, \textsc{Edge} transitions are disallowed where the child node already
-has an incoming primary edge\oa{is that correct?}.
+has an incoming primary edge.
 \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}. We distinguish between these two pairs of transitions, for the parser to be able to predict whether an edge is a primary or a remote one.
 In order to allow nodes to have multiple parents, node and edge transitions do not automatically
 apply \textsc{Reduce}. This is in line with other work on
@@ -896,8 +896,7 @@ results obtained with the SVM classifier, which are about 1\% F-score higher.
 
 We use the default settings for all parsers.
 We note that \textsc{uparse} uses beam search by default,
-with a beam size of 4, where the other parsers use greedy search.\oa{is that true
-  for LSTM too?}
+with a beam size of 4, where the other parsers use greedy search.
 
 %The LSTM parser uses the arc-standard transition set, and the MaltParser
 %running MaltParser with arc-standard yielded nearly the same
@@ -1023,12 +1022,9 @@ The quality of the results is underscored by UCCA's inter-annotator
 agreement on primary edges (often taken as an upper bound),
 80--85\% F-score \cite{abend2013universal}.
 
-In order to allow insight into the contribution of each of the feature sets,
-we conduct feature ablation experiments, and report results on the development set.
-Results show ...
-
-\oa{Consider including paragraph-level parsing results, and results on \textsc{BCS}
-  applied to the converted broad-coverage semantic dependencies dataset.}.
+%In order to allow insight into the contribution of each of the feature sets,
+%we conduct feature ablation experiments, and report results on the development set.
+%Results show ...
 
 %We will briefly review their results:
 %(1) We applied the parsers to complete paragraphs, without splitting to sentences. MaltParser and the
