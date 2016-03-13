@@ -353,7 +353,7 @@ The participant ``John'' is a part of both Scenes, but is marked as a \textit{re
 the second, since it is not explicit in the second clause.
 Further categories account for relations between Scenes and
 the internal structures of complex arguments (e.g., coordination) and relations (e.g., complex adverbials, such a ``very clearly'').
-UCCA graphs for both examples are given in \figref{fig:ucca_example1}\footnote{UCCA graphs may contain
+UCCA graphs for both examples are given in \figref{fig:ucca_example1}\footnote{UCCA graphs may contain nodes
   that do not correspond to a token in the text. Such units serve in UCCA to represent implicit relations
   and participants, such as the agent in passive sentences. Parsing these empty units
   is generally beyond the scope of this work.}.
@@ -630,26 +630,21 @@ $[\mathrm{root}]$ & $w_{1:n}$ & \multirow{2}{40pt}{$\{\mathrm{root}\} \cup w_{1:
 \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & \textbf{\footnotesize Terminal?} & \\
 $S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ & $-$ & \\
 $S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & \\
-\cline{11-11}
 $S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ &
 $x \neq \mathrm{root}$ \\
-\cline{11-11}
 %$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Implicit$_X$} & $S \;|\; x$ & $y^* \;|\; B$ & $V \cup \{ y^* \}$ & $E \cup \{ (x,y^*)_X \}$ & $-$ &
 %$x \not\in w_{1:n}$ \\
-\cline{11-11}
 $S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ &
-\multirow{4}{50pt}{$\begin{aligned}
+\multirow{4}{50pt}{\vspace{-5mm}\[\left\{\begin{array}{l}
 x \not\in w_{1:n},\\
 y \neq \mathrm{root},\\
 x \not\leadsto_G y
-\end{aligned}$} \\
+\end{array}\right.\]} \\
 $S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ & \\
 $S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
 $S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
-\cline{11-11}
 $S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ & $-$ &
 $\mathrm{i}(x) < \mathrm{i}(y)$ \\
-\cline{11-11}
 $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & $+$ & \\
 \end{tabular}
 \end{adjustbox}
