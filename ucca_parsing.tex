@@ -200,7 +200,6 @@ All converters, parsers and datasets will be made publicly available upon public
       } edge from parent node[right] {\scriptsize $H$} }
       ;
     \node (LKG) at (-2,0) [fill=black!20, circle] {};
-%<<<<<<< HEAD
 %    \draw[bend left,dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
 %    \draw (LKG) to node [near start, left] {\scriptsize $$} (After);
 %    \draw (LKG) to node [near start, left] {\scriptsize $$} (graduation);
@@ -639,26 +638,21 @@ $[\mathrm{root}]$ & $w_{1:n}$ & \multirow{2}{40pt}{$\{\mathrm{root}\} \cup w_{1:
 \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & \textbf{\footnotesize Terminal?} & \\
 $S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ & $-$ & \\
 $S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & \\
-\cline{11-11}
 $S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ &
 $x \neq \mathrm{root}$ \\
-\cline{11-11}
 %$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Implicit$_X$} & $S \;|\; x$ & $y^* \;|\; B$ & $V \cup \{ y^* \}$ & $E \cup \{ (x,y^*)_X \}$ & $-$ &
 %$x \not\in w_{1:n}$ \\
-\cline{11-11}
 $S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ &
-\multirow{4}{50pt}{$\begin{aligned}
+\multirow{4}{50pt}{\vspace{-5mm}\[\left\{\begin{array}{l}
 x \not\in w_{1:n},\\
 y \neq \mathrm{root},\\
 x \not\leadsto_G y
-\end{aligned}$} \\
+\end{array}\right.\]} \\
 $S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ & \\
 $S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
 $S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
-\cline{11-11}
 $S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ & $-$ &
 $\mathrm{i}(x) < \mathrm{i}(y)$ \\
-\cline{11-11}
 $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & $+$ & \\
 \end{tabular}
 \end{adjustbox}
