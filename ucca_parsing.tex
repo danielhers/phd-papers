@@ -178,7 +178,7 @@ All converters, parsers and datasets will be made publicly available upon public
 \section{Background}\label{sec:related}
 
 \begin{figure}
-
+  \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->]
     \node (ROOT) [fill=black, circle] {}
       child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
@@ -186,7 +186,7 @@ All converters, parsers and datasets will be made publicly available upon public
       {
         child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
       } edge from parent node[left] {\scriptsize $H$} }
-      child {node {,} edge from parent node[left] {\scriptsize $U$}}
+      child {node {,} edge from parent node[right] {\scriptsize $U$}}
       child {node (moved) [fill=black, circle] {}
       {
         child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
@@ -196,15 +196,17 @@ All converters, parsers and datasets will be made publicly available upon public
           child {node {to} edge from parent node[left] {\scriptsize $R$}}
           child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
         } edge from parent node[left] {\scriptsize $A$} }
-      } edge from parent node[left] {\scriptsize $H$} }
+      } edge from parent node[right] {\scriptsize $H$} }
       ;
     \node (LKG) at (-2,0) [fill=black!20, circle] {};
     \draw[bend left,dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
-    \draw (LKG) to node [auto] {\scriptsize $LR$} (After);
-    \draw (LKG) to node [auto] {\scriptsize $LA$} (graduation);
-    \draw (LKG) to node [auto] {\scriptsize $LA$} (moved);
+    \draw (LKG) to node [near start, left] {\scriptsize $$} (After);
+    \draw (LKG) to node [near start, left] {\scriptsize $$} (graduation);
+    \draw (LKG) to node [near start, right] {\scriptsize $$} (moved);
   \end{tikzpicture}
+  }
   \\
+  \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway}]
     \node (ROOT) [fill=black, circle] {}
@@ -225,10 +227,16 @@ All converters, parsers and datasets will be made publicly available upon public
     \draw[bend left,dashed,->] (takeashower) to node [auto] {\scriptsize $A$} (John);
     \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
   \end{tikzpicture}
-\caption{\label{fig:ucca_example1}
-  UCCA graphs for the sentences ``After graduation, John moved to Paris.'' and ``John decided to take a quick shower.''
-  The first sentence demonstrates a linkage relation, and the second sentence exhibits a discontinuous unit (``take a shower'').
-  Both sentences have a remote edge (the dashed lines), where the node ``John'' has multiple parents.
+  }
+\caption{\label{fig:ucca_example1}\small
+  UCCA graphs for two example sentences:
+  ``After graduation, John moved to Paris.'' and ``John decided to take a quick shower.''
+  Both sentences have a remote edge (dashed),
+  resulting in ``John'' having two parents.
+  The first sentence includes a linkage relation,
+  and the second sentence exhibits a discontinuous unit (``take a ... shower'').
+  Partial legend: $P$ -- a Scene's main relation, $A$ -- participant,
+  $L$ -- inter-scene linker, $H$ -- linked Scene, $F$ -- function unit.
 }
 \end{figure}
 
@@ -293,7 +301,7 @@ Most work has addressed parsing sentences into Abstract Meaning Representations 
 which represents sentences as directed graphs, without
 grounding their semantic sub-parts in the sentence's words and constituents.
 Examples of AMR parsers include 
-\cite{flanigan2014discriminative,wang2015transition,vanderwende2015amr,pust2015parsing,artzi2015broad}. 
+\cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad}. 
 
 While sharing much of this work's motivation, AMR parsing differs from broad-coverage
 semantic constituency parsing in two important ways.
@@ -321,18 +329,18 @@ and dependencies derived from the Lingo ERG Minimal Recursion Semantics represen
 %as has been explored in two recent SemEval shared tasks \cite{oepen2014semeval,oepen2015semeval}.
 Bi-lexical dependencies are appealing for semantic representation, partly due to
 their structural simplicity and the strong parsing methods they allow for.
-However, the assumption that each semantic unit has a unique head is
+However, their assumption that each semantic unit has a unique head is
 problematic for representing several frequent constructions which have no clear
 head, such as coordination, prepositional phrases and multi-word expressions,
-leading to unsystematic treatment of these cases, which yields both conceptual
-and practical problems \cite{schwartz2011neutralizing,Ivanova2012who,tsarfaty2012cross}.
+leading to unsystematic treatment of these cases \cite{schwartz2011neutralizing,Ivanova2012who,tsarfaty2012cross}.
+% , which results in conceptual and practical problems 
 
 \paragraph{Universal Conceptual Cognitive Annotation.}\label{subsec:ucca}
 Taking a constituency-based approach to semantic parsing,
 we use the annotated UCCA corpora, a broad-coverage semantic annotation scheme that
 represents predicate-argument structures (verbal, nominal, adjectival and others),
 the inter-relations between them, in addition to other major semanitc phenomena.
-UCCA \cite{abend2013universal} builds on an established framework
+UCCA builds on an established framework
 for typological description, ``Basic Linguistic Theory''
 \cite{Dixon:10b,Dixon:10a,Dixon:12}, as well as on the Cognitive Linguistics literature,
 and defines a set of coarse-grained, cross-linguistically applicable distinctions.
@@ -341,9 +349,9 @@ Czech, support for rapid annotation, and semantic stability in translation: UCCA
 annotations of translated text usually contain the same set of relationships
 \cite{sulem2015conceptual}.
 
-Formally, a UCCA structure is a constituency DAG, whose leaves (or a subset of them) correspond to the words of the text. The nodes of the graph, called ``units'', are either terminals or several elements (not necessarily contiguous) jointly viewed as a single entity according to some semantic or cognitive consideration.
+Formally, a UCCA structure is a constituency DAG, whose leaves correspond to the words of the text. The nodes of the graph, called ``units'', are either terminals or several elements (not necessarily contiguous) jointly viewed as a single entity according to some semantic or cognitive consideration.
 Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents. 
-The most basic notion is the ``Scene'', which describes a movement, an action or a state.
+The most basic notion is the {\it Scene}, which describes a movement, an action or a state.
 Each Scene contains one main relation, or anchor, as well as one or more participants.
 For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes, whose main relations are ``graduation'' and ``moved''. The participant ``John'' is a part of both Scenes, while ``Paris'' only of the latter.
 The two Scenes in this sentence are both arguments in the \textit{linkage relation} ``After'', in this case expressing temporal linkage between them.
@@ -352,10 +360,13 @@ The participant ``John'' is a part of both Scenes, but is marked as a \textit{re
 the second, since it is not explicit in the second clause.
 Further categories account for relations between Scenes and
 the internal structures of complex arguments (e.g., coordination) and relations (e.g., complex adverbials, such a ``very clearly'').
-UCCA graphs for both examples are given in \figref{fig:ucca_example1}\footnote{UCCA graphs may contain
-  that do not correspond to a token in the text. Such units serve in UCCA to represent implicit relations
-  and participants, such as the agent in passive sentences. Parsing these empty units
-  is generally beyond the scope of this work.}.
+UCCA graphs for both examples are given in \figref{fig:ucca_example1}\footnote{
+UCCA graphs may contain implicit units that have no correspondent in the text.
+Such units serve in UCCA to represent implicit relations and participants,
+such as the agent in passive sentences.
+We defer the parsing of these units to future work,
+as it is likely to require different machinery than
+those explored here \cite{roth2015inducing}.}.
   
 %Another example for a UCCA-annotated sentence is shown in \figref{fig:ucca_example2}.
 
@@ -384,8 +395,7 @@ to constituency parsing \cite{sagae2005classifier,zhu2013fast}, and has been rec
 discontiguous constituency parsing \cite{maier2015discontinuous},
 yielding improvements over in the parsing of discontiguous constituents in German.
 Transition-based parsers have also been developed for dependency DAG structures
-\cite{sagae2008shift,tokgoz2015transition}, AMR parsing \cite{wang2015transition} and
-CCG parsing \cite{ambati2015incremental}.
+\cite{sagae2008shift,tokgoz2015transition} and CCG parsing \cite{ambati2015incremental}.
 Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
 
 %\oa{Who to compare to? (we take a transition-based approach; later we discuss,
@@ -453,14 +463,14 @@ The amount of information lost by this back and forth conversion is discussed in
 \secref{sec:experiments}.
 
 \paragraph{Notation.}
-For a given set $L$ of possible edge labels,
-a \textit{semantic constituency DAG} $G=(V,E, \ell)$ over a sequence of tokens $w_1, \ldots, w_n$
-is a directed acyclic graph, where $\ell:E\to L$ is a function of \textit{edge labels}.
-For each token $w_i$ ($i=1, \ldots, n$) there exists a leaf  $t_i \in V$.
-{\it Terminals} are the leaf nodes in $V$.
+Let $L$ be the set possible edge labels.
+A constituency DAG is a directed acyclic graph $G=(V,E, \ell)$
+over a sequence of tokens $w_1, \ldots, w_n$,
+where $\ell:E\to L$ is a function of \textit{edge labels}.
+For each token $w_i$ ($i=1, \ldots, n$) there exists a leaf (or a terminal) $t_i \in V$.
 
 \paragraph{Conversion to Constituency Trees.}
-We convert constituency DAGs into constituency trees by removing a subset of the edges.
+We convert constituency DAGs to constituency trees by removing a subset of the edges.
 As the original constituency DAGs may contain discontiguous units, the resulting trees
 may also have contain such units.
 Specifically, when converting UCCA structures, we note that UCCA marks one of the incoming edges
@@ -481,17 +491,20 @@ The nodes of the converted dependency tree are simply the terminals of $T$.
 We define a linear order over possible edge labels $L$.
 For each node $u \in V$, denote with $h(u)$ its child with the highest edge label.
 Denote with $h^*(u)$ the terminal reached by recursively applying of $h(\cdot)$ over $u$.
-For each terminal $t$, we define $n(t)$ as the highest non-terminal $u$ such that $t=h^*(n(t))$, i.e.,
+For each terminal $t$, we define $n(t)$ as the highest
+non-terminal such that $t=h^*(n(t))$, i.e.,
 $n(t)$ is the only node such that $t=h^*(n(t))$ and $t \neq h^*(Parent_c(n(t)))$.
-The head terminal of $t$ is now defined to be the terminal $h^*(Parent_c(n(t)))$.
+The head of $t$ according to the dependency graph is
+the terminal $h^*(Parent_c(n(t)))$.
 The complete algorithm is given in Algorithm~\ref{alg:con2dep}.
 
 We note that this conversion procedure is simpler than the
-head percolation procedure used for converting syntactic constituency trees to dependency trees.
+head percolation procedure used for converting syntactic constituency
+trees to dependency trees.
 This is because $h(u)$ of a node $u$ (similar to $u$'s head-containing child),
 depends only on the label of the edge $(h(u),u)$, and not on the sub-tree spanned by $u$,
 because edge labels in UCCA directly express the role of the child in the parent unit, and
-is thus sufficient for determining which of $u$'s children contains the head node.
+are thus sufficient for determining which of $u$'s children contains the head node.
 %This is appropriate, since edges in a semantic constituency graph express the relation between units,
 %whereas in syntactic constituency trees the identity of a node depends on the nodes below it.
 
@@ -522,13 +535,18 @@ is thus sufficient for determining which of $u$'s children contains the head nod
  \label{alg:con2dep}
 \end{algorithm}
 
-The inverse conversion introduces non-terminal nodes back into the tree. As the distinction
-between low- and high-attaching nodes is lost in the constituency to dependency conversion,
-we heuristically assume that attachments are always high-attaching.
+The inverse conversion introduces non-terminal nodes back into the tree.
+As the distinction
+between low- and high-attaching nodes is lost in the constituency to
+dependency conversion,
+we heuristically assume that attachments are always
+high-attaching\oa{did you check any other options?}.
 
-Assume $T_d=(V_d,E_d,\ell_d)$ is a dependency tree. We begin by creating a root node $r$.
+Assume $T_d=(V_d,E_d,\ell_d)$ is a dependency tree.
+We begin by creating a root node $r$.
 Then, iterating over $V_d$ in topological order,
-we add them as terminals to the constituency tree and create a pre-terminal parent for each,
+we add its members as terminals to the constituency tree
+and create a pre-terminal parent for each,
 with an edge labeled as \textit{Terminal} between them.
 The parents of the pre-terminals are determined by the terminal's parent in the dependency
 tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $T_d$. We add an intermediate node inbetween if $t$ has any dependents in $T_d$, to allow adding their pre-terminals as children.
@@ -590,23 +608,6 @@ and a graph $G=(V,E,\ell)$ of constructed nodes and labeled edges.
 In addition, some states are marked as \textit{terminal}, meaning that $G$ is the final output.
 A classifier is used at each step to select the next transition based on features
 which encode the parser's current state.
-
-Following \newcite{maier2015discontinuous}, we use a linear classifier, using
-the averaged structured perceptron algorithm for training it
-\cite{Coll:04} with the \textsc{MinUpdate} \cite{cai2011language} procedure
-(i.e., a minimum number of updates to a feature has to occur in training for it
-to be included in the model). Inference is performed greedily (i.e., without beam search).
-
-For training the local classifier, we use a dynamic oracle \cite{goldberg2012dynamic},
-i.e., an oracle that outputs a set of optimal transitions: when applied to the current parser state, these transition would all lead to the gold-standard graph.
-For example, the oracle would predict a \textsc{Node} transition if the stack 
-has on its top a parent in the gold graph that hasn't been created,
-but would predict a \textsc{Right-Edge} transition if the second stack element is a parent of the
-first element according to the gold graph and the edge between them hasn't been created.
-The transition predicted by the classifier prediction is deemed correct
-and is applied to the parser state if it is a member of the oracle's set
-of optimal transitions. Otherwise, a random optimal transition is taken and the
-classifier's weights are updated.
 
 \paragraph{Transition Set.}
 Parsing starts with a single node in the stack (the root node), and the input tokens
@@ -703,7 +704,7 @@ for the novel \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} transitions
 % FEATURES
 \begin{figure}
 \begin{tabular}{>{\small}l}
-{\footnotesize Features from \cite{zhang2009transition}:} \\
+{Features from \cite{zhang2009transition}:} \\
 \textbf{unigrams} \\
 $s_0te, s_0we, s_1te, s_1we, s_2te, s_2we, s_3te, s_3we,$ \\
 $b_0wt, b_1wt, b_2wt, b_3wt,$ \\
@@ -758,6 +759,30 @@ $s_0R, s_0wR, b_0R, b_0wR$
 }
 \end{figure}
 
+\paragraph{Training.}
+Following \newcite{maier2015discontinuous}, we use a linear classifier, using
+the averaged structured perceptron algorithm for training it
+\cite{Coll:04} with the \textsc{MinUpdate} \cite{cai2011language} procedure
+(i.e., a minimum number of updates to a feature has to occur in training for it
+to be included in the model). Inference is performed greedily (i.e., without beam search).
+
+For training the local classifier, we use a dynamic oracle \cite{goldberg2012dynamic},
+i.e., an oracle that outputs a set of optimal transitions: when any of them
+is applied to the current parser state, the gold
+standard graph is reachable from the resulting state.\oa{is that right?}.
+For example, the oracle would predict a \textsc{Node} transition if the stack 
+has on its top a parent in the gold graph that hasn't been created,
+but would predict a \textsc{Right-Edge} transition if the second stack
+element is a parent of the
+first element according to the gold graph and the edge between them hasn't been created.
+The transition predicted by the classifier prediction is deemed correct
+and is applied to the parser state to reach the subsequent state
+if the transition is included in the set of optimal transitions.
+Otherwise, a random optimal transition is applied
+and the classifier's weights are updated, according to the structured perceptron
+update rule.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experiments}\label{sec:experiments}
@@ -766,12 +791,11 @@ $s_0R, s_0wR, b_0R, b_0wR$
 \subsection{Experimental Setup}
 
 \paragraph{Data.}\label{sec:data}
-We conduct our main experiments on the UCCA Wikipedia corpus (hence \textit{Wiki}), and use
-the English part of the
-UCCA \textit{Twenty Thousand Leagues Under the Sea} English-French parallel corpus (hence \textit{20K Leagues}) as
+We conduct our main experiments on the UCCA Wikipedia corpus (henceforth, \textit{Wiki}),
+and use the English part of the UCCA \textit{Twenty Thousand Leagues Under the Sea} English-French parallel corpus (henceforth, \textit{20K Leagues}) as
 out-of-domain data.\footnote{Both are available at \url{http://www.cs.huji.ac.il/~oabend/ucca.html}}
 \tabref{table:data} presents some statistics for the two corpora, demonstrating that while
-the \textit{Wiki} corpus is over ten times bigger, the overall statistics are
+the \textit{Wiki} corpus is over ten times larger, the overall statistics are
 similar.
 
 \begin{table}
@@ -804,15 +828,17 @@ similar.
 \end{table}
 
 %Our conversion tools and direct parser are implemented in Python.
-In all experiments, we use passages of indices not greater than 655
-of the \textit{Wiki} corpus as our training set, passages 656-700 as development set,
-and passages 701-695 as test set.
+We use passages of indices 1--655
+of the \textit{Wiki} corpus as our training set, passages 656--700 as development set,
+and passages 701--695 as in-domain test set.
 While UCCA edges can cross sentence boundaries, we adhere to the common
 practice in semantic parsing and train our parsers on individual sentences,
 discarding inter-relations between them (0.18\% of the edges).
-In the out-of-domain experiments, we apply the same parser (trained on the \textit{Wiki}
-corpus) to the entire \textit{20K Leagues} corpus as test set,
-without any parameter re-tuning.
+We also discard linkage nodes and edges, as they often express inter-sentence
+relations and are often redundant when applied at the sentence level.
+In the out-of-domain experiments, we apply the same parser
+(trained on the \textit{Wiki} corpus) to the entire \textit{20K Leagues}
+corpus as test set, without re-tuning any parameters.
 
 \paragraph{Evaluation.}
 Since there are no standard evaluation measures for comparing constituency DAGs, we define
@@ -820,7 +846,7 @@ two simple measures for comparing them.
 Assume $G_p=(V_p,E_p,\ell_p)$ and $G_g=(V_g,E_g,\ell_g)$
 are the predicted and gold-standard DAGs over the same
 set of terminals $W = \{w_1,\ldots,w_n\}$, respectively.
-For an edge $e=(u,v)$ in either graphs,
+For an edge $e=(u,v)$ in either graph,
 where $u$ is the parent and $v$ is the child, define its yield $y(e) \subseteq W$ as the
 set of terminals in $W$ that are descendants of $v$.
 We define the set of \textit{mutual edges} between $G_p$ and $G_g$:
@@ -847,39 +873,50 @@ In all cases, punctuation marks are excluded from the evaluation, but not from t
 %constituency representation and \textsc{CoNLL-X} as the format for dependency representation.
 
 \paragraph{Conversions.}
-We explore two conversion scenarios: one into (possible discontiguous) constituency trees,
-and one into CoNLL-style dependencies. In the first setting we experiment with the \textsc{uparse},
+We explore two conversion scenarios: one into (possibly discontiguous) constituency trees,
+and one into CoNLL-style dependencies. In the first setting we experiment with \textsc{uparse},
 the only transition-based constituency parser, to our knowledge, able to parse trees with
 discontiguous constituents.
-In the second setting we use the MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser by
-\newcite{dyer2015transition}.
+In the second setting we use the MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser \cite{dyer2015transition}.
 We experiment with different settings of MaltParser, including
 different transition systems and local classifiers. As the different
-settings yield comparable results, we only report those of the highest
+settings yield similar results\oa{give a ballpark estimate of the difference},
+we only report those of the highest
 scoring configuration, using the \texttt{nivreeager} transitions
 and the \texttt{libsvm} SVM classifier.
 Apart from that, we use the default settings for all parsers.
-\footnote{We note that only \textsc{uparse} uses beam search by default, with a beam size of 4.}
-We note that the LSTM parser uses a different set of transitions (arc-standard) to
-MaltParser (arc-eager),
-in addition to the fact that it differs in terms of its classifier.
+\footnote{We note that only \textsc{uparse} uses beam search by default,
+  with a beam size of 4.}
 
-We omit linkage edges and nodes, as these are not evaluated
-by the evaluation metrics yet and are not an essential part of the
-semantic parsing scheme.
-We also omit implicit nodes, leaving them for future work.
+The LSTM parser uses the arc-standard transition set, and the MaltParser
+running MaltParser with arc-standard yielded nearly the same
+scores as arc-eager. \textsc{uparse}, in contrast, uses a larger transition
+set that allows discontinuous constituency tree parsing.
+\textsc{bcs} expands this set further, allowing for DAG parsing
+and UCCA-specific features.
+
+Another parameter of variation is the classifier used by each of the parsers.
+The LSTM parser is based on neural networks, whereas the highest scores for
+MaltParser were obtained with an SVM classifier.
+Both \textsc{uparse} and \textsc{bcs} use a linear classifier.
+
+%We omit linkage edges and nodes, as these are not evaluated
+%by the evaluation metrics yet and are not an essential part of the
+%semantic parsing scheme.
+%We also omit implicit nodes, leaving them for future work.
 
 We further report upper bounds for the conversion-based methods, by applying
 the conversion and inverse conversion on the gold standard graphs and comparing
 them to the original gold standard.
 
-\paragraph{Direct parser.}
-In the \textsc{bcs} parser, we use a \textsc{MinUpdate}
-value of 5 and a constant learning rate of 1.
-We use an \textsc{Importance} value of 2, doubling the weight updates for gold \textsc{Swap} transitions to address the sparseness of discontinuous structures \cite{maier2015discontinuous}.
+\paragraph{\textsc{BCS} Parser.}
+We use a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
+We use an \textsc{Importance} value of 2, doubling the weight updates
+for gold \textsc{Swap} transitions to address the sparseness
+of discontinuous structures, as in \cite{maier2015discontinuous}.
 We train \textsc{bcs} both where remote edges
 are included, and when they are excluded from the training data, to allow
-more direct comparison with the conversion-based methods that can only
+more direct comparison with conversion-based methods that can only
 predict trees.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -890,15 +927,20 @@ upper bounds for the conversion-based methods.
 \textsc{bcs} obtains comparable F-scores to MaltParser and \textsc{uparse}
 in terms of primary edges, but unlike them, is able to predict some
 of the remote edges as well. 
-Removing remote edges from the training data of \textsc{bcs} allows it to focus
-on the primary edges, and improves the F-score by 2.2\%. Results on
+Removing remote edges from the training data of \textsc{bcs} does not
+change results considerably on the primary edges,
+reducing them by 0.9\% F-score in the in-domain setting, but reduces
+them by the same amount when applied out-of-domain. Results on
 the out-of-domain settings are largely comparable with the in-domain
 results, supporting the robustness of the \textsc{bcs} results.
 
-The LSTM parser obtains the best results on primary edges, with a considerable margin.
-Importantly, it obtains a 10.6\% higher F-score than MaltParser.
-This suggests that applying a similar LSTM-based approach to training \textsc{bcs} is
-likely to boost results considerably, and further underscores the feasibility
+The LSTM parser obtains the best results on primary edges,
+with a considerable margin. Importantly, it obtains more than
+10\% of F-score higher than MaltParser, which mostly differ
+from it in terms of the local classifier.
+This suggests that applying a similar LSTM-based approach to
+training \textsc{bcs} is likely to boost results considerably,
+and further underscores the feasibility
 of the presented approach for semantic constituency parsing. 
 
 %too practically turns the structure into a constituency tree, and raises the scores above two of the conversion-based parsers. However, the stack LSTM-based parser of Dyer et al.~\shortcite{dyer2015transition} still reaches the highest score.
@@ -955,25 +997,15 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}\label{sec:discussion}
 
-We have defined broad-coverage semantic constituency parsing,
-and explored two complementary parsing approaches to tackle it, by applying
-conversion-based parsing procedures that assess the ability of existing
-technology to address the task, and by constructing a novel semantic parser, \textsc{bcs}, for
-the task. The work makes further contributions
-by first defining a statistical constituency DAG parser,
-and by presenting the first experiments with UCCA parsing.
-Experiments demonstrate that UCCA can already be parsed with 69.3 F1 score, not a small
-feat for first work on a semantic, structural task, and suggests means for
-improvement by taking an LSTM-based approach to the local classifier of \textsc{bcs}.
-
-The LSTM parser uses the arc-standard transition set, and
-running MaltParser with arc-standard yielded nearly the same scores as arc-eager.
-\textsc{uparse}, in contrast, uses a larger transition set that allows discontinuous constituency parsing.
-\textsc{bcs} expands this set further, allowing for DAG parsing and UCCA-specific features.
-
-Another parameter of variation is the classifier used by each of the parsers.
-The LSTM parser is based on neural networks, whereas the highest scores for MaltParser were obtained with an SVM classifier.
-Both \textsc{uparse} and \textsc{bcs} use a linear classifier.
+We have defined the broad-coverage semantic constituency parsing task,
+and explored two complementary parsing approaches to tackle it.
+Conversion-based parsing procedures assess the ability of existing
+technology to address the task, and the novel \textsc{BCS} parser first
+explores parsing in constituency DAG representations.
+The work makes a further contribution by first experimenting on UCCA parsing.
+Results show that UCCA can already be parsed with 69.3\% F-score,
+and suggests means for improvement by taking an LSTM-based
+approach to the local classifier of \textsc{bcs}.
 
 Further experiments we have conducted are
 (1) parsing complete paragraphs without splitting to sentences,
@@ -983,11 +1015,13 @@ and (4) conversion to other formats (specifically, semantic dependency parsing \
 We did not evaluate a DAG parser \cite{tokgoz2015transition} on the dependency format, since we could not find an available one.
 
 The availability of a UCCA parser first allows to apply UCCA to downstream applications,
-and to further empirically test its support for semantic tasks. Major efforts to incorporate
-semantic structure within downstream NLP application is currently underway in several
-domains, such as machine translation \cite{jones2012semantics} and summarization \cite{liu2015toward}.
-Introducing further candidate
-representations into these inquiries is thus appealing and timely.
+and to further empirically test its support for semantic tasks.
+Major efforts to incorporate semantic structure within downstream NLP application
+is currently underway in several
+domains, such as machine translation \cite{jones2012semantics} and
+summarization \cite{liu2015toward}.
+Introducing further candidate representations into these inquiries
+is thus appealing and timely.
 
 Future work will further explore improvements to the two presented approaches.
 As our experiments suggest that a neural network classifier is likely to substantially boost the parser
