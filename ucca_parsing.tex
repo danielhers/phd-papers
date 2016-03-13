@@ -976,12 +976,10 @@ Another parameter of variation is the classifier used by each of the parsers.
 The LSTM parser is based on neural networks, whereas the highest scores for MaltParser were obtained with an SVM classifier.
 Both \textsc{uparse} and \textsc{bcs} use a linear classifier.
 
-Further experiments we have conducted are
-(1) parsing complete paragraphs without splitting to sentences,
-(2) including linkage edges and implicit nodes (by an additional transition) in the \textsc{bcs} parser,
-(3) removing features from the \textsc{bcs} parser to evaluate their importance,
-and (4) conversion to other formats (specifically, semantic dependency parsing \cite{oepen2015semeval}, which allows multiple parents).
-We did not evaluate a DAG parser \cite{tokgoz2015transition} on the dependency format, since we could not find an available one.
+We have conducted additional experiments, not included in this work. We will briefly review their results:
+(1) We applied the parsers to complete paragraphs, without splitting to sentences. MaltParser and the LSTM parser reached nearly the same scores as in the sentence experiments, but \textsc{uparse} and \textsc{bcs} failed to run with input above 500 tokens, for technical reasons.
+(2) We tried including linkage nodes and edges and implicit nodes when running the \textsc{bcs} parser, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
+(3) We created a conversion procedure to SDP (semantic dependency parsing), an additional dependency format that allows multiple parents \cite{oepen2015semeval}. The resulting upper bound for primary edges was similar to the \textsc{CoNLL} format, but for remote edges it was as high as 68.6\% labeled F1. We did not evaluate dependency DAG parsers \cite{sagae2008shift,tokgoz2015transition} on this format since we could not obtain their code.
 
 The availability of a UCCA parser first allows to apply UCCA to downstream applications,
 and to further empirically test its support for semantic tasks. Major efforts to incorporate
