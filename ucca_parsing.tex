@@ -811,31 +811,32 @@ the \textit{Wiki} corpus is over ten times larger, the overall statistics are
 similar.
 
 \begin{table}
-\begin{tabular}{l|ccc}
-& Wiki & 20K Leagues \\
+\begin{tabular}{l|ccc|c}
+& \multicolumn{3}{c}{Wiki} & 20K \\
+& \small Train & \small Dev & \small Test & Leagues \\
 \hline
-\multicolumn{3}{l}{\footnotesize Over entire corpus} \\
-\# terminal nodes & 158,771 & 12,355 \\
-\# nodes & 379,051 & 30,487 \\
-\# edges & 388,589 & 31,215 \\
-\# remote edges & 5,745 & 629 \\
-\# non-terminal nodes & 220,280 & 18,132 \\
-\# implicit nodes & 1,099 & 241 \\
-%\% non-terminals & 58.11 & 59.47 \\
-\multicolumn{3}{l}{\footnotesize Out of edges} \\
-\% remote & 1.48 & 2.02 \\
-\multicolumn{3}{l}{\footnotesize Out of non-terminals} \\
-\% multiple parents & 7.66 & 7.91 \\
-\% discontinuous & 0.88 & 1.31 \\
-\% implicit & 0.5 & 1.33 \\
-\multicolumn{3}{l}{\footnotesize Average per non-terminal} \\
-\# parents & 1.07 & 1.07 \\
-\# children & 1.7 & 1.63 \\
-\multicolumn{3}{l}{\footnotesize Average per sentence} \\
-\# terminal nodes & 29.8 & 23.7 \\
-\# non-terminal nodes & 41.4 & 34.7 \\
+\# passages & 281 & 35 & 43 & 154 \\
+\# sentences & 4021 & 537 & 608 & 522 \\
+\hline
+\# nodes & 277,587 & 40,700 & 45,047 & 29,965 \\
+\% terminal & 42.41 & 42.8 & 42.66 & 41.23 \\
+\% non-term. & 57.59 & 57.20 & 57.34 & 58.77 \\
+\% implicit & 0.29 & 0.35 & 0.27 & 0.8 \\
+\% linkage & 0.92 & 0.96 & 0.9 & 1.25 \\
+\% discont. & 0.52 & 0.55 & 0.47 & 0.79 \\
+\hline
+\# edges & 272,018 & 39,660 & 44,139 & 28,723 \\
+\% primary & 95.37 & 95.70 & 95.90 & 94.48 \\
+\% remote & 1.69 & 1.24 & 1.32 & 2.19 \\
+\% linkage & 2.94 & 3.06 & 2.78 & 3.33 \\
+\hline
+\multicolumn{3}{l}{\footnotesize Average per non-linkage non-terminal node} \\
+\# parents & 0.98 & 0.97 & 0.98 & 0.95 \\
+\# children & 1.67 & 1.67 & 1.67 & 1.61 
 \end{tabular}
-\caption{Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.}
+\caption{Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.
+All counts exclude the root node.
+}
 \label{table:data}
 \end{table}
 
@@ -932,7 +933,7 @@ predict trees.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Results}
 
-\tabref{table:convert} presents the results of our main experiments, as well as
+\tabref{table:results} presents the results of our main experiments, as well as
 upper bounds for the conversion-based methods.
 \textsc{bcs} obtains comparable F-scores to MaltParser and \textsc{uparse}
 in terms of primary edges, but unlike them, is able to predict some
@@ -1001,8 +1002,7 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
   and when trained on UCCA trees, obtained by removing remote edges (\textsc{bcs}$_{\mathrm{Tree}}$).
   Bottom: results for \textsc{bcs} and \textsc{bcs}$_{\mathrm{Tree}}$ when tested on out-of-domain data.
 }
-
-\label{table:convert}
+\label{table:results}
 \end{table}
 
 
