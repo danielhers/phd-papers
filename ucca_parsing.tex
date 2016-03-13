@@ -136,16 +136,16 @@ case\footnote{While the task is not specific to UCCA,
 and pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
 by developing conversion protocols between UCCA structures and two related formalisms:
-dependency trees and discontiguous constituency trees.
+dependency trees and discontinuous constituency trees.
 We are not aware of any statistical constituency DAG parsers, and specifically not
-ones that support discontiguous constituents, as required for a broad-coverage
+ones that support discontinuous constituents, as required for a broad-coverage
 parser (for discussion of this point in the context of syntactic parsing, see
 \cite{kallmeyer2013data,pitler2015linear}).
 Consequently, the conversion necessarily loses information, but 
 we find that it is nonetheless effective
 in practice (\secref{sec:conversion_approach}).
 Second, we present a novel transition-based
-constituency DAG parser that supports discontiguous constituents, named
+constituency DAG parser that supports discontinuous constituents, named
 the \textsc{bcs} parser (\secref{sec:direct_approach}).
 
 We apply the parsing approaches both to an in-domain and out-of-domain scenarios,
@@ -321,7 +321,7 @@ requires that the alignment between words and logical symbols be automatically
 (and imprecisely) detected, and complicates the parsing task.
 Transition-based approach has been applied to AMR parsing by \newcite{wang2015transition},
 but their approach involved first syntactically parsing the input, and then converting
-the resulting tree into an AMR, unlike the \textsc{BCS} parser which performs parsing in a single step.
+the resulting tree into an AMR, unlike the \textsc{bcs} parser which performs parsing in a single step.
 
 Another line of work that addresses parsing into elaborate semantic structures
 is that of Broad-coverage Semantic Dependency Parsing (SDP) \cite{oepen2014semeval,oepen2015semeval}.
@@ -329,8 +329,8 @@ Like AMR, SDP also addresses a wide range of argument structures (including verb
 adjectival ones) and the inter-relations between them, but uses word-to-word dependency structures.
 Three representation approaches have been studied:
 the Prague Dependency Treebank tectogrammatical layer \cite{bohmova2003prague},
-HSPG-derived parsers using the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
-and dependencies derived from the Lingo ERG Minimal Recursion Semantics represenations \cite{Flic:02}.
+HPSG-derived parsers using the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
+and dependencies derived from the Lingo ERG Minimal Recursion Semantics representations \cite{Flic:02}.
 %An alternative line of work tackles parsing into grounded semantic representations.
 %Most work of this strand represent semantics using dependency structures,
 %as has been explored in two recent SemEval shared tasks \cite{oepen2014semeval,oepen2015semeval}.
@@ -346,7 +346,7 @@ leading to unsystematic treatment of these cases \cite{schwartz2011neutralizing,
 Taking a constituency-based approach to semantic parsing,
 we use the annotated UCCA corpora, a broad-coverage semantic annotation scheme that
 represents predicate-argument structures (verbal, nominal, adjectival and others),
-the inter-relations between them, in addition to other major semanitc phenomena.
+the inter-relations between them, in addition to other major semantic phenomena.
 UCCA builds on an established framework
 for typological description, ``Basic Linguistic Theory''
 \cite{Dixon:10b,Dixon:10a,Dixon:12}, as well as on the Cognitive Linguistics literature,
@@ -398,12 +398,12 @@ decisions \cite[and much subsequent work]{Nivre03anefficient}.
 
 Despite being based on local decisions, transition-based methods have yielded excellent
 results in a variety of parsing tasks. Within syntactic dependencies parsing, transition-based methods
-have been successfully applied to corproa in many languages and domains, yielding some
+have been successfully applied to corpora in many languages and domains, yielding some
 of the best reported results \cite{dyer2015transition,ballesteros2015improved}. 
 The approach has also yielded results comparable with the state-of-the-art when applied
 to constituency parsing \cite{sagae2005classifier,zhu2013fast}, and has been recently extended to
-discontiguous constituency parsing \cite{maier2015discontinuous},
-yielding improvements over in the parsing of discontiguous constituents in German.
+discontinuous constituency parsing \cite{maier2015discontinuous},
+yielding improvements over in the parsing of discontinuous constituents in German.
 Transition-based parsers have also been developed for dependency DAG structures
 \cite{sagae2008shift,tokgoz2015transition} and CCG parsing \cite{ambati2015incremental}.
 Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
@@ -464,7 +464,7 @@ Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
 
 We begin by assessing the ability of existing technology to address the task,
 by taking a conversion-based approach. Training proceeds by 
-convering the constituency DAGs into the target representation,
+converting the constituency DAGs into the target representation,
 and training an existing parser for that representation on the converted representations.
 We test the parsers by applying the resulting parser to the text of the test set,
 and converting back to the original constituency DAG format, where they are compared
@@ -481,7 +481,7 @@ For each token $w_i$ ($i=1, \ldots, n$) there exists a leaf (or a terminal) $t_i
 
 \paragraph{Conversion to Constituency Trees.}
 We convert constituency DAGs to constituency trees by removing a subset of the edges.
-As the original constituency DAGs may contain discontiguous units, the resulting trees
+As the original constituency DAGs may contain discontinuous units, the resulting trees
 may also have contain such units.
 Specifically, when converting UCCA structures, we note that UCCA marks one of the incoming edges
 for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges.
@@ -884,10 +884,10 @@ In all cases, punctuation marks are excluded from the evaluation, but not from t
 %constituency representation and \textsc{CoNLL-X} as the format for dependency representation.
 
 \paragraph{Conversions.}
-We explore two conversion scenarios: one into (possibly discontiguous) constituency trees,
+We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
 and one into CoNLL-style dependencies. In the first setting we experiment with \textsc{uparse},
 the only transition-based constituency parser, to our knowledge, able to parse trees with
-discontiguous constituents.
+discontinuous constituents.
 In the second setting we use the MaltParser with arc-standard and
 arc-eager transition sets \cite{nivre2007maltparser},
 and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
@@ -919,7 +919,7 @@ We further report upper bounds for the conversion-based methods, by applying
 the conversion and inverse conversion on the gold standard graphs and comparing
 them to the original gold standard.
 
-\paragraph{\textsc{BCS} Parser.}
+\paragraph{\textsc{bcs} Parser.}
 We use a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
 We use an \textsc{Importance} value of 2, doubling the weight updates
 for gold \textsc{Swap} transitions to address the sparseness
@@ -1012,7 +1012,7 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 We have defined the broad-coverage semantic constituency parsing task,
 and explored two complementary parsing approaches to tackle it.
 Conversion-based parsing procedures assess the ability of existing
-technology to address the task, and the novel \textsc{BCS} parser first
+technology to address the task, and the novel \textsc{bcs} parser first
 explores parsing into constituency DAG representations.
 The work makes a further contribution by first experimenting on UCCA parsing.
 Results show that UCCA can already be parsed with 69.3\% F-score,
