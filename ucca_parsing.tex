@@ -179,7 +179,7 @@ All converters, parsers and datasets will be made publicly available upon public
 
 \begin{figure}
 
-  \begin{tikzpicture}[level distance=12mm, ->]
+  \begin{tikzpicture}[level distance=10mm, ->]
     \node (ROOT) [fill=black, circle] {}
       child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
       child {node (graduation) [fill=black, circle] {}
@@ -199,10 +199,10 @@ All converters, parsers and datasets will be made publicly available upon public
       } edge from parent node[left] {\scriptsize $H$} }
       ;
     \node (LKG) at (-2,0) [fill=black!20, circle] {};
-    \draw[bend left,dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
-    \draw (LKG) to node [auto] {\scriptsize $LR$} (After);
-    \draw (LKG) to node [auto] {\scriptsize $LA$} (graduation);
-    \draw (LKG) to node [auto] {\scriptsize $LA$} (moved);
+    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+    \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
+    \draw[bend right] (LKG) to node [auto, below] {\scriptsize $LA$} (graduation);
+    \draw[bend left] (LKG) to[out=30, in=90, edge node={node [above] {\scriptsize $LA$}}] (moved);
   \end{tikzpicture}
   \\
   \begin{tikzpicture}[level distance=12mm, ->,
@@ -227,7 +227,8 @@ All converters, parsers and datasets will be made publicly available upon public
   \end{tikzpicture}
 \caption{\label{fig:ucca_example1}
   UCCA graphs for the sentences ``After graduation, John moved to Paris.'' and ``John decided to take a quick shower.''
-  The first sentence demonstrates a linkage relation, and the second sentence exhibits a discontinuous unit (``take a shower'').
+  The first sentence demonstrates a linkage relation (the gray node and its outgoing edges),
+  and the second sentence exhibits a discontinuous unit (``take a shower'').
   Both sentences have a remote edge (the dashed lines), where the node ``John'' has multiple parents.
 }
 \end{figure}
