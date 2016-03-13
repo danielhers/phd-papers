@@ -557,8 +557,10 @@ we add its members as terminals to the constituency tree
 and create a pre-terminal parent for each,
 with an edge labeled as \textit{Terminal} between them.
 The parents of the pre-terminals are determined by the terminal's parent in the dependency
-tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $T_d$. We add an intermediate node inbetween if $t$ has any dependents in $T_d$, to allow adding their pre-terminals as children.
-We need to determine the label for all of the intermediate edges introduced in this process, since they were not originally in $T_d$. We use a set of rules for this purpose (denoted by $\mathrm{Label}(u)$; we choose the label $C$ (\textit{center}) in most cases).
+tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $T_d$. We add an intermediate node in between if $t$ has any dependents in $T_d$,
+to allow adding their pre-terminals as children.
+Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$.
+In practice, it mostly selects the label $C$ (Center).
 
 \begin{algorithm}
  \KwData{dependency tree $T_d=(V_d,E_d,\ell_d)$}
@@ -670,7 +672,10 @@ Concretely, \textsc{Node$_X$} creates a new node on the buffer as a parent of th
 %\textsc{Implicit$_X$} acts similarly, but the created node is a child instead,
 %and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
 
-\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}. We distinguish between these two pairs of transitions, for the parser to be able to predict whether an edge is a primary or a remote one.
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a primary new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. As a UCCA node may only
+have one incoming primary edge, \textsc{Edge} transitions are disallowed where the child node already
+has an incoming primary edge\oa{is that correct?}.
+\textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}. We distinguish between these two pairs of transitions, for the parser to be able to predict whether an edge is a primary or a remote one.
 In order to allow nodes to have multiple parents, node and edge transitions do not automatically
 apply \textsc{Reduce}. This is in line with other work on
 transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transition}.
@@ -884,30 +889,28 @@ We explore two conversion scenarios: one into (possibly discontiguous) constitue
 and one into CoNLL-style dependencies. In the first setting we experiment with \textsc{uparse},
 the only transition-based constituency parser, to our knowledge, able to parse trees with
 discontiguous constituents.
-In the second setting we use the MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser \cite{dyer2015transition}.
+In the second setting we use the MaltParser with arc-standard and
+arc-eager transition sets \cite{nivre2007maltparser},
+and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
 In the MaltParser, we use both SVM and perceptron classifiers, and report
-the results obtained with the SVM classifier, which are about 1\% F-score higher.
-%different transition systems and local classifiers.
-As the different
-settings yield similar results\oa{give a ballpark estimate of the difference},
-we only report those of the highest
-scoring configuration, using the \texttt{nivreeager} transitions
-and the \texttt{libsvm} SVM classifier.
-Apart from that, we use the default settings for all parsers.
-\footnote{We note that only \textsc{uparse} uses beam search by default,
-  with a beam size of 4.}
+results obtained with the SVM classifier, which are about 1\% F-score higher.
 
-The LSTM parser uses the arc-standard transition set, and the MaltParser
-running MaltParser with arc-standard yielded nearly the same
-scores as arc-eager. \textsc{uparse}, in contrast, uses a larger transition
-set that allows discontinuous constituency tree parsing.
-\textsc{bcs} expands this set further, allowing for DAG parsing
-and UCCA-specific features.
+We use the default settings for all parsers.
+We note that \textsc{uparse} uses beam search by default,
+with a beam size of 4, where the other parsers use greedy search.\oa{is that true
+  for LSTM too?}
 
-Another parameter of variation is the classifier used by each of the parsers.
-The LSTM parser is based on neural networks, whereas the highest scores for
-MaltParser were obtained with an SVM classifier.
-Both \textsc{uparse} and \textsc{bcs} use a linear classifier.
+%The LSTM parser uses the arc-standard transition set, and the MaltParser
+%running MaltParser with arc-standard yielded nearly the same
+%scores as arc-eager. \textsc{uparse}, in contrast, uses a larger transition
+%set that allows discontinuous constituency tree parsing.
+%\textsc{bcs} extends this set further, allowing for DAG parsing
+%and UCCA-specific features.
+
+%Parsers parameter of variation is the classifier used by each of the parsers.
+%The LSTM parser is based on neural networks, whereas the highest scores for
+%MaltParser were obtained with an SVM classifier.
+%Both \textsc{uparse} and \textsc{bcs} use a linear classifier.
 
 %We omit linkage edges and nodes, as these are not evaluated
 %by the evaluation metrics yet and are not an essential part of the
@@ -965,17 +968,18 @@ The conversion to dependency format loses considerably more information, since a
 Both conversions yield zero scores on remote edges, since these are invariably removed when converting to trees.
 
 \begin{table}[ht]
-  \small
+  \scalebox{.8}{
 \begin{tabular}{l|ccc|ccc}
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Constituency Tree Conversion} \\
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Conversion} \\
 \textsc{uparse} & 58 & 59.8 & 58.7 & $-$ & 0 & 0 \\
 Upper Bound & 100 & 100 & 100 & $-$ & 0 & 0 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Dependency Tree Conversion} \\
-Malt & 61.1 & 56.5 & 58.7 & $-$ & 0 & 0 \\
+MALT_{arc-std} &  &  &  & $-$ & 0 & 0 \\
+MALT_{arc-eager} & 61.1 & 56.5 & 58.7 & $-$ & 0 & 0 \\
 LSTM & {\bf 71.8} & {\bf 67} & {\bf 69.3} & $-$ & 0 & 0 \\
 Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \hline
@@ -987,16 +991,17 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \textsc{bcs} & 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
 \textsc{bcs}$_{\mathrm{Tree}}$ & 60.2 & 52.8 & 56.2 & $-$ & 0 & 0 \\
 \end{tabular}
+}
 \caption{\small
-  Results of the main experiments. The columns correspond to labeled precision,
+  Main experimental results in percents. Columns correspond to labeled precision,
   recall and F-score for the different parsers, for both primary (left-hand side)
   and remote (right-hand side) edges. Top: results for \textsc{uparse}
-  after conversion to constituency tree annotation. Upper middle: results for
-  MaltParser and the LSTM parsers after conversion to dependency tree annotation.
+  after conversion to constituency tree annotation. Upper middle: results for the
+  MaltParser arc-eager and arc-standard, as well as
+  the LSTM parser after conversion to dependency tree annotation.
   Lower middle: results for our \textsc{bcs} parser, when trained on the complete UCCA DAGs (\textsc{bcs}),
   and when trained on UCCA trees, obtained by removing remote edges (\textsc{bcs}$_{\mathrm{Tree}}$).
   Bottom: results for \textsc{bcs} and \textsc{bcs}$_{\mathrm{Tree}}$ when tested on out-of-domain data.
-  Results are in percents.
 }
 
 \label{table:convert}
@@ -1010,35 +1015,46 @@ We have defined the broad-coverage semantic constituency parsing task,
 and explored two complementary parsing approaches to tackle it.
 Conversion-based parsing procedures assess the ability of existing
 technology to address the task, and the novel \textsc{BCS} parser first
-explores parsing in constituency DAG representations.
+explores parsing into constituency DAG representations.
 The work makes a further contribution by first experimenting on UCCA parsing.
 Results show that UCCA can already be parsed with 69.3\% F-score,
 and suggests means for improvement by taking an LSTM-based
 approach to the local classifier of \textsc{bcs}.
-The quality of the results is emphasized by UCCA's inter-annotator agreement on primary edges (often
-taken as an upper bound), of a little over 80\% F-score \cite{abend2013universal}.
+The quality of the results is underscored by UCCA's inter-annotator
+agreement on primary edges (often taken as an upper bound),
+80--85\% F-score \cite{abend2013universal}.
 
-We have conducted additional experiments, not included in this work. We will briefly review their results:
-(1) We applied the parsers to complete paragraphs, without splitting to sentences. MaltParser and the LSTM parser reached nearly the same scores as in the sentence experiments, but \textsc{uparse} and \textsc{bcs} failed to run with input above 500 tokens, for technical reasons.
-(2) We tried including linkage nodes and edges and implicit nodes when running the \textsc{bcs} parser, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
-(3) We created a conversion procedure to SDP (semantic dependency parsing), an additional dependency format that allows multiple parents \cite{oepen2015semeval}. The resulting upper bound for primary edges was similar to the \textsc{CoNLL} format, but for remote edges it was as high as 68.6\% labeled F-score. We did not evaluate dependency DAG parsers \cite{sagae2008shift,tokgoz2015transition} on this format since we could not obtain their code.
+In order to allow insight into the contribution of each of the feature sets,
+we conduct feature ablation experiments, and report results on the development set.
+Results show ...
 
-The availability of a UCCA parser first allows to apply UCCA to downstream applications,
-and to further empirically test its support for semantic tasks.
+\oa{Consider including paragraph-level parsing results, and results on \textsc{BCS}
+  applied to the converted broad-coverage semantic dependencies dataset.}.
+
+%We will briefly review their results:
+%(1) We applied the parsers to complete paragraphs, without splitting to sentences. MaltParser and the
+%LSTM parser reached nearly the same scores as in the sentence experiments, but \textsc{uparse}
+%and \textsc{bcs} failed to run with input above 500 tokens, for technical reasons.
+%%%%%%%(2) We tried including linkage nodes and edges and implicit nodes when running the \textsc{bcs} parser, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
+%(3) We created a conversion procedure to SDP (semantic dependency parsing), an additional dependency format that allows multiple parents \cite{oepen2015semeval}. The resulting upper bound for primary edges was similar to the \textsc{CoNLL} format, but for remote edges it was as high as 68.6\% labeled F-score. We did not evaluate dependency DAG parsers \cite{sagae2008shift,tokgoz2015transition} on this format since we could not obtain their code.
+
+The availability of a UCCA parser first allows to apply UCCA to
+downstream applications, and to empirically test its contribution for semantic tasks.
 Major efforts to incorporate semantic structure within downstream NLP application
-is currently underway in several
-domains, such as machine translation \cite{jones2012semantics} and
-summarization \cite{liu2015toward}.
-Introducing further candidate representations into these inquiries
-is thus appealing and timely.
+are currently underway in several domains,
+such as machine translation \cite{jones2012semantics} and summarization \cite{liu2015toward}.
+We believe that UCCA's merits in providing a cross-linguistically applicable, coarse-grained
+annotation is likely to support a wide range of semantic applications, and to contribute to
+the ongoing discussion on the optimal characterization of semantic representation in NLP.
 
-Future work will further explore improvements to the two presented approaches.
-As our experiments suggest that a neural network classifier is likely to substantially boost the parser
-results of the \textsc{bcs} parser, we intend to explore this angle, as well as explore its applicability
-to other related parsing tasks. Second, we intend to conduct further studies of the relations
-between the different annotation schemes, both to allow more effective conversion tools between
-them, and thus better re-use of technology, and for gaining insight into the optimal means for
-representing semantic structure in NLP.
+Future work will further explore improvements to the presented parsing approaches.
+We intend to pursue the incorporation of neural network classification methods to
+improve parser performance, following our encouraging results in this respect.
+Second, while much recent work focused on semantic parsing of different types,
+the relations between the different representations are far from being clear.
+We intend to apply conversion-based parsing approaches both to allow better re-use
+of parsing technology, and to shed light on the commonalities and differences
+between representations, suggesting ways to optimally design them.
 
 %\paragraph{Improving the conversion procedure.}
 %Several decision have to be made in the conversion between dependency and constituency annotation.
