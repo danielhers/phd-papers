@@ -21,7 +21,8 @@
 \usepackage{tikz}
 \usepackage{tikz-dependency}
 \usetikzlibrary{shapes,fit,calc,er,positioning,intersections,decorations.shapes,mindmap,trees}
-\tikzset{decorate sep/.style 2 args={decorate,decoration={shape backgrounds,shape=circle,shape size=#1,shape sep=#2}}}
+\tikzset{decorate sep/.style 2 args={decorate,decoration={shape backgrounds,shape=circle,
+      shape size=#1,shape sep=#2}}}
 
 \newcommand{\oa}[1]{\footnote{\color{red} #1}}
 \newcommand{\daniel}[1]{\footnote{\color{blue} #1}}
@@ -179,7 +180,7 @@ All converters, parsers and datasets will be made publicly available upon public
 
 \begin{figure}
   \scalebox{.9}{
-  \begin{tikzpicture}[level distance=12mm, ->]
+  \begin{tikzpicture}[level distance=10mm, ->]
     \node (ROOT) [fill=black, circle] {}
       child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
       child {node (graduation) [fill=black, circle] {}
@@ -199,10 +200,16 @@ All converters, parsers and datasets will be made publicly available upon public
       } edge from parent node[right] {\scriptsize $H$} }
       ;
     \node (LKG) at (-2,0) [fill=black!20, circle] {};
-    \draw[bend left,dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
-    \draw (LKG) to node [near start, left] {\scriptsize $$} (After);
-    \draw (LKG) to node [near start, left] {\scriptsize $$} (graduation);
-    \draw (LKG) to node [near start, right] {\scriptsize $$} (moved);
+%<<<<<<< HEAD
+%    \draw[bend left,dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+%    \draw (LKG) to node [near start, left] {\scriptsize $$} (After);
+%    \draw (LKG) to node [near start, left] {\scriptsize $$} (graduation);
+%    \draw (LKG) to node [near start, right] {\scriptsize $$} (moved);
+%=======
+    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+    \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
+    \draw[bend right] (LKG) to node [auto, below] {\scriptsize $LA$} (graduation);
+    \draw[bend left] (LKG) to[out=30, in=90, edge node={node [above] {\scriptsize $LA$}}] (moved);
   \end{tikzpicture}
   }
   \\
@@ -233,10 +240,11 @@ All converters, parsers and datasets will be made publicly available upon public
   ``After graduation, John moved to Paris.'' and ``John decided to take a quick shower.''
   Both sentences have a remote edge (dashed),
   resulting in ``John'' having two parents.
-  The first sentence includes a linkage relation,
+  The first sentence includes a linkage relation (gray node and its outgoing edges)
   and the second sentence exhibits a discontinuous unit (``take a ... shower'').
   Partial legend: $P$ -- a Scene's main relation, $A$ -- participant,
   $L$ -- inter-scene linker, $H$ -- linked Scene, $F$ -- function unit.
+  Pre-terminal nodes are omitted for brevity.
 }
 \end{figure}
 
@@ -349,11 +357,14 @@ Czech, support for rapid annotation, and semantic stability in translation: UCCA
 annotations of translated text usually contain the same set of relationships
 \cite{sulem2015conceptual}.
 
-Formally, a UCCA structure is a constituency DAG, whose leaves correspond to the words of the text. The nodes of the graph, called ``units'', are either terminals or several elements (not necessarily contiguous) jointly viewed as a single entity according to some semantic or cognitive consideration.
+Formally, a UCCA structure is a constituency DAG, whose leaves correspond to the words of the text. The
+nodes of the graph, called ``units'', are either terminals or several elements (not necessarily contiguous)
+jointly viewed as a single entity according to some semantic or cognitive consideration.
 Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents. 
 The most basic notion is the {\it Scene}, which describes a movement, an action or a state.
 Each Scene contains one main relation, or anchor, as well as one or more participants.
-For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes, whose main relations are ``graduation'' and ``moved''. The participant ``John'' is a part of both Scenes, while ``Paris'' only of the latter.
+For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes,
+whose main relations are ``graduation'' and ``moved''. The participant ``John'' is a part of both Scenes, while ``Paris'' only of the latter.
 The two Scenes in this sentence are both arguments in the \textit{linkage relation} ``After'', in this case expressing temporal linkage between them.
 For example, the sentence ``John decided to take a shower'' contains two Scenes, whose main relations are ``decided'' and ``take a shower'', and where the second Scene is a participant in the first.
 The participant ``John'' is a part of both Scenes, but is marked as a \textit{remote} participant in
@@ -536,11 +547,9 @@ are thus sufficient for determining which of $u$'s children contains the head no
 \end{algorithm}
 
 The inverse conversion introduces non-terminal nodes back into the tree.
-As the distinction
-between low- and high-attaching nodes is lost in the constituency to
-dependency conversion,
-we heuristically assume that attachments are always
-high-attaching\oa{did you check any other options?}.
+As the distinction between low- and high-attaching nodes is lost in the constituency to
+dependency conversion, we heuristically assume that attachments are always
+high-attaching.
 
 Assume $T_d=(V_d,E_d,\ell_d)$ is a dependency tree.
 We begin by creating a root node $r$.
@@ -703,6 +712,8 @@ for the novel \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} transitions
 
 % FEATURES
 \begin{figure}
+  \begin{adjustbox}{margin=3pt,frame}
+
 \begin{tabular}{>{\small}l}
 {Features from \cite{zhang2009transition}:} \\
 \textbf{unigrams} \\
@@ -744,6 +755,8 @@ $a_0we, a_1we$ \\
 {\footnotesize Novel, UCCA-specific features:} \\
 $s_0R, s_0wR, b_0R, b_0wR$
 \end{tabular}
+\end{adjustbox}
+
 \caption{\small\label{fig:features}
   Feature templates for the \textsc{bcs} parser. Notation:
   $s_i$, $b_i$ are the $i$th stack and buffer items, respectively.
@@ -769,7 +782,7 @@ to be included in the model). Inference is performed greedily (i.e., without bea
 For training the local classifier, we use a dynamic oracle \cite{goldberg2012dynamic},
 i.e., an oracle that outputs a set of optimal transitions: when any of them
 is applied to the current parser state, the gold
-standard graph is reachable from the resulting state.\oa{is that right?}.
+standard graph is reachable from the resulting state.
 For example, the oracle would predict a \textsc{Node} transition if the stack 
 has on its top a parent in the gold graph that hasn't been created,
 but would predict a \textsc{Right-Edge} transition if the second stack
@@ -828,14 +841,14 @@ similar.
 \end{table}
 
 %Our conversion tools and direct parser are implemented in Python.
-We use passages of indices 1--655
+We use passages of indices up to 655
 of the \textit{Wiki} corpus as our training set, passages 656--700 as development set,
 and passages 701--695 as in-domain test set.
 While UCCA edges can cross sentence boundaries, we adhere to the common
 practice in semantic parsing and train our parsers on individual sentences,
 discarding inter-relations between them (0.18\% of the edges).
 We also discard linkage nodes and edges, as they often express inter-sentence
-relations and are often redundant when applied at the sentence level.
+relations and are thus mostly redundant when applied at the sentence level.
 In the out-of-domain experiments, we apply the same parser
 (trained on the \textit{Wiki} corpus) to the entire \textit{20K Leagues}
 corpus as test set, without re-tuning any parameters.
@@ -878,8 +891,10 @@ and one into CoNLL-style dependencies. In the first setting we experiment with \
 the only transition-based constituency parser, to our knowledge, able to parse trees with
 discontiguous constituents.
 In the second setting we use the MaltParser \cite{nivre2007maltparser} and the stack LSTM-based parser \cite{dyer2015transition}.
-We experiment with different settings of MaltParser, including
-different transition systems and local classifiers. As the different
+In the MaltParser, we use both SVM and perceptron classifiers, and report
+the results obtained with the SVM classifier, which are about 1\% F-score higher.
+%different transition systems and local classifiers.
+As the different
 settings yield similar results\oa{give a ballpark estimate of the difference},
 we only report those of the highest
 scoring configuration, using the \texttt{nivreeager} transitions
@@ -1006,13 +1021,13 @@ The work makes a further contribution by first experimenting on UCCA parsing.
 Results show that UCCA can already be parsed with 69.3\% F-score,
 and suggests means for improvement by taking an LSTM-based
 approach to the local classifier of \textsc{bcs}.
+The quality of the results is emphasized by UCCA's inter-annotator agreement on primary edges (often
+taken as an upper bound), of a little over 80\% F-score \cite{abend2013universal}.
 
-Further experiments we have conducted are
-(1) parsing complete paragraphs without splitting to sentences,
-(2) including linkage edges and implicit nodes (by an additional transition) in the \textsc{bcs} parser,
-(3) removing features from the \textsc{bcs} parser to evaluate their importance,
-and (4) conversion to other formats (specifically, semantic dependency parsing \cite{oepen2015semeval}, which allows multiple parents).
-We did not evaluate a DAG parser \cite{tokgoz2015transition} on the dependency format, since we could not find an available one.
+We have conducted additional experiments, not included in this work. We will briefly review their results:
+(1) We applied the parsers to complete paragraphs, without splitting to sentences. MaltParser and the LSTM parser reached nearly the same scores as in the sentence experiments, but \textsc{uparse} and \textsc{bcs} failed to run with input above 500 tokens, for technical reasons.
+(2) We tried including linkage nodes and edges and implicit nodes when running the \textsc{bcs} parser, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
+(3) We created a conversion procedure to SDP (semantic dependency parsing), an additional dependency format that allows multiple parents \cite{oepen2015semeval}. The resulting upper bound for primary edges was similar to the \textsc{CoNLL} format, but for remote edges it was as high as 68.6\% labeled F-score. We did not evaluate dependency DAG parsers \cite{sagae2008shift,tokgoz2015transition} on this format since we could not obtain their code.
 
 The availability of a UCCA parser first allows to apply UCCA to downstream applications,
 and to further empirically test its support for semantic tasks.
