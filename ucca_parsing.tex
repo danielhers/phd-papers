@@ -145,7 +145,7 @@ is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
 
 Second, we present a novel transition-based broad-coverage DAG parser, named
-the \textsc{bss} parser (\secref{sec:direct_approach}).
+\textsc{bsp} (Broad-coverage Semantic Parser) (\secref{sec:direct_approach}).
 This parser combines techniques from transition-based discontiguous constituency parsing \cite{maier2015discontinuous} and transition-based dependency DAG parsing \cite{tokgoz2015transition}. In addition, we introduce new features for parsing BSS and UCCA specifically.
 
 %and tackle the constituency-based semantic parsing task.
@@ -187,7 +187,7 @@ All converters, parsers and datasets will be made publicly available upon public
 %First, we motivate and define the constituency broad-coverage semantic parsing task.
 %Second, we create converters and study the ability of existing parsing technology
 %for formally related settings to address the task, focusing on transition-based methods.
-%Third, we present the \textsc{bcs} parser, novel both in being the first constituency DAG parser,
+%Third, we present the \textsc{bsp}, novel both in being the first constituency DAG parser,
 %as well as the first UCCA parser. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -381,7 +381,7 @@ requires that the alignment between words and logical symbols be automatically
 (and imprecisely) detected, and complicates the parsing task.
 Transition-based approach has been applied to AMR parsing by \newcite{wang2015transition},
 but their approach involved first syntactically parsing the input, and then converting
-the resulting tree into an AMR, unlike the \textsc{bcs} parser which performs parsing in a single step.
+the resulting tree into an AMR, unlike the \textsc{bsp} which performs parsing in a single step.
 
 Another line of work that addresses parsing into elaborate semantic structures
 is that of Broad-coverage Semantic Dependency Parsing (SDP) \cite{oepen2014semeval,oepen2015semeval}.
@@ -722,7 +722,7 @@ $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & 
 \end{tabular}
 \end{adjustbox}
 \caption{\label{fig:transitions}
-  The transition set of the \textsc{bcs} parser. Following standard practice,
+  The transition set of the \textsc{bsp}. Following standard practice,
   we write the stack with its top to the right and the buffer with its head to the left.
   $(\cdot,\cdot)_X$ denotes an $X$-labeled edge, $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge,
   and $x^*$ an implicit node. $\mathrm{i}(x)$ is a running index for the created nodes.
@@ -822,7 +822,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
 \end{adjustbox}
 
 \caption{\small\label{fig:features}
-  Feature templates for the \textsc{bcs} parser. Notation:
+  Feature templates for the \textsc{bsp}. Notation:
   $s_i$, $b_i$ are the $i$th stack and buffer items, respectively.
   $w$ and $t$ are the word form and part-of-speech tag of the terminal returned by the $h^*(\cdot)$ function (\secref{subsec:con2dep}).
   $\emph{}$ is the edge label to the node returned by the $h(\cdot)$ function.
@@ -971,13 +971,13 @@ with a beam size of 4, where the other parsers use greedy search.
 %running MaltParser with arc-standard yielded nearly the same
 %scores as arc-eager. \textsc{uparse}, in contrast, uses a larger transition
 %set that allows discontiguous constituency tree parsing.
-%\textsc{bcs} extends this set further, allowing for DAG parsing
+%\textsc{bsp} extends this set further, allowing for DAG parsing
 %and UCCA-specific features.
 
 %Parsers parameter of variation is the classifier used by each of the parsers.
 %The LSTM parser is based on neural networks, whereas the highest scores for
 %MaltParser were obtained with an SVM classifier.
-%Both \textsc{uparse} and \textsc{bcs} use a linear classifier.
+%Both \textsc{uparse} and \textsc{bsp} use a linear classifier.
 
 %We omit linkage edges and nodes, as these are not evaluated
 %by the evaluation metrics yet and are not an essential part of the
@@ -988,12 +988,12 @@ We further report upper bounds for the conversion-based methods, by applying
 the conversion and inverse conversion on the gold standard graphs and comparing
 them to the original gold standard.
 
-\paragraph{\textsc{bcs} Parser.}
-Training \textsc{bcs} for 16 iterations, we use a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
+\paragraph{\textsc{bsp}.}
+Training \textsc{bsp} for 16 iterations, we use a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
 We use an \textsc{Importance} value of 2, doubling the weight updates
 for gold \textsc{Swap} transitions to address the sparseness
 of discontiguous structures, as in \cite{maier2015discontinuous}.
-We train \textsc{bcs} both where remote edges
+We train \textsc{bsp} both where remote edges
 are included, and when they are excluded from the training data, to allow
 more direct comparison with conversion-based methods that can only
 predict trees.
@@ -1003,28 +1003,28 @@ predict trees.
 
 \tabref{table:results} presents the results of our main experiments, as well as
 upper bounds for the conversion-based methods.
-\textsc{bcs} obtains comparable F-scores to MaltParser and \textsc{uparse}
+\textsc{bsp} obtains comparable F-scores to MaltParser and \textsc{uparse}
 in terms of primary edges, but unlike them, is able to predict some
 of the remote edges as well. 
-Removing remote edges from the training data of \textsc{bcs} does not
+Removing remote edges from the training data of \textsc{bsp} does not
 change results considerably on the primary edges,
 reducing them by 0.9\% F-score in the in-domain setting, but reduces
 them by the same amount when applied out-of-domain. Results on
 the out-of-domain settings are largely comparable with the in-domain
-results, supporting the robustness of the \textsc{bcs} results.
+results, supporting the robustness of the \textsc{bsp} results.
 
 The LSTM parser obtains the best results on primary edges,
 with a considerable margin. Importantly, it obtains more than
 10\% of F-score higher than MaltParser, which mostly differ
 from it in terms of the local classifier.
 This suggests that applying a similar LSTM-based approach to
-training \textsc{bcs} is likely to boost results considerably,
+training \textsc{bsp} is likely to boost results considerably,
 and further underscores the feasibility
 of the presented approach for semantic constituency parsing. 
 
 %too practically turns the structure into a constituency tree, and raises the scores above two of the conversion-based parsers. However, the stack LSTM-based parser of Dyer et al.~\shortcite{dyer2015transition} still reaches the highest score.
 
-%The \textsc{bcs} parser obtains scores that are nearly identical to \newcite{maier2015discontinuous}
+%The \textsc{bsp} obtains scores that are nearly identical to \newcite{maier2015discontinuous}
 %and Nivre et al.~\shortcite{nivre2007maltparser} on primary edges, but also correctly
 %predicts remote edges when trained on them.
 %Training without linkage edges and implicit nodes improve the scores on primary edges, as a more simple model is easier to learn.
@@ -1051,12 +1051,12 @@ LSTM & {\bf 73.2} & {\bf 66.2} & {\bf 69.2} & $-$ & 0 & 0 \\
 Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Direct Approach} \\
-\textsc{bcs} & 62.4 & 56 & 59 & 15.3 & 11.8 & 13.3 \\
-\textsc{bcs}$_{\mathrm{Tree}}$ & 63.8 & 56.5 & 59.9 & $-$ & 0 & 0 \\
+\textsc{bsp} & 62.4 & 56 & 59 & 15.3 & 11.8 & 13.3 \\
+\textsc{bsp}$_{\mathrm{Tree}}$ & 63.8 & 56.5 & 59.9 & $-$ & 0 & 0 \\
 \hhline{=======}
 \multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Out-of-domain} \\
-\textsc{bcs} & 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
-\textsc{bcs}$_{\mathrm{Tree}}$ & 60.2 & 52.8 & 56.2 & $-$ & 0 & 0 \\
+\textsc{bsp} & 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
+\textsc{bsp}$_{\mathrm{Tree}}$ & 60.2 & 52.8 & 56.2 & $-$ & 0 & 0 \\
 \end{tabular}
 }
 \caption{\small
@@ -1066,16 +1066,16 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
   after conversion to constituency tree annotation. Upper middle: results for the
   MaltParser arc-eager and arc-standard, as well as
   the LSTM parser after conversion to dependency tree annotation.
-  Lower middle: results for our \textsc{bcs} parser, when trained on the complete UCCA DAGs (\textsc{bcs}),
-  and when trained on UCCA trees, obtained by removing remote edges (\textsc{bcs}$_{\mathrm{Tree}}$).
-  Bottom: results for \textsc{bcs} and \textsc{bcs}$_{\mathrm{Tree}}$ when tested on out-of-domain data.
+  Lower middle: results for our \textsc{bsp}, when trained on the complete UCCA DAGs (\textsc{bsp}),
+  and when trained on UCCA trees, obtained by removing remote edges (\textsc{bsp}$_{\mathrm{Tree}}$).
+  Bottom: results for \textsc{bsp} and \textsc{bsp}$_{\mathrm{Tree}}$ when tested on out-of-domain data.
 }
 \label{table:results}
 \end{table}
 
 \paragraph{Feature ablation.}
 
-In another experiment, involving only \textsc{bcs}, we removed a set of features at a time, trained the resulting model (for 16 iterations, with the same parameters as in the main experiment) and evaluated it on the development set. Thus, we can evaluate the importance of each set of features. \tabref{table:ablation} shows the results of this experiment.
+In another experiment, involving only \textsc{bsp}, we removed a set of features at a time, trained the resulting model (for 16 iterations, with the same parameters as in the main experiment) and evaluated it on the development set. Thus, we can evaluate the importance of each set of features. \tabref{table:ablation} shows the results of this experiment.
 
 
 \begin{table}[ht]
@@ -1084,18 +1084,18 @@ In another experiment, involving only \textsc{bcs}, we removed a set of features
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\textsc{bcs} &  &  &  &  &  &  \\
-\textsc{bcs}$-$\textbf{unigrams} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{bigrams} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{trigrams} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{separator} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{extended} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{disco} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{counts} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{edges} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{history} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{remote} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{ratio} &  &  &  &  &  &
+\textsc{bsp} &  &  &  &  &  &  \\
+\textsc{bsp}$-$\textbf{unigrams} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{bigrams} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{trigrams} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{separator} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{extended} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{disco} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{counts} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{edges} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{history} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{remote} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{ratio} &  &  &  &  &  &
 \end{tabular}
 }
 \caption{\small
@@ -1114,12 +1114,12 @@ This table shows that although some of the features have a small positive contri
 We have defined the broad-coverage semantic constituency parsing task,
 and explored two complementary parsing approaches to tackle it.
 Conversion-based parsing procedures assess the ability of existing
-technology to address the task, and the novel \textsc{bcs} parser first
+technology to address the task, and the novel \textsc{bsp} first
 explores parsing into constituency DAG representations.
 The work makes a further contribution by first experimenting on UCCA parsing.
 Results show that UCCA can already be parsed with 69.3\% F-score,
 and suggests means for improvement by taking an LSTM-based
-approach to the local classifier of \textsc{bcs}.
+approach to the local classifier of \textsc{bsp}.
 The quality of the results is underscored by UCCA's inter-annotator
 agreement on primary edges (often taken as an upper bound),
 80--85\% F-score \cite{abend2013universal}.
@@ -1131,8 +1131,8 @@ agreement on primary edges (often taken as an upper bound),
 %We will briefly review their results:
 %(1) We applied the parsers to complete paragraphs, without splitting to sentences. MaltParser and the
 %LSTM parser reached nearly the same scores as in the sentence experiments, but \textsc{uparse}
-%and \textsc{bcs} failed to run with input above 500 tokens, for technical reasons.
-%%%%%%%(2) We tried including linkage nodes and edges and implicit nodes when running the \textsc{bcs} parser, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
+%and \textsc{bsp} failed to run with input above 500 tokens, for technical reasons.
+%%%%%%%(2) We tried including linkage nodes and edges and implicit nodes when running the \textsc{bsp}, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
 %(3) We created a conversion procedure to SDP (semantic dependency parsing), an additional dependency format that allows multiple parents \cite{oepen2015semeval}. The resulting upper bound for primary edges was similar to the \textsc{CoNLL} format, but for remote edges it was as high as 68.6\% labeled F-score. We did not evaluate dependency DAG parsers \cite{sagae2008shift,tokgoz2015transition} on this format since we could not obtain their code.
 
 The availability of a UCCA parser first allows to apply UCCA to
