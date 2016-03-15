@@ -13,7 +13,7 @@
 \usepackage[]{algorithm2e}
 \usepackage{hhline}
 \usepackage{multirow}
-\usepackage{caption}
+\usepackage[font=small]{caption}
 \usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage{color}
@@ -282,7 +282,7 @@ All converters and parsers will be made publicly available upon publication.
   \caption{}
   \label{fig:gave}
   \end{subfigure}
-  \caption{\small  \label{fig:examples}
+  \caption{\label{fig:examples}
     Semantic representation of the three structural properties
     required for BSS, according to the UCCA scheme. \figref{fig:graduation} includes a remote edge (dashed),
     resulting in ``John'' having two parents. % and a linkage relation (gray node and its outgoing edges).
@@ -739,7 +739,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
 \end{tabular}
 \end{adjustbox}
 
-\caption{\small\label{fig:features}
+\caption{\label{fig:features}
   Feature templates for the \textsc{bsp}. Notation:
   $s_i$, $b_i$ are the $i$th stack and buffer items, respectively.
   $w$ and $t$ are the word form and part-of-speech tag of the terminal returned by the $h^*(\cdot)$ function (\secref{subsec:con2dep}).
@@ -832,7 +832,7 @@ corpus as test set, without re-tuning any parameters.
 \# children & 1.67 & 1.67 & 1.67 & 1.61 
 \end{tabular}
 }
-\caption{\small Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.
+\caption{Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.
 All counts exclude the root node.
 }
 \label{table:data}
@@ -977,7 +977,7 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \textsc{bsp}$_{\mathrm{Tree}}$ & 60.2 & 52.8 & 56.2 & $-$ & 0 & 0 \\
 \end{tabular}
 }
-\caption{\small
+\caption{
   Main experimental results in percents. Columns correspond to labeled precision,
   recall and F-score for the different parsers, for both primary (left-hand side)
   and remote (right-hand side) edges. Top: results for \textsc{uparse}
@@ -1016,7 +1016,7 @@ In another experiment, involving only \textsc{bsp}, we removed a set of features
 \textsc{bsp}$-$\textbf{ratio} &  &  &  &  &  &
 \end{tabular}
 }
-\caption{\small
+\caption{
   Results in percents of the feature ablation experiment.
   See \figref{fig:features} for the definition of each feature set; \textbf{disco} refers to all discontiguous features, and \textbf{ratio} is the number of terminals divided by the total number of nodes (\secref{subsec:features}).
 }
