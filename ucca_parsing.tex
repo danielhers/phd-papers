@@ -34,6 +34,14 @@
 \DeclareMathOperator*{\argmax}{argmax}
 \SetKwRepeat{Do}{do}{while}
 
+\makeatletter
+\renewcommand{\paragraph}{
+  \@startsection{paragraph}{4}
+  {\z@}{.5ex \@plus .5ex \@minus .2ex}{-1em}
+  {\normalfont\normalsize\bfseries}
+}
+\makeatother
+
 %\aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
 
@@ -64,20 +72,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-  The representation of many common semantic phenomena requires
-  more formal expressivity than is commonly used for syntactic parsing.
-  %Recent work has focused on broad-coverage semantic parsing into dependency
-  %  (word to word) or abstract (i.e., not grounded in the sentence's
-  %words and phrases) representations.
-  Existing representations and parsers mostly support some of these structural
-  properties, which we term ``Broad-coverage semantic structures'' (BSS), but not all. 
-  The main contribution of this paper is in proposing two transition-based
-  techniques for parsing into BSS:
-  (1) applying conversion procedures to BSS, mapping them into related
-  formalisms, and using existing state-of-the-art parsers on the converted
-  representations; and (2) constructing a novel parser for the task.
+  The representation of many common semantic phenomena requires 
+  structural properties beyond those commonly used for syntactic parsing.
+  The paper discusses a set  structural properties, that should be supported
+  by semantic parsers, noting that existing parsers support some of these properties,
+  but not all.
+  %(representations supporting these properties are called {\it Broad-coverage Semantic Structures}, or BSS).
+  The main contribution of this paper is in proposing
+  two transition-based techniques for parsing such semantic structures:
+  (1) applying conversion procedures to the semantic structures,
+  mapping them into related formalisms, and using existing state-of-the-art
+  parsers on the converted representations;
+  and (2) constructing a parser that supports these properties.
   We obtain encouraging results, using the UCCA semantic representation, which
-  supports BSS, as a testbed.
+  supports our formal characterization, as a testbed.
   
   %We experiment with two types of semantic representations, obtaining
   %encouraging results.
@@ -98,36 +106,36 @@
 \section{Introduction}
 
 In order to support a full range of semantic structures, the following
-structural properties are needed. First, arguments and relations (semantic units, or simply
-units) that are shared between predicates are effectively represented as multi-parented nodes,
+structural properties are needed. First, arguments and relations (semantic units)
+that are shared between predicates are effectively represented as multi-parented nodes,
 yielding DAG, rather than tree structures. For instance, in the sentence
 ``After graduation, John moved to Paris'', ``John'' is an argument of both ``graduation''
 and ``moved'', yielding a DAG rather than tree structure (\figref{fig:graduation}).
 Second, semantic structures require non-terminal nodes for complex units.
 While bi-lexical dependencies partially circumvent this restriction, by
-representing complex units in terms of their heads, they fall short
+representing complex units in terms of their headwords, they fall short
 when representing units that have no clear head.
 Frequent examples of such constructions include
 coordination structures (e.g., ``{\bf John and Mary} went home''; \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the {\bf Have Nots}''),
 and prepositional phrases.
-Third, semantic units may be discontiguous in the text. For instance, in ``John gave everything up'' (\figref{fig:gave}),
-the phrasal verb ``gave ... up'' forms a single semantic unit.
-We call the combination of these three properties
+Third, semantic units may be discontiguous in the text. For instance, in ``John gave everything up''
+(\figref{fig:gave}), the phrasal verb ``gave ... up'' forms a single semantic unit.
+We call formal representations supporting all three properties
 {\it Broad-coverage Semantic Structures} (BSS).
 
 However, to our knowledge, no existing parser supports the combination of these criteria,
 and the only semantically-annotated corpora that supports them is UCCA \cite{abend2013universal}.
 Several other models either support some of these properties \cite{oepen2015semeval},
 or take an alternative approach and avoid grounding semantic units
-altogether (notably, AMR \cite{banarescu2013abstract}). We discuss related work in \secref{sec:related}.
+altogether (notably, AMR \cite{banarescu2013abstract}). See \secref{sec:background}.
 
-In this work we are thus first in proposing techniques for parsing BSS.
+In this work we are thus first in proposing techniques for BSS parsing.
 We adopt a transition-based approach, which has recently produced some of the best
 results in syntactic dependency parsing
 \cite{dyer2015transition,ballesteros2015improved}, and has demonstrated
-strong performance in a variety of other semantic and syntactic settings as well
-\cite{maier2015discontinuous,ambati2015incremental,wang2015transition}.
+strong performance in a variety of other semantic and syntactic settings as well,
+e.g., \cite{maier2015discontinuous,wang2015transition}.
 
 We pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
@@ -136,20 +144,23 @@ dependency trees and discontiguous constituency trees.
 As these formalisms are more restrictive than BSS, the conversion
 is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
+Second, we present a novel transition-based broad-coverage DAG parser,
+Broad-Coverage Semantic Parsing (BSP; \secref{sec:direct_approach}),
+based on extending existing transition-based parsing,
+with new transitions and features for parsing BSS and UCCA in particular.
 
-Second, we present a novel transition-based broad-coverage DAG parser, named
-\textsc{bsp} (\secref{sec:direct_approach}).
-We base our parser on existing techniques from transition-based parsing, with the addition of new features for parsing BSS and UCCA specifically.
-
-We use the English UCCA-annotated corpora \cite{abend2013universal} as a test
-case\footnote{While the task is not specific to UCCA,
-  to the best of our knowledge, UCCA's are the only
-  semantically annotated corpora that support all criteria of BSS.},
+We experiment with the English UCCA-annotated corpora \cite{abend2013universal}
+as a test case,
 and apply the parsing approaches both to in-domain and out-of-domain scenarios.
 Results are encouraging, with nealy 70\% labeled F-score for the highest
 scoring parser, and suggest concrete paths for further improvement.
+All converters and parsers will be made publicly available upon publication.
+
+
+%\footnote{While the task is not specific to UCCA,
+%  to the best of our knowledge, UCCA's are the only
+%  semantically annotated corpora that support all criteria of BSS.},
 %a small degradation with the transition to out-of-domain scenarios.
-All converters, parsers and datasets will be made publicly available upon publication.
 
 %A general parser for this setting must support the prediction of multiple parents,
 %as well as of discontiguous constituents, both pervasive phenomena in semantic
@@ -174,7 +185,7 @@ All converters, parsers and datasets will be made publicly available upon public
 %as well as the first UCCA parser. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Background}\label{sec:ucca}
+\section{Background}\label{sec:background}
 
 \begin{figure}
   \begin{subfigure}[t]{.5\textwidth}
@@ -199,11 +210,11 @@ All converters, parsers and datasets will be made publicly available upon public
         } edge from parent node[left] {\scriptsize $A$} }
       } edge from parent node[right] {\scriptsize $H$} }
       ;
-    \node (LKG) at (-1.8,0) [fill=black!20, circle] {};
-    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
-    \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
-    \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
-    \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
+    %\node (LKG) at (-1.8,0) [fill=black!20, circle] {};
+      %    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+      %    \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
+      %    \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
+%    \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
   }
   \caption{}
@@ -271,22 +282,15 @@ All converters, parsers and datasets will be made publicly available upon public
   \caption{}
   \label{fig:gave}
   \end{subfigure}
-  \label{fig:examples}
-  \caption{\small
-  UCCA graphs for three example sentences:
-  ``After graduation, John moved to Paris'',
-  ``John and Mary went home''
-  and ``John gave everything up.''
-  % and ``John decided to take a quick shower.''
-  The first sentence includes a remote edge (dashed),
-  resulting in ``John'' having two parents, and
-  a linkage relation (gray node and its outgoing edges).
-  The second sentence includes a coordination construction (``John and Mary'').
-  The third sentence includes a discontiguous unit (``gave ... up'').
-  Legend: $P$ -- a Scene's main relation, $A$ -- participant,
-  $L$ -- inter-scene linker, $H$ -- linked Scene, $F$ -- function unit,
-  $LA$ -- link argument, $LR$ -- link relation.
-  Pre-terminal nodes are omitted for brevity.
+  \caption{\small  \label{fig:examples}
+    Semantic representation of the three structural properties
+    required for BSS, according to the UCCA scheme. \figref{fig:graduation} includes a remote edge (dashed),
+    resulting in ``John'' having two parents. % and a linkage relation (gray node and its outgoing edges).
+    \figref{fig:home} includes a coordination construction (``John and Mary'').
+    \figref{fig:gave} includes a discontiguous unit (``gave ... up'').
+    Partial legend: $P$ -- a Scene's main relation, $A$ -- participant,
+    $L$ -- inter-scene linker, $H$ -- linked Scene, $F$ -- function unit.
+    Pre-terminal nodes are omitted for brevity.
 }
 \end{figure}
 
@@ -343,19 +347,25 @@ All converters, parsers and datasets will be made publicly available upon public
 
 \paragraph{The UCCA Annotation Scheme.}
 Universal Cognitive Conceptual Annotation (UCCA)
-is a cross-linguistically applicable semantic representation schemes,
-that builds on an established framework
-for typological description, ``Basic Linguistic Theory''
-\cite{Dixon:10b,Dixon:10a,Dixon:12}, as well as on the Cognitive Linguistics literature.
-UCCA takes a modular approach to semantics, representing each layer, or modules
-of semantic distinctions, using a closed set of categories. Importantly,
-the same set of categories can be applied to different lexical items, and across
-languages. This stands in contrast to more lexically oriented schemes, such as FrameNet \cite{Baker:98},
+is a cross-linguistically applicable semantic representation scheme,
+that builds on the established ``Basic Linguistic Theory'' framework for typological description
+\cite{Dixon:10b,Dixon:10a,Dixon:12}, and on the Cognitive Linguistics literature.
+UCCA is a multi-layered representation, representing each module of semantic distinctions,
+as a closed set of categories.
+Importantly, the same set of categories can be applied across different lexical items and languages.
+This stands in contrast to more lexically oriented schemes, such as FrameNet \cite{Baker:98},
 PropBank \cite{Palmer:05} and AMR, which define an open-ended, fine-grained set of categories,
-which while providing further information, is prone to coverage problems \cite{Palmer:10},
-and results in divergent structures when applied to different languages \cite{Xue2014not}.
+which while providing further information, are more prone to coverage problems \cite{Palmer:10},
+and may result in a different set of relations when applied to different languages \cite{Xue2014not}.
 
-UCCA's foundational UCCA layer, which we use in this work, covers the predicate-argument
+Formally, a UCCA structure over a sentence is a DAG, whose leaves correspond to the sentence's words.
+The nodes of the graph, or its ``units'', are either terminals or several
+sub-units (not necessarily contiguous) jointly viewed as a
+single entity according to some semantic or cognitive consideration.
+Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents.
+UCCA structures support all three criteria of BSS: multiple parents, non-terminal nodes, and discontiguous units.
+
+UCCA's foundational layer, which we use here, covers the predicate-argument
 structures evoked by predicates of all grammatical categories
 (verbal, nominal, adjectival and others), the inter-relations between them,
 as well as other major linguistic phenomena such as coordination and multi-word expressions.
@@ -365,65 +375,53 @@ UCCA annotations of translated text usually contain the same set of relationship
 \cite{sulem2015conceptual}. This finding supports the claim that UCCA represents an abstract
 level of semantics, shared by different languages.
 
-Formally, a UCCA structure is a DAG, whose leaves correspond to the words of the text. The
-nodes of the graph, or its ``units'',
-are either terminals or several elements (not necessarily contiguous) jointly viewed as a
-single entity according to some semantic or cognitive consideration.
-UCCA structures thus support all three criteria of BSS: multiple parents, non-terminal nodes,
-and discontiguous units.
-
-Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents. 
-The most basic notion is the {\it Scene}, which describes a movement, an action or a state.
-Each Scene contains one main relation, or anchor, as well as one or more participants.
+The layer's basic notion is the {\it Scene}, which describes a movement, an action or a state.
+Each Scene contains one Main Relation, as well as one or more Participants.
 For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes,
-whose main relations are ``graduation'' and ``moved''. The participant ``John'' is a part of both Scenes,
+whose main relations are ``graduation'' and ``moved''. ``John'' is a Participant in both Scenes,
 while ``Paris'' only of the latter.
-The two Scenes in this sentence are both arguments in the \textit{linkage relation} ``After'',
-in this case expressing temporal linkage between them.
-For example, the sentence ``John decided to take a shower'' contains two Scenes, whose main relations are ``decided'' and ``take a shower'', and where the second Scene is a participant in the first.
-The participant ``John'' is a part of both Scenes, but is marked as a \textit{remote} participant in
-the second, since it is not explicit in the second clause.
+The two Scenes in this sentence are both arguments of the \textit{Linker} ``After'',
+which in this case expresses a temporal relation between them.
+\figref{fig:examples} presents the UCCA annotation of this and other examples.
+
 Further categories account for relations between Scenes and the internal structures of
 complex arguments (e.g., coordination) and relations
-(e.g., complex adverbials, such a ``very clearly'')\footnote{
-UCCA graphs may contain implicit units that have no correspondent in the text.
-Such units serve in UCCA to represent implicit relations and participants,
-such as the agent in passive sentences.
-We defer the parsing of these units to future work,
-as it is likely to require different machinery than
-those explored here \cite{roth2015inducing}.}.
+(e.g., complex adverbials, such a ``very clearly''). UCCA graphs may contain implicit
+units that have no correspondent in the text, but the parsing of these
+units is defered to future work, as it is likely to require different methods
+than those explored here \cite{roth2015inducing}.
 
-\oa{refer to figures}
+%The example ``John decided to take a shower'' contains two Scenes, whose main relations are ``decided'' and ``take a shower'', and where the second Scene is a participant in the first.
+%The participant ``John'' is a part of both Scenes, but is marked as a \textit{remote} participant in
+%the second, since it is not explicit in the second clause.
 
 \paragraph{Broad-coverage Semantic Representation.}
 While earlier work on semantic parsing has mostly concentrated on shallow semantic analysis,
-mainly addressing semantic role labeling of verbal argument structures,
+focusing on semantic role labeling of verbal argument structures,
 the focus has recently shifted to parsing of more elaborate representations that account
 for a wider range of phenomena. 
-
 Most closely related to this work is the Broad-coverage Semantic Dependency Parsing (SDP) task,
-recently addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval}.
-Three representation approaches have been studied:
-the Prague Dependency Treebank tectogrammatical layer \cite{bohmova2003prague},
-and dependencies derived from the HPSG Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
-and the Minimal Recursion Semantics representations of the Lingo ERG \cite{Flic:02}.
+recently addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval},
+experimenting with the Prague tectogrammatical layer \cite{bohmova2003prague},
+and dependencies derived from the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
+and Lingo ERG \cite{Flic:02}.
 Like BSS parsing, SDP addresses a wide range of semantic phenomena,
-and supports discontiguous units, and multiple parents. However, SDP does
+and supports discontiguous units and multiple parents. However, SDP uses
 bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
 structures that have no clear head, such as coordination \cite{Ivanova2012who}.
 
-Another line of work addressed parsing sentences into Abstract Meaning Representations (AMRs)
-\cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,wang2015transition,artzi2015broad}. 
-While sharing much of this work's motivation, AMR parsing differs from the BSS parsing
-task addressed here in a few ways. 
+Another line of work addressed parsing into Abstract Meaning Representations (AMRs)
+\cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad}. 
+While sharing much of this work's motivation, AMR parsing techniques are not applicable
+here for two reasons. 
 First, AMR does not ground its units in the words and constituents of the text.
 This both reflects on the nature of the representation,
 where not all AMR nodes correspond to words in the text and vice versa, and reflects
-on parsing, as it requries that the alignment between words and logical symbols be automatically
-(and imprecisely) detected, and complicates the parsing task.
+on parsing, as it requries that the alignment between words and logical symbols be
+automatically detected, thus changing the parsing task.
 Transition-based approach has been applied to AMR parsing by \newcite{wang2015transition},
 but their approach involved first syntactically parsing the input, and then converting
-the resulting tree into an AMR, and thus used a different set of transitions than
+the resulting tree into an AMR. They thus used a different set of transitions than
 BSP, which parses strings directly into graphs.
 
 
@@ -778,6 +776,18 @@ out-of-domain data.\footnote{Both are available at \url{http://www.cs.huji.ac.il
 \tabref{table:data} presents some statistics for the two corpora, demonstrating that while
 the \textit{Wiki} corpus is over ten times larger, the overall statistics are
 similar.
+We use passages of indices up to 655
+of the \textit{Wiki} corpus as our training set, passages 656--700 as development set,
+and passages 701--695 as in-domain test set.
+While UCCA edges can cross sentence boundaries, we adhere to the common
+practice in semantic parsing and train our parsers on individual sentences,
+discarding inter-relations between them (0.18\% of the edges).
+We also discard linkage nodes and edges, as they often express inter-sentence
+relations and are thus mostly redundant when applied at the sentence level.
+In the out-of-domain experiments, we apply the same parser
+(trained on the \textit{Wiki} corpus) to the entire \textit{20K Leagues}
+corpus as test set, without re-tuning any parameters.
+
 
 \begin{table}
   \scalebox{.8}{
@@ -811,18 +821,6 @@ All counts exclude the root node.
 }
 \label{table:data}
 \end{table}
-
-We use passages of indices up to 655
-of the \textit{Wiki} corpus as our training set, passages 656--700 as development set,
-and passages 701--695 as in-domain test set.
-While UCCA edges can cross sentence boundaries, we adhere to the common
-practice in semantic parsing and train our parsers on individual sentences,
-discarding inter-relations between them (0.18\% of the edges).
-We also discard linkage nodes and edges, as they often express inter-sentence
-relations and are thus mostly redundant when applied at the sentence level.
-In the out-of-domain experiments, we apply the same parser
-(trained on the \textit{Wiki} corpus) to the entire \textit{20K Leagues}
-corpus as test set, without re-tuning any parameters.
 
 \paragraph{Evaluation.}
 Since there are no standard evaluation measures for BSS, we define
