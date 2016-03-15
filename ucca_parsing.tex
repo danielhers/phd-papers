@@ -182,7 +182,7 @@ All converters and parsers will be made publicly available upon publication.
 %First, we motivate and define the broad-coverage semantic parsing task.
 %Second, we create converters and study the ability of existing parsing technology
 %for formally related settings to address the task, focusing on transition-based methods.
-%Third, we present the \textsc{bsp}, novel both in being the first broad-coverage DAG parser,
+%Third, we present \textsc{bsp}, novel both in being the first broad-coverage DAG parser,
 %as well as the first UCCA parser. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -646,7 +646,7 @@ $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & 
 \end{tabular}
 \end{adjustbox}
 \caption{\label{fig:transitions}
-  The transition set of the \textsc{bsp}. Following standard practice,
+  The transition set of \textsc{bsp}. Following standard practice,
   we write the stack with its top to the right and the buffer with its head to the left.
   $(\cdot,\cdot)_X$ denotes an $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
   $\mathrm{i}(x)$ is a running index for the created nodes.
@@ -743,7 +743,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
 \end{adjustbox}
 
 \caption{\label{fig:features}
-  Feature templates for the \textsc{bsp}. Notation:
+  Feature templates for \textsc{bsp}. Notation:
   $s_i$, $b_i$ are the $i$th stack and buffer items, respectively.
   $w$ and $t$ are the word form and part-of-speech tag of the terminal returned by the $h^*(\cdot)$ function (\secref{subsec:con2dep}).
   $\emph{}$ is the edge label to the node returned by the $h(\cdot)$ function.
@@ -948,7 +948,7 @@ approach for BSS parsing.
 
 %too practically turns the structure into a constituency tree, and raises the scores above two of the conversion-based parsers. However, the stack LSTM-based parser of Dyer et al.~\shortcite{dyer2015transition} still reaches the highest score.
 
-%The \textsc{bsp} obtains scores that are nearly identical to \newcite{maier2015discontinuous}
+%\textsc{bsp} obtains scores that are nearly identical to \newcite{maier2015discontinuous}
 %and Nivre et al.~\shortcite{nivre2007maltparser} on primary edges, but also correctly
 %predicts remote edges when trained on them.
 %Training without linkage edges and implicit nodes improve the scores on primary edges, as a more simple model is easier to learn.
@@ -1001,7 +1001,7 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 
 \paragraph{Feature Ablation.}
 In order to evaluate the relative importance of the different feature sets,
-we perform feature ablation experiments on the \textsc{bsp},
+we perform feature ablation experiments on \textsc{bsp},
 removing a single set of features at a time,
 and evaluating the resulting parser on the development set (\tabref{table:ablation}).
 Results show that in the few cases where a feature set had only a small
@@ -1062,7 +1062,7 @@ agreement on primary edges (often taken as an upper bound),
 %(1) We applied the parsers to complete paragraphs, without splitting to sentences. MaltParser and the
 %LSTM parser reached nearly the same scores as in the sentence experiments, but \textsc{uparse}
 %and \textsc{bsp} failed to run with input above 500 tokens, for technical reasons.
-%%%%%%%(2) We tried including linkage nodes and edges and implicit nodes when running the \textsc{bsp}, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
+%%%%%%%(2) We tried including linkage nodes and edges and implicit nodes when running \textsc{bsp}, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
 %(3) We created a conversion procedure to SDP (semantic dependency parsing), an additional dependency format that allows multiple parents \cite{oepen2015semeval}. The resulting upper bound for primary edges was similar to the \textsc{CoNLL} format, but for remote edges it was as high as 68.6\% labeled F-score.
 
 Transition-based methods, explored in this work,
