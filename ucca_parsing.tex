@@ -143,9 +143,11 @@ dependency trees and discontinuous constituency trees.
 As these formalisms are more restrictive than BSS, the conversion
 is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
+
 Second, we present a novel transition-based constituency DAG parser
 that supports discontinuous constituents, named
-the \textsc{bss} parser (\secref{sec:direct_approach}).
+the \textsc{bss} parser (\secref{sec:direct_approach}).\oa{add one-two sentences
+  about the novelty of parsing techniques}
 
 %and tackle the constituency-based semantic parsing task.
 %Constituency semantic representation differ from previous broad-coverage semantic parsing
@@ -160,11 +162,12 @@ the \textsc{bss} parser (\secref{sec:direct_approach}).
 We use the English UCCA-annotated corpora \cite{abend2013universal} as a test
 case\footnote{While the task is not specific to UCCA,
   to the best of our knowledge, UCCA's are the only
-  semantically annotated corpora that use constituency graphs.},
-applying the parsing approaches both to in-domain and out-of-domain scenarios,
-and obtain results comparable to the state-of-the-art in other broad-coverage
-semantic parsing tasks.
-The best performing parser obtains a labeled F-score of nearly 70\%.
+  semantically annotated corpora that support all criteria of BSS.},
+and apply the parsing approaches both to in-domain and out-of-domain scenarios.
+Results are encouraging, with nealy 70\% labeled F-score for the highest
+scoring parser, and suggest concrete paths for further improvement.
+%a small degradation with the transition to out-of-domain scenarios.
+All converters, parsers and datasets will be made publicly available upon publication.
 
 %A general parser for this setting must support the prediction of multiple parents,
 %as well as of discontiguous constituents, both pervasive phenomena in semantic
@@ -180,13 +183,13 @@ The best performing parser obtains a labeled F-score of nearly 70\%.
 %speech: ``'The dog', John said, 'is back again''', and are even more pervasive in English semantic parses
 %(see \secref{sec:data}).
 
-\oa{fix this}
-The contribution of this work is thus three-fold.
-First, we motivate and define the constituency broad-coverage semantic parsing task.
-Second, we create converters and study the ability of existing parsing technology
-for formally related settings to address the task, focusing on transition-based methods.
-Third, we present the \textsc{bcs} parser, novel both in being the first constituency DAG parser, as well as the first UCCA parser. 
-All converters, parsers and datasets will be made publicly available upon publication.
+%\oa{fix this}
+%The contribution of this work is thus three-fold.
+%First, we motivate and define the constituency broad-coverage semantic parsing task.
+%Second, we create converters and study the ability of existing parsing technology
+%for formally related settings to address the task, focusing on transition-based methods.
+%Third, we present the \textsc{bcs} parser, novel both in being the first constituency DAG parser,
+%as well as the first UCCA parser. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}\label{sec:related}
