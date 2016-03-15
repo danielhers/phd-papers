@@ -729,28 +729,30 @@ $s_0es_1wb_0w, s_0es_1wb_0t, s_0ws_1es_2e, s_0ws_1eb_0t$ \\
 $s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
 $s_1wp, s_1wep, s_1wq, s_1weq$ \\
 \\
-{\footnotesize Features from \cite{zhu2013fast}:} \\
-\textbf{extended} \\
+\textbf{extended} \cite{zhu2013fast} \\
 $s_0llwe, s_0lrwe, s_0luwe, s_0rlwe, s_0rrwe,$ \\
 $s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
 $s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
 \\
 {\footnotesize Features from \cite{maier2015discontinuous}:} \\
-\textbf{unigrams} (discontinuous) \\
+\textbf{discontinuous unigrams} \\
 $s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
 $s_0xte, s_1xte, s_2xte, s_3xte,$ \\
 $s_0xy, s_1xy, s_2xy, s_3xy$ \\
-\textbf{bigrams} (discontinuous) \\
+\textbf{discontinuous bigrams} \\
 $s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
 $s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
 $s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$ \\
 \\
 {\footnotesize Features from \cite{tokgoz2015transition}:} \\
+\textbf{counts} \\
 $s_0P, s_0C, s_0wP, s_0wC, b_0P, b_0C, b_0wP, b_0wC$ \\
+\textbf{edges} \\
 $s_0s_1, s_1s_0, s_0b_0, b_0s_0, s_0b_0e, b_0s_0e$ \\
+\textbf{history} \\
 $a_0we, a_1we$ \\
 \\
-{\footnotesize Novel, UCCA-specific features:} \\
+\textbf{remote} (Novel, UCCA-specific features) \\
 $s_0R, s_0wR, b_0R, b_0wR$
 \end{tabular}
 \end{adjustbox}
@@ -923,7 +925,7 @@ the conversion and inverse conversion on the gold standard graphs and comparing
 them to the original gold standard.
 
 \paragraph{\textsc{bcs} Parser.}
-We use a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
+Training \textsc{bcs} for 16 iterations, we use a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
 We use an \textsc{Importance} value of 2, doubling the weight updates
 for gold \textsc{Swap} transitions to address the sparseness
 of discontinuous structures, as in \cite{maier2015discontinuous}.
@@ -975,13 +977,13 @@ Both conversions yield zero scores on remote edges, since these are invariably r
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Conversion} \\
-\textsc{uparse} & 58 & 59.8 & 58.7 & $-$ & 0 & 0 \\
+\textsc{uparse} & 64 & 67.3 & 65.4 & $-$ & 0 & 0 \\
 Upper Bound & 100 & 100 & 100 & $-$ & 0 & 0 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Dependency Tree Conversion} \\
-Malt$_{\textrm{arc-standard}}$ &  &  &  & $-$ & 0 & 0 \\
-Malt$_{\textrm{arc-eager}}$ & 61.1 & 56.5 & 58.7 & $-$ & 0 & 0 \\
-LSTM & {\bf 71.8} & {\bf 67} & {\bf 69.3} & $-$ & 0 & 0 \\
+Malt$_{\textrm{arc-standard}}$ & 63.4 & 57.3 & 60.1 & $-$ & 0 & 0 \\
+Malt$_{\textrm{arc-eager}}$ & 63.9 & 57.9 & 60.5 & $-$ & 0 & 0 \\
+LSTM & {\bf 73.2} & {\bf 66.2} & {\bf 69.2} & $-$ & 0 & 0 \\
 Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Direct Approach} \\
@@ -1006,6 +1008,39 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 }
 \label{table:results}
 \end{table}
+
+\paragraph{Feature ablation.}
+
+In another experiment, involving only \textsc{bcs}, we removed a set of features at a time, trained the resulting model (for 16 iterations, with the same parameters as in the main experiment) and evaluated it on the development set. Thus, we can evaluate the importance of each set of features. \tabref{table:ablation} shows the results of this experiment.
+
+\begin{table}[ht]
+  \scalebox{.8}{
+\begin{tabular}{l|ccc|ccc}
+& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\hline
+\textsc{bcs} &  &  &  &  &  &  \\
+\textsc{bcs}$-$\textbf{unigrams} &  &  &  &  &  & \\
+\textsc{bcs}$-$\textbf{bigrams} &  &  &  &  &  & \\
+\textsc{bcs}$-$\textbf{trigrams} &  &  &  &  &  & \\
+\textsc{bcs}$-$\textbf{separator} &  &  &  &  &  & \\
+\textsc{bcs}$-$\textbf{extended} &  &  &  &  &  & \\
+\textsc{bcs}$-$\textbf{disco} &  &  &  &  &  & \\
+\textsc{bcs}$-$\textbf{counts} &  &  &  &  &  & \\
+\textsc{bcs}$-$\textbf{edges} &  &  &  &  &  & \\
+\textsc{bcs}$-$\textbf{history} &  &  &  &  &  & \\
+\textsc{bcs}$-$\textbf{remote} &  &  &  &  &  & \\
+\textsc{bcs}$-$\textbf{ratio} &  &  &  &  &  &
+\end{tabular}
+}
+\caption{\small
+  Results in percents of the feature ablation experiment.
+  See \figref{fig:features} for the definition of each feature set; \textbf{disco} refers to all discontinuous features, and \textbf{ratio} is the number of terminals divided by the total number of nodes (\secref{subsec:features}).
+}
+\label{table:ablation}
+\end{table}
+
+This table shows that although some of the features have a small positive contribution to the primary edge scores or even a negative one, in those cases the remote edge scores improve.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
