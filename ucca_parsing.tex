@@ -44,8 +44,7 @@
 \newcommand\BibTeX{B\textsc{ib}\TeX}
 
 
-\title{Broad-Coverage Semantic Constituency Parsing: \\
-  A Transition-Based Approach}
+\title{Broad-Coverage Semantic Parsing: A Transition-Based Approach}
   %General Transition-Based Broad-Coverage Semantic Parsing
 
 \author{Daniel Hershcovich \and Omri Abend \and Ari Rappoport \\
@@ -66,20 +65,26 @@
 \begin{abstract}
 
   The representation of many common semantic phenomena requires
-  more expressive formalisms than those commonly used for syntactic parsing.
-  Recent work has focused on broad-coverage semantic parsing into dependency
-  (word to word) or abstract (i.e., not grounded in the sentence's
-  words and phrases) representations.
-  Instead, we advocate a constituency-based formulation of the
-  task and define the Broad-coverage Constituency Semantic Parsing task
-  using the UCCA semantic scheme and annotated corpora as a testbed.
-  We note that there are no existing methods for constituency DAG parsing,
-  and propose two transition-based approaches to tackle it:
-  (1) developing procedures for converting UCCA structures into related
-  formalisms, using existing state-of-the-art parsers on the converted representations,
-  and converting them back, and (2) constructing a novel parser for the task.
-  Results are comparable to state-of-the-art results in related
-  semantic parsing tasks, and suggest future directions for improvement.
+  more formal expressivity than is commonly used for syntactic parsing.
+  %Recent work has focused on broad-coverage semantic parsing into dependency
+  %  (word to word) or abstract (i.e., not grounded in the sentence's
+  %words and phrases) representations.
+  Existing representations and parsers mostly support some of these structural
+  properties, which we term ``Broad-coverage semantic structures'' (BSS), but not all. 
+  The main contribution of this paper is in proposing two transition-based
+  techniques for parsing into BSS:
+  (1) applying conversion procedures to BSS, mapping them into related
+  formalisms, and using existing state-of-the-art parsers on the converted
+  representations; and (2) constructing a novel parser for the task.
+  We obtain encouraging results, using the UCCA semantic representation, which
+  supports BSS, as a testbed.
+  
+  %Instead, we advocate a constituency-based formulation of the
+  %  task and define the Broad-coverage Constituency Semantic Parsing task
+  %  using 
+  %  We note that there are no existing methods for constituency DAG parsing,
+  %  and propose two transition-based approaches to tackle it:
+  %%  semantic parsing tasks, and suggest future directions for improvement.
   
   %We experiment with two types of semantic representations, obtaining
   %encouraging results.
@@ -99,59 +104,67 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-% (1) there has been much interest lately in broad-coverage semantic parsing.
-%  (2) semantic parsing requires the development of new parsing technology
-% (beyond syntactic parsers), as they are formally different. importantly, they
-%  are not trees, but DAGs (e.g., argument sharing in control structures;
-% see Oepen et al., 2015, AMR).
+In order to support a full range of semantic structures, the following
+structural properties are needed. First, arguments and relations (semantic units, or simply
+units) that are shared between predicates are effectively represented as multi-parented nodes,
+yielding DAG, rather than tree structures. For instance, in the sentence
+``After graduation, John moved to Paris'', ``John'' is an argument of both ``graduation''
+and ``moved'', yielding a DAG rather than tree structure (\figref{fig:graduation}).
+Second, semantic structures require non-terminal nodes for complex units.
+While bi-lexical dependencies partially circumvent this restriction, by
+representing complex units in terms of their heads, they fall short
+when representing units that have no clear head.
+Frequent examples of such constructions include
+coordination structures (e.g., ``{\bf John and Mary} went home''; \figref{fig:non_terminal_nodes})
+some multi-word expressions (e.g., ``The Haves and the {\bf Have Nots}''),
+and prepositional phrases.
+Third, semantic units may be discontiguous in the text. For instance, in ``John gave everything up'',
+the phrasal verb ``gave ... up'' forms a single semantic unit (\figref{fig:gave}).
+We call the combination of these three properties
+{\it Broad-coverage Semantic Structures} (BSS).
 
-The formal constraints imposed by available statistical parsers are
-too restrictive for broad-coverage semantic parsing \cite{oepen2015semeval}.
-For instance, arguments that are
-shared between predicates are often represented as multi-parented nodes,
-yielding DAG, rather than tree structures. This has motivated much recent
-inquiry into statistical parsing with more expressive formalisms.
+However, to our knowledge, no existing parser supports the combination of these criteria,
+and the only semantically-annotated corpora that supports them is UCCA \cite{abend2013universal}.
+Several other models either support some of these properties \cite{oepen2015semeval},
+or take an alternative approach and avoid grounding semantic units
+altogether (notably, AMR \cite{banarescu2013abstract}). We discuss related work in \secref{sec:related}.
 
-In this work we define and tackle the constituency-based semantic parsing task.
-Constituency semantic representation differ from previous broad-coverage semantic parsing
-work in two ways.
-First, it does not impose the unique head assumption, imposed
-by bi-lexical dependencies, which is problematic for representing several
-frequent constructions that have no clear head.
-Second, it grounds the representation in the text,
-unlike more abstract approach such as AMR \cite{banarescu2013abstract},
-which allows for the use of strong and efficient parsing methods.
-Indeed, transition-based methods, which have recently produced some of the best
-results in syntactic dependency
-parsing \cite{dyer2015transition,ballesteros2015improved},
-have been shown to be effective for other settings as well,
-including constituency parsing \cite{sagae2005classifier,zhu2013fast,maier2015discontinuous}. 
-We thus adopt a transition-based approach in this work.
+In this work we are thus first in proposing techniques for parsing BSS.
+We adopt a transition-based approach, which has recently produced some of the best
+results in syntactic dependency parsing
+\cite{dyer2015transition,ballesteros2015improved}, and has demonstrated
+strong performance in a variety of other semantic and syntactic settings as well
+\cite{maier2015discontinuous,ambati2015incremental,wang2015transition}.
+
+We pursue two complementary parsing strategies.
+First, we assess the ability of existing technology to tackle the task,
+by developing conversion protocols between UCCA structures and two related formalisms:
+dependency trees and discontinuous constituency trees.
+As these formalisms are more restrictive than BSS, the conversion
+is necessarily lossy. Nonetheless, we find that it is effective
+in practice (\secref{sec:conversion_approach}).
+Second, we present a novel transition-based constituency DAG parser
+that supports discontinuous constituents, named
+the \textsc{bss} parser (\secref{sec:direct_approach}).
+
+%and tackle the constituency-based semantic parsing task.
+%Constituency semantic representation differ from previous broad-coverage semantic parsing
+%work in two ways.
+%First, it does not impose the unique head assumption, imposed
+%by bi-lexical dependencies, which is problematic for representing several
+%frequent constructions that have no clear head.
+%Second, it grounds the representation in the text,
+%unlike more abstract approach such as AMR \cite{banarescu2013abstract},
+%which allows for the use of strong and efficient parsing methods.
 
 We use the English UCCA-annotated corpora \cite{abend2013universal} as a test
 case\footnote{While the task is not specific to UCCA,
   to the best of our knowledge, UCCA's are the only
-  semantically annotated corpora that use constituency graphs.}
-and pursue two complementary parsing strategies.
-First, we assess the ability of existing technology to tackle the task,
-by developing conversion protocols between UCCA structures and two related formalisms:
-dependency trees and discontinuous constituency trees.
-We are not aware of any statistical constituency DAG parsers, and specifically not
-ones that support discontinuous constituents, as required for a broad-coverage
-parser (for discussion of this point in the context of syntactic parsing, see
-\cite{kallmeyer2013data,pitler2015linear}).
-Consequently, the conversion necessarily loses information, but 
-we find that it is nonetheless effective
-in practice (\secref{sec:conversion_approach}).
-Second, we present a novel transition-based
-constituency DAG parser that supports discontinuous constituents, named
-the \textsc{bcs} parser (\secref{sec:direct_approach}).
-
-We apply the parsing approaches both to an in-domain and out-of-domain scenarios,
-and obtain results comparable to the state-of-the-art in other broad-coverage semantic parsing
-tasks. For example, the best performing parser obtains an F-score of nearly 70\% in
-the in-domain scenario, on par with state-of-the-art results on other semantic
-parsing tasks (e.g., \cite{artzi2015broad}). 
+  semantically annotated corpora that use constituency graphs.},
+applying the parsing approaches both to in-domain and out-of-domain scenarios,
+and obtain results comparable to the state-of-the-art in other broad-coverage
+semantic parsing tasks.
+The best performing parser obtains a labeled F-score of nearly 70\%.
 
 %A general parser for this setting must support the prediction of multiple parents,
 %as well as of discontiguous constituents, both pervasive phenomena in semantic
@@ -167,6 +180,7 @@ parsing tasks (e.g., \cite{artzi2015broad}).
 %speech: ``'The dog', John said, 'is back again''', and are even more pervasive in English semantic parses
 %(see \secref{sec:data}).
 
+\oa{fix this}
 The contribution of this work is thus three-fold.
 First, we motivate and define the constituency broad-coverage semantic parsing task.
 Second, we create converters and study the ability of existing parsing technology
@@ -340,6 +354,9 @@ problematic for representing several frequent constructions which have no clear
 head, such as coordination, prepositional phrases and multi-word expressions,
 leading to unsystematic treatment of these cases \cite{schwartz2011neutralizing,Ivanova2012who,tsarfaty2012cross}.
 % , which results in conceptual and practical problems 
+
+(for discussion of this point in the context of syntactic parsing, see
+\cite{kallmeyer2013data,pitler2015linear})
 
 \paragraph{Universal Conceptual Cognitive Annotation.}\label{subsec:ucca}
 Taking a constituency-based approach to semantic parsing,
@@ -1012,6 +1029,7 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \paragraph{Feature ablation.}
 
 In another experiment, involving only \textsc{bcs}, we removed a set of features at a time, trained the resulting model (for 16 iterations, with the same parameters as in the main experiment) and evaluated it on the development set. Thus, we can evaluate the importance of each set of features. \tabref{table:ablation} shows the results of this experiment.
+
 
 \begin{table}[ht]
   \scalebox{.8}{
