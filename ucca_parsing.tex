@@ -216,15 +216,49 @@ All converters, parsers and datasets will be made publicly available upon public
       } edge from parent node[right] {\scriptsize $H$} }
       ;
     \node (LKG) at (-2,0) [fill=black!20, circle] {};
-%    \draw[bend left,dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
-%    \draw (LKG) to node [near start, left] {\scriptsize $$} (After);
-%    \draw (LKG) to node [near start, left] {\scriptsize $$} (graduation);
-%    \draw (LKG) to node [near start, right] {\scriptsize $$} (moved);
-%=======
     \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
     \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
     \draw[bend right] (LKG) to node [auto, below] {\scriptsize $LA$} (graduation);
     \draw[bend left] (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
+  \end{tikzpicture}
+  }
+%  \\
+%  \scalebox{.9}{
+%  \begin{tikzpicture}[level distance=12mm, ->,
+%      every node/.append style={midway}]
+%    \node (ROOT) [fill=black, circle] {}
+%      child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+%      child {node {decided} edge from parent node[left] {\scriptsize $P$}}
+%      child {node (totakeaquickshower) [fill=black, circle] {}
+%      {
+%        child {node {to} edge from parent node[left] {\scriptsize $F$}}
+%        child {node (takeashower) [fill=black, circle] {}
+%        {
+%          child {node {take} edge from parent node[left] {\scriptsize $C$}}
+%          child {node {a} edge from parent node[right] {\scriptsize $F$}}
+%          child {node (quick) {quick} edge from parent[white]}
+%          child {node {shower} edge from parent node[right] {\scriptsize $C$}}
+%        } edge from parent node[right] {\scriptsize $P$} }
+%      } edge from parent node[left] {\scriptsize $A$} }
+%      ;
+%    \draw[bend left,dashed,->] (takeashower) to node [auto] {\scriptsize $A$} (John);
+%    \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
+%  \end{tikzpicture}
+%  }
+  \\
+  \scalebox{.9}{
+  \begin{tikzpicture}[level distance=12mm, ->,
+      every node/.append style={midway}]
+    \node (ROOT) [fill=black, circle] {}
+      child {node [fill=black, circle] {}
+      {
+        child {node {John} edge from parent node[left] {\scriptsize $C$}}
+        child {node {and} edge from parent node[left] {\scriptsize $N$}}
+        child {node {Mary} edge from parent node[left] {\scriptsize $C$}}
+      } edge from parent node[left] {\scriptsize $A$} }
+      child {node {went} edge from parent node[left] {\scriptsize $P$}}
+      child {node {home} edge from parent node[left] {\scriptsize $A$}}
+      ;
   \end{tikzpicture}
   }
   \\
@@ -232,33 +266,31 @@ All converters, parsers and datasets will be made publicly available upon public
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway}]
     \node (ROOT) [fill=black, circle] {}
-      child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
-      child {node {decided} edge from parent node[left] {\scriptsize $P$}}
-      child {node (totakeaquickshower) [fill=black, circle] {}
+      child {node {John} edge from parent node[left] {\scriptsize $A$}}
+      child {node [fill=black, circle] {}
       {
-        child {node {to} edge from parent node[left] {\scriptsize $F$}}
-        child {node (takeashower) [fill=black, circle] {}
-        {
-          child {node {take} edge from parent node[left] {\scriptsize $C$}}
-          child {node {a} edge from parent node[right] {\scriptsize $F$}}
-          child {node (quick) {quick} edge from parent[white]}
-          child {node {shower} edge from parent node[right] {\scriptsize $C$}}
-        } edge from parent node[right] {\scriptsize $P$} }
-      } edge from parent node[left] {\scriptsize $A$} }
+      	child {node {gave} edge from parent node[left] {\scriptsize $C$}}
+      	child {node (everything) {everything} edge from parent[white]}
+      	child {node {up} edge from parent node[left] {\scriptsize $C$}}
+      } edge from parent node[right] {\scriptsize $P$} }
       ;
-    \draw[bend left,dashed,->] (takeashower) to node [auto] {\scriptsize $A$} (John);
-    \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
+    \draw[bend right,->] (ROOT) to[out=-20, in=180] node [left] {\scriptsize $A$} (everything);
   \end{tikzpicture}
   }
 \caption{\label{fig:ucca_example1}\small
-  UCCA graphs for two example sentences:
-  ``After graduation, John moved to Paris.'' and ``John decided to take a quick shower.''
-  Both sentences have a remote edge (dashed),
-  resulting in ``John'' having two parents.
-  The first sentence includes a linkage relation (gray node and its outgoing edges)
-  and the second sentence exhibits a discontinuous unit (``take a ... shower'').
-  Partial legend: $P$ -- a Scene's main relation, $A$ -- participant,
-  $L$ -- inter-scene linker, $H$ -- linked Scene, $F$ -- function unit.
+  UCCA graphs for three example sentences:
+  ``After graduation, John moved to Paris'',
+  ``John and Mary went home''
+  and ``John gave everything up.''
+  % and ``John decided to take a quick shower.''
+  The first sentence includes a remote edge (dashed),
+  resulting in ``John'' having two parents, and
+  a linkage relation (gray node and its outgoing edges).
+  The second sentence includes a coordination construction (``John and Mary'').
+  The third sentence includes a discontinuous unit (``gave ... up'').
+  Legend: $P$ -- a Scene's main relation, $A$ -- participant,
+  $L$ -- inter-scene linker, $H$ -- linked Scene, $F$ -- function unit,
+  $LA$ -- link argument, $LR$ -- link relation.
   Pre-terminal nodes are omitted for brevity.
 }
 \end{figure}
