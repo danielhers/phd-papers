@@ -115,11 +115,11 @@ While bi-lexical dependencies partially circumvent this restriction, by
 representing complex units in terms of their heads, they fall short
 when representing units that have no clear head.
 Frequent examples of such constructions include
-coordination structures (e.g., ``{\bf John and Mary} went home''; \figref{fig:non_terminal_nodes})
+coordination structures (e.g., ``{\bf John and Mary} went home''; \figref{fig:home})
 some multi-word expressions (e.g., ``The Haves and the {\bf Have Nots}''),
 and prepositional phrases.
-Third, semantic units may be discontiguous in the text. For instance, in ``John gave everything up'',
-the phrasal verb ``gave ... up'' forms a single semantic unit (\figref{fig:gave}).
+Third, semantic units may be discontiguous in the text. For instance, in ``John gave everything up'' (\figref{fig:gave}),
+the phrasal verb ``gave ... up'' forms a single semantic unit.
 We call the combination of these three properties
 {\it Broad-coverage Semantic Structures} (BSS).
 
@@ -195,6 +195,8 @@ All converters, parsers and datasets will be made publicly available upon public
 \section{Background}\label{sec:related}
 
 \begin{figure}
+  \begin{subfigure}[t]{.5\textwidth}
+  \centering
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=10mm, ->]
     \node (ROOT) [fill=black, circle] {}
@@ -222,7 +224,9 @@ All converters, parsers and datasets will be made publicly available upon public
     \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
   }
-%  \\
+  \caption{}
+  \label{fig:graduation}
+  \end{subfigure}
 %  \scalebox{.9}{
 %  \begin{tikzpicture}[level distance=12mm, ->,
 %      every node/.append style={midway}]
@@ -245,7 +249,8 @@ All converters, parsers and datasets will be made publicly available upon public
 %    \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
 %  \end{tikzpicture}
 %  }
-  \\
+  \begin{subfigure}[t]{.5\textwidth}
+  \centering
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway}]
@@ -261,7 +266,11 @@ All converters, parsers and datasets will be made publicly available upon public
       ;
   \end{tikzpicture}
   }
-  \\
+  \caption{}
+  \label{fig:home}
+  \end{subfigure}
+  \begin{subfigure}[t]{.5\textwidth}
+  \centering
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway}]
@@ -277,7 +286,11 @@ All converters, parsers and datasets will be made publicly available upon public
     \draw[bend right,->] (ROOT) to[out=-20, in=180] node [left] {\scriptsize $A$} (everything);
   \end{tikzpicture}
   }
-\caption{\label{fig:ucca_example1}\small
+  \caption{}
+  \label{fig:gave}
+  \end{subfigure}
+  \label{fig:examples}
+  \caption{\small
   UCCA graphs for three example sentences:
   ``After graduation, John moved to Paris'',
   ``John and Mary went home''
