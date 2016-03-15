@@ -74,13 +74,13 @@
 
   The representation of many common semantic phenomena requires 
   structural properties beyond those commonly used for syntactic parsing.
-  The paper discusses a set  structural properties, that should be supported
+  This paper discusses a set of structural properties that should be supported
   by semantic parsers, noting that existing parsers support some of these properties,
   but not all.
   %(representations supporting these properties are called {\it Broad-coverage Semantic Structures}, or BSS).
   The main contribution of this paper is in proposing
   two transition-based techniques for parsing such semantic structures:
-  (1) applying conversion procedures to the semantic structures,
+  (1) applying conversion procedures,
   mapping them into related formalisms, and using existing state-of-the-art
   parsers on the converted representations;
   and (2) constructing a parser that supports these properties.
@@ -105,7 +105,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-In order to support a full range of semantic structures, the following
+In order to support the full range of semantic structures, the following
 structural properties are needed. First, arguments and relations (semantic units)
 that are shared between predicates are effectively represented as multi-parented nodes,
 yielding DAG, rather than tree structures. For instance, in the sentence
@@ -210,8 +210,8 @@ All converters and parsers will be made publicly available upon publication.
         } edge from parent node[left] {\scriptsize $A$} }
       } edge from parent node[right] {\scriptsize $H$} }
       ;
+    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
     %\node (LKG) at (-1.8,0) [fill=black!20, circle] {};
-      %    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
       %    \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
       %    \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
 %    \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
