@@ -434,11 +434,11 @@ the resulting tree into an AMR. They thus used a different set of transitions th
 We begin by assessing the ability of existing technology to address the task,
 by taking a conversion-based approach. Training proceeds by 
 converting BSS into a different representation,
-and training an existing parser for that representation on the converted structures.
+and training an existing parser on the converted structures.
 We test the trained parsers by applying them to the test set,
 and converting the results back to BSS, where they are compared
 with the gold standard.
-The amount of information lost by this back and forth conversion is discussed in
+The error resulting from this back and forth conversion is discussed in
 \secref{sec:results}.
 
 \paragraph{Notation.}
@@ -446,12 +446,13 @@ Let $L$ be the set of possible edge labels.
 A BSS is a directed acyclic graph $G=(V,E, \ell)$
 over a sequence of tokens $w_1, \ldots, w_n$,
 where $\ell:E\to L$ is a function of \textit{edge labels}.
-For each token $w_i$ ($i=1, \ldots, n$) there exists a leaf (or a terminal) $t_i \in V$.
+For each token $w_i$ ($i=1, \ldots, n$), there exists a leaf (or a terminal) $t_i \in V$.
 
 \paragraph{Conversion to Constituency Trees.}
-We convert BSS to constituency trees by removing a subset of the edges\footnote{Since
-for a tree, labeling the nodes is equivalent to labeling the edges, we do not distinguish between the two options.
-Note also that as the original structures may contain discontiguous units, the resulting trees may also contain discontiguous nodes.}.
+We convert BSS to constituency trees by removing a subset of the
+edges\footnote{As for trees, labeling nodes is equivalent to labeling edges,
+  we do not distinguish between the two options. 
+  Note also that as the original structures may contain discontiguities, the resulting trees may too.}.
 Specifically, when converting UCCA structures, we note that UCCA marks one of the incoming edges
 for each non-root as ``primary'' and the others as ``remote'' edges (see \figref{fig:graduation}).
 We thus remove all remote edges.
@@ -486,9 +487,9 @@ are thus sufficient for determining which of $u$'s children contains the head no
 %This is appropriate, since edges in a semantic constituency graph express the relation between units,
 %whereas in syntactic constituency trees the identity of a node depends on the nodes below it.
 
-
 \begin{algorithm}[t]
- \KwData{constituency tree ${T_c}=(V_c,E_c,\ell_c)$}
+  \small
+  \KwData{constituency tree ${T_c}=(V_c,E_c,\ell_c)$}
  \KwResult{dependency tree $T_d=(V_d,E_d,\ell_d)$}
  \ForEach{$u \in V_c$} {
   $h(u) \leftarrow \argmin_v \mathrm{Priority}(\ell_c(u,v))$\;
@@ -509,7 +510,7 @@ are thus sufficient for determining which of $u$'s children contains the head no
   $E_d \leftarrow E_d \cup \{(t^\prime, t)\}$\;
   $\ell_d (t^\prime, t) \leftarrow \ell_c(u, n(t))\}$\;
  }
- \caption{Constituency to dependency conversion procedure.}
+ \caption{\small Constituency to dependency conversion procedure.}
  \label{alg:con2dep}
 \end{algorithm}
 
@@ -531,6 +532,7 @@ Edge labels for the intermediate edges are determined by a rule-based function, 
 In practice, it mostly selects the label $C$ (Center).
 
 \begin{algorithm}
+  \small
  \KwData{dependency tree $T_d=(V_d,E_d,\ell_d)$}
  \KwResult{constituency tree $T_c=(V_c,E_c,\ell_c)$}
  $r \leftarrow \mathrm{Node()}$\;
@@ -558,7 +560,7 @@ In practice, it mostly selects the label $C$ (Center).
    $\ell_c(p, u^\prime) \leftarrow \ell_d(t^\prime, t)$\;
   }
  }
- \caption{Dependency to constituency conversion procedure.}
+ \caption{\small Dependency to constituency conversion procedure.}
  \label{alg:dep2con}
 \end{algorithm}
 
