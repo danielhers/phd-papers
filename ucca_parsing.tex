@@ -439,7 +439,7 @@ We test the trained parsers by applying them to the test set,
 and converting the results back to BSS, where they are compared
 with the gold standard.
 The amount of information lost by this back and forth conversion is discussed in
-\secref{sec:experiments}.
+\secref{sec:results}.
 
 \paragraph{Notation.}
 Let $L$ be the set of possible edge labels.
@@ -567,19 +567,20 @@ In practice, it mostly selects the label $C$ (Center).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Broad-Coverage DAG Parsing}\label{sec:direct_approach}
 
-\paragraph{Transition-Based Parsing.}
-We now turn to the direct approach for parsing BSS, a transition-based broad-coverage DAG parser.
-
-In transition-based (also called \textit{shift-reduce}) parsing \cite{Nivre03anefficient},
-the input is scanned from left to right.
-The output is created incrementally by applying a \textit{transition} at each step to the parser state,
+We now turn to presenting the BSP parser,
+a transition-based parser that supports the three criteria of broad-coverage
+semantic structures.
+Transition-based parsing \cite{Nivre03anefficient} creates the parse tree,
+as it scans the text from left to right.
+The parse tree is created incrementally by applying a \textit{transition} at each step to the parser state,
 defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
 a stack $S$ of nodes currently being processed,
 and a graph $G=(V,E,\ell)$ of constructed nodes and labeled edges.
-In addition, some states are marked as \textit{terminal}, meaning that $G$ is the final output.
+Some of the states are marked as \textit{terminal}, meaning that $G$ is the final output.
 A classifier is used at each step to select the next transition based on features
-which encode the parser's current state.
-During training, an oracle with access to the gold-standard annotated graph is used as a classifier.
+that encode the parser's current state.
+During training, an oracle creates training instances for the classifier,
+based on the gold-standard annotation.
 
 Despite being based on local decisions, transition-based methods have yielded excellent
 results in a variety of parsing tasks.
@@ -588,21 +589,23 @@ have been successfully applied to corpora in many languages and domains, yieldin
 of the best reported results \cite{dyer2015transition,ballesteros2015improved}. 
 The approach has also yielded results comparable with the state-of-the-art when applied
 to constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
-and has been recently extended to discontiguous constituency parsing \cite{maier2015discontinuous},
-yielding improvements in the parsing of discontiguous constituents in German.
+and discontiguous constituency parsing \cite{maier2015discontinuous}.
 Transition-based parsers have also been developed for dependency DAG structures
-\cite{sagae2008shift,tokgoz2015transition},
-CCG parsing \cite{ambati2015incremental} and AMR parsing \cite{wang2015transition}.
-Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
-Our parser combines techniques from discontiguous constituency parsing and dependency DAG parsing.
-In addition, we introduce new UCCA-oriented features for parsing BSS.
-We name our parser \textsc{bsp} (Broad-coverage Semantic Parser).
+\cite{sagae2008shift,tokgoz2015transition}, CCG structures \cite{ambati2015incremental}
+and AMR parsing \cite{wang2015transition}.
+
+Our parser mostly builds on recent advances in the dependency discontiguous constituency
+and DAG parsing techniques, and further introduces novel UCCA-oriented features for parsing BSS.
 
 \paragraph{Transition Set.}
-Given a sequence of tokens $w_1, \ldots, w_n$, we directly predict a BSS $G$ whose leaves
+Given a sequence of tokens $w_1, \ldots, w_n$, we predict a BSS $G$ whose leaves
 correspond to  $w_1, \ldots, w_n$.
 Parsing starts with a single node in the stack (the root node), and the input tokens
 $w_1, \ldots, w_n$ in the buffer. The set of transitions is given in \figref{fig:transitions}.
+In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
+we follow previous work in transition-based constituency parsing \cite{sagae2005classifier}, and include the \textsc{Node} transition for creating new non-terminal nodes.
+Concretely, \textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge.
+
 
 \begin{figure*}
 \begin{adjustbox}{width=\textwidth,margin=3pt,frame}
@@ -647,9 +650,6 @@ $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & 
 }
 \end{figure*}
 
-In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
-we follow previous work in transition-based constituency parsing \cite{sagae2005classifier}, and include the \textsc{Node} transition for creating new non-terminal nodes.
-Concretely, \textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge.
 %\textsc{Implicit$_X$} acts similarly, but the created node is a child instead,
 %and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
 
@@ -780,10 +780,10 @@ update rule.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Experiments}\label{sec:experiments}
+%\section{Experiments}\label{sec:experiments}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Experimental Setup}
+\section{Experimental Setup}\label{sec:exp_setup}
 
 \paragraph{Data.}\label{sec:data}
 We conduct our main experiments on the UCCA Wikipedia corpus (henceforth, \textit{Wiki}),
@@ -849,7 +849,7 @@ where $u$ is the parent and $v$ is the child, define its yield $y(e) \subseteq W
 set of terminals in $W$ that are descendants of $v$.
 We define the set of \textit{mutual edges} between $G_p$ and $G_g$:
 
-\vspace{-.5cm}
+\vspace{-.6cm}
 
 {\small
 \begin{multline*}
@@ -859,13 +859,13 @@ We define the set of \textit{mutual edges} between $G_p$ and $G_g$:
 \end{multline*}
 }
 
-\vspace{-.5cm}
+\vspace{-.6cm}
 
 Labeled precision and recall are defined by dividing $|M(G_p,G_g)|$ by $|E_p|$ and $|E_g|$, respectively.
 We report two variants of this measure, one where we consider only non-remote edges,
 and another where we consider remote edges. We note that the measure collapses to the standard
 PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
-In all cases, punctuation marks are excluded from the evaluation, but not from the datasets.
+Punctuation marks are excluded from the evaluation, but not from the datasets.
 
 %For the conversions, we use \textsc{NeGra export} as the format for
 %constituency representation and \textsc{CoNLL-X} as the format for dependency representation.
@@ -880,8 +880,7 @@ arc-eager transition sets \cite{nivre2007maltparser},
 and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
 In the MaltParser, we use both SVM and perceptron classifiers, and report
 results obtained with the SVM classifier, which are about 1\% F-score higher.
-
-We use the default settings for all parsers.
+Default settings are used in all cases.
 We note that \textsc{uparse} uses beam search by default,
 with a beam size of 4, where the other parsers use greedy search.
 
@@ -902,12 +901,12 @@ with a beam size of 4, where the other parsers use greedy search.
 %semantic parsing scheme.
 %We also omit implicit nodes, leaving them for future work.
 
-We further report upper bounds for the conversion-based methods, by applying
-the conversion and inverse conversion on the gold standard graphs and comparing
-them to the original gold standard.
+Upper bounds for the conversion-based methods are computed by applying
+the conversion and inverse conversion on the gold standard
+graphs and comparing them to the original gold standard.
 
 \paragraph{\textsc{bsp}.}
-Training \textsc{bsp} for 16 iterations, we use a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
+We train \textsc{bsp} for 16 iterations, using a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
 We use an \textsc{Importance} value of 2, doubling the weight updates
 for gold \textsc{Swap} transitions to address the sparseness
 of discontiguous structures, as in \cite{maier2015discontinuous}.
@@ -917,7 +916,7 @@ more direct comparison with conversion-based methods that can only
 predict trees.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Results}
+\section{Results}\label{sec:results}
 
 \tabref{table:results} presents the results of our main experiments, as well as
 upper bounds for the conversion-based methods.
@@ -927,18 +926,18 @@ of the remote edges as well.
 Removing remote edges from the training data of \textsc{bsp} does not
 change results considerably on the primary edges,
 reducing them by 0.9\% F-score in the in-domain setting, but reduces
-them by the same amount when applied out-of-domain. Results on
-the out-of-domain settings are largely comparable with the in-domain
-results, supporting the robustness of the \textsc{bsp} results.
-
+them by the same amount when applied out-of-domain. 
+Out-of-domain results are largely comparable with the in-domain
+results, demonstrating considerable robustness by \textsc{bsp}
+to domain variation.
 The LSTM parser obtains the best results on primary edges,
-with a considerable margin. Importantly, it obtains more than
-10\% of F-score higher than MaltParser, which mostly differ
-from it in terms of the local classifier.
+with a considerable margin. Importantly, it obtains 9.1\%
+F-score higher than the arc-standard MaltParser, which
+mostly differ from it in its classifier.
 This suggests that applying a similar LSTM-based approach to
-training \textsc{bsp} is likely to boost results considerably,
-and further underscores the feasibility
-of the presented approach for BSS parsing. 
+training \textsc{bsp} is likely to improve results,
+and further underscores the feasibility of the transition-based
+approach for BSS parsing. 
 
 %too practically turns the structure into a constituency tree, and raises the scores above two of the conversion-based parsers. However, the stack LSTM-based parser of Dyer et al.~\shortcite{dyer2015transition} still reaches the highest score.
 
@@ -947,10 +946,12 @@ of the presented approach for BSS parsing.
 %predicts remote edges when trained on them.
 %Training without linkage edges and implicit nodes improve the scores on primary edges, as a more simple model is easier to learn.
 
-The conversion to constituency format allows a perfect score on the
-primary edges, as it only omits linkage parents and implicit nodes (which the evaluation metric ignores).
-The conversion to dependency format loses considerably more information, since all of the non-terminal nodes are lost and have to be reconstructed by a simple rule-based inverse conversion.
-Both conversions yield zero scores on remote edges, since these are invariably removed when converting to trees.
+The conversion to constituency format only removes remote edges,
+and thus obtains a perfect primary edge score.
+The conversion to dependency format loses considerably more information, since
+all of non-terminal nodes are lost and have to be reconstructed by a
+simple rule-based inverse conversion. Both conversions yield zero scores on remote edges,
+since these are invariably removed when converting to trees.
 
 \begin{table}[ht]
   \scalebox{.8}{
@@ -991,9 +992,15 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \label{table:results}
 \end{table}
 
-\paragraph{Feature ablation.}
-
-In another experiment, involving only \textsc{bsp}, we removed a set of features at a time, trained the resulting model (for 16 iterations, with the same parameters as in the main experiment) and evaluated it on the development set. Thus, we can evaluate the importance of each set of features. \tabref{table:ablation} shows the results of this experiment.
+\paragraph{Feature Ablation.}
+In order to evaluate the relative importance of the different feature sets,
+we perform feature ablation experiments on the \textsc{bsp},
+removing a single set of features at a time,
+and evaluating the resulting parser on the development set (\tabref{table:ablation})
+Results show that in the few cases where a feature set had only a small
+or a negative contribution to the primary edge F-score, 
+it had a positive contribution on the prediction of
+remote edges.\oa{say something about what features are most important}
 
 
 \begin{table}[ht]
@@ -1005,7 +1012,7 @@ In another experiment, involving only \textsc{bsp}, we removed a set of features
 \textsc{bsp} &  &  &  &  &  &  \\
 \textsc{bsp}$-$\textbf{unigrams} &  &  &  &  &  & \\
 \textsc{bsp}$-$\textbf{bigrams} &  &  &  &  &  & \\
-\textsc{bsp}$-$\textbf{trigrams} &  &  &  &  &  & \\
+`\textsc{bsp}$-$\textbf{trigrams} &  &  &  &  &  & \\
 \textsc{bsp}$-$\textbf{separator} &  &  &  &  &  & \\
 \textsc{bsp}$-$\textbf{extended} &  &  &  &  &  & \\
 \textsc{bsp}$-$\textbf{disco} &  &  &  &  &  & \\
@@ -1023,17 +1030,15 @@ In another experiment, involving only \textsc{bsp}, we removed a set of features
 \label{table:ablation}
 \end{table}
 
-This table shows that although some of the features have a small positive contribution to the primary edge scores or even a negative one, in those cases the remote edge scores improve.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discussion}\label{sec:discussion}
+\section{Conclusion}\label{sec:conclusion}
 
-We have defined the broad-coverage semantic constituency parsing task,
-and explored two complementary parsing approaches to tackle it.
-Conversion-based parsing procedures assess the ability of existing
-technology to address the task, and the novel \textsc{bsp} first
-explores parsing into constituency DAG representations.
+We have introduced the first parser that supports multiple parents, non-terminal
+nodes and discontiguous units.
+We further explored a conversion-based parsing approach in order to assess the ability of existing
+technology to address the task.
 The work makes a further contribution by first experimenting on UCCA parsing.
 Results show that UCCA can already be parsed with 69.3\% F-score,
 and suggests means for improvement by taking an LSTM-based
@@ -1053,23 +1058,21 @@ agreement on primary edges (often taken as an upper bound),
 %%%%%%%(2) We tried including linkage nodes and edges and implicit nodes when running the \textsc{bsp}, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
 %(3) We created a conversion procedure to SDP (semantic dependency parsing), an additional dependency format that allows multiple parents \cite{oepen2015semeval}. The resulting upper bound for primary edges was similar to the \textsc{CoNLL} format, but for remote edges it was as high as 68.6\% labeled F-score. We did not evaluate dependency DAG parsers \cite{sagae2008shift,tokgoz2015transition} on this format since we could not obtain their code.
 
-The availability of a UCCA parser first allows to apply UCCA to
-downstream applications, and to empirically test its contribution for semantic tasks.
-Major efforts to incorporate semantic structure within downstream NLP application
-are currently underway in several domains,
-such as machine translation \cite{jones2012semantics} and summarization \cite{liu2015toward}.
-We believe that UCCA's merits in providing a cross-linguistically applicable, coarse-grained
-annotation is likely to support a wide range of semantic applications, and to contribute to
-the ongoing discussion on the optimal characterization of semantic representation in NLP.
+Transition-based methods, explored in this work,
+are a natural starting point for UCCA parsing,
+as the set of distinctions it represents, which are centered around predicate-argument
+structures and their inter-relations, is similar in spirit to the distinctions
+conveyed by dependency schemes.
 
-Future work will further explore improvements to the presented parsing approaches.
-We intend to pursue the incorporation of neural network classification methods to
-improve parser performance, following our encouraging results in this respect.
-Second, while much recent work focused on semantic parsing of different types,
-the relations between the different representations are far from being clear.
-We intend to apply conversion-based parsing approaches both to allow better re-use
-of parsing technology, and to shed light on the commonalities and differences
-between representations, suggesting ways to optimally design them.
+While much recent work focused on semantic parsing of different types,
+the relations between the different representations have not been clarified.
+We intend to further explore conversion-based parsing approaches to shed light
+on the commonalities and differences between representations, suggesting ways to
+design better semantic represnetations.
+We believe that UCCA's merits in providing a cross-linguistically applicable, broad-coverage
+annotation is likely to support ongoing efforts to incorporate deeper semantic structures
+into a variety of applications, such as machine translation \cite{jones2012semantics}
+and summarization \cite{liu2015toward}.
 
 %\paragraph{Improving the conversion procedure.}
 %Several decision have to be made in the conversion between dependency and constituency annotation.
@@ -1080,7 +1083,7 @@ between representations, suggesting ways to optimally design them.
 %%Our parser reaches promising results, but it is very basic in terms of the techniques used in it. Using beam search rather than greedy inference tends to improve the parsing scores significantly.
 %In terms of machine learning, we use a linear classifier with hand-crafted features. As the experiment with the LSTM parser shows, implementing a parser based on neural networks should also give a significant improvement to our parsing scores.
 
-\daniel{
+\com{
 Semantic parsing methods can be largely partitioned into grammar-based and grammarless methods.
 Within the grammar-based literature, most work relied on Combinatory Categorial Grammar (CCG)
 \cite{Steedman:00}, which allows to compute semantic structure compositionally from the
