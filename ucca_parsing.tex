@@ -145,14 +145,14 @@ As these formalisms are more restrictive than BSS, the conversion
 is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
 Second, we present a novel transition-based broad-coverage DAG parser,
-Broad-Coverage Semantic Parsing (BSP; \secref{sec:direct_approach}),
-based on extending existing transition-based parsing,
+Broad-coverage Semantic Parser (\textsc{bsp}; \secref{sec:direct_approach}),
+based on extending existing transition-based parsers,
 with new transitions and features for parsing BSS and UCCA in particular.
 
 We experiment with the English UCCA-annotated corpora \cite{abend2013universal}
 as a test case,
 and apply the parsing approaches both to in-domain and out-of-domain scenarios.
-Results are encouraging, with nealy 70\% labeled F-score for the highest
+Results are encouraging, with nearly 70\% labeled F-score for the highest
 scoring parser, and suggest concrete paths for further improvement.
 All converters and parsers will be made publicly available upon publication.
 
@@ -388,7 +388,7 @@ Further categories account for relations between Scenes and the internal structu
 complex arguments (e.g., coordination) and relations
 (e.g., complex adverbials, such a ``very clearly''). UCCA graphs may contain implicit
 units that have no correspondent in the text, but the parsing of these
-units is defered to future work, as it is likely to require different methods
+units is deferred to future work, as it is likely to require different methods
 than those explored here \cite{roth2015inducing}.
 
 %The example ``John decided to take a shower'' contains two Scenes, whose main relations are ``decided'' and ``take a shower'', and where the second Scene is a participant in the first.
@@ -417,12 +417,12 @@ here for two reasons.
 First, AMR does not ground its units in the words and constituents of the text.
 This both reflects on the nature of the representation,
 where not all AMR nodes correspond to words in the text and vice versa, and reflects
-on parsing, as it requries that the alignment between words and logical symbols be
+on parsing, as it requires that the alignment between words and logical symbols be
 automatically detected, thus changing the parsing task.
 \newcite{wang2015transition} applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
 the resulting tree into an AMR. They thus used a different set of transitions than
-BSP, which parses strings directly into graphs.
+\textsc{bsp}, which parses strings directly into graphs.
 
 
 
