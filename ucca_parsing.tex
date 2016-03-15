@@ -876,7 +876,9 @@ and one into CoNLL-style dependencies. In the first setting we experiment with \
 the only transition-based constituency parser, to our knowledge, able to parse trees with
 discontiguous constituents.
 In the second setting we use the MaltParser with arc-standard and
-arc-eager transition sets \cite{nivre2007maltparser},
+arc-eager transition sets \cite{nivre2007maltparser}\footnote{Since preliminary
+experiments with non-projective variants showed they did not score as well as the
+projective ones, we do not report them here.},
 and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
 In the MaltParser, we use both SVM and perceptron classifiers, and report
 results obtained with the SVM classifier, which are about 1\% F-score higher.
