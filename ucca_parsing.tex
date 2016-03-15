@@ -144,10 +144,10 @@ dependency trees and discontiguous constituency trees.
 As these formalisms are more restrictive than BSS, the conversion
 is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
-Second, we present a novel transition-based broad-coverage DAG parser,
-Broad-coverage Semantic Parser (\textsc{bsp}; \secref{sec:direct_approach}),
-based on extending existing transition-based parsers,
-with new transitions and features for parsing BSS and UCCA in particular.
+Second, we present a novel transition-based broad-coverage parser,
+Broad-coverage Semantic Parser (\textsc{bsp}; \secref{sec:direct_approach})
+that supports BSS parsing, based on extending existing transition-based parsers
+with new transitions and features. %for parsing BSS and UCCA in particular.
 
 We experiment with the English UCCA-annotated corpora \cite{abend2013universal}
 as a test case,
@@ -453,9 +453,8 @@ We convert BSS to constituency trees by removing a subset of the edges\footnote{
 for a tree, labeling the nodes is equivalent to labeling the edges, we do not distinguish between the two options.
 Note also that as the original structures may contain discontiguous units, the resulting trees may also contain discontiguous nodes.}.
 Specifically, when converting UCCA structures, we note that UCCA marks one of the incoming edges
-for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges (see \figref{fig:graduation}).
-We thus remove all remote and linkage edges, in addition to nodes that are disconnected
-from the graph as a result of this removal.
+for each non-root as ``primary'' and the others as ``remote'' edges (see \figref{fig:graduation}).
+We thus remove all remote edges.
 The inverse conversion from trees to BSS is simply the identity function, as every constituency tree is a BSS.
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
@@ -645,8 +644,8 @@ $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & 
 \caption{\label{fig:transitions}
   The transition set of the \textsc{bsp}. Following standard practice,
   we write the stack with its top to the right and the buffer with its head to the left.
-  $(\cdot,\cdot)_X$ denotes an $X$-labeled edge, $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge,
-  and $x^*$ an implicit node. $\mathrm{i}(x)$ is a running index for the created nodes.
+  $(\cdot,\cdot)_X$ denotes an $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
+  $\mathrm{i}(x)$ is a running index for the created nodes.
 }
 \end{figure*}
 
@@ -799,7 +798,8 @@ While UCCA edges can cross sentence boundaries, we adhere to the common
 practice in semantic parsing and train our parsers on individual sentences,
 discarding inter-relations between them (0.18\% of the edges).
 We also discard linkage nodes and edges, as they often express inter-sentence
-relations and are thus mostly redundant when applied at the sentence level.
+relations and are thus mostly redundant when applied at the sentence level,
+as well as implicit nodes (\secref{sec:background}).
 In the out-of-domain experiments, we apply the same parser
 (trained on the \textit{Wiki} corpus) to the entire \textit{20K Leagues}
 corpus as test set, without re-tuning any parameters.
@@ -883,6 +883,7 @@ and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
 In the MaltParser, we use both SVM and perceptron classifiers, and report
 results obtained with the SVM classifier, which are about 1\% F-score higher.
 Default settings are used in all cases.
+We do not use existing dependency DAG parsers since we could not obtain their code.
 We note that \textsc{uparse} uses beam search by default,
 with a beam size of 4, where the other parsers use greedy search.
 
@@ -998,7 +999,7 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 In order to evaluate the relative importance of the different feature sets,
 we perform feature ablation experiments on the \textsc{bsp},
 removing a single set of features at a time,
-and evaluating the resulting parser on the development set (\tabref{table:ablation})
+and evaluating the resulting parser on the development set (\tabref{table:ablation}).
 Results show that in the few cases where a feature set had only a small
 or a negative contribution to the primary edge F-score, 
 it had a positive contribution on the prediction of
@@ -1014,7 +1015,7 @@ remote edges.\oa{say something about what features are most important}
 \textsc{bsp} &  &  &  &  &  &  \\
 \textsc{bsp}$-$\textbf{unigrams} &  &  &  &  &  & \\
 \textsc{bsp}$-$\textbf{bigrams} &  &  &  &  &  & \\
-`\textsc{bsp}$-$\textbf{trigrams} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{trigrams} &  &  &  &  &  & \\
 \textsc{bsp}$-$\textbf{separator} &  &  &  &  &  & \\
 \textsc{bsp}$-$\textbf{extended} &  &  &  &  &  & \\
 \textsc{bsp}$-$\textbf{disco} &  &  &  &  &  & \\
@@ -1058,7 +1059,7 @@ agreement on primary edges (often taken as an upper bound),
 %LSTM parser reached nearly the same scores as in the sentence experiments, but \textsc{uparse}
 %and \textsc{bsp} failed to run with input above 500 tokens, for technical reasons.
 %%%%%%%(2) We tried including linkage nodes and edges and implicit nodes when running the \textsc{bsp}, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
-%(3) We created a conversion procedure to SDP (semantic dependency parsing), an additional dependency format that allows multiple parents \cite{oepen2015semeval}. The resulting upper bound for primary edges was similar to the \textsc{CoNLL} format, but for remote edges it was as high as 68.6\% labeled F-score. We did not evaluate dependency DAG parsers \cite{sagae2008shift,tokgoz2015transition} on this format since we could not obtain their code.
+%(3) We created a conversion procedure to SDP (semantic dependency parsing), an additional dependency format that allows multiple parents \cite{oepen2015semeval}. The resulting upper bound for primary edges was similar to the \textsc{CoNLL} format, but for remote edges it was as high as 68.6\% labeled F-score.
 
 Transition-based methods, explored in this work,
 are a natural starting point for UCCA parsing,
