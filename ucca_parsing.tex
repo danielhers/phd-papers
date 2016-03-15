@@ -13,7 +13,7 @@
 \usepackage[]{algorithm2e}
 \usepackage{hhline}
 \usepackage{multirow}
-\usepackage{caption}
+\usepackage[font=small]{caption}
 \usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage{color}
@@ -74,13 +74,13 @@
 
   The representation of many common semantic phenomena requires 
   structural properties beyond those commonly used for syntactic parsing.
-  The paper discusses a set  structural properties, that should be supported
+  This paper discusses a set of structural properties that should be supported
   by semantic parsers, noting that existing parsers support some of these properties,
   but not all.
   %(representations supporting these properties are called {\it Broad-coverage Semantic Structures}, or BSS).
   The main contribution of this paper is in proposing
   two transition-based techniques for parsing such semantic structures:
-  (1) applying conversion procedures to the semantic structures,
+  (1) applying conversion procedures,
   mapping them into related formalisms, and using existing state-of-the-art
   parsers on the converted representations;
   and (2) constructing a parser that supports these properties.
@@ -105,7 +105,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-In order to support a full range of semantic structures, the following
+In order to support the full range of semantic structures, the following
 structural properties are needed. First, arguments and relations (semantic units)
 that are shared between predicates are effectively represented as multi-parented nodes,
 yielding DAG, rather than tree structures. For instance, in the sentence
@@ -145,14 +145,14 @@ As these formalisms are more restrictive than BSS, the conversion
 is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
 Second, we present a novel transition-based broad-coverage DAG parser,
-Broad-Coverage Semantic Parsing (BSP; \secref{sec:direct_approach}),
-based on extending existing transition-based parsing,
+Broad-coverage Semantic Parser (\textsc{bsp}; \secref{sec:direct_approach}),
+based on extending existing transition-based parsers,
 with new transitions and features for parsing BSS and UCCA in particular.
 
 We experiment with the English UCCA-annotated corpora \cite{abend2013universal}
 as a test case,
 and apply the parsing approaches both to in-domain and out-of-domain scenarios.
-Results are encouraging, with nealy 70\% labeled F-score for the highest
+Results are encouraging, with nearly 70\% labeled F-score for the highest
 scoring parser, and suggest concrete paths for further improvement.
 All converters and parsers will be made publicly available upon publication.
 
@@ -210,8 +210,8 @@ All converters and parsers will be made publicly available upon publication.
         } edge from parent node[left] {\scriptsize $A$} }
       } edge from parent node[right] {\scriptsize $H$} }
       ;
+    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
     %\node (LKG) at (-1.8,0) [fill=black!20, circle] {};
-      %    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
       %    \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
       %    \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
 %    \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
@@ -282,7 +282,7 @@ All converters and parsers will be made publicly available upon publication.
   \caption{}
   \label{fig:gave}
   \end{subfigure}
-  \caption{\small  \label{fig:examples}
+  \caption{\label{fig:examples}
     Semantic representation of the three structural properties
     required for BSS, according to the UCCA scheme. \figref{fig:graduation} includes a remote edge (dashed),
     resulting in ``John'' having two parents. % and a linkage relation (gray node and its outgoing edges).
@@ -388,7 +388,7 @@ Further categories account for relations between Scenes and the internal structu
 complex arguments (e.g., coordination) and relations
 (e.g., complex adverbials, such a ``very clearly''). UCCA graphs may contain implicit
 units that have no correspondent in the text, but the parsing of these
-units is defered to future work, as it is likely to require different methods
+units is deferred to future work, as it is likely to require different methods
 than those explored here \cite{roth2015inducing}.
 
 %The example ``John decided to take a shower'' contains two Scenes, whose main relations are ``decided'' and ``take a shower'', and where the second Scene is a participant in the first.
@@ -417,12 +417,12 @@ here for two reasons.
 First, AMR does not ground its units in the words and constituents of the text.
 This both reflects on the nature of the representation,
 where not all AMR nodes correspond to words in the text and vice versa, and reflects
-on parsing, as it requries that the alignment between words and logical symbols be
+on parsing, as it requires that the alignment between words and logical symbols be
 automatically detected, thus changing the parsing task.
 \newcite{wang2015transition} applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
 the resulting tree into an AMR. They thus used a different set of transitions than
-BSP, which parses strings directly into graphs.
+\textsc{bsp}, which parses strings directly into graphs.
 
 
 
@@ -739,7 +739,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
 \end{tabular}
 \end{adjustbox}
 
-\caption{\small\label{fig:features}
+\caption{\label{fig:features}
   Feature templates for the \textsc{bsp}. Notation:
   $s_i$, $b_i$ are the $i$th stack and buffer items, respectively.
   $w$ and $t$ are the word form and part-of-speech tag of the terminal returned by the $h^*(\cdot)$ function (\secref{subsec:con2dep}).
@@ -832,7 +832,7 @@ corpus as test set, without re-tuning any parameters.
 \# children & 1.67 & 1.67 & 1.67 & 1.61 
 \end{tabular}
 }
-\caption{\small Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.
+\caption{Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.
 All counts exclude the root node.
 }
 \label{table:data}
@@ -876,7 +876,9 @@ and one into CoNLL-style dependencies. In the first setting we experiment with \
 the only transition-based constituency parser, to our knowledge, able to parse trees with
 discontiguous constituents.
 In the second setting we use the MaltParser with arc-standard and
-arc-eager transition sets \cite{nivre2007maltparser},
+arc-eager transition sets \cite{nivre2007maltparser}\footnote{Since preliminary
+experiments with non-projective variants showed they did not score as well as the
+projective ones, we do not report them here.},
 and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
 In the MaltParser, we use both SVM and perceptron classifiers, and report
 results obtained with the SVM classifier, which are about 1\% F-score higher.
@@ -978,7 +980,7 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \textsc{bsp}$_{\mathrm{Tree}}$ & 60.2 & 52.8 & 56.2 & $-$ & 0 & 0 \\
 \end{tabular}
 }
-\caption{\small
+\caption{
   Main experimental results in percents. Columns correspond to labeled precision,
   recall and F-score for the different parsers, for both primary (left-hand side)
   and remote (right-hand side) edges. Top: results for \textsc{uparse}
@@ -1023,7 +1025,7 @@ remote edges.\oa{say something about what features are most important}
 \textsc{bsp}$-$\textbf{ratio} &  &  &  &  &  &
 \end{tabular}
 }
-\caption{\small
+\caption{
   Results in percents of the feature ablation experiment.
   See \figref{fig:features} for the definition of each feature set; \textbf{disco} refers to all discontiguous features, and \textbf{ratio} is the number of terminals divided by the total number of nodes (\secref{subsec:features}).
 }
