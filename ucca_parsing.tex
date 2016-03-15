@@ -465,9 +465,9 @@ In the conversion to dependency trees, we first convert BSS
 to constituency trees using the above procedure, and then convert the result to dependency trees. 
 Assume $T_c=(V_c,E_c,\ell_c)$ is a constituency tree with labels $\ell_c:E_c~\rightarrow~L$,
 where $L$ is the set of possible labels.
-The conversion from $T$ to a dependency tree involves the removal of
-all non-terminals from $T$ and the addition of edges between terminals.
-The nodes of the converted dependency tree are simply the terminals of $T$.
+The conversion from $T_c$ to a dependency tree involves the removal of
+all non-terminals from $T_c$ and the addition of edges between terminals.
+The nodes of the converted dependency tree are simply the terminals of $T_c$.
 
 We define a linear order over possible edge labels $L$.
 For each node $u \in V$, denote with $h(u)$ its child with the highest edge label.
