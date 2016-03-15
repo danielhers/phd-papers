@@ -79,13 +79,6 @@
   We obtain encouraging results, using the UCCA semantic representation, which
   supports BSS, as a testbed.
   
-  %Instead, we advocate a constituency-based formulation of the
-  %  task and define the Broad-coverage Constituency Semantic Parsing task
-  %  using 
-  %  We note that there are no existing methods for constituency DAG parsing,
-  %  and propose two transition-based approaches to tackle it:
-  %%  semantic parsing tasks, and suggest future directions for improvement.
-  
   %We experiment with two types of semantic representations, obtaining
   %encouraging results.
   %Universal Conceptual Cognitive Annotation (UCCA) is a semantic grammatical scheme
@@ -115,11 +108,11 @@ While bi-lexical dependencies partially circumvent this restriction, by
 representing complex units in terms of their heads, they fall short
 when representing units that have no clear head.
 Frequent examples of such constructions include
-coordination structures (e.g., ``{\bf John and Mary} went home''; \figref{fig:non_terminal_nodes})
+coordination structures (e.g., ``{\bf John and Mary} went home''; \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the {\bf Have Nots}''),
 and prepositional phrases.
-Third, semantic units may be discontiguous in the text. For instance, in ``John gave everything up'',
-the phrasal verb ``gave ... up'' forms a single semantic unit (\figref{fig:gave}).
+Third, semantic units may be discontiguous in the text. For instance, in ``John gave everything up'' (\figref{fig:gave}),
+the phrasal verb ``gave ... up'' forms a single semantic unit.
 We call the combination of these three properties
 {\it Broad-coverage Semantic Structures} (BSS).
 
@@ -139,25 +132,14 @@ strong performance in a variety of other semantic and syntactic settings as well
 We pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
 by developing conversion protocols between UCCA structures and two related formalisms:
-dependency trees and discontinuous constituency trees.
+dependency trees and discontiguous constituency trees.
 As these formalisms are more restrictive than BSS, the conversion
 is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
 
-Second, we present a novel transition-based constituency DAG parser
-that supports discontinuous constituents, named
-the \textsc{bss} parser (\secref{sec:direct_approach}).\oa{add one-two sentences
-  about the novelty of parsing techniques}
-
-%and tackle the constituency-based semantic parsing task.
-%Constituency semantic representation differ from previous broad-coverage semantic parsing
-%work in two ways.
-%First, it does not impose the unique head assumption, imposed
-%by bi-lexical dependencies, which is problematic for representing several
-%frequent constructions that have no clear head.
-%Second, it grounds the representation in the text,
-%unlike more abstract approach such as AMR \cite{banarescu2013abstract},
-%which allows for the use of strong and efficient parsing methods.
+Second, we present a novel transition-based broad-coverage DAG parser, named
+\textsc{bsp} (\secref{sec:direct_approach}).
+We base our parser on existing techniques from transition-based parsing, with the addition of new features for parsing BSS and UCCA specifically.
 
 We use the English UCCA-annotated corpora \cite{abend2013universal} as a test
 case\footnote{While the task is not specific to UCCA,
@@ -185,16 +167,18 @@ All converters, parsers and datasets will be made publicly available upon public
 
 %\oa{fix this}
 %The contribution of this work is thus three-fold.
-%First, we motivate and define the constituency broad-coverage semantic parsing task.
+%First, we motivate and define the broad-coverage semantic parsing task.
 %Second, we create converters and study the ability of existing parsing technology
 %for formally related settings to address the task, focusing on transition-based methods.
-%Third, we present the \textsc{bcs} parser, novel both in being the first constituency DAG parser,
+%Third, we present the \textsc{bsp}, novel both in being the first broad-coverage DAG parser,
 %as well as the first UCCA parser. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}\label{sec:ucca}
 
 \begin{figure}
+  \begin{subfigure}[t]{.5\textwidth}
+  \centering
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=10mm, ->]
     \node (ROOT) [fill=black, circle] {}
@@ -215,50 +199,93 @@ All converters, parsers and datasets will be made publicly available upon public
         } edge from parent node[left] {\scriptsize $A$} }
       } edge from parent node[right] {\scriptsize $H$} }
       ;
-    \node (LKG) at (-2,0) [fill=black!20, circle] {};
-%    \draw[bend left,dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
-%    \draw (LKG) to node [near start, left] {\scriptsize $$} (After);
-%    \draw (LKG) to node [near start, left] {\scriptsize $$} (graduation);
-%    \draw (LKG) to node [near start, right] {\scriptsize $$} (moved);
-%=======
+    \node (LKG) at (-1.8,0) [fill=black!20, circle] {};
     \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
     \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
-    \draw[bend right] (LKG) to node [auto, below] {\scriptsize $LA$} (graduation);
-    \draw[bend left] (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
+    \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
+    \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
   }
-  \\
+  \caption{}
+  \label{fig:graduation}
+  \end{subfigure}
+%  \scalebox{.9}{
+%  \begin{tikzpicture}[level distance=12mm, ->,
+%      every node/.append style={midway}]
+%    \node (ROOT) [fill=black, circle] {}
+%      child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+%      child {node {decided} edge from parent node[left] {\scriptsize $P$}}
+%      child {node (totakeaquickshower) [fill=black, circle] {}
+%      {
+%        child {node {to} edge from parent node[left] {\scriptsize $F$}}
+%        child {node (takeashower) [fill=black, circle] {}
+%        {
+%          child {node {take} edge from parent node[left] {\scriptsize $C$}}
+%          child {node {a} edge from parent node[right] {\scriptsize $F$}}
+%          child {node (quick) {quick} edge from parent[white]}
+%          child {node {shower} edge from parent node[right] {\scriptsize $C$}}
+%        } edge from parent node[right] {\scriptsize $P$} }
+%      } edge from parent node[left] {\scriptsize $A$} }
+%      ;
+%    \draw[bend left,dashed,->] (takeashower) to node [auto] {\scriptsize $A$} (John);
+%    \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
+%  \end{tikzpicture}
+%  }
+  \begin{subfigure}[t]{.5\textwidth}
+  \centering
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway}]
     \node (ROOT) [fill=black, circle] {}
-      child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
-      child {node {decided} edge from parent node[left] {\scriptsize $P$}}
-      child {node (totakeaquickshower) [fill=black, circle] {}
+      child {node [fill=black, circle] {}
       {
-        child {node {to} edge from parent node[left] {\scriptsize $F$}}
-        child {node (takeashower) [fill=black, circle] {}
-        {
-          child {node {take} edge from parent node[left] {\scriptsize $C$}}
-          child {node {a} edge from parent node[right] {\scriptsize $F$}}
-          child {node (quick) {quick} edge from parent[white]}
-          child {node {shower} edge from parent node[right] {\scriptsize $C$}}
-        } edge from parent node[right] {\scriptsize $P$} }
+        child {node {John} edge from parent node[left] {\scriptsize $C$}}
+        child {node {and} edge from parent node[left] {\scriptsize $N$}}
+        child {node {Mary} edge from parent node[left] {\scriptsize $C$}}
       } edge from parent node[left] {\scriptsize $A$} }
+      child {node {went} edge from parent node[left] {\scriptsize $P$}}
+      child {node {home} edge from parent node[left] {\scriptsize $A$}}
       ;
-    \draw[bend left,dashed,->] (takeashower) to node [auto] {\scriptsize $A$} (John);
-    \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
   \end{tikzpicture}
   }
-\caption{\label{fig:ucca_example1}\small
-  UCCA graphs for two example sentences:
-  ``After graduation, John moved to Paris.'' and ``John decided to take a quick shower.''
-  Both sentences have a remote edge (dashed),
-  resulting in ``John'' having two parents.
-  The first sentence includes a linkage relation (gray node and its outgoing edges)
-  and the second sentence exhibits a discontinuous unit (``take a ... shower'').
-  Partial legend: $P$ -- a Scene's main relation, $A$ -- participant,
-  $L$ -- inter-scene linker, $H$ -- linked Scene, $F$ -- function unit.
+  \caption{}
+  \label{fig:home}
+  \end{subfigure}
+  \begin{subfigure}[t]{.5\textwidth}
+  \centering
+  \scalebox{.9}{
+  \begin{tikzpicture}[level distance=12mm, ->,
+      every node/.append style={midway}]
+    \node (ROOT) [fill=black, circle] {}
+      child {node {John} edge from parent node[left] {\scriptsize $A$}}
+      child {node [fill=black, circle] {}
+      {
+      	child {node {gave} edge from parent node[left] {\scriptsize $C$}}
+      	child {node (everything) {everything} edge from parent[white]}
+      	child {node {up} edge from parent node[left] {\scriptsize $C$}}
+      } edge from parent node[right] {\scriptsize $P$} }
+      ;
+    \draw[bend right,->] (ROOT) to[out=-20, in=180] node [left] {\scriptsize $A$} (everything);
+  \end{tikzpicture}
+  }
+  \caption{}
+  \label{fig:gave}
+  \end{subfigure}
+  \label{fig:examples}
+  \caption{\small
+  UCCA graphs for three example sentences:
+  ``After graduation, John moved to Paris'',
+  ``John and Mary went home''
+  and ``John gave everything up.''
+  % and ``John decided to take a quick shower.''
+  The first sentence includes a remote edge (dashed),
+  resulting in ``John'' having two parents, and
+  a linkage relation (gray node and its outgoing edges).
+  The second sentence includes a coordination construction (``John and Mary'').
+  The third sentence includes a discontiguous unit (``gave ... up'').
+  Legend: $P$ -- a Scene's main relation, $A$ -- participant,
+  $L$ -- inter-scene linker, $H$ -- linked Scene, $F$ -- function unit,
+  $LA$ -- link argument, $LR$ -- link relation.
   Pre-terminal nodes are omitted for brevity.
 }
 \end{figure}
@@ -313,7 +340,6 @@ All converters, parsers and datasets will be made publicly available upon public
 }
 \end{figure*}
 }
-
 
 \paragraph{The UCCA Annotation Scheme.}
 Universal Cognitive Conceptual Annotation (UCCA)
@@ -404,39 +430,38 @@ BSP, which parses strings directly into graphs.
 
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conversion-Based Parsing}\label{sec:conversion_approach}
 
 We begin by assessing the ability of existing technology to address the task,
 by taking a conversion-based approach. Training proceeds by 
-converting the constituency DAGs into the target representation,
-and training an existing parser for that representation on the converted representations.
-We test the parsers by applying the resulting parser to the text of the test set,
-and converting back to the original constituency DAG format, where they are compared
+converting BSS into a different representation,
+and training an existing parser for that representation on the converted structures.
+We test the trained parsers by applying them to the test set,
+and converting the results back to BSS, where they are compared
 with the gold standard.
 The amount of information lost by this back and forth conversion is discussed in
 \secref{sec:experiments}.
 
 \paragraph{Notation.}
-Let $L$ be the set possible edge labels.
-A constituency DAG is a directed acyclic graph $G=(V,E, \ell)$
+Let $L$ be the set of possible edge labels.
+A BSS is a directed acyclic graph $G=(V,E, \ell)$
 over a sequence of tokens $w_1, \ldots, w_n$,
 where $\ell:E\to L$ is a function of \textit{edge labels}.
 For each token $w_i$ ($i=1, \ldots, n$) there exists a leaf (or a terminal) $t_i \in V$.
 
 \paragraph{Conversion to Constituency Trees.}
-We convert constituency DAGs to constituency trees by removing a subset of the edges.
-As the original constituency DAGs may contain discontinuous units, the resulting trees
-may also have contain such units.
+We convert BSS to constituency trees by removing a subset of the edges\footnote{Since
+for a tree, labeling the nodes is equivalent to labeling the edges, we do not distinguish between the two options.
+Note also that as the original structures may contain discontiguous units, the resulting trees may also contain discontiguous nodes.}.
 Specifically, when converting UCCA structures, we note that UCCA marks one of the incoming edges
-for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges.
+for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges (see \figref{fig:graduation}).
 We thus remove all remote and linkage edges, in addition to nodes that are disconnected
-from the graph as a result of this removal. 
-The inverse conversion from trees to graphs is simply the identity function.
+from the graph as a result of this removal.
+The inverse conversion from trees to BSS is simply the identity function, as every constituency tree is a BSS.
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
-In the conversion to dependency trees, we first convert semantic constituency graphs
+In the conversion to dependency trees, we first convert BSS
 to constituency trees using the above procedure, and then convert the result to dependency trees. 
 Assume $T_c=(V_c,E_c,\ell_c)$ is a constituency tree with labels $\ell_c:E_c~\rightarrow~L$,
 where $L$ is the set of possible labels.
@@ -542,20 +567,16 @@ In practice, it mostly selects the label $C$ (Center).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Constituency DAG Parsing}\label{sec:direct_approach}
+\section{Broad-Coverage DAG Parsing}\label{sec:direct_approach}
 
-We now turn to the direct approach for parsing semantic constituency graphs. Given a sequence
-of tokens $w_1, \ldots, w_n$, we directly predict a DAG $G$ whose leaves
+We now turn to the direct approach for parsing BSS, a transition-based broad-coverage DAG parser.
+We name our parser \textsc{bsp} (Broad-coverage Semantic Parser).
+This parser combines techniques from transition-based discontiguous constituency parsing \cite{maier2015discontinuous}
+and transition-based dependency DAG parsing \cite{tokgoz2015transition}.
+In addition, we introduce new UCCA-oriented features for parsing BSS.
+
+Given a sequence of tokens $w_1, \ldots, w_n$, we directly predict a BSS $G$ whose leaves
 correspond to  $w_1, \ldots, w_n$.
-
-%We define a transition system for constituency DAG parsing as a quadruple $S=(C,T,c_s,C_t)$, where
-%\begin{enumerate}
-% \item $C$ is a set of \textit{configurations}.
-% \item $T$ is a set of \textit{transitions}.
-% \item $c_s$ is a function mapping a sequence of tokens to an \textit{initial state} in $C$.
-% \item $C_t$ is a set of \textit{terminal configurations}.
-%\end{enumerate}
-
 In transition-based (also called \textit{shift-reduce}) parsing, the input is scanned from left to right.
 The output is created incrementally by applying a \textit{transition} at each step to the parser state,
 defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
@@ -605,7 +626,7 @@ $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & 
 \end{tabular}
 \end{adjustbox}
 \caption{\label{fig:transitions}
-  The transition set of the \textsc{bcs} parser. Following standard practice,
+  The transition set of the \textsc{bsp}. Following standard practice,
   we write the stack with its top to the right and the buffer with its head to the left.
   $(\cdot,\cdot)_X$ denotes an $X$-labeled edge, $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge,
   and $x^*$ an implicit node. $\mathrm{i}(x)$ is a running index for the created nodes.
@@ -613,7 +634,7 @@ $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & 
 \end{figure*}
 
 In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
-we follow previous work in transition-based constituency parsing \cite{zhu2013fast}, and include the \textsc{Node} transition for creating new non-terminal nodes.
+we follow previous work in transition-based constituency parsing \cite{sagae2005classifier}, and include the \textsc{Node} transition for creating new non-terminal nodes.
 Concretely, \textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge.
 %\textsc{Implicit$_X$} acts similarly, but the created node is a child instead,
 %and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
@@ -628,7 +649,7 @@ transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transitio
 Once all edges for a particular node have been created, it is removed from the stack
 by applying \textsc{Reduce}.
 
-\textsc{Swap} allows handling discontinuous nodes, by popping the second
+\textsc{Swap} allows handling discontiguous nodes, by popping the second
 node on the stack and adding it to the top of the buffer, as with the similarly
 named transition in previous work \cite{nivre2009non,maier2015discontinuous}.
 Finally, \textsc{Finish} pops the root node and marks the state as terminal.
@@ -682,11 +703,11 @@ $s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
 $s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
 \\
 {\footnotesize Features from \cite{maier2015discontinuous}:} \\
-\textbf{discontinuous unigrams} \\
+\textbf{discontiguous unigrams} \\
 $s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
 $s_0xte, s_1xte, s_2xte, s_3xte,$ \\
 $s_0xy, s_1xy, s_2xy, s_3xy$ \\
-\textbf{discontinuous bigrams} \\
+\textbf{discontiguous bigrams} \\
 $s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
 $s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
 $s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$ \\
@@ -705,7 +726,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
 \end{adjustbox}
 
 \caption{\small\label{fig:features}
-  Feature templates for the \textsc{bcs} parser. Notation:
+  Feature templates for the \textsc{bsp}. Notation:
   $s_i$, $b_i$ are the $i$th stack and buffer items, respectively.
   $w$ and $t$ are the word form and part-of-speech tag of the terminal returned by the $h^*(\cdot)$ function (\secref{subsec:con2dep}).
   $\emph{}$ is the edge label to the node returned by the $h(\cdot)$ function.
@@ -804,8 +825,8 @@ In the out-of-domain experiments, we apply the same parser
 corpus as test set, without re-tuning any parameters.
 
 \paragraph{Evaluation.}
-Since there are no standard evaluation measures for comparing constituency DAGs, we define
-two simple measures for comparing them.
+Since there are no standard evaluation measures for BSS, we define
+two simple measures for comparing such structures.
 Assume $G_p=(V_p,E_p,\ell_p)$ and $G_g=(V_g,E_g,\ell_g)$
 are the predicted and gold-standard DAGs over the same
 set of terminals $W = \{w_1,\ldots,w_n\}$, respectively.
@@ -836,10 +857,10 @@ In all cases, punctuation marks are excluded from the evaluation, but not from t
 %constituency representation and \textsc{CoNLL-X} as the format for dependency representation.
 
 \paragraph{Conversions.}
-We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
+We explore two conversion scenarios: one into (possibly discontiguous) constituency trees,
 and one into CoNLL-style dependencies. In the first setting we experiment with \textsc{uparse},
 the only transition-based constituency parser, to our knowledge, able to parse trees with
-discontinuous constituents.
+discontiguous constituents.
 In the second setting we use the MaltParser with arc-standard and
 arc-eager transition sets \cite{nivre2007maltparser},
 and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
@@ -853,14 +874,14 @@ with a beam size of 4, where the other parsers use greedy search.
 %The LSTM parser uses the arc-standard transition set, and the MaltParser
 %running MaltParser with arc-standard yielded nearly the same
 %scores as arc-eager. \textsc{uparse}, in contrast, uses a larger transition
-%set that allows discontinuous constituency tree parsing.
-%\textsc{bcs} extends this set further, allowing for DAG parsing
+%set that allows discontiguous constituency tree parsing.
+%\textsc{bsp} extends this set further, allowing for DAG parsing
 %and UCCA-specific features.
 
 %Parsers parameter of variation is the classifier used by each of the parsers.
 %The LSTM parser is based on neural networks, whereas the highest scores for
 %MaltParser were obtained with an SVM classifier.
-%Both \textsc{uparse} and \textsc{bcs} use a linear classifier.
+%Both \textsc{uparse} and \textsc{bsp} use a linear classifier.
 
 %We omit linkage edges and nodes, as these are not evaluated
 %by the evaluation metrics yet and are not an essential part of the
@@ -871,12 +892,12 @@ We further report upper bounds for the conversion-based methods, by applying
 the conversion and inverse conversion on the gold standard graphs and comparing
 them to the original gold standard.
 
-\paragraph{\textsc{bcs} Parser.}
-Training \textsc{bcs} for 16 iterations, we use a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
+\paragraph{\textsc{bsp}.}
+Training \textsc{bsp} for 16 iterations, we use a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
 We use an \textsc{Importance} value of 2, doubling the weight updates
 for gold \textsc{Swap} transitions to address the sparseness
-of discontinuous structures, as in \cite{maier2015discontinuous}.
-We train \textsc{bcs} both where remote edges
+of discontiguous structures, as in \cite{maier2015discontinuous}.
+We train \textsc{bsp} both where remote edges
 are included, and when they are excluded from the training data, to allow
 more direct comparison with conversion-based methods that can only
 predict trees.
@@ -886,28 +907,28 @@ predict trees.
 
 \tabref{table:results} presents the results of our main experiments, as well as
 upper bounds for the conversion-based methods.
-\textsc{bcs} obtains comparable F-scores to MaltParser and \textsc{uparse}
+\textsc{bsp} obtains comparable F-scores to MaltParser and \textsc{uparse}
 in terms of primary edges, but unlike them, is able to predict some
 of the remote edges as well. 
-Removing remote edges from the training data of \textsc{bcs} does not
+Removing remote edges from the training data of \textsc{bsp} does not
 change results considerably on the primary edges,
 reducing them by 0.9\% F-score in the in-domain setting, but reduces
 them by the same amount when applied out-of-domain. Results on
 the out-of-domain settings are largely comparable with the in-domain
-results, supporting the robustness of the \textsc{bcs} results.
+results, supporting the robustness of the \textsc{bsp} results.
 
 The LSTM parser obtains the best results on primary edges,
 with a considerable margin. Importantly, it obtains more than
 10\% of F-score higher than MaltParser, which mostly differ
 from it in terms of the local classifier.
 This suggests that applying a similar LSTM-based approach to
-training \textsc{bcs} is likely to boost results considerably,
+training \textsc{bsp} is likely to boost results considerably,
 and further underscores the feasibility
-of the presented approach for semantic constituency parsing. 
+of the presented approach for BSS parsing. 
 
 %too practically turns the structure into a constituency tree, and raises the scores above two of the conversion-based parsers. However, the stack LSTM-based parser of Dyer et al.~\shortcite{dyer2015transition} still reaches the highest score.
 
-%The \textsc{bcs} parser obtains scores that are nearly identical to \newcite{maier2015discontinuous}
+%The \textsc{bsp} obtains scores that are nearly identical to \newcite{maier2015discontinuous}
 %and Nivre et al.~\shortcite{nivre2007maltparser} on primary edges, but also correctly
 %predicts remote edges when trained on them.
 %Training without linkage edges and implicit nodes improve the scores on primary edges, as a more simple model is easier to learn.
@@ -934,12 +955,12 @@ LSTM & {\bf 73.2} & {\bf 66.2} & {\bf 69.2} & $-$ & 0 & 0 \\
 Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Direct Approach} \\
-\textsc{bcs} & 62.4 & 56 & 59 & 15.3 & 11.8 & 13.3 \\
-\textsc{bcs}$_{\mathrm{Tree}}$ & 63.8 & 56.5 & 59.9 & $-$ & 0 & 0 \\
+\textsc{bsp} & 62.4 & 56 & 59 & 15.3 & 11.8 & 13.3 \\
+\textsc{bsp}$_{\mathrm{Tree}}$ & 63.8 & 56.5 & 59.9 & $-$ & 0 & 0 \\
 \hhline{=======}
 \multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Out-of-domain} \\
-\textsc{bcs} & 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
-\textsc{bcs}$_{\mathrm{Tree}}$ & 60.2 & 52.8 & 56.2 & $-$ & 0 & 0 \\
+\textsc{bsp} & 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
+\textsc{bsp}$_{\mathrm{Tree}}$ & 60.2 & 52.8 & 56.2 & $-$ & 0 & 0 \\
 \end{tabular}
 }
 \caption{\small
@@ -949,16 +970,16 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
   after conversion to constituency tree annotation. Upper middle: results for the
   MaltParser arc-eager and arc-standard, as well as
   the LSTM parser after conversion to dependency tree annotation.
-  Lower middle: results for our \textsc{bcs} parser, when trained on the complete UCCA DAGs (\textsc{bcs}),
-  and when trained on UCCA trees, obtained by removing remote edges (\textsc{bcs}$_{\mathrm{Tree}}$).
-  Bottom: results for \textsc{bcs} and \textsc{bcs}$_{\mathrm{Tree}}$ when tested on out-of-domain data.
+  Lower middle: results for our \textsc{bsp}, when trained on the complete UCCA DAGs (\textsc{bsp}),
+  and when trained on UCCA trees, obtained by removing remote edges (\textsc{bsp}$_{\mathrm{Tree}}$).
+  Bottom: results for \textsc{bsp} and \textsc{bsp}$_{\mathrm{Tree}}$ when tested on out-of-domain data.
 }
 \label{table:results}
 \end{table}
 
 \paragraph{Feature ablation.}
 
-In another experiment, involving only \textsc{bcs}, we removed a set of features at a time, trained the resulting model (for 16 iterations, with the same parameters as in the main experiment) and evaluated it on the development set. Thus, we can evaluate the importance of each set of features. \tabref{table:ablation} shows the results of this experiment.
+In another experiment, involving only \textsc{bsp}, we removed a set of features at a time, trained the resulting model (for 16 iterations, with the same parameters as in the main experiment) and evaluated it on the development set. Thus, we can evaluate the importance of each set of features. \tabref{table:ablation} shows the results of this experiment.
 
 
 \begin{table}[ht]
@@ -967,23 +988,23 @@ In another experiment, involving only \textsc{bcs}, we removed a set of features
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\textsc{bcs} &  &  &  &  &  &  \\
-\textsc{bcs}$-$\textbf{unigrams} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{bigrams} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{trigrams} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{separator} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{extended} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{disco} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{counts} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{edges} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{history} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{remote} &  &  &  &  &  & \\
-\textsc{bcs}$-$\textbf{ratio} &  &  &  &  &  &
+\textsc{bsp} &  &  &  &  &  &  \\
+\textsc{bsp}$-$\textbf{unigrams} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{bigrams} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{trigrams} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{separator} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{extended} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{disco} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{counts} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{edges} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{history} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{remote} &  &  &  &  &  & \\
+\textsc{bsp}$-$\textbf{ratio} &  &  &  &  &  &
 \end{tabular}
 }
 \caption{\small
   Results in percents of the feature ablation experiment.
-  See \figref{fig:features} for the definition of each feature set; \textbf{disco} refers to all discontinuous features, and \textbf{ratio} is the number of terminals divided by the total number of nodes (\secref{subsec:features}).
+  See \figref{fig:features} for the definition of each feature set; \textbf{disco} refers to all discontiguous features, and \textbf{ratio} is the number of terminals divided by the total number of nodes (\secref{subsec:features}).
 }
 \label{table:ablation}
 \end{table}
@@ -997,12 +1018,12 @@ This table shows that although some of the features have a small positive contri
 We have defined the broad-coverage semantic constituency parsing task,
 and explored two complementary parsing approaches to tackle it.
 Conversion-based parsing procedures assess the ability of existing
-technology to address the task, and the novel \textsc{bcs} parser first
+technology to address the task, and the novel \textsc{bsp} first
 explores parsing into constituency DAG representations.
 The work makes a further contribution by first experimenting on UCCA parsing.
 Results show that UCCA can already be parsed with 69.3\% F-score,
 and suggests means for improvement by taking an LSTM-based
-approach to the local classifier of \textsc{bcs}.
+approach to the local classifier of \textsc{bsp}.
 The quality of the results is underscored by UCCA's inter-annotator
 agreement on primary edges (often taken as an upper bound),
 80--85\% F-score \cite{abend2013universal}.
@@ -1014,8 +1035,8 @@ agreement on primary edges (often taken as an upper bound),
 %We will briefly review their results:
 %(1) We applied the parsers to complete paragraphs, without splitting to sentences. MaltParser and the
 %LSTM parser reached nearly the same scores as in the sentence experiments, but \textsc{uparse}
-%and \textsc{bcs} failed to run with input above 500 tokens, for technical reasons.
-%%%%%%%(2) We tried including linkage nodes and edges and implicit nodes when running the \textsc{bcs} parser, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
+%and \textsc{bsp} failed to run with input above 500 tokens, for technical reasons.
+%%%%%%%(2) We tried including linkage nodes and edges and implicit nodes when running the \textsc{bsp}, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
 %(3) We created a conversion procedure to SDP (semantic dependency parsing), an additional dependency format that allows multiple parents \cite{oepen2015semeval}. The resulting upper bound for primary edges was similar to the \textsc{CoNLL} format, but for remote edges it was as high as 68.6\% labeled F-score. We did not evaluate dependency DAG parsers \cite{sagae2008shift,tokgoz2015transition} on this format since we could not obtain their code.
 
 The availability of a UCCA parser first allows to apply UCCA to
