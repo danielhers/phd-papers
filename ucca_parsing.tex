@@ -569,14 +569,9 @@ In practice, it mostly selects the label $C$ (Center).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Broad-Coverage DAG Parsing}\label{sec:direct_approach}
 
+\paragraph{Transition-Based Parsing.}
 We now turn to the direct approach for parsing BSS, a transition-based broad-coverage DAG parser.
-We name our parser \textsc{bsp} (Broad-coverage Semantic Parser).
-This parser combines techniques from transition-based discontiguous constituency parsing \cite{maier2015discontinuous}
-and transition-based dependency DAG parsing \cite{tokgoz2015transition}.
-In addition, we introduce new UCCA-oriented features for parsing BSS.
 
-Given a sequence of tokens $w_1, \ldots, w_n$, we directly predict a BSS $G$ whose leaves
-correspond to  $w_1, \ldots, w_n$.
 In transition-based (also called \textit{shift-reduce}) parsing, the input is scanned from left to right.
 The output is created incrementally by applying a \textit{transition} at each step to the parser state,
 defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
@@ -585,6 +580,26 @@ and a graph $G=(V,E,\ell)$ of constructed nodes and labeled edges.
 In addition, some states are marked as \textit{terminal}, meaning that $G$ is the final output.
 A classifier is used at each step to select the next transition based on features
 which encode the parser's current state.
+
+Despite being based on local decisions, transition-based methods have yielded excellent
+results in a variety of parsing tasks.
+Within syntactic dependency parsing, transition-based methods
+have been successfully applied to corpora in many languages and domains, yielding some
+of the best reported results \cite{dyer2015transition,ballesteros2015improved}. 
+The approach has also yielded results comparable with the state-of-the-art when applied
+to constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast}, and has been recently extended to
+discontinuous constituency parsing \cite{maier2015discontinuous},
+yielding improvements in the parsing of discontiguous constituents in German.
+Transition-based parsers have also been developed for dependency DAG structures
+\cite{sagae2008shift,tokgoz2015transition} and CCG parsing \cite{ambati2015incremental}.
+Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
+Our parser combines techniques from transition-based discontiguous constituency parsing \cite{maier2015discontinuous}
+and transition-based dependency DAG parsing \cite{tokgoz2015transition}.
+In addition, we introduce new UCCA-oriented features for parsing BSS.
+We name our parser \textsc{bsp} (Broad-coverage Semantic Parser).
+
+Given a sequence of tokens $w_1, \ldots, w_n$, we directly predict a BSS $G$ whose leaves
+correspond to  $w_1, \ldots, w_n$.
 
 \paragraph{Transition Set.}
 Parsing starts with a single node in the stack (the root node), and the input tokens
@@ -1066,10 +1081,7 @@ between representations, suggesting ways to optimally design them.
 %%Our parser reaches promising results, but it is very basic in terms of the techniques used in it. Using beam search rather than greedy inference tends to improve the parsing scores significantly.
 %In terms of machine learning, we use a linear classifier with hand-crafted features. As the experiment with the LSTM parser shows, implementing a parser based on neural networks should also give a significant improvement to our parsing scores.
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Related Semantic and Syntactic Parsing Work.}\label{sec:related}
-
+\daniel{
 Semantic parsing methods can be largely partitioned into grammar-based and grammarless methods.
 Within the grammar-based literature, most work relied on Combinatory Categorial Grammar (CCG)
 \cite{Steedman:00}, which allows to compute semantic structure compositionally from the
@@ -1084,18 +1096,7 @@ pursuing either graph-based methods that predict the highest ranking graph
 (e.g., \newcite{flanigan2014discriminative} for AMR parsing)
 or a transition-based method that builds the parse incrementally following a series of local
 decisions \cite[and much subsequent work]{Nivre03anefficient}.
-
-Despite being based on local decisions, transition-based methods have yielded excellent
-results in a variety of parsing tasks. Within syntactic dependencies parsing, transition-based methods
-have been successfully applied to corpora in many languages and domains, yielding some
-of the best reported results \cite{dyer2015transition,ballesteros2015improved}. 
-The approach has also yielded results comparable with the state-of-the-art when applied
-to constituency parsing \cite{sagae2005classifier,zhu2013fast}, and has been recently extended to
-discontinuous constituency parsing \cite{maier2015discontinuous},
-yielding improvements over in the parsing of discontinuous constituents in German.
-Transition-based parsers have also been developed for dependency DAG structures
-\cite{sagae2008shift,tokgoz2015transition} and CCG parsing \cite{ambati2015incremental}.
-Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
+}
 
 
 
@@ -1103,27 +1104,3 @@ Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
 \bibliographystyle{acl2016}
 
 \end{document}
-
-
-\com{
-  (8) we expriment with the UCCA corpus...
-  (7) since this is the first parser for the task, we compare the results to partial
-  implementations of the algorithm. we also conduct a comparison with existing parsers for similar
-  parsing tasks.
-  (9) our contribution: \#1 defining the 
-  \#2 first parser for broad-coverage constituency-based parsing; \#3 first parser for UCCA;
-  Previous work: the work has interesting connections to syntactic parsing, to SRL (which also has both dependency
-  and constituency versions), and to semantic parsing into logical forms, but is different from the,
-  see discussion in (Oepen et al., 2015). Also AMR parsing.
-
-Universal Conceptual Cognitive Annotation (UCCA) is a recently introduced semantic annotation scheme. It takes a semantic approach to grammatical representation, describing relations between words and phrases in natural language text. The foundational layer can potentially be extended by any number of additional layers to provide refinements to the existing scheme, but it already covers many of the basic semantic relations in language. The annotation is represented as a directed acyclic graph (DAG), where edges denote semantic dependencies between abstract units. UCCA can be easily annotated manually without expert knowledge in linguistics, making it attractive as a resource for semantic tasks---an alternative to syntactic annotation, which is costly. A corpus containing 160K words from the English Wikipedia has been manually annotated~\cite{abend2013universal}.
-
-UCCA exhibits three properties that are generally absent in syntactic schemes:
-\begin{description}
-\item[Multiple parents.] In general, the UCCA graph is a DAG and not a tree.
-\item[Discontinuity.] The yield of a node may have gaps.
-\item[Non-terminal units.] There are units representing abstract entities or events, and not all nodes correspond to tokens.
-\end{description}
-
-This work is the first attempt at automatic UCCA parsing.
-}
