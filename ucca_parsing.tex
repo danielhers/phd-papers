@@ -656,7 +656,7 @@ $[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\
 %\textsc{Implicit$_X$} acts similarly, but the created node is a child instead,
 %and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
 
-\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a primary new $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. As a UCCA node may only
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new primary $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. As a UCCA node may only
 have one incoming primary edge, \textsc{Edge} transitions are disallowed where the child node already
 has an incoming primary edge.
 \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}. We distinguish between these two pairs of transitions, for the parser to be able to predict whether an edge is a primary or a remote one.
