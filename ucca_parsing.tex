@@ -138,8 +138,8 @@ is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
 
 Second, we present a novel transition-based broad-coverage DAG parser, named
-\textsc{bsp} (Broad-coverage Semantic Parser) (\secref{sec:direct_approach}).
-This parser combines techniques from transition-based discontiguous constituency parsing \cite{maier2015discontinuous} and transition-based dependency DAG parsing \cite{tokgoz2015transition}. In addition, we introduce new features for parsing BSS and UCCA specifically.
+\textsc{bsp} (\secref{sec:direct_approach}).
+We base our parser on existing techniques from transition-based parsing, with the addition of new features for parsing BSS and UCCA specifically.
 
 We use the English UCCA-annotated corpora \cite{abend2013universal} as a test
 case\footnote{While the task is not specific to UCCA,
@@ -631,18 +631,14 @@ In practice, it mostly selects the label $C$ (Center).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Broad-Coverage DAG Parsing}\label{sec:direct_approach}
 
-We now turn to the direct approach for parsing semantic constituency graphs. Given a sequence
-of tokens $w_1, \ldots, w_n$, we directly predict a DAG $G$ whose leaves
+We now turn to the direct approach for parsing BSS, a transition-based broad-coverage DAG parser.
+We name our parser \textsc{bsp} (Broad-coverage Semantic Parser).
+This parser combines techniques from transition-based discontiguous constituency parsing \cite{maier2015discontinuous}
+and transition-based dependency DAG parsing \cite{tokgoz2015transition}.
+In addition, we introduce new UCCA-oriented features for parsing BSS.
+
+Given a sequence of tokens $w_1, \ldots, w_n$, we directly predict a BSS $G$ whose leaves
 correspond to  $w_1, \ldots, w_n$.
-
-%We define a transition system for constituency DAG parsing as a quadruple $S=(C,T,c_s,C_t)$, where
-%\begin{enumerate}
-% \item $C$ is a set of \textit{configurations}.
-% \item $T$ is a set of \textit{transitions}.
-% \item $c_s$ is a function mapping a sequence of tokens to an \textit{initial state} in $C$.
-% \item $C_t$ is a set of \textit{terminal configurations}.
-%\end{enumerate}
-
 In transition-based (also called \textit{shift-reduce}) parsing, the input is scanned from left to right.
 The output is created incrementally by applying a \textit{transition} at each step to the parser state,
 defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
@@ -700,7 +696,7 @@ $[r]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & 
 \end{figure*}
 
 In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
-we follow previous work in transition-based constituency parsing \cite{zhu2013fast}, and include the \textsc{Node} transition for creating new non-terminal nodes.
+we follow previous work in transition-based constituency parsing \cite{sagae2005classifier}, and include the \textsc{Node} transition for creating new non-terminal nodes.
 Concretely, \textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge.
 %\textsc{Implicit$_X$} acts similarly, but the created node is a child instead,
 %and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
@@ -891,8 +887,8 @@ In the out-of-domain experiments, we apply the same parser
 corpus as test set, without re-tuning any parameters.
 
 \paragraph{Evaluation.}
-Since there are no standard evaluation measures for comparing constituency DAGs, we define
-two simple measures for comparing them.
+Since there are no standard evaluation measures for BSS, we define
+two simple measures for comparing such structures.
 Assume $G_p=(V_p,E_p,\ell_p)$ and $G_g=(V_g,E_g,\ell_g)$
 are the predicted and gold-standard DAGs over the same
 set of terminals $W = \{w_1,\ldots,w_n\}$, respectively.
@@ -990,7 +986,7 @@ from it in terms of the local classifier.
 This suggests that applying a similar LSTM-based approach to
 training \textsc{bsp} is likely to boost results considerably,
 and further underscores the feasibility
-of the presented approach for semantic constituency parsing. 
+of the presented approach for BSS parsing. 
 
 %too practically turns the structure into a constituency tree, and raises the scores above two of the conversion-based parsers. However, the stack LSTM-based parser of Dyer et al.~\shortcite{dyer2015transition} still reaches the highest score.
 
