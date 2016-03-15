@@ -471,7 +471,7 @@ The nodes of the converted dependency tree are simply the terminals of $T_c$.
 
 We define a linear order over possible edge labels $L$.
 For each node $u \in V$, denote with $h(u)$ its child with the highest edge label.
-Denote with $h^*(u)$ the terminal reached by recursively applying of $h(\cdot)$ over $u$.
+Denote with $h^*(u)$ the terminal reached by recursively applying $h(\cdot)$ over $u$.
 For each terminal $t$, we define $n(t)$ as the highest
 non-terminal such that $t=h^*(n(t))$, i.e.,
 $n(t)$ is the only node such that $t=h^*(n(t))$ and $t \neq h^*(\mathrm{Parent}_c(n(t)))$.
