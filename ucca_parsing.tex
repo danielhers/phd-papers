@@ -452,9 +452,9 @@ For each token $w_i$ ($i=1, \ldots, n$), there exists a leaf (or a terminal) $t_
 
 \paragraph{Conversion to Constituency Trees.}
 We convert BSS to constituency trees by removing a subset of the
-edges\footnote{As for trees, labeling nodes is equivalent to labeling edges,
+edges\footnote{For trees, labeling nodes is equivalent to labeling edges. Thus,
   we do not distinguish between the two options. 
-  Note also that as the original structures may contain discontiguities, the resulting trees may too.}.
+  Note also that as the original structures may contain discontiguities, so may the resulting trees.}.
 Specifically, when converting UCCA structures, we note that UCCA marks one of the incoming edges
 for each non-root as ``primary'' and the others as ``remote'' edges (see \figref{fig:graduation}).
 We thus remove all remote edges.
