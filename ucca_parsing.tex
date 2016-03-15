@@ -79,13 +79,6 @@
   We obtain encouraging results, using the UCCA semantic representation, which
   supports BSS, as a testbed.
   
-  %Instead, we advocate a constituency-based formulation of the
-  %  task and define the Broad-coverage Constituency Semantic Parsing task
-  %  using 
-  %  We note that there are no existing methods for constituency DAG parsing,
-  %  and propose two transition-based approaches to tackle it:
-  %%  semantic parsing tasks, and suggest future directions for improvement.
-  
   %We experiment with two types of semantic representations, obtaining
   %encouraging results.
   %Universal Conceptual Cognitive Annotation (UCCA) is a semantic grammatical scheme
@@ -148,16 +141,6 @@ Second, we present a novel transition-based broad-coverage DAG parser, named
 \textsc{bsp} (Broad-coverage Semantic Parser) (\secref{sec:direct_approach}).
 This parser combines techniques from transition-based discontiguous constituency parsing \cite{maier2015discontinuous} and transition-based dependency DAG parsing \cite{tokgoz2015transition}. In addition, we introduce new features for parsing BSS and UCCA specifically.
 
-%and tackle the constituency-based semantic parsing task.
-%Constituency semantic representation differ from previous broad-coverage semantic parsing
-%work in two ways.
-%First, it does not impose the unique head assumption, imposed
-%by bi-lexical dependencies, which is problematic for representing several
-%frequent constructions that have no clear head.
-%Second, it grounds the representation in the text,
-%unlike more abstract approach such as AMR \cite{banarescu2013abstract},
-%which allows for the use of strong and efficient parsing methods.
-
 We use the English UCCA-annotated corpora \cite{abend2013universal} as a test
 case\footnote{While the task is not specific to UCCA,
   to the best of our knowledge, UCCA's are the only
@@ -184,10 +167,10 @@ All converters, parsers and datasets will be made publicly available upon public
 
 %\oa{fix this}
 %The contribution of this work is thus three-fold.
-%First, we motivate and define the constituency broad-coverage semantic parsing task.
+%First, we motivate and define the broad-coverage semantic parsing task.
 %Second, we create converters and study the ability of existing parsing technology
 %for formally related settings to address the task, focusing on transition-based methods.
-%Third, we present the \textsc{bsp}, novel both in being the first constituency DAG parser,
+%Third, we present the \textsc{bsp}, novel both in being the first broad-coverage DAG parser,
 %as well as the first UCCA parser. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -460,7 +443,7 @@ or a transition-based method that builds the parse incrementally following a ser
 decisions \cite[and much subsequent work]{Nivre03anefficient}.
 
 Despite being based on local decisions, transition-based methods have yielded excellent
-results in a variety of parsing tasks. Within syntactic dependencies parsing, transition-based methods
+results in a variety of parsing tasks. Within syntactic dependency parsing, transition-based methods
 have been successfully applied to corpora in many languages and domains, yielding some
 of the best reported results \cite{dyer2015transition,ballesteros2015improved}. 
 The approach has also yielded results comparable with the state-of-the-art when applied
@@ -469,20 +452,7 @@ discontiguous constituency parsing \cite{maier2015discontinuous},
 yielding improvements over in the parsing of discontiguous constituents in German.
 Transition-based parsers have also been developed for dependency DAG structures
 \cite{sagae2008shift,tokgoz2015transition} and CCG parsing \cite{ambati2015incremental}.
-Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
-
-%\oa{Who to compare to? (we take a transition-based approach; later we discuss,
-%  without comparing, to grammar-based
-%  or graph-based approaches)
-%  Constituency parsers that meet some of the criteria: Wolfgang's (all but multiple parents),
-%        which is state-of-the-art on Negra discontiguous units.
-%        There are no multiple parent constituency parsers! (so we can't compare)
-%%  Dependency parsers: there are the standard ones (done!), there is MALT non-projective, and there is not MALT with multiple parents. There are other dependency with multiple parents: tokgoez and erdigit (based on earlier work by sagae and tsujii) -- we're trying to get their code.
-%  
-%  We'll also say that future work will address other languages, ...
-%  Evaluation specifically on multiple parents, and on discontiguous.
-%  Future work: LSTM-version of our parser, conversion from t-layer parsers and such.
-%}
+Nevertheless, there are no broad-coverage DAG parsers, a gap this work addresses.
 
 % ADL comment: I removed these paragraphs because I think the text should zero in on precisely what our research methods, without dwelling on background/ previous work, esp. this early in the text. If this appears at all it should be briefly summarized at the end; say how it informs UCCA, but don't dwell on it.
 
@@ -527,33 +497,33 @@ Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
 
 We begin by assessing the ability of existing technology to address the task,
 by taking a conversion-based approach. Training proceeds by 
-converting the constituency DAGs into the target representation,
-and training an existing parser for that representation on the converted representations.
-We test the parsers by applying the resulting parser to the text of the test set,
-and converting back to the original constituency DAG format, where they are compared
+converting BSS into a different representation,
+and training an existing parser for that representation on the converted structures.
+We test the trained parsers by applying them to the test set,
+and converting the results back to BSS, where they are compared
 with the gold standard.
 The amount of information lost by this back and forth conversion is discussed in
 \secref{sec:experiments}.
 
 \paragraph{Notation.}
-Let $L$ be the set possible edge labels.
-A constituency DAG is a directed acyclic graph $G=(V,E, \ell)$
+Let $L$ be the set of possible edge labels.
+A BSS is a directed acyclic graph $G=(V,E, \ell)$
 over a sequence of tokens $w_1, \ldots, w_n$,
 where $\ell:E\to L$ is a function of \textit{edge labels}.
 For each token $w_i$ ($i=1, \ldots, n$) there exists a leaf (or a terminal) $t_i \in V$.
 
 \paragraph{Conversion to Constituency Trees.}
-We convert constituency DAGs to constituency trees by removing a subset of the edges.
-As the original constituency DAGs may contain discontiguous units, the resulting trees
-may also have contain such units.
+We convert BSS to constituency trees by removing a subset of the edges\footnote{Since
+for a tree, labeling the nodes is equivalent to labeling the edges, we do not distinguish between the two options.
+Note also that as the original structures may contain discontiguous units, the resulting trees may also contain discontiguous nodes.}.
 Specifically, when converting UCCA structures, we note that UCCA marks one of the incoming edges
-for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges.
+for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges (see \figref{fig:graduation}).
 We thus remove all remote and linkage edges, in addition to nodes that are disconnected
-from the graph as a result of this removal. 
-The inverse conversion from trees to graphs is simply the identity function.
+from the graph as a result of this removal.
+The inverse conversion from trees to BSS is simply the identity function, as every constituency tree is a BSS.
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
-In the conversion to dependency trees, we first convert semantic constituency graphs
+In the conversion to dependency trees, we first convert BSS
 to constituency trees using the above procedure, and then convert the result to dependency trees. 
 Assume $T_c=(V_c,E_c,\ell_c)$ is a constituency tree with labels $\ell_c:E_c~\rightarrow~L$,
 where $L$ is the set of possible labels.
@@ -659,7 +629,7 @@ In practice, it mostly selects the label $C$ (Center).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Constituency DAG Parsing}\label{sec:direct_approach}
+\section{Broad-Coverage DAG Parsing}\label{sec:direct_approach}
 
 We now turn to the direct approach for parsing semantic constituency graphs. Given a sequence
 of tokens $w_1, \ldots, w_n$, we directly predict a DAG $G$ whose leaves
