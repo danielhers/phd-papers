@@ -115,7 +115,7 @@ While bi-lexical dependencies partially circumvent this restriction, by
 representing complex units in terms of their heads, they fall short
 when representing units that have no clear head.
 Frequent examples of such constructions include
-coordination structures (e.g., ``{\bf John and Mary} went home''; \figref{fig:home})
+coordination structures (e.g., ``{\bf John and Mary} went home''; \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the {\bf Have Nots}''),
 and prepositional phrases.
 Third, semantic units may be discontiguous in the text. For instance, in ``John gave everything up'' (\figref{fig:gave}),
@@ -134,18 +134,18 @@ We adopt a transition-based approach, which has recently produced some of the be
 results in syntactic dependency parsing
 \cite{dyer2015transition,ballesteros2015improved}, and has demonstrated
 strong performance in a variety of other semantic and syntactic settings as well
-\cite{maier2015discontinuous,ambati2015incremental,wang2015transition}.
+\cite{maier2015discontiguous,ambati2015incremental,wang2015transition}.
 
 We pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
 by developing conversion protocols between UCCA structures and two related formalisms:
-dependency trees and discontinuous constituency trees.
+dependency trees and discontiguous constituency trees.
 As these formalisms are more restrictive than BSS, the conversion
 is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
 
 Second, we present a novel transition-based constituency DAG parser
-that supports discontinuous constituents, named
+that supports discontiguous constituents, named
 the \textsc{bss} parser (\secref{sec:direct_approach}).\oa{add one-two sentences
   about the novelty of parsing techniques}
 
@@ -300,7 +300,7 @@ All converters, parsers and datasets will be made publicly available upon public
   resulting in ``John'' having two parents, and
   a linkage relation (gray node and its outgoing edges).
   The second sentence includes a coordination construction (``John and Mary'').
-  The third sentence includes a discontinuous unit (``gave ... up'').
+  The third sentence includes a discontiguous unit (``gave ... up'').
   Legend: $P$ -- a Scene's main relation, $A$ -- participant,
   $L$ -- inter-scene linker, $H$ -- linked Scene, $F$ -- function unit,
   $LA$ -- link argument, $LR$ -- link relation.
@@ -466,8 +466,8 @@ have been successfully applied to corpora in many languages and domains, yieldin
 of the best reported results \cite{dyer2015transition,ballesteros2015improved}. 
 The approach has also yielded results comparable with the state-of-the-art when applied
 to constituency parsing \cite{sagae2005classifier,zhu2013fast}, and has been recently extended to
-discontinuous constituency parsing \cite{maier2015discontinuous},
-yielding improvements over in the parsing of discontinuous constituents in German.
+discontiguous constituency parsing \cite{maier2015discontiguous},
+yielding improvements over in the parsing of discontiguous constituents in German.
 Transition-based parsers have also been developed for dependency DAG structures
 \cite{sagae2008shift,tokgoz2015transition} and CCG parsing \cite{ambati2015incremental}.
 Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
@@ -518,7 +518,7 @@ Nevertheless, there are no constituency DAG parsers, a gap this work addresses.
 
 %Methods for constituent parsing can also be useful for UCCA parsing, but the common chart-based approach is also $\mathcal{O}(n^3)$ at best. However, there are also transition-based constituent parsers~\cite{zhu2013fast} with linear run-time complexity.
 
-%Like standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontinuous constituents} (the equivalent of non-projective dependency trees). However, Maier~\shortcite{maier2015discontinuous} introduced a transition-based constituent parsing with a \textsc{swap} transition to allow discontinuous parsing.\footnote{https://github.com/wmaier/uparse}
+%Like standard dependency parsers, transition-based constituent parsers are generally unable to produce \textit{discontiguous constituents} (the equivalent of non-projective dependency trees). However, Maier~\shortcite{maier2015discontiguous} introduced a transition-based constituent parsing with a \textsc{swap} transition to allow discontiguous parsing.\footnote{https://github.com/wmaier/uparse}
 
 
 
@@ -545,7 +545,7 @@ For each token $w_i$ ($i=1, \ldots, n$) there exists a leaf (or a terminal) $t_i
 
 \paragraph{Conversion to Constituency Trees.}
 We convert constituency DAGs to constituency trees by removing a subset of the edges.
-As the original constituency DAGs may contain discontinuous units, the resulting trees
+As the original constituency DAGs may contain discontiguous units, the resulting trees
 may also have contain such units.
 Specifically, when converting UCCA structures, we note that UCCA marks one of the incoming edges
 for each non-root as ``primary'' and the others as ``remote'' and ``linkage'' edges.
@@ -746,9 +746,9 @@ transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transitio
 Once all edges for a particular node have been created, it is removed from the stack
 by applying \textsc{Reduce}.
 
-\textsc{Swap} allows handling discontinuous nodes, by popping the second
+\textsc{Swap} allows handling discontiguous nodes, by popping the second
 node on the stack and adding it to the top of the buffer, as with the similarly
-named transition in previous work \cite{nivre2009non,maier2015discontinuous}.
+named transition in previous work \cite{nivre2009non,maier2015discontiguous}.
 Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 
 \paragraph{Features.}
@@ -764,12 +764,12 @@ In addition to the binary features defined by the feature templates,
 we employ a real-valued feature corresponding to the ratio between the number of terminals to number of nodes
 in the graph $G$. This novel feature serves as a regularizer for the creation of new nodes, and should be beneficial for other transition-based constituency parsers too.
 Features are generally adapted from the related parsers of \newcite{zhang2009transition,zhu2013fast,tokgoz2015transition} and
-\newcite{maier2015discontinuous}, with a small additional set of features encoding relevant information
+\newcite{maier2015discontiguous}, with a small additional set of features encoding relevant information
 for the novel \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} transitions.
 
 % and \textsc{Implicit$_X$}
 
-%$s_i$ and $b_i$ stand for the $i$th stack and buffer items respectively, $w$ stands for the head word, $t$ for its POS tag, $e$ for the head incoming edge label. Note that $e$ replaces $c$ (consituent label) from Maier~\shortcite{maier2015discontinuous}, since in UCCA the labels are on the edges rather than the units; and a unit may have more than one incoming edge. $l$ and $r$ ($ll$ and $rr$) represent the leftmost and rightmost children (grand-children) of the element; $u$ handles the unary case.
+%$s_i$ and $b_i$ stand for the $i$th stack and buffer items respectively, $w$ stands for the head word, $t$ for its POS tag, $e$ for the head incoming edge label. Note that $e$ replaces $c$ (consituent label) from Maier~\shortcite{maier2015discontiguous}, since in UCCA the labels are on the edges rather than the units; and a unit may have more than one incoming edge. $l$ and $r$ ($ll$ and $rr$) represent the leftmost and rightmost children (grand-children) of the element; $u$ handles the unary case.
 %Concerning the separator features, $p$ is a unique separator feature between the head words of $s_0$ and $s_1$; $q$ is the count of any separator features between them.
 %$x$ denotes the gap type of a subgraph. There are three possible values, either "none" (fully continuous), "pass" (there is a gap at the root, i.e., this gap must be filled later further up in the graph), or "gap" (the root of this graph fills a gap, i.e., its children have gaps, but the root does not). Finally, $y$ is the sum of all gap lengths.
 
@@ -799,12 +799,12 @@ $s_0llwe, s_0lrwe, s_0luwe, s_0rlwe, s_0rrwe,$ \\
 $s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
 $s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
 \\
-{\footnotesize Features from \cite{maier2015discontinuous}:} \\
-\textbf{discontinuous unigrams} \\
+{\footnotesize Features from \cite{maier2015discontiguous}:} \\
+\textbf{discontiguous unigrams} \\
 $s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
 $s_0xte, s_1xte, s_2xte, s_3xte,$ \\
 $s_0xy, s_1xy, s_2xy, s_3xy$ \\
-\textbf{discontinuous bigrams} \\
+\textbf{discontiguous bigrams} \\
 $s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
 $s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
 $s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$ \\
@@ -838,7 +838,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
 \end{figure}
 
 \paragraph{Training.}
-Following \newcite{maier2015discontinuous}, we use a linear classifier, using
+Following \newcite{maier2015discontiguous}, we use a linear classifier, using
 the averaged structured perceptron algorithm for training it
 \cite{Coll:04} with the \textsc{MinUpdate} \cite{cai2011language} procedure
 (i.e., a minimum number of updates to a feature has to occur in training for it
@@ -954,10 +954,10 @@ In all cases, punctuation marks are excluded from the evaluation, but not from t
 %constituency representation and \textsc{CoNLL-X} as the format for dependency representation.
 
 \paragraph{Conversions.}
-We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
+We explore two conversion scenarios: one into (possibly discontiguous) constituency trees,
 and one into CoNLL-style dependencies. In the first setting we experiment with \textsc{uparse},
 the only transition-based constituency parser, to our knowledge, able to parse trees with
-discontinuous constituents.
+discontiguous constituents.
 In the second setting we use the MaltParser with arc-standard and
 arc-eager transition sets \cite{nivre2007maltparser},
 and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
@@ -971,7 +971,7 @@ with a beam size of 4, where the other parsers use greedy search.
 %The LSTM parser uses the arc-standard transition set, and the MaltParser
 %running MaltParser with arc-standard yielded nearly the same
 %scores as arc-eager. \textsc{uparse}, in contrast, uses a larger transition
-%set that allows discontinuous constituency tree parsing.
+%set that allows discontiguous constituency tree parsing.
 %\textsc{bcs} extends this set further, allowing for DAG parsing
 %and UCCA-specific features.
 
@@ -993,7 +993,7 @@ them to the original gold standard.
 Training \textsc{bcs} for 16 iterations, we use a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
 We use an \textsc{Importance} value of 2, doubling the weight updates
 for gold \textsc{Swap} transitions to address the sparseness
-of discontinuous structures, as in \cite{maier2015discontinuous}.
+of discontiguous structures, as in \cite{maier2015discontiguous}.
 We train \textsc{bcs} both where remote edges
 are included, and when they are excluded from the training data, to allow
 more direct comparison with conversion-based methods that can only
@@ -1025,7 +1025,7 @@ of the presented approach for semantic constituency parsing.
 
 %too practically turns the structure into a constituency tree, and raises the scores above two of the conversion-based parsers. However, the stack LSTM-based parser of Dyer et al.~\shortcite{dyer2015transition} still reaches the highest score.
 
-%The \textsc{bcs} parser obtains scores that are nearly identical to \newcite{maier2015discontinuous}
+%The \textsc{bcs} parser obtains scores that are nearly identical to \newcite{maier2015discontiguous}
 %and Nivre et al.~\shortcite{nivre2007maltparser} on primary edges, but also correctly
 %predicts remote edges when trained on them.
 %Training without linkage edges and implicit nodes improve the scores on primary edges, as a more simple model is easier to learn.
@@ -1101,7 +1101,7 @@ In another experiment, involving only \textsc{bcs}, we removed a set of features
 }
 \caption{\small
   Results in percents of the feature ablation experiment.
-  See \figref{fig:features} for the definition of each feature set; \textbf{disco} refers to all discontinuous features, and \textbf{ratio} is the number of terminals divided by the total number of nodes (\secref{subsec:features}).
+  See \figref{fig:features} for the definition of each feature set; \textbf{disco} refers to all discontiguous features, and \textbf{ratio} is the number of terminals divided by the total number of nodes (\secref{subsec:features}).
 }
 \label{table:ablation}
 \end{table}
