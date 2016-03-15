@@ -75,9 +75,9 @@
 
   The representation of many common semantic phenomena requires 
   structural properties beyond those commonly used for syntactic parsing.
-  This paper discusses a set of structural properties that should be supported
-  by semantic parsers, noting that existing parsers support some of these properties,
-  but not all.
+  We discuss a set of structural properties required for
+  broad-coverage semantic representation, and note that existing
+  parsers support some of these properties, but not all.
   %(representations supporting these properties are called {\it Broad-coverage Semantic Structures}, or BSS).
   The main contribution of this paper is in proposing
   two transition-based techniques for parsing such semantic structures:
@@ -105,13 +105,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-In order to support the full range of semantic structures, the following
-structural properties are needed. First, arguments and relations (semantic units)
-that are shared between predicates are effectively represented as multi-parented nodes,
-yielding DAG, rather than tree structures. For instance, in the sentence
+In order to support the full range of semantic structures exhibited by
+natural language, the following three structural properties should be supported.
+The first is support for DAG, rather than tree structures,
+in order to represent arguments and relations (semantic units)
+that are shared between predicates.
+For instance, in the sentence
 ``After graduation, John moved to Paris'', ``John'' is an argument of both ``graduation''
-and ``moved'', yielding a DAG rather than tree structure (\figref{fig:graduation}).
-Second, semantic structures require non-terminal nodes for complex units.
+and ``moved'', yielding a DAG structure (\figref{fig:graduation}).
+The second is support for non-terminal nodes, in order to represent units
+comprising of more than one word.
 While bi-lexical dependencies partially circumvent this restriction, by
 representing complex units in terms of their headwords, they fall short
 when representing units that have no clear head.
@@ -125,16 +128,17 @@ We call formal representations supporting all three properties
 {\it Broad-coverage Semantic Structures} (BSS).
 
 However, to our knowledge, no existing parser supports the combination of these criteria,
-and the only semantically-annotated corpora that supports them is UCCA \cite{abend2013universal}.
+and the only semantically-annotated corpora that supports them is UCCA \cite{abend2013universal},
+which has no parser.
 Several other models either support some of these properties \cite{oepen2015semeval},
-or take an alternative approach and avoid grounding semantic units
-altogether (notably, AMR \cite{banarescu2013abstract}). See \secref{sec:background}.
+or avoid grounding semantic units altogether
+(notably, AMR \cite{banarescu2013abstract}). See \secref{sec:background}.
 
 In this work we are thus first in proposing techniques for BSS parsing.
 We adopt a transition-based approach, which has recently produced some of the best
 results in syntactic dependency parsing
-\cite{dyer2015transition,ballesteros2015improved}, and has demonstrated
-strong performance in a variety of other semantic and syntactic settings as well,
+\cite{dyer2015transition,ballesteros2015improved}, and has also demonstrated
+strong performance in a variety of other semantic and syntactic settings,
 e.g., \newcite{maier2015discontinuous,wang2015transition}.
 
 We pursue two complementary parsing strategies.
@@ -148,6 +152,10 @@ Second, we present a novel transition-based broad-coverage parser,
 Broad-coverage Semantic Parser (\textsc{bsp}; \secref{sec:direct_approach})
 that supports BSS parsing, based on extending existing transition-based parsers
 with new transitions and features. %for parsing BSS and UCCA in particular.
+Transition-based methods are a natural starting point for UCCA parsing,
+as the set of distinctions it represents, which is centered around predicate-argument
+structures and their inter-relations, is similar in spirit to the distinctions
+conveyed by dependency schemes.
 
 We experiment with the English UCCA-annotated corpora \cite{abend2013universal}
 as a test case,
@@ -351,12 +359,12 @@ Universal Cognitive Conceptual Annotation (UCCA)
 is a cross-linguistically applicable semantic representation scheme,
 that builds on the established ``Basic Linguistic Theory'' framework for typological description
 \cite{Dixon:10b,Dixon:10a,Dixon:12}, and on the Cognitive Linguistics literature.
-UCCA is a multi-layered representation, representing each module of semantic distinctions,
-as a closed set of categories.
+UCCA is a multi-layered representation, where each layer corresponds to a ``module'' of
+semantic distinctions (e.g., predicate-argument structures, adverbials, coreference etc.).
 Importantly, the same set of categories can be applied across different lexical items and languages.
-This stands in contrast to more lexically oriented schemes, such as FrameNet \cite{Baker:98},
-PropBank \cite{Palmer:05} and AMR, which define an open-ended, fine-grained set of categories,
-which while providing further information, are more prone to coverage problems \cite{Palmer:10},
+This stands in contrast to more schemes such as FrameNet \cite{Baker:98},
+PropBank \cite{Palmer:05} and AMR, that define an open-ended, lexically-based set of categories,
+which while providing further information, are more prone to coverage issues \cite{Palmer:10},
 and may result in a different set of relations when applied to different languages \cite{Xue2014not}.
 
 Formally, a UCCA structure over a sentence is a DAG, whose leaves correspond to the sentence's words.
@@ -381,6 +389,8 @@ Each Scene contains one Main Relation, as well as one or more Participants.
 For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes,
 whose main relations are ``graduation'' and ``moved''. ``John'' is a Participant in both Scenes,
 while ``Paris'' only of the latter.
+We note that the scheme marks one of the incoming edges for each non-root
+as ``primary'' and the others as ``remote'' edges.
 The two Scenes in this sentence are both arguments of the \textit{Linker} ``After'',
 which in this case expresses a temporal relation between them.
 \figref{fig:examples} presents the UCCA annotation of this and other examples.
@@ -416,10 +426,10 @@ Another line of work addressed parsing into Abstract Meaning Representations (AM
 While sharing much of this work's motivation, AMR parsing techniques are not applicable
 here for two reasons. 
 First, AMR does not ground its units in the words and constituents of the text.
-This both reflects on the nature of the representation,
-where not all AMR nodes correspond to words in the text and vice versa, and reflects
-on parsing, as it requires that the alignment between words and logical symbols be
-automatically detected, thus changing the parsing task.
+This is both reflected in the representation scheme,
+where not all nodes correspond to words in the text and vice versa, and in
+parsing, as it requires that the alignment between words and logical symbols be
+automatically detected, thus altering the parsing task.
 \newcite{wang2015transition} applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
 the resulting tree into an AMR. They thus used a different set of transitions than
@@ -454,9 +464,9 @@ We convert BSS to constituency trees by removing a subset of the
 edges\footnote{For trees, labeling nodes is equivalent to labeling edges. Thus,
   we do not distinguish between the two options. 
   Note also that as the original structures may contain discontiguities, so may the resulting trees.}.
-Specifically, when converting UCCA structures, we note that UCCA marks one of the incoming edges
-for each non-root as ``primary'' and the others as ``remote'' edges (see \figref{fig:graduation}).
-We thus remove all remote edges.
+Specifically, when converting UCCA structures, we simply remove all remote edges,
+leaving only primary edges that form a tree structure
+(see \figref{fig:graduation}).
 The inverse conversion from trees to BSS is simply the identity function, as every constituency tree is a BSS.
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
@@ -519,7 +529,6 @@ The inverse conversion introduces non-terminal nodes back into the tree.
 As the distinction between low- and high-attaching nodes is lost in the constituency to
 dependency conversion, we heuristically assume that attachments are always
 high-attaching.
-
 Assume $T_d=(V_d,E_d,\ell_d)$ is a dependency tree.
 We begin by creating a root node $r$.
 Then, iterating over $V_d$ in topological order,
@@ -530,7 +539,7 @@ The parents of the pre-terminals are determined by the terminal's parent in the 
 tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $T_d$. We add an intermediate node in between if $t$ has any dependents in $T_d$,
 to allow adding their pre-terminals as children.
 Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$.
-In practice, it mostly selects the label $C$ (Center).
+In practice, it mostly selects the UCCA label Center.
 
 \begin{algorithm}
   \small
@@ -572,7 +581,8 @@ In practice, it mostly selects the label $C$ (Center).
 We now turn to presenting the BSP parser,
 a transition-based parser that supports the three criteria of broad-coverage
 semantic structures.
-Transition-based parsing \cite{Nivre03anefficient} creates the parse tree,
+
+Transition-based parsing \cite{Nivre03anefficient} creates the parse tree
 as it scans the text from left to right.
 The parse tree is created incrementally by applying a \textit{transition} at each step to the parser state,
 defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
@@ -589,14 +599,14 @@ results in a variety of parsing tasks.
 Within syntactic dependency parsing, transition-based methods
 have been successfully applied to corpora in many languages and domains, yielding some
 of the best reported results \cite{dyer2015transition,ballesteros2015improved}. 
-The approach has also yielded results comparable with the state-of-the-art when applied
-to constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
-and discontiguous constituency parsing \cite{maier2015discontinuous}.
-Transition-based parsers have also been developed for dependency DAG structures
+The approach has also yielded results comparable with the state-of-the-art in
+constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
+discontiguous constituency parsing \cite{maier2015discontinuous},
+as well as dependency DAG structures
 \cite{sagae2008shift,tokgoz2015transition}, CCG structures \cite{ambati2015incremental}
 and AMR parsing \cite{wang2015transition}.
 
-Our parser mostly builds on recent advances in discontiguous constituency
+\textsc{BSP} mostly builds on recent advances in discontiguous constituency
 and dependency DAG parsing techniques, and further introduces novel UCCA-oriented features for parsing BSS.
 
 \paragraph{Transition Set.}
@@ -645,8 +655,8 @@ $[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\
 \end{tabular}
 \end{adjustbox}
 \caption{\label{fig:transitions}
-  The transition set of \textsc{bsp}. Following standard practice,
-  we write the stack with its top to the right and the buffer with its head to the left.
+  The transition set of \textsc{bsp}. %Following standard practice,
+  We write the stack with its top to the right and the buffer with its head to the left.
   $(\cdot,\cdot)_X$ denotes an $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
   $\mathrm{i}(x)$ is a running index for the created nodes.
   \textsc{Edge} transitions have an additional condition: the prospective child may not
@@ -660,8 +670,10 @@ $[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\
 \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new primary $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. As a UCCA node may only
 have one incoming primary edge, \textsc{Edge} transitions are disallowed where the child node already
 has an incoming primary edge.
-\textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is marked as \textit{remote}. We distinguish between these two pairs of transitions, for the parser to be able to predict whether an edge is a primary or a remote one.
-In order to allow nodes to have multiple parents, node and edge transitions do not automatically
+\textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is
+marked as \textit{remote}. We distinguish between these two pairs of transitions, for the parser
+to be able to determine whether an edge is a primary or a remote one.
+In order to support the prediction of multiple parents, node and edge transitions do not automatically
 apply \textsc{Reduce}. This is in line with other work on
 transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transition}.
 Once all edges for a particular node have been created, it is removed from the stack
@@ -679,7 +691,7 @@ Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 For some of the features, we used the notion of \textit{head word},
 defined by the $h^*(\cdot)$ function (\secref{subsec:con2dep}).
 While head words are not explicitly represented in the UCCA scheme, these
-features proved useful as means of encoding bi-lexical dependencies.
+features proved useful as means of encoding word-to-word relations.
 
 In addition to the binary features defined by the feature templates,
 we employ a real-valued feature, \textbf{ratio}, corresponding to the ratio between the number of terminals to number of nodes
@@ -776,7 +788,7 @@ The transition predicted by the classifier is deemed correct
 and is applied to the parser state to reach the subsequent state
 if the transition is included in the set of optimal transitions.
 Otherwise, a random optimal transition is applied
-and the classifier's weights are updated, according to the structured perceptron
+and the classifier's weights are updated according to the structured perceptron
 update rule.
 
 
@@ -879,9 +891,9 @@ and one into CoNLL-style dependencies. In the first setting we experiment with \
 the only transition-based constituency parser, to our knowledge, able to parse trees with
 discontiguous constituents.
 In the second setting we use the MaltParser with arc-standard and
-arc-eager transition sets \cite{nivre2007maltparser}\footnote{Since preliminary
-experiments with non-projective variants showed they did not score as well as the
-projective ones, we do not report them here.},
+arc-eager transition sets \cite{nivre2007maltparser}\footnote{Preliminary
+experiments with non-projective variants of MaltParser yielded lower scores than
+projective ones, and were thus discarded from the final evaluation.},
 and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
 In the MaltParser, we use both SVM and perceptron classifiers, and report
 results obtained with the SVM classifier, which are about 1\% F-score higher.
@@ -934,8 +946,9 @@ change results considerably on the primary edges,
 reducing them by 0.9\% F-score in the in-domain setting, but reduces
 them by the same amount when applied out-of-domain. 
 Out-of-domain results are largely comparable with the in-domain
-results, demonstrating considerable robustness by \textsc{bsp}
+results, demonstrating robustness by \textsc{bsp}
 to domain variation.
+
 The LSTM parser obtains the best results on primary edges,
 with a considerable margin. Importantly, it obtains 9.1\%
 F-score higher than the arc-standard MaltParser, which
@@ -1030,7 +1043,9 @@ remote edges.\oa{say something about what features are most important}
 \end{tabular}
 }
 \caption{
-  Results in percents of the feature ablation experiment.
+  Results in percents for the feature ablation experiment.
+  Rows correspond to the BSP parser, where one feature set is excluded.
+  Columns are the same as in \tabref{table:results}. 
   See \secref{subsec:features} and \figref{fig:features} for the definition of each feature set.
 }
 \label{table:ablation}
@@ -1050,8 +1065,8 @@ Results show that UCCA can already be parsed with 69.2\% F-score,
 and suggests means for improvement by taking an LSTM-based
 approach to the local classifier of \textsc{bsp}.
 The quality of the results is underscored by UCCA's inter-annotator
-agreement on primary edges (often taken as an upper bound),
-80--85\% F-score \cite{abend2013universal}.
+agreement (often taken as an upper bound) of 
+80--85\% F-score on primary edges \cite{abend2013universal}.
 
 %In order to allow insight into the contribution of each of the feature sets,
 %we conduct feature ablation experiments, and report results on the development set.
@@ -1064,11 +1079,6 @@ agreement on primary edges (often taken as an upper bound),
 %%%%%%%(2) We tried including linkage nodes and edges and implicit nodes when running \textsc{bsp}, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
 %(3) We created a conversion procedure to SDP (semantic dependency parsing), an additional dependency format that allows multiple parents \cite{oepen2015semeval}. The resulting upper bound for primary edges was similar to the \textsc{CoNLL} format, but for remote edges it was as high as 68.6\% labeled F-score.
 
-Transition-based methods, explored in this work,
-are a natural starting point for UCCA parsing,
-as the set of distinctions it represents, which are centered around predicate-argument
-structures and their inter-relations, is similar in spirit to the distinctions
-conveyed by dependency schemes.
 
 While much recent work focused on semantic parsing of different types,
 the relations between the different representations have not been clarified.
@@ -1076,7 +1086,7 @@ We intend to further explore conversion-based parsing approaches to shed light
 on the commonalities and differences between representations, suggesting ways to
 design better semantic representations.
 We believe that UCCA's merits in providing a cross-linguistically applicable, broad-coverage
-annotation is likely to support ongoing efforts to incorporate deeper semantic structures
+annotation will support ongoing efforts to incorporate deeper semantic structures
 into a variety of applications, such as machine translation \cite{jones2012semantics}
 and summarization \cite{liu2015toward}.
 
