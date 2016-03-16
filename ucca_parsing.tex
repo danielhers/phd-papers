@@ -140,18 +140,18 @@ We adopt a transition-based approach, which has recently produced some of the be
 results in syntactic dependency parsing
 \cite{dyer2015transition,ballesteros2015improved}, and has also demonstrated
 strong performance in a variety of other semantic and syntactic settings,
-e.g., \newcite{maier2015discontinuous,wang2015transition}.
+\cite[among others]{maier2015discontinuous,wang2015transition}.
 
 We pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
 by developing conversion protocols between UCCA structures and two related formalisms:
-dependency trees and discontiguous constituency trees.
+dependency trees and discontinuous constituency trees.
 As these formalisms are more restrictive than BSS, the conversion
 is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
 Second, we present a novel transition-based broad-coverage parser,
 Broad-coverage Semantic Parser (\textsc{bsp}; \secref{sec:direct_approach})
-that supports multiple parents, non-terminal nodes and discontiguous units,
+that supports multiple parents, non-terminal nodes and discontinuous units,
 based on extending existing transition-based parsers
 with new transitions and features.
 %for parsing BSS and UCCA in particular.
@@ -174,7 +174,7 @@ All converters and parsers will be made publicly available upon publication.
 %a small degradation with the transition to out-of-domain scenarios.
 
 %A general parser for this setting must support the prediction of multiple parents,
-%as well as of discontiguous constituents, both pervasive phenomena in semantic
+%as well as of discontinuous constituents, both pervasive phenomena in semantic
 %structures even in English (see \secref{sec:data}.
 %Multiple parents show up frequently in the context of argument
 %sharing, where a certain argument participates in several relations but is only mentioned once.
@@ -182,7 +182,7 @@ All converters and parsers will be made publicly available upon publication.
 %(e.g., in ``John went home and took a shower'', ``John'' is an argument of both ``went'' and ``took'')
 %or nominalizations (e.g., ``After graduation, John moved to London'', where ``John'' is an argument
 %of both ``graduation'' and ``moved'').
-%Discontiguous units are common even in syntactic structures in some languages (e.g., German, Bulgarian,
+%discontinuous units are common even in syntactic structures in some languages (e.g., German, Bulgarian,
 %Korean and many others \cite{kallmeyer2013data}), and can even be found in English, e.g., in reported
 %speech: ``'The dog', John said, 'is back again''', and are even more pervasive in English semantic parses
 %(see \secref{sec:data}).
@@ -295,7 +295,7 @@ All converters and parsers will be made publicly available upon publication.
     required for BSS, according to the UCCA scheme. \subref{fig:graduation} includes a remote edge (dashed),
     resulting in ``John'' having two parents. % and a linkage relation (gray node and its outgoing edges).
     \subref{fig:home} includes a coordination construction (``John and Mary'').
-    \subref{fig:gave} includes a discontiguous unit (``gave ... up'').
+    \subref{fig:gave} includes a discontinuous unit (``gave ... up'').
     Legend: $P$ -- a Scene's main relation, $A$ -- participant,
     $L$ -- inter-scene linker, $H$ -- linked Scene, $C$ -- center,
     $R$ -- relator, $N$ -- connector, $U$ -- punctuation, $F$ -- function unit.
@@ -369,7 +369,7 @@ experimenting with the Prague tectogrammatical layer \cite{bohmova2003prague},
 and dependencies derived from the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
 and Lingo ERG \cite{Flic:02}.
 Like BSS parsing, SDP addresses a wide range of semantic phenomena,
-and supports discontiguous units and multiple parents. However, SDP uses
+and supports discontinuous units and multiple parents. However, SDP uses
 bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
 structures that have no clear head, such as coordination \cite{Ivanova2012who}.
 
@@ -405,7 +405,7 @@ The nodes of the graph, or its ``units'', are either terminals or several
 sub-units (not necessarily contiguous) jointly viewed as a
 single entity according to some semantic or cognitive consideration.
 Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents.
-UCCA structures support all three criteria of BSS: multiple parents, non-terminal nodes, and discontiguous units.
+UCCA structures support all three criteria of BSS: multiple parents, non-terminal nodes, and discontinuous units.
 
 UCCA's foundational layer, which we use here, covers the predicate-argument
 structures evoked by predicates of all grammatical categories
@@ -468,7 +468,7 @@ For each token $w_i$ ($i=1, \ldots, n$), there exists a leaf (or a terminal) $t_
 We convert BSS to constituency trees by removing a subset of the
 edges\footnote{For trees, labeling nodes is equivalent to labeling edges. Thus,
   we do not distinguish between the two options. 
-  Note also that as the original structures may contain discontiguities, so may the resulting trees.}.
+  Note also that as the original structures may contain discontinuities, so may the resulting trees.}.
 Specifically, when converting UCCA structures, we simply remove all remote edges,
 leaving only primary edges that form a tree structure
 (see \figref{fig:graduation}).
@@ -607,12 +607,12 @@ have been successfully applied to corpora in many languages and domains, yieldin
 of the best reported results \cite{dyer2015transition,ballesteros2015improved}. 
 The approach has also yielded results comparable with the state-of-the-art in
 constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
-discontiguous constituency parsing \cite{maier2015discontinuous},
+discontinuous constituency parsing \cite{maier2015discontinuous},
 as well as dependency DAG structures
 \cite{sagae2008shift,tokgoz2015transition}, CCG structures \cite{ambati2015incremental}
 and AMR parsing \cite{wang2015transition}.
 
-\textsc{bsp} mostly builds on recent advances in discontiguous constituency
+\textsc{bsp} mostly builds on recent advances in discontinuous constituency
 and dependency DAG parsing techniques, and further introduces novel UCCA-oriented features for parsing BSS.
 
 \paragraph{Transition Set.}
@@ -685,7 +685,7 @@ transition-based DAG dependency parsing \cite{sagae2008shift,tokgoz2015transitio
 Once all edges for a particular node have been created, it is removed from the stack
 by applying \textsc{Reduce}.
 
-\textsc{Swap} allows handling discontiguous nodes, by popping the second
+\textsc{Swap} allows handling discontinuous nodes, by popping the second
 node on the stack and adding it to the top of the buffer, as with the similarly
 named transition in previous work \cite{nivre2009non,maier2015discontinuous}.
 Finally, \textsc{Finish} pops the root node and marks the state as terminal.
@@ -767,7 +767,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
   $l$, $r$ ($ll$, $rr$) are the leftmost and rightmost (grand)children, respectively.
   $u$ ($uu$) is the unary (grand)child, when only one exists.
   $p$ is a unique separator punctuation and $q$ is the separator count between $s_0$ and $s_1$.
-  $x$ is the gap type (``none'', ``pass'' or ``gap'') at the sub-graph under the current node, and $y$ is the sum of gap lengths \protect\cite{maier2009characterizing}.
+  $x$ is the gap type (``none'', ``pass'' or ``gap'') at the sub-graph under the current node, and $y$ is the sum of gap lengths \protect\cite{Maier:Lichte:11}.
   $P$ and $C$ are the number of parents and children, respectively, and $R$ is the number of remote children.
   $a_i$ is the transition taken $i$ steps back.
   All feature templates correspond to binary features.
@@ -777,7 +777,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
 \paragraph{Training.}
 Following \newcite{maier2015discontinuous}, we use a linear classifier, using
 the averaged structured perceptron algorithm for training it
-\cite{Coll:04} with the \textsc{MinUpdate} \cite{cai2011language} procedure
+\cite{Coll:04} with the \textsc{MinUpdate} \cite{goldberg2011learning} procedure
 (i.e., a minimum number of updates to a feature has to occur in training for it
 to be included in the model). Inference is performed greedily (i.e., without beam search).
 
@@ -892,10 +892,10 @@ Punctuation marks are excluded from the evaluation, but not from the datasets.
 %constituency representation and \textsc{CoNLL-X} as the format for dependency representation.
 
 \paragraph{Conversions.}
-We explore two conversion scenarios: one into (possibly discontiguous) constituency trees,
+We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
 and one into CoNLL-style dependencies. In the first setting we experiment with \textsc{uparse},
 the only transition-based constituency parser, to our knowledge, able to parse trees with
-discontiguous constituents.
+discontinuous constituents.
 In the second setting we use the MaltParser with arc-standard and
 arc-eager transition sets \cite{nivre2007maltparser}\footnote{Preliminary
 experiments with non-projective variants of MaltParser yielded lower scores than
@@ -911,7 +911,7 @@ with a beam size of 4, where the other parsers use greedy search.
 %The LSTM parser uses the arc-standard transition set, and the MaltParser
 %running MaltParser with arc-standard yielded nearly the same
 %scores as arc-eager. \textsc{uparse}, in contrast, uses a larger transition
-%set that allows discontiguous constituency tree parsing.
+%set that allows discontinuous constituency tree parsing.
 %\textsc{bsp} extends this set further, allowing for DAG parsing
 %and UCCA-specific features.
 
@@ -933,7 +933,7 @@ graphs and comparing them to the original gold standard.
 We train \textsc{bsp} for 16 iterations, using a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
 We use an \textsc{Importance} value of 2, doubling the weight updates
 for gold \textsc{Swap} transitions to address the sparseness
-of discontiguous structures, as in \cite{maier2015discontinuous}.
+of discontinuous structures, as in \cite{maier2015discontinuous}.
 We train \textsc{bsp} both where remote edges
 are included, and when they are excluded from the training data, to allow
 more direct comparison with conversion-based methods that can only
@@ -1029,7 +1029,7 @@ The \textbf{unigrams} and \textbf{bigrams} features are especially
 important, and the \textbf{ratio} feature greatly improves recall on
 primary edges. \textbf{disco} features have a positive contribution,
 which is likely to be amplified in languages
-with a higher percentage of discontiguous units, such as German.
+with a higher percentage of discontinuous units, such as German.
 
 \begin{table}[ht]
   \scalebox{.8}{
@@ -1067,7 +1067,7 @@ with a higher percentage of discontiguous units, such as German.
 \section{Conclusion}\label{sec:conclusion}
 
 We have introduced the first parser that supports multiple parents, non-terminal
-nodes and discontiguous units.
+nodes and discontinuous units.
 We further explored a conversion-based parsing approach in order to assess the ability of existing
 technology to address the task.
 The work makes a further contribution by first experimenting on UCCA parsing.
