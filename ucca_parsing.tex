@@ -486,7 +486,7 @@ non-terminal such that $t=h^*(n(t))$, i.e.,
 $n(t)$ is the only node such that $t=h^*(n(t))$ and $t \neq h^*(\mathrm{Parent}_c(n(t)))$.
 The head of $t$ according to the dependency graph is
 the terminal $h^*(\mathrm{Parent}_c(n(t)))$.
-The complete algorithm is given in Algorithm~\ref{alg:con2dep}.
+The complete procedure from constituency to dependency is given in Algorithm~\ref{alg:con2dep}.
 
 We note that this conversion procedure is simpler than the
 head percolation procedure used for converting syntactic constituency
@@ -540,6 +540,7 @@ tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-t
 to allow adding their pre-terminals as children.
 Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$.
 In practice, it mostly selects the UCCA label Center.
+The conversion procedure from dependency to constituency is given in Algorithm~\ref{alg:dep2con}.
 
 \begin{algorithm}
   \small
