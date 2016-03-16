@@ -124,7 +124,7 @@ some multi-word expressions (e.g., ``The Haves and the {\bf Have Nots}''),
 and prepositional phrases.
 Third, semantic units may be discontiguous in the text. For instance, in ``John gave everything up''
 (\figref{fig:gave}), the phrasal verb ``gave ... up'' forms a single semantic unit.
-We call formal representations supporting all three properties
+We call formal representations supporting all three properties 
 {\it Broad-coverage Semantic Structures} (BSS).
 
 However, to our knowledge, no existing parser supports the combination of these criteria,
@@ -150,8 +150,10 @@ is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
 Second, we present a novel transition-based broad-coverage parser,
 Broad-coverage Semantic Parser (\textsc{bsp}; \secref{sec:direct_approach})
-that supports BSS parsing, based on extending existing transition-based parsers
-with new transitions and features. %for parsing BSS and UCCA in particular.
+that supports multiple parents, non-terminal nodes and discontiguous units,
+based on extending existing transition-based parsers
+with new transitions and features.
+%for parsing BSS and UCCA in particular.
 Transition-based methods are a natural starting point for UCCA parsing,
 as the set of distinctions it represents, which is centered around predicate-argument
 structures and their inter-relations, is similar in spirit to the distinctions
