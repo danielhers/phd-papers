@@ -1019,8 +1019,11 @@ and evaluating the resulting parser on the development set (\tabref{table:ablati
 Results show that in the few cases where a feature set had only a small
 or a negative contribution to the primary edge F-score, 
 it had a positive contribution on the prediction of remote edges.
-The \textbf{unigrams} and \textbf{bigrams} features are especially important, and the \textbf{ratio} feature greatly improves recall on primary edges.
-The \textbf{disco} features had a moderate contribution, and we expect them to be even more beneficial in languages with a high percentage of discontiguous units, such as German.
+The \textbf{unigrams} and \textbf{bigrams} features are especially
+important, and the \textbf{ratio} feature greatly improves recall on
+primary edges. \textbf{disco} features have a positive contribution,
+which is likely to be amplified in languages
+with a higher percentage of discontiguous units, such as German.
 
 \begin{table}[ht]
   \scalebox{.8}{
@@ -1043,11 +1046,11 @@ The \textbf{disco} features had a moderate contribution, and we expect them to b
 \end{tabular}
 }
 \caption{
-  Results in percents for the feature ablation experiment (on the \textit{Wiki} development set).
+  Results on the development set for the feature ablation experiment, in percents.
   The first row corresponds to \textsc{bsp} as in the main experiment.
   In each of the other rows, one feature set is excluded.
   Columns are the same as in \tabref{table:results}.
-  See \secref{subsec:features} and \figref{fig:features} for the definition of each feature set.
+  See \secref{subsec:features} and \figref{fig:features} for the feature set definitions.
 }
 \label{table:ablation}
 \end{table}
