@@ -998,7 +998,7 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \end{tabular}
 }
 \caption{
-  Main experimental results in percents. Columns correspond to labeled precision,
+  Main experimental results in percents (on the \textit{Wiki} test set, except for the bottom part). Columns correspond to labeled precision,
   recall and F-score for the different parsers, for both primary (left-hand side)
   and remote (right-hand side) edges. Top: results for \textsc{uparse}
   after conversion to constituency tree annotation. Upper middle: results for the
@@ -1006,7 +1006,7 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
   the LSTM parser after conversion to dependency tree annotation.
   Lower middle: results for our \textsc{bsp}, when trained on the complete UCCA DAGs (\textsc{bsp}),
   and when trained on UCCA trees, obtained by removing remote edges (\textsc{bsp}$_{\mathrm{Tree}}$).
-  Bottom: results for \textsc{bsp} and \textsc{bsp}$_{\mathrm{Tree}}$ when tested on out-of-domain data.
+  Bottom: results for \textsc{bsp} and \textsc{bsp}$_{\mathrm{Tree}}$ when tested on out-of-domain data (\textit{20K Leagues}).
 }
 \label{table:results}
 \end{table}
@@ -1019,7 +1019,7 @@ and evaluating the resulting parser on the development set (\tabref{table:ablati
 Results show that in the few cases where a feature set had only a small
 or a negative contribution to the primary edge F-score, 
 it had a positive contribution on the prediction of
-remote edges.\oa{say something about what features are most important}
+remote edges.
 
 
 \begin{table}[ht]
@@ -1028,24 +1028,25 @@ remote edges.\oa{say something about what features are most important}
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\textsc{bsp} &  &  &  &  &  &  \\
-\textsc{bsp}$-$\textbf{unigrams} &  &  &  &  &  & \\
-\textsc{bsp}$-$\textbf{bigrams} &  &  &  &  &  & \\
-\textsc{bsp}$-$\textbf{trigrams} &  &  &  &  &  & \\
-\textsc{bsp}$-$\textbf{separator} &  &  &  &  &  & \\
-\textsc{bsp}$-$\textbf{extended} &  &  &  &  &  & \\
-\textsc{bsp}$-$\textbf{disco} &  &  &  &  &  & \\
-\textsc{bsp}$-$\textbf{counts} &  &  &  &  &  & \\
-\textsc{bsp}$-$\textbf{edges} &  &  &  &  &  & \\
-\textsc{bsp}$-$\textbf{history} &  &  &  &  &  & \\
-\textsc{bsp}$-$\textbf{remote} &  &  &  &  &  & \\
-\textsc{bsp}$-$\textbf{ratio} &  &  &  &  &  &
+\textsc{bsp} & 62.6	& 55.7 & 58.9 & 20 & 12.9 & 15.7 \\
+\textsc{bsp}$-$\textbf{unigrams} & 62.5 & 52.6 & 57.1 & 18.9 & 10.1 & 13.2 \\
+\textsc{bsp}$-$\textbf{bigrams} & 59.8 & 50.0 & 54.4 & 18.2 & 12.2 & 14.6 \\
+\textsc{bsp}$-$\textbf{trigrams} & 63.7 & 55.0 & 59.0 & 20.7 & 12.0 & 15.2 \\
+\textsc{bsp}$-$\textbf{separator} & 62.9 & 53.5 & 57.8 & 17.8 & 11.7 & 14.1 \\
+\textsc{bsp}$-$\textbf{extended} & 62.9 & 52.8 & 57.4 & 17.4 & 11.5 & 13.9 \\
+\textsc{bsp}$-$\textbf{disco} & 63.6 & 53.6 & 58.2 & 19.7 & 11.5 & 14.5 \\
+\textsc{bsp}$-$\textbf{counts} & 63.3 & 52.8 & 57.6 & 14.6 & 10.6 & 12.3 \\
+\textsc{bsp}$-$\textbf{edges} & 63.5 & 54.9 & 58.9 & 23.6 & 14.5 & 17.9 \\
+\textsc{bsp}$-$\textbf{history} & 63.1 & 53.2 & 57.8 & 23.7 & 14.5 & 18.0 \\
+\textsc{bsp}$-$\textbf{remote} & 63.5 & 53.2 & 57.9 & 17.2 & 10.6 & 13.1 \\
+\textsc{bsp}$-$\textbf{ratio} & 63.7 & 48.3 & 55.0 & 25.4 & 13.6 & 17.7
 \end{tabular}
 }
 \caption{
-  Results in percents for the feature ablation experiment.
-  Rows correspond to the BSP parser, where one feature set is excluded.
-  Columns are the same as in \tabref{table:results}. 
+  Results in percents for the feature ablation experiment (on the \textit{Wiki} development set).
+  The first row corresponds to \textsc{bsp} as in the main experiment.
+  In each of the other rows, one feature set is excluded.
+  Columns are the same as in \tabref{table:results}.
   See \secref{subsec:features} and \figref{fig:features} for the definition of each feature set.
 }
 \label{table:ablation}
