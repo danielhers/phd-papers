@@ -195,9 +195,6 @@ All converters and parsers will be made publicly available upon publication.
 %Third, we present \textsc{bsp}, novel both in being the first broad-coverage DAG parser,
 %as well as the first UCCA parser. 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Background}\label{sec:background}
-
 \begin{figure}
   \begin{subfigure}[t]{.5\textwidth}
   \centering
@@ -357,6 +354,39 @@ All converters and parsers will be made publicly available upon publication.
 \end{figure*}
 }
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Background}\label{sec:background}
+
+\paragraph{Broad-coverage Semantic Representation.}
+While earlier work on semantic parsing has mostly concentrated on shallow semantic analysis,
+focusing on semantic role labeling of verbal argument structures,
+the focus has recently shifted to parsing of more elaborate representations that account
+for a wider range of phenomena. 
+Most closely related to this work is the Broad-coverage Semantic Dependency Parsing (SDP) task,
+recently addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval},
+experimenting with the Prague tectogrammatical layer \cite{bohmova2003prague},
+and dependencies derived from the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
+and Lingo ERG \cite{Flic:02}.
+Like BSS parsing, SDP addresses a wide range of semantic phenomena,
+and supports discontiguous units and multiple parents. However, SDP uses
+bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
+structures that have no clear head, such as coordination \cite{Ivanova2012who}.
+
+Another line of work addressed parsing into Abstract Meaning Representations (AMRs)
+\cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad}. 
+While sharing much of this work's motivation, AMR parsing techniques are not applicable
+here for two reasons. 
+First, AMR does not ground its units in the words and constituents of the text.
+This is both reflected in the representation scheme,
+where not all nodes correspond to words in the text and vice versa, and in
+parsing, as it requires that the alignment between words and logical symbols be
+automatically detected, thus altering the parsing task.
+\newcite{wang2015transition} applied a transition-based approach to AMR parsing,
+but their method involved first syntactically parsing the input, and then converting
+the resulting tree into an AMR. They thus used a different set of transitions than
+\textsc{bsp}, which parses strings directly into graphs.
+
 \paragraph{The UCCA Annotation Scheme.}
 Universal Cognitive Conceptual Annotation (UCCA)
 is a cross-linguistically applicable semantic representation scheme,
@@ -409,34 +439,6 @@ than those explored here \cite{roth2015inducing}.
 %The participant ``John'' is a part of both Scenes, but is marked as a \textit{remote} participant in
 %the second, since it is not explicit in the second clause.
 
-\paragraph{Broad-coverage Semantic Representation.}
-While earlier work on semantic parsing has mostly concentrated on shallow semantic analysis,
-focusing on semantic role labeling of verbal argument structures,
-the focus has recently shifted to parsing of more elaborate representations that account
-for a wider range of phenomena. 
-Most closely related to this work is the Broad-coverage Semantic Dependency Parsing (SDP) task,
-recently addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval},
-experimenting with the Prague tectogrammatical layer \cite{bohmova2003prague},
-and dependencies derived from the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
-and Lingo ERG \cite{Flic:02}.
-Like BSS parsing, SDP addresses a wide range of semantic phenomena,
-and supports discontiguous units and multiple parents. However, SDP uses
-bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
-structures that have no clear head, such as coordination \cite{Ivanova2012who}.
-
-Another line of work addressed parsing into Abstract Meaning Representations (AMRs)
-\cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad}. 
-While sharing much of this work's motivation, AMR parsing techniques are not applicable
-here for two reasons. 
-First, AMR does not ground its units in the words and constituents of the text.
-This is both reflected in the representation scheme,
-where not all nodes correspond to words in the text and vice versa, and in
-parsing, as it requires that the alignment between words and logical symbols be
-automatically detected, thus altering the parsing task.
-\newcite{wang2015transition} applied a transition-based approach to AMR parsing,
-but their method involved first syntactically parsing the input, and then converting
-the resulting tree into an AMR. They thus used a different set of transitions than
-\textsc{bsp}, which parses strings directly into graphs.
 
 
 
