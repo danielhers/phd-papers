@@ -39,7 +39,7 @@
 \makeatletter
 \renewcommand{\paragraph}{
   \@startsection{paragraph}{4}
-  {\z@}{.5ex \@plus .5ex \@minus .2ex}{-1em}
+  {\z@}{.3ex \@plus .3ex \@minus .2ex}{-1em}
   {\normalfont\normalsize\bfseries}
 }
 \makeatother
@@ -83,8 +83,9 @@
   (1) applying conversion procedures to map them into related formalisms,
   and using existing state-of-the-art parsers on the converted representations;
   and (2) constructing a parser that directly supports the full set of properties.
-  We experiment with UCCA-annotated corpora, the only ones with all
-  structural semantic properties. Results demonstrate the effectiveness of this approach.
+  We experiment with UCCA-annotated corpora, the only ones with all these
+  structural semantic properties. Results demonstrate the effectiveness
+  of transition-based methods for the task.
   
 \end{abstract}
 
@@ -104,14 +105,14 @@ and ``moved'', yielding a DAG structure (\figref{fig:graduation}), rather than a
 
 The second is \textbf{non-terminal nodes} for representing units
 comprising more than one word.
-While bi-lexical dependencies partially circumvent this restriction, by
+While bi-lexical dependencies partially circumvent this requirement, by
 representing complex units in terms of their headwords, they fall short
 when representing units that have no clear head.
 Frequent examples of such constructions include
 coordination structures (e.g., ``\textit{John and Mary} went home''; \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases.
-Dependency schemes often apply some annotation convention that selects one of the sub-units
+In these cases, dependency schemes often apply some annotation convention that selects one of the sub-units
 as the head, but as different head selections are needed for different purposes,
 standardization problems arise \cite{Ivanova2012who}.
 For example, selecting the preposition to head prepositional phrases yields better
@@ -302,6 +303,7 @@ All converters and parsers will be made publicly available upon publication.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-.1cm}
 \section{Background}\label{sec:background}
 
 \paragraph{Broad-coverage Semantic Representation.}
@@ -310,10 +312,9 @@ focusing on semantic role labeling of verbal argument structures,
 the focus has recently shifted to parsing of more elaborate representations that account
 for a wider range of phenomena. 
 Most closely related to this work is Broad-coverage Semantic Dependency Parsing (SDP),
-recently addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval},
+addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval},
 experimenting with the Prague tectogrammatical layer \cite{sgallhp:1986,bohmova2003prague},
-dependencies derived from the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
-and Lingo ERG \cite{Flic:02}.
+and with dependencies derived from the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.}, and Lingo ERG \cite{Flic:02}.
 Like BSS parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and multiple parents. However, SDP uses
 bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
@@ -444,7 +445,7 @@ non-terminal such that $t=h^*(n(t))$, i.e.,
 $n(t)$ is the only node such that $t=h^*(n(t))$ and $t \neq h^*(\mathrm{Parent}_c(n(t)))$.
 The head of $t$ according to the dependency graph is
 the terminal $h^*(\mathrm{Parent}_c(n(t)))$.
-The complete procedure from constituency to dependency is given in Algorithm~\ref{alg:con2dep}.
+The complete conversion procedure from constituency to dependency is given in Algorithm~\ref{alg:con2dep}.
 
 We note that this conversion procedure is simpler than the
 head percolation procedure used for converting syntactic constituency
@@ -496,12 +497,11 @@ with an edge labeled as \textit{Terminal} between them.
 The parents of the pre-terminals are determined by the terminal's parent in the dependency
 tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $T_d$. We add an intermediate node in between if $t$ has any dependents in $T_d$,
 to allow adding their pre-terminals as children.
-Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$
-\footnote{See Supplementary Material for the definition of $\mathrm{Label}$.}.
+Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$\footnote{See Supplementary Material for the definition of $\mathrm{Label}$.}.
 In practice, it mostly selects the UCCA label \textit{Center}.
 The conversion procedure from dependency to constituency is given in Algorithm~\ref{alg:dep2con}.
 
-\begin{algorithm}
+\begin{algorithm}[t]
   \small
  \KwData{dependency tree $T_d=(V_d,E_d,\ell_d)$}
  \KwResult{constituency tree $T_c=(V_c,E_c,\ell_c)$}
@@ -571,7 +571,7 @@ and dependency DAG parsing techniques, and further introduces novel UCCA-oriente
 
 \paragraph{Transition Set.}
 Given a sequence of tokens $w_1, \ldots, w_n$, we predict a BSS $G$ whose leaves
-correspond to  $w_1, \ldots, w_n$.
+correspond to the tokens. % $w_1, \ldots, w_n$.
 Parsing starts with a single node on the stack (the root node), and the input tokens
 $w_1, \ldots, w_n$ in the buffer. The set of transitions is given in \figref{fig:transitions}.
 In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
@@ -656,8 +656,7 @@ features proved useful as means of encoding word-to-word relations.
 In addition to the binary features defined by the feature templates,
 we employ a real-valued feature, \textbf{ratio}, corresponding to the ratio between the number of terminals to number of nodes
 in the graph $G$. This novel feature serves as a regularizer for the creation of new nodes, and should be beneficial for other transition-based constituency parsers too.
-Features are generally adapted from the related parsers of \newcite{zhang2009transition,zhu2013fast,tokgoz2015transition} and
-\newcite{maier2015discontinuous}, with a small additional set of features encoding relevant information
+Features are generally adapted from the related parsers of \cite{zhang2009transition,zhu2013fast,tokgoz2015transition,maier2015discontinuous}, with a small additional set of features encoding relevant information
 for the novel \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} transitions.
 
 % and \textsc{Implicit$_X$}
@@ -745,7 +744,7 @@ but would predict a \textsc{Right-Edge} transition if the second stack
 element is a parent of the
 first element according to the gold graph and the edge between them hasn't been created.
 The transition predicted by the classifier is deemed correct
-and is applied to the parser state to reach the subsequent state
+and is applied to the parser state to reach the subsequent state,
 if the transition is included in the set of optimal transitions.
 Otherwise, a random optimal transition is applied
 and the classifier's weights are updated according to the structured perceptron
@@ -1022,7 +1021,7 @@ nodes and discontinuous units.
 We further explored a conversion-based parsing approach to assess the ability of existing
 technology to address the task.
 The work makes a further contribution by first experimenting on UCCA parsing.
-Results show that UCCA can be parsed with 69.2\% F-score,
+Results show that UCCA can be parsed with 69.2\% primary F-score,
 and suggest means for improvement by taking an LSTM-based
 approach to the local classifier of \textsc{bsp}.
 The quality of the results is underscored by UCCA's inter-annotator
