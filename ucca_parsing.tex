@@ -247,6 +247,10 @@ results in syntactic dependency parsing
 \cite{dyer2015transition,ballesteros2015improved}, and has also demonstrated
 strong performance in a variety of other semantic and syntactic settings
 \cite[among others]{maier2015discontinuous,wang2015transition}.
+Transition-based methods are a natural starting point for UCCA parsing,
+as the set of distinctions it represents, which is centered around predicate-argument
+structures and their inter-relations, is similar in spirit to the distinctions
+conveyed by dependency schemes.
 
 We pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
@@ -261,10 +265,6 @@ that supports multiple parents, non-terminal nodes and discontinuous units,
 based on extending existing transition-based parsers
 with new transitions and features.
 %for parsing BSS and UCCA in particular.
-Transition-based methods are a natural starting point for UCCA parsing,
-as the set of distinctions it represents, which is centered around predicate-argument
-structures and their inter-relations, is similar in spirit to the distinctions
-conveyed by dependency schemes.
 
 We experiment with the English UCCA-annotated corpora \cite{abend2013universal}
 as a test case, in both in-domain and out-of-domain scenarios, reaching
@@ -309,10 +309,10 @@ While earlier work on semantic parsing has mostly concentrated on shallow semant
 focusing on semantic role labeling of verbal argument structures,
 the focus has recently shifted to parsing of more elaborate representations that account
 for a wider range of phenomena. 
-Most closely related to this work is the Broad-coverage Semantic Dependency Parsing (SDP) task,
+Most closely related to this work is Broad-coverage Semantic Dependency Parsing (SDP),
 recently addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval},
 experimenting with the Prague tectogrammatical layer \cite{sgallhp:1986,bohmova2003prague},
-and dependencies derived from the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
+dependencies derived from the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
 and Lingo ERG \cite{Flic:02}.
 Like BSS parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and multiple parents. However, SDP uses
@@ -405,7 +405,7 @@ We begin by assessing the ability of existing technology to address the task,
 by taking a conversion-based approach. Training proceeds by 
 converting BSS into a different representation,
 and training an existing parser on the converted structures.
-We test the trained parsers by applying them to the test set,
+We evaluate the trained parsers by applying them to the test set,
 and converting the results back to BSS, where they are compared
 with the gold standard.
 The error resulting from this back and forth conversion is discussed in
@@ -424,8 +424,7 @@ edges\footnote{For trees, labeling nodes is equivalent to labeling edges. Thus,
   we do not distinguish between the two options. 
   Note also that as the original structures may contain discontinuities, so may the resulting trees.}.
 Specifically, when converting UCCA structures, we simply remove all remote edges,
-leaving only primary edges that form a tree structure
-(see \figref{fig:graduation}).
+leaving only primary edges, which form a tree structure (see \figref{fig:graduation}).
 The inverse conversion from trees to BSS is simply the identity function, as every constituency tree is a BSS.
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
@@ -498,8 +497,8 @@ The parents of the pre-terminals are determined by the terminal's parent in the 
 tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $T_d$. We add an intermediate node in between if $t$ has any dependents in $T_d$,
 to allow adding their pre-terminals as children.
 Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$
-(see Supplementary Material).
-In practice, it mostly selects the UCCA label Center.
+\footnote{See Supplementary Material for the definition of $\mathrm{Label}$.}.
+In practice, it mostly selects the UCCA label \textit{Center}.
 The conversion procedure from dependency to constituency is given in Algorithm~\ref{alg:dep2con}.
 
 \begin{algorithm}
@@ -543,9 +542,9 @@ We now turn to presenting \textsc{bsp},
 a transition-based parser that supports the three criteria of broad-coverage
 semantic structures.
 
-Transition-based parsing \cite{Nivre03anefficient} creates the parse tree
+Transition-based parsing \cite{Nivre03anefficient} creates the parse
 as it scans the text from left to right.
-The parse tree is created incrementally by applying a \textit{transition} at each step to the parser state,
+The parse is created incrementally by applying a \textit{transition} at each step to the parser state,
 defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
 a stack $S$ of nodes currently being processed,
 and a graph $G=(V,E,\ell)$ of constructed nodes and labeled edges.
@@ -573,7 +572,7 @@ and dependency DAG parsing techniques, and further introduces novel UCCA-oriente
 \paragraph{Transition Set.}
 Given a sequence of tokens $w_1, \ldots, w_n$, we predict a BSS $G$ whose leaves
 correspond to  $w_1, \ldots, w_n$.
-Parsing starts with a single node in the stack (the root node), and the input tokens
+Parsing starts with a single node on the stack (the root node), and the input tokens
 $w_1, \ldots, w_n$ in the buffer. The set of transitions is given in \figref{fig:transitions}.
 In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
 we follow previous work in transition-based constituency parsing \cite{sagae2005classifier}, and include the \textsc{Node} transition for creating new non-terminal nodes.
@@ -618,7 +617,7 @@ $[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\
 \caption{\label{fig:transitions}
   The transition set of \textsc{bsp}. %Following standard practice,
   We write the stack with its top to the right and the buffer with its head to the left.
-  $(\cdot,\cdot)_X$ denotes an $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
+  $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
   $\mathrm{i}(x)$ is a running index for the created nodes.
   \textsc{Edge} transitions have an additional condition: the prospective child may not
   already have a primary parent.
@@ -631,7 +630,7 @@ $[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\
 \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new primary $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. As a UCCA node may only
 have one incoming primary edge, \textsc{Edge} transitions are disallowed where the child node already
 has an incoming primary edge.
-\textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do the same, but the created edge is
+\textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do not have this restriction, and the created edge is
 marked as \textit{remote}. We distinguish between these two pairs of transitions, for the parser
 to be able to determine whether an edge is a primary or a remote one.
 In order to support the prediction of multiple parents, node and edge transitions do not automatically
@@ -737,8 +736,8 @@ a minimum number of updates to a feature has to occur in training for it
 to be included in the model. Inference is performed greedily (i.e., without beam search).
 
 For training the local classifier, we use a dynamic oracle \cite{goldberg2012dynamic},
-i.e., an oracle that outputs a set of optimal transitions: when any of them
-is applied to the current parser state, the gold
+i.e., an oracle that outputs a set of optimal transitions: when
+applied to the current parser state, the gold
 standard graph is reachable from the resulting state.
 For example, the oracle would predict a \textsc{Node} transition if the stack 
 has on its top a parent in the gold graph that hasn't been created,
@@ -888,7 +887,7 @@ graphs and comparing them to the original gold standard.
 We train \textsc{bsp} for 16 iterations, using a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
 We use an \textsc{Importance} value of 2, doubling the weight updates
 for gold \textsc{Swap} transitions to address the sparseness
-of discontinuous structures, as in \cite{maier2015discontinuous}.
+of discontinuous structures, as in \newcite{maier2015discontinuous}.
 We train \textsc{bsp} both where remote edges
 are included, and when they are excluded from the training data, to allow
 more direct comparison with conversion-based methods that can only
@@ -904,7 +903,7 @@ in terms of primary edges, but unlike them, is able to predict some
 of the remote edges as well. 
 Removing remote edges from the training data of \textsc{bsp} does not
 change results considerably on the primary edges,
-reducing them by 0.9\% F-score in the in-domain setting, but reduces
+improving them by 0.9\% F-score in the in-domain setting, but reduces
 them by the same amount when applied out-of-domain. 
 Out-of-domain results are largely comparable with the in-domain
 results, demonstrating robustness by \textsc{bsp}
@@ -929,7 +928,7 @@ methods for BSS parsing.
 The conversion to constituency format only removes remote edges,
 and thus obtains a perfect primary edge score.
 The conversion to dependency format loses considerably more information, since
-all of non-terminal nodes are lost and have to be reconstructed by a
+all non-terminal nodes are lost and have to be reconstructed by a
 simple rule-based inverse conversion. Both conversions yield zero scores on remote edges,
 since these are invariably removed when converting to trees.
 
@@ -973,18 +972,17 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \end{table}
 
 \paragraph{Feature Ablation.}
-In order to evaluate the relative importance of the different feature sets,
+To evaluate the relative importance of the different feature sets,
 we perform feature ablation experiments on \textsc{bsp},
-removing a single set of features at a time,
+removing a set of features at a time,
 and evaluating the resulting parser on the development set (\tabref{table:ablation}).
-Results show that in the few cases where a feature set had only a small
+In the few cases where a feature set has only a small
 or a negative contribution to the primary edge F-score, 
-it had a positive contribution on the prediction of remote edges.
-The \textbf{unigrams} and \textbf{bigrams} features are especially
+it has a positive contribution on the prediction of remote edges.
+\textbf{unigrams} and \textbf{bigrams} features are especially
 important, and the \textbf{ratio} feature greatly improves recall on
 primary edges. \textbf{disco} features have a positive contribution,
-which is likely to be amplified in languages
-with a higher percentage of discontinuous units, such as German.
+likely to be amplified in languages with a higher percentage of discontinuous units, such as German.
 
 \begin{table}[ht]
   \scalebox{.8}{
