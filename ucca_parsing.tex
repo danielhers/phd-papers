@@ -93,7 +93,7 @@
 \section{Introduction}
 
 In order to support the full range of semantic structures exhibited by
-natural language, the following three structural properties should be supported.
+natural language, there are three structural properties that should be supported.
 The first is \textbf{multiple parents},
 %support for DAG (directed acyclic graph), rather than tree structures,
 representing arguments and relations (semantic units) that are shared between predicates.
@@ -109,14 +109,15 @@ Frequent examples of such constructions include
 coordination structures (e.g., ``\textit{John and Mary} went home''; \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases.
-The ad-hoc solutions to this problem suffer from lack of standardization \cite{Ivanova2012who},
-and task-dependence: for prepositional phrases, for example,
-representing the preposition as the head is preferable for
-parsing \cite{Schwartz:12}, although the nominal phrase is more meaningful for e.g. information extraction.
-\daniel{to review}
-Third, semantic units may be \textbf{discontiguous} in the text. For instance, in ``John gave everything up''
+The many ad-hoc solutions to this problem suffer from lack of standardization \cite{Ivanova2012who}
+and task-dependence: representing the preposition as the head of a prepositional phrase, for example,
+yields better results for parsing \cite{Schwartz:12}, although the nominal phrase is more meaningful
+e.g. for information extraction. \daniel{to review}
+Third, semantic units may be \textbf{discontinuous} in the text. For instance, in
+``John \textit{gave} everything \textit{up}''
 (\figref{fig:gave}), the phrasal verb ``gave ... up'' forms a single semantic unit.
-This also applies to multi-word expressions \cite{schneider2014discriminative}. \daniel{to review}
+This is a common phenomenon with other multi-word expressions, too \cite{schneider2014discriminative}.
+\daniel{to review}
 We call formal representations supporting all three properties 
 {\it Broad-coverage Semantic Structures} (BSS).
 
