@@ -127,8 +127,9 @@ We call formal representations supporting all three properties
 {\it Broad-coverage Semantic Structures} (BSS).
 
 \begin{figure}[t]
-  \begin{subfigure}[t]{.5\textwidth}
-  \centering
+  \begin{subfigure}[t]{.9\columnwidth}
+  \parbox{.1\columnwidth}{\caption{}\label{fig:graduation}}
+  \parbox{.8\columnwidth}{
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=10mm, ->]
     \node (ROOT) [fill=black, circle] {}
@@ -155,9 +156,7 @@ We call formal representations supporting all three properties
       %    \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
 %    \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
-  }
-  \caption{}
-  \label{fig:graduation}
+  }}
   \end{subfigure}
 %  \scalebox{.9}{
 %  \begin{tikzpicture}[level distance=12mm, ->,
@@ -181,8 +180,10 @@ We call formal representations supporting all three properties
 %    \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
 %  \end{tikzpicture}
 %  }
-  \begin{subfigure}[t]{.5\textwidth}
-  \centering
+  \begin{subfigure}[t]{.9\columnwidth}
+  \parbox{.1\columnwidth}{\caption{}\label{fig:home}}
+  \hspace{.1\columnwidth}
+  \parbox{.7\columnwidth}{
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway}]
@@ -197,12 +198,12 @@ We call formal representations supporting all three properties
       child {node {home} edge from parent node[left] {\scriptsize $A$}}
       ;
   \end{tikzpicture}
-  }
-  \caption{}
-  \label{fig:home}
+  }}
   \end{subfigure}
-  \begin{subfigure}[t]{.5\textwidth}
-  \centering
+  \begin{subfigure}[t]{.9\columnwidth}
+  \parbox{.1\columnwidth}{\caption{}\label{fig:gave}}
+  \hspace{.25\columnwidth}
+  \parbox{.55\columnwidth}{
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway}]
@@ -217,9 +218,7 @@ We call formal representations supporting all three properties
       ;
     \draw[bend right,->] (ROOT) to[out=-20, in=180] node [left] {\scriptsize $A$} (everything);
   \end{tikzpicture}
-  }
-  \caption{}
-  \label{fig:gave}
+  }}
   \end{subfigure}
   \caption{\label{fig:examples}
     Semantic representation of the three structural properties
@@ -231,7 +230,7 @@ We call formal representations supporting all three properties
     $L$ -- inter-scene linker, $H$ -- linked Scene, $C$ -- center,
     $R$ -- relator, $N$ -- connector, $U$ -- punctuation, $F$ -- function unit.
     Pre-terminal nodes are omitted for brevity.
-}
+  }
 \end{figure}
 
 However, to our knowledge, no existing parser supports the combination of these criteria.
