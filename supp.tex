@@ -21,6 +21,7 @@
 \usepackage{tikz}
 \usepackage{tikz-dependency}
 \usepackage{rotating}
+\usepackage{float}
 \usetikzlibrary{shapes,fit,calc,er,positioning,intersections,decorations.shapes,mindmap,trees}
 \tikzset{decorate sep/.style 2 args={decorate,decoration={shape backgrounds,shape=circle,
       shape size=#1,shape sep=#2}}}
@@ -45,17 +46,17 @@
 
 \newcommand\BibTeX{B\textsc{ib}\TeX}
 
-\title{Supplementary Material}
+\title{Broad-Coverage Semantic Parsing: A Transition-Based Approach \\ Supplementary Material}
 
 \begin{document}
 \maketitle
 
 \section{Label heuristics in dependency-to-constituency conversion}
 
-The $\mathrm{Label}$ function is used when introducing new nodes to the constituency tree, when no clear edge exists.
+The $\mathrm{Label}$ function is used when introducing new nodes to the constituency tree, if no clear edge exists.
 It is given in the following algorithm:
 
-\begin{algorithm}[h]
+\begin{algorithm}[H]
   \small
   \KwData{node $u \in V_d$}
  \KwResult{label $\ell \in L$}
@@ -73,9 +74,70 @@ It is given in the following algorithm:
  }
 \end{algorithm}
 
-\section{Conversion examples}
+\section{Conversion example}
+
+Converting the sentence in Figure 1a to a constituency tree consists of simply removing the remote edge:
+
+\begin{figure*}[H]
+  \centering
+  \begin{tikzpicture}[level distance=10mm, ->]
+    \node (ROOT) [fill=black, circle] {}
+      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
+      child {node (graduation) [fill=black, circle] {}
+      {
+        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
+      } edge from parent node[left] {\scriptsize $H$} }
+      child {node {,} edge from parent node[right] {\scriptsize $U$}}
+      child {node (moved) [fill=black, circle] {}
+      {
+        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
+        child {node [fill=black, circle] {}
+        {
+          child {node {to} edge from parent node[left] {\scriptsize $R$}}
+          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
+        } edge from parent node[left] {\scriptsize $A$} }
+      } edge from parent node[right] {\scriptsize $H$} }
+      ;
+  \end{tikzpicture}
+\end{figure*}
+
+The corresponding dependency tree is given in the following figure:
+
+\begin{figure*}[H]
+  \centering
+\begin{dependency}[theme = simple]
+\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+\end{deptext}
+\depedge{2}{1}{L}
+\depedge{2}{3}{U}
+\depedge{5}{4}{A}
+\depedge{2}{5}{H}
+\depedge{7}{6}{R}
+\depedge{5}{7}{A}
+\end{dependency}
+\end{figure*}
 
 \section{Conversion-based out-of-domain results}
+
+The following scores were obtained on primary edges when running the conversion-based parsers on the out-of-domain data set (\textit{20K Leagues}). Scores on remote edges are zero, since they are not reconstructed by the conversion.
+\begin{table}[H]
+  \centering
+\begin{tabular}{l|ccc}
+& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Conversion} \\
+\textsc{uparse} & 57 & 59.4 & 58 \\
+Upper Bound & 100 & 100 & 100 \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Dependency Tree Conversion} \\
+Malt$_{\textrm{arc-standard}}$ & 62.3 & 55.9 & 58.7 \\
+Malt$_{\textrm{arc-eager}}$ & 62.8 & 56.3 & 59.2 \\
+LSTM & {\bf 70.1} & {\bf 63.3} & {\bf 66.1} \\
+Upper Bound & 93.5 & 82.5 & 87.6 \\
+\end{tabular}
+\end{table}
 
 \section{Additional UCCA-annotated examples}
 
@@ -83,8 +145,8 @@ It is given in the following algorithm:
 
 The following figure demonstrates a linkage relation, omitted from Figure 1a in the paper.
 
-\begin{figure*}[h]
-  \scalebox{.9}{
+\begin{figure}[H]
+  \centering
   \begin{tikzpicture}[level distance=10mm, ->]
     \node (ROOT) [fill=black, circle] {}
       child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
@@ -110,8 +172,7 @@ The following figure demonstrates a linkage relation, omitted from Figure 1a in 
           \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
           \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
-  }
-\end{figure*}
+\end{figure}
 
 \paragraph{Longer example.}
 
@@ -120,8 +181,9 @@ The following figure shows the UCCA annotation for the sentence
 The sentence was used by \cite{oepen2015semeval} to compare between the difference schemes.
 It sentence includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
 
-\begin{sidewaysfigure*}[h]
-  \scalebox{.9}{
+\begin{figure}[H]
+  \centering
+  \scalebox{.6}{
   \begin{tikzpicture}[level distance=20mm, ->,
   level 1/.style={sibling distance=8em},
   level 2/.style={sibling distance=4em},
@@ -162,7 +224,7 @@ It sentence includes a single Scene, whose main relation is ``apply'', a seconda
       ;
   \end{tikzpicture}
   }
-\end{sidewaysfigure*}
+\end{figure}
 
 
 

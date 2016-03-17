@@ -84,7 +84,7 @@
   and using existing state-of-the-art parsers on the converted representations;
   and (2) constructing a parser that directly supports the full set of properties.
   We experiment with UCCA-annotated corpora, the only ones with all
-  structural semantic properties.
+  structural semantic properties. Results demonstrate the effectiveness of this approach.
   
 \end{abstract}
 
@@ -915,7 +915,7 @@ F-score higher than the arc-standard MaltParser, which
 differs from it only in its classifier.
 This suggests that applying a similar LSTM-based approach to
 training \textsc{bsp} is likely to improve results,
-and further underscores the feasibility of transition-based 
+and further underscores the effectiveness of transition-based 
 methods for BSS parsing. 
 
 %too practically turns the structure into a constituency tree, and raises the scores above two of the conversion-based parsers. However, the stack LSTM-based parser of Dyer et al.~\shortcite{dyer2015transition} still reaches the highest score.
@@ -972,13 +972,11 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \end{table}
 
 \paragraph{Feature Ablation.}
-To evaluate the relative importance of the different feature sets,
-we perform feature ablation experiments on \textsc{bsp},
-removing a set of features at a time,
-and evaluating the resulting parser on the development set (\tabref{table:ablation}).
-In the few cases where a feature set has only a small
-or a negative contribution to the primary edge F-score, 
-it has a positive contribution on the prediction of remote edges.
+To evaluate the relative impact of the different feature sets on \textsc{bsp},
+we remove a set of features at a time,
+and evaluate the resulting parser on the development set (\tabref{table:ablation}).
+Almost all feature sets have a positive contribution to the primary edge F-score, 
+or otherwise to the prediction of remote edges.
 \textbf{unigrams} and \textbf{bigrams} features are especially
 important, and the \textbf{ratio} feature greatly improves recall on
 primary edges. \textbf{disco} features have a positive contribution,
@@ -1021,10 +1019,10 @@ likely to be amplified in languages with a higher percentage of discontinuous un
 
 We have introduced the first parser that supports multiple parents, non-terminal
 nodes and discontinuous units.
-We further explored a conversion-based parsing approach in order to assess the ability of existing
+We further explored a conversion-based parsing approach to assess the ability of existing
 technology to address the task.
 The work makes a further contribution by first experimenting on UCCA parsing.
-Results show that UCCA can already be parsed with 69.2\% F-score,
+Results show that UCCA can be parsed with 69.2\% F-score,
 and suggest means for improvement by taking an LSTM-based
 approach to the local classifier of \textsc{bsp}.
 The quality of the results is underscored by UCCA's inter-annotator
