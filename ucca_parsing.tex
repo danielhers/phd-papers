@@ -94,7 +94,7 @@
 
 In order to support the full range of semantic structures exhibited by
 natural language, the following three structural properties should be supported.
-The first is support for DAG, rather than tree structures,
+The first is support for DAG (directed acyclic graph), rather than tree structures,
 in order to represent arguments and relations (semantic units)
 that are shared between predicates.
 For instance, in the sentence
@@ -109,8 +109,14 @@ Frequent examples of such constructions include
 coordination structures (e.g., ``{\bf John and Mary} went home''; \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the {\bf Have Nots}''),
 and prepositional phrases.
+The ad-hoc solutions to this problem suffer from lack of standardization \cite{Ivanova2012who},
+and task-dependence: for prepositional phrases, for example,
+representing the preposition as the head is preferable for
+parsing \cite{Schwartz:12}, although the nominal phrase is more meaningful for e.g. information extraction.
+\daniel{to review}
 Third, semantic units may be discontiguous in the text. For instance, in ``John gave everything up''
 (\figref{fig:gave}), the phrasal verb ``gave ... up'' forms a single semantic unit.
+This also applies to multi-word expressions \cite{schneider2014discriminative}. \daniel{to review}
 We call formal representations supporting all three properties 
 {\it Broad-coverage Semantic Structures} (BSS).
 
