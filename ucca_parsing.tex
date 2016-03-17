@@ -94,98 +94,31 @@
 
 In order to support the full range of semantic structures exhibited by
 natural language, the following three structural properties should be supported.
-The first is support for DAG (directed acyclic graph), rather than tree structures,
-in order to represent arguments and relations (semantic units)
-that are shared between predicates.
+The first is \textbf{multiple parents},
+%support for DAG (directed acyclic graph), rather than tree structures,
+representing arguments and relations (semantic units) that are shared between predicates.
 For instance, in the sentence
 ``After graduation, John moved to Paris'', ``John'' is an argument of both ``graduation''
-and ``moved'', yielding a DAG structure (\figref{fig:graduation}).
-The second is support for non-terminal nodes, in order to represent units
+and ``moved'', yielding a DAG structure (\figref{fig:graduation}), rather than a tree.
+The second is \textbf{non-terminal nodes}, in order to represent units
 comprising more than one word.
 While bi-lexical dependencies partially circumvent this restriction, by
 representing complex units in terms of their headwords, they fall short
 when representing units that have no clear head.
 Frequent examples of such constructions include
-coordination structures (e.g., ``{\bf John and Mary} went home''; \figref{fig:home}),
-some multi-word expressions (e.g., ``The Haves and the {\bf Have Nots}''),
+coordination structures (e.g., ``\textit{John and Mary} went home''; \figref{fig:home}),
+some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases.
 The ad-hoc solutions to this problem suffer from lack of standardization \cite{Ivanova2012who},
 and task-dependence: for prepositional phrases, for example,
 representing the preposition as the head is preferable for
 parsing \cite{Schwartz:12}, although the nominal phrase is more meaningful for e.g. information extraction.
 \daniel{to review}
-Third, semantic units may be discontiguous in the text. For instance, in ``John gave everything up''
+Third, semantic units may be \textbf{discontiguous} in the text. For instance, in ``John gave everything up''
 (\figref{fig:gave}), the phrasal verb ``gave ... up'' forms a single semantic unit.
 This also applies to multi-word expressions \cite{schneider2014discriminative}. \daniel{to review}
 We call formal representations supporting all three properties 
 {\it Broad-coverage Semantic Structures} (BSS).
-
-However, to our knowledge, no existing parser supports the combination of these criteria,
-and the only semantically-annotated corpora that supports them is UCCA \cite{abend2013universal},
-which has no parser.
-Several other models either support some of these properties \cite{oepen2015semeval},
-or avoid grounding semantic units altogether
-(notably, AMR \cite{banarescu2013abstract}). See \secref{sec:background}.
-
-In this work we are thus first in proposing techniques for BSS parsing.
-We adopt a transition-based approach, which has recently produced some of the best
-results in syntactic dependency parsing
-\cite{dyer2015transition,ballesteros2015improved}, and has also demonstrated
-strong performance in a variety of other semantic and syntactic settings,
-\cite[among others]{maier2015discontinuous,wang2015transition}.
-
-We pursue two complementary parsing strategies.
-First, we assess the ability of existing technology to tackle the task,
-by developing conversion protocols between UCCA structures and two related formalisms:
-dependency trees and discontinuous constituency trees.
-As these formalisms are more restrictive than BSS, the conversion
-is necessarily lossy. Nonetheless, we find that it is effective
-in practice (\secref{sec:conversion_approach}).
-Second, we present a novel transition-based broad-coverage parser,
-Broad-coverage Semantic Parser (\textsc{bsp}; \secref{sec:direct_approach})
-that supports multiple parents, non-terminal nodes and discontinuous units,
-based on extending existing transition-based parsers
-with new transitions and features.
-%for parsing BSS and UCCA in particular.
-Transition-based methods are a natural starting point for UCCA parsing,
-as the set of distinctions it represents, which is centered around predicate-argument
-structures and their inter-relations, is similar in spirit to the distinctions
-conveyed by dependency schemes.
-
-We experiment with the English UCCA-annotated corpora \cite{abend2013universal}
-as a test case,
-and apply the parsing approaches both to in-domain and out-of-domain scenarios.
-Results reach nearly 70\% labeled F-score for the highest
-scoring parser, and suggest concrete paths for further improvement.
-All converters and parsers will be made publicly available upon publication.
-
-
-%\footnote{While the task is not specific to UCCA,
-%  to the best of our knowledge, UCCA's are the only
-%  semantically annotated corpora that support all criteria of BSS.},
-%a small degradation with the transition to out-of-domain scenarios.
-
-%A general parser for this setting must support the prediction of multiple parents,
-%as well as of discontinuous constituents, both pervasive phenomena in semantic
-%structures even in English (see \secref{sec:data}.
-%Multiple parents show up frequently in the context of argument
-%sharing, where a certain argument participates in several relations but is only mentioned once.
-%Common examples are coordination structures
-%(e.g., in ``John went home and took a shower'', ``John'' is an argument of both ``went'' and ``took'')
-%or nominalizations (e.g., ``After graduation, John moved to London'', where ``John'' is an argument
-%of both ``graduation'' and ``moved'').
-%discontinuous units are common even in syntactic structures in some languages (e.g., German, Bulgarian,
-%Korean and many others \cite{kallmeyer2013data}), and can even be found in English, e.g., in reported
-%speech: ``'The dog', John said, 'is back again''', and are even more pervasive in English semantic parses
-%(see \secref{sec:data}).
-
-%\oa{fix this}
-%The contribution of this work is thus three-fold.
-%First, we motivate and define the broad-coverage semantic parsing task.
-%Second, we create converters and study the ability of existing parsing technology
-%for formally related settings to address the task, focusing on transition-based methods.
-%Third, we present \textsc{bsp}, novel both in being the first broad-coverage DAG parser,
-%as well as the first UCCA parser. 
 
 \begin{figure}
   \begin{subfigure}[t]{.5\textwidth}
@@ -294,6 +227,73 @@ All converters and parsers will be made publicly available upon publication.
     Pre-terminal nodes are omitted for brevity.
 }
 \end{figure}
+
+However, to our knowledge, no existing parser supports the combination of these criteria,
+and the only semantically-annotated corpora that supports them is UCCA \cite{abend2013universal},
+which has no parser.
+Several other models either support some of these properties \cite{oepen2015semeval},
+or avoid grounding semantic units altogether
+(notably, AMR \cite{banarescu2013abstract}). See \secref{sec:background}.
+
+In this work we are thus first in proposing techniques for BSS parsing.
+We adopt a transition-based approach, which has recently produced some of the best
+results in syntactic dependency parsing
+\cite{dyer2015transition,ballesteros2015improved}, and has also demonstrated
+strong performance in a variety of other semantic and syntactic settings,
+\cite[among others]{maier2015discontinuous,wang2015transition}.
+
+We pursue two complementary parsing strategies.
+First, we assess the ability of existing technology to tackle the task,
+by developing conversion protocols between UCCA structures and two related formalisms:
+dependency trees and discontinuous constituency trees.
+As these formalisms are more restrictive than BSS, the conversion
+is necessarily lossy. Nonetheless, we find that it is effective
+in practice (\secref{sec:conversion_approach}).
+Second, we present a novel transition-based broad-coverage parser,
+Broad-coverage Semantic Parser (\textsc{bsp}; \secref{sec:direct_approach})
+that supports multiple parents, non-terminal nodes and discontinuous units,
+based on extending existing transition-based parsers
+with new transitions and features.
+%for parsing BSS and UCCA in particular.
+Transition-based methods are a natural starting point for UCCA parsing,
+as the set of distinctions it represents, which is centered around predicate-argument
+structures and their inter-relations, is similar in spirit to the distinctions
+conveyed by dependency schemes.
+
+We experiment with the English UCCA-annotated corpora \cite{abend2013universal}
+as a test case,
+and apply the parsing approaches both to in-domain and out-of-domain scenarios.
+Results reach nearly 70\% labeled F-score for the highest
+scoring parser, and suggest concrete paths for further improvement.
+All converters and parsers will be made publicly available upon publication.
+
+
+%\footnote{While the task is not specific to UCCA,
+%  to the best of our knowledge, UCCA's are the only
+%  semantically annotated corpora that support all criteria of BSS.},
+%a small degradation with the transition to out-of-domain scenarios.
+
+%A general parser for this setting must support the prediction of multiple parents,
+%as well as of discontinuous constituents, both pervasive phenomena in semantic
+%structures even in English (see \secref{sec:data}.
+%Multiple parents show up frequently in the context of argument
+%sharing, where a certain argument participates in several relations but is only mentioned once.
+%Common examples are coordination structures
+%(e.g., in ``John went home and took a shower'', ``John'' is an argument of both ``went'' and ``took'')
+%or nominalizations (e.g., ``After graduation, John moved to London'', where ``John'' is an argument
+%of both ``graduation'' and ``moved'').
+%discontinuous units are common even in syntactic structures in some languages (e.g., German, Bulgarian,
+%Korean and many others \cite{kallmeyer2013data}), and can even be found in English, e.g., in reported
+%speech: ``'The dog', John said, 'is back again''', and are even more pervasive in English semantic parses
+%(see \secref{sec:data}).
+
+%\oa{fix this}
+%The contribution of this work is thus three-fold.
+%First, we motivate and define the broad-coverage semantic parsing task.
+%Second, we create converters and study the ability of existing parsing technology
+%for formally related settings to address the task, focusing on transition-based methods.
+%Third, we present \textsc{bsp}, novel both in being the first broad-coverage DAG parser,
+%as well as the first UCCA parser. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
