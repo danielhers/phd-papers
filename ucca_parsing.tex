@@ -233,18 +233,19 @@ We call formal representations supporting all three properties
 }
 \end{figure}
 
-However, to our knowledge, no existing parser supports the combination of these criteria,
-and the only semantically-annotated corpora that supports them is UCCA \cite{abend2013universal},
+However, to our knowledge, no existing parser supports the combination of these criteria.
+The only semantic annotation scheme that supports them is UCCA \cite{abend2013universal},
 which has no parser.
 Several other models either support some of these properties \cite{oepen2015semeval},
 or avoid grounding semantic units altogether
-(notably, AMR \cite{banarescu2013abstract}). See \secref{sec:background}.
+(notably, AMR \cite{banarescu2013abstract}).
+\secref{sec:background} discusses these models.
 
 In this work we are first in proposing techniques for BSS parsing.
 We adopt a transition-based approach, which has recently produced some of the best
 results in syntactic dependency parsing
 \cite{dyer2015transition,ballesteros2015improved}, and has also demonstrated
-strong performance in a variety of other semantic and syntactic settings,
+strong performance in a variety of other semantic and syntactic settings
 \cite[among others]{maier2015discontinuous,wang2015transition}.
 
 We pursue two complementary parsing strategies.
@@ -266,10 +267,9 @@ structures and their inter-relations, is similar in spirit to the distinctions
 conveyed by dependency schemes.
 
 We experiment with the English UCCA-annotated corpora \cite{abend2013universal}
-as a test case,
-and apply the parsing approaches both to in-domain and out-of-domain scenarios.
-Results reach nearly 70\% labeled F-score for the highest
-scoring parser, and suggest concrete paths for further improvement.
+as a test case, in both in-domain and out-of-domain scenarios, reaching
+nearly 70\% labeled F-score for the highest scoring parser.
+The results suggest concrete paths for further improvement.
 All converters and parsers will be made publicly available upon publication.
 
 
