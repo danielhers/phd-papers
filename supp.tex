@@ -51,9 +51,33 @@
 \begin{document}
 \maketitle
 
+\section{Priority order of edge labels}
+
+The order of labels defines as the $\mathrm{Priority}$ function in Algorithm 1 is the following:
+
+\begin{enumerate}
+\item $C$ (\textit{Center})
+\item $N$ (\textit{Connector})
+\item $H$ (\textit{ParallelScene})
+\item $P$ \textit{Process})
+\item $S$ (\textit{State})
+\item $A$ (\textit{Participant})
+\item $D$ (\textit{Adverbial})
+\item $T$ (\textit{Time})
+\item $E$ (\textit{Elaborator})
+\item $R$ (\textit{Relator})
+\item $F$ (\textit{Function})
+\item $L$ (\textit{Linker})
+\item $LR$ (\textit{LinkRelation})
+\item $LA$ (\textit{LinkArgument})
+\item $G$ (\textit{Ground})
+\item $\mathit{Terminal}$ (\textit{Terminal})
+\item $U$ (\textit{Punctuation})
+\end{enumerate}
+
 \section{Label heuristics in dependency-to-constituency conversion}
 
-The $\mathrm{Label}$ function is used when introducing new nodes to the constituency tree, if no clear edge exists.
+The $\mathrm{Label}$ function is used in Algorithm 2 when introducing new nodes to the constituency tree, if no clear edge exists.
 It is given in the following algorithm:
 
 \begin{algorithm}[H]
@@ -74,6 +98,26 @@ It is given in the following algorithm:
  }
 \end{algorithm}
 
+
+\section{Conversion-based out-of-domain results}
+
+The following scores were obtained on primary edges when running the conversion-based parsers on the out-of-domain data set (\textit{20K Leagues}). Scores on remote edges are zero, since they are not reconstructed by the conversion.
+\begin{table}[H]
+  \centering
+\begin{tabular}{l|ccc}
+& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Conversion} \\
+\textsc{uparse} & 57 & 59.4 & 58 \\
+Upper Bound & 100 & 100 & 100 \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Dependency Tree Conversion} \\
+Malt$_{\textrm{arc-standard}}$ & 62.3 & 55.9 & 58.7 \\
+Malt$_{\textrm{arc-eager}}$ & 62.8 & 56.3 & 59.2 \\
+LSTM & {\bf 70.1} & {\bf 63.3} & {\bf 66.1} \\
+Upper Bound & 93.5 & 82.5 & 87.6 \\
+\end{tabular}
+\end{table}
 \section{Conversion example}
 
 Converting the sentence in Figure 1a to a constituency tree consists of simply removing the remote edge:
@@ -119,26 +163,6 @@ After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 \end{dependency}
 \end{figure*}
 
-\section{Conversion-based out-of-domain results}
-
-The following scores were obtained on primary edges when running the conversion-based parsers on the out-of-domain data set (\textit{20K Leagues}). Scores on remote edges are zero, since they are not reconstructed by the conversion.
-\begin{table}[H]
-  \centering
-\begin{tabular}{l|ccc}
-& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-\hline
-\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Conversion} \\
-\textsc{uparse} & 57 & 59.4 & 58 \\
-Upper Bound & 100 & 100 & 100 \\
-\hline
-\multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Dependency Tree Conversion} \\
-Malt$_{\textrm{arc-standard}}$ & 62.3 & 55.9 & 58.7 \\
-Malt$_{\textrm{arc-eager}}$ & 62.8 & 56.3 & 59.2 \\
-LSTM & {\bf 70.1} & {\bf 63.3} & {\bf 66.1} \\
-Upper Bound & 93.5 & 82.5 & 87.6 \\
-\end{tabular}
-\end{table}
-
 \section{Additional UCCA-annotated examples}
 
 \paragraph{Linkage.}
@@ -179,7 +203,7 @@ The following figure demonstrates a linkage relation, omitted from Figure 1a in 
 The following figure shows the UCCA annotation for the sentence
 ``A similar technique is almost impossible to apply to other crops, such as cotton, soybeans and rice.''.
 The sentence was used by \cite{oepen2015semeval} to compare between the difference schemes.
-It sentence includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
+It includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
 
 \begin{figure}[H]
   \centering
