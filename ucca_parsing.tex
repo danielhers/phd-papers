@@ -518,12 +518,12 @@ The conversion procedure from dependency to constituency is given in Algorithm~\
   $t^\prime \leftarrow \mathrm{Parent}_d(t)$\;
   \eIf{$t^\prime = \textsc{Root}$} {
    $E_c \leftarrow E_c \cup \{(r, u)\}$\;
-   $\ell_c(r, u) \leftarrow \mathrm{Label}(r,u)$\;
+   $\ell_c(r, u) \leftarrow \mathrm{Label}(r)$\;
   } {
    \eIf{$\exists v \in V_d : (t,v) \in E_d$} {
     $u^\prime \leftarrow \mathrm{Node()}$\;
     $E_c \leftarrow E_c \cup \{(u^\prime, u)\}$\;
-    $\ell_c(u^\prime, u) \leftarrow \mathrm{Label}(u^\prime, u)$\;
+    $\ell_c(u^\prime, u) \leftarrow \mathrm{Label}(u^\prime)$\;
    } {
     $u' \leftarrow u$\;
    }
