@@ -78,28 +78,12 @@
   We discuss a set of structural properties required for
   broad-coverage semantic representation, and note that existing
   parsers support some of these properties, but not all.
-  % (representations supporting these properties are called
-  % {\it Broad-coverage Semantic Structures}, % or BSS).
-  We propose
-  two transition-based techniques for parsing such semantic structures:
+  We propose two transition-based techniques for parsing such semantic structures:
   (1) applying conversion procedures to map them into related formalisms,
   and using existing state-of-the-art parsers on the converted representations;
   and (2) constructing a parser that directly supports the full set of properties.
   We experiment with UCCA-annotated corpora, the only ones with all
-  structural semantic properties, and obtain encouraging results.
-  %We obtain encouraging results, using the UCCA semantic representation, which
-  %supports our formal characterization, as a testbed.
-  
-  %We experiment with two types of semantic representations, obtaining
-  %encouraging results.
-  %Universal Conceptual Cognitive Annotation (UCCA) is a semantic grammatical scheme
-  % that assigns 
-  %a complete structure to natural language text. We present the first automatic
-  % UCCA parser, 
-  % a transition-based parser using a novel transition system. We compare the
-  % results to baselines 
-  % obtained by converting UCCA to CoNNL-X, and training syntactic parsers on the
-  % converted dependency trees.
+  structural semantic properties.
   
 \end{abstract}
 
@@ -165,7 +149,7 @@ conveyed by dependency schemes.
 We experiment with the English UCCA-annotated corpora \cite{abend2013universal}
 as a test case,
 and apply the parsing approaches both to in-domain and out-of-domain scenarios.
-Results are encouraging, with nearly 70\% labeled F-score for the highest
+Results reach nearly 70\% labeled F-score for the highest
 scoring parser, and suggest concrete paths for further improvement.
 All converters and parsers will be made publicly available upon publication.
 
