@@ -289,57 +289,6 @@ All converters and parsers will be made publicly available upon publication.
 }
 \end{figure}
 
-\com{
-\begin{figure*}
-\begin{adjustbox}{width=\textwidth}
-  \begin{tikzpicture}[level distance=20mm, ->,
-  level 1/.style={sibling distance=8em},
-  level 2/.style={sibling distance=4em},
-  level 3/.style={sibling distance=4em}]
-    \node (ROOT) [fill=black, circle] {}
-      child {node [fill=black, circle] {}
-      {
-        child {node {A} edge from parent node[left] {\scriptsize $E$}}
-        child {node {similar} edge from parent node[left] {\scriptsize $E$}}
-        child {node {technique} edge from parent node[right] {\scriptsize $C$}}
-      } edge from parent node[left] {\scriptsize $A\quad$ \hspace{1mm} } }
-      child {node {is} edge from parent node[left] {\scriptsize $F$}}
-      child {node [fill=black, circle] {}
-      {
-        child {node {almost} edge from parent node[left] {\scriptsize $E$}}
-        child {node {impossible} edge from parent node[right] {\scriptsize $C$}}
-      } edge from parent node[left] {\scriptsize $D$} }
-      child {node {\textbf{IMPLICIT}} edge from parent node[left] {\scriptsize $A$}}
-      child {node {to} edge from parent node[left] {\scriptsize $F$}}
-      child {node {apply} edge from parent node[left] {\scriptsize $P\quad$}}
-      child {node [fill=black, circle] {}
-      {
-        child {node {to} edge from parent node[left] {\scriptsize $R$}}
-        child {node {other} edge from parent node[left] {\scriptsize $E$}}
-        child {node {crops} edge from parent node[left] {\scriptsize $C$}}
-        child {node {,} edge from parent node[left] {\scriptsize $U$}}
-        child {node [fill=black, circle] {}
-        {
-          child {node {such as} edge from parent node[left] {\scriptsize $R$}}
-          child {node {cotton} edge from parent node[left] {\scriptsize $C$}}
-          child {node {,} edge from parent node[left] {\scriptsize $U$}}
-          child {node {soybeans} edge from parent node[left] {\scriptsize $C$}}
-          child {node {and} edge from parent node[left] {\scriptsize $N$}}
-          child {node {rice} edge from parent node[right] {\scriptsize $\; C$}}
-        } edge from parent node[right] {\scriptsize $\; E$ \hspace{1mm} } }
-      } edge from parent node[left] {\scriptsize $A\;$ \hspace{1mm} } }
-      child {node {.} edge from parent node[right] {\scriptsize $\quad \quad U$}}
-      ;
-  \end{tikzpicture}
-\end{adjustbox}
-\caption{\label{fig:ucca_example2}
-  UCCA graph for the sentence ``A similar technique is almost impossible to
-  apply to other crops, such as cotton, soybeans and rice.''
-  The sentence was used by \protect\newcite{oepen2015semeval} to compare between the difference schemes. The sentence includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
-}
-\end{figure*}
-}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}\label{sec:background}
