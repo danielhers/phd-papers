@@ -78,13 +78,15 @@
   We discuss a set of structural properties required for
   broad-coverage semantic representation, and note that existing
   parsers support some of these properties, but not all.
-  %(representations supporting these properties are called {\it Broad-coverage Semantic Structures}, or BSS).
+  % (representations supporting these properties are called
+  % {\it Broad-coverage Semantic Structures}, % or BSS).
   We propose
   two transition-based techniques for parsing such semantic structures:
   (1) applying conversion procedures to map them into related formalisms,
   and using existing state-of-the-art parsers on the converted representations;
   and (2) constructing a parser that directly supports the full set of properties.
-  We experiment with the UCCA corpora, the only ones with all structural semantic properties, and obtain encouraging results.
+  We experiment with UCCA-annotated corpora, the only ones with all
+  structural semantic properties, and obtain encouraging results.
   %We obtain encouraging results, using the UCCA semantic representation, which
   %supports our formal characterization, as a testbed.
   
@@ -375,17 +377,24 @@ structures that have no clear head, such as coordination \cite{Ivanova2012who}.
 
 Another line of work addressed parsing into Abstract Meaning Representations (AMRs)
 \cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad}. 
-While sharing much of this work's motivation, AMR parsing techniques are not applicable
-here for two reasons. 
-First, AMR does not ground its units in the words and constituents of the text.
-This is both reflected in the representation scheme,
-where not all nodes correspond to words in the text and vice versa, and in
-parsing, as it requires that the alignment between words and logical symbols be
-automatically detected, thus altering the parsing task.
+While sharing much of this work's motivation,
+AMR does not ground its units in the words and constituents of the text.
+This complicates the parsing task, as it requires
+that the alignment between words and logical symbols be automatically
+(and imprecisely) detected.
 \newcite{wang2015transition} applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
 the resulting tree into an AMR. They thus used a different set of transitions than
 \textsc{bsp}, which parses strings directly into graphs.
+
+%techniques are not applicable here.
+%bears on the representation scheme,
+%where not all nodes correspond to words in the text and vice versa,
+%and in parsing, as it requires 
+%We note that not grounding the text within the semantic representation poses difficutlties,
+%as it generally requires that this correspondence
+%be automatically (and hence imprecisely) derived.
+%AMR does not ground 
 
 \paragraph{The UCCA Annotation Scheme.}
 Universal Cognitive Conceptual Annotation (UCCA)
@@ -394,18 +403,19 @@ that builds on the established ``Basic Linguistic Theory'' framework for typolog
 \cite{Dixon:10b,Dixon:10a,Dixon:12}, and on the Cognitive Linguistics literature.
 UCCA is a multi-layered representation, where each layer corresponds to a ``module'' of
 semantic distinctions (e.g., predicate-argument structures, adverbials, coreference etc.).
-Importantly, the same set of categories can be applied across different lexical items and languages.
-This stands in contrast to more schemes such as FrameNet \cite{Baker:98},
-PropBank \cite{Palmer:05} and AMR, that define an open-ended, lexically-based set of categories,
-which while providing further information, are more prone to coverage issues \cite{Palmer:10},
-and may result in a different set of relations when applied to different languages \cite{Xue2014not}.
+%Importantly, the same set of categories can be applied across different lexical items and languages.
+%This stands in contrast to more schemes such as FrameNet \cite{Baker:98},
+%PropBank \cite{Palmer:05} and AMR, that define an open-ended, lexically-based set of categories,
+%which while providing further information, are more prone to coverage issues \cite{Palmer:10},
+%and may result in a different set of relations when applied to different languages \cite{Xue2014not}.
 
 Formally, a UCCA structure over a sentence is a DAG, whose leaves correspond to the sentence's words.
 The nodes of the graph, or its ``units'', are either terminals or several
 sub-units (not necessarily contiguous) jointly viewed as a
 single entity according to some semantic or cognitive consideration.
 Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents.
-UCCA structures support all three criteria of BSS: multiple parents, non-terminal nodes, and discontinuous units.
+UCCA structures support all three criteria of BSS: multiple parents, non-terminal nodes, and
+discontinuous units.
 
 UCCA's foundational layer, which we use here, covers the predicate-argument
 structures evoked by predicates of all grammatical categories
