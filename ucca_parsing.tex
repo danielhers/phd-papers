@@ -92,7 +92,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-In order to support the full range of semantic structures exhibited by
+In order to represent the full range of semantic structures exhibited by
 natural language, there are three structural properties that should be supported.
 The first is \textbf{multiple parents},
 %support for DAG (directed acyclic graph), rather than tree structures,
@@ -100,7 +100,8 @@ representing arguments and relations (semantic units) that are shared between pr
 For instance, in the sentence
 ``After graduation, John moved to Paris'', ``John'' is an argument of both ``graduation''
 and ``moved'', yielding a DAG structure (\figref{fig:graduation}), rather than a tree.
-The second is \textbf{non-terminal nodes}, in order to represent units
+
+The second is \textbf{non-terminal nodes} for representing units
 comprising more than one word.
 While bi-lexical dependencies partially circumvent this restriction, by
 representing complex units in terms of their headwords, they fall short
@@ -109,15 +110,18 @@ Frequent examples of such constructions include
 coordination structures (e.g., ``\textit{John and Mary} went home''; \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases.
-The many ad-hoc solutions to this problem suffer from lack of standardization \cite{Ivanova2012who}
-and task-dependence: representing the preposition as the head of a prepositional phrase, for example,
-yields better results for parsing \cite{Schwartz:12}, although the nominal phrase is more meaningful
-e.g. for information extraction. \daniel{to review}
+Dependency schemes often apply some annotation convention that selects one of the sub-units
+as the head, but as different head selections are needed for different purposes,
+standardization problems arise \cite{Ivanova2012who}.
+For example, selecting the preposition to head prepositional phrases yields better
+parsing results \cite{Schwartz:12}, while the head noun can be more useful for
+information extraction purposes.
+
 Third, semantic units may be \textbf{discontinuous} in the text. For instance, in
 ``John \textit{gave} everything \textit{up}''
 (\figref{fig:gave}), the phrasal verb ``gave ... up'' forms a single semantic unit.
-This is a common phenomenon with other multi-word expressions, too \cite{schneider2014discriminative}.
-\daniel{to review}
+Discontiguities are also pervasive with other multi-word
+expressions \cite{schneider2014discriminative}.
 We call formal representations supporting all three properties 
 {\it Broad-coverage Semantic Structures} (BSS).
 
@@ -236,7 +240,7 @@ Several other models either support some of these properties \cite{oepen2015seme
 or avoid grounding semantic units altogether
 (notably, AMR \cite{banarescu2013abstract}). See \secref{sec:background}.
 
-In this work we are thus first in proposing techniques for BSS parsing.
+In this work we are first in proposing techniques for BSS parsing.
 We adopt a transition-based approach, which has recently produced some of the best
 results in syntactic dependency parsing
 \cite{dyer2015transition,ballesteros2015improved}, and has also demonstrated
@@ -307,15 +311,15 @@ the focus has recently shifted to parsing of more elaborate representations that
 for a wider range of phenomena. 
 Most closely related to this work is the Broad-coverage Semantic Dependency Parsing (SDP) task,
 recently addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval},
-experimenting with the Prague tectogrammatical layer \cite{sgallhp:1986,bohmova2003prague},\daniel{to review}
+experimenting with the Prague tectogrammatical layer \cite{sgallhp:1986,bohmova2003prague},
 and dependencies derived from the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.},
 and Lingo ERG \cite{Flic:02}.
 Like BSS parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and multiple parents. However, SDP uses
 bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
-structures that have no clear head, such as coordination \cite{Ivanova2012who}.
+structures that have no clear head.%, such as coordination \cite{Ivanova2012who}.
 
-Another line of work addressed parsing into Abstract Meaning Representations (AMRs)
+Another line of work addresses parsing into Abstract Meaning Representations (AMRs)
 \cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad}. 
 While sharing much of this work's motivation,
 AMR does not ground its units in the words and constituents of the text.
@@ -1043,7 +1047,7 @@ agreement (often taken as an upper bound) of
 While much recent work focused on semantic parsing of different types,
 the relations between the different representations have not been clarified.
 We intend to further explore conversion-based parsing approaches,
-including different target representations and more sophisticated conversion procedures \cite{kong-15}\daniel{to review},
+including different target representations and more sophisticated conversion procedures \cite{kong-15},
 to shed light on the commonalities and differences between representations, suggesting ways to
 design better semantic representations.
 We believe that UCCA's merits in providing a cross-linguistically applicable, broad-coverage
