@@ -74,7 +74,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-  The representation of many common semantic phenomena requires 
+  The representation of many common semantic phenomena requires
   structural properties beyond those commonly used for syntactic parsing.
   We discuss a set of structural properties required for
   broad-coverage semantic representation, and note that existing
@@ -94,7 +94,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-In order to represent the full range of semantic structures exhibited by
+In order for a grounded\footnote{By \textit{grounded} we mean the text tokens are directly
+annotated as part of the representation.}
+semantic representation to cover the full range of semantic structures exhibited by
 natural language, there are three structural properties that should be supported.
 The first is \textbf{multiple parents},
 %support for DAG (directed acyclic graph), rather than tree structures,
@@ -112,12 +114,12 @@ Frequent examples of such constructions include
 coordination structures (e.g., ``\textit{John and Mary} went home''; \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases.
-In these cases, dependency schemes often apply some annotation convention that selects one of the sub-units
+In these cases, dependency schemes often apply some convention selecting one of the sub-units
 as the head, but as different head selections are needed for different purposes,
 standardization problems arise \cite{Ivanova2012who}.
 For example, selecting the preposition to head prepositional phrases yields better
-parsing results \cite{Schwartz:12}, while the head noun can be more useful for
-information extraction purposes.
+parsing results \cite{Schwartz:12}, while the head noun is more useful for
+information extraction.
 
 Third, semantic units may be \textbf{discontinuous} in the text. For instance, in
 ``John \textit{gave} everything \textit{up}''
@@ -234,13 +236,13 @@ We call formal representations supporting all three properties
   }
 \end{figure}
 
-However, to our knowledge, no existing parser supports the combination of these criteria.
-The only semantic annotation scheme that supports them is UCCA \cite{abend2013universal},
+However, to our knowledge, no existing parser for a grounded semantic annotation scheme
+supports the combination of these criteria.
+The only such scheme supporting them is UCCA \cite{abend2013universal},
 which has no parser.
 Several other models either support some of these properties \cite{oepen2015semeval},
 or avoid grounding semantic units altogether
-(notably, AMR \cite{banarescu2013abstract}).
-\secref{sec:background} discusses these models.
+(notably, AMR \cite{banarescu2013abstract}; see \secref{sec:background}).
 
 In this work we are first in proposing techniques for BSS parsing.
 We adopt a transition-based approach, which has recently produced some of the best
@@ -249,8 +251,8 @@ results in syntactic dependency parsing
 strong performance in a variety of other semantic and syntactic settings
 \cite[among others]{maier2015discontinuous,wang2015transition}.
 Transition-based methods are a natural starting point for UCCA parsing,
-as the set of distinctions it represents, which is centered around predicate-argument
-structures and their inter-relations, is similar in spirit to the distinctions
+as the set of distinctions it represents, centered around predicate-argument
+structures and their inter-relations, is similar to distinctions
 conveyed by dependency schemes.
 
 We pursue two complementary parsing strategies.
@@ -262,7 +264,7 @@ is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
 Second, we present a novel transition-based broad-coverage parser,
 Broad-coverage Semantic Parser (\textsc{bsp}; \secref{sec:direct_approach})
-that supports multiple parents, non-terminal nodes and discontinuous units,
+supporting multiple parents, non-terminal nodes and discontinuous units,
 based on extending existing transition-based parsers
 with new transitions and features.
 %for parsing BSS and UCCA in particular.
@@ -307,14 +309,14 @@ All converters and parsers will be made publicly available upon publication.
 \section{Background}\label{sec:background}
 
 \paragraph{Broad-coverage Semantic Representation.}
-While earlier work on semantic parsing has mostly concentrated on shallow semantic analysis,
+While earlier work on grounded semantic parsing has mostly concentrated on shallow semantic analysis,
 focusing on semantic role labeling of verbal argument structures,
 the focus has recently shifted to parsing of more elaborate representations that account
 for a wider range of phenomena. 
 Most closely related to this work is Broad-coverage Semantic Dependency Parsing (SDP),
 addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval},
 experimenting with the Prague tectogrammatical layer \cite{sgallhp:1986,bohmova2003prague},
-and with dependencies derived from the Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.}, and Lingo ERG \cite{Flic:02}.
+and with dependencies derived from the Enju parser,\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.} and Lingo ERG \cite{Flic:02}.
 Like BSS parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and multiple parents. However, SDP uses
 bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
@@ -326,7 +328,9 @@ While sharing much of this work's motivation,
 AMR does not ground its units in the words and constituents of the text.
 This complicates the parsing task, as it requires
 that the alignment between words and logical symbols be automatically
-(and imprecisely) detected.
+(and imprecisely) detected.\footnote{Considerable technical effort has been invested in this task
+with various approaches, including
+\newcite{flanigan2014discriminative}, \newcite{pourdamghani2014aligning} and \newcite{pust2015parsing}.}
 \newcite{wang2015transition} applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
 the resulting tree into an AMR. They thus used a different set of transitions than
@@ -421,9 +425,9 @@ For each token $w_i$ ($i=1, \ldots, n$), there exists a leaf (or a terminal) $t_
 
 \paragraph{Conversion to Constituency Trees.}
 We convert BSS to constituency trees by removing a subset of the
-edges\footnote{For trees, labeling nodes is equivalent to labeling edges. Thus,
+edges.\footnote{For trees, labeling nodes is equivalent to labeling edges. Thus,
   we do not distinguish between the two options. 
-  Note also that as the original structures may contain discontinuities, so may the resulting trees.}.
+  Note also that as the original structures may contain discontinuities, so may the resulting trees.}
 Specifically, when converting UCCA structures, we simply remove all remote edges,
 leaving only primary edges, which form a tree structure (see \figref{fig:graduation}).
 The inverse conversion from trees to BSS is simply the identity function, as every constituency tree is a BSS.
@@ -497,7 +501,7 @@ with an edge labeled as \textit{Terminal} between them.
 The parents of the pre-terminals are determined by the terminal's parent in the dependency
 tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $T_d$. We add an intermediate node in between if $t$ has any dependents in $T_d$,
 to allow adding their pre-terminals as children.
-Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$\footnote{See Supplementary Material for the definition of $\mathrm{Label}$.}.
+Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$.\footnote{See Supplementary Material for the definition of $\mathrm{Label}$.}
 In practice, it mostly selects the UCCA label \textit{Center}.
 The conversion procedure from dependency to constituency is given in Algorithm~\ref{alg:dep2con}.
 
@@ -850,9 +854,9 @@ and one into CoNLL-style dependencies. In the first setting we experiment with \
 the only transition-based constituency parser, to our knowledge, able to parse trees with
 discontinuous constituents.
 In the second setting we use the MaltParser with arc-standard and
-arc-eager transition sets \cite{nivre2007maltparser}\footnote{Preliminary
+arc-eager transition sets \cite{nivre2007maltparser},\footnote{Preliminary
 experiments with non-projective variants of MaltParser yielded lower scores than
-projective ones, and were thus discarded from the final evaluation.},
+projective ones, and were thus discarded from the final evaluation.}
 and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
 In the MaltParser, we use both SVM and perceptron classifiers, and report
 results obtained with the SVM classifier, which are about 1\% F-score higher.
@@ -883,13 +887,12 @@ the conversion and inverse conversion on the gold standard
 graphs and comparing them to the original gold standard.
 
 \paragraph{\textsc{bsp}.}
-We train \textsc{bsp} for 16 iterations, using a \textsc{MinUpdate} value of 5 and a constant learning rate of 1.
-We use an \textsc{Importance} value of 2, doubling the weight updates
+We train \textsc{bsp} for 16 iterations, using $\textsc{MinUpdate}=5$ and a constant learning rate of 1.
+We use $\textsc{Importance}=2$, doubling the weight updates
 for gold \textsc{Swap} transitions to address the sparseness
 of discontinuous structures, as in \newcite{maier2015discontinuous}.
-We train \textsc{bsp} both where remote edges
-are included, and when they are excluded from the training data, to allow
-more direct comparison with conversion-based methods that can only
+We train \textsc{bsp} both with and without remote edge transitions,
+to allow more direct comparison with conversion-based methods that can only
 predict trees.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -899,8 +902,8 @@ predict trees.
 upper bounds for the conversion-based methods.
 \textsc{bsp} obtains comparable F-scores to MaltParser and \textsc{uparse}
 in terms of primary edges, but unlike them, is able to predict some
-of the remote edges as well. 
-Removing remote edges from the training data of \textsc{bsp} does not
+of the remote edges too. 
+Removing remote edge transitions from \textsc{bsp} does not
 change results considerably on the primary edges,
 improving them by 0.9\% F-score in the in-domain setting, but reduces
 them by the same amount when applied out-of-domain. 
@@ -910,10 +913,10 @@ to domain variation.
 
 The LSTM parser obtains the highest primary F-score,
 with a considerable margin. Importantly, it obtains 9.1\%
-F-score higher than the arc-standard MaltParser, which
-differs from it only in its classifier.
-This suggests that applying a similar LSTM-based approach to
-training \textsc{bsp} is likely to improve results,
+F-score higher than the arc-standard MaltParser,
+differing from it only in its classifier.
+This suggests that applying a similar approach to
+\textsc{bsp} is likely to improve results,
 and further underscores the effectiveness of transition-based 
 methods for BSS parsing. 
 
@@ -979,7 +982,7 @@ or otherwise to the prediction of remote edges.
 \textbf{unigrams} and \textbf{bigrams} features are especially
 important, and the \textbf{ratio} feature greatly improves recall on
 primary edges. \textbf{disco} features have a positive contribution,
-likely to be amplified in languages with a higher percentage of discontinuous units, such as German.
+likely to be amplified in languages with a higher percentage of discontinuous units, e.g. German.
 
 \begin{table}[ht]
   \scalebox{.8}{
