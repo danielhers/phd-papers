@@ -322,19 +322,26 @@ and supports discontinuous units and multiple parents. However, SDP uses
 bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
 structures that have no clear head, such as coordination \cite{Ivanova2012who}.
 
-Another line of work addresses parsing into Abstract Meaning Representations (AMRs)
-\cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad}. 
+Another line of work addresses parsing into non-grounded semantic representation,
+notably Abstract Meaning Representation (AMR)
+\cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad}.
 While sharing much of this work's motivation,
-AMR does not ground its units in the words and constituents of the text.
-This complicates the parsing task, as it requires
+not grounding the representation in the text
+complicates the parsing task, as it requires
 that the alignment between words and logical symbols be automatically
 (and imprecisely) detected.\footnote{Considerable technical effort has been invested in this task
 with various approaches, including
 \newcite{flanigan2014discriminative}, \newcite{pourdamghani2014aligning} and \newcite{pust2015parsing}.}
+%Furthermore, grounding allows breaking down sentences into semantically meaningful sub-spans,
+%which is useful for many applications (see discussion in \newcite{fernandez2015parsing}),
+%and simplifies manual annotation \cite{abend2013universal}.
 \newcite{wang2015transition} applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
-the resulting tree into an AMR. They thus used a different set of transitions than
+the result into AMR. They thus used a different set of transitions than
 \textsc{bsp}, which parses strings directly into graphs.
+Similarly, parsing in frameworks such as MRS \cite{copestake2005minimal} is based on
+theories of syntax-semantics interface, which we avoid in this work and parse semantic structure
+directly.
 
 %techniques are not applicable here.
 %bears on the representation scheme,
@@ -503,7 +510,7 @@ tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-t
 to allow adding their pre-terminals as children.
 Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$.\footnote{See Supplementary Material for the definition of $\mathrm{Label}$.}
 In practice, it mostly selects the UCCA label \textit{Center}.
-The conversion procedure from dependency to constituency is given in Algorithm~\ref{alg:dep2con}.
+This conversion procedure is given in Algorithm~\ref{alg:dep2con}.
 
 \begin{algorithm}[t]
   \small
@@ -743,15 +750,15 @@ i.e., an oracle that outputs a set of optimal transitions: when
 applied to the current parser state, the gold
 standard graph is reachable from the resulting state.
 For example, the oracle would predict a \textsc{Node} transition if the stack 
-has on its top a parent in the gold graph that hasn't been created,
+has on its top a parent in the gold graph that has not been created,
 but would predict a \textsc{Right-Edge} transition if the second stack
 element is a parent of the
-first element according to the gold graph and the edge between them hasn't been created.
+first element according to the gold graph and the edge between them has not been created.
 The transition predicted by the classifier is deemed correct
 and is applied to the parser state to reach the subsequent state,
 if the transition is included in the set of optimal transitions.
 Otherwise, a random optimal transition is applied
-and the classifier's weights are updated according to the structured perceptron
+and the classifier's weights are updated according to the perceptron
 update rule.
 
 
@@ -779,8 +786,8 @@ We also discard linkage nodes and edges, as they often express inter-sentence
 relations and are thus mostly redundant when applied at the sentence level,
 as well as implicit nodes (\secref{sec:background}).
 In the out-of-domain experiments, we apply the same parser
-(trained on the \textit{Wiki} corpus) to the entire \textit{20K Leagues}
-corpus as test set, without re-tuning any parameters.
+(trained on the \textit{Wiki} corpus) to the \textit{20K Leagues} corpus
+without re-tuning the parameters.
 
 
 \begin{table}
@@ -858,8 +865,8 @@ arc-eager transition sets \cite{nivre2007maltparser},\footnote{Preliminary
 experiments with non-projective variants of MaltParser yielded lower scores than
 projective ones, and were thus discarded from the final evaluation.}
 and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
-In the MaltParser, we use both SVM and perceptron classifiers, and report
-results obtained with the SVM classifier, which are about 1\% F-score higher.
+For MaltParser, we try both SVM and perceptron classifiers, reporting
+results obtained with SVM (about 1\% F-score higher).
 Default settings are used in all cases.
 We do not use existing dependency DAG parsers since we could not obtain their code.
 We note that \textsc{uparse} uses beam search by default,
@@ -887,12 +894,12 @@ the conversion and inverse conversion on the gold standard
 graphs and comparing them to the original gold standard.
 
 \paragraph{\textsc{bsp}.}
-We train \textsc{bsp} for 16 iterations, using $\textsc{MinUpdate}=5$ and a constant learning rate of 1.
-We use $\textsc{Importance}=2$, doubling the weight updates
+We train \textsc{bsp} for 16 iterations, using $\textsc{MinUpdate}=5$
+and $\textsc{Importance}=2$, doubling weight updates
 for gold \textsc{Swap} transitions to address the sparseness
 of discontinuous structures, as in \newcite{maier2015discontinuous}.
 We train \textsc{bsp} both with and without remote edge transitions,
-to allow more direct comparison with conversion-based methods that can only
+to allow better comparison with conversion-based methods that only
 predict trees.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
