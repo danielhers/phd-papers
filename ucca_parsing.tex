@@ -94,9 +94,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-In order for a grounded\footnote{By \textit{grounded} we mean the text tokens are directly
-annotated as part of the representation.}
-semantic representation to cover the full range of semantic structures exhibited by
+In order for a grounded semantic representation to cover the full range of semantic structures exhibited by
 natural language, there are three structural properties that should be supported.
 The first is \textbf{multiple parents},
 %support for DAG (directed acyclic graph), rather than tree structures,
@@ -316,14 +314,17 @@ for a wider range of phenomena.
 Most closely related to this work is Broad-coverage Semantic Dependency Parsing (SDP),
 addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval},
 experimenting with the Prague tectogrammatical layer \cite{sgallhp:1986,bohmova2003prague},
-and with dependencies derived from the Enju parser,\footnote{See \url{http://kmcs.nii.ac.jp/enju/}.} and Lingo ERG \cite{Flic:02}.
+and with dependencies derived from the Enju parser,\footnote{See \url{http://kmcs.nii.ac.jp/enju}} and Lingo ERG \cite{Flic:02}.
 Like BSS parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and multiple parents. However, SDP uses
 bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
 structures that have no clear head, such as coordination \cite{Ivanova2012who}.
 
-Another line of work addresses parsing into non-grounded semantic representation,
-notably Abstract Meaning Representation (AMR)
+Another line of work addresses parsing into
+non-grounded\footnote{By \textit{grounded} we mean the text tokens are directly
+annotated as part of the representation,
+as opposed to abstract formalisms approximating logical form, for example.}
+semantic representation, notably Abstract Meaning Representation (AMR)
 \cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad}.
 While sharing much of this work's motivation,
 not grounding the representation in the text
@@ -332,25 +333,17 @@ that the alignment between words and logical symbols be automatically
 (and imprecisely) detected.\footnote{Considerable technical effort has been invested in this task
 with various approaches, including
 \newcite{flanigan2014discriminative}, \newcite{pourdamghani2014aligning} and \newcite{pust2015parsing}.}
-%Furthermore, grounding allows breaking down sentences into semantically meaningful sub-spans,
-%which is useful for many applications (see discussion in \newcite{fernandez2015parsing}),
-%and simplifies manual annotation \cite{abend2013universal}.
+Furthermore, grounding allows breaking down sentences into semantically meaningful sub-spans,
+which is useful for many applications (see discussion in \newcite{fernandez2015parsing}),
+and may simplify manual annotation \cite{abend2013universal}.
 \newcite{wang2015transition} applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
-the result into AMR. They thus used a different set of transitions than
-\textsc{bsp}, which parses strings directly into graphs.
-Similarly, parsing in frameworks such as MRS \cite{copestake2005minimal} is based on
-theories of syntax-semantics interface, which we avoid in this work and parse semantic structure
-directly.
-
-%techniques are not applicable here.
-%bears on the representation scheme,
-%where not all nodes correspond to words in the text and vice versa,
-%and in parsing, as it requires 
-%We note that not grounding the text within the semantic representation poses difficutlties,
-%as it generally requires that this correspondence
-%be automatically (and hence imprecisely) derived.
-%AMR does not ground 
+the result into AMR.
+This falls beyond the scope of this work, as well as
+formalisms based on theories of syntax-semantics interface.
+Instead, we parse semantic structure directly.
+%They thus used a different set of transitions than
+%\textsc{bsp}, which parses strings directly into graphs.
 
 \paragraph{The UCCA Annotation Scheme.}
 Universal Cognitive Conceptual Annotation (UCCA)
@@ -383,12 +376,12 @@ UCCA annotations of translated text usually contain the same set of relationship
 \cite{sulem2015conceptual}. This finding supports the claim that UCCA represents an abstract
 level of semantics, shared by different languages.
 
-The layer's basic notion is the {\it Scene}, which describes a movement, an action or a state.
+The layer's basic notion is the {\it Scene}, which describes a movement, action or state.
 Each Scene contains one Main Relation, as well as one or more Participants.
 For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes,
 whose main relations are ``graduation'' and ``moved''. ``John'' is a Participant in both Scenes,
-while ``Paris'' only of the latter.
-We note that the scheme marks one of the incoming edges for each non-root
+while ``Paris'' only in the latter.
+UCCA marks one of the incoming edges for each non-root
 as ``primary'' and the others as ``remote'' edges.
 The two Scenes in this sentence are both arguments of the \textit{Linker} ``After'',
 which in this case expresses a temporal relation between them.
