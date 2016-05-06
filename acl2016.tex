@@ -314,7 +314,8 @@ for a wider range of phenomena.
 Most closely related to this work is Broad-coverage Semantic Dependency Parsing (SDP),
 addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval},
 experimenting with the Prague tectogrammatical layer \cite{sgallhp:1986,bohmova2003prague},
-and with dependencies derived from the Enju parser,\footnote{See \url{http://kmcs.nii.ac.jp/enju}} and Lingo ERG \cite{Flic:02}.
+and with dependencies derived from the
+Enju parser,\footnote{See \url{http://kmcs.nii.ac.jp/enju}} and Lingo ERG \cite{Flic:02}.
 Like BSS parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and multiple parents. However, SDP uses
 bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
@@ -330,20 +331,23 @@ While sharing much of this work's motivation,
 not grounding the representation in the text
 complicates the parsing task, as it requires
 that the alignment between words and logical symbols be automatically
-(and imprecisely) detected.\footnote{Considerable technical effort has been invested in this task
-with various approaches, including
-\newcite{flanigan2014discriminative}, \newcite{pourdamghani2014aligning} and \newcite{pust2015parsing}.}
+(and imprecisely) detected.\footnote{Considerable technical effort has been invested in
+the AMR alignment task under various approaches
+\cite{flanigan2014discriminative,pourdamghani2014aligning,pust2015parsing}.}
 Furthermore, grounding allows breaking down sentences into semantically meaningful sub-spans,
-which is useful for many applications (see discussion in \newcite{fernandez2015parsing}),
-and may simplify manual annotation \cite{abend2013universal}.
+which is useful for many applications (see discussion in \newcite{fernandez2015parsing}).
+%and may simplify manual annotation \cite{abend2013universal}.
 \newcite{wang2015transition} applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
 the result into AMR.
-This falls beyond the scope of this work, as well as
-formalisms based on theories of syntax-semantics interface.
-Instead, we parse semantic structure directly.
+%This falls beyond the scope of this work, as well as
+%formalisms based on theories of syntax-semantics interface.
+%Instead, we parse semantic structure directly.
 %They thus used a different set of transitions than
 %\textsc{bsp}, which parses strings directly into graphs.
+Other approaches for non-grounded semantic representation include MRS and DRT,
+which involve considerably different representation and parsing approaches,
+and so fall beyond the scope of our discussion.
 
 \paragraph{The UCCA Annotation Scheme.}
 Universal Cognitive Conceptual Annotation (UCCA)
