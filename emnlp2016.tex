@@ -57,7 +57,6 @@
 \newcommand\BibTeX{B{\sc ib}\TeX}
 
 \title{Broad-Coverage Semantic Parsing: A Transition-Based Approach}
-  %General Transition-Based Broad-Coverage Semantic Parsing
 
 \author{Daniel Hershcovich \and Omri Abend \and Ari Rappoport \\
   Institute of Computer Science \\
@@ -99,7 +98,6 @@
 In order for a grounded semantic representation to cover the full range of semantic structures exhibited by
 natural language, there are three structural properties that should be supported.
 The first is \textbf{multiple parents},
-%support for DAG (directed acyclic graph), rather than tree structures,
 representing arguments and relations (semantic units) that are shared between predicates.
 For instance, in the sentence
 ``After graduation, John moved to Paris'', ``John'' is an argument of both ``graduation''
@@ -154,35 +152,9 @@ We call formal representations supporting all three properties
       } edge from parent node[right] {\scriptsize $H$} }
       ;
     \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
-    %\node (LKG) at (-1.8,0) [fill=black!20, circle] {};
-      %    \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
-      %    \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
-%    \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
   }}
   \end{subfigure}
-%  \scalebox{.9}{
-%  \begin{tikzpicture}[level distance=12mm, ->,
-%      every node/.append style={midway}]
-%    \node (ROOT) [fill=black, circle] {}
-%      child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
-%      child {node {decided} edge from parent node[left] {\scriptsize $P$}}
-%      child {node (totakeaquickshower) [fill=black, circle] {}
-%      {
-%        child {node {to} edge from parent node[left] {\scriptsize $F$}}
-%        child {node (takeashower) [fill=black, circle] {}
-%        {
-%          child {node {take} edge from parent node[left] {\scriptsize $C$}}
-%          child {node {a} edge from parent node[right] {\scriptsize $F$}}
-%          child {node (quick) {quick} edge from parent[white]}
-%          child {node {shower} edge from parent node[right] {\scriptsize $C$}}
-%        } edge from parent node[right] {\scriptsize $P$} }
-%      } edge from parent node[left] {\scriptsize $A$} }
-%      ;
-%    \draw[bend left,dashed,->] (takeashower) to node [auto] {\scriptsize $A$} (John);
-%    \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
-%  \end{tikzpicture}
-%  }
   \begin{subfigure}[t]{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:home}}
   \hspace{.1\columnwidth}
@@ -242,7 +214,7 @@ The only such scheme supporting them is UCCA \cite{abend2013universal},
 which has no parser.
 Several other models either support some of these properties \cite{oepen2015semeval},
 or avoid grounding semantic units altogether
-(notably, AMR \cite{banarescu2013abstract}; see \secref{sec:background}).
+(notably, AMR \cite{banarescu2013abstract}; see \secref{sec:related_work}).
 
 In this work we are first in proposing techniques for BSS parsing.
 We adopt a transition-based approach, which has recently produced some of the best
@@ -267,7 +239,6 @@ Broad-coverage Semantic Parser (\textsc{bsp}; \secref{sec:direct_approach})
 supporting multiple parents, non-terminal nodes and discontinuous units,
 based on extending existing transition-based parsers
 with new transitions and features.
-%for parsing BSS and UCCA in particular.
 
 We experiment with the English UCCA-annotated corpora \cite{abend2013universal}
 as a test case, in both in-domain and out-of-domain scenarios, reaching
@@ -276,44 +247,18 @@ The results suggest concrete paths for further improvement.
 All converters and parsers will be made publicly available upon publication.
 
 
-%\footnote{While the task is not specific to UCCA,
-%  to the best of our knowledge, UCCA's are the only
-%  semantically annotated corpora that support all criteria of BSS.},
-%a small degradation with the transition to out-of-domain scenarios.
-
-%A general parser for this setting must support the prediction of multiple parents,
-%as well as of discontinuous constituents, both pervasive phenomena in semantic
-%structures even in English (see \secref{sec:data}.
-%Multiple parents show up frequently in the context of argument
-%sharing, where a certain argument participates in several relations but is only mentioned once.
-%Common examples are coordination structures
-%(e.g., in ``John went home and took a shower'', ``John'' is an argument of both ``went'' and ``took'')
-%or nominalizations (e.g., ``After graduation, John moved to London'', where ``John'' is an argument
-%of both ``graduation'' and ``moved'').
-%discontinuous units are common even in syntactic structures in some languages (e.g., German, Bulgarian,
-%Korean and many others \cite{kallmeyer2013data}), and can even be found in English, e.g., in reported
-%speech: ``'The dog', John said, 'is back again''', and are even more pervasive in English semantic parses
-%(see \secref{sec:data}).
-
-%\oa{fix this}
-%The contribution of this work is thus three-fold.
-%First, we motivate and define the broad-coverage semantic parsing task.
-%Second, we create converters and study the ability of existing parsing technology
-%for formally related settings to address the task, focusing on transition-based methods.
-%Third, we present \textsc{bsp}, novel both in being the first broad-coverage DAG parser,
-%as well as the first UCCA parser. 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{-.1cm}
-\section{Background}\label{sec:background}
 
-\paragraph{Broad-coverage Semantic Representation.}
+\section{Related Work}\label{sec:related_work}
 While earlier work on grounded semantic parsing has mostly concentrated on shallow semantic analysis,
 focusing on semantic role labeling of verbal argument structures,
 the focus has recently shifted to parsing of more elaborate representations that account
-for a wider range of phenomena. 
-Most closely related to this work is Broad-coverage Semantic Dependency Parsing (SDP),
+for a wider range of phenomena.
+
+
+\paragraph{Broad-Coverage Semantic Parsing.}
+Most closely related to this work is Broad-Coverage Semantic Dependency Parsing (SDP),
 addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval},
 experimenting with the Prague tectogrammatical layer \cite{sgallhp:1986,bohmova2003prague},
 and with dependencies derived from the
@@ -323,6 +268,8 @@ and supports discontinuous units and multiple parents. However, SDP uses
 bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
 structures that have no clear head, such as coordination \cite{Ivanova2012who}.
 
+
+\paragraph{Abstract Meaning Representation.}
 Another line of work addresses parsing into
 non-grounded\footnote{By \textit{grounded} we mean the text tokens are directly
 annotated as part of the representation,
@@ -338,32 +285,46 @@ the AMR alignment task under various approaches
 \cite{flanigan2014discriminative,pourdamghani2014aligning,pust2015parsing}.}
 Furthermore, grounding allows breaking down sentences into semantically meaningful sub-spans,
 which is useful for many applications (see discussion in \newcite{fernandez2015parsing}).
-%and may simplify manual annotation \cite{abend2013universal}.
 \newcite{wang2015transition} applied a transition-based approach to AMR parsing.
 Their method involved first syntactically parsing the input, and then converting
 the result into AMR.
-%This falls beyond the scope of this work, as well as
-%formalisms based on theories of syntax-semantics interface.
-%Instead, we parse semantic structure directly.
-%They thus used a different set of transitions than
-%\textsc{bsp}, which parses strings directly into graphs.
+
+
+\paragraph{Grammar-Based Methods.}
+Semantic parsing methods can be largely partitioned into grammar-based and grammarless methods.
+Within the grammar-based literature, most work relied on Combinatory Categorial Grammar (CCG)
+\cite{Steedman:00}, which allows computing semantic structure compositionally from the
+syntactic derivations. Notable examples include the Boxer parser \cite{bos2005towards}
+and the AMR parser by \newcite{artzi2015broad}.
+Other examples include parsing with Hyperedge Replacement Grammars
+\cite{jones2012semantics,chiang2013parsing,peng2015synchronous} and
+graph grammars \cite{koller2015semantic}.
+A different line of work takes a discriminative, grammarless approach,
+pursuing either graph-based methods that predict the highest ranking graph
+(tree or DAG) that satisfies a given set of constraints
+(e.g., \newcite{flanigan2014discriminative} for AMR parsing)
+or a transition-based method that builds the parse incrementally following a series of local
+decisions \cite[and much subsequent work]{Nivre03anefficient}.
+\daniel{other grammar-based formalisms like HPSG and TAG ungrounded compositional semantics
+by positing elaborate theories of syntax-semantics interface.
+we suggest a direct approach which is discriminative and grammar-less and makes less
+theoretical commitments about the syntax-semantics interface}
+
 Other approaches for semantic representation, such as MRS \cite{copestake2005minimal}
 and DRT \cite{kamp2011discourse},
 involve considerably different representation and parsing approaches,
 and so fall beyond the scope of our discussion.
 
-\paragraph{The UCCA Annotation Scheme.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{-.1cm}
+\section{The UCCA Scheme}\label{sec:ucca}
 Universal Conceptual Cognitive Annotation (UCCA)
 is a cross-linguistically applicable semantic representation scheme,
 that builds on the established ``Basic Linguistic Theory'' framework for typological description
 \cite{Dixon:10b,Dixon:10a,Dixon:12}, and on the Cognitive Linguistics literature.
 UCCA is a multi-layered representation, where each layer corresponds to a ``module'' of
 semantic distinctions (e.g., predicate-argument structures, adverbials, coreference etc.).
-%Importantly, the same set of categories can be applied across different lexical items and languages.
-%This stands in contrast to more schemes such as FrameNet \cite{Baker:98},
-%PropBank \cite{Palmer:05} and AMR, that define an open-ended, lexically-based set of categories,
-%which while providing further information, are more prone to coverage issues \cite{Palmer:10},
-%and may result in a different set of relations when applied to different languages \cite{Xue2014not}.
 
 Formally, a UCCA structure over a sentence is a DAG, whose leaves correspond to the sentence's words.
 The nodes of the graph, or its ``units'', are either terminals or several
@@ -401,25 +362,22 @@ units that have no correspondent in the text, but the parsing of these
 units is deferred to future work, as it is likely to require different methods
 than those explored here \cite{roth2015inducing}.
 
-%The example ``John decided to take a shower'' contains two Scenes, whose main relations are ``decided'' and ``take a shower'', and where the second Scene is a participant in the first.
-%The participant ``John'' is a part of both Scenes, but is marked as a \textit{remote} participant in
-%the second, since it is not explicit in the second clause.
-
-
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conversion-Based Parsing}\label{sec:conversion_approach}
 
 We begin by assessing the ability of existing technology to address the task,
-by taking a conversion-based approach. Training proceeds by 
-converting BSS into a different representation,
+by taking a conversion-based approach.
+Training proceeds by converting BSS into a different representation,
 and training an existing parser on the converted structures.
 We evaluate the trained parsers by applying them to the test set,
 and converting the results back to BSS, where they are compared
 with the gold standard.
+Due to the success of dependency tree parsers, a similar approach has yielded
+very strong parsers for other graph structures,
+more general than dependency trees but not as general as BSS
+\cite{agic2015semantic,fernandez2015parsing}, despite lossy reconstruction algorithms.
 The error resulting from this back and forth conversion is discussed in
 \secref{sec:results}.
 
@@ -465,8 +423,6 @@ This is because $h(u)$ of a node $u$ (similar to $u$'s head-containing child),
 depends only on the label of the edge $(h(u),u)$, and not on the sub-tree spanned by $u$,
 because edge labels in UCCA directly express the role of the child in the parent unit, and
 are thus sufficient for determining which of $u$'s children contains the head node.
-%This is appropriate, since edges in a semantic constituency graph express the relation between units,
-%whereas in syntactic constituency trees the identity of a node depends on the nodes below it.
 
 \begin{algorithm}[t]
   \small
@@ -599,18 +555,12 @@ $[\mathrm{root}]$ & $w_{1:n}$ & \multirow{2}{40pt}{$\{\mathrm{root}\} \cup w_{1:
 \multicolumn{5}{c|}{} \\
 \multicolumn{5}{c|}{} \\
 \hline
-%\end{tabular}
-%\end{adjustbox}
-%\begin{adjustbox}{width=\textwidth,frame}
-%\begin{tabular}{llll|l|llllc|l}
 \multicolumn{4}{c|}{\textbf{\small Before Transition}} & \textbf{\small Transition} & \multicolumn{5}{c|}{\textbf{\small After Transition}} & \textbf{\small Condition} \\
 \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & \textbf{\footnotesize Terminal?} & \\
 $S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ & $-$ & \\
 $S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & \\
 $S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ &
 $x \neq \mathrm{root}$ \\
-%$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Implicit$_X$} & $S \;|\; x$ & $y^* \;|\; B$ & $V \cup \{ y^* \}$ & $E \cup \{ (x,y^*)_X \}$ & $-$ &
-%$x \not\in w_{1:n}$ \\
 $S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ &
 \multirow{4}{50pt}{\vspace{-5mm}\[\left\{\begin{array}{l}
 x \not\in w_{1:n},\\
@@ -634,9 +584,6 @@ $[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\
   already have a primary parent.
 }
 \end{figure*}
-
-%\textsc{Implicit$_X$} acts similarly, but the created node is a child instead,
-%and is marked as \textit{implicit}, representing a unit that does not appear explicitly in the text.
 
 \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new primary $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively. As a UCCA node may only
 have one incoming primary edge, \textsc{Edge} transitions are disallowed where the child node already
@@ -669,12 +616,6 @@ we employ a real-valued feature, \textbf{ratio}, corresponding to the ratio betw
 in the graph $G$. This novel feature serves as a regularizer for the creation of new nodes, and should be beneficial for other transition-based constituency parsers too.
 Features are generally adapted from the related parsers of \cite{zhang2009transition,zhu2013fast,tokgoz2015transition,maier2015discontinuous}, with a small additional set of features encoding relevant information
 for the novel \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} transitions.
-
-% and \textsc{Implicit$_X$}
-
-%$s_i$ and $b_i$ stand for the $i$th stack and buffer items respectively, $w$ stands for the head word, $t$ for its POS tag, $e$ for the head incoming edge label. Note that $e$ replaces $c$ (consituent label) from Maier~\shortcite{maier2015discontinuous}, since in UCCA the labels are on the edges rather than the units; and a unit may have more than one incoming edge. $l$ and $r$ ($ll$ and $rr$) represent the leftmost and rightmost children (grand-children) of the element; $u$ handles the unary case.
-%Concerning the separator features, $p$ is a unique separator feature between the head words of $s_0$ and $s_1$; $q$ is the count of any separator features between them.
-%$x$ denotes the gap type of a subgraph. There are three possible values, either "none" (fully continuous), "pass" (there is a gap at the root, i.e., this gap must be filled later further up in the graph), or "gap" (the root of this graph fills a gap, i.e., its children have gaps, but the root does not). Finally, $y$ is the sum of all gap lengths.
 
 % FEATURES
 \begin{figure}
@@ -784,7 +725,7 @@ practice in semantic parsing and train our parsers on individual sentences,
 discarding inter-relations between them (0.18\% of the edges).
 We also discard linkage nodes and edges, as they often express inter-sentence
 relations and are thus mostly redundant when applied at the sentence level,
-as well as implicit nodes (\secref{sec:background}).
+as well as implicit nodes (\secref{sec:ucca}).
 In the out-of-domain experiments, we apply the same parser
 (trained on the \textit{Wiki} corpus) to the \textit{20K Leagues} corpus
 without re-tuning the parameters.
@@ -852,9 +793,6 @@ and another where we consider remote edges. We note that the measure collapses t
 PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
 Punctuation marks are excluded from the evaluation, but not from the datasets.
 
-%For the conversions, we use \textsc{NeGra export} as the format for
-%constituency representation and \textsc{CoNLL-X} as the format for dependency representation.
-
 \paragraph{Conversions.}
 We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
 and one into CoNLL-style dependencies. In the first setting we experiment with \textsc{uparse},
@@ -871,23 +809,6 @@ Default settings are used in all cases.
 We do not use existing dependency DAG parsers since we could not obtain their code.
 We note that \textsc{uparse} uses beam search by default,
 with a beam size of 4, where the other parsers use greedy search.
-
-%The LSTM parser uses the arc-standard transition set, and the MaltParser
-%running MaltParser with arc-standard yielded nearly the same
-%scores as arc-eager. \textsc{uparse}, in contrast, uses a larger transition
-%set that allows discontinuous constituency tree parsing.
-%\textsc{bsp} extends this set further, allowing for DAG parsing
-%and UCCA-specific features.
-
-%Parsers parameter of variation is the classifier used by each of the parsers.
-%The LSTM parser is based on neural networks, whereas the highest scores for
-%MaltParser were obtained with an SVM classifier.
-%Both \textsc{uparse} and \textsc{bsp} use a linear classifier.
-
-%We omit linkage edges and nodes, as these are not evaluated
-%by the evaluation metrics yet and are not an essential part of the
-%semantic parsing scheme.
-%We also omit implicit nodes, leaving them for future work.
 
 Upper bounds for the conversion-based methods are computed by applying
 the conversion and inverse conversion on the gold standard
@@ -926,13 +847,6 @@ This suggests that applying a similar approach to
 \textsc{bsp} is likely to improve results,
 and further underscores the effectiveness of transition-based 
 methods for BSS parsing. 
-
-%too practically turns the structure into a constituency tree, and raises the scores above two of the conversion-based parsers. However, the stack LSTM-based parser of Dyer et al.~\shortcite{dyer2015transition} still reaches the highest score.
-
-%\textsc{bsp} obtains scores that are nearly identical to \newcite{maier2015discontinuous}
-%and Nivre et al.~\shortcite{nivre2007maltparser} on primary edges, but also correctly
-%predicts remote edges when trained on them.
-%Training without linkage edges and implicit nodes improve the scores on primary edges, as a more simple model is easier to learn.
 
 The conversion to constituency format only removes remote edges,
 and thus obtains a perfect primary edge score.
@@ -1038,17 +952,6 @@ The quality of the results is underscored by UCCA's inter-annotator
 agreement (often taken as an upper bound) of 
 80--85\% F-score on primary edges \cite{abend2013universal}.
 
-%In order to allow insight into the contribution of each of the feature sets,
-%we conduct feature ablation experiments, and report results on the development set.
-%Results show ...
-
-%We will briefly review their results:
-%(1) We applied the parsers to complete paragraphs, without splitting to sentences. MaltParser and the
-%LSTM parser reached nearly the same scores as in the sentence experiments, but \textsc{uparse}
-%and \textsc{bsp} failed to run with input above 500 tokens, for technical reasons.
-%%%%%%%(2) We tried including linkage nodes and edges and implicit nodes when running \textsc{bsp}, by including them in the oracle output, allowing multiple non-remote parents and adding an additional \textsc{Implicit} transition. The scores were lower by 2 to 5 percentage points, as our classifier had to learn a more complex model, and our evaluation scheme does not yet support linkage and implicit.
-%(3) We created a conversion procedure to SDP (semantic dependency parsing), an additional dependency format that allows multiple parents \cite{oepen2015semeval}. The resulting upper bound for primary edges was similar to the \textsc{CoNLL} format, but for remote edges it was as high as 68.6\% labeled F-score.
-
 
 While much recent work focused on semantic parsing of different types,
 the relations between the different representations have not been clarified.
@@ -1060,33 +963,6 @@ We believe that UCCA's merits in providing a cross-linguistically applicable, br
 annotation will support ongoing efforts to incorporate deeper semantic structures
 into a variety of applications, such as machine translation \cite{jones2012semantics}
 and summarization \cite{liu2015toward}.
-
-%\paragraph{Improving the conversion procedure.}
-%Several decision have to be made in the conversion between dependency and constituency annotation.
-%%In the conversion from constituency to dependency, a head terminal has to be selected for each node. When converting in the other direction, labels for the added edges have to be determined.
-%Currently, we handle these decisions by crude heuristics, but a more sophisticated way can be devised. These will be reflected by higher scores for the oracle experiments.
-
-%\paragraph{Improving the direct parser.}
-%%Our parser reaches promising results, but it is very basic in terms of the techniques used in it. Using beam search rather than greedy inference tends to improve the parsing scores significantly.
-%In terms of machine learning, we use a linear classifier with hand-crafted features. As the experiment with the LSTM parser shows, implementing a parser based on neural networks should also give a significant improvement to our parsing scores.
-
-\com{
-Semantic parsing methods can be largely partitioned into grammar-based and grammarless methods.
-Within the grammar-based literature, most work relied on Combinatory Categorial Grammar (CCG)
-\cite{Steedman:00}, which allows computing semantic structure compositionally from the
-syntactic derivations. Notable examples include the Boxer parser \cite{bos2005towards}
-and the AMR parser by \newcite{artzi2015broad}.
-Other examples include parsing with Hyperedge Replacement Grammars
-\cite{jones2012semantics,chiang2013parsing,peng2015synchronous} and
-graph grammars \cite{koller2015semantic}.
-A different line of work takes a discriminative, grammarless approach,
-pursuing either graph-based methods that predict the highest ranking graph
-(tree or DAG) that satisfies a given set of constraints
-(e.g., \newcite{flanigan2014discriminative} for AMR parsing)
-or a transition-based method that builds the parse incrementally following a series of local
-decisions \cite[and much subsequent work]{Nivre03anefficient}.
-}
-
 
 
 \bibliography{references}
