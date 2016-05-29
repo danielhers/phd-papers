@@ -291,40 +291,15 @@ the result into AMR. Our approach is more direct, and does not rely on syntax.
 
 
 \paragraph{Grammar-Based Methods.}
-
-
-Semantic parsing methods can be largely partitioned into grammar-based and grammarless methods.
-Within the grammar-based literature, most work relied on Combinatory Categorial Grammar (CCG)
-\cite{Steedman:00}, which allows computing semantic structure compositionally from the
-syntactic derivations. Notable examples include the Boxer parser \cite{bos2005towards}
-and the AMR parser by \newcite{artzi2015broad}.
-Other examples include parsing with Hyperedge Replacement Grammars
-\cite{jones2012semantics,chiang2013parsing,peng2015synchronous} and
-graph grammars \cite{koller2015semantic}.
-A different line of work takes a discriminative, grammarless approach,
-pursuing either graph-based methods that predict the highest ranking graph
-(tree or DAG) that satisfies a given set of constraints
-(e.g., \newcite{flanigan2014discriminative} for AMR parsing)
-or a transition-based method that builds the parse incrementally following a series of local
-decisions \cite[and much subsequent work]{Nivre03anefficient}.
-
-While some grammar-based parsers,
-such as HPSG- or DRT-based approaches, can be said to support the BSS
-criteria, they address somewhat different challenges, as they map into
-ungrounded representations by relying on elaborate theories of the
-syntax-semantics interface, while we map into grounded
-representations, taking a transition-based approach that makes
-considerably less theoretical commitments.
-
-\daniel{other grammar-based formalisms like HPSG and TAG ungrounded compositional semantics
-by positing elaborate theories of syntax-semantics interface.
-we suggest a direct approach which is discriminative and grammar-less and makes less
-theoretical commitments about the syntax-semantics interface}
-
-Other approaches for semantic representation, such as MRS \cite{copestake2005minimal}
-and DRT \cite{kamp2011discourse},
-involve considerably different representation and parsing approaches,
-and so fall beyond the scope of our discussion.
+Linguistically expressive grammars such as HPSG, CCG and TAG
+provide a theory of the syntax-semantics interface that has been used to build semantic parsers
+by defining compositional semantics on top of them \cite{Hock:03b,Clar:03}.
+Depending on the grammar and the implementation, these semantic parsers can support
+some or all of the BSS criteria.
+Nevertheless, this line of work differs from our discriminative grammarless approach,
+which uses dependency-like semantic structures,
+making less commitments as to the relation between syntax and semantics.
+This both changes the parsing task and the type of semantic distinctions used.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
