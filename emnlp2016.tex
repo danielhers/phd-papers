@@ -259,10 +259,10 @@ for a wider range of phenomena.
 
 \paragraph{Broad-Coverage Semantic Parsing.}
 Most closely related to this work is Broad-Coverage Semantic Dependency Parsing (SDP),
-addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval},
-experimenting with the Prague tectogrammatical layer \cite{sgallhp:1986,bohmova2003prague},
-and with dependencies derived from the
-Enju parser,\footnote{See \url{http://kmcs.nii.ac.jp/enju}} and Lingo ERG \cite{Flic:02}.
+addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval}.
+%experimenting with the Prague tectogrammatical layer \cite{sgallhp:1986,bohmova2003prague},
+%and with dependencies derived from the
+%Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju}} and Lingo ERG \cite{Flic:02}.
 Like BSS parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and multiple parents. However, SDP uses
 bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
@@ -287,10 +287,12 @@ Furthermore, grounding allows breaking down sentences into semantically meaningf
 which is useful for many applications (see discussion in \newcite{fernandez2015parsing}).
 \newcite{wang2015transition} applied a transition-based approach to AMR parsing.
 Their method involved first syntactically parsing the input, and then converting
-the result into AMR.
+the result into AMR. Our approach is more direct, and does not rely on syntax.
 
 
 \paragraph{Grammar-Based Methods.}
+
+
 Semantic parsing methods can be largely partitioned into grammar-based and grammarless methods.
 Within the grammar-based literature, most work relied on Combinatory Categorial Grammar (CCG)
 \cite{Steedman:00}, which allows computing semantic structure compositionally from the
@@ -305,6 +307,15 @@ pursuing either graph-based methods that predict the highest ranking graph
 (e.g., \newcite{flanigan2014discriminative} for AMR parsing)
 or a transition-based method that builds the parse incrementally following a series of local
 decisions \cite[and much subsequent work]{Nivre03anefficient}.
+
+While some grammar-based parsers,
+such as HPSG- or DRT-based approaches, can be said to support the BSS
+criteria, they address somewhat different challenges, as they map into
+ungrounded representations by relying on elaborate theories of the
+syntax-semantics interface, while we map into grounded
+representations, taking a transition-based approach that makes
+considerably less theoretical commitments.
+
 \daniel{other grammar-based formalisms like HPSG and TAG ungrounded compositional semantics
 by positing elaborate theories of syntax-semantics interface.
 we suggest a direct approach which is discriminative and grammar-less and makes less
