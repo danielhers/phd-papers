@@ -22,6 +22,8 @@
 \usepackage{tikz-dependency}
 \usepackage{rotating}
 \usepackage{float}
+\usepackage{xr}
+\externaldocument{emnlp2016}
 \usetikzlibrary{shapes,fit,calc,er,positioning,intersections,decorations.shapes,mindmap,trees}
 \tikzset{decorate sep/.style 2 args={decorate,decoration={shape backgrounds,shape=circle,
       shape size=#1,shape sep=#2}}}
@@ -250,9 +252,38 @@ It includes a single Scene, whose main relation is ``apply'', a secondary relati
   }
 \end{figure}
 
+\section{Feature ablation experimental results}
+
+The following results, in percents,
+were obtained on the development set in the feature ablation experiment (Section 7 in the paper).
+The first row corresponds to \textsc{bsp} as in the main experiment.
+In each of the other rows, one feature set is excluded.
+Columns are the same as in Table 2 in the paper.
+See Section 5 and Figure 3 in the paper for the feature set definitions.
+  
+\begin{table}[H]
+\centering
+\begin{tabular}{l|ccc|ccc}
+& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\hline
+\textsc{bsp} & 62.6	& 55.7 & 58.9 & 20 & 12.9 & 15.7 \\
+\textsc{bsp}$-$\textbf{unigrams} & 62.5 & 52.6 & 57.1 & 18.9 & 10.1 & 13.2 \\
+\textsc{bsp}$-$\textbf{bigrams} & 59.8 & 50.0 & 54.4 & 18.2 & 12.2 & 14.6 \\
+\textsc{bsp}$-$\textbf{trigrams} & 63.7 & 55.0 & 59.0 & 20.7 & 12.0 & 15.2 \\
+\textsc{bsp}$-$\textbf{separator} & 62.9 & 53.5 & 57.8 & 17.8 & 11.7 & 14.1 \\
+\textsc{bsp}$-$\textbf{extended} & 62.9 & 52.8 & 57.4 & 17.4 & 11.5 & 13.9 \\
+\textsc{bsp}$-$\textbf{disco} & 63.6 & 53.6 & 58.2 & 19.7 & 11.5 & 14.5 \\
+\textsc{bsp}$-$\textbf{counts} & 63.3 & 52.8 & 57.6 & 14.6 & 10.6 & 12.3 \\
+\textsc{bsp}$-$\textbf{edges} & 63.5 & 54.9 & 58.9 & 23.6 & 14.5 & 17.9 \\
+\textsc{bsp}$-$\textbf{history} & 63.1 & 53.2 & 57.8 & 23.7 & 14.5 & 18.0 \\
+\textsc{bsp}$-$\textbf{remote} & 63.5 & 53.2 & 57.9 & 17.2 & 10.6 & 13.1 \\
+\textsc{bsp}$-$\textbf{ratio} & 63.7 & 48.3 & 55.0 & 25.4 & 13.6 & 17.7
+\end{tabular}
+\end{table}
 
 
 \bibliography{references}
-\bibliographystyle{acl2016}
+\bibliographystyle{emnlp2016}
 
 \end{document}
