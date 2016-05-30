@@ -78,15 +78,16 @@
   The representation of many common semantic phenomena requires 
   structural properties beyond those commonly used for syntactic parsing.
   We discuss a set of structural properties required for
-  broad-coverage semantic representation, and note that existing
+  broad-coverage semantic representation, and note that existing grammarless
   parsers support some of these properties, but not all.
   We propose two transition-based techniques for parsing such semantic structures:
   (1) applying conversion procedures to map them into related formalisms,
   and using existing state-of-the-art parsers on the converted representations;
   and (2) constructing a parser that directly supports the full set of properties.
-  We experiment with UCCA-annotated corpora, the only ones with all these
-  structural semantic properties. Results demonstrate the effectiveness
-  of transition-based methods for the task.
+  Experimental results on UCCA-annotated corpora
+  %, the only ones that directly support
+  %all these structural semantic properties. Results
+  demonstrate the effectiveness of transition-based methods for the task.
   
 \end{abstract}
 
@@ -95,7 +96,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-In order for a grounded semantic representation to cover the full range of semantic structures exhibited by
+In order for a grounded semantic representation to cover the full range of semantic
+structures exhibited by
 natural language, there are three structural properties that should be supported.
 The first is \textbf{multiple parents},
 representing arguments and relations (semantic units) that are shared between predicates.
@@ -208,18 +210,21 @@ We call formal representations supporting all three properties
   }
 \end{figure}
 
-Parsers supporting the combination of these criteria are scarce,
-and rely on syntactic theories of compositional semantics or avoid grounding semantic units
-(\secref{sec:related_work}).
-In this work we are first in proposing techniques for BSS parsing,
+Parsers that support the combination of these criteria are scarce,
+and rely on compositional semantics
+or avoid grounding semantic units altogether (\secref{sec:related_work}).
+In this work we are first in proposing grammarless techniques for BSS parsing,
 adopting a transition-based approach, which has recently produced the best
-results in syntactic dependency parsing,
-and has also demonstrated
+results in syntactic dependency parsing, and has also demonstrated
 strong performance in a variety of other semantic and syntactic settings
 \cite[among others]{maier2015discontinuous,wang2015transition}.
+
+We experiment with the UCCA scheme and annotated corpora \cite{abend2013universal},
+which to our knowledge are the only corpora annotated with grounded semantic
+representations that support all three criteria.
 Transition-based methods are a natural starting point for UCCA parsing,
 as the set of distinctions it represents, centered around predicate-argument
-structure, is similar to distinctions conveyed by dependency schemes.
+structure, is similar in spirit to those expressed by depenedencies.
 
 We pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
@@ -265,37 +270,36 @@ structures that have no clear head, such as coordination \cite{Ivanova2012who}.
 
 \paragraph{Abstract Meaning Representation.}
 Another line of work addresses parsing into
-non-grounded\footnote{By \textit{grounded} we mean the text tokens are directly
-annotated as part of the representation,
-as opposed to abstract formalisms approximating logical form, for example.}
+ungrounded\footnote{By \textit{grounded} we mean the text tokens are grounded in
+  the words and phrases of the text.}
 semantic representation, notably Abstract Meaning Representation (AMR)
 \cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad}. 
 While sharing much of this work's motivation,
 not grounding the representation in the text
 complicates the parsing task, as it requires
 that the alignment between words and logical symbols be automatically
-(and imprecisely) detected.\footnote{Considerable technical effort has been invested in
-the AMR alignment task under various approaches
-\cite{flanigan2014discriminative,pourdamghani2014aligning,pust2015parsing}.}
+(and imprecisely) detected. Indeed, despite considerable technical effort,
+using rule-based methods \cite{flanigan2014discriminative}, machine translation methods \cite{pourdamghani2014aligning} and Boolean LP methods \cite{werling2015robust}, alignments are only about 80\%--90\% correct.
 Furthermore, grounding allows breaking down sentences into semantically meaningful sub-spans,
-which is useful for many applications (see discussion in \newcite{fernandez2015parsing}).
-\newcite{wang2015transition} applied a transition-based approach to AMR parsing.
-As opposed to our direct approach,
-their method involved first syntactically parsing the input, and then converting
-the result into AMR.
+which is useful for many applications \cite{fernandez2015parsing}.
 
+\newcite{wang2015transition} applied a transition-based approach to AMR parsing,
+but their method involved first syntactically parsing the input, and then converting
+the result into AMR, while our approach involves no such syntactic pre-processing.
 
-\paragraph{Grammar-Based Methods.}
-Linguistically expressive grammars such as HPSG, CCG and TAG
-provide a theory of the syntax-semantics interface that has been used to build semantic parsers
-by defining compositional semantics on top of them \cite{Hock:03b,Clar:03}.
-Depending on the grammar and the implementation, these semantic parsers can support
+\paragraph{Grammar-Based Parsing.}
+Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steedman:00} and TAG \cite{Joshi:97}
+provide a theory of the syntax-semantics interface, and have been used as a basis for semantic parsers
+by defining compositional semantics on top of them \cite[among others]{Flic:00,bos2005towards}.
+Depending on the grammar and the implementation, such semantic parsers can support
 some or all of the BSS criteria.
-Nevertheless, this line of work differs from our discriminative grammarless approach,
-which uses dependency-like semantic structures,
-making less commitments as to the relation between syntax and semantics.
-This both changes the parsing task and the type of semantic distinctions used.
-
+Nevertheless, this line of work differs from our grammarless approach in two important ways.
+First, the semantic representations are different. BSS does not attempt to model
+the syntax-semantics interface and is thus less coupled with syntax in comparison to
+compositional semantic structures.
+Second, while grammar-based parsers explicitly model syntax, grammarless
+approaches, such as the ones presented here, seek to directly model the relation between
+strings and semantic structures.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{-.1cm}
@@ -350,10 +354,10 @@ We build each parser by converting BSS into supported tree structures,
 on which it is trained.
 We evaluate the trained parsers by applying them to the test set
 and then reconstructing BSS graphs, which are compared with the gold standard.
-Due to the success of dependency tree parsers, a similar approach has yielded
+Due to the success of dependency tree parsers, a conversion-based approach has yielded
 very strong parsers for other graph structures
-\cite{agic2015semantic,fernandez2015parsing}, despite lossy reconstruction algorithms:
-the error resulting from this back and forth conversion is discussed in
+\cite{agic2015semantic,fernandez2015parsing}, despite lossy reconstruction algorithms.
+The error resulting from this back and forth conversion is discussed in
 \secref{sec:results}.
 
 \paragraph{Notation.}
@@ -868,11 +872,12 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 To evaluate the relative impact of the different feature sets on \textsc{bsp},
 we remove a set of features at a time,
 and evaluate the resulting parser on the development set.\footnote{See
-Supplementary Material for feature ablation results.}
+Supplementary Material for elaborate results.}
 Almost all feature sets have a positive contribution to the primary edge F-score, 
 or otherwise to the prediction of remote edges.
 \textbf{unigrams} and \textbf{bigrams} features are especially
-important, and the \textbf{ratio} feature greatly improves recall on
+important\oa{give one or two numbers here. what are the F-score differences?},
+and the \textbf{ratio} feature greatly improves recall on
 primary edges. \textbf{disco} features have a positive contribution,
 likely to be amplified in languages with a higher percentage of discontinuous units, e.g. German.
 
@@ -881,17 +886,15 @@ likely to be amplified in languages with a higher percentage of discontinuous un
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}\label{sec:conclusion}
 
-We have introduced the first parser that supports multiple parents, non-terminal
+We have introduced the first grammarless parser that supports multiple parents, non-terminal
 nodes and discontinuous units.
-We explored a conversion-based parsing approach to assess the ability of existing
-technology to address the task,
-and make a further contribution by first experimenting on UCCA parsing.
+We further explore a conversion-based parsing approach to assess the ability of existing
+technology to address the task, and make an additional contribution by first experimenting on UCCA parsing.
 Results show that UCCA can be parsed with 69.2\% primary F-score,
 and suggest means for improvement by applying an NN-based classifier to \textsc{bsp}.
 The quality of the results is underscored by UCCA's inter-annotator
 agreement of 
 80--85\% F-score on primary edges \cite{abend2013universal}.
-
 
 While much recent work focused on semantic parsing of different types,
 the relations between the different representations have not been clarified.
