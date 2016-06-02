@@ -25,6 +25,8 @@
       shape size=#1,shape sep=#2}}}
 
 \setlength{\belowcaptionskip}{-10pt}
+\addtolength{\parskip}{-0.5mm}
+\addtolength{\textfloatsep}{-2mm}
 \newcommand{\oa}[1]{\footnote{\color{red} #1}}
 \newcommand{\daniel}[1]{\footnote{\color{blue} #1}}
 \newcommand{\com}[1]{}
@@ -121,7 +123,7 @@ For example, selecting the preposition to head prepositional phrases yields bett
 parsing results \cite{Schwartz:12}, while the head noun is more useful for
 information extraction.
 
-Third, semantic units may be \textbf{discontinuous} in the text. For instance, in
+Third, semantic units may be \textbf{discontinuous}. For instance, in
 ``John \textit{gave} everything \textit{up}''
 (\figref{fig:gave}), the phrasal verb ``gave ... up'' forms a single semantic unit.
 Discontinuities are also pervasive with other multi-word
@@ -229,7 +231,7 @@ structure, is similar in spirit to those expressed by depenedencies.
 We pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
 by developing conversion protocols between UCCA structures and two related formalisms:
-dependency trees and discontinuous constituency trees.
+dependency and constituency trees.
 As these formalisms are more restrictive than BSS, the conversion
 is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
@@ -357,7 +359,7 @@ and then reconstructing BSS graphs, which are compared with the gold standard.
 Due to the success of dependency tree parsers, a conversion-based approach has yielded
 very strong parsers for other graph structures
 \cite{agic2015semantic,fernandez2015parsing}, despite lossy reconstruction algorithms.
-The error resulting from this back and forth conversion is discussed in
+The error resulting from this conversion is discussed in
 \secref{sec:results}.
 
 \paragraph{Notation.}
@@ -372,8 +374,8 @@ edges.\footnote{For trees, labeling nodes is equivalent to labeling edges, so
   we do not distinguish between the two options.
   If the original structures contain discontinuities, so will the resulting trees.}
 Specifically, when converting UCCA structures, we simply remove all remote edges,
-leaving a tree structure formed by the primary edges (see \figref{fig:graduation}).
-The inverse conversion is simply the identity function.
+leaving a tree formed by primary edges (see \figref{fig:graduation}).
+The inverse conversion is the identity function.
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
 In the conversion to dependency trees, we first convert BSS
@@ -424,7 +426,7 @@ are thus sufficient for determining which of $u$'s children contains the head no
   $E_d \leftarrow E_d \cup \{(t^\prime, t)\}$\;
   $\ell_d (t^\prime, t) \leftarrow \ell_c(u, n(t))\}$\;
  }
- \caption{\small Constituency to dependency conversion procedure.}
+ \caption{\small Constituency to dependency conversion.}
  \label{alg:con2dep}
 \end{algorithm}
 
@@ -474,7 +476,7 @@ This procedure is given in Algorithm~\ref{alg:dep2con}.
    $\ell_c(p, u^\prime) \leftarrow \ell_d(t^\prime, t)$\;
   }
  }
- \caption{\small Dependency to constituency conversion procedure.}
+ \caption{\small Dependency to constituency conversion.}
  \label{alg:dep2con}
 \end{algorithm}
 
@@ -527,12 +529,6 @@ adding the \textsc{Node} transition for creating new non-terminal nodes.
 \begin{figure*}
 \begin{adjustbox}{width=\textwidth,margin=3pt,frame}
 \begin{tabular}{llll|l|llllc|c}
-\multicolumn{5}{c|}{\textbf{\small Initial State}} & \multicolumn{6}{c}{\textbf{\small Final State}} \\
-\textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \multicolumn{1}{l}{\textbf{\footnotesize Edges}} & \multicolumn{1}{c|}{\textbf{\footnotesize Terminal?}} & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & \multicolumn{1}{c}{\textbf{\footnotesize Terminal?}} \\
-$[\mathrm{root}]$ & $w_{1:n}$ & \multirow{2}{40pt}{$\{\mathrm{root}\} \cup w_{1:n}$} & \multicolumn{1}{l}{$\emptyset$} & \multicolumn{1}{c|}{$-$} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & \multicolumn{1}{c}{$+$} \\ 
-\multicolumn{5}{c|}{} \\
-\multicolumn{5}{c|}{} \\
-\hline
 \multicolumn{4}{c|}{\textbf{\small Before Transition}} & \textbf{\small Transition} & \multicolumn{5}{c|}{\textbf{\small After Transition}} & \textbf{\small Condition} \\
 \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & \textbf{\footnotesize Terminal?} & \\
 $S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ & $-$ & \\
@@ -615,12 +611,12 @@ $s_0es_1wb_0w, s_0es_1wb_0t, s_0ws_1es_2e, s_0ws_1eb_0t$ \\
 \textbf{separator} \\
 $s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
 $s_1wp, s_1wep, s_1wq, s_1weq$ \\
-\\
+
 \textbf{extended} \footnotesize \cite{zhu2013fast} \\
 $s_0llwe, s_0lrwe, s_0luwe, s_0rlwe, s_0rrwe,$ \\
 $s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
 $s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
-\\
+
 \textbf{disco} \footnotesize \cite{maier2015discontinuous} \\
 $s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
 $s_0xte, s_1xte, s_2xte, s_3xte,$ \\
@@ -628,15 +624,15 @@ $s_0xy, s_1xy, s_2xy, s_3xy$ \\
 $s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
 $s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
 $s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$ \\
-\\
+
 {\footnotesize Features from \cite{tokgoz2015transition}:} \\
 \textbf{counts} \\
 $s_0P, s_0C, s_0wP, s_0wC, b_0P, b_0C, b_0wP, b_0wC$ \\
-\textbf{edges} \;
+\textbf{edges} \\
 $s_0s_1, s_1s_0, s_0b_0, b_0s_0, s_0b_0e, b_0s_0e$ \\
-\textbf{history} \;
+\textbf{history} \\
 $a_0, a_1$ \\
-\\
+
 \textbf{remote} \footnotesize (Novel, UCCA-specific features) \\
 $s_0R, s_0wR, b_0R, b_0wR$
 \end{tabular}
@@ -763,17 +759,17 @@ Define the set of \textit{mutual edges} between $G_p$ and $G_g$:
 \vspace{-.6cm}
 
 Labeled precision and recall are defined by dividing $|M(G_p,G_g)|$ by $|E_p|$ and $|E_g|$, respectively.
-We report two variants of this measure, one where we consider only non-remote edges,
-and another where we consider remote edges. We note that the measure collapses to the standard
+We report two variants of this measure: one where we consider only primary edges,
+and another for remote edges. We note that the measure collapses to the standard
 PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
-Punctuation marks are excluded from the evaluation, but not from the datasets.
+Punctuation is excluded from the evaluation, but not from the datasets.
 
 \paragraph{Conversions.}
 We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
 and one into bi-lexical dependencies. In the first setting we experiment with \textsc{uparse},
 the only transition-based constituency parser, to our knowledge, able to parse trees with
 discontinuous constituents.
-In the second setting we use the MaltParser with arc-standard and
+In the second setting we use MaltParser with arc-standard and
 arc-eager transition sets \cite{nivre2007maltparser},\footnote{Preliminary
 experiments with non-projective variants of MaltParser yielded lower scores than
 projective ones, and were thus discarded from the final evaluation.}
@@ -801,15 +797,14 @@ predict trees.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}\label{sec:results}
 
-\tabref{table:results} presents the results of our main experiments, as well as
+\tabref{table:results} presents our main experimental results, as well as
 upper bounds for the conversion-based methods.
-\textsc{bsp} obtains comparable F-scores to MaltParser and \textsc{uparse}
-in terms of primary edges, but unlike them, is able to predict some
-of the remote edges too. 
+\textsc{bsp} obtains slightly lower primary F-scores than the other parsers,
+but unlike them, is able to predict some of the remote edges. 
 Removing remote edge transitions from \textsc{bsp} does not
-change results considerably on the primary edges,
-improving them by 0.9\% F-score in the in-domain setting, but reduces
-them by the same amount when applied out-of-domain. 
+change results considerably on the primary edges.
+%improving them by 0.9\% F-score in the in-domain setting, but reduces
+%them by the same amount when applied out-of-domain. 
 Out-of-domain and in-domain results are largely comparable,
 demonstrating the robustness of \textsc{bsp}.
 
@@ -839,17 +834,17 @@ since these are invariably removed when converting to trees.
 \textsc{uparse} & 64 & 67.3 & 65.4 & $-$ & 0 & 0 \\
 Upper Bound & 100 & 100 & 100 & $-$ & 0 & 0 \\
 \hline
-\multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Dependency Tree Conversion} \\
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Dependency Tree Conversion} \\
 Malt$_{\textrm{arc-standard}}$ & 63.4 & 57.3 & 60.1 & $-$ & 0 & 0 \\
 Malt$_{\textrm{arc-eager}}$ & 63.9 & 57.9 & 60.5 & $-$ & 0 & 0 \\
 LSTM & {\bf 73.2} & {\bf 66.2} & {\bf 69.2} & $-$ & 0 & 0 \\
 Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \hline
-\multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Direct Approach} \\
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
 \textsc{bsp} & 62.4 & 56 & 59 & 15.3 & 11.8 & 13.3 \\
 \textsc{bsp}$_{\mathrm{Tree}}$ & 63.8 & 56.5 & 59.9 & $-$ & 0 & 0 \\
 \hhline{=======}
-\multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Out-of-domain} \\
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Out-of-domain} \\
 \textsc{bsp} & 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
 \textsc{bsp}$_{\mathrm{Tree}}$ & 60.2 & 52.8 & 56.2 & $-$ & 0 & 0 \\
 \end{tabular}
@@ -888,12 +883,12 @@ likely to be amplified in languages with a higher percentage of discontinuous un
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}\label{sec:conclusion}
 
-We have introduced the first grammarless parser that supports multiple parents, non-terminal
+We introduce the first grammarless parser that supports multiple parents, non-terminal
 nodes and discontinuous units.
 We further explore a conversion-based parsing approach to assess the ability of existing
-technology to address the task, and make an additional contribution by first experimenting on UCCA parsing.
-Results show that UCCA can be parsed with 69.2\% primary F-score,
-and suggest means for improvement by applying an NN-based classifier to \textsc{bsp}.
+technology to address the task.
+We provide the first parser for UCCA, showing it can be parsed with 69.2\% primary F-score.
+The results suggest means for improvement by using an NN-based classifier.
 The quality of the results is underscored by UCCA's inter-annotator
 agreement of 
 80--85\% F-score on primary edges \cite{abend2013universal}.
