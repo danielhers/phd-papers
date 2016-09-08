@@ -1,9 +1,12 @@
 %
-% File emnlp2016.tex
+% File eacl2017.tex
 %
 
-\documentclass[11pt,letterpaper]{article}
-\usepackage{emnlp2016}
+\documentclass[11pt]{article}
+\usepackage{eacl2017}
+\usepackage{times}
+\usepackage{url}
+\usepackage{latexsym}
 \usepackage{times}
 \usepackage{url}
 \usepackage{amsmath}
@@ -23,7 +26,6 @@
 \usetikzlibrary{shapes,fit,calc,er,positioning,intersections,decorations.shapes,mindmap,trees}
 \tikzset{decorate sep/.style 2 args={decorate,decoration={shape backgrounds,shape=circle,
       shape size=#1,shape sep=#2}}}
-
 \setlength{\belowcaptionskip}{-10pt}
 \addtolength{\parskip}{-0.5mm}
 \addtolength{\textfloatsep}{-2mm}
@@ -38,23 +40,14 @@
 \SetKwRepeat{Do}{do}{while}
 \renewcommand\AlCapFnt{\normalfont\small}
 
-\makeatletter
-\renewcommand{\paragraph}{
-  \@startsection{paragraph}{4}
-  {\z@}{.3ex \@plus .3ex \@minus .2ex}{-1em}
-  {\normalfont\normalsize\bfseries}
-}
-\makeatother
+%\eaclfinalcopy % Uncomment this line for the final submission
+%\def\eaclpaperid{***} %  Enter the acl Paper ID here
 
-% Uncomment this line for the final submission:
-%\emnlpfinalcopy
-
-%  Enter the EMNLP Paper ID here:
-\def\emnlppaperid{230}
-
-% To expand the titlebox for more authors, uncomment
-% below and set accordingly.
-% \addtolength\titlebox{.5in}    
+%\setlength\titlebox{5cm}
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
 
 \newcommand\BibTeX{B{\sc ib}\TeX}
 
@@ -67,7 +60,6 @@
 }
 
 \date{}
-
 
 \begin{document}
 \maketitle
@@ -596,6 +588,7 @@ with an additional set of features encoding relevant information
 for the \textsc{Remote} transitions.
 
 % FEATURES
+\daniel{Move to supplementary material}
 \begin{figure}
 \begin{adjustbox}{margin=3pt,frame}
 \begin{tabular}{>{\small}l}
@@ -679,7 +672,6 @@ if the transition is included in the set of optimal transitions.
 Otherwise, a random optimal transition is applied
 and the classifier's weights are updated according to the perceptron
 update rule.
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experimental Setup}\label{sec:exp_setup}
@@ -910,6 +902,6 @@ and summarization \cite{liu2015toward}.
 
 
 \bibliography{references}
-\bibliographystyle{emnlp2016}
+\bibliographystyle{eacl2017}
 
 \end{document}
