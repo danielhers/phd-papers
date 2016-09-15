@@ -354,7 +354,8 @@ Due to the success of dependency tree parsers, a conversion-based approach has y
 very strong parsers for other graph structures
 \cite{agic2015semantic,fernandez2015parsing}, despite lossy reconstruction algorithms.
 The error resulting from this conversion is discussed in
-\secref{sec:results}.
+\secref{sec:results}.\footnote{See Supplementary Material for a detailed description of
+the conversion procedures.}
 
 \paragraph{Notation.}
 Let $L$ be the set of possible edge labels.
@@ -374,105 +375,6 @@ The inverse conversion is the identity function.
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
 In the conversion to dependency trees, we first convert BSS
 to constituency trees using the above procedure, and then convert the result to dependency trees. 
-Let $T_c=(V_c,E_c,\ell_c)$ be a constituency tree with labels $\ell_c:E_c~\rightarrow~L$.
-The conversion from $T_c$ to a dependency tree involves the removal of
-all non-terminals from $T_c$ and the addition of edges between terminals.
-The nodes of the converted dependency tree are simply the terminals of $T_c$.
-
-We define a linear order over possible edge labels $L$.
-For each node $u \in V$, denote by $h(u)$ its child with the highest edge label.
-Let $h^*(u)$ be the terminal reached by recursively applying $h(\cdot)$ over $u$.
-For each terminal $t$, we define $n(t)$ as the highest
-non-terminal such that $t=h^*(n(t))$, i.e.
-$n(t)$ is the only node such that $t=h^*(n(t))$ and $t \neq h^*(\mathrm{Parent}_c(n(t)))$.
-$t$'s head in the dependency graph is
-the terminal $h^*(\mathrm{Parent}_c(n(t)))$.
-The complete conversion procedure from constituency to dependency is given in Algorithm~\ref{alg:con2dep}.
-
-Note that this conversion procedure is simpler than the
-head percolation procedure used for converting syntactic constituency
-trees to dependency trees,
-since $h(u)$ (similar to $u$'s head-containing child)
-depends only on $\ell_c(h(u),u)$ and not on the sub-tree spanned by $u$,
-because edge labels in UCCA directly express the role of the child in the parent unit, and
-are thus sufficient for determining which of $u$'s children contains the head node.
-
-\begin{algorithm}[t]
-  \small
-  \KwData{constituency tree ${T_c}=(V_c,E_c,\ell_c)$}
- \KwResult{dependency tree $T_d=(V_d,E_d,\ell_d)$}
- \ForEach{$u \in V_c$} {
-  $h(u) \leftarrow \argmin_v \mathrm{Priority}(\ell_c(u,v))$\;
- }
- $V_d \leftarrow \mathrm{Terminals}({T_c})$,
- $E_d \leftarrow \emptyset$\;
- \ForEach{$t \in V_d$} {
-  $u \leftarrow t$\;
-  \While{$u=h(\mathrm{Parent}_c(u))$} {
-  	$h^*(u) \leftarrow t$\;
-  	$u \leftarrow \mathrm{Parent}_c(u)$\;
-  }
-  $n(t) \leftarrow h(u)$\;
- }
- \ForEach{$t \in V_d$} {
-  $u \leftarrow \mathrm{Parent}_c(n(t))$\;
-  $t^\prime \leftarrow h^*(u)$\;
-  $E_d \leftarrow E_d \cup \{(t^\prime, t)\}$\;
-  $\ell_d (t^\prime, t) \leftarrow \ell_c(u, n(t))\}$\;
- }
- \caption{\small Constituency to dependency conversion.}
- \label{alg:con2dep}
-\end{algorithm}
-
-The inverse conversion introduces non-terminal nodes back into the tree.
-As the distinction between low- and high-attaching nodes is lost in the constituency to
-dependency conversion, we assume that attachments are always
-high-attaching.
-Let $T_d=(V_d,E_d,\ell_d)$ be a dependency tree.
-We begin by creating a root node $r$.
-Then, iterating over $V_d$ in topological order,
-we add its members as terminals to the constituency tree
-and create a pre-terminal parent for each,
-with an edge labeled as \textit{Terminal} between them.
-The parents of the pre-terminals are determined by the terminal's parent in the dependency
-tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $T_d$. We add an intermediate node in between if $t$ has any dependents in $T_d$,
-to allow adding their pre-terminals as children.
-Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$.\footnote{See Supplementary Material for the definition of $\mathrm{Label}$.
-In practice, it mostly selects the UCCA label \textit{Center}.}
-This procedure is given in Algorithm~\ref{alg:dep2con}.
-
-\begin{algorithm}[t]
-  \small
- \KwData{dependency tree $T_d=(V_d,E_d,\ell_d)$}
- \KwResult{constituency tree $T_c=(V_c,E_c,\ell_c)$}
- $r \leftarrow \mathrm{Node()}$\;
- $V_c \leftarrow \{r\}$,
- $E_c \leftarrow \emptyset$\;
- \ForEach{$t \in \mathrm{TopologicalSort}(V_d)$} {
-  $u \leftarrow \mathrm{Node()}$\;
-  $V_c \leftarrow V_c \cup \{u, t\}$\;
-  $E_c \leftarrow E_c \cup \{(u, t)\}$\;
-  $\ell_c(u,t)\leftarrow\mathit{Terminal}$\;
-  $t^\prime \leftarrow \mathrm{Parent}_d(t)$\;
-  \eIf{$t^\prime = \textsc{Root}$} {
-   $E_c \leftarrow E_c \cup \{(r, u)\}$\;
-   $\ell_c(r, u) \leftarrow \mathrm{Label}(r)$\;
-  } {
-   \eIf{$\exists v \in V_d : (t,v) \in E_d$} {
-    $u^\prime \leftarrow \mathrm{Node()}$\;
-    $E_c \leftarrow E_c \cup \{(u^\prime, u)\}$\;
-    $\ell_c(u^\prime, u) \leftarrow \mathrm{Label}(u^\prime)$\;
-   } {
-    $u' \leftarrow u$\;
-   }
-   $p \leftarrow \mathrm{Parent}_c(t^\prime)$\;
-   $E_c \leftarrow E_c \cup \{(p, u^\prime)\}$\;
-   $\ell_c(p, u^\prime) \leftarrow \ell_d(t^\prime, t)$\;
-  }
- }
- \caption{\small Dependency to constituency conversion.}
- \label{alg:dep2con}
-\end{algorithm}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -683,9 +585,9 @@ out-of-domain data.\footnote{Both are available at \url{http://www.cs.huji.ac.il
 \tabref{table:data} presents some statistics for the two corpora, demonstrating that while
 the \textit{Wiki} corpus is over ten times larger, the overall statistics are
 similar.
-We use passages of indices up to 655
-of the \textit{Wiki} corpus as our training set, passages 656--700 as development set,
-and passages 701--965 as in-domain test set.
+We use passages of indices up to 675
+of the \textit{Wiki} corpus as our training set, passages 676--807 as development set,
+and passages 808--1028 as in-domain test set.
 While UCCA edges can cross sentence boundaries, we adhere to the common
 practice in semantic parsing and train our parsers on individual sentences,
 discarding inter-relations between them (0.18\% of the edges).
@@ -838,6 +740,8 @@ Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
 \textsc{bsp} & 62.4 & 56 & 59 & 15.3 & 11.8 & 13.3 \\
 \textsc{bsp}$_{\mathrm{Tree}}$ & 63.8 & 56.5 & 59.9 & $-$ & 0 & 0 \\
+Feedforward NN \\
+perceptron with embeddings \\
 \hhline{=======}
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Out-of-domain} \\
 \textsc{bsp} & 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
