@@ -13,6 +13,7 @@
 \usepackage{algorithm2e}
 \usepackage{hhline}
 \usepackage{multirow}
+\usepackage{multicol}
 \usepackage[font=small]{caption}
 \usepackage{subcaption}
 \usepackage{hyperref}
@@ -61,7 +62,7 @@
 
 The following figure demonstrates a linkage relation, omitted from Figure 1a in the paper.
 
-\begin{figure}[H]
+\begin{figure}[h]
   \centering
   \begin{tikzpicture}[level distance=10mm, ->]
     \node (ROOT) [fill=black, circle] {}
@@ -88,6 +89,7 @@ The following figure demonstrates a linkage relation, omitted from Figure 1a in 
           \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
           \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
+  \caption{UCCA example with linkage.}
 \end{figure}
 
 \paragraph{Longer example.}
@@ -97,7 +99,7 @@ The following figure shows the UCCA annotation for the sentence
 The sentence was used by \cite{oepen2015semeval} to compare between the difference schemes.
 It includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
 
-\begin{figure}[H]
+\begin{figure}[h]
   \centering
   \scalebox{.6}{
   \begin{tikzpicture}[level distance=20mm, ->,
@@ -140,6 +142,7 @@ It includes a single Scene, whose main relation is ``apply'', a secondary relati
       ;
   \end{tikzpicture}
   }
+  \caption{Longer UCCA example.}
 \end{figure}
 
 \section{Conversion algorithms}
@@ -150,7 +153,7 @@ The conversion from $T_c$ to a dependency tree involves the removal of
 all non-terminals from $T_c$ and the addition of edges between terminals.
 The nodes of the converted dependency tree are simply the terminals of $T_c$.
 
-We define a linear order over possible edge labels $L$.
+We define a linear order over possible edge labels $L$ (\figref{fig:priority}).
 For each node $u \in V$, denote by $h(u)$ its child with the highest edge label.
 Let $h^*(u)$ be the terminal reached by recursively applying $h(\cdot)$ over $u$.
 For each terminal $t$, we define $n(t)$ as the highest
@@ -168,10 +171,10 @@ depends only on $\ell_c(h(u),u)$ and not on the sub-tree spanned by $u$,
 because edge labels in UCCA directly express the role of the child in the parent unit, and
 are thus sufficient for determining which of $u$'s children contains the head node.
 
-\begin{algorithm}[t]
-  \small
-  \KwData{constituency tree ${T_c}=(V_c,E_c,\ell_c)$}
+\begin{algorithm}[h]
+ \KwData{constituency tree ${T_c}=(V_c,E_c,\ell_c)$}
  \KwResult{dependency tree $T_d=(V_d,E_d,\ell_d)$}
+ 
  \ForEach{$u \in V_c$} {
   $h(u) \leftarrow \argmin_v \mathrm{Priority}(\ell_c(u,v))$\;
  }
@@ -191,7 +194,7 @@ are thus sufficient for determining which of $u$'s children contains the head no
   $E_d \leftarrow E_d \cup \{(t^\prime, t)\}$\;
   $\ell_d (t^\prime, t) \leftarrow \ell_c(u, n(t))\}$\;
  }
- \caption{\small Constituency to dependency conversion.}
+ \caption{Constituency to dependency conversion.}
  \label{alg:con2dep}
 \end{algorithm}
 
@@ -209,14 +212,14 @@ with an edge labeled as \textit{Terminal} between them.
 The parents of the pre-terminals are determined by the terminal's parent in the dependency
 tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $T_d$. We add an intermediate node in between if $t$ has any dependents in $T_d$,
 to allow adding their pre-terminals as children.
-Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$.\footnote{See Supplementary Material for the definition of $\mathrm{Label}$.
-In practice, it mostly selects the UCCA label \textit{Center}.}
+Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$.
 This procedure is given in Algorithm~\ref{alg:dep2con}.
 
-\begin{algorithm}[t]
-  \small
+\begin{algorithm}[h]
  \KwData{dependency tree $T_d=(V_d,E_d,\ell_d)$}
  \KwResult{constituency tree $T_c=(V_c,E_c,\ell_c)$}
+ \SetKwFunction{Label}{Label}{}{}
+ 
  $r \leftarrow \mathrm{Node()}$\;
  $V_c \leftarrow \{r\}$,
  $E_c \leftarrow \emptyset$\;
@@ -228,12 +231,12 @@ This procedure is given in Algorithm~\ref{alg:dep2con}.
   $t^\prime \leftarrow \mathrm{Parent}_d(t)$\;
   \eIf{$t^\prime = \textsc{Root}$} {
    $E_c \leftarrow E_c \cup \{(r, u)\}$\;
-   $\ell_c(r, u) \leftarrow \mathrm{Label}(r)$\;
+   $\ell_c(r, u) \leftarrow \Label(r)$\;
   } {
    \eIf{$\exists v \in V_d : (t,v) \in E_d$} {
     $u^\prime \leftarrow \mathrm{Node()}$\;
     $E_c \leftarrow E_c \cup \{(u^\prime, u)\}$\;
-    $\ell_c(u^\prime, u) \leftarrow \mathrm{Label}(u^\prime)$\;
+    $\ell_c(u^\prime, u) \leftarrow \Label(u^\prime)$\;
    } {
     $u' \leftarrow u$\;
    }
@@ -242,15 +245,32 @@ This procedure is given in Algorithm~\ref{alg:dep2con}.
    $\ell_c(p, u^\prime) \leftarrow \ell_d(t^\prime, t)$\;
   }
  }
- \caption{\small Dependency to constituency conversion.}
+ 
+  \SetKwProg{func}{Function}{}{}
+  
+  \func{\Label}{
+  \KwData{node $u \in V_d$}
+  \KwResult{label $\ell \in L$}
+
+   \uIf{$\mathrm{IsPunctuation}(u)$}{
+    \Return \textit{Punctuation}\;
+   }
+   \uElseIf{$\exists v \in V_d : \ell(u,v) = \textit{ParallelScene}$}{
+    \Return \textit{ParallelScene}\;
+   }
+   \uElseIf{$\exists v \in V_d : \ell(u,v) = \textit{Participant}$}{
+    \Return \textit{Process}\;
+   }
+   \uElse{
+    \Return \textit{Center}\;
+   }
+  }
+ \caption{Dependency to constituency conversion.}
  \label{alg:dep2con}
 \end{algorithm}
 
-
-\paragraph{Priority order of edge labels.}
-
-The order of labels defines as the $\mathrm{Priority}$ function in Algorithm 1 is the following:
-
+\begin{figure}[h]
+\begin{multicols}{2}
 \begin{enumerate}
 \item $C$ (\textit{Center})
 \item $N$ (\textit{Connector})
@@ -270,36 +290,17 @@ The order of labels defines as the $\mathrm{Priority}$ function in Algorithm 1 i
 \item $\mathit{Terminal}$ (\textit{Terminal})
 \item $U$ (\textit{Punctuation})
 \end{enumerate}
-
-\paragraph{Label heuristics in dependency-to-constituency conversion.}
-
-The $\mathrm{Label}$ function is used in Algorithm 2 when introducing new nodes to the constituency tree, if no clear edge exists.
-It is given in the following algorithm:
-
-\begin{algorithm}[H]
-  \small
-  \KwData{node $u \in V_d$}
- \KwResult{label $\ell \in L$}
- \uIf{$\mathrm{IsPunctuation}(u)$}{
-  \Return \textit{Punctuation}\;
- }
- \uElseIf{$\exists v \in V_d : \ell(u,v) = \textit{ParallelScene}$}{
-  \Return \textit{ParallelScene}\;
- }
- \uElseIf{$\exists v \in V_d : \ell(u,v) = \textit{Participant}$}{
-  \Return \textit{Process}\;
- }
- \uElse{
-  \Return \textit{Center}\;
- }
-\end{algorithm}
+\end{multicols}
+\caption{Priority order of edge labels, used in Algorithm~\ref{alg:con2dep}.}
+\label{fig:priority}
+\end{figure}
 
 
 \paragraph{Example.}
 
-Converting the sentence in Figure 1a to a constituency tree consists of simply removing the remote edge:
+Converting the sentence in Figure 1a to a constituency tree consists of simply removing the remote edge, as can be seen in \figref{fig:con_example}.
 
-\begin{figure*}[h]
+\begin{figure}[H]
   \centering
   \begin{tikzpicture}[level distance=10mm, ->]
     \node (ROOT) [fill=black, circle] {}
@@ -321,11 +322,13 @@ Converting the sentence in Figure 1a to a constituency tree consists of simply r
       } edge from parent node[right] {\scriptsize $H$} }
       ;
   \end{tikzpicture}
-\end{figure*}
+  \caption{Example: conversion to constituency tree}
+  \label{fig:con_example}
+\end{figure}
 
-The corresponding dependency tree is given in the following figure:
+The corresponding dependency tree is given in \figref{fig:dep_example}.
 
-\begin{figure*}[h]
+\begin{figure}[H]
 \centering
 \begin{dependency}[theme = simple]
 \begin{deptext}[column sep=.7em,ampersand replacement=\^]
@@ -338,11 +341,13 @@ After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 \depedge{7}{6}{R}
 \depedge{5}{7}{A}
 \end{dependency}
-\end{figure*}
+  \caption{Example: conversion to dependency tree}
+  \label{fig:dep_example}
+\end{figure}
 
 \section{Conversion-based out-of-domain results}
 
-The following scores were obtained on primary edges when running the conversion-based parsers on the out-of-domain data set (\textit{20K Leagues}). Scores on remote edges are zero, since they are not reconstructed by the conversion.
+The scores in \tabref{tab:ood_converted} were obtained on primary edges when running the conversion-based parsers on the out-of-domain data set (\textit{20K Leagues}). Scores on remote edges are zero, since they are not reconstructed by the conversion.
 \begin{table}[H]
   \centering
 \begin{tabular}{l|ccc}
@@ -358,6 +363,8 @@ Malt$_{\textrm{arc-eager}}$ & 62.8 & 56.3 & 59.2 \\
 LSTM & {\bf 70.1} & {\bf 63.3} & {\bf 66.1} \\
 Upper Bound & 93.5 & 82.5 & 87.6 \\
 \end{tabular}
+\caption{Results for conversion-based parsing when tested on out-of-domain data (\textit{20K Leagues})}
+\label{tab:ood_converted}
 \end{table}
 
 \section{Feature ablation experimental results}
@@ -388,6 +395,8 @@ See Section 5 and Figure 3 in the paper for the feature set definitions.
 \textsc{bsp}$-$\textbf{remote} & 63.5 & 53.2 & 57.9 & 17.2 & 10.6 & 13.1 \\
 \textsc{bsp}$-$\textbf{ratio} & 63.7 & 48.3 & 55.0 & 25.4 & 13.6 & 17.7
 \end{tabular}
+\caption{Results for feature ablation experiments.}
+\label{tab:ablation}
 \end{table}
 
 
