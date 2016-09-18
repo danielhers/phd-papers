@@ -39,6 +39,7 @@
 \DeclareMathOperator*{\argmax}{argmax}
 \SetKwRepeat{Do}{do}{while}
 \renewcommand\AlCapFnt{\normalfont\small}
+\hyphenation{SemEval}
 
 %\eaclfinalcopy % Uncomment this line for the final submission
 %\def\eaclpaperid{***} %  Enter the acl Paper ID here
@@ -75,7 +76,7 @@ The UCCA semantic scheme contains non-terminal nodes in addition to these proper
 and thus parsing it also requires detecting these nodes, corresponding to abstract semantic units.
 We propose two techniques for UCCA parsing: one based on approximation by simpler structures,
 and a direct broad-coverage parser. We focus on transition-based methods, and experimentally
-demonstrate their effective on the task.
+demonstrate their effectiveness on the task.
   
 \end{abstract}
 
@@ -84,11 +85,16 @@ demonstrate their effective on the task.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-In order for an anchored\footnote{By \textit{anchored} we mean the text tokens are
-anchored in the words and phrases of the text.}
-semantic representation to cover the full range of semantic
-structures exhibited by
-natural language, there are three structural properties that should be supported.
+Tree-oriented parsing has been in the focus of research for several decades,
+recently yielding some impressive results.
+However, more general graph structures are necessary for semantic representation,
+as has been argued to justify two recent SemEval shared tasks
+\cite{oepen2014semeval,oepen2015semeval}.
+
+We focus on anchored meaning representation
+(semantic units are inherently aligned to the words and phrases of the text),
+and claim that three structural properties must be supported to cover the full range of semantic
+structures exhibited by natural language.
 The first is \textbf{multiple parents},
 representing arguments and relations (semantic units) that are shared between predicates.
 For instance, in the sentence
@@ -116,8 +122,6 @@ Third, semantic units may be \textbf{discontinuous}. For instance, in
 (\figref{fig:gave}), the phrasal verb ``gave ... up'' forms a single semantic unit.
 Discontinuities are also pervasive with other multi-word
 expressions \cite{schneider2014discriminative}.
-We call formal representations supporting all three properties 
-{\it Broad-coverage Semantic Structures} (BSS).
 
 \begin{figure}[t]
   \begin{subfigure}[t]{.9\columnwidth}
@@ -200,22 +204,16 @@ We call formal representations supporting all three properties
   }
 \end{figure}
 
-Parsers that support the combination of these criteria are scarce,
-and rely on compositional semantics
-or avoid grounding semantic units altogether (\secref{sec:related_work}).
-In this work we are first in proposing grammarless techniques for BSS parsing,
-adopting a transition-based approach, which has recently produced the best
-results in syntactic dependency parsing, and has also demonstrated
-strong performance in a variety of other semantic and syntactic settings
-\cite[among others]{maier2015discontinuous,wang2015transition}.
-
 We experiment with the UCCA scheme and annotated corpora \cite{abend2013universal},
-which to our knowledge are the only corpora annotated with anchored semantic
-representations that support all three criteria.
-Transition-based methods are a natural starting point for UCCA parsing,
-as the set of distinctions it represents, centered around predicate-argument
-structure, is similar in spirit to those expressed by dependencies.
+which exhibit all three properties.
+We focus on transition-based methods---a natural starting point for UCCA parsing,
+given their recently proven fitness for similar tasks, including syntactic dependency parsing
+\cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
+discontinuous syntactic constituency parsing
+\cite{maier-lichte:2016:DiscoNLP} and AMR parsing
+\cite{wang-EtAl:2016:SemEval}.
 
+\daniel{update}
 We pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
 by developing conversion protocols between UCCA structures and two related formalisms:
@@ -229,15 +227,11 @@ supporting multiple parents, non-terminal nodes and discontinuous units,
 based on extending existing transition-based parsers
 with new transitions and features.
 
-We experiment with the English UCCA-annotated corpora \cite{abend2013universal},
-in both in-domain and out-of-domain scenarios, reaching
-nearly 70\% labeled F-score for the highest scoring parser.
 The results suggest concrete paths for further improvement.
 All converters and parsers will be made publicly available upon publication.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\vspace{-.1cm}
 
 \section{Related Work}\label{sec:related_work}
 While earlier work on anchored semantic parsing has mostly concentrated on shallow semantic analysis,
@@ -294,7 +288,7 @@ approaches, such as the ones presented here, seek to directly model the relation
 strings and semantic structures.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\vspace{-.1cm}
+
 \section{The UCCA Scheme}\label{sec:ucca}
 Universal Conceptual Cognitive Annotation (UCCA)
 is a cross-linguistically applicable semantic representation scheme,
@@ -397,14 +391,13 @@ results in a variety of parsing tasks.
 Within syntactic dependency parsing, transition-based methods
 have been successfully applied to corpora in many languages and domains, yielding
 the best reported results for English
-\cite{dyer2015transition,andor2016globally,2016arXiv160304351K}.
+\cite{dyer2015transition,andor2016globally,kiperwasser2016simple}.
 The approach has also yielded results comparable with the state-of-the-art in
 constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
 discontinuous constituency parsing \cite{maier2015discontinuous},
 as well as dependency DAG structures
 \cite{sagae2008shift,tokgoz2015transition}, CCG \cite{ambati2015incremental}
 and AMR parsing \cite{wang2015transition}.
-\daniel{LSTM DAG parser: Zhu et. al., NAACL 2016}
 
 \textsc{bsp} mostly builds on recent advances in discontinuous constituency
 and dependency DAG parsing, and further introduces novel features for BSS.
@@ -703,6 +696,11 @@ primary edges (by 7.4\%, leading to  a 3.9\% F-score improvement).
 \textbf{disco} features have a positive contribution
 (0.7\% primary, 1.2\% remote F-scores),
 likely to be amplified in languages with a higher percentage of discontinuous units, e.g. German.
+
+
+\section{Discussion}
+
+including DAG-structured LSTM \cite{zhu-sobhani-guo:2016:N16-1}
 
 
 
