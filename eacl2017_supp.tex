@@ -148,6 +148,14 @@ It includes a single Scene, whose main relation is ``apply'', a secondary relati
 \section{Conversion algorithms}
 \label{sec:conversion}
 
+We convert UCCA to constituency trees by removing a subset of the
+edges.\footnote{For trees, labeling nodes is equivalent to labeling edges, so
+  we do not distinguish between the two options.
+  If the original structures contain discontinuities, so will the resulting trees.}
+Specifically, when converting UCCA structures, we simply remove all remote edges,
+leaving a tree formed by primary edges (see Figure 1a in the paper).
+The inverse conversion is the identity function.
+
 \paragraph{Conversion from constituency to dependency trees.}
 Let $T_c=(V_c,E_c,\ell_c)$ be a constituency tree with labels $\ell_c:E_c~\rightarrow~L$.
 The conversion from $T_c$ to a dependency tree involves the removal of

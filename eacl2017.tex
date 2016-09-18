@@ -89,10 +89,10 @@ Tree-oriented parsing has been in the focus of research for several decades,
 recently yielding some impressive results.
 However, more general graph structures are necessary for semantic representation,
 as has been argued to justify two recent SemEval shared tasks
-\cite{oepen2014semeval,oepen2015semeval}.
+\cite[see \secref{sec:related_work}]{oepen2014semeval,oepen2015semeval}.
 
 We focus on anchored meaning representation
-(semantic units are inherently aligned to the words and phrases of the text),
+(where semantic units are inherently aligned to the words and phrases of the text),
 and claim that three structural properties must be supported to cover the full range of semantic
 structures exhibited by natural language.
 The first is \textbf{multiple parents},
@@ -103,7 +103,7 @@ and ``moved'', yielding a DAG structure (\figref{fig:graduation}), rather than a
 
 The second is \textbf{non-terminal nodes} for representing units
 comprising more than one word.
-While bi-lexical dependencies partially circumvent this requirement, by
+While bilexical dependencies partially circumvent this requirement, by
 representing complex units in terms of their headwords, they fall short
 when representing units that have no clear head.
 Frequent examples of such constructions include
@@ -128,26 +128,27 @@ expressions \cite{schneider2014discriminative}.
   \parbox{.1\columnwidth}{\caption{}\label{fig:graduation}}
   \parbox{.8\columnwidth}{
   \scalebox{.9}{
-  \begin{tikzpicture}[level distance=10mm, ->]
-    \node (ROOT) [fill=black, circle] {}
-      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
-      child {node (graduation) [fill=black, circle] {}
+  \begin{tikzpicture}[level distance=10mm, ->,
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node (After) {After} edge from parent node[left] {\scriptsize L}}
+      child {node (graduation) [circle] {}
       {
-        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
-      } edge from parent node[left] {\scriptsize $H$} }
-      child {node {,} edge from parent node[right] {\scriptsize $U$}}
-      child {node (moved) [fill=black, circle] {}
+        child {node {graduation} edge from parent node[left] {\scriptsize P}}
+      } edge from parent node[left] {\scriptsize H} }
+      child {node {,} edge from parent node[right] {\scriptsize U}}
+      child {node (moved) [circle] {}
       {
-        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
-        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
-        child {node [fill=black, circle] {}
+        child {node (John) {John} edge from parent node[left] {\scriptsize A}}
+        child {node {moved} edge from parent node[left] {\scriptsize P}}
+        child {node [circle] {}
         {
-          child {node {to} edge from parent node[left] {\scriptsize $R$}}
-          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
-        } edge from parent node[left] {\scriptsize $A$} }
-      } edge from parent node[right] {\scriptsize $H$} }
+          child {node {to} edge from parent node[left] {\scriptsize R}}
+          child {node {Paris} edge from parent node[left] {\scriptsize C}}
+        } edge from parent node[left] {\scriptsize A} }
+      } edge from parent node[right] {\scriptsize H} }
       ;
-    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+    \draw[dashed,->] (graduation) to node [auto] {\scriptsize A} (John);
   \end{tikzpicture}
   }}
   \end{subfigure}
@@ -157,16 +158,17 @@ expressions \cite{schneider2014discriminative}.
   \parbox{.7\columnwidth}{
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
-      every node/.append style={midway}]
-    \node (ROOT) [fill=black, circle] {}
-      child {node [fill=black, circle] {}
+      every node/.append style={midway},
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node [circle] {}
       {
-        child {node {John} edge from parent node[left] {\scriptsize $C$}}
-        child {node {and} edge from parent node[left] {\scriptsize $N$}}
-        child {node {Mary} edge from parent node[left] {\scriptsize $C$}}
-      } edge from parent node[left] {\scriptsize $A$} }
-      child {node {went} edge from parent node[left] {\scriptsize $P$}}
-      child {node {home} edge from parent node[left] {\scriptsize $A$}}
+        child {node {John} edge from parent node[left] {\scriptsize C}}
+        child {node {and} edge from parent node[left] {\scriptsize N}}
+        child {node {Mary} edge from parent node[left] {\scriptsize C}}
+      } edge from parent node[left] {\scriptsize A} }
+      child {node {went} edge from parent node[left] {\scriptsize P}}
+      child {node {home} edge from parent node[left] {\scriptsize A}}
       ;
   \end{tikzpicture}
   }}
@@ -177,17 +179,18 @@ expressions \cite{schneider2014discriminative}.
   \parbox{.55\columnwidth}{
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
-      every node/.append style={midway}]
-    \node (ROOT) [fill=black, circle] {}
-      child {node {John} edge from parent node[left] {\scriptsize $A$}}
-      child {node [fill=black, circle] {}
+      every node/.append style={midway},
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node {John} edge from parent node[left] {\scriptsize A}}
+      child {node [circle] {}
       {
-      	child {node {gave} edge from parent node[left] {\scriptsize $C$}}
+      	child {node {gave} edge from parent node[left] {\scriptsize C}}
       	child {node (everything) {everything} edge from parent[white]}
-      	child {node {up} edge from parent node[left] {\scriptsize $C$}}
-      } edge from parent node[right] {\scriptsize $P$} }
+      	child {node {up} edge from parent node[left] {\scriptsize C}}
+      } edge from parent node[right] {\scriptsize P} }
       ;
-    \draw[bend right,->] (ROOT) to[out=-20, in=180] node [left] {\scriptsize $A$} (everything);
+    \draw[bend right,->] (ROOT) to[out=-20, in=180] node [left] {\scriptsize A} (everything);
   \end{tikzpicture}
   }}
   \end{subfigure}
@@ -204,7 +207,8 @@ expressions \cite{schneider2014discriminative}.
   }
 \end{figure}
 
-We experiment with the UCCA scheme and annotated corpora \cite{abend2013universal},
+We experiment with the UCCA scheme and annotated corpora
+\cite[see \secref{sec:ucca}]{abend2013universal},
 which exhibit all three properties.
 We focus on transition-based methods---a natural starting point for UCCA parsing,
 given their recently proven fitness for similar tasks, including syntactic dependency parsing
@@ -220,9 +224,9 @@ by developing conversion protocols between UCCA structures and two related forma
 dependency and constituency trees.
 As these formalisms are more restrictive than UCCA, the conversion
 is necessarily lossy. Nonetheless, we find that it is effective
-in practice (\secref{sec:conversion_approach}).
+in practice (\secref{sec:conversion}).
 Second, we present a novel transition-based broad-coverage parser,
-(\textsc{bsp}; \secref{sec:direct_approach})
+(BSP; \secref{sec:direct_approach})
 supporting multiple parents, non-terminal nodes and discontinuous units,
 based on extending existing transition-based parsers
 with new transitions and features.
@@ -248,28 +252,29 @@ addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval}.
 %Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju}} and Lingo ERG \cite{Flic:02}.
 Like UCCA parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and multiple parents. However, SDP uses
-bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
+bilexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
 structures that have no clear head, such as coordination \cite{Ivanova2012who}.
 Increasing interest in the SDP task has given rise to numerable works on DAG parsing
 \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on DAG parsing by tree approximation
 \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
 and on on joint syntactic/semantic parsing
-\cite{henderson2013multilingual,swayamdipta-EtAl:2016:CoNLL}
+\cite{henderson2013multilingual,swayamdipta-EtAl:2016:CoNLL}.
 
 \paragraph{Abstract Meaning Representation.}
 Another line of work addresses parsing into non-anchored
 semantic representation, notably Abstract Meaning Representation (AMR)
-\cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad}. 
+\cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad},
+where the alignment between the semantic units and the text tokens is not part of the annotation.
 While sharing much of this work's motivation,
-not grounding the representation in the text
+not anchoring the representation in the text
 complicates the parsing task, as it requires
 that the alignment between words and logical symbols be automatically
 (and imprecisely) detected. Indeed, despite considerable technical effort,
 using rule-based methods \cite{flanigan2014discriminative}, machine translation methods \cite{pourdamghani2014aligning} and Boolean LP methods \cite{werling2015robust}, alignments are only about 80\%--90\% correct.
-Furthermore, grounding allows breaking down sentences into semantically meaningful sub-spans,
-which is useful for many applications \cite{fernandez2015parsing}.
+Furthermore, anchoring allows breaking down sentences into semantically meaningful sub-spans,
+which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
 
-\newcite{wang2015transition} applied a transition-based approach to AMR parsing,
+\newcite{wang-EtAl:2016:SemEval} applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
 the result into AMR, while our approach involves no such syntactic pre-processing.
 
@@ -278,7 +283,7 @@ Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steed
 provide a theory of the syntax-semantics interface, and have been used as a basis for semantic parsers
 by defining compositional semantics on top of them \cite[among others]{Flic:00,bos2005towards}.
 Depending on the grammar and the implementation, such semantic parsers can support
-some or all of the UCCA criteria.
+some or all of the structural properties UCCA supports.
 Nevertheless, this line of work differs from our grammarless approach in two important ways.
 First, the semantic representations are different. UCCA does not attempt to model
 the syntax-semantics interface and is thus less coupled with syntax in comparison to
@@ -318,6 +323,8 @@ whose main relations are ``graduation'' and ``moved''. ``John'' is a Participant
 while ``Paris'' only in the latter.
 One incoming edge for each non-root is marked as ``primary'',
 and the rest (mostly denoting implied relations) as ``remote'' edges.
+The primary edges thus form a tree structure,
+whereas the remote edges enable multiple parents for the same node.
 \figref{fig:examples} shows this example and others.
 
 Further categories account for relations between Scenes and the internal structure of
@@ -329,37 +336,51 @@ complex arguments and relations
 %than those explored here.
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conversion-Based Parsing}\label{sec:conversion_approach}
+\section{Parsing by Bilexical Approximation}\label{sec:conversion}
 
-We begin by assessing the ability of existing technology to address the task,
-by taking a conversion-based approach.
-We build each parser by converting UCCA into supported tree structures,
-on which it is trained.
+We begin by assessing the ability of existing parsers to address the task.
+Since no existing DAG parsers support non-terminal nodes, we first convert UCCA into bilexical
+dependencies.
+This is similar to the \textit{tree approximation} approach used for dependency DAG parsing
+\cite{agic2015semantic,fernandez2015parsing},
+where dependency DAGs were converted into dependency trees
+and then parsed by existing dependency tree parsers.
+
+\begin{figure}
+  \scalebox{.9}{
+\centering
+\begin{dependency}[theme = simple]
+\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+\end{deptext}
+\depedge{2}{1}{L}
+\depedge{2}{3}{U}
+\depedge[dashed]{2}{4}{A}
+\depedge{5}{4}{A}
+\depedge{2}{5}{H}
+\depedge{7}{6}{R}
+\depedge{5}{7}{A}
+\end{dependency}
+}
+  \caption{Bilexical approximation for the sentence in \figref{fig:graduation}}
+  \label{fig:bilexical_example}
+\end{figure}
+
+We first convert UCCA into bilexical dependencies
+(see example in \figref{fig:bilexical_example}), and train each parser on the resulting
+training set\footnote{See Supplementary Material for a detailed description of
+the conversion procedures.}.
 We evaluate the trained parsers by applying them to the test set
 and then reconstructing UCCA graphs, which are compared with the gold standard.
-Due to the success of dependency tree parsers, a conversion-based approach has yielded
-very strong parsers for other graph structures
-\cite{agic2015semantic,fernandez2015parsing}, despite lossy reconstruction algorithms.
 The error resulting from this conversion is discussed in
-\secref{sec:results}.\footnote{See Supplementary Material for a detailed description of
-the conversion procedures.}
+\secref{sec:results}.
 
 \paragraph{Notation.}
 Let $L$ be the set of possible edge labels.
 A UCCA graph over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph $G=(V,E, \ell)$,
 where $\ell:E\to L$ maps edges to labels.
 For each token $w_i$ there exists a leaf (``terminal'') $t_i \in V$.
-
-\paragraph{Conversion to Constituency Trees.}
-We convert UCCA to constituency trees by removing a subset of the
-edges.\footnote{For trees, labeling nodes is equivalent to labeling edges, so
-  we do not distinguish between the two options.
-  If the original structures contain discontinuities, so will the resulting trees.}
-Specifically, when converting UCCA structures, we simply remove all remote edges,
-leaving a tree formed by primary edges (see \figref{fig:graduation}).
-The inverse conversion is the identity function.
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
 In the conversion to dependency trees, we first convert UCCA
@@ -369,7 +390,7 @@ to constituency trees using the above procedure, and then convert the result to 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Broad-Coverage Semantic Parsing}\label{sec:direct_approach}
 
-We now turn to presenting \textsc{bsp} (Broad-coverage Semantic Parser),
+We now turn to presenting BSP (Broad-coverage Semantic Parser),
 a transition-based parser supporting the criteria of broad-coverage
 semantic structures.
 
@@ -398,7 +419,7 @@ as well as dependency DAG structures
 \cite{sagae2008shift,tokgoz2015transition}, CCG \cite{ambati2015incremental}
 and AMR parsing \cite{wang2015transition}.
 
-\textsc{bsp} mostly builds on recent advances in discontinuous constituency
+BSP mostly builds on recent advances in discontinuous constituency
 and dependency DAG parsing, and further introduces novel features for UCCA.
 
 \paragraph{Transition Set.}
@@ -435,7 +456,7 @@ $[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\
 \end{tabular}
 \end{adjustbox}
 \caption{\label{fig:transitions}
-  The transition set of \textsc{bsp}. %Following standard practice,
+  The transition set of BSP. %Following standard practice,
   We write the stack with its top to the right and the buffer with its head to the left.
   $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
   $\mathrm{i}(x)$ is a running index for the created nodes.
@@ -582,7 +603,7 @@ Punctuation is excluded from the evaluation, but not from the datasets.
 
 \paragraph{Conversions.}
 We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
-and one into bi-lexical dependencies. In the first setting we experiment with \textsc{uparse}
+and one into bilexical dependencies. In the first setting we experiment with \textsc{uparse}
 \newcite{maier2015discontinuous},
 the only transition-based constituency parser, to our knowledge, able to parse trees with
 discontinuous constituents.
@@ -601,8 +622,8 @@ Upper bounds for the conversion-based methods are computed by applying
 the conversion and inverse conversion on the gold standard
 graphs and comparing them to the original gold standard.
 
-\paragraph{\textsc{bsp}.}
-We train \textsc{bsp} for 16 iterations, using $\textsc{MinUpdate}=5$
+\paragraph{BSP.}
+We train BSP for 16 iterations, using $\textsc{MinUpdate}=5$
 and $\textsc{Importance}=2$, doubling weight updates
 for gold \textsc{Swap} transitions to address the nodes
 of discontinuous structures, as in \newcite{maier2015discontinuous}.
@@ -615,21 +636,21 @@ predict trees.
 
 \tabref{table:results} presents our main experimental results, as well as
 upper bounds for the conversion-based methods.
-\textsc{bsp} obtains slightly lower primary F-scores than the other parsers,
+BSP obtains slightly lower primary F-scores than the other parsers,
 but unlike them, is able to predict some of the remote edges. 
-Removing remote edge transitions from \textsc{bsp} does not
+Removing remote edge transitions from BSP does not
 change results considerably on the primary edges.
 %improving them by 0.9\% F-score in the in-domain setting, but reduces
 %them by the same amount when applied out-of-domain. 
 Out-of-domain and in-domain results are largely comparable,
-demonstrating the robustness of \textsc{bsp}.
+demonstrating the robustness of BSP.
 
 The LSTM parser obtains the highest primary F-score,
 with a considerable margin. Importantly, it obtains 9.1\%
 F-score higher than the arc-standard MaltParser,
 differing only by classifier,
 suggesting that a similar approach in
-\textsc{bsp} is likely to improve results,
+BSP is likely to improve results,
 and further underscoring the effectiveness of transition-based 
 methods for UCCA parsing.
 
@@ -646,43 +667,37 @@ since these are invariably removed when converting to trees.
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Conversion} \\
-\textsc{uparse} & 64 & 67.3 & 65.4 & $-$ & 0 & 0 \\
-Upper Bound & 100 & 100 & 100 & $-$ & 0 & 0 \\
-\hline
-\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Dependency Tree Conversion} \\
-Malt$_{\textrm{arc-standard}}$ & 63.4 & 57.3 & 60.1 & $-$ & 0 & 0 \\
-Malt$_{\textrm{arc-eager}}$ & 63.9 & 57.9 & 60.5 & $-$ & 0 & 0 \\
-LSTM & {\bf 73.2} & {\bf 66.2} & {\bf 69.2} & $-$ & 0 & 0 \\
-Upper Bound & 93.8 & 83.7 & 88.4 & $-$ & 0 & 0 \\
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
+Upper Bound & 93.5 & 83.5 & 88.2 & 77 & 46.8 & 58.2 \\
+DAGParser &  &  &  &  &  &  \\
+TurboParser &  &  &  &  &  &  \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
-\textsc{bsp} & 62.4 & 56 & 59 & 15.3 & 11.8 & 13.3 \\
-\textsc{bsp}$_{\mathrm{Tree}}$ & 63.8 & 56.5 & 59.9 & $-$ & 0 & 0 \\
-Feedforward NN \\
-perceptron with embeddings \\
+BSP & 64 & 55.6 & 59.5 & 16 & 11.6 & 13.4 \\
+BSP+embeddings & 55 & 54.8 & 54.9 & 15.2 & 16.9 & 16 \\
+BSP+NN &  &  &  &  &  &  \\
 \hhline{=======}
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Out-of-domain} \\
-\textsc{bsp} & 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
-\textsc{bsp}$_{\mathrm{Tree}}$ & 60.2 & 52.8 & 56.2 & $-$ & 0 & 0 \\
+BSP & 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
 \end{tabular}
 }
-\caption{
+\caption{\label{table:results}
   Main experimental results in percents (on the \textit{Wiki} test set, except for the bottom part). Columns correspond to labeled precision,
   recall and F-score for the different parsers, for both primary (left-hand side)
   and remote (right-hand side) edges. Top: results for \textsc{uparse}
   after conversion to constituency tree annotation. Upper middle: results for the
   MaltParser arc-eager and arc-standard, and
   the LSTM parser, after conversion to dependency tree annotation.
-  Lower middle: results for our \textsc{bsp}, trained on the complete UCCA DAGs (\textsc{bsp}),
-  and trained on UCCA trees, obtained by removing remote edges (\textsc{bsp}$_{\mathrm{Tree}}$).
-  Bottom: results for \textsc{bsp} and \textsc{bsp}$_{\mathrm{Tree}}$ when tested on out-of-domain data (\textit{20K Leagues}).
+  Lower middle: results for our BSP, trained on the complete UCCA DAGs (BSP),
+  and trained on UCCA trees, obtained by removing remote edges (BSP$_{\mathrm{Tree}}$).
+  Bottom: results for BSP and BSP$_{\mathrm{Tree}}$ when tested on out-of-domain data (\textit{20K Leagues}).
+  DAGParser is \newcite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval} and
+  TurboParser is \newcite{almeida-martins:2015:SemEval}.
 }
-\label{table:results}
 \end{table}
 
 \paragraph{Feature Ablation.}
-To evaluate the relative impact of the different feature sets on \textsc{bsp},
+To evaluate the relative impact of the different feature sets on BSP,
 we remove a set of features at a time,
 and evaluate the resulting parser on the development set.\footnote{See
 Supplementary Material for detailed results.}
@@ -700,6 +715,47 @@ likely to be amplified in languages with a higher percentage of discontinuous un
 \section{Discussion}
 
 including DAG-structured LSTM \cite{zhu-sobhani-guo:2016:N16-1}
+
+\paragraph{Tree approximation}
+For completeness, we also evaluate tree-oriented parsers on the task of reconstructing
+only the primary edges in UCCA graphs.
+We use a settings similar to the tree approximation experiments mentioned in \secref{sec:conversion}.
+However, this results in a different task for the underlying parser, whose results are not directly
+comparable:
+without remote edges, the task becomes easier, and
+as tree parsing is a well-researched task, parsers designed for it are clearly more accurate on it.
+\figref{fig:tree_approx_results} shows the results.
+We evaluate MaltParser using the ArcEager transition set and the SVM classifier\footnote{We also
+experimented with ArcStandard and perceptron, and got slightly lower scores.}.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{l|ccc}
+& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Approximation} \\
+\textsc{uparse} & 63 & 64.7 & 63.7 \\
+Upper Bound & 100 & 100 & 100 \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Dependency Tree Approximation} \\
+MaltParser & 64.9 & 57.9 & 61 \\
+LSTM Parser & {\bf 74.9} & {\bf 66.4} & {\bf 70.2} \\
+Upper Bound & 93.7 & 83.6 & 88.4 \\
+BSP$_{\mathrm{Tree}}$ & 63.8 & 56.5 & 59.9 \\
+\end{tabular}
+\caption{\label{fig:tree_approx_results}
+  Results of tree approximation experiment, in percents (on the \textit{Wiki} test set).
+  Columns correspond to labeled precision,
+  recall and F-score for the different parsers, including only primary edges
+  (remote edges are not supported).
+  Top: results for \textsc{uparse}
+  after conversion to constituency tree annotation. Upper middle: results for the
+  MaltParser arc-eager and arc-standard, and
+  the LSTM parser, after conversion to dependency tree annotation.
+  Lower middle: results for our BSP, trained on
+  UCCA trees, obtained by removing remote edges (BSP$_{\mathrm{Tree}}$).
+}
+\end{table}
 
 
 
