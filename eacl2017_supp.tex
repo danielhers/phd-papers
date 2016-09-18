@@ -146,6 +146,7 @@ It includes a single Scene, whose main relation is ``apply'', a secondary relati
 \end{figure}
 
 \section{Conversion algorithms}
+\label{sec:conversion}
 
 \paragraph{Conversion from constituency to dependency trees.}
 Let $T_c=(V_c,E_c,\ell_c)$ be a constituency tree with labels $\ell_c:E_c~\rightarrow~L$.
@@ -366,6 +367,81 @@ Upper Bound & 93.5 & 82.5 & 87.6 \\
 \caption{Results for conversion-based parsing when tested on out-of-domain data (\textit{20K Leagues})}
 \label{tab:ood_converted}
 \end{table}
+
+\section{Feature templates for sparse linear classifier}
+
+\figref{fig:features} presents the feature templates used by the parser.
+All feature templates define binary features.
+For some of the features, we used the notion of \textit{head word},
+defined by the $h^*$ function (\secref{sec:conversion}).
+While head words are not explicitly represented in the UCCA scheme, these
+features proved useful as means of encoding word-to-word relations.
+
+\begin{figure}
+\centering
+\begin{adjustbox}{margin=3pt,frame}
+\begin{tabular}{l}
+{\footnotesize Features from \cite{zhang2009transition}:} \\
+\textbf{unigrams} \\
+$s_0te, s_0we, s_1te, s_1we, s_2te, s_2we, s_3te, s_3we,$ \\
+$b_0wt, b_1wt, b_2wt, b_3wt,$ \\
+$s_0lwe, s_0rwe, s_0uwe, s_1lwe, s_1rwe, s_1uwe$ \\
+\textbf{bigrams} \\
+$s_0ws_1w, s_0ws_1e, s_0es_1w, s_0es_1e, s_0wb_0w, s_0wb_0t,$ \\
+$s_0eb_0w, s_0eb_0t, s_1wb_0w, s_1wb_0t, s_1eb_0w, s_1eb_0t,$ \\
+$b_0wb_1w, b_0wb_1t, b_0tb_1w, b_0tb_1t$ \\
+\textbf{trigrams} \\
+$s_0es_1es_2w, s_0es_1es_2e, s_0es_1eb_0w, s_0es_1eb_0t,$ \\
+$s_0es_1wb_0w, s_0es_1wb_0t, s_0ws_1es_2e, s_0ws_1eb_0t$ \\
+\textbf{separator} \\
+$s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
+$s_1wp, s_1wep, s_1wq, s_1weq$ \\
+
+\textbf{extended} \footnotesize \cite{zhu2013fast} \\
+$s_0llwe, s_0lrwe, s_0luwe, s_0rlwe, s_0rrwe,$ \\
+$s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
+$s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
+\end{tabular}
+\begin{tabular}{l}
+\textbf{disco} \footnotesize \cite{maier2015discontinuous} \\
+$s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
+$s_0xte, s_1xte, s_2xte, s_3xte,$ \\
+$s_0xy, s_1xy, s_2xy, s_3xy$ \\
+$s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
+$s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
+$s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$ \\
+
+{\footnotesize Features from \cite{tokgoz2015transition}:} \\
+\textbf{counts} \\
+$s_0P, s_0C, s_0wP, s_0wC, b_0P, b_0C, b_0wP, b_0wC$ \\
+\textbf{edges} \\
+$s_0s_1, s_1s_0, s_0b_0, b_0s_0, s_0b_0e, b_0s_0e$ \\
+\textbf{history} \\
+$a_0, a_1$ \\
+
+\textbf{remote} \footnotesize (Novel, UCCA-specific features) \\
+$s_0R, s_0wR, b_0R, b_0wR$
+\end{tabular}
+\end{adjustbox}
+\captionsetup{singlelinecheck=off}
+\caption[]{\label{fig:features}
+  Binary feature templates for \textsc{bsp}. Notation:
+  \begin{itemize}
+  \item $s_i$, $b_i$: $i$th stack and buffer items.
+  \item $w$, $t$: word form and POS tag of the terminal returned by $h^*(\cdot)$
+  (\secref{sec:conversion}).
+  \item $e$: edge label to the node returned by $h(\cdot)$.
+  \item $l$, $r$ ($ll$, $rr$): leftmost and rightmost (grand)children.
+  \item $u$ ($uu$): unary (grand)child, when only one exists.
+  \item $p$: unique separator punctuation between $s_0$ and $s_1$. $q$: separator count.
+  \item $x$: gap type (``none'', ``pass'' or ``gap'') at the sub-graph under the current node.
+  \item $y$: sum of gap lengths \protect\cite{Maier:Lichte:11}.
+  \item $P$, $C$: number of parents and children.
+  \item $R$: number of remote children.
+  \item $a_i$: action taken $i$ steps back.
+  \end{itemize}
+}
+\end{figure}
 
 \section{Feature ablation experimental results}
 

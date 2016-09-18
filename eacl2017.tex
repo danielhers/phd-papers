@@ -69,19 +69,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
-  The representation of many common semantic phenomena requires 
-  structural properties beyond those commonly used for syntactic parsing.
-  We discuss a set of structural properties required for
-  broad-coverage semantic representation, and note that existing grammarless
-  parsers support some of these properties, but not all.
-  We propose two transition-based techniques for parsing such semantic structures:
-  (1) applying conversion procedures to map them into related formalisms,
-  and using existing state-of-the-art parsers on the converted representations;
-  and (2) constructing a parser that directly supports the full set of properties.
-  Experimental results on UCCA-annotated corpora
-  %, the only ones that directly support
-  %all these structural semantic properties. Results
-  demonstrate the effectiveness of transition-based methods for the task.
+Semantic annotation schemes and data sets call for parsers not limited to tree structures,
+and many languages require non-projective parsing techniques.
+The UCCA semantic scheme contains non-terminal nodes in addition to these properties,
+and thus parsing it also requires detecting these nodes, corresponding to abstract semantic units.
+We propose two techniques for UCCA parsing: one based on approximation by simpler structures,
+and a direct broad-coverage parser. We focus on transition-based methods, and experimentally
+demonstrate their effective on the task.
   
 \end{abstract}
 
@@ -478,81 +472,12 @@ Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 \paragraph{Features.}
 \label{subsec:features}
 
-\figref{fig:features} presents the feature templates used by the parser.
-For some of the features, we used the notion of \textit{head word},
-defined by the $h^*$ function (\secref{subsec:con2dep}).
-While head words are not explicitly represented in the UCCA scheme, these
-features proved useful as means of encoding word-to-word relations.
-
-In addition to the binary features defined by the feature templates,
+In addition to binary features ,
 we employ a real-valued feature, \textbf{ratio}, corresponding to the ratio between the number of terminals to number of nodes
 in the graph $G$. This novel feature serves as a regularizer for the creation of new nodes, and should be beneficial for other transition-based constituency parsers too.
 Features are adapted from \newcite{zhang2009transition,zhu2013fast,tokgoz2015transition,maier2015discontinuous},
 with an additional set of features encoding relevant information
 for the \textsc{Remote} transitions.
-
-% FEATURES
-\daniel{Move to supplementary material}
-\begin{figure}
-\begin{adjustbox}{margin=3pt,frame}
-\begin{tabular}{>{\small}l}
-{\footnotesize Features from \cite{zhang2009transition}:} \\
-\textbf{unigrams} \\
-$s_0te, s_0we, s_1te, s_1we, s_2te, s_2we, s_3te, s_3we,$ \\
-$b_0wt, b_1wt, b_2wt, b_3wt,$ \\
-$s_0lwe, s_0rwe, s_0uwe, s_1lwe, s_1rwe, s_1uwe$ \\
-\textbf{bigrams} \\
-$s_0ws_1w, s_0ws_1e, s_0es_1w, s_0es_1e, s_0wb_0w, s_0wb_0t,$ \\
-$s_0eb_0w, s_0eb_0t, s_1wb_0w, s_1wb_0t, s_1eb_0w, s_1eb_0t,$ \\
-$b_0wb_1w, b_0wb_1t, b_0tb_1w, b_0tb_1t$ \\
-\textbf{trigrams} \\
-$s_0es_1es_2w, s_0es_1es_2e, s_0es_1eb_0w, s_0es_1eb_0t,$ \\
-$s_0es_1wb_0w, s_0es_1wb_0t, s_0ws_1es_2e, s_0ws_1eb_0t$ \\
-\textbf{separator} \\
-$s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
-$s_1wp, s_1wep, s_1wq, s_1weq$ \\
-
-\textbf{extended} \footnotesize \cite{zhu2013fast} \\
-$s_0llwe, s_0lrwe, s_0luwe, s_0rlwe, s_0rrwe,$ \\
-$s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
-$s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
-
-\textbf{disco} \footnotesize \cite{maier2015discontinuous} \\
-$s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
-$s_0xte, s_1xte, s_2xte, s_3xte,$ \\
-$s_0xy, s_1xy, s_2xy, s_3xy$ \\
-$s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
-$s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
-$s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$ \\
-
-{\footnotesize Features from \cite{tokgoz2015transition}:} \\
-\textbf{counts} \\
-$s_0P, s_0C, s_0wP, s_0wC, b_0P, b_0C, b_0wP, b_0wC$ \\
-\textbf{edges} \\
-$s_0s_1, s_1s_0, s_0b_0, b_0s_0, s_0b_0e, b_0s_0e$ \\
-\textbf{history} \\
-$a_0, a_1$ \\
-
-\textbf{remote} \footnotesize (Novel, UCCA-specific features) \\
-$s_0R, s_0wR, b_0R, b_0wR$
-\end{tabular}
-\end{adjustbox}
-\caption{\label{fig:features}
-  Binary feature templates for \textsc{bsp}. Notation:
-  $s_i$, $b_i$: $i$th stack and buffer items.
-  $w$, $t$: word form and POS tag of the terminal returned by $h^*(\cdot)$
-  (\secref{subsec:con2dep}).
-  $e$: edge label to the node returned by $h(\cdot)$.
-  $l$, $r$ ($ll$, $rr$): leftmost and rightmost (grand)children.
-  $u$ ($uu$): unary (grand)child, when only one exists.
-  $p$: unique separator punctuation between $s_0$ and $s_1$. $q$: separator count.
-  $x$: gap type (``none'', ``pass'' or ``gap'') at the sub-graph under the current node.
-  $y$: sum of gap lengths \protect\cite{Maier:Lichte:11}.
-  $P$, $C$: number of parents and children.
-  $R$: number of remote children.
-  $a_i$: action taken $i$ steps back.
-}
-\end{figure}
 
 \paragraph{Training.}
 Following \newcite{maier2015discontinuous}, we use a linear classifier, using
