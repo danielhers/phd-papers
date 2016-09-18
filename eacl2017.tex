@@ -192,8 +192,8 @@ expressions \cite{schneider2014discriminative}.
   }}
   \end{subfigure}
   \caption{\label{fig:examples}
-    Semantic representation of the three structural properties
-    required for BSS, according to the UCCA scheme. (\subref{fig:graduation}) includes a remote edge (dashed),
+    Semantic representation of three structural properties exhibited by the UCCA scheme.
+    (\subref{fig:graduation}) includes a remote edge (dashed),
     resulting in ``John'' having two parents. % and a linkage relation (gray node and its outgoing edges).
     (\subref{fig:home}) includes a coordination construction (``John and Mary'').
     (\subref{fig:gave}) includes a discontinuous unit (``gave ... up'').
@@ -218,7 +218,7 @@ We pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
 by developing conversion protocols between UCCA structures and two related formalisms:
 dependency and constituency trees.
-As these formalisms are more restrictive than BSS, the conversion
+As these formalisms are more restrictive than UCCA, the conversion
 is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion_approach}).
 Second, we present a novel transition-based broad-coverage parser,
@@ -246,7 +246,7 @@ addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval}.
 %experimenting with the Prague tectogrammatical layer \cite{sgallhp:1986,bohmova2003prague},
 %and with dependencies derived from the
 %Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju}} and Lingo ERG \cite{Flic:02}.
-Like BSS parsing, SDP addresses a wide range of semantic phenomena,
+Like UCCA parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and multiple parents. However, SDP uses
 bi-lexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
 structures that have no clear head, such as coordination \cite{Ivanova2012who}.
@@ -278,9 +278,9 @@ Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steed
 provide a theory of the syntax-semantics interface, and have been used as a basis for semantic parsers
 by defining compositional semantics on top of them \cite[among others]{Flic:00,bos2005towards}.
 Depending on the grammar and the implementation, such semantic parsers can support
-some or all of the BSS criteria.
+some or all of the UCCA criteria.
 Nevertheless, this line of work differs from our grammarless approach in two important ways.
-First, the semantic representations are different. BSS does not attempt to model
+First, the semantic representations are different. UCCA does not attempt to model
 the syntax-semantics interface and is thus less coupled with syntax in comparison to
 compositional semantic structures.
 Second, while grammar-based parsers explicitly model syntax, grammarless
@@ -302,8 +302,7 @@ A graph nodes (a ``unit'') is either a terminal or several
 sub-units (not necessarily contiguous) jointly viewed as a
 single entity according to some semantic or cognitive consideration.
 Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents.
-UCCA structures support all three criteria of BSS: multiple parents, non-terminal nodes, and
-discontinuous units.
+UCCA therefore supports multiple parents, non-terminal nodes and discontinuous units.
 
 The foundational layer, used here, covers the predicate-argument
 structure evoked by predicates of all grammatical categories
@@ -336,10 +335,10 @@ complex arguments and relations
 
 We begin by assessing the ability of existing technology to address the task,
 by taking a conversion-based approach.
-We build each parser by converting BSS into supported tree structures,
+We build each parser by converting UCCA into supported tree structures,
 on which it is trained.
 We evaluate the trained parsers by applying them to the test set
-and then reconstructing BSS graphs, which are compared with the gold standard.
+and then reconstructing UCCA graphs, which are compared with the gold standard.
 Due to the success of dependency tree parsers, a conversion-based approach has yielded
 very strong parsers for other graph structures
 \cite{agic2015semantic,fernandez2015parsing}, despite lossy reconstruction algorithms.
@@ -349,12 +348,12 @@ the conversion procedures.}
 
 \paragraph{Notation.}
 Let $L$ be the set of possible edge labels.
-A BSS over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph $G=(V,E, \ell)$,
+A UCCA graph over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph $G=(V,E, \ell)$,
 where $\ell:E\to L$ maps edges to labels.
 For each token $w_i$ there exists a leaf (``terminal'') $t_i \in V$.
 
 \paragraph{Conversion to Constituency Trees.}
-We convert BSS to constituency trees by removing a subset of the
+We convert UCCA to constituency trees by removing a subset of the
 edges.\footnote{For trees, labeling nodes is equivalent to labeling edges, so
   we do not distinguish between the two options.
   If the original structures contain discontinuities, so will the resulting trees.}
@@ -363,7 +362,7 @@ leaving a tree formed by primary edges (see \figref{fig:graduation}).
 The inverse conversion is the identity function.
 
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
-In the conversion to dependency trees, we first convert BSS
+In the conversion to dependency trees, we first convert UCCA
 to constituency trees using the above procedure, and then convert the result to dependency trees. 
 
 
@@ -400,10 +399,10 @@ as well as dependency DAG structures
 and AMR parsing \cite{wang2015transition}.
 
 \textsc{bsp} mostly builds on recent advances in discontinuous constituency
-and dependency DAG parsing, and further introduces novel features for BSS.
+and dependency DAG parsing, and further introduces novel features for UCCA.
 
 \paragraph{Transition Set.}
-Given a sequence of tokens $w_1, \ldots, w_n$, we predict a BSS $G$ over the sequence.
+Given a sequence of tokens $w_1, \ldots, w_n$, we predict a UCCA graph $G$ over the sequence.
 Parsing starts with a single node on the stack (the root node), and the input tokens
 in the buffer. The set of transitions is given in \figref{fig:transitions}.
 In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
@@ -553,7 +552,7 @@ All counts exclude the root node.
 \end{table}
 
 \paragraph{Evaluation.}
-Since there are no standard evaluation measures for BSS, we define
+Since there are no standard evaluation measures for UCCA, we define
 two simple measures for comparing such structures.
 Assume $G_p=(V_p,E_p,\ell_p)$ and $G_g=(V_g,E_g,\ell_g)$
 are the predicted and gold-standard DAGs over the same
@@ -632,7 +631,7 @@ differing only by classifier,
 suggesting that a similar approach in
 \textsc{bsp} is likely to improve results,
 and further underscoring the effectiveness of transition-based 
-methods for BSS parsing. 
+methods for UCCA parsing.
 
 The conversion to constituency format only removes remote edges,
 and thus obtains a perfect primary edge score.
