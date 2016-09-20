@@ -376,12 +376,6 @@ and then reconstructing UCCA graphs, which are compared with the gold standard.
 The error resulting from this conversion is discussed in
 \secref{sec:results}.
 
-\paragraph{Notation.}
-Let $L$ be the set of possible edge labels.
-A UCCA graph over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph $G=(V,E, \ell)$,
-where $\ell:E\to L$ maps edges to labels.
-For each token $w_i$ there exists a leaf (``terminal'') $t_i \in V$.
-
 \paragraph{Conversion to Dependency Trees.}\label{subsec:con2dep}
 In the conversion to dependency trees, we first convert UCCA
 to constituency trees using the above procedure, and then convert the result to dependency trees. 

@@ -148,110 +148,100 @@ It includes a single Scene, whose main relation is ``apply'', a secondary relati
 \section{Conversion algorithms}
 \label{sec:conversion}
 
-We convert UCCA to constituency trees by removing a subset of the
-edges.\footnote{For trees, labeling nodes is equivalent to labeling edges, so
-  we do not distinguish between the two options.
-  If the original structures contain discontinuities, so will the resulting trees.}
-Specifically, when converting UCCA structures, we simply remove all remote edges,
-leaving a tree formed by primary edges (see Figure 1a in the paper).
-The inverse conversion is the identity function.
+\paragraph{Notation.}
+Let $L$ be the set of possible edge labels.
+A UCCA graph over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph
+$G=(V,E, \ell)$, where $\ell:E\to L$ maps edges to labels.
+For each token $w_i$ there exists a leaf (\emph{terminal}) $t_i \in V$.
 
-\paragraph{Conversion from constituency to dependency trees.}
-Let $T_c=(V_c,E_c,\ell_c)$ be a constituency tree with labels $\ell_c:E_c~\rightarrow~L$.
-The conversion from $T_c$ to a dependency tree involves the removal of
-all non-terminals from $T_c$ and the addition of edges between terminals.
-The nodes of the converted dependency tree are simply the terminals of $T_c$.
+\paragraph{Conversion to bilexical graphs.}
+Let $G=(V,E,\ell)$ be a UCCA graph with labels $\ell:E\rightarrow L$.
+The conversion from $G$ to a dependency graph consists of calculating a set $A$ of
+labeled dependency arcs between the terminals of $G$.
+All non-terminals in $G$ are removed.
 
 We define a linear order over possible edge labels $L$ (\figref{fig:priority}).
-For each node $u \in V$, denote by $h(u)$ its child with the highest edge label.
+For each node $u \in V$, denote by $h(u)$ its child with the highest-priority edge label.
 Let $h^*(u)$ be the terminal reached by recursively applying $h(\cdot)$ over $u$.
-For each terminal $t$, we define $n(t)$ as the highest
-non-terminal such that $t=h^*(n(t))$, i.e.
-$n(t)$ is the only node such that $t=h^*(n(t))$ and $t \neq h^*(\mathrm{Parent}_c(n(t)))$.
-$t$'s head in the dependency graph is
-the terminal $h^*(\mathrm{Parent}_c(n(t)))$.
-The complete conversion procedure from constituency to dependency is given in Algorithm~\ref{alg:con2dep}.
-
-Note that this conversion procedure is simpler than the
-head percolation procedure used for converting syntactic constituency
+For each terminal $t$, we define
+\[
+N(t) = \{n\in V \;|\; t=h^*(n) \wedge t \neq h^*(h^{-1}(n)) \}
+\]
+For each such node $n$, we add $h^*(\mathrm{Parent}(n))$ as a head of $t$ in $A$.
+The complete conversion procedure to a bilexical graph is given in
+Algorithm~\ref{alg:to_bilexical}\footnote{Note that this conversion procedure
+is simpler than the head percolation procedure used for converting syntactic constituency
 trees to dependency trees,
 since $h(u)$ (similar to $u$'s head-containing child)
-depends only on $\ell_c(h(u),u)$ and not on the sub-tree spanned by $u$,
+depends only on $\ell(h(u),u)$ and not on the sub-tree spanned by $u$,
 because edge labels in UCCA directly express the role of the child in the parent unit, and
-are thus sufficient for determining which of $u$'s children contains the head node.
+are thus sufficient for determining which of $u$'s children contains the head node.}.
 
 \begin{algorithm}[h]
- \KwData{constituency tree ${T_c}=(V_c,E_c,\ell_c)$}
- \KwResult{dependency tree $T_d=(V_d,E_d,\ell_d)$}
+ \KwData{UCCA graph ${G}=(V,E,\ell)$}
+ \KwResult{set $A$ of bilexical arcs}
  
- \ForEach{$u \in V_c$} {
-  $h(u) \leftarrow \argmin_v \mathrm{Priority}(\ell_c(u,v))$\;
+ \ForEach{$u \in V$} {
+  $h(u) \leftarrow \argmin_v \mathrm{Priority}(\ell(u,v))$\;
  }
- $V_d \leftarrow \mathrm{Terminals}({T_c})$,
- $E_d \leftarrow \emptyset$\;
- \ForEach{$t \in V_d$} {
-  $u \leftarrow t$\;
-  \While{$u=h(\mathrm{Parent}_c(u))$} {
-  	$h^*(u) \leftarrow t$\;
-  	$u \leftarrow \mathrm{Parent}_c(u)$\;
+ $A \leftarrow \emptyset$\;
+ \ForEach{$t \in \mathrm{Terminals}(V)$} {
+  \ForEach{$n \in N(t)$} {
+   $u \leftarrow h^{-1}(n(t))$\;
+   $t^\prime \leftarrow h^*(u)$\;
+   $A \leftarrow A \cup \{(t^\prime, t)\}$\;
+   $\ell_d (t^\prime, t) \leftarrow \ell(u, n(t))\}$\;
   }
-  $n(t) \leftarrow h(u)$\;
  }
- \ForEach{$t \in V_d$} {
-  $u \leftarrow \mathrm{Parent}_c(n(t))$\;
-  $t^\prime \leftarrow h^*(u)$\;
-  $E_d \leftarrow E_d \cup \{(t^\prime, t)\}$\;
-  $\ell_d (t^\prime, t) \leftarrow \ell_c(u, n(t))\}$\;
- }
- \caption{Constituency to dependency conversion.}
- \label{alg:con2dep}
+ \caption{Conversion to bilexical graphs.}
+ \label{alg:to_bilexical}
 \end{algorithm}
 
-\paragraph{Conversion from dependency to constituency trees.}
+\paragraph{Conversion from bilexical graphs.}
 The inverse conversion introduces non-terminal nodes back into the tree.
 As the distinction between low- and high-attaching nodes is lost in the constituency to
 dependency conversion, we assume that attachments are always
 high-attaching.
-Let $T_d=(V_d,E_d,\ell_d)$ be a dependency tree.
+Let $A=(V_d,E_d,\ell_d)$ be a dependency tree.
 We begin by creating a root node $r$.
 Then, iterating over $V_d$ in topological order,
 we add its members as terminals to the constituency tree
 and create a pre-terminal parent for each,
 with an edge labeled as \textit{Terminal} between them.
 The parents of the pre-terminals are determined by the terminal's parent in the dependency
-tree: if a dependency node $t$ is a child of the root in $T_d$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $T_d$. We add an intermediate node in between if $t$ has any dependents in $T_d$,
+tree: if a dependency node $t$ is a child of the root in $A$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $A$. We add an intermediate node in between if $t$ has any dependents in $A$,
 to allow adding their pre-terminals as children.
 Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$.
-This procedure is given in Algorithm~\ref{alg:dep2con}.
+This procedure is given in Algorithm~\ref{alg:from_bilexical}.
 
 \begin{algorithm}[h]
- \KwData{dependency tree $T_d=(V_d,E_d,\ell_d)$}
- \KwResult{constituency tree $T_c=(V_c,E_c,\ell_c)$}
+ \KwData{dependency tree $A=(V_d,E_d,\ell_d)$}
+ \KwResult{constituency tree $G=(V,E,\ell)$}
  \SetKwFunction{Label}{Label}{}{}
  
  $r \leftarrow \mathrm{Node()}$\;
- $V_c \leftarrow \{r\}$,
- $E_c \leftarrow \emptyset$\;
+ $V \leftarrow \{r\}$,
+ $E \leftarrow \emptyset$\;
  \ForEach{$t \in \mathrm{TopologicalSort}(V_d)$} {
   $u \leftarrow \mathrm{Node()}$\;
-  $V_c \leftarrow V_c \cup \{u, t\}$\;
-  $E_c \leftarrow E_c \cup \{(u, t)\}$\;
-  $\ell_c(u,t)\leftarrow\mathit{Terminal}$\;
+  $V \leftarrow V \cup \{u, t\}$\;
+  $E \leftarrow E \cup \{(u, t)\}$\;
+  $\ell(u,t)\leftarrow\mathit{Terminal}$\;
   $t^\prime \leftarrow \mathrm{Parent}_d(t)$\;
   \eIf{$t^\prime = \textsc{Root}$} {
-   $E_c \leftarrow E_c \cup \{(r, u)\}$\;
-   $\ell_c(r, u) \leftarrow \Label(r)$\;
+   $E \leftarrow E \cup \{(r, u)\}$\;
+   $\ell(r, u) \leftarrow \Label(r)$\;
   } {
    \eIf{$\exists v \in V_d : (t,v) \in E_d$} {
     $u^\prime \leftarrow \mathrm{Node()}$\;
-    $E_c \leftarrow E_c \cup \{(u^\prime, u)\}$\;
-    $\ell_c(u^\prime, u) \leftarrow \Label(u^\prime)$\;
+    $E \leftarrow E \cup \{(u^\prime, u)\}$\;
+    $\ell(u^\prime, u) \leftarrow \Label(u^\prime)$\;
    } {
     $u' \leftarrow u$\;
    }
-   $p \leftarrow \mathrm{Parent}_c(t^\prime)$\;
-   $E_c \leftarrow E_c \cup \{(p, u^\prime)\}$\;
-   $\ell_c(p, u^\prime) \leftarrow \ell_d(t^\prime, t)$\;
+   $p \leftarrow \mathrm{Parent}(t^\prime)$\;
+   $E \leftarrow E \cup \{(p, u^\prime)\}$\;
+   $\ell(p, u^\prime) \leftarrow \ell_d(t^\prime, t)$\;
   }
  }
  
@@ -274,8 +264,8 @@ This procedure is given in Algorithm~\ref{alg:dep2con}.
     \Return \textit{Center}\;
    }
   }
- \caption{Dependency to constituency conversion.}
- \label{alg:dep2con}
+ \caption{Conversion from bilexical graphs.}
+ \label{alg:from_bilexical}
 \end{algorithm}
 
 \begin{figure}[h]
@@ -300,7 +290,7 @@ This procedure is given in Algorithm~\ref{alg:dep2con}.
 \item $U$ (\textit{Punctuation})
 \end{enumerate}
 \end{multicols}
-\caption{Priority order of edge labels, used in Algorithm~\ref{alg:con2dep}.}
+\caption{Priority order of edge labels, used in Algorithm~\ref{alg:to_bilexical}.}
 \label{fig:priority}
 \end{figure}
 
@@ -375,6 +365,15 @@ Upper Bound & 93.5 & 82.5 & 87.6 \\
 \caption{Results for conversion-based parsing when tested on out-of-domain data (\textit{20K Leagues})}
 \label{tab:ood_converted}
 \end{table}
+
+\paragraph{Conversion to constituency trees.}
+We convert UCCA to constituency trees by removing a subset of the
+edges.\footnote{For trees, labeling nodes is equivalent to labeling edges, so
+  we do not distinguish between the two options.
+  If the original structures contain discontinuities, so will the resulting trees.}
+Specifically, when converting UCCA structures, we simply remove all remote edges,
+leaving a tree formed by primary edges (see Figure 1a in the paper).
+The inverse conversion is the identity function.
 
 \section{Feature templates for sparse linear classifier}
 
