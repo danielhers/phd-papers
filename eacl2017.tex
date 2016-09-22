@@ -490,7 +490,8 @@ We refer to this parser as BSP+embedding.
 Third, we use a feedforward neural network, similar to the one used by \newcite{chen2014fast},
 but with two hidden layers using the sigmoid activation function,
 with dropout applied after each layer \cite{srivastava2014dropout}.
-We refer to the neural network-based parser as BSP+NN.
+We refer to the neural network-based parser as BSP+NN\footnote{For full implementation
+details, refer to the code which will be released upon publication}.
 
 For all classifiers, inference is performed greedily (i.e., without beam search).
 
@@ -680,21 +681,21 @@ the in-domain and the out-of-domain test sets.
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
-Upper Bound % on the test set and ood set only
-& 93.4 & 83.7 & 88.3 & 73.9 & 49.5 & 59.3
-& 93.5 & 83.5 & 88.2 & 66.7 & 31.6 & 42.9 \\
 DAGParser
 & 63.7 & 	56.1	 & 59.5	 & 0.8	 & 9.5	 &  1.4
 & 58	 & 49.8	 & 53.4 & -- & 0 & 0 \\
 TurboParser
 & 60.2	 & 47.4	 & 52.9	 & 2.2	 & 7.8	 &  3.4
 & 52.6	 & 39	 & 44.7	 & 100	 & 0.3	 & 0.6 \\
+Upper Bound % on the test set and ood set only
+& 93.4 & 83.7 & 88.3 & 73.9 & 49.5 & 59.3
+& 93.5 & 83.5 & 88.2 & 66.7 & 31.6 & 42.9 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
 BSP
 & 64 & 55.6 & 59.5 & 16 & 11.6 & 13.4 
 & 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
-BSP+embeddings 
+BSP+embedding 
 & 55 & 54.8 & 54.9 & 15.2 & 16.9 & 16 
 & 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
 BSP+NN 
@@ -707,6 +708,8 @@ BSP+NN
   and the \textit{20K Leagues} set (right, out-of-domain).
   Columns correspond to labeled precision, recall and F-score for the different parsers,
   for both primary and remote edges.
+  Top: results for DAGParser and TurboParser, after conversion to bilexical graphs.
+  Bottom: results for our BSP, trained on the original UCCA graphs.
 }
 \end{table*}
 
@@ -725,12 +728,17 @@ primary edges (by 7.4\%, leading to  a 3.9\% F-score improvement).
 (0.7\% primary, 1.2\% remote F-scores),
 likely to be amplified in languages with a higher percentage of discontinuous units, e.g. German.
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}
 
-including DAG-structured LSTM \cite{zhu-sobhani-guo:2016:N16-1}
+Remote edges in UCCA represent implied or syntactically unrepresented relations between entities
+and scenes.
+Despite their scarcity (see \tabref{table:data}), these relations are important for many semantic
+tasks.
+Whereas the bilexical approximation-based parsers can correctly identify a small part of these
+edges, the direct approach does such much more accurately.
 
-\paragraph{Tree approximation}
+\paragraph{Tree approximation.}
 For completeness, we also evaluate tree-oriented parsers on the task of reconstructing
 only the primary edges in UCCA graphs.
 We use a settings similar to the tree approximation experiments mentioned in \secref{sec:conversion}.
@@ -738,29 +746,23 @@ However, this results in a different task for the underlying parser, whose resul
 comparable:
 without remote edges, the task becomes easier, and
 as tree parsing is a well-researched task, parsers designed for it are clearly more accurate on it.
-\figref{fig:tree_approx_results} shows the results.
-We evaluate MaltParser using the ArcEager transition set and the SVM classifier\footnote{We also
-experimented with ArcStandard and perceptron, and got slightly lower scores.}.
 
 We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
-and one into bilexical dependencies. In the first setting we experiment with \textsc{uparse}
-\newcite{maier2015discontinuous},
+and one into bilexical dependency trees. In the first setting we experiment with \textsc{uparse}
+\cite{maier2015discontinuous},
 the only transition-based constituency parser, to our knowledge, able to parse trees with
 discontinuous constituents.
-In the second setting we use MaltParser with arc-standard and
-arc-eager transition sets \cite{nivre2007maltparser},\footnote{Preliminary
-experiments with non-projective variants of MaltParser yielded lower scores than
-projective ones, and were thus discarded from the final evaluation.}
+In the second setting we use MaltParser \cite{nivre2007maltparser} with the
+arc-eager transition set and the SVM classifier\footnote{Preliminary
+experiments with arc-standard and non-projective variants of MaltParser yielded slightly
+lower scores, and were thus discarded from the final evaluation.
+We also experimented with a linear classifier, and also got slightly lower scores.},
 and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
-For MaltParser, we try both SVM and perceptron classifiers, reporting
-results obtained with SVM (about 1\% F-score higher).
 Default settings are used in all cases.
 We note that \textsc{uparse} uses beam search by default,
 with a beam size of 4, and the other parsers are greedy.
-
-We train BSP both with and without remote edge transitions,
-to allow better comparison with conversion-based methods that only
-predict trees.
+We also train the BSP variants without remote edge transitions, yielding a tree parser.
+\tabref{fig:tree_approx_results} shows the results.
 
 \begin{table}[ht]
 \centering
@@ -775,39 +777,24 @@ Upper Bound & 100 & 100 & 100 \\
 MaltParser & 64.9 & 57.9 & 61 \\
 LSTM Parser & {\bf 74.9} & {\bf 66.4} & {\bf 70.2} \\
 Upper Bound & 93.7 & 83.6 & 88.4 \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Tree Parsing} \\
 BSP $-$ \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
+BSP+embedding $-$ \textsc{Remote} &  \\
+BSP+NN $-$ \textsc{Remote} &  \\
 \end{tabular}
 \caption{\label{fig:tree_approx_results}
   Results of tree approximation experiment, in percents (on the \textit{Wiki} test set).
   Columns correspond to labeled precision,
   recall and F-score for the different parsers, including only primary edges
-  (remote edges are not supported).
+  (remote edges are removed at training).
   Top: results for \textsc{uparse}
   after conversion to constituency tree annotation. Upper middle: results for the
-  MaltParser arc-eager and arc-standard, and
-  the LSTM parser, after conversion to dependency tree annotation.
-  Lower middle: results for our BSP, trained on
-  UCCA trees, obtained by removing remote edges (BSP$_{\mathrm{Tree}}$).
+  MaltParser and the LSTM parser, after conversion to dependency tree annotation.
+  Bottom: results for our BSP, trained on
+  UCCA trees, obtained by removing remote edges ($-$ \textsc{Remote}).
 }
 \end{table}
-
-BSP obtains slightly lower primary F-scores than the other parsers,
-but unlike them, is able to predict some of the remote edges. 
-Removing remote edge transitions from BSP does not
-change results considerably on the primary edges.
-%improving them by 0.9\% F-score in the in-domain setting, but reduces
-%them by the same amount when applied out-of-domain. 
-Out-of-domain and in-domain results are largely comparable,
-demonstrating the robustness of BSP.
-
-The LSTM parser obtains the highest primary F-score,
-with a considerable margin. Importantly, it obtains 9.1\%
-F-score higher than the arc-standard MaltParser,
-differing only by classifier,
-suggesting that a similar approach in
-BSP is likely to improve results,
-and further underscoring the effectiveness of transition-based 
-methods for UCCA parsing.
 
 The conversion to constituency format only removes remote edges,
 and thus obtains a perfect primary edge score.
@@ -816,7 +803,16 @@ all non-terminal nodes have to be reconstructed by a
 simple rule-based inverse conversion. Both conversions yield zero scores on remote edges,
 since these are invariably removed when converting to trees.
 
-
+The LSTM parser obtains the highest primary F-score,
+with a considerable margin. Importantly, it obtains 8.8\% F-score higher than the MaltParser,
+despite being limited by the same approximation error upper bound, and using a similar
+transition set.
+This shows that the LSTM classifier has a significant contribution to the accuracy of
+the parser, suggesting concrete paths for further improvements to BSP:
+a recurrent neural network may be used instead of the feedforward one.
+This is in line with the recent success of recurrent neural networks
+(specifically, LSTMs and GRUs) in NLP tasks, including DAG-structured LSTM
+\cite{zhu-sobhani-guo:2016:N16-1}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}\label{sec:conclusion}
@@ -825,8 +821,7 @@ We introduce the first grammarless parser that supports multiple parents, non-te
 nodes and discontinuous units.
 We further explore a conversion-based parsing approach to assess the ability of existing
 technology to address the task.
-We provide the first parser for UCCA, showing it can be parsed with 69.2\% primary F-score.
-The results suggest means for improvement by using an NN-based classifier.
+We provide the first parser for UCCA.
 The quality of the results is underscored by UCCA's inter-annotator
 agreement of 
 80--85\% F-score on primary edges \cite{abend2013universal}.
@@ -837,11 +832,12 @@ We intend to further explore conversion-based parsing approaches,
 including different target representations and more sophisticated conversion procedures \cite{kong-15},
 to shed light on the commonalities and differences between representations, suggesting ways to
 design better semantic representations.
+A parser for UCCA will enable using the framework for new tasks, in addition to existing
+applications for evaluation of machine translation \cite{sulem2015conceptual,birch2016hume}.
 We believe that UCCA's merits in providing a cross-linguistically applicable, broad-coverage
 annotation will support ongoing efforts to incorporate deeper semantic structures
 into a variety of applications, such as machine translation \cite{jones2012semantics}
 and summarization \cite{liu2015toward}.
-\daniel{applications: MT evaluation, Elior, Leshem}
 
 
 \bibliography{references}
