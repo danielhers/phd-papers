@@ -56,7 +56,7 @@
 
 
 
-\section{Additional UCCA-annotated examples}
+\section{Additional UCCA features and annotated examples}
 
 \paragraph{Linkage.}
 
@@ -92,12 +92,26 @@ The following figure demonstrates a linkage relation, omitted from Figure 1a in 
   \caption{UCCA example with linkage.}
 \end{figure}
 
-\paragraph{Longer example.}
+The linkage relation is represented by the gray node.
+$LA$ is \emph{link argument}, and $LR$ is \emph{link relation}.
+The relation represents the fact that the \emph{linker} ``After'' links the two parallel scenes
+that are the arguments of the linkage.
+Linkage relations are another source of multiple parents for a node, which we do not yet handle
+in parsing and evaluation.
 
-The following figure shows the UCCA annotation for the sentence
+\paragraph{Implicit units.}
+
+UCCA graphs may contain implicit units with no correspondent in the text.
+The following figure shows the annotation for the sentence
 ``A similar technique is almost impossible to apply to other crops, such as cotton, soybeans and rice.''.
-The sentence was used by \cite{oepen2015semeval} to compare between the difference schemes.
+The sentence was used by \cite{oepen2015semeval} to compare between different semantic
+dependency schemes.
 It includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
+In addition, the scenes includes an implicit argument, which represents the agent of the
+``apply'' relation.
+
+The parsing of these units is deferred to future work, as it is likely to require different methods
+than those explored in this paper \cite{roth2015inducing}.
 
 \begin{figure}[h]
   \centering
@@ -142,8 +156,33 @@ It includes a single Scene, whose main relation is ``apply'', a secondary relati
       ;
   \end{tikzpicture}
   }
-  \caption{Longer UCCA example.}
+  \caption{UCCA example with an implicit unit.}
 \end{figure}
+
+\paragraph{Statistics of Linkage and Implicit Nodes}
+
+\tabref{table:data_linkage_implicit} shows the statistics of linkage and implicit nodes
+in the corpora.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l|ccc|c}
+& \multicolumn{3}{c|}{Wiki} & 20K \\
+& \small Train & \small Dev & \small Test & Leagues \\
+\hline
+nodes \\
+\% implicit & 0.29 & 0.35 & 0.27 & 0.8 \\
+\% linkage & 0.92 & 0.96 & 0.9 & 1.25 \\
+\hline
+edges \\
+\% linkage & 2.94 & 3.06 & 2.78 & 3.33
+\end{tabular}
+\caption{Statistics of linkage and implicit nodes in the
+\textit{Wiki} and \textit{20K Leagues} UCCA corpora.
+Cf. Table 1 in the paper.
+}
+\label{table:data_linkage_implicit}
+\end{table}
 
 \section{Conversion algorithms}
 \label{sec:conversion}
@@ -167,7 +206,7 @@ For each terminal $t$, we define
 \[
 N(t) = \{n\in V \;|\; t=h^*(n) \wedge t \neq h^*(h^{-1}(n)) \}
 \]
-For each such node $n$, we add $h^*(\mathrm{Parent}(n))$ as a head of $t$ in $A$.
+For each such node $n$, we add $h^*(h^{-1}(n))$ as a head of $t$ in $A$.
 The complete conversion procedure to a bilexical graph is given in
 Algorithm~\ref{alg:to_bilexical}\footnote{Note that this conversion procedure
 is simpler than the head percolation procedure used for converting syntactic constituency
@@ -179,7 +218,7 @@ are thus sufficient for determining which of $u$'s children contains the head no
 
 \begin{algorithm}[h]
  \KwData{UCCA graph ${G}=(V,E,\ell)$}
- \KwResult{set $A$ of bilexical arcs}
+ \KwResult{set $A$ of labeled bilexical arcs}
  
  \ForEach{$u \in V$} {
   $h(u) \leftarrow \argmin_v \mathrm{Priority}(\ell(u,v))$\;
@@ -198,66 +237,70 @@ are thus sufficient for determining which of $u$'s children contains the head no
 \end{algorithm}
 
 \paragraph{Conversion from bilexical graphs.}
-The inverse conversion introduces non-terminal nodes back into the tree.
-As the distinction between low- and high-attaching nodes is lost in the constituency to
-dependency conversion, we assume that attachments are always
-high-attaching.
-Let $A=(V_d,E_d,\ell_d)$ be a dependency tree.
+The inverse conversion introduces non-terminal nodes back into the graph.
+As the distinction between low- and high-attaching nodes is lost in the
+conversion, we assume that attachments are always
+low-attaching.
+Let $A$ be a the labeled arc set of a bilexical graph.
 We begin by creating a root node $r$.
-Then, iterating over $V_d$ in topological order,
-we add its members as terminals to the constituency tree
+Then, iterating over the terminals in topological order according to $A$,
+we add its members as terminals to graph
 and create a pre-terminal parent for each,
 with an edge labeled as \textit{Terminal} between them.
-The parents of the pre-terminals are determined by the terminal's parent in the dependency
-tree: if a dependency node $t$ is a child of the root in $A$, then $t$'s pre-terminal will also be a child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal associated with $t$'s head in $A$. We add an intermediate node in between if $t$ has any dependents in $A$,
+The parents of the pre-terminals are determined by the terminal's parent in the bilexical
+graph: if a terminal $t$ is a child of the root in $A$, then $t$'s pre-terminal will also be a
+child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal
+associated with $t$'s head in $A$.
+We add an intermediate node in between if $t$ has any dependents in $A$,
 to allow adding their pre-terminals as children.
-Edge labels for the intermediate edges are determined by a rule-based function, denoted by $\mathrm{Label}(u)$.
+Edge labels for the intermediate edges are determined by a rule-based function, denoted by
+$\mathrm{Label}(u)$.
 This procedure is given in Algorithm~\ref{alg:from_bilexical}.
 
 \begin{algorithm}[h]
- \KwData{dependency tree $A=(V_d,E_d,\ell_d)$}
- \KwResult{constituency tree $G=(V,E,\ell)$}
+ \KwData{list $T$ of terminals, set $A$ of labeled bilexical arcs}
+ \KwResult{UCCA graph $G=(V,E,\ell)$}
  \SetKwFunction{Label}{Label}{}{}
  
  $r \leftarrow \mathrm{Node()}$\;
  $V \leftarrow \{r\}$,
  $E \leftarrow \emptyset$\;
- \ForEach{$t \in \mathrm{TopologicalSort}(V_d)$} {
+ \ForEach{$t \in \mathrm{TopologicalSort}(T, A)$} {
   $u \leftarrow \mathrm{Node()}$\;
   $V \leftarrow V \cup \{u, t\}$\;
   $E \leftarrow E \cup \{(u, t)\}$\;
   $\ell(u,t)\leftarrow\mathit{Terminal}$\;
-  $t^\prime \leftarrow \mathrm{Parent}_d(t)$\;
+  $t^\prime \leftarrow \mathrm{Parent}_A(t)$\;
   \eIf{$t^\prime = \textsc{Root}$} {
    $E \leftarrow E \cup \{(r, u)\}$\;
    $\ell(r, u) \leftarrow \Label(r)$\;
   } {
-   \eIf{$\exists v \in V_d : (t,v) \in E_d$} {
+   \eIf{$\exists v \in T : (t,v) \in A$} {
     $u^\prime \leftarrow \mathrm{Node()}$\;
     $E \leftarrow E \cup \{(u^\prime, u)\}$\;
     $\ell(u^\prime, u) \leftarrow \Label(u^\prime)$\;
    } {
     $u' \leftarrow u$\;
    }
-   $p \leftarrow \mathrm{Parent}(t^\prime)$\;
+   $p \leftarrow \mathrm{Parent}_G(t^\prime)$\;
    $E \leftarrow E \cup \{(p, u^\prime)\}$\;
-   $\ell(p, u^\prime) \leftarrow \ell_d(t^\prime, t)$\;
+   $\ell(p, u^\prime) \leftarrow \ell_A(t^\prime, t)$\;
   }
  }
  
   \SetKwProg{func}{Function}{}{}
   
   \func{\Label}{
-  \KwData{node $u \in V_d$}
+  \KwData{node $u \in T$}
   \KwResult{label $\ell \in L$}
 
    \uIf{$\mathrm{IsPunctuation}(u)$}{
     \Return \textit{Punctuation}\;
    }
-   \uElseIf{$\exists v \in V_d : \ell(u,v) = \textit{ParallelScene}$}{
+   \uElseIf{$\exists v \in T : \ell(u,v) = \textit{ParallelScene}$}{
     \Return \textit{ParallelScene}\;
    }
-   \uElseIf{$\exists v \in V_d : \ell(u,v) = \textit{Participant}$}{
+   \uElseIf{$\exists v \in T : \ell(u,v) = \textit{Participant}$}{
     \Return \textit{Process}\;
    }
    \uElse{
@@ -294,10 +337,10 @@ This procedure is given in Algorithm~\ref{alg:from_bilexical}.
 \label{fig:priority}
 \end{figure}
 
+\paragraph{Conversion to trees.}
 
-\paragraph{Example.}
-
-Converting the sentence in Figure 1a to a constituency tree consists of simply removing the remote edge, as can be seen in \figref{fig:con_example}.
+To convert a UCCA graph to a tree, we simply remove the remote edges.
+Converting the sentence in Figure 1a results in the tree given in \figref{fig:con_example}.
 
 \begin{figure}[H]
   \centering
@@ -321,10 +364,12 @@ Converting the sentence in Figure 1a to a constituency tree consists of simply r
       } edge from parent node[right] {\scriptsize $H$} }
       ;
   \end{tikzpicture}
-  \caption{Example: conversion to constituency tree}
+  \caption{Tree approximation for the UCCA graph in Figure 1a from the paper}
   \label{fig:con_example}
 \end{figure}
 
+To convert a UCCA graph to a bilexical tree, we first convert it to a bilexical graph, and then
+remove the remote edges.
 The corresponding dependency tree is given in \figref{fig:dep_example}.
 
 \begin{figure}[H]
@@ -340,13 +385,15 @@ After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 \depedge{7}{6}{R}
 \depedge{5}{7}{A}
 \end{dependency}
-  \caption{Example: conversion to dependency tree}
+  \caption{Bilexical tree approximation for the UCCA graph in Figure 1a from the paper}
   \label{fig:dep_example}
 \end{figure}
 
-\section{Conversion-based out-of-domain results}
+\section{Tree approximation-based out-of-domain results}
 
-The scores in \tabref{tab:ood_converted} were obtained on primary edges when running the conversion-based parsers on the out-of-domain data set (\textit{20K Leagues}). Scores on remote edges are zero, since they are not reconstructed by the conversion.
+The scores in \tabref{tab:ood_converted} were obtained on primary edges when running the
+tree approximation parsers on the out-of-domain data set (\textit{20K Leagues}).
+Scores on remote edges are zero, since they are not reconstructed by the conversion.
 \begin{table}[H]
   \centering
 \begin{tabular}{l|ccc}
@@ -362,22 +409,14 @@ Malt$_{\textrm{arc-eager}}$ & 62.8 & 56.3 & 59.2 \\
 LSTM & {\bf 70.1} & {\bf 63.3} & {\bf 66.1} \\
 Upper Bound & 93.5 & 82.5 & 87.6 \\
 \end{tabular}
-\caption{Results for conversion-based parsing when tested on out-of-domain data (\textit{20K Leagues})}
+\caption{Results for tree approximation-based parsing when tested on out-of-domain data
+(\textit{20K Leagues})}
 \label{tab:ood_converted}
 \end{table}
 
-\paragraph{Conversion to constituency trees.}
-We convert UCCA to constituency trees by removing a subset of the
-edges.\footnote{For trees, labeling nodes is equivalent to labeling edges, so
-  we do not distinguish between the two options.
-  If the original structures contain discontinuities, so will the resulting trees.}
-Specifically, when converting UCCA structures, we simply remove all remote edges,
-leaving a tree formed by primary edges (see Figure 1a in the paper).
-The inverse conversion is the identity function.
-
 \section{Feature templates for sparse linear classifier}
 
-\figref{fig:features} presents the feature templates used by the parser.
+\figref{fig:features} presents the feature templates used by the perceptron-based parser.
 All feature templates define binary features.
 For some of the features, we used the notion of \textit{head word},
 defined by the $h^*$ function (\secref{sec:conversion}).

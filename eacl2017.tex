@@ -217,12 +217,11 @@ discontinuous syntactic constituency parsing
 \cite{maier-lichte:2016:DiscoNLP} and AMR parsing
 \cite{wang-EtAl:2016:SemEval}.
 
-\daniel{update}
 We pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
-by developing conversion protocols between UCCA structures and two related formalisms:
-dependency and constituency trees.
-As these formalisms are more restrictive than UCCA, the conversion
+by developing conversion protocols between UCCA structures and bilexical graphs
+(\emph{bilexical approximation}).
+As these are more restrictive than UCCA, the conversion
 is necessarily lossy. Nonetheless, we find that it is effective
 in practice (\secref{sec:conversion}).
 Second, we present a novel transition-based broad-coverage parser,
@@ -330,10 +329,6 @@ whereas the remote edges enable multiple parents for the same node.
 Further categories account for relations between Scenes and the internal structure of
 complex arguments and relations
 (e.g. coordination; complex adverbials such as ``very clearly'').
-%UCCA graphs may contain implicit
-%units with no correspondent in the text, but the parsing of these
-%units is deferred to future work, as it is likely to require different methods
-%than those explored here.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -527,7 +522,8 @@ practice in semantic parsing and train our parsers on individual sentences,
 discarding inter-relations between them (0.18\% of the edges).
 We also discard linkage nodes and edges, as they often express inter-sentence
 relations and are thus mostly redundant when applied at the sentence level,
-as well as implicit nodes (\secref{sec:ucca}).
+as well as implicit nodes\footnote{Supplementary Material for examples
+of Linkage and Implicit nodes.}.
 In the out-of-domain experiments, we apply the same parser
 (trained on the \textit{Wiki} corpus) to the \textit{20K Leagues} corpus
 without parameter re-tuning.
@@ -545,17 +541,14 @@ without parameter re-tuning.
 \# nodes & 277,587 & 40,700 & 45,047 & 29,965 \\
 \% terminal & 42.41 & 42.8 & 42.66 & 41.23 \\
 \% non-term. & 57.59 & 57.20 & 57.34 & 58.77 \\
-\% implicit & 0.29 & 0.35 & 0.27 & 0.8 \\
-\% linkage & 0.92 & 0.96 & 0.9 & 1.25 \\
 \% discont. & 0.52 & 0.55 & 0.47 & 0.79 \\
 \% \textgreater 1 parent & 2.29 & 1.89 & 2.21 & 1.98 \\
 \hline
 \# edges & 272,018 & 39,660 & 44,139 & 28,723 \\
 \% primary & 95.37 & 95.70 & 95.90 & 94.48 \\
 \% remote & 1.69 & 1.24 & 1.32 & 2.19 \\
-\% linkage & 2.94 & 3.06 & 2.78 & 3.33 \\
 \hline
-\multicolumn{3}{l}{\footnotesize Average per non-linkage non-terminal node} \\
+\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
 %\# parents & 0.98 & 0.97 & 0.98 & 0.95 \\
 \# children & 1.67 & 1.67 & 1.67 & 1.61 
 \end{tabular}
