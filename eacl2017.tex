@@ -70,6 +70,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 
+\daniel{start by introducing UCCA, then add a sentence about applicability of methods}
 Semantic annotation schemes and data sets call for parsers not limited to tree structures,
 and many languages require non-projective parsing techniques.
 The UCCA semantic scheme contains non-terminal nodes in addition to these properties,
@@ -85,6 +86,7 @@ demonstrate their effectiveness on the task.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
+\daniel{start by introducing UCCA, then add a couple of paragraph about structural properties}
 Tree-oriented parsing has been in the focus of research for several decades,
 recently yielding some impressive results.
 However, more general graph structures are necessary for semantic representation,
@@ -217,6 +219,7 @@ discontinuous syntactic constituency parsing
 \cite{maier-lichte:2016:DiscoNLP} and AMR parsing
 \cite{wang-EtAl:2016:SemEval}.
 
+\daniel{rewrite to clarify these are baselines}
 We pursue two complementary parsing strategies.
 First, we assess the ability of existing technology to tackle the task,
 by developing conversion protocols between UCCA structures and bilexical graphs
@@ -294,6 +297,7 @@ strings and semantic structures.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{The UCCA Scheme}\label{sec:ucca}
+\daniel{move to introduction?}
 Universal Conceptual Cognitive Annotation (UCCA)
 is a cross-linguistically applicable semantic representation scheme,
 building on the established ``Basic Linguistic Theory'' typological framework
@@ -332,7 +336,7 @@ complex arguments and relations
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Parsing by Bilexical Approximation}\label{sec:conversion}
+\section{Bilexical Approximation}\label{sec:conversion}
 
 We begin by assessing the ability of existing parsers to address the task.
 Since no existing DAG parsers support non-terminal nodes, we first convert UCCA into bilexical
@@ -375,7 +379,7 @@ For comparability, we chose to keep the same set of edge labels in the conversio
 even though a lower approximation error may have been possible with a larger label set.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Broad-Coverage Semantic Parsing}\label{sec:direct_approach}
+\section{Direct Approach}\label{sec:direct_approach}
 
 We now turn to presenting BSP (Broad-coverage Semantic Parser),
 a transition-based parser supporting the structural properties of UCCA.
@@ -634,8 +638,8 @@ and another for remote edges. We note that the measure collapses to the standard
 PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
 Punctuation is excluded from the evaluation, but not from the datasets.
 
-\paragraph{Bilexical Approximation.}
-We evaluate two parsers in the bilexical approximation setting:
+\paragraph{Baselines.}
+We evaluate two parsers in the bilexical approximation setting (see \secref{sec:conversion}):
 DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, a transition-based parser
 which participated in the SDP task of SemEval 2014 \cite{oepen2014semeval},
 and the semantic variant of TurboParser \cite{almeida-martins:2015:SemEval},
