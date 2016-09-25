@@ -244,67 +244,57 @@ As the distinction between low- and high-attaching nodes is lost in the
 conversion, we assume that attachments are always
 low-attaching.
 Let $A$ be a the labeled arc set of a bilexical graph.
-We begin by creating a root node $r$.
-Then, iterating over the terminals in topological order according to $A$,
+Iterating over the terminals in topological order according to $A$,
 we add its members as terminals to graph
 and create a pre-terminal parent $u_t$ for each terminal $t$,
 with an edge labeled as \textit{Terminal} between them.
 The parents of the pre-terminals are determined by the terminal's parent in the bilexical
-graph: if a terminal $t$ is a child of the root in $A$, then $t$'s pre-terminal will also be a
-child of the root node. Otherwise, $t$'s pre-terminal is the child of the pre-terminal
-associated with $t$'s head in $A$.
+graph: if $t^\prime$ is a head of $t$ in $A$, then $u_{t^\prime}$ will be a parent of $u_t$.
 We add an intermediate node in between if $t$ has any dependents in $A$,
-to allow adding their pre-terminals as children.
+to allow adding their pre-terminals as children later.
 Edge labels for the intermediate edges are determined by a rule-based function, denoted by
-$\mathrm{Label}(u)$.
+$\mathrm{Label}(t)$.
 This procedure is given in Algorithm~\ref{alg:from_bilexical}.
 
 \begin{algorithm}[h]
  \KwData{list $T$ of terminals, set $A$ of labeled bilexical arcs}
  \KwResult{UCCA graph $G=(V,E,\ell)$}
  \SetKwFunction{Label}{Label}{}{}
- 
- $r \leftarrow \mathrm{Node()}$\;
- $V \leftarrow \{r\}$,
+ $V \leftarrow \emptyset$\;
  $E \leftarrow \emptyset$\;
  \ForEach{$t \in \mathrm{TopologicalSort}(T, A)$} {
   $u_t \leftarrow \mathrm{Node()}$\;
   $V \leftarrow V \cup \{u_t, t\}$\;
   $E \leftarrow E \cup \{(u_t, t)\}$\;
   $\ell(u_t,t)\leftarrow\mathit{Terminal}$\;
-  \ForEach{$t^\prime\in T\cup\{\textsc{Root}\},l\in L$} {
+  \ForEach{$t^\prime\in T,l\in L$} {
    \If{$(t^\prime,l,t)\in A$} {
-    \eIf{$t^\prime = \textsc{Root}$} {
-     $E \leftarrow E \cup \{(r, u_t)\}$\;
-     $\ell(r, u_t) \leftarrow \Label(r)$\;
+    \eIf{$\exists t^{\prime\prime}\in T,l^\prime\in L : (t,l^\prime,t^{\prime\prime}) \in A$} {
+     $u \leftarrow \mathrm{Node()}$\;
+     $E \leftarrow E \cup \{(u, u_t)\}$\;
+     $\ell(u, u_t) \leftarrow \Label(t)$\;
     } {
-     \eIf{$\exists t^{\prime\prime}\in T,l^\prime\in L : (t,l^\prime,t^{\prime\prime}) \in A$} {
-      $u \leftarrow \mathrm{Node()}$\;
-      $E \leftarrow E \cup \{(u, u_t)\}$\;
-      $\ell(u, u_t) \leftarrow \Label(u)$\;
-     } {
-      $u \leftarrow u_t$\;
-     }
-     $E \leftarrow E \cup \{(u_{t^\prime}, u)\}$\;
-     $\ell(u_{t^\prime}, u) \leftarrow l$\;
+     $u \leftarrow u_t$\;
     }
-   }
+    $E \leftarrow E \cup \{(u_{t^\prime}, u)\}$\;
+    $\ell(u_{t^\prime}, u) \leftarrow l$\;
+    }
   }
  }
  
   \SetKwProg{func}{Function}{}{}
   
   \func{\Label}{
-  \KwData{node $u \in T$}
-  \KwResult{label $\ell \in L$}
+  \KwData{node $t \in T$}
+  \KwResult{label $l\in L$}
 
-   \uIf{$\mathrm{IsPunctuation}(u)$}{
+   \uIf{$\mathrm{IsPunctuation}(t)$}{
     \Return \textit{Punctuation}\;
    }
-   \uElseIf{$\exists v \in T : \ell(u,v) = \textit{ParallelScene}$}{
+   \uElseIf{$\exists t^\prime \in T : (t,\textit{ParallelScene},t^\prime)\in A$}{
     \Return \textit{ParallelScene}\;
    }
-   \uElseIf{$\exists v \in T : \ell(u,v) = \textit{Participant}$}{
+   \uElseIf{$\exists t^\prime \in T : (t,\textit{Participant},t^\prime)\in A$}{
     \Return \textit{Process}\;
    }
    \uElse{
