@@ -66,19 +66,18 @@
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%     Abstract
+%%%%%%%%%%%%%%%%%     Abstract     %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-
-\daniel{start by introducing UCCA, then add a sentence about applicability of methods}
-Semantic annotation schemes and data sets call for parsers not limited to tree structures,
-and many languages require non-projective parsing techniques.
-The UCCA semantic scheme contains non-terminal nodes in addition to these properties,
-and thus parsing it also requires detecting these nodes, corresponding to abstract semantic units.
-We propose two techniques for UCCA parsing: one based on approximation by simpler structures,
-and a direct broad-coverage parser. We focus on transition-based methods, and experimentally
-demonstrate their effectiveness on the task.
-  
+We present the first parser for UCCA, a framework for semantic representation that is
+cross-linguistically applicable, supports rapid annotation and captures the semantic distinctions
+expressed through linguistic utterances.
+UCCA poses a challenge for existing parsing techniques, as it exhibits reentrancy,
+discontinuous structures and non-terminal nodes corresponding to abstract semantic units.
+Our transition-based parser has value not just for UCCA parsing:
+its ability to handle more general graph structures makes it applicable to
+many semantic annotation schemes and data sets not limited to tree structures,
+and to languages that require non-projective parsing techniques.
 \end{abstract}
 
 
@@ -86,46 +85,39 @@ demonstrate their effectiveness on the task.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-\daniel{start by introducing UCCA, then add a couple of paragraph about structural properties}
-Tree-oriented parsing has been in the focus of research for several decades,
-recently yielding some impressive results.
-However, more general graph structures are necessary for semantic representation,
-as has been argued to justify two recent SemEval shared tasks
-\cite[see \secref{sec:related_work}]{oepen2014semeval,oepen2015semeval}.
+Universal Conceptual Cognitive Annotation (UCCA)
+is a cross-linguistically applicable semantic representation scheme,
+building on the established ``Basic Linguistic Theory'' typological framework
+\cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive Linguistics literature.
+It is a multi-layered representation, each layer corresponding to a ``module'' of
+semantic distinctions (e.g. predicate-argument structure and coreference).
 
-We focus on anchored meaning representation
-(where semantic units are inherently aligned to the words and phrases of the text),
-and claim that three structural properties must be supported to cover the full range of semantic
-structures exhibited by natural language.
-The first is \textbf{multiple parents},
-representing arguments and relations (semantic units) that are shared between predicates.
-For instance, in the sentence
-``After graduation, John moved to Paris'', ``John'' is an argument of both ``graduation''
-and ``moved'', yielding a DAG structure (\figref{fig:graduation}), rather than a tree.
+Formally, a UCCA representation is a DAG whose leaves correspond to the tokens.
+A graph nodes (a ``unit'') is either a terminal or several
+sub-units (not necessarily contiguous) jointly viewed as a
+single entity according to some semantic or cognitive consideration.
+Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents.
+UCCA therefore supports multiple parents, non-terminal nodes and discontinuous units.
 
-The second is \textbf{non-terminal nodes} for representing units
-comprising more than one word.
-While bilexical dependencies partially circumvent this requirement, by
-representing complex units in terms of their headwords, they fall short
-when representing units that have no clear head.
-Frequent examples of such constructions include
-coordination structures (e.g., ``\textit{John and Mary} went home''; \figref{fig:home}),
-some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
-and prepositional phrases.
-In these cases, dependency schemes often apply some convention selecting one of the sub-units
-as the head, but as different head selections are needed for different purposes,
-standardization problems arise \cite{Ivanova2012who}.
-For example, selecting the preposition to head prepositional phrases yields better
-parsing results \cite{Schwartz:12}, while the head noun is more useful for
-information extraction.
+The foundational layer, used here, covers the predicate-argument
+structure evoked by predicates of all grammatical categories
+(verbal, nominal, adjectival and others), the inter-relations between them,
+and other major linguistic phenomena such as coordination and multi-word expressions.
+This set of categories has demonstrated applicability to multiple languages, including
+English, French, German and Czech, support for rapid annotation, and semantic stability in translation \cite{sulem2015conceptual}.
 
-Third, semantic units may be \textbf{discontinuous}. For instance, in
-``John \textit{gave} everything \textit{up}''
-(\figref{fig:gave}), the phrasal verb ``gave ... up'' forms a single semantic unit.
-Discontinuities are also pervasive with other multi-word
-expressions \cite{schneider2014discriminative}.
+The layer's basic notion is the {\it Scene}, describing a movement, action or state.
+Each Scene contains one main relation, as well as one or more Participants.
+For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes,
+whose main relations are ``graduation'' and ``moved''. ``John'' is a Participant in both Scenes,
+while ``Paris'' only in the latter.
+One incoming edge for each non-root is marked as ``primary'',
+and the rest (mostly denoting implied relations) as ``remote'' edges.
+The primary edges thus form a tree structure,
+whereas the remote edges enable multiple parents for the same node.
+\figref{fig:examples} shows this example and others.
 
-\begin{figure}[t]
+\begin{figure}[ht]
   \begin{subfigure}[t]{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:graduation}}
   \parbox{.8\columnwidth}{
@@ -208,6 +200,48 @@ expressions \cite{schneider2014discriminative}.
     Pre-terminal nodes are omitted for brevity.
   }
 \end{figure}
+
+Further categories account for relations between Scenes and the internal structure of
+complex arguments and relations
+(e.g. coordination; complex adverbials such as ``very clearly'').
+
+Tree-oriented parsing has been in the focus of research for several decades,
+recently yielding some impressive results.
+However, more general graph structures are necessary for semantic representation,
+as has been argued to justify two recent SemEval shared tasks
+\cite[see \secref{sec:related_work}]{oepen2014semeval,oepen2015semeval}.
+
+We focus on anchored meaning representation
+(where semantic units are inherently aligned to the words and phrases of the text),
+and claim that three structural properties must be supported to cover the full range of semantic
+structures exhibited by natural language.
+The first is \textbf{multiple parents},
+representing arguments and relations (semantic units) that are shared between predicates.
+For instance, in the sentence
+``After graduation, John moved to Paris'', ``John'' is an argument of both ``graduation''
+and ``moved'', yielding a DAG structure (\figref{fig:graduation}), rather than a tree.
+
+The second is \textbf{non-terminal nodes} for representing units
+comprising more than one word.
+While bilexical dependencies partially circumvent this requirement, by
+representing complex units in terms of their headwords, they fall short
+when representing units that have no clear head.
+Frequent examples of such constructions include
+coordination structures (e.g., ``\textit{John and Mary} went home''; \figref{fig:home}),
+some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
+and prepositional phrases.
+In these cases, dependency schemes often apply some convention selecting one of the sub-units
+as the head, but as different head selections are needed for different purposes,
+standardization problems arise \cite{Ivanova2012who}.
+For example, selecting the preposition to head prepositional phrases yields better
+parsing results \cite{Schwartz:12}, while the head noun is more useful for
+information extraction.
+
+Third, semantic units may be \textbf{discontinuous}. For instance, in
+``John \textit{gave} everything \textit{up}''
+(\figref{fig:gave}), the phrasal verb ``gave ... up'' forms a single semantic unit.
+Discontinuities are also pervasive with other multi-word
+expressions \cite{schneider2014discriminative}.
 
 We experiment with the UCCA scheme and annotated corpora
 \cite[see \secref{sec:ucca}]{abend2013universal},
@@ -293,46 +327,6 @@ compositional semantic structures.
 Second, while grammar-based parsers explicitly model syntax, grammarless
 approaches, such as the ones presented here, seek to directly model the relation between
 strings and semantic structures.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{The UCCA Scheme}\label{sec:ucca}
-\daniel{move to introduction?}
-Universal Conceptual Cognitive Annotation (UCCA)
-is a cross-linguistically applicable semantic representation scheme,
-building on the established ``Basic Linguistic Theory'' typological framework
-\cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive Linguistics literature.
-It is a multi-layered representation, each layer corresponding to a ``module'' of
-semantic distinctions (e.g. predicate-argument structure and coreference).
-
-Formally, a UCCA representation is a DAG whose leaves correspond to the tokens.
-A graph nodes (a ``unit'') is either a terminal or several
-sub-units (not necessarily contiguous) jointly viewed as a
-single entity according to some semantic or cognitive consideration.
-Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents.
-UCCA therefore supports multiple parents, non-terminal nodes and discontinuous units.
-
-The foundational layer, used here, covers the predicate-argument
-structure evoked by predicates of all grammatical categories
-(verbal, nominal, adjectival and others), the inter-relations between them,
-and other major linguistic phenomena such as coordination and multi-word expressions.
-This set of categories has demonstrated applicability to multiple languages, including
-English, French, German and Czech, support for rapid annotation, and semantic stability in translation \cite{sulem2015conceptual}.
-
-The layer's basic notion is the {\it Scene}, describing a movement, action or state.
-Each Scene contains one main relation, as well as one or more Participants.
-For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes,
-whose main relations are ``graduation'' and ``moved''. ``John'' is a Participant in both Scenes,
-while ``Paris'' only in the latter.
-One incoming edge for each non-root is marked as ``primary'',
-and the rest (mostly denoting implied relations) as ``remote'' edges.
-The primary edges thus form a tree structure,
-whereas the remote edges enable multiple parents for the same node.
-\figref{fig:examples} shows this example and others.
-
-Further categories account for relations between Scenes and the internal structure of
-complex arguments and relations
-(e.g. coordination; complex adverbials such as ``very clearly'').
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
