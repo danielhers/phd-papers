@@ -16,7 +16,7 @@
 \usepackage{multicol}
 \usepackage[font=small]{caption}
 \usepackage{subcaption}
-\usepackage{hyperref}
+%\usepackage{hyperref}
 \usepackage{color}
 \usepackage{lipsum,adjustbox}
 \usepackage{tikz}
@@ -24,7 +24,7 @@
 \usepackage{rotating}
 \usepackage{float}
 \usepackage{xr}
-\externaldocument{eacl2016}
+\externaldocument[main:]{eacl2017}
 \usetikzlibrary{shapes,fit,calc,er,positioning,intersections,decorations.shapes,mindmap,trees}
 \tikzset{decorate sep/.style 2 args={decorate,decoration={shape backgrounds,shape=circle,
       shape size=#1,shape sep=#2}}}
@@ -60,7 +60,8 @@
 
 \paragraph{Linkage.}
 
-The following figure demonstrates a linkage relation, omitted from Figure 1a in the paper.
+The following figure demonstrates a linkage relation, omitted from \figref{main:fig:graduation}
+in the paper.
 
 \begin{figure}[h]
   \centering
@@ -179,7 +180,7 @@ edges \\
 \end{tabular}
 \caption{Statistics of linkage and implicit nodes in the
 \textit{Wiki} and \textit{20K Leagues} UCCA corpora.
-Cf. Table 1 in the paper.
+Cf. \tabref{main:table:data} in the paper.
 }
 \label{table:data_linkage_implicit}
 \end{table}
@@ -340,7 +341,8 @@ This procedure is given in Algorithm~\ref{alg:from_bilexical}.
 \paragraph{Conversion to trees.}
 
 To convert a UCCA graph to a tree, we simply remove the remote edges.
-Converting the sentence in Figure 1a results in the tree given in \figref{fig:con_example}.
+Converting the sentence in \figref{main:fig:graduation} in the paper
+results in the tree given in \figref{fig:con_example}.
 
 \begin{figure}[H]
   \centering
@@ -364,7 +366,7 @@ Converting the sentence in Figure 1a results in the tree given in \figref{fig:co
       } edge from parent node[right] {\scriptsize $H$} }
       ;
   \end{tikzpicture}
-  \caption{Tree approximation for the UCCA graph in Figure 1a from the paper}
+  \caption{Tree approximation for the UCCA graph in \figref{main:fig:graduation} in the paper}
   \label{fig:con_example}
 \end{figure}
 
@@ -385,7 +387,7 @@ After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 \depedge{7}{6}{R}
 \depedge{5}{7}{A}
 \end{dependency}
-  \caption{Bilexical tree approximation for the UCCA graph in Figure 1a from the paper}
+  \caption{Bilexical tree approximation for the UCCA graph in \figref{main:fig:graduation} in the paper}
   \label{fig:dep_example}
 \end{figure}
 
@@ -423,7 +425,7 @@ defined by the $h^*$ function (\secref{sec:conversion}).
 While head words are not explicitly represented in the UCCA scheme, these
 features proved useful as means of encoding word-to-word relations.
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \begin{adjustbox}{margin=3pt,frame}
 \begin{tabular}{l}
@@ -471,7 +473,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
 \end{adjustbox}
 \captionsetup{singlelinecheck=off}
 \caption[]{\label{fig:features}
-  Binary feature templates for \textsc{bsp}. Notation:
+  Binary feature templates for BSP. Notation:
   \begin{itemize}
   \item $s_i$, $b_i$: $i$th stack and buffer items.
   \item $w$, $t$: word form and POS tag of the terminal returned by $h^*(\cdot)$
@@ -489,14 +491,14 @@ $s_0R, s_0wR, b_0R, b_0wR$
 }
 \end{figure}
 
-\section{Feature ablation experimental results}
+\paragraph{Feature ablation experimental results.}
 
 The following results, in percents,
-were obtained on the development set in the feature ablation experiment (Section 7 in the paper).
-The first row corresponds to \textsc{bsp} as in the main experiment.
+were obtained on the development set in the feature ablation experiment
+(\secref{main:sec:results} in the paper).
+The first row corresponds to BSP as in the main experiment.
 In each of the other rows, one feature set is excluded.
-Columns are the same as in Table 2 in the paper.
-See Section 5 and Figure 3 in the paper for the feature set definitions.
+Columns are the same as in \tabref{main:table:results} in the paper.
   
 \begin{table}[H]
 \centering
@@ -504,18 +506,18 @@ See Section 5 and Figure 3 in the paper for the feature set definitions.
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\textsc{bsp} & 62.6	& 55.7 & 58.9 & 20 & 12.9 & 15.7 \\
-\textsc{bsp}$-$\textbf{unigrams} & 62.5 & 52.6 & 57.1 & 18.9 & 10.1 & 13.2 \\
-\textsc{bsp}$-$\textbf{bigrams} & 59.8 & 50.0 & 54.4 & 18.2 & 12.2 & 14.6 \\
-\textsc{bsp}$-$\textbf{trigrams} & 63.7 & 55.0 & 59.0 & 20.7 & 12.0 & 15.2 \\
-\textsc{bsp}$-$\textbf{separator} & 62.9 & 53.5 & 57.8 & 17.8 & 11.7 & 14.1 \\
-\textsc{bsp}$-$\textbf{extended} & 62.9 & 52.8 & 57.4 & 17.4 & 11.5 & 13.9 \\
-\textsc{bsp}$-$\textbf{disco} & 63.6 & 53.6 & 58.2 & 19.7 & 11.5 & 14.5 \\
-\textsc{bsp}$-$\textbf{counts} & 63.3 & 52.8 & 57.6 & 14.6 & 10.6 & 12.3 \\
-\textsc{bsp}$-$\textbf{edges} & 63.5 & 54.9 & 58.9 & 23.6 & 14.5 & 17.9 \\
-\textsc{bsp}$-$\textbf{history} & 63.1 & 53.2 & 57.8 & 23.7 & 14.5 & 18.0 \\
-\textsc{bsp}$-$\textbf{remote} & 63.5 & 53.2 & 57.9 & 17.2 & 10.6 & 13.1 \\
-\textsc{bsp}$-$\textbf{ratio} & 63.7 & 48.3 & 55.0 & 25.4 & 13.6 & 17.7
+BSP & 62.6	& 55.7 & 58.9 & 20 & 12.9 & 15.7 \\
+BSP$-$\textbf{unigrams} & 62.5 & 52.6 & 57.1 & 18.9 & 10.1 & 13.2 \\
+BSP$-$\textbf{bigrams} & 59.8 & 50.0 & 54.4 & 18.2 & 12.2 & 14.6 \\
+BSP$-$\textbf{trigrams} & 63.7 & 55.0 & 59.0 & 20.7 & 12.0 & 15.2 \\
+BSP$-$\textbf{separator} & 62.9 & 53.5 & 57.8 & 17.8 & 11.7 & 14.1 \\
+BSP$-$\textbf{extended} & 62.9 & 52.8 & 57.4 & 17.4 & 11.5 & 13.9 \\
+BSP$-$\textbf{disco} & 63.6 & 53.6 & 58.2 & 19.7 & 11.5 & 14.5 \\
+BSP$-$\textbf{counts} & 63.3 & 52.8 & 57.6 & 14.6 & 10.6 & 12.3 \\
+BSP$-$\textbf{edges} & 63.5 & 54.9 & 58.9 & 23.6 & 14.5 & 17.9 \\
+BSP$-$\textbf{history} & 63.1 & 53.2 & 57.8 & 23.7 & 14.5 & 18.0 \\
+BSP$-$\textbf{remote} & 63.5 & 53.2 & 57.9 & 17.2 & 10.6 & 13.1 \\
+BSP$-$\textbf{ratio} & 63.7 & 48.3 & 55.0 & 25.4 & 13.6 & 17.7
 \end{tabular}
 \caption{Results for feature ablation experiments.}
 \label{tab:ablation}
