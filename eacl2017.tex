@@ -26,9 +26,6 @@
 \usetikzlibrary{shapes,fit,calc,er,positioning,intersections,decorations.shapes,mindmap,trees}
 \tikzset{decorate sep/.style 2 args={decorate,decoration={shape backgrounds,shape=circle,
       shape size=#1,shape sep=#2}}}
-\setlength{\belowcaptionskip}{-10pt}
-\addtolength{\parskip}{-0.5mm}
-\addtolength{\textfloatsep}{-2mm}
 \newcommand{\oa}[1]{\footnote{\color{red} #1}}
 \newcommand{\daniel}[1]{\footnote{\color{blue} #1}}
 \newcommand{\com}[1]{}
@@ -50,9 +47,7 @@
 % smaller than 5cm (the original size); we will check this
 % in the camera-ready version and ask you to change it back.
 
-\newcommand\BibTeX{B{\sc ib}\TeX}
-
-\title{Broad-Coverage Semantic Parsing: A Transition-Based Approach}
+\title{A Broad-Coverage Transition-Based Parser for UCCA}
 
 \author{Daniel Hershcovich$^{1,2}$ \And Omri Abend$^2$ \And Ari Rappoport$^2$ \\
   $^1$Edmond and Lily Safra Center for Brain Sciences, Hebrew University of Jerusalem \\
@@ -73,19 +68,18 @@ We present the first parser for UCCA, a framework for semantic representation th
 cross-linguistically applicable, supports rapid annotation and captures the semantic distinctions
 expressed through linguistic utterances.
 UCCA poses a challenge for existing parsing techniques, as it exhibits reentrancy,
-discontinuous structures and non-terminal nodes corresponding to abstract semantic units.
-Our transition-based parser has value not just for UCCA parsing:
+discontinuous structures and non-terminal nodes corresponding to complex semantic units.
+Our transition-based parser, using novel transition set and features,
+has value not just for UCCA parsing:
 its ability to handle more general graph structures makes it applicable to
 many semantic annotation schemes and data sets not limited to tree structures,
 and to languages that require non-projective parsing techniques.
 \end{abstract}
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Introduction}
-
-Universal Conceptual Cognitive Annotation (UCCA)
+\section{Introduction}\label{sec:introduction}
+Universal Conceptual Cognitive Annotation, or UCCA \cite{abend2013universal},
 is a cross-linguistically applicable semantic representation scheme,
 building on the established ``Basic Linguistic Theory'' typological framework
 \cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive Linguistics literature.
@@ -93,31 +87,13 @@ It is a multi-layered representation, each layer corresponding to a ``module'' o
 semantic distinctions (e.g. predicate-argument structure and coreference).
 
 Formally, a UCCA representation is a DAG whose leaves correspond to the tokens.
-A graph nodes (a ``unit'') is either a terminal or several
+A graph node (a ``unit'') is either a terminal or several
 sub-units (not necessarily contiguous) jointly viewed as a
 single entity according to some semantic or cognitive consideration.
 Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents.
-UCCA therefore supports multiple parents, non-terminal nodes and discontinuous units.
+\figref{fig:examples} demonstrates three sentences annotated with UCCA.
 
-The foundational layer, used here, covers the predicate-argument
-structure evoked by predicates of all grammatical categories
-(verbal, nominal, adjectival and others), the inter-relations between them,
-and other major linguistic phenomena such as coordination and multi-word expressions.
-This set of categories has demonstrated applicability to multiple languages, including
-English, French, German and Czech, support for rapid annotation, and semantic stability in translation \cite{sulem2015conceptual}.
-
-The layer's basic notion is the {\it Scene}, describing a movement, action or state.
-Each Scene contains one main relation, as well as one or more Participants.
-For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes,
-whose main relations are ``graduation'' and ``moved''. ``John'' is a Participant in both Scenes,
-while ``Paris'' only in the latter.
-One incoming edge for each non-root is marked as ``primary'',
-and the rest (mostly denoting implied relations) as ``remote'' edges.
-The primary edges thus form a tree structure,
-whereas the remote edges enable multiple parents for the same node.
-\figref{fig:examples} shows this example and others.
-
-\begin{figure}[ht]
+\begin{figure}[t]
   \begin{subfigure}[t]{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:graduation}}
   \parbox{.8\columnwidth}{
@@ -147,27 +123,6 @@ whereas the remote edges enable multiple parents for the same node.
   }}
   \end{subfigure}
   \begin{subfigure}[t]{.9\columnwidth}
-  \parbox{.1\columnwidth}{\caption{}\label{fig:home}}
-  \hspace{.1\columnwidth}
-  \parbox{.7\columnwidth}{
-  \scalebox{.9}{
-  \begin{tikzpicture}[level distance=12mm, ->,
-      every node/.append style={midway},
-      every circle node/.append style={fill=black}]
-    \node (ROOT) [circle] {}
-      child {node [circle] {}
-      {
-        child {node {John} edge from parent node[left] {\scriptsize C}}
-        child {node {and} edge from parent node[left] {\scriptsize N}}
-        child {node {Mary} edge from parent node[left] {\scriptsize C}}
-      } edge from parent node[left] {\scriptsize A} }
-      child {node {went} edge from parent node[left] {\scriptsize P}}
-      child {node {home} edge from parent node[left] {\scriptsize A}}
-      ;
-  \end{tikzpicture}
-  }}
-  \end{subfigure}
-  \begin{subfigure}[t]{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:gave}}
   \hspace{.25\columnwidth}
   \parbox{.55\columnwidth}{
@@ -188,45 +143,61 @@ whereas the remote edges enable multiple parents for the same node.
   \end{tikzpicture}
   }}
   \end{subfigure}
+  \begin{subfigure}[t]{.9\columnwidth}
+  \parbox{.1\columnwidth}{\caption{}\label{fig:home}}
+  \hspace{.1\columnwidth}
+  \parbox{.7\columnwidth}{
+  \scalebox{.9}{
+  \begin{tikzpicture}[level distance=12mm, ->,
+      every node/.append style={midway},
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node [circle] {}
+      {
+        child {node {John} edge from parent node[left] {\scriptsize C}}
+        child {node {and} edge from parent node[left] {\scriptsize N}}
+        child {node {Mary} edge from parent node[left] {\scriptsize C}}
+      } edge from parent node[left] {\scriptsize A} }
+      child {node {went} edge from parent node[left] {\scriptsize P}}
+      child {node {home} edge from parent node[left] {\scriptsize A}}
+      ;
+  \end{tikzpicture}
+  }}
+  \end{subfigure}
   \caption{\label{fig:examples}
-    Semantic representation of three structural properties exhibited by the UCCA scheme.
+    Semantic representation showing three structural properties exhibited by the UCCA scheme.
     (\subref{fig:graduation}) includes a remote edge (dashed),
-    resulting in ``John'' having two parents. % and a linkage relation (gray node and its outgoing edges).
-    (\subref{fig:home}) includes a coordination construction (``John and Mary'').
+    resulting in ``John'' having two parents.
     (\subref{fig:gave}) includes a discontinuous unit (``gave ... up'').
-    Legend: $P$ -- a Scene's main relation, $A$ -- participant,
-    $L$ -- inter-scene linker, $H$ -- linked Scene, $C$ -- center,
+    (\subref{fig:home}) includes a coordination construction (``John and Mary'').
+    Legend: $P$ -- process (a scene's main relation), $A$ -- participant,
+    $L$ -- inter-scene linker, $H$ -- linked scene, $C$ -- center,
     $R$ -- relator, $N$ -- connector, $U$ -- punctuation, $F$ -- function unit.
     Pre-terminal nodes are omitted for brevity.
   }
 \end{figure}
 
-Further categories account for relations between Scenes and the internal structure of
-complex arguments and relations
-(e.g. coordination; complex adverbials such as ``very clearly'').
-
-Tree-oriented parsing has been in the focus of research for several decades,
-recently yielding some impressive results.
-However, more general graph structures are necessary for semantic representation,
-as has been argued to justify two recent SemEval shared tasks
-\cite[see \secref{sec:related_work}]{oepen2014semeval,oepen2015semeval}.
-
-We focus on anchored meaning representation
-(where semantic units are inherently aligned to the words and phrases of the text),
-and claim that three structural properties must be supported to cover the full range of semantic
-structures exhibited by natural language.
-The first is \textbf{multiple parents},
-representing arguments and relations (semantic units) that are shared between predicates.
+Alongside the recent progress in projective tree-oriented dependency parsing and similar methods
+\cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
+there is increasing interest in broad-coverage parsing (see \secref{sec:related_work}),
+directed at representations supporting more general structural properties.
+One such property is \textbf{reentrancy},
+referring to arguments and relations (semantic units) that are shared between predicates.
 For instance, in the sentence
-``After graduation, John moved to Paris'', ``John'' is an argument of both ``graduation''
-and ``moved'', yielding a DAG structure (\figref{fig:graduation}), rather than a tree.
+``After graduation, John moved to Paris'' (\figref{fig:graduation}),
+``John'' is an argument of both ``graduation''
+and ``moved'', yielding a UCCA structure that is a DAG rather than a tree.
 
-The second is \textbf{non-terminal nodes} for representing units
-comprising more than one word.
-While bilexical dependencies partially circumvent this requirement, by
-representing complex units in terms of their headwords, they fall short
-when representing units that have no clear head.
-Frequent examples of such constructions include
+A second property is \textbf{discontinuity} (or \textit{non-projectivity} in bilexical schemes):
+in ``John \textit{gave} everything \textit{up}'', for instance
+(\figref{fig:gave}), the phrasal verb ``gave ... up'' forms a discontinuous semantic unit.
+Discontinuities are pervasive with multi-word
+expressions \cite{schneider2014discriminative}.
+
+Finally, \textbf{non-terminal nodes} in UCCA represent units comprising more than one word.
+Bilexical dependencies lack this property, representing complex units in terms of their headwords.
+They fall short when representing units that have no clear head:
+frequent examples of such constructions include
 coordination structures (e.g., ``\textit{John and Mary} went home''; \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases.
@@ -234,40 +205,56 @@ In these cases, dependency schemes often apply some convention selecting one of 
 as the head, but as different head selections are needed for different purposes,
 standardization problems arise \cite{Ivanova2012who}.
 For example, selecting the preposition to head prepositional phrases yields better
-parsing results \cite{Schwartz:12}, while the head noun is more useful for
+parsing results \cite{Schwartz:12}, while the selecting the noun as the head may be more useful for
 information extraction.
 
-Third, semantic units may be \textbf{discontinuous}. For instance, in
-``John \textit{gave} everything \textit{up}''
-(\figref{fig:gave}), the phrasal verb ``gave ... up'' forms a single semantic unit.
-Discontinuities are also pervasive with other multi-word
-expressions \cite{schneider2014discriminative}.
+The UCCA foundational layer, which we target in this paper, covers the predicate-argument
+structure evoked by predicates of all grammatical categories
+(verbal, nominal, adjectival and others), the inter-relations between them,
+and other major linguistic phenomena such as coordination and multi-word expressions.
+This set of categories has demonstrated applicability to multiple languages, including
+English, French, German and Czech, support for rapid annotation, and semantic stability in translation \cite{sulem2015conceptual}.
 
-We experiment with the UCCA scheme and annotated corpora
-\cite[see \secref{sec:ucca}]{abend2013universal},
-which exhibit all three properties.
-We focus on transition-based methods---a natural starting point for UCCA parsing,
+The layer's basic notion is the {\it Scene}, describing a movement, action or state.
+Each Scene contains one main relation, as well as one or more Participants.
+For example, the sentence ``After graduation, John moved to Paris'' contains two Scenes,
+whose main relations are ``graduation'' and ``moved''. ``John'' is a Participant in both Scenes,
+while ``Paris'' only in the latter.
+One incoming edge for each non-root is marked as ``primary'',
+and the rest (mostly denoting implied relations) as ``remote'' edges.
+The primary edges thus form a tree structure,
+whereas the remote edges enable reentrancy.
+
+Further categories account for relations between Scenes and the internal structure of
+complex arguments and relations
+(e.g. coordination; complex adverbials such as ``very clearly'').
+
+In this paper we focus on transition-based methods---a natural starting point for UCCA parsing,
 given their recently proven fitness for similar tasks, including syntactic dependency parsing
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
-discontinuous syntactic constituency parsing
-\cite{maier-lichte:2016:DiscoNLP} and AMR parsing
-\cite{wang-EtAl:2016:SemEval}.
+discontinuous syntactic constituency parsing \cite{maier-lichte:2016:DiscoNLP},
+AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval}
+and CCG parsing \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1},
+as well as joint lexical and syntactic parsing
+\cite{constant-nivre:2016:P16-1}.
 
-\daniel{rewrite to clarify these are baselines}
-We pursue two complementary parsing strategies.
-First, we assess the ability of existing technology to tackle the task,
-by developing conversion protocols between UCCA structures and bilexical graphs
-(\emph{bilexical approximation}).
-As these are more restrictive than UCCA, the conversion
-is necessarily lossy. Nonetheless, we find that it is effective
-in practice (\secref{sec:conversion}).
-Second, we present a novel transition-based broad-coverage parser,
-(BSP; \secref{sec:direct_approach})
-supporting multiple parents, non-terminal nodes and discontinuous units,
+No existing parser supports the three structural properties described above,
+without requiring a preceding stage of alignment between the semantic units and text tokens
+(related semantic schemes and parsers are discussed in \secref{sec:related_work}).
+Therefore, as a baseline,
+we assess the ability of existing bilexical DAG parsers to tackle the task,
+by developing a conversion protocol between UCCA and bilexical graphs
+(\secref{sec:conversion}).
+We then present a direct, novel, transition-based broad-coverage parser
+(BSP; \secref{sec:direct_approach}),
+supporting reentrancy, discontinuous units and non-terminal nodes,
 based on extending existing transition-based parsers
 with new transitions and features.
-
-The results suggest concrete paths for further improvement.
+We evaluate the baselines and the direct parser on the UCCA corpora, in both
+in-domain and out-of-domain settings (\secref{sec:exp_setup}).
+The results demonstrate the benefit of the direct approach in UCCA parsing (\secref{sec:results}),
+and suggest concrete paths for further improvement (discussed in \secref{sec:discussion}).
+Finally, \secref{sec:conclusion} concludes the paper.
 All converters and parsers will be made publicly available upon publication.
 
 
@@ -279,17 +266,14 @@ focusing on semantic role labeling of verbal argument structures,
 the focus has recently shifted to parsing of more elaborate representations that account
 for a wider range of phenomena.
 
-
 \paragraph{Broad-Coverage Semantic Parsing.}
 Most closely related to this work is Broad-Coverage Semantic Dependency Parsing (SDP),
 addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval}.
-%experimenting with the Prague tectogrammatical layer \cite{sgallhp:1986,bohmova2003prague},
-%and with dependencies derived from the
-%Enju parser\footnote{See \url{http://kmcs.nii.ac.jp/enju}} and Lingo ERG \cite{Flic:02}.
 Like UCCA parsing, SDP addresses a wide range of semantic phenomena,
-and supports discontinuous units and multiple parents. However, SDP uses
+and supports discontinuous units and reentrancy. However, SDP uses
 bilexical dependencies, disallowing non-terminal nodes, and thus faces difficulties in supporting
-structures that have no clear head, such as coordination \cite{Ivanova2012who}.
+structures that have no clear head, such as coordination
+\cite[see \secref{sec:introduction}]{Ivanova2012who}.
 Increasing interest in the SDP task has given rise to numerable works on DAG parsing
 \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on DAG parsing by tree approximation
 \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
@@ -301,6 +285,8 @@ Another line of work addresses parsing into non-anchored
 semantic representation, notably Abstract Meaning Representation (AMR)
 \cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad},
 where the alignment between the semantic units and the text tokens is not part of the annotation.
+In UCCA we deal with anchored meaning representation,
+where semantic units are inherently aligned to the words and phrases of the text.
 While sharing much of this work's motivation,
 not anchoring the representation in the text
 complicates the parsing task, as it requires
@@ -310,7 +296,8 @@ using rule-based methods \cite{flanigan2014discriminative}, machine translation 
 Furthermore, anchoring allows breaking down sentences into semantically meaningful sub-spans,
 which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
 
-\newcite{wang-EtAl:2016:SemEval} applied a transition-based approach to AMR parsing,
+\newcite[2016]{wang2015transition}
+applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
 the result into AMR, while our approach involves no such syntactic pre-processing.
 
@@ -587,7 +574,7 @@ without parameter re-tuning.
 \% terminal & 42.42 & 43.15 & 42.38 & 41.22 \\
 \% non-term. & 57.58 & 56.85 & 57.62 & 58.78 \\
 \% discont. & 0.53 & 0.50 & 0.46 & 0.80 \\
-\% \textgreater 1 parent & 2.28 & 1.74 & 2.16 & 1.98 \\
+\% reentrant & 2.28 & 1.74 & 2.16 & 1.98 \\
 \hline
 \# edges & 296,234 & 32,752 & 36,951 & 28,706 \\
 \% primary & 95.35 & 96.58 & 95.80 & 94.48 \\
@@ -726,7 +713,7 @@ primary edges (by 7.4\%, leading to  a 3.9\% F-score improvement).
 likely to be amplified in languages with a higher percentage of discontinuous units, e.g. German.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discussion}
+\section{Discussion}\label{sec:discussion}
 
 Remote edges in UCCA represent implied or syntactically unrepresented relations between entities
 and scenes.
