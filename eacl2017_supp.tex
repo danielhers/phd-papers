@@ -188,26 +188,33 @@ Cf. \tabref{main:table:data} in the paper.
 \section{Conversion algorithms}
 \label{sec:conversion}
 
+Here we describe the algorithms used in the conversion referred to in \secref{main:sec:conversion}
+in the paper.
+
 \paragraph{Notation.}
 Let $L$ be the set of possible edge labels.
 A UCCA graph over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph
 $G=(V,E, \ell)$, where $\ell:E\to L$ maps edges to labels.
 For each token $w_i$ there exists a leaf (\emph{terminal}) $t_i \in V$.
+A bilexical (dependency) graph over the same text consists of a set $A$ of
+labeled dependency arcs $(t^\prime,l,t)$
+between the terminals of $G$, where $t^\prime$ is the head, $t$ is the dependent and $l$ is
+the edge label.
 
 \paragraph{Conversion to bilexical graphs.}
 Let $G=(V,E,\ell)$ be a UCCA graph with labels $\ell:E\rightarrow L$.
-The conversion from $G$ to a dependency graph consists of calculating a set $A$ of
-labeled dependency arcs between the terminals of $G$.
+The conversion to a bilexical graph requires calculating the set $A$.
 All non-terminals in $G$ are removed.
 
-We define a linear order over possible edge labels $L$ (\figref{fig:priority}).
+We define a linear order over possible edge labels $L$ (see \figref{fig:priority}).
 For each node $u \in V$, denote by $h(u)$ its child with the highest-priority edge label.
 Let $h^*(u)$ be the terminal reached by recursively applying $h(\cdot)$ over $u$.
 For each terminal $t$, we define
 \[
-N(t) = \{n\in V \;|\; t=h^*(n) \wedge t \neq h^*(h^{-1}(n)) \}
+N(t) = \{(u,v)\in E \;|\; t=h^*(v) \wedge t \neq h^*(u) \}
 \]
-For each such node $n$, we add $h^*(h^{-1}(n))$ as a head of $t$ in $A$.
+For each edge $(u,v)\in N(t)$, we add $h^*(u)$ as a head of $t$ in $A$,
+with the label $\ell(u,v)$.
 The complete conversion procedure to a bilexical graph is given in
 Algorithm~\ref{alg:to_bilexical}\footnote{Note that this conversion procedure
 is simpler than the head percolation procedure used for converting syntactic constituency
@@ -220,17 +227,11 @@ are thus sufficient for determining which of $u$'s children contains the head no
 \begin{algorithm}[h]
  \KwData{UCCA graph ${G}=(V,E,\ell)$}
  \KwResult{set $A$ of labeled bilexical arcs}
- 
- \ForEach{$u \in V$} {
-  $h(u) \leftarrow \argmin_v \mathrm{Priority}(\ell(u,v))$\;
- }
  $A \leftarrow \emptyset$\;
  \ForEach{$t \in \mathrm{Terminals}(V)$} {
-  \ForEach{$n \in N(t)$} {
-   $u \leftarrow h^{-1}(n(t))$\;
+  \ForEach{$(u,v)\in N(t)$} {
    $t^\prime \leftarrow h^*(u)$\;
-   $A \leftarrow A \cup \{(t^\prime, t)\}$\;
-   $\ell_d (t^\prime, t) \leftarrow \ell(u, n(t))\}$\;
+   $A \leftarrow A \cup \{(t^\prime, \ell(u, v), t)\}$\;
   }
  }
  \caption{Conversion to bilexical graphs.}
@@ -246,7 +247,7 @@ Let $A$ be a the labeled arc set of a bilexical graph.
 We begin by creating a root node $r$.
 Then, iterating over the terminals in topological order according to $A$,
 we add its members as terminals to graph
-and create a pre-terminal parent for each,
+and create a pre-terminal parent $u_t$ for each terminal $t$,
 with an edge labeled as \textit{Terminal} between them.
 The parents of the pre-terminals are determined by the terminal's parent in the bilexical
 graph: if a terminal $t$ is a child of the root in $A$, then $t$'s pre-terminal will also be a
@@ -267,25 +268,27 @@ This procedure is given in Algorithm~\ref{alg:from_bilexical}.
  $V \leftarrow \{r\}$,
  $E \leftarrow \emptyset$\;
  \ForEach{$t \in \mathrm{TopologicalSort}(T, A)$} {
-  $u \leftarrow \mathrm{Node()}$\;
-  $V \leftarrow V \cup \{u, t\}$\;
-  $E \leftarrow E \cup \{(u, t)\}$\;
-  $\ell(u,t)\leftarrow\mathit{Terminal}$\;
-  $t^\prime \leftarrow \mathrm{Parent}_A(t)$\;
-  \eIf{$t^\prime = \textsc{Root}$} {
-   $E \leftarrow E \cup \{(r, u)\}$\;
-   $\ell(r, u) \leftarrow \Label(r)$\;
-  } {
-   \eIf{$\exists v \in T : (t,v) \in A$} {
-    $u^\prime \leftarrow \mathrm{Node()}$\;
-    $E \leftarrow E \cup \{(u^\prime, u)\}$\;
-    $\ell(u^\prime, u) \leftarrow \Label(u^\prime)$\;
-   } {
-    $u' \leftarrow u$\;
+  $u_t \leftarrow \mathrm{Node()}$\;
+  $V \leftarrow V \cup \{u_t, t\}$\;
+  $E \leftarrow E \cup \{(u_t, t)\}$\;
+  $\ell(u_t,t)\leftarrow\mathit{Terminal}$\;
+  \ForEach{$t^\prime\in T\cup\{\textsc{Root}\},l\in L$} {
+   \If{$(t^\prime,l,t)\in A$} {
+    \eIf{$t^\prime = \textsc{Root}$} {
+     $E \leftarrow E \cup \{(r, u_t)\}$\;
+     $\ell(r, u_t) \leftarrow \Label(r)$\;
+    } {
+     \eIf{$\exists t^{\prime\prime}\in T,l^\prime\in L : (t,l^\prime,t^{\prime\prime}) \in A$} {
+      $u \leftarrow \mathrm{Node()}$\;
+      $E \leftarrow E \cup \{(u, u_t)\}$\;
+      $\ell(u, u_t) \leftarrow \Label(u)$\;
+     } {
+      $u \leftarrow u_t$\;
+     }
+     $E \leftarrow E \cup \{(u_{t^\prime}, u)\}$\;
+     $\ell(u_{t^\prime}, u) \leftarrow l$\;
+    }
    }
-   $p \leftarrow \mathrm{Parent}_G(t^\prime)$\;
-   $E \leftarrow E \cup \{(p, u^\prime)\}$\;
-   $\ell(p, u^\prime) \leftarrow \ell_A(t^\prime, t)$\;
   }
  }
  
@@ -312,7 +315,7 @@ This procedure is given in Algorithm~\ref{alg:from_bilexical}.
  \label{alg:from_bilexical}
 \end{algorithm}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \begin{multicols}{2}
 \begin{enumerate}
 \item $C$ (\textit{Center})
@@ -391,7 +394,7 @@ After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
   \label{fig:dep_example}
 \end{figure}
 
-\section{Tree approximation-based out-of-domain results}
+\paragraph{Tree approximation-based out-of-domain results.}
 
 The scores in \tabref{tab:ood_converted} were obtained on primary edges when running the
 tree approximation parsers on the out-of-domain data set (\textit{20K Leagues}).
