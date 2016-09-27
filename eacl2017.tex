@@ -47,7 +47,7 @@
 % smaller than 5cm (the original size); we will check this
 % in the camera-ready version and ask you to change it back.
 
-\title{A Broad-Coverage Transition-Based Parser for UCCA}
+\title{Broad-Coverage Transition-Based UCCA Parsing}
 
 \author{Daniel Hershcovich$^{1,2}$ \And Omri Abend$^2$ \And Ari Rappoport$^2$ \\
   $^1$Edmond and Lily Safra Center for Brain Sciences, Hebrew University of Jerusalem \\
@@ -64,34 +64,43 @@
 %%%%%%%%%%%%%%%%%     Abstract     %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-We present the first parser for UCCA, a framework for semantic representation that is
-cross-linguistically applicable, supports rapid annotation and captures the semantic distinctions
-expressed through linguistic utterances.
-UCCA poses a challenge for existing parsing techniques, as it exhibits reentrancy,
-discontinuous structures and non-terminal nodes corresponding to complex semantic units.
-Our transition-based parser, using novel transition set and features,
-has value not just for UCCA parsing:
-its ability to handle more general graph structures makes it applicable to
-many semantic annotation schemes and data sets not limited to tree structures,
-and to languages that require non-projective parsing techniques.
+  We present the first parser for UCCA, a framework for semantic
+  representation that is cross-linguistically applicable, building on extensive
+  typological work, and supports rapid annotation.
+  UCCA poses a challenge for existing parsing techniques,
+  as it exhibits reentrancy (resulting in DAG structures),
+  discontinuous structures and non-terminal nodes corresponding
+  to complex semantic units. To our knowledge, the conjunction
+  of these formal properties is not supported by any existing parser.
+  Our transition-based parser, using novel transition set
+  and features, has value not just for UCCA parsing:
+  its ability to handle more general graph structures will inform
+  research on broad-coverage parsing into DAG structures using
+  other semantic schemes, 
+  and parsing research on languages which frequently use discontinuous structures.
 \end{abstract}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:introduction}
-Universal Conceptual Cognitive Annotation, or UCCA \cite{abend2013universal},
-is a cross-linguistically applicable semantic representation scheme,
-building on the established ``Basic Linguistic Theory'' typological framework
-\cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive Linguistics literature.
-It is a multi-layered representation, each layer corresponding to a ``module'' of
-semantic distinctions (e.g. predicate-argument structure and coreference).
 
-Formally, a UCCA representation is a DAG whose leaves correspond to the tokens.
-A graph node (a ``unit'') is either a terminal or several
-sub-units (not necessarily contiguous) jointly viewed as a
+Universal Conceptual Cognitive Annotation, (UCCA, \newcite{abend2013universal}),
+is a cross-linguistically applicable semantic representation scheme,
+building on the established Basic Linguistic Theory typological framework
+\cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive
+Linguistics literature \cite{Croft:04}.
+It is a multi-layered representation, each layer corresponding
+to a ``module'' of semantic distinctions
+(e.g. predicate-argument structure and coreference). Existing corpora are
+annotated with UCCA's foundational layer, which focuses on predicate-argument
+structures (verbal, nominal, adjectival and others) and the inter-relations between them.
+
+Formally, a UCCA representation is a DAG whose leaves correspond to the tokens of the text\oa{add footnote about we use sentences, but that it's annotated on paragraphs?}. Nodes (or {\it units}) either correspond to a terminal or
+to several sub-units (not necessarily contiguous) jointly viewed as a
 single entity according to some semantic or cognitive consideration.
-Edges bear a category, indicating the role of the sub-unit in the relation that the parent represents.
-\figref{fig:examples} demonstrates three sentences annotated with UCCA.
+Edges bear a category, indicating the role of the sub-unit in the relation
+that the parent represents.
+\figref{fig:examples} presents a few UCCA-anntoated examples.
 
 \begin{figure}[t]
   \begin{subfigure}[t]{.9\columnwidth}
@@ -165,7 +174,8 @@ Edges bear a category, indicating the role of the sub-unit in the relation that 
   }}
   \end{subfigure}
   \caption{\label{fig:examples}
-    Semantic representation showing three structural properties exhibited by the UCCA scheme.
+    UCCA structures demonstrating three structural properties exhibited by
+    the scheme.
     (\subref{fig:graduation}) includes a remote edge (dashed),
     resulting in ``John'' having two parents.
     (\subref{fig:gave}) includes a discontinuous unit (``gave ... up'').
@@ -177,7 +187,7 @@ Edges bear a category, indicating the role of the sub-unit in the relation that 
   }
 \end{figure}
 
-Alongside the recent progress in projective tree-oriented dependency parsing and similar methods
+Alongside recent progress in projective tree-oriented dependency parsing and similar methods
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
 there is increasing interest in broad-coverage parsing (see \secref{sec:related_work}),
 directed at representations supporting more general structural properties.
