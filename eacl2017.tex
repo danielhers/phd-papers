@@ -585,18 +585,6 @@ and are reported in \secref{sec:results}.
 
 %For comparability, we choose to keep the same set of edge labels in the conversion, even though a lower approximation error may have been possible with a larger label set.
 
-We evaluate two parsers in the bilexical approximation setting:
-DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, the leading transition-based parser which participated in the SDP task of SemEval 2014 \cite{oepen2014semeval},
-and the semantic variant of TurboParser \cite{almeida-martins:2015:SemEval},
-a second-order graph-based parser that uses dual decomposition for optimization,
-which obtained some of the best results in the SDP task of SemEval 2015 \cite{oepen2015semeval}. Default settings are used in all cases.
-We note that DAGParser uses beam search by default, with a beam size of 5.
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Results}\label{sec:results}
-
 \begin{table*}[ht]
 \begin{tabular}{l|ccc|ccc||ccc|ccc}
 & \multicolumn{6}{c||}{Wiki (in-domain)} & \multicolumn{6}{c}{20K Leagues (out-of-domain)} \\
@@ -633,20 +621,36 @@ Upper Bound % on the test set and ood set only
   Columns correspond to labeled precision, recall and F-score for the different parsers,
   for both primary and remote edges.
   Top: results for DAGParser and TurboParser, after conversion to bilexical graphs.
-  Bottom: results for our \parser{}, trained on the original UCCA graphs.
+  Bottom: results for our \parser{}, trained on the original UCCA graphs, using each of the
+  three classifiers.
+  \parser{NN} obtains the highest scores in all metrics, surpassing the bilexical parsers
+  and the other classifiers.
 }
 \end{table*}
 
-\tabref{table:results} presents our main experimental results, as well as
-upper bounds for the approximation-based method.
+We evaluate two parsers in the bilexical approximation setting:
+DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, the leading transition-based parser which participated in the SDP task of SemEval 2014 \cite{oepen2014semeval},
+and the semantic variant of TurboParser \cite{almeida-martins:2015:SemEval},
+a second-order graph-based parser that uses dual decomposition for optimization,
+which obtained some of the best results in the SDP task of SemEval 2015 \cite{oepen2015semeval}. Default settings are used in all cases.
+We note that DAGParser uses beam search by default, with a beam size of 5.
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results}\label{sec:results}
+
+\tabref{table:results} presents our main experimental results, as well as
+upper bounds for the approximation-based method,
+reflecting the error resulting from converting the test set into bilexical graphs and then
+back into UCCA---the conversion procedure loses some of the information about non-terminal nodes.
 Despite the lossy conversion, the bilexical graph parsers obtain comparable results to
 \parser{sparse}
 on primary edges. However, on remote edges their results are much lower
 (DAGParser does not predict even one remote edge on the out-of-domain set).
 
 The sparse perceptron-based \parser{sparse} achieves comparable results to DAGParser on primary edges, but on remote edges it is much more accurate, surpassing TurboParser by 10\% F-score.
-The dense perceptron-based \parser{dense}, using pre-trained word vectors, is less accurate on
+The dense perceptron-based \parser{dense}, using pre-trained word vectors, is less accurate
 than its sparse counterpart (although its recall on remote edges is better in the in-domain
 test set). This can be attributed to the fact that the perceptron algorithm is better suited to
 sparse feature representation.
@@ -817,7 +821,6 @@ strings and semantic structures.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}\label{sec:conclusion}
-
 We present the first parser for UCCA.
 Comparing the parser to a conversion-based parsing approach, we obtain
 superior results.
