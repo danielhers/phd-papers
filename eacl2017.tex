@@ -29,7 +29,7 @@
 \newcommand{\oa}[1]{\footnote{\color{red} #1}}
 \newcommand{\daniel}[1]{\footnote{\color{blue} #1}}
 \newcommand{\com}[1]{}
-\newcommand{\parser}[0]{TUPA}
+\newcommand{\parser}[1]{TUPA\textsubscript{#1}}
 \newcommand{\secref}[1]{Section~\ref{#1}}
 \newcommand{\figref}[1]{Figure~\ref{#1}}
 \newcommand{\tabref}[1]{Table~\ref{#1}}
@@ -189,7 +189,7 @@ that the parent represents. \figref{fig:examples} presents a few UCCA-annotated 
   }
 \end{figure}
 
-Alongside recent progress in dependency parsing into projective trees 
+Alongside recent progress in dependency parsing into projective trees
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
 there is increasing interest in broad-coverage parsing
 (see \secref{sec:related_work}),
@@ -207,7 +207,7 @@ Discontinuities are pervasive, e.g.,  with multi-word
 expressions \cite{schneider2014discriminative}.
 
 Finally, UCCA uses \textbf{non-terminal nodes}
-to UCCA represent units comprising more than one word.
+to represent units comprising more than one word.
 The use of non-terminal nodes is motivated by constructions that have no clear head, including
 coordination structures (e.g., ``\textit{John and Mary} went home''; \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
@@ -236,7 +236,7 @@ in-domain and out-of-domain settings (\secref{sec:exp_setup}).
 As a point of comparison, we assess the ability of existing bilexical DAG
 parsers to tackle the task, by developing a conversion protocol
 between UCCA and bilexical graphs.
-Results show superior results for \parser{}, demonstrating the effectiveness of
+Results show superior accuracy for \parser{}, demonstrating the effectiveness of
 the approach for UCCA parsing (\secref{sec:results}),
 and suggest concrete paths for further improvement (\secref{sec:discussion})
 All converters and parsers will be made publicly available upon publication.
@@ -367,25 +367,27 @@ named transition in previous work \cite{nivre2009non,maier2015discontinuous}.
 Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 
 \paragraph{Classifier.}
-We experiment with three classifiers.
+We experiment with three classifiers\footnote{A link to the code repository will
+be released upon publication.}.
 First, following \newcite{maier2015discontinuous} and \newcite{maier-lichte:2016:DiscoNLP},
 we use a linear classifier, using sparse features and
 the averaged structured perceptron algorithm for training it
 \cite{Coll:04} with the \textsc{MinUpdate} procedure \cite{goldberg2011learning}:
 a minimum number of updates to a feature has to occur in training for it
 to be included in the model.
-We refer to the parser using this classifier simply as \parser{}.
+We refer to the parser using this classifier as \parser{sparse}.
 Second, we experiment with a linear classifier using dense embedding features (see below),
 which we also train using averaged structured perceptron.
-We refer to this parser as \parser{}(dense).
+We refer to this parser as \parser{dense}.
 Third, we use a feedforward neural network, similar in architecture to that of \newcite{chen2014fast}, with the following modifications: two hidden layers instead of one, using the sigmoid activation function instead of cube,
 and applying dropout after each layer \cite{srivastava2014dropout}.
-We refer to the neural network-based parser as \parser{}(NN).\footnote{A link to the code repository will be released upon publication.}
+We refer to the neural network-based parser as \parser{NN}.
 
 For all classifiers, inference is performed greedily, i.e., without beam search.
 
 \paragraph{Features.}
-For the sparse perceptron-based parser (\parser{}), we use binary indicator features representing
+For the sparse perceptron-based parser (\parser{sparse}),
+we use binary indicator features representing
 the word, POS tags and existing edge labels related to the top four stack elements and the next
 three buffer elements, in addition to their children and grandchildren in the graph.
 We also use bi- and trigram features based on these values \cite{zhang2009transition,zhu2013fast},
@@ -394,7 +396,7 @@ and features representing existing edges and the number of parents and children 
 In addition, we use novel, UCCA-specific features related to remote edges\footnote{See
 supplementary material for a full listing of the feature templates.}.
 
-For the dense perceptron-based (\parser{}(dense)) and the neural network-based parser (\parser{}(NN)),
+For the dense perceptron-based (\parser{dense}) and the neural network-based parser (\parser{NN}),
 we replace all binary features by a
 concatenation of the vector embeddings of all the represented elements:
 words, POS tags, edge labels and parser actions.
@@ -427,7 +429,9 @@ and $\textsc{Importance}=2$, doubling weight updates
 for gold \textsc{Swap} transitions to address the sparsity of discontinuous nodes,
 as in \newcite{maier2015discontinuous}.
 POS tags are extracted using the averaged perceptron tagger of NLTK \cite{bird2009natural}.
-Word embeddings for the dense perceptron are initialized with the 100-dimensional pre-trained word2vec vectors \cite{mikolov2013efficient}.\oa{link?}
+Word embeddings for the dense perceptron are initialized with the 100-dimensional pre-trained word2vec vectors \cite{mikolov2013efficient},
+the same ones used by \newcite{dyer2015transition}\footnote{
+\url{https://github.com/clab/lstm-parser}}.
 
 For the neural network classifier, the word embeddings are initialized to random
 100-dimensional vectors (which were found to give better results than the pre-trained vectors). We use 1000-dimensional hidden layers.
@@ -612,13 +616,13 @@ Upper Bound % on the test set and ood set only
 & 93.5 & 83.5 & 88.2 & 66.7 & 31.6 & 42.9 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
-\parser{}
+\parser{sparse}
 & 64 & 55.6 & 59.5 & 16 & 11.6 & 13.4 
 & 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
-\parser{}(dense) 
+\parser{dense} 
 & 55 & 54.8 & 54.9 & 15.2 & 16.9 & 16 
 & 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
-\parser{}(NN) 
+\parser{NN}
 &  &  &  &  &  &  
 &  &  &  &  &  & 
 \end{tabular}
@@ -636,17 +640,18 @@ Upper Bound % on the test set and ood set only
 \tabref{table:results} presents our main experimental results, as well as
 upper bounds for the approximation-based method.
 
-Despite the lossy conversion, the bilexical graph parsers obtain comparable results to the \parser{} on primary edges. However, on remote edges their results are much lower (DAGParser does not predict even one remote edge on the out-of-domain set). 
+Despite the lossy conversion, the bilexical graph parsers obtain comparable results to
+\parser{sparse}
+on primary edges. However, on remote edges their results are much lower
+(DAGParser does not predict even one remote edge on the out-of-domain set).
 
-%, where DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval} does better on primary edges, and TurboParser \cite{almeida-martins:2015:SemEval} does slightly better on remote edges .
-
-The sparse perceptron-based \parser{} achieves comparable results to DAGParser on primary edges, but on remote edges it is much more accurate, surpassing TurboParser by 10\% F-score.
-The dense perceptron-based \parser{}(dense), using pre-trained word vectors, is less accurate on
+The sparse perceptron-based \parser{sparse} achieves comparable results to DAGParser on primary edges, but on remote edges it is much more accurate, surpassing TurboParser by 10\% F-score.
+The dense perceptron-based \parser{dense}, using pre-trained word vectors, is less accurate on
 than its sparse counterpart (although its recall on remote edges is better in the in-domain
 test set). This can be attributed to the fact that the perceptron algorithm is better suited to
 sparse feature representation.
 
-Finally, the neural network-based \parser{}(NN) gets the highest scores in all measures, on both
+Finally, the neural network-based \parser{NN} gets the highest scores in all measures, on both
 the in-domain and the out-of-domain test sets.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -690,9 +695,9 @@ LSTM Parser & {\bf 74.9} & {\bf 66.4} & {\bf 70.2} \\
 Upper Bound & 93.7 & 83.6 & 88.4 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Tree Parsing} \\
-\parser{} $-$ \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
-\parser{}(dense) $-$ \textsc{Remote} & 57.2 & 57.3 & 57.2 \\
-\parser{}(NN) $-$ \textsc{Remote} &  \\
+\parser{sparse} $-$ \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
+\parser{dense} $-$ \textsc{Remote} & 57.2 & 57.3 & 57.2 \\
+\parser{NN} $-$ \textsc{Remote} &  \\
 \end{tabular}
 \caption{\label{fig:tree_approx_results}
   Results of tree approximation experiment, in percents (on the \textit{Wiki} test set).
@@ -818,9 +823,10 @@ We present the first parser for UCCA.
 Comparing the parser to a conversion-based parsing approach, we obtain
 superior results.
 While much recent work focused on semantic parsing of different types,
-the effectiveness
-of different parsing approaches for schemes with
-different structural and semantic properties is not well-understood\oa{cite the oepen and kuhlmann?}. The paper makes a contribution to this literature first by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, and through detailed experiments with different architectures for the local classifier, and comparison both to bilexical approximations and to tree approximations.
+the effectiveness of different parsing approaches for schemes with
+different structural and semantic properties is not well-understood 
+\cite{kuhlmann2016towards}.
+The paper makes a contribution to this literature first by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, and through detailed experiments with different architectures for the local classifier, and comparison both to bilexical approximations and to tree approximations.
 
 Future work will delve deeper in the exploration of
 conversion-based parsing approaches, including different target
