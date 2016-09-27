@@ -536,7 +536,7 @@ Punctuation is excluded from the evaluation, but not from the datasets.
 
 \paragraph{Comparison to dependency DAG parsers.}
 Since no existing DAG parsers support non-terminal nodes,
-to assess the ability of existing parsers to address the task.
+to assess the ability of existing parsers to address the task,
 we first convert UCCA into bilexical dependencies.
 This is similar to the \textit{tree approximation} approach used for dependency DAG parsing
 \cite{agic2015semantic,fernandez2015parsing},
@@ -592,9 +592,7 @@ The error resulting from this conversion is discussed in
 For comparability, we chose to keep the same set of edge labels in the conversion,
 even though a lower approximation error may have been possible with a larger label set.
 
-
-
-We evaluate two parsers in the bilexical approximation setting (see \secref{sec:conversion}):
+We evaluate two parsers in the bilexical approximation setting:
 DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, a transition-based parser
 which participated in the SDP task of SemEval 2014 \cite{oepen2014semeval},
 and the semantic variant of TurboParser \cite{almeida-martins:2015:SemEval},
