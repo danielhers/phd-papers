@@ -821,14 +821,14 @@ strings and semantic structures.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}\label{sec:conclusion}
-We present the first parser for UCCA.
-Comparing the parser to a conversion-based parsing approach, we obtain
-superior results.
+We present \parser{}, the first parser for UCCA.
+Evaluated in both in-domain and out-of-domain settings, we show that coupled with a
+NN classifier, \parser{NN} surpasses bilexical graph parsers on the task of UCCA parsing.
 While much recent work focused on semantic parsing of different types,
 the effectiveness of different parsing approaches for schemes with
 different structural and semantic properties is not well-understood 
 \cite{kuhlmann2016towards}.
-The paper makes a contribution to this literature first by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, and through detailed experiments with different architectures for the local classifier, and comparison both to bilexical approximations and to tree approximations.
+This paper makes a contribution to this literature first by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, and through detailed experiments with different architectures for the local classifier, and comparison both to bilexical approximations and to tree approximations.
 
 Future work will delve deeper in the exploration of
 conversion-based parsing approaches, including different target
