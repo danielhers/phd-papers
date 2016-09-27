@@ -29,6 +29,7 @@
 \newcommand{\oa}[1]{\footnote{\color{red} #1}}
 \newcommand{\daniel}[1]{\footnote{\color{blue} #1}}
 \newcommand{\com}[1]{}
+\newcommand{\parser}[0]{UCCP}
 \newcommand{\secref}[1]{Section~\ref{#1}}
 \newcommand{\figref}[1]{Figure~\ref{#1}}
 \newcommand{\tabref}[1]{Table~\ref{#1}}
@@ -88,21 +89,16 @@ Universal Conceptual Cognitive Annotation, (UCCA, \newcite{abend2013universal}),
 is a cross-linguistically applicable semantic representation scheme,
 building on the established Basic Linguistic Theory typological framework
 \cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive
-Linguistics literature \cite{Croft:04}.
+Linguistics literature \cite{croft2004cognitive}.
 UCCA has demonstrated applicability to multiple languages, including
 English, French, German and Czech, support for rapid annotation,
 and semantic stability in translation \cite{sulem2015conceptual}.
-The scheme has proven useful for human machine translation evaluation \cite{birch2016hume},
-but its applicability has so far been limited by the absence of a UCCA parser,
+The scheme has proven useful for machine translation evaluation \cite{birch2016hume},
+but its applicability has been so far limited by the absence of a UCCA parser,
 a gap this paper addresses.
 
-Formally, a UCCA representation is a DAG whose leaves correspond to the tokens of
-<<<<<<< HEAD
+Formally, a UCCA structure is a DAG whose leaves correspond to the tokens of
 the text. Nodes (or {\it units}) either correspond to a terminal or
-=======
-the text.
-Nodes (or {\it units}) either correspond to a terminal or
->>>>>>> 9a5dc480b0f38dc849553de4ec7776d1a6928654
 to several sub-units (not necessarily contiguous) jointly viewed as a
 single entity according to some semantic or cognitive consideration.
 Edges bear a category, indicating the role of the sub-unit in the relation
@@ -193,13 +189,10 @@ that the parent represents. \figref{fig:examples} presents a few UCCA-annotated 
   }
 \end{figure}
 
-<<<<<<< HEAD
 Alongside recent progress in dependency parsing into projective trees 
-=======
-Alongside recent progress in dependency parsing into projective trees
->>>>>>> 9a5dc480b0f38dc849553de4ec7776d1a6928654
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
-there is increasing interest in broad-coverage parsing (see \secref{sec:related_work}),
+there is increasing interest in broad-coverage parsing
+(see \secref{sec:related_work}),
 directed at representations supporting more general structural properties.
 One such property is \textbf{reentrancy},
 referring to arguments and relations (semantic units) that are shared between predicates.
@@ -208,9 +201,8 @@ For instance, in the sentence
 ``John'' is an argument of both ``graduation''
 and ``moved'', yielding a UCCA structure that is a DAG rather than a tree.
 
-A second property is \textbf{discontinuity} (similar to \textit{non-projectivity} in bilexical schemes).
-E.g., in ``John \textit{gave} everything \textit{up}''
-(\figref{fig:gave}), the phrasal verb ``gave up'' forms a discontinuous semantic unit.
+A second property is \textbf{discontinuity} (similar to \textit{non-projectivity} in bilexical schemes), as in ``John \textit{gave} everything \textit{up}''
+(\figref{fig:gave}), where ``gave up'' forms a discontinuous semantic unit.
 Discontinuities are pervasive, e.g.,  with multi-word
 expressions \cite{schneider2014discriminative}.
 
@@ -222,15 +214,15 @@ some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases.
 
 No existing parser, to our knowledge, supports the three structural properties described above.
-We propose UCCP (Universal Conceptual Cognitive Parser), taking a transition-based approach.
-We build on existing knowledge in tackling these three properties
-in isolation, and define an extended set of transitions and features
+We propose the \parser{} parser, taking a transition-based approach.
+Building on existing knowledge in tackling these three properties
+in isolation, we define an extended set of transitions and features
 that supports reentrancy, discontinuities and non-terminal nodes.
 
 Transition-based techniques are a natural
 starting point for UCCA parsing, given the conceptual similarity of UCCA's distinctions,
 centered around predicate-argument structures, to distinctions expressed by dependency schemes.
-We are further motivated by the remarkable performance of transition-based methods
+We are further motivated by the strength of transition-based methods
 in similar tasks, including syntactic dependency parsing
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
 discontinuous syntactic constituency parsing \cite{maier-lichte:2016:DiscoNLP},
@@ -239,12 +231,12 @@ and CCG parsing \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1},
 as well as joint lexical and syntactic parsing
 \cite{constant-nivre:2016:P16-1}.
 
-We evaluate UCCP on the available English UCCA corpora, in both
+We evaluate \parser{} on the available English UCCA corpora, in both
 in-domain and out-of-domain settings (\secref{sec:exp_setup}).
 As a point of comparison, we assess the ability of existing bilexical DAG
 parsers to tackle the task, by developing a conversion protocol
-between UCCA and bilexical graphs (\secref{sec:conversion}).
-Results show superior results for UCCP, demonstrating the effectiveness of
+between UCCA and bilexical graphs.
+Results show superior results for \parser{}, demonstrating the effectiveness of
 the approach for UCCA parsing (\secref{sec:results}),
 and suggest concrete paths for further improvement (\secref{sec:discussion})
 All converters and parsers will be made publicly available upon publication.
@@ -273,16 +265,16 @@ The primary edges thus form a tree structure, whereas the remote edges enable re
 
 Further categories account for relations between Scenes and the internal structure of
 complex arguments and relations (e.g. coordination; complex
-adverbials such as ``very clearly'').\footnote{All UCCA-related resources can be found here:
-  \url{http://www.cs.huji.ac.il/~oabend/ucca.html}.}
+adverbials such as ``very clearly'').
+%\footnote{All UCCA-related resources can be found here:
+%  \url{http://www.cs.huji.ac.il/~oabend/ucca.html}.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Broad-Coverage UCCA Parsing}\label{sec:direct_approach}
 
-We now turn to presenting UCCP (Broad-coverage Semantic Parser),
+We now turn to presenting \parser{},
 a transition-based parser supporting the structural properties of UCCA.
-
 Transition-based parsers \cite{Nivre03anefficient} scan the text from start to end,
 and create the parse incrementally by applying a \textit{transition}
 at each step to the parser state,
@@ -303,15 +295,13 @@ Within syntactic dependency parsing, transition-based methods
 have been successfully applied to corpora in many languages and domains, yielding
 the best reported results for English
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple}.
-The approach has also yielded results comparable with the state-of-the-art in
+The approach has further yielded results comparable with the state-of-the-art in
 constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
 discontinuous constituency parsing \cite{maier2015discontinuous,maier-lichte:2016:DiscoNLP},
 as well as dependency DAG structures
-\cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition},
-CCG \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1,dipendra2016neural}
-and AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval}.
+\cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition}, CCG \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1,dipendra2016neural}\oa{is Misra and Artzi a CCG parser or a semantic parser that uses CCG?} and AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval}.
 
-UCCP mostly builds on recent advances in discontinuous constituency
+\parser{} mostly builds on recent advances in discontinuous constituency
 and dependency DAG parsing, and further introduces novel features for UCCA.
 
 \paragraph{Transition Set.}
@@ -348,7 +338,7 @@ $[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\
 \end{tabular}
 \end{adjustbox}
 \caption{\label{fig:transitions}
-  The transition set of UCCP. %Following standard practice,
+  The transition set of \parser{}. %Following standard practice,
   We write the stack with its top to the right and the buffer with its head to the left.
   $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
   $\mathrm{i}(x)$ is a running index for the created nodes.
@@ -377,42 +367,36 @@ named transition in previous work \cite{nivre2009non,maier2015discontinuous}.
 Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 
 \paragraph{Classifier.}
-We experiment with three classifiers:
-
+We experiment with three classifiers.
 First, following \newcite{maier2015discontinuous} and \newcite{maier-lichte:2016:DiscoNLP},
 we use a linear classifier, using sparse features and
 the averaged structured perceptron algorithm for training it
 \cite{Coll:04} with the \textsc{MinUpdate} procedure \cite{goldberg2011learning}:
 a minimum number of updates to a feature has to occur in training for it
 to be included in the model.
-We refer to the parser using this classifier simply as UCCP.
-
-Second, we also experiment with a linear classifier using dense embedding features (see below),
+We refer to the parser using this classifier simply as \parser{}.
+Second, we experiment with a linear classifier using dense embedding features (see below),
 which we also train using averaged structured perceptron.
-We refer to this parser as UCCP+embedding.
-
-Third, we use a feedforward neural network, similar to the one used by \newcite{chen2014fast},
-but with two hidden layers using the sigmoid activation function,
+We refer to this parser as \parser{}+embedding.
+Third, we use a feedforward neural network, similar in architecture to that of \newcite{chen2014fast}, but with two hidden layers using the sigmoid activation function,
 with dropout applied after each layer \cite{srivastava2014dropout}.
-We refer to the neural network-based parser as UCCP+NN\footnote{For full implementation
-details, refer to the code which will be released upon publication.}.
+We refer to the neural network-based parser as \parser{}+NN.\footnote{A link to the code repository will be released upon publication.}\oa{what are the differences from Chen and Manning? what implemention details are missing?}
 
-For all classifiers, inference is performed greedily (i.e., without beam search).
+For all classifiers, inference is performed greedily, i.e., without beam search.
 
 \paragraph{Features.}
-For the sparse perceptron-based parser (UCCP), we use binary indicator features representing
+For the sparse perceptron-based parser (\parser{}), we use binary indicator features representing
 the word, POS tags and existing edge labels related to the top four stack elements and the next
 three buffer elements, in addition to their children and grandchildren in the graph.
 We also use bi- and trigram features based on these values \cite{zhang2009transition,zhu2013fast},
-features related to discontinuous nodes \cite{maier2015discontinuous},
-and features representing existing edges and the number of parents and children a node has
-\cite{tokgoz2015transition}.
+features related to discontinuous nodes adopted from \cite{maier2015discontinuous},
+and features representing existing edges and the number of parents and children a node has, following \cite{tokgoz2015transition}.
 In addition, we use novel, UCCA-specific features related to remote edges\footnote{See
-Supplementary Material for a full listing of the feature templates.}.
+supplementary material for a full listing of the feature templates.}.
 
-For the dense perceptron-based (UCCP+embedding) and the neural network-based parser (UCCP+NN),
+For the dense perceptron-based (\parser{}+embedding) and the neural network-based parser (\parser{}+NN),
 we replace all binary features by a
-concatenation of vector representations for all corresponding elements:
+concatenation of the vector embeddings of all the represented elements:
 words, POS tags, edge labels and parser actions.
 
 Finally, for all classifiers we employ a real-valued feature,
@@ -443,21 +427,15 @@ and $\textsc{Importance}=2$, doubling weight updates
 for gold \textsc{Swap} transitions to address the sparsity of discontinuous nodes,
 as in \newcite{maier2015discontinuous}.
 POS tags are extracted using the averaged perceptron tagger of NLTK \cite{bird2009natural}.
-
-The word embeddings for the dense perceptron are initialized by 100-dimensional pre-trained
-word2vec vectors \cite{mikolov2013efficient}.
+Word embeddings for the dense perceptron are initialized with the 100-dimensional pre-trained word2vec vectors \cite{mikolov2013efficient}.\oa{link?}
 
 For the neural network classifier, the word embeddings are initialized to random
-100-dimensional vectors (which were found to give better results than pre-trained vectors).
-We use 1000-dimensional hidden layers.
-For both the dense perceptron and the neural network classifiers, we initialize the POS tag
-embeddings to random 20-dimensional vectors. The embeddings for existing edge labels are
-10-dimensional, and for parser actions are 5-dimensional.
-We use the categorical cross-entropy objective function and train the neural network
-classifier with the Adam optimizer \cite{kingma2014adam}. We use a dropout probability of 0.2,
+100-dimensional vectors (which were found to give better results than the pre-trained vectors). We use 1000-dimensional hidden layers.
+For both the dense perceptron and the neural network classifiers, we initialize the POS tag embeddings to random 20-dimensional vectors. The embeddings for existing edge labels are 10-dimensional, and for parser actions are 5-dimensional.
+We use the categorical cross-entropy objective function and train the
+neural network classifier with the Adam optimizer \cite{kingma2014adam}. We use a dropout probability of 0.2,
 and train the network for 50 epochs on a batch of 100 sentences at a time.
-We implemented all classifiers in Python,
-using Keras \cite{chollet2015keras} for the neural network.
+We use the Keras package \cite{chollet2015keras} for implementing the neural network classifier.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experimental Setup}\label{sec:exp_setup}
@@ -477,7 +455,7 @@ practice in semantic parsing and train our parsers on individual sentences,
 discarding inter-relations between them (0.18\% of the edges).
 We also discard linkage nodes and edges (as they often express inter-sentence
 relations and are thus mostly redundant when applied at the sentence level)
-as well as implicit nodes\footnote{See Supplementary Material for examples
+as well as implicit nodes\footnote{See supplementary material for examples
 of Linkage and Implicit nodes.}.
 In the out-of-domain experiments, we apply the same parsers
 (trained on the \textit{Wiki} corpus) to the \textit{20K Leagues} corpus
@@ -590,29 +568,25 @@ John \^ and \^ Mary \^ went \^ home \\
 
 We first convert UCCA into bilexical dependencies
 (see examples in \figref{fig:bilexical_example}), and train each parser on the resulting
-training set\footnote{See Supplementary Material for a detailed description of
+training set\footnote{See supplementary material for a detailed description of
 the conversion procedures.}.
 We evaluate the trained parsers by applying them to the test set
 and then reconstructing UCCA graphs, which are compared with the gold standard.
-The error resulting from this conversion is discussed in
-\secref{sec:results}.
-
-For comparability, we chose to keep the same set of edge labels in the conversion,
-even though a lower approximation error may have been possible with a larger label set.
-
-We evaluate two parsers in the bilexical approximation setting:
-DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, a transition-based parser
-which participated in the SDP task of SemEval 2014 \cite{oepen2014semeval},
-and the semantic variant of TurboParser \cite{almeida-martins:2015:SemEval},
-a second-order graph-based parser using
-dual decomposition for optimization, which achieved some of the best results
-in the SDP task of SemEval 2015 \cite{oepen2015semeval}.
-Default settings are used in all cases.
-We note that DAGParser uses beam search by default, with a beam size of 5.
-
 Upper bounds for the conversion-based method are computed by applying
 the conversion and inverse conversion on the gold standard
-graphs and comparing them to the original gold standard.
+graphs and comparing them to the original gold standard,
+and are reported in \secref{sec:results}.
+
+%For comparability, we choose to keep the same set of edge labels in the conversion, even though a lower approximation error may have been possible with a larger label set.
+
+We evaluate two parsers in the bilexical approximation setting:
+DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, the leading transition-based parser which participated in the SDP task of SemEval 2014 \cite{oepen2014semeval},
+and the semantic variant of TurboParser \cite{almeida-martins:2015:SemEval},
+a second-order graph-based parser that uses dual decomposition for optimization,
+which obtained some of the best results in the SDP task of SemEval 2015 \cite{oepen2015semeval}. Default settings are used in all cases.
+We note that DAGParser uses beam search by default, with a beam size of 5.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}\label{sec:results}
@@ -638,13 +612,13 @@ Upper Bound % on the test set and ood set only
 & 93.5 & 83.5 & 88.2 & 66.7 & 31.6 & 42.9 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
-UCCP
+\parser{}
 & 64 & 55.6 & 59.5 & 16 & 11.6 & 13.4 
 & 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
-UCCP+embedding 
+\parser{}+embedding 
 & 55 & 54.8 & 54.9 & 15.2 & 16.9 & 16 
 & 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
-UCCP+NN 
+\parser{}+NN 
 &  &  &  &  &  &  
 &  &  &  &  &  & 
 \end{tabular}
@@ -655,61 +629,51 @@ UCCP+NN
   Columns correspond to labeled precision, recall and F-score for the different parsers,
   for both primary and remote edges.
   Top: results for DAGParser and TurboParser, after conversion to bilexical graphs.
-  Bottom: results for our UCCP, trained on the original UCCA graphs.
+  Bottom: results for our \parser{}, trained on the original UCCA graphs.
 }
 \end{table*}
 
 \tabref{table:results} presents our main experimental results, as well as
 upper bounds for the approximation-based method.
-Despite the limiting upper bound, the bilexical graph parsers obtain reasonable scores on
-primary edges. However, on remote edges their results are much worse, where
-DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval} does better on primary edges,
-and TurboParser \cite{almeida-martins:2015:SemEval} does slightly better on remote edges
-(DAGParser does not predict even one remote edge on the out-of-domain set).
 
-The sparse perceptron-based UCCP achieves comparable results to DAGParser on primary edges, but
-on remote edges it is much more accurate, surpassing TurboParser by 10\% F-score.
-The dense perceptron-based UCCP+embedding, using pre-trained word vectors, is less accurate on
+Despite the lossy conversion, the bilexical graph parsers obtain comparable results to the \parser{} on primary edges. However, on remote edges their results are much lower (DAGParser does not predict even one remote edge on the out-of-domain set). 
+
+%, where DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval} does better on primary edges, and TurboParser \cite{almeida-martins:2015:SemEval} does slightly better on remote edges .
+
+The sparse perceptron-based \parser{} achieves comparable results to DAGParser on primary edges, but on remote edges it is much more accurate, surpassing TurboParser by 10\% F-score.
+The dense perceptron-based \parser{}+embedding, using pre-trained word vectors, is less accurate on
 than its sparse counterpart (although its recall on remote edges is better in the in-domain
 test set). This can be attributed to the fact that the perceptron algorithm is better suited to
 sparse feature representation.
 
-Finally, the neural network-based UCCP+NN gets the highest scores in all measures, on both
+Finally, the neural network-based \parser{}+NN gets the highest scores in all measures, on both
 the in-domain and the out-of-domain test sets.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion}\label{sec:discussion}
+
 \paragraph{Feature Ablation.}
-To evaluate the relative impact of the different feature sets on UCCP,
-we remove a set of features at a time,
-and evaluate the resulting sparse perceptron-based parser on the development set.\footnote{See
-Supplementary Material for detailed results.}
-Almost all feature sets have a positive contribution to the primary edge F-score, 
-or otherwise to the prediction of remote edges.
+To evaluate the relative impact of the different feature sets on \parser{},
+we remove a set of features at a time, and evaluate the
+resulting sparse perceptron-based parser on the development set.\footnote{See
+supplementary material for moredetailed results.}
+Almost all feature sets have a positive contribution to the primary
+edge F-score, or otherwise to the prediction of remote edges.
 \textbf{unigrams} and \textbf{bigrams} features are especially
 important (they contribute 1.1\% to 4.5\% to the F-score),
 and the \textbf{ratio} feature greatly improves recall on
 primary edges (by 7.4\%, leading to  a 3.9\% F-score improvement).
 \textbf{disco} features have a positive contribution
 (0.7\% primary, 1.2\% remote F-scores),
-likely to be amplified in languages with a higher percentage of discontinuous units, e.g. German.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discussion}\label{sec:discussion}
-
-Remote edges in UCCA represent implied or syntactically unrepresented relations between entities
-and scenes.
-Despite their scarcity (see \tabref{table:data}), these relations are important for many semantic
-tasks.
-Whereas the bilexical approximation-based parsers can correctly identify a small part of these
-edges, the direct approach does so much more accurately.
+likely to be amplified in languages with a higher percentage of
+discontinuous units, e.g. German.
 
 \paragraph{Tree approximation.}
-For completeness, we also evaluate tree-oriented parsers on the task of reconstructing
-only the primary edges in UCCA graphs.
-We use a settings similar to the tree approximation experiments mentioned in \secref{sec:conversion}.
-However, this results in a different task for the underlying parser, whose results are not directly
-comparable:
-without remote edges, the task becomes easier, and
-as tree parsing is a well-researched task, parsers designed for it are clearly more accurate on it.
+For completeness, we further explore a conversion-based approach that
+lossily converts UCCA structures into trees. 
+This approach resembles the bilexical approximation approach described in \secref{sec:exp_setup}, but here it results in a simplified task for the underlying parser: parsing into tree structures.
+
+Performance on remote edges is of pivotal importance in this investigation, which focuses on extending the class of graphs statistical parsers may produce in order to support the full range of UCCA structures. Nevertheless, we believe that exploring tree approximation methods, thus building on the maturity and cummulative experience with transition-based tree parsing, can inform the future development of DAG parsers in general and of UCCA parsers in particular.
 
 We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
 and one into bilexical dependency trees. In the first setting we experiment with \textsc{uparse}
@@ -720,13 +684,12 @@ In the second setting we use MaltParser \cite{nivre2007maltparser} with the
 arc-eager transition set and the SVM classifier\footnote{Preliminary
 experiments with arc-standard and non-projective variants of MaltParser yielded slightly
 lower scores, and were thus discarded from the final evaluation.
-We also experimented with a linear classifier, and also got slightly lower scores.},
+Experiments with a linear classifier also obtained slightly lower scores.},
 and the stack LSTM-based arc-standard parser of \newcite{dyer2015transition}.
 Default settings are used in all cases.
-We note that \textsc{uparse} uses beam search by default,
+\textsc{uparse} uses beam search by default,
 with a beam size of 4, and the other parsers are greedy.
-We also train the UCCP variants without remote edge transitions, yielding a tree parser.
-\tabref{fig:tree_approx_results} shows the results.
+We also train the \parser{} variants without remote edge transitions, yielding a tree parser.
 
 \begin{table}[ht]
 \centering
@@ -743,9 +706,9 @@ LSTM Parser & {\bf 74.9} & {\bf 66.4} & {\bf 70.2} \\
 Upper Bound & 93.7 & 83.6 & 88.4 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Tree Parsing} \\
-UCCP $-$ \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
-UCCP+embedding $-$ \textsc{Remote} & 57.2 & 57.3 & 57.2 \\
-UCCP+NN $-$ \textsc{Remote} &  \\
+\parser{} $-$ \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
+\parser{}+embedding $-$ \textsc{Remote} & 57.2 & 57.3 & 57.2 \\
+\parser{}+NN $-$ \textsc{Remote} &  \\
 \end{tabular}
 \caption{\label{fig:tree_approx_results}
   Results of tree approximation experiment, in percents (on the \textit{Wiki} test set).
@@ -755,25 +718,29 @@ UCCP+NN $-$ \textsc{Remote} &  \\
   Top: results for \textsc{uparse}
   after conversion to constituency tree annotation. Upper middle: results for the
   MaltParser and the LSTM parser, after conversion to dependency tree annotation.
-  Bottom: results for our UCCP, trained on
+  Bottom: results for our \parser{}, trained on
   UCCA trees, obtained by removing remote edges ($-$ \textsc{Remote}).
 }
 \end{table}
 
+\tabref{fig:tree_approx_results} presents the results.
 The conversion to constituency format only removes remote edges,
 and thus obtains a perfect primary edge score.
 The conversion to dependency format loses considerably more information, since
-all non-terminal nodes have to be reconstructed by a
-simple rule-based inverse conversion. Both conversions yield zero scores on remote edges,
+all non-terminal nodes have to be reconstructed by a simple rule-based inverse
+conversion. Both conversions yield zero scores on remote edges,
 since these are invariably removed when converting to trees.
 
 The LSTM parser obtains the highest primary F-score,
-with a considerable margin. Importantly, it obtains 9.2\% F-score higher than the MaltParser,
-despite being limited by the same approximation error upper bound, and using a similar
-transition set.
-This shows that the LSTM classifier has a significant contribution to the accuracy of
-the parser, suggesting concrete paths for further improvements to UCCP:
-a recurrent neural network may be used instead of the feedforward one.
+with a considerable margin. Importantly, it obtains 9.2\% F-score
+higher than the MaltParser,
+despite being limited by the same approximation error upper bound,
+and using a similar transition set.
+This shows that the LSTM classifier has a significant contribution
+to the accuracy of
+the parser, suggesting that a recurrent neural network (RNN) model
+may also improve \parser{}.
+%a recurrent neural network may be used instead of the feedforward one.
 This is in line with the recent success of recurrent neural networks
 (specifically, LSTMs and GRUs) in NLP tasks, including DAG-structured LSTM
 \cite{zhu-sobhani-guo:2016:N16-1}.
@@ -845,26 +812,26 @@ strings and semantic structures.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}\label{sec:conclusion}
 
-We provide the first parser for UCCA,
-which is also the first grammarless parser that supports multiple parents, non-terminal
-nodes and discontinuous units.
-We compare the parser to a conversion-based parsing approach, demonstrating its advantage.
-The quality of the results is underscored by UCCA's inter-annotator
-agreement of 
-80--85\% F-score on primary edges \cite{abend2013universal}.
-
+We present the first parser for UCCA.
+Comparing the parser to a conversion-based parsing approach, we obtain
+superior results.
 While much recent work focused on semantic parsing of different types,
-the relations between the different representations have not been clarified.
-In addition to evaluating different neural network architectures for UCCP,
-we intend to further explore conversion-based parsing approaches,
-including different target representations and more sophisticated conversion procedures \cite{kong-15},
-to shed light on the commonalities and differences between representations, suggesting ways to
-design better semantic representations.
-A parser for UCCA will enable using the framework for new tasks, in addition to existing
-applications for evaluation of machine translation \cite{sulem2015conceptual,birch2016hume}.
-We believe that UCCA's merits in providing a cross-linguistically applicable, broad-coverage
-annotation will support ongoing efforts to incorporate deeper semantic structures
-into a variety of applications, such as machine translation \cite{jones2012semantics}
+the effectiveness
+of different parsing approaches for schemes with
+different structural and semantic properties is not well-understood\oa{cite the oepen and kuhlmann?}. The paper makes a contribution to this literature first by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, and through detailed experiments with different architectures for the local classifier, and comparison both to bilexical approximations and to tree approximations.
+
+Future work will delve deeper in the exploration of
+conversion-based parsing approaches, including different target
+representations and more sophisticated conversion procedures \cite{kong-15},
+in order to shed light on the commonalities and differences between
+representations, suggesting ways for a data-driven design of semantic structures.
+A parser for UCCA will enable using the framework for new tasks,
+in addition to existing applications for evaluation of
+machine translation \cite{birch2016hume}.
+We believe that UCCA's merits in providing a cross-linguistically applicable,
+broad-coverage annotation will support ongoing efforts to incorporate deeper
+semantic structures into a variety of applications,
+such as machine translation \cite{jones2012semantics}
 and summarization \cite{liu2015toward}.
 
 
