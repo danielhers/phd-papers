@@ -299,7 +299,9 @@ The approach has further yielded results comparable with the state-of-the-art in
 constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
 discontinuous constituency parsing \cite{maier2015discontinuous,maier-lichte:2016:DiscoNLP},
 as well as dependency DAG structures
-\cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition}, CCG \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1,dipendra2016neural}\oa{is Misra and Artzi a CCG parser or a semantic parser that uses CCG?} and AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval}.
+\cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition},
+CCG \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1}
+and AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval,dipendra2016neural}.
 
 \parser{} mostly builds on recent advances in discontinuous constituency
 and dependency DAG parsing, and further introduces novel features for UCCA.
@@ -460,7 +462,7 @@ discarding inter-relations between them (0.18\% of the edges).
 We also discard linkage nodes and edges (as they often express inter-sentence
 relations and are thus mostly redundant when applied at the sentence level)
 as well as implicit nodes\footnote{See supplementary material for examples
-of Linkage and Implicit nodes.}.
+of Linkage and Implicit nodes, as well as their frequency in the corpora.}.
 In the out-of-domain experiments, we apply the same parsers
 (trained on the \textit{Wiki} corpus) to the \textit{20K Leagues} corpus
 without parameter re-tuning.
@@ -475,22 +477,22 @@ without parameter re-tuning.
 \# passages & 300 & 34 & 34 & 154 \\
 \# sentences & 4267 & 453 & 518 & 506 \\
 \hline
-\# nodes & 302,398 & 33,623 & 37,706 & 29,932 \\
-\% terminal & 42.42 & 43.15 & 42.38 & 41.22 \\
-\% non-term. & 57.58 & 56.85 & 57.62 & 58.78 \\
-\% discont. & 0.53 & 0.50 & 0.46 & 0.80 \\
-\% reentrant & 2.28 & 1.74 & 2.16 & 1.98 \\
+\# nodes & 298,665 & 33,263 & 37,262 & 29,315 \\
+\% terminal & 42.95 & 43.62 & 42.89 & 42.09 \\
+\% non-term. & 58.30 & 57.46 & 58.31 & 60.01 \\
+\% discont. & 0.53 & 0.51 & 0.47 & 0.81 \\
+\% reentrant & 2.31 & 1.76 & 2.18 & 2.03 \\
 \hline
-\# edges & 296,234 & 32,752 & 36,951 & 28,706 \\
-\% primary & 95.35 & 96.58 & 95.80 & 94.48 \\
-\% remote & 1.66 & 1.17 & 1.21 & 2.19 \\
+\# edges & 287,381 & 32,015 & 35,846 & 27,749 \\
+\% primary & 98.29 & 98.81 & 98.75 & 97.73 \\
+\% remote & 1.71 & 1.19 & 1.25 & 2.27 \\
 \hline
 \multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
-\# children & 1.64 & 1.66 & 1.63 & 1.57 
+\# children & 1.67 & 1.68 & 1.66 & 1.61 
 \end{tabular}
 }
 \caption{Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.
-All counts exclude the root node.
+All counts exclude the root node, implicit nodes, and linkage nodes and edges.
 }
 \label{table:data}
 \end{table}
@@ -596,7 +598,6 @@ We note that DAGParser uses beam search by default, with a beam size of 5.
 \section{Results}\label{sec:results}
 
 \begin{table*}[ht]
-\begin{adjustbox}{width=\textwidth}
 \begin{tabular}{l|ccc|ccc||ccc|ccc}
 & \multicolumn{6}{c||}{Wiki (in-domain)} & \multicolumn{6}{c}{20K Leagues (out-of-domain)} \\
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c||}{Remote}
@@ -623,10 +624,9 @@ Upper Bound % on the test set and ood set only
 & 55 & 54.8 & 54.9 & 15.2 & 16.9 & 16 
 & 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
 \parser{NN}
-&  &  &  &  &  &  
-&  &  &  &  &  & 
+& {\bf } & {\bf } & {\bf } & {\bf } & {\bf } & {\bf } 
+& {\bf } & {\bf } & {\bf } & {\bf } & {\bf } & {\bf }
 \end{tabular}
-\end{adjustbox}
 \caption{\label{table:results}
   Main experimental results in percents, on the \textit{Wiki} test set (left, in-domain)
   and the \textit{20K Leagues} set (right, out-of-domain).
