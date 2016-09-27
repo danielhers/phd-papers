@@ -539,6 +539,7 @@ We train the perceptron classifiers for 16 iterations, using $\textsc{MinUpdate}
 and $\textsc{Importance}=2$, doubling weight updates
 for gold \textsc{Swap} transitions to address the nodes
 of discontinuous structures, as in \newcite{maier2015discontinuous}.
+POS tags were extracted using the averaged perceptron tagger of NLTK \cite{bird2009natural}.
 
 The word embeddings for the dense perceptron are initialized by 100-dimensional pre-trained
 word2vec vectors \cite{mikolov2013efficient}.
@@ -552,6 +553,8 @@ embeddings to random 20-dimensional vectors, and the embeddings for existing edg
 We use the categorical cross-entropy objective function and train the neural network
 classifier with the Adam optimizer \cite{kingma2014adam}. We use a dropout probability of 0.2,
 and train the network for 50 epochs on a batch of 10 sentences at a time.
+We implemented all classifiers in Python,
+using Keras \cite{chollet2015keras} for the neural network.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experimental Setup}\label{sec:exp_setup}
