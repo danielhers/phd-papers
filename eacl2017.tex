@@ -234,7 +234,7 @@ given their recently proven fitness for similar tasks, including syntactic depen
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
 discontinuous syntactic constituency parsing \cite{maier-lichte:2016:DiscoNLP},
 AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval}
-and CCG parsing \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1},
+and CCG parsing \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1,dipendra2016neural},
 as well as joint lexical and syntactic parsing
 \cite{constant-nivre:2016:P16-1}.
 
@@ -382,8 +382,8 @@ even though a lower approximation error may have been possible with a larger lab
 We now turn to presenting BSP (Broad-coverage Semantic Parser),
 a transition-based parser supporting the structural properties of UCCA.
 
-Transition-based parsing \cite{Nivre03anefficient} scans the text from left to right,
-and creates the parse incrementally by applying a \textit{transition}
+Transition-based parsers \cite{Nivre03anefficient} scan the text from start to end,
+and create the parse incrementally by applying a \textit{transition}
 at each step to the parser state,
 defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
 a stack $S$ of nodes currently being processed,
@@ -407,7 +407,7 @@ constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
 discontinuous constituency parsing \cite{maier2015discontinuous,maier-lichte:2016:DiscoNLP},
 as well as dependency DAG structures
 \cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition},
-CCG \cite{ambati2015incremental}
+CCG \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1,dipendra2016neural}
 and AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval}.
 
 BSP mostly builds on recent advances in discontinuous constituency
@@ -415,7 +415,7 @@ and dependency DAG parsing, and further introduces novel features for UCCA.
 
 \paragraph{Transition Set.}
 Given a sequence of tokens $w_1, \ldots, w_n$, we predict a UCCA graph $G$ over the sequence.
-Parsing starts with a single node on the stack (the root node), and the input tokens
+Parsing starts with a single node on the stack (an artificial root node), and the input tokens
 in the buffer. The set of transitions is given in \figref{fig:transitions}.
 In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
 we follow previous work in transition-based constituency parsing \cite{sagae2005classifier},
@@ -461,8 +461,9 @@ As a UCCA node may only have one incoming primary edge,
 \textsc{Edge} transitions are disallowed if the child node already
 has an incoming primary edge.
 \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do not have this restriction,
-and the created edge is marked as \textit{remote}.
-We distinguish between these two pairs of transitions to allow the parser to create remote edges.
+and the created edge is additionally marked as \textit{remote}.
+We distinguish between these two pairs of transitions to allow the parser to create remote edges
+without the possibility of producing invalid graphs.
 To support the prediction of multiple parents, node and edge transitions
 leave the stack unchanged, as in other work on
 transition-based DAG dependency parsing
@@ -480,7 +481,7 @@ We experiment with three classifiers:
 First, following \newcite{maier2015discontinuous}, we use a linear classifier, using
 sparse features and
 the averaged structured perceptron algorithm for training it
-\cite{Coll:04} with the \textsc{MinUpdate} \cite{goldberg2011learning} procedure:
+\cite{Coll:04} with the \textsc{MinUpdate} procedure \cite{goldberg2011learning}:
 a minimum number of updates to a feature has to occur in training for it
 to be included in the model.
 We refer to the parser using this classifier simply as BSP.
