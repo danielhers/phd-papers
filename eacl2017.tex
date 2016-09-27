@@ -328,8 +328,8 @@ where dependency DAGs were converted into dependency trees
 and then parsed by existing dependency tree parsers.
 
 \begin{figure}
-  \scalebox{.9}{
 \centering
+\scalebox{.9}{
 \begin{dependency}[theme = simple]
 \begin{deptext}[column sep=.7em,ampersand replacement=\^]
 After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
@@ -343,12 +343,29 @@ After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 \depedge{5}{7}{A}
 \end{dependency}
 }
-  \caption{Bilexical approximation for the sentence in \figref{fig:graduation}.}
-  \label{fig:bilexical_example}
+\begin{dependency}[theme = simple]
+\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+John \^ gave \^ everything \^ up \\
+\end{deptext}
+\depedge{1}{2}{A}
+\depedge{3}{2}{A}
+\depedge{4}{2}{C}
+\end{dependency}
+\begin{dependency}[theme = simple]
+\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+John \^ and \^ Mary \^ went \^ home \\
+\end{deptext}
+\depedge[edge start x offset=-6pt]{1}{4}{A}
+\depedge{2}{1}{N}
+\depedge{3}{1}{C}
+\depedge{5}{4}{A}
+\end{dependency}
+\caption{Bilexical approximation for sentences in \figref{fig:examples}.}
+\label{fig:bilexical_example}
 \end{figure}
 
 We first convert UCCA into bilexical dependencies
-(see example in \figref{fig:bilexical_example}), and train each parser on the resulting
+(see examples in \figref{fig:bilexical_example}), and train each parser on the resulting
 training set\footnote{See Supplementary Material for a detailed description of
 the conversion procedures.}.
 We evaluate the trained parsers by applying them to the test set
@@ -387,11 +404,11 @@ the best reported results for English
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple}.
 The approach has also yielded results comparable with the state-of-the-art in
 constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
-discontinuous constituency parsing \cite{maier-lichte:2016:DiscoNLP},
+discontinuous constituency parsing \cite{maier2015discontinuous,maier-lichte:2016:DiscoNLP},
 as well as dependency DAG structures
 \cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition},
 CCG \cite{ambati2015incremental}
-and AMR parsing \cite{wang-EtAl:2016:SemEval}.
+and AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval}.
 
 BSP mostly builds on recent advances in discontinuous constituency
 and dependency DAG parsing, and further introduces novel features for UCCA.
