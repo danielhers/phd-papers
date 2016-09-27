@@ -381,7 +381,7 @@ which we also train using averaged structured perceptron.
 We refer to this parser as \parser{dense}.
 Third, we use a feedforward neural network, similar in architecture to that of \newcite{chen2014fast}, with the following modifications: two hidden layers instead of one, using the sigmoid activation function instead of cube,
 and applying dropout after each layer \cite{srivastava2014dropout}.
-We refer to the neural network-based parser as \parser{NN}.
+We refer to the NN-based parser as \parser{NN}.
 
 For all classifiers, inference is performed greedily, i.e., without beam search.
 
@@ -396,7 +396,7 @@ and features representing existing edges and the number of parents and children 
 In addition, we use novel, UCCA-specific features related to remote edges\footnote{See
 supplementary material for a full listing of the feature templates.}.
 
-For the dense perceptron-based (\parser{dense}) and the neural network-based parser (\parser{NN}),
+For the dense perceptron-based (\parser{dense}) and the NN-based parser (\parser{NN}),
 we replace all binary features by a
 concatenation of the vector embeddings of all the represented elements:
 words, POS tags, edge labels and parser actions.
@@ -433,13 +433,13 @@ Word embeddings for the dense perceptron are initialized with the 100-dimensiona
 the same ones used by \newcite{dyer2015transition}\footnote{
 \url{https://github.com/clab/lstm-parser}}.
 
-For the neural network classifier, the word embeddings are initialized to random
+For the NN classifier, the word embeddings are initialized to random
 100-dimensional vectors (which were found to give better results than the pre-trained vectors). We use 1000-dimensional hidden layers.
-For both the dense perceptron and the neural network classifiers, we initialize the POS tag embeddings to random 20-dimensional vectors. The embeddings for existing edge labels are 10-dimensional, and for parser actions are 5-dimensional.
+For both the dense perceptron and the NN classifiers, we initialize the POS tag embeddings to random 20-dimensional vectors. The embeddings for existing edge labels are 10-dimensional, and for parser actions are 5-dimensional.
 We use the categorical cross-entropy objective function and train the
-neural network classifier with the Adam optimizer \cite{kingma2014adam}. We use a dropout probability of 0.2,
+NN classifier with the Adam optimizer \cite{kingma2014adam}. We use a dropout probability of 0.2,
 and train the network for 50 epochs on a batch of 100 sentences at a time.
-We use the Keras package \cite{chollet2015keras} for implementing the neural network classifier.
+We use the Keras package \cite{chollet2015keras} for implementing the NN classifier.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experimental Setup}\label{sec:exp_setup}
@@ -651,7 +651,7 @@ than its sparse counterpart (although its recall on remote edges is better in th
 test set). This can be attributed to the fact that the perceptron algorithm is better suited to
 sparse feature representation.
 
-Finally, the neural network-based \parser{NN} gets the highest scores in all measures, on both
+Finally, the NN-based \parser{NN} gets the highest scores in all measures, on both
 the in-domain and the out-of-domain test sets.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -729,8 +729,7 @@ This shows that the LSTM classifier has a significant contribution
 to the accuracy of
 the parser, suggesting that a recurrent neural network (RNN) model
 may also improve \parser{}.
-%a recurrent neural network may be used instead of the feedforward one.
-This is in line with the recent success of recurrent neural networks
+This is in line with the recent success of RNNs
 (specifically, LSTMs and GRUs) in NLP tasks, including DAG-structured LSTM
 \cite{zhu-sobhani-guo:2016:N16-1}.
 
