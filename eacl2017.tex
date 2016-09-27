@@ -212,17 +212,6 @@ coordination structures (e.g., ``\textit{John and Mary} went home''; \figref{fig
 some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases.
 
-%Bilexical dependencies lack this property, representing complex units in terms of their headwords.
-%They fall short when representing units that have no clear head:
-%frequent examples of such constructions include
-%coordination structures ,
-%In these cases, dependency schemes often apply some convention selecting one of the sub-units
-%as the head, but as different head selections are needed for different purposes,
-%standardization problems arise \cite{Ivanova2012who}.
-%For example, selecting the preposition to head prepositional phrases yields better
-%parsing results \cite{Schwartz:12}, while selecting the noun as the head may be
-%more useful for information extraction.
-
 No existing parser, to our knowledge, supports the three structural properties described above.
 We propose the BSP UCCA parser\oa{we need to change its name to something with UCCA},
 taking a transition-based approach. We build on existing knowledge in tackling these three properties
@@ -250,15 +239,6 @@ Results show superior results for BSP, demonstrating the effectiveness of
 the approach for UCCA parsing (\secref{sec:results}),
 and suggest concrete paths for further improvement (\secref{sec:discussion})
 All converters and parsers will be made publicly available upon publication.
-%Comparison with tree approximation methods 
-
-
-%while the distinctions made by UCCA are similar in spirit to those expressed by bilexical
-%schemes (see \secref{sec:ucca}),
-
-%In this paper we focus on transition-based methods---a natural starting point for UCCA parsing,
-%given their 
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -287,144 +267,9 @@ complex arguments and relations (e.g. coordination; complex
 adverbials such as ``very clearly'').\footnote{All UCCA-related resources can be found here:
   \url{http://www.cs.huji.ac.il/~oabend/ucca.html}.}
 
-%In this paper we focus on transition-based methods---a natural starting point for UCCA parsing,
-%given their recently proven fitness for similar tasks, including syntactic dependency parsing
-%\cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
-%discontinuous syntactic constituency parsing \cite{maier-lichte:2016:DiscoNLP},
-%AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval}
-%and CCG parsing \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1,dipendra2016neural},
-%as well as joint lexical and syntactic parsing
-%\cite{constant-nivre:2016:P16-1}.
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Related Work}\label{sec:related_work}
-
-While earlier work on anchored\footnote{By {\it grounded} we mean that the semantic representation
-  directly corresponds to the words and phrases of the text.} semantic parsing has mostly concentrated on shallow semantic analysis,
-focusing on semantic role labeling of verbal argument structures,
-the focus has recently shifted to parsing of more elaborate representations that account
-for a wider range of phenomena.
-
-\paragraph{Broad-Coverage Semantic Parsing.}
-Most closely related to this work is Broad-Coverage Semantic Dependency Parsing (SDP),
-addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval}.
-Like UCCA parsing, SDP addresses a wide range of semantic phenomena,
-and supports discontinuous units and reentrancy.
-However, SDP uses bilexical dependencies, disallowing non-terminal nodes, which
-are useful for representing structures that have no clear head, such as coordination
-\cite[see \secref{sec:introduction}]{Ivanova2012who}. It also differs from UCCA in the type
-of distinctions it makes, which are more closely related to the syntax-semantics interface,
-where UCCA aims to capture purely semantic cross-linguistically applicable notions, abstracting
-away, as much as possible, from syntactic distinctions.
-Recent interest in SDP has yielded numerable works on DAG parsing
-\cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on DAG parsing
-by tree approximation (i.e., methods that lossily convert DAG structures
-into trees in order to train existing tree parsers to produce tree structures
-that approximate the target DAGs) \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
-and on joint syntactic/semantic parsing
-\cite{henderson2013multilingual,swayamdipta-EtAl:2016:CoNLL}.
-
-\paragraph{Abstract Meaning Representation.}
-Another line of work addresses parsing into unanchored
-semantic representation, notably Abstract Meaning Representation (AMR)
-\cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad},
-where, unlike in UCCA parsing, the alignment between the semantic units and the text tokens
-is not explicitly marked.
-While sharing much of this work's motivation, not anchoring the representation in the text
-complicates the parsing task, as it requires
-that the alignment between words and logical symbols be automatically
-(and imprecisely) detected. Indeed, despite considerable technical effort,
-using rule-based methods \cite{flanigan2014discriminative}, machine
-translation methods \cite{pourdamghani2014aligning} and Boolean LP methods
-\cite{werling2015robust}, alignments are only about 80\%--90\% correct.
-Furthermore, anchoring allows breaking down sentences into semantically meaningful sub-spans,
-which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
-
-\newcite[2016]{wang2015transition} applied a transition-based approach to AMR parsing,
-but their method involved first syntactically parsing the input, and then converting
-the result into AMR, while our approach involves no such syntactic pre-processing.\oa{do we mention
-  Shay's work?}
-
-\paragraph{Grammar-Based Parsing.}
-Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steedman:00} and TAG \cite{Joshi:97}
-provide a theory of the syntax-semantics interface, and have been used as a basis for semantic parsers
-by defining compositional semantics on top of them \cite[among others]{Flic:00,bos2005towards}.
-Depending on the grammar and the implementation, such semantic parsers can support
-some or all of the structural properties UCCA supports.
-Nevertheless, this line of work differs from our grammarless approach in two important ways.
-First, the semantic representations are different. UCCA does not attempt to model
-the syntax-semantics interface and is thus less coupled with syntax in comparison to
-compositional semantic structures.
-Second, while grammar-based parsers explicitly model syntax, grammarless
-approaches, such as the ones presented here, seek to directly model the relation between
-strings and semantic structures.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Bilexical Approximation}\label{sec:conversion}
-
-We begin by assessing the ability of existing parsers to address the task.
-Since no existing DAG parsers support non-terminal nodes, we first convert UCCA into bilexical
-dependencies.
-This is similar to the \textit{tree approximation} approach used for dependency DAG parsing
-\cite{agic2015semantic,fernandez2015parsing},
-where dependency DAGs were converted into dependency trees
-and then parsed by existing dependency tree parsers.
-
-\begin{figure}
-\centering
-\scalebox{.9}{
-\begin{dependency}[theme = simple]
-\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
-\end{deptext}
-\depedge{2}{1}{L}
-\depedge{2}{3}{U}
-\depedge[dashed]{2}{4}{A}
-\depedge{5}{4}{A}
-\depedge{2}{5}{H}
-\depedge{7}{6}{R}
-\depedge{5}{7}{A}
-\end{dependency}
-}
-\begin{dependency}[theme = simple]
-\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-John \^ gave \^ everything \^ up \\
-\end{deptext}
-\depedge{1}{2}{A}
-\depedge{3}{2}{A}
-\depedge{4}{2}{C}
-\end{dependency}
-\begin{dependency}[theme = simple]
-\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-John \^ and \^ Mary \^ went \^ home \\
-\end{deptext}
-\depedge[edge start x offset=-6pt]{1}{4}{A}
-\depedge{2}{1}{N}
-\depedge{3}{1}{C}
-\depedge{5}{4}{A}
-\end{dependency}
-\caption{Bilexical approximation for sentences in \figref{fig:examples}.}
-\label{fig:bilexical_example}
-\end{figure}
-
-We first convert UCCA into bilexical dependencies
-(see examples in \figref{fig:bilexical_example}), and train each parser on the resulting
-training set\footnote{See Supplementary Material for a detailed description of
-the conversion procedures.}.
-We evaluate the trained parsers by applying them to the test set
-and then reconstructing UCCA graphs, which are compared with the gold standard.
-The error resulting from this conversion is discussed in
-\secref{sec:results}.
-
-For comparability, we chose to keep the same set of edge labels in the conversion,
-even though a lower approximation error may have been possible with a larger label set.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Direct Approach}\label{sec:direct_approach}
+\section{Broad-Coverage UCCA Parsing}\label{sec:direct_approach}
 
 We now turn to presenting BSP (Broad-coverage Semantic Parser),
 a transition-based parser supporting the structural properties of UCCA.
@@ -688,7 +533,66 @@ and another for remote edges. We note that the measure collapses to the standard
 PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
 Punctuation is excluded from the evaluation, but not from the datasets.
 
-\paragraph{Baselines.}
+\paragraph{Comparison to dependency DAG parsers.}
+Since no existing DAG parsers support non-terminal nodes,
+to assess the ability of existing parsers to address the task.
+we first convert UCCA into bilexical dependencies.
+This is similar to the \textit{tree approximation} approach used for dependency DAG parsing
+\cite{agic2015semantic,fernandez2015parsing},
+where dependency DAGs were converted into dependency trees
+and then parsed by existing dependency tree parsers.
+
+\begin{figure}[ht]
+\centering
+\scalebox{.9}{
+\begin{dependency}[theme = simple]
+\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+\end{deptext}
+\depedge{2}{1}{L}
+\depedge{2}{3}{U}
+\depedge[dashed]{2}{4}{A}
+\depedge{5}{4}{A}
+\depedge{2}{5}{H}
+\depedge{7}{6}{R}
+\depedge{5}{7}{A}
+\end{dependency}
+}
+\begin{dependency}[theme = simple]
+\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+John \^ gave \^ everything \^ up \\
+\end{deptext}
+\depedge{1}{2}{A}
+\depedge{3}{2}{A}
+\depedge{4}{2}{C}
+\end{dependency}
+\begin{dependency}[theme = simple]
+\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+John \^ and \^ Mary \^ went \^ home \\
+\end{deptext}
+\depedge[edge start x offset=-6pt]{1}{4}{A}
+\depedge{2}{1}{N}
+\depedge{3}{1}{C}
+\depedge{5}{4}{A}
+\end{dependency}
+\caption{Bilexical approximation for sentences in \figref{fig:examples}.}
+\label{fig:bilexical_example}
+\end{figure}
+
+We first convert UCCA into bilexical dependencies
+(see examples in \figref{fig:bilexical_example}), and train each parser on the resulting
+training set\footnote{See Supplementary Material for a detailed description of
+the conversion procedures.}.
+We evaluate the trained parsers by applying them to the test set
+and then reconstructing UCCA graphs, which are compared with the gold standard.
+The error resulting from this conversion is discussed in
+\secref{sec:results}.
+
+For comparability, we chose to keep the same set of edge labels in the conversion,
+even though a lower approximation error may have been possible with a larger label set.
+
+
+
 We evaluate two parsers in the bilexical approximation setting (see \secref{sec:conversion}):
 DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, a transition-based parser
 which participated in the SDP task of SemEval 2014 \cite{oepen2014semeval},
@@ -866,6 +770,71 @@ a recurrent neural network may be used instead of the feedforward one.
 This is in line with the recent success of recurrent neural networks
 (specifically, LSTMs and GRUs) in NLP tasks, including DAG-structured LSTM
 \cite{zhu-sobhani-guo:2016:N16-1}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Related Work}\label{sec:related_work}
+
+While earlier work on anchored\footnote{By {\it grounded} we mean that the semantic representation
+  directly corresponds to the words and phrases of the text.} semantic parsing has mostly concentrated on shallow semantic analysis,
+focusing on semantic role labeling of verbal argument structures,
+the focus has recently shifted to parsing of more elaborate representations that account
+for a wider range of phenomena.
+
+\paragraph{Broad-Coverage Semantic Parsing.}
+Most closely related to this work is Broad-Coverage Semantic Dependency Parsing (SDP),
+addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval}.
+Like UCCA parsing, SDP addresses a wide range of semantic phenomena,
+and supports discontinuous units and reentrancy.
+However, SDP uses bilexical dependencies, disallowing non-terminal nodes, which
+are useful for representing structures that have no clear head, such as coordination
+\cite[see \secref{sec:introduction}]{Ivanova2012who}. It also differs from UCCA in the type
+of distinctions it makes, which are more closely related to the syntax-semantics interface,
+where UCCA aims to capture purely semantic cross-linguistically applicable notions, abstracting
+away, as much as possible, from syntactic distinctions.
+Recent interest in SDP has yielded numerable works on DAG parsing
+\cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on DAG parsing
+by tree approximation (i.e., methods that lossily convert DAG structures
+into trees in order to train existing tree parsers to produce tree structures
+that approximate the target DAGs) \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
+and on joint syntactic/semantic parsing
+\cite{henderson2013multilingual,swayamdipta-EtAl:2016:CoNLL}.
+
+\paragraph{Abstract Meaning Representation.}
+Another line of work addresses parsing into unanchored
+semantic representation, notably Abstract Meaning Representation (AMR)
+\cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad},
+where, unlike in UCCA parsing, the alignment between the semantic units and the text tokens
+is not explicitly marked.
+While sharing much of this work's motivation, not anchoring the representation in the text
+complicates the parsing task, as it requires
+that the alignment between words and logical symbols be automatically
+(and imprecisely) detected. Indeed, despite considerable technical effort,
+using rule-based methods \cite{flanigan2014discriminative}, machine
+translation methods \cite{pourdamghani2014aligning} and Boolean LP methods
+\cite{werling2015robust}, alignments are only about 80\%--90\% correct.
+Furthermore, anchoring allows breaking down sentences into semantically meaningful sub-spans,
+which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
+
+\newcite[2016]{wang2015transition} applied a transition-based approach to AMR parsing,
+but their method involved first syntactically parsing the input, and then converting
+the result into AMR, while our approach involves no such syntactic pre-processing.\oa{do we mention
+  Shay's work?}
+
+\paragraph{Grammar-Based Parsing.}
+Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steedman:00} and TAG \cite{Joshi:97}
+provide a theory of the syntax-semantics interface, and have been used as a basis for semantic parsers
+by defining compositional semantics on top of them \cite[among others]{Flic:00,bos2005towards}.
+Depending on the grammar and the implementation, such semantic parsers can support
+some or all of the structural properties UCCA supports.
+Nevertheless, this line of work differs from our grammarless approach in two important ways.
+First, the semantic representations are different. UCCA does not attempt to model
+the syntax-semantics interface and is thus less coupled with syntax in comparison to
+compositional semantic structures.
+Second, while grammar-based parsers explicitly model syntax, grammarless
+approaches, such as the ones presented here, seek to directly model the relation between
+strings and semantic structures.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}\label{sec:conclusion}
