@@ -97,12 +97,12 @@ but its applicability has so far been limited by the absence of a UCCA parser,
 a gap this paper addresses.
 
 Formally, a UCCA representation is a DAG whose leaves correspond to the tokens of
-the text\oa{add footnote about we use sentences, but that it's annotated on paragraphs?}.
+the text.
 Nodes (or {\it units}) either correspond to a terminal or
 to several sub-units (not necessarily contiguous) jointly viewed as a
 single entity according to some semantic or cognitive consideration.
 Edges bear a category, indicating the role of the sub-unit in the relation
-that the parent represents. \figref{fig:examples} presents a few UCCA-anntoated examples.
+that the parent represents. \figref{fig:examples} presents a few UCCA-annotated examples.
 
 \begin{figure}[t]
   \begin{subfigure}[t]{.9\columnwidth}
@@ -189,8 +189,8 @@ that the parent represents. \figref{fig:examples} presents a few UCCA-anntoated 
   }
 \end{figure}
 
-Alongside recent progress in dependency parsing into projective trees and
-similar methods\oa{what does ``and similar methods'' mean?} \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
+Alongside recent progress in dependency parsing into projective trees
+\cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
 there is increasing interest in broad-coverage parsing (see \secref{sec:related_work}),
 directed at representations supporting more general structural properties.
 One such property is \textbf{reentrancy},
@@ -819,8 +819,7 @@ which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
 
 \newcite[2016]{wang2015transition} applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
-the result into AMR, while our approach involves no such syntactic pre-processing.\oa{do we mention
-  Shay's work?}
+the result into AMR, while our approach involves no such syntactic pre-processing.
 
 \paragraph{Grammar-Based Parsing.}
 Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steedman:00} and TAG \cite{Joshi:97}
