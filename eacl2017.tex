@@ -645,16 +645,6 @@ DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval} does better
 and TurboParser \cite{almeida-martins:2015:SemEval} does slightly better on remote edges
 (DAGParser does not predict even on remote edge on the out-of-domain set).
 
-The sparse perceptron-based BSP achieves comparable results to DAGParser on primary edges, but
-on remote edges it is much more accurate.
-The dense perceptron-based BSP+embedding, using pre-trained word vectors, is less accurate on
-than its sparse counterpart (although it does slightly better on remote edges in the in-domain
-test set). This can be attributed to the fact that the perceptron algorithm is better suited to
-sparse feature representation.
-
-Finally, the neural network-based BSP+NN gets the highest scores in all measures, on both
-the in-domain and the out-of-domain test sets.
-
 \begin{table*}[ht]
 \begin{adjustbox}{width=\textwidth}
 \begin{tabular}{l|ccc|ccc||ccc|ccc}
@@ -696,6 +686,16 @@ BSP+NN
   Bottom: results for our BSP, trained on the original UCCA graphs.
 }
 \end{table*}
+
+The sparse perceptron-based BSP achieves comparable results to DAGParser on primary edges, but
+on remote edges it is much more accurate.
+The dense perceptron-based BSP+embedding, using pre-trained word vectors, is less accurate on
+than its sparse counterpart (although it does slightly better on remote edges in the in-domain
+test set). This can be attributed to the fact that the perceptron algorithm is better suited to
+sparse feature representation.
+
+Finally, the neural network-based BSP+NN gets the highest scores in all measures, on both
+the in-domain and the out-of-domain test sets.
 
 \paragraph{Feature Ablation.}
 To evaluate the relative impact of the different feature sets on BSP,
