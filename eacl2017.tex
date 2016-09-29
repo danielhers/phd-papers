@@ -225,11 +225,17 @@ centered around predicate-argument structures, to distinctions expressed by depe
 We are further motivated by the strength of transition-based methods
 in similar tasks, including syntactic dependency parsing
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
-discontinuous syntactic constituency parsing \cite{maier-lichte:2016:DiscoNLP},
+dependency DAG parsing
+\cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition},
+constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
+discontinuous constituency parsing
+\cite{maier2015discontinuous,maier-lichte:2016:DiscoNLP},
 AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval,dipendra2016neural,goodman2016noise}
 and CCG parsing \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1},
 as well as joint lexical and syntactic parsing
 \cite{constant-nivre:2016:P16-1}.
+\parser{} mostly builds on recent advances in discontinuous constituency
+and dependency DAG parsing, and further introduces novel features for UCCA.
 
 We evaluate \parser{} on the available English UCCA corpora, in both
 in-domain and out-of-domain settings (\secref{sec:exp_setup}).
@@ -289,27 +295,6 @@ A classifier is used at each step to select the next transition based on feature
 encoding the parser's current state.
 During training, an oracle creates training instances for the classifier,
 based on gold-standard annotations.
-
-\oa{paragraph commented out. repetitive. see if some of the citations don't appear elsewhere}
-\com{
-Transition-based methods have yielded excellent
-results in a variety of parsing tasks.
-Within syntactic dependency parsing, transition-based methods
-have been successfully applied to corpora in many languages and domains, yielding
-the best reported results for English
-\cite{dyer2015transition,andor2016globally,kiperwasser2016simple}.
-The approach has further yielded results comparable with the state-of-the-art in
-constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
-discontinuous constituency parsing \cite{maier2015discontinuous,maier-lichte:2016:DiscoNLP},
-as well as dependency DAG structures
-\cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition},
-CCG \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1}
-and AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval,dipendra2016neural,goodman2016noise}.
-
-\parser{} mostly builds on recent advances in discontinuous constituency
-and dependency DAG parsing, and further introduces novel features for UCCA.
-}
-
 
 \paragraph{Transition Set.}
 Given a sequence of tokens $w_1, \ldots, w_n$, we predict a UCCA graph $G$ over the sequence.
@@ -690,8 +675,7 @@ For completeness, we further explore a conversion-based approach that
 lossily converts UCCA structures into trees. 
 This approach resembles the bilexical approximation approach described in \secref{sec:exp_setup}, but here it results in a simplified task for the underlying parser: parsing into tree structures.
 
-Performance on remote edges, which tree approximations miss entirely,
-is of pivotal importance in this investigation, which focuses on extending the class of graphs supported by statistical parsers. Nevertheless, we believe that exploring tree approximation methods, thus building on the maturity of transition-based tree parsing, can inform the future development of DAG parsers in general and of UCCA parsers in particular.
+Performance on remote edges is of pivotal importance in this investigation, which focuses on extending the class of graphs supported by statistical parsers. Nevertheless, we believe that exploring tree approximation methods, thus building on the maturity and cummulative experience with transition-based tree parsing, can inform the future development of DAG parsers in general and of UCCA parsers in particular.
 
 We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
 and one into bilexical dependency trees. In the first setting we experiment with \textsc{uparse}
@@ -757,20 +741,19 @@ and using a similar transition set.
 This shows that the LSTM classifier has a significant contribution
 to the accuracy of
 the parser, suggesting that a recurrent neural network (RNN) model
-may also improve UCCA parsing.
+may also improve \parser{}.
 This is in line with the recent success of RNNs
 (specifically, LSTMs and GRUs) in NLP tasks, including DAG-structured LSTM
 \cite{zhu-sobhani-guo:2016:N16-1}.
 
 \paragraph{Feature Ablation.}
-To evaluate the relative impact of the different feature sets on \parser{sparse},
+To evaluate the relative impact of the different feature sets on \parser{},
 we remove a set of features at a time, and evaluate the
 resulting sparse perceptron-based parser on the development set.\footnote{See
 supplementary material for more detailed results.}
 Almost all feature sets have a positive contribution to the primary
 edge F-score, or otherwise to the prediction of remote edges.
-\textbf{unigrams} and \textbf{bigrams}\oa{these terms don't appear in the paper
-  any more. explain what these are} features are especially
+\textbf{unigrams} and \textbf{bigrams} features are especially
 important (they contribute 1.1\% to 4.5\% to the F-score),
 and the \textbf{ratio} feature greatly improves recall on
 primary edges (by 7.4\%, leading to  a 3.9\% F-score improvement).
@@ -824,7 +807,7 @@ using rule-based methods \cite{flanigan2014discriminative}, machine
 translation methods \cite{pourdamghani2014aligning} and Boolean LP methods
 \cite{werling2015robust}, alignments are only about 80\%--90\% correct.
 Furthermore, anchoring allows breaking down sentences into semantically meaningful sub-spans,
-which is useful for many applications \cite{fernandez2015parsing}.
+which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
 
 \newcite[2016]{wang2015transition} applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
@@ -847,19 +830,18 @@ strings and semantic structures.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}\label{sec:conclusion}
-
-We present \parser{}, the first parser for UCCA, taking a transition-based approach.
+We present \parser{}, the first parser for UCCA.
 Evaluated in both in-domain and out-of-domain settings, we show that coupled with a
-feed-forward NN classifier, \parser{NN} surpasses bilexical DAG parsers on the task of UCCA parsing.
+NN classifier, \parser{NN} surpasses bilexical DAG parsers on the task of UCCA parsing.
 While much recent work focused on semantic parsing of different types,
 the effectiveness of different parsing approaches for schemes with
 different structural and semantic properties is not well-understood 
 \cite{kuhlmann2016towards}.
-This paper makes a two-foled contribution to this literature. First, by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, and second, through detailed experiments with different architectures for the local classifier, and comparison both to bilexical approximations and to tree approximations.
+This paper makes a contribution to this literature first by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, and through detailed experiments with different architectures for the local classifier, and comparison both to bilexical approximations and to tree approximations.
 
 Future work will delve deeper in the exploration of
 conversion-based parsing approaches, including different target
-representations and more sophisticated conversion procedures (e.g., \newcite{kong-15}),
+representations and more sophisticated conversion procedures \cite{kong-15},
 in order to shed light on the commonalities and differences between
 representations, suggesting ways for a data-driven design of semantic structures.
 A parser for UCCA will enable using the framework for new tasks,
