@@ -835,7 +835,7 @@ While much recent work focused on semantic parsing of different types,
 the effectiveness of different parsing approaches for schemes with
 different structural and semantic properties is not well-understood 
 \cite{kuhlmann2016towards}.
-This paper makes a contribution to this literature first by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, and through detailed experiments with different architectures for the local classifier, and comparison both to bilexical approximations and to tree approximations.
+This paper makes a contribution to this literature first by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, through detailed experiments with different architectures for the local classifier, and comparison both to bilexical approximations and to tree approximations.
 
 Future work will delve deeper in the exploration of
 conversion-based parsing approaches, including different target
@@ -896,7 +896,7 @@ Algorithm~\ref{alg:to_bilexical}\footnote{Note that this conversion procedure
 is simpler than the head percolation procedure used for converting syntactic constituency
 trees to dependency trees,
 since $h(u)$ (similar to $u$'s head-containing child)
-depends only on $\ell(h(u),u)$ and not on the sub-tree spanned by $u$,
+depends only on $\ell(u,h(u))$ and not on the sub-tree spanned by $u$,
 because edge labels in UCCA directly express the role of the child in the parent unit, and
 are thus sufficient for determining which of $u$'s children contains the head node.}.
 
@@ -906,8 +906,7 @@ are thus sufficient for determining which of $u$'s children contains the head no
  $A \leftarrow \emptyset$\;
  \ForEach{$t \in \mathrm{Terminals}(V)$} {
   \ForEach{$(u,v)\in N(t)$} {
-   $t^\prime \leftarrow h^*(u)$\;
-   $A \leftarrow A \cup \{(t^\prime, \ell(u, v), t)\}$\;
+   $A \leftarrow A \cup \{(h^*(u), \ell(u, v), t)\}$\;
   }
  }
  \caption{Conversion to bilexical graphs.}
@@ -947,6 +946,7 @@ This procedure is given in Algorithm~\ref{alg:from_bilexical}.
    \If{$(t^\prime,l,t)\in A$} {
     \eIf{$\exists t^{\prime\prime}\in T,l^\prime\in L : (t,l^\prime,t^{\prime\prime}) \in A$} {
      $u \leftarrow \mathrm{Node()}$\;
+     $V \leftarrow V \cup \{u\}$\;
      $E \leftarrow E \cup \{(u, u_t)\}$\;
      $\ell(u, u_t) \leftarrow \Label(t)$\;
     } {
@@ -983,6 +983,7 @@ This procedure is given in Algorithm~\ref{alg:from_bilexical}.
 
 \begin{figure}[ht]
 \begin{enumerate}
+\itemsep0em
 \item $C$ (\textit{Center})
 \item $N$ (\textit{Connector})
 \item $H$ (\textit{ParallelScene})
@@ -1069,17 +1070,17 @@ Scores on remote edges are zero, since they are not reconstructed by the convers
 & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Conversion} \\
+Upper Bound & 100 & 100 & 100 \vspace{.1cm} \\
 \textsc{uparse} & 57 & 59.4 & 58 \\
-Upper Bound & 100 & 100 & 100 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Dependency Tree Conversion} \\
+Upper Bound & 93.5 & 82.5 & 87.6 \vspace{.1cm} \\
 Malt$_{\textrm{arc-standard}}$ & 62.3 & 55.9 & 58.7 \\
 Malt$_{\textrm{arc-eager}}$ & 62.8 & 56.3 & 59.2 \\
 LSTM & {\bf 70.1} & {\bf 63.3} & {\bf 66.1} \\
-Upper Bound & 93.5 & 82.5 & 87.6 \\
 \end{tabular}
 \caption{Results for tree approximation-based parsing when tested on out-of-domain data
-(\textit{20K Leagues})}
+(\textit{20K Leagues}).}
 \label{tab:ood_converted}
 \end{table}
 
@@ -1089,7 +1090,7 @@ Upper Bound & 93.5 & 82.5 & 87.6 \\
 \figref{fig:features} presents the feature templates used by the perceptron-based parser.
 All feature templates define binary features.
 For some of the features, we used the notion of \textit{head word},
-defined by the $h^*$ function (Appendix~\ref{appendix:conversion}).
+defined by the $h^*$ function (see Appendix~\ref{appendix:conversion}).
 While head words are not explicitly represented in the UCCA scheme, these
 features proved useful as means of encoding word-to-word relations.
 
@@ -1144,7 +1145,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
   Binary feature templates for \parser{sparse}. Notation:\\
   $s_i$, $b_i$: $i$th stack and buffer items.\\
   $w$, $t$: word form and POS tag of the terminal returned by $h^*(\cdot)$
-  (Appendix~\ref{appendix:conversion}).\\
+  (see Appendix~\ref{appendix:conversion}).\\
   $e$: edge label to the node returned by $h(\cdot)$.\\
   $l$, $r$ ($ll$, $rr$): leftmost and rightmost (grand)children.\\
   $u$ ($uu$): unary (grand)child, when only one exists.\\
@@ -1244,7 +1245,7 @@ UCCA graphs may contain implicit units with no correspondent in the text.
 The sentence was used by \cite{oepen2015semeval} to compare between different semantic
 dependency schemes.
 It includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
-In addition, the scenes includes an implicit argument, which represents the agent of the
+In addition, the scene includes an implicit argument, which represents the agent of the
 ``apply'' relation.
 
 The parsing of these units is deferred to future work, as it is likely to require different methods
@@ -1297,9 +1298,9 @@ than those explored in this paper \cite{roth2015inducing}.
   \label{fig:example_implicit}
 \end{figure*}
 
-\paragraph{Statistics of Linkage and Implicit Nodes}
+\paragraph{Statistics of linkage and implicit units.}
 
-\tabref{table:data_linkage_implicit} shows the statistics of linkage and implicit nodes
+\tabref{table:data_linkage_implicit} shows the statistics of linkage nodes and edges and implicit nodes
 in the corpora.
 
 \begin{table}[ht]
