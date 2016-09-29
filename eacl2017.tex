@@ -517,10 +517,10 @@ PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
 Punctuation is excluded from the evaluation, but not from the datasets.
 
 \paragraph{Comparison to bilexical DAG parsers.}
-As \parser{} is the first parser to support reentrancy, discontiguous units and
+As \parser{} is the first parser to support reentrancy, discontinuous units and
 non-terminal nodes, no direct comparison with an existing parser is possible.
 We instead compare \parser{} to bilexical DAG parsers,
-which we view as the closest existing match (they support two of the propoerties,
+which we view as the closest existing match (they support two of the properties,
 but not non-terminal nodes).
 In order to assess the ability of existing parsers to address the task,
 we first convert UCCA into bilexical dependencies.
@@ -643,10 +643,10 @@ back into UCCA---the conversion procedure loses some of the information about no
 DAGParser is most directly comparable to \parser{sparse}, as both parsers
 use the perceptron classifier over a sparse feature representation.
 Despite the lossy conversion, DAGParser obtains comparable results to
-\parser{sparse} on primary edges, but on remote edges, \parser{sprase}
+\parser{sparse} on primary edges, but on remote edges, \parser{sparse}
 surpasses it considerably in performance
 (DAGParser does not predict any remote edges in the out-of-domain setting).
-TurboParser fares worse in this comaprison, despite somewhat better results on
+TurboParser fares worse in this comparison, despite somewhat better results on
 remote edges.
 
 %The sparse perceptron-based \parser{sparse} achieves comparable results to DAGParser on primary edges, but on remote edges it is much more accurate, surpassing  by 10\% F-score.
@@ -658,7 +658,7 @@ Finally, using a feed-forward, \parser{NN} manages to exploit the embeddings,
 and obtains substantially higher scores in all measures, both
 in the in-domain and out-of-domain settings.
 Its performance in absolute terms, of .. \%\oa{missing} F-score, is encouraging in light of the
-inter-anntoator agreement, given UCCA’s inter-annotator agreement of 80--85\%
+inter-annotator agreement, given UCCA’s inter-annotator agreement of 80--85\%
 F-score on primary edges \cite{abend2013universal}.
 
 %Using embeddings, \parser{dense}, using pre-trained word vectors, is less accurate
@@ -674,7 +674,7 @@ For completeness, we further explore a conversion-based approach that
 lossily converts UCCA structures into trees. 
 This approach resembles the bilexical approximation approach described in \secref{sec:exp_setup}, but here it results in a simplified task for the underlying parser: parsing into tree structures.
 
-Performance on remote edges is of pivotal importance in this investigation, which focuses on extending the class of graphs supported by statistical parsers. Nevertheless, we believe that exploring tree approximation methods, thus building on the maturity and cummulative experience with transition-based tree parsing, can inform the future development of DAG parsers in general and of UCCA parsers in particular.
+Performance on remote edges is of pivotal importance in this investigation, which focuses on extending the class of graphs supported by statistical parsers. Nevertheless, we believe that exploring tree approximation methods, thus building on the maturity and cumulative experience with transition-based tree parsing, can inform the future development of DAG parsers in general and of UCCA parsers in particular.
 
 We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
 and one into bilexical dependency trees. In the first setting we experiment with \textsc{uparse}
