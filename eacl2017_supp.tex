@@ -58,136 +58,7 @@ Supplementary Material}
 
 
 
-\section{Additional UCCA features and annotated examples}
-
-\paragraph{Linkage.}
-
-The following figure demonstrates a linkage relation, omitted from \figref{main:fig:graduation}
-in the paper.
-
-\begin{figure}[h]
-  \centering
-  \begin{tikzpicture}[level distance=10mm, ->]
-    \node (ROOT) [fill=black, circle] {}
-      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
-      child {node (graduation) [fill=black, circle] {}
-      {
-        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
-      } edge from parent node[left] {\scriptsize $H$} }
-      child {node {,} edge from parent node[right] {\scriptsize $U$}}
-      child {node (moved) [fill=black, circle] {}
-      {
-        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
-        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
-        child {node [fill=black, circle] {}
-        {
-          child {node {to} edge from parent node[left] {\scriptsize $R$}}
-          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
-        } edge from parent node[left] {\scriptsize $A$} }
-      } edge from parent node[right] {\scriptsize $H$} }
-      ;
-    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
-    \node (LKG) at (-1.8,0) [fill=black!20, circle] {};
-          \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
-          \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
-          \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
-  \end{tikzpicture}
-  \caption{UCCA example with linkage.}
-\end{figure}
-
-The linkage relation is represented by the gray node.
-$LA$ is \emph{link argument}, and $LR$ is \emph{link relation}.
-The relation represents the fact that the \emph{linker} ``After'' links the two parallel scenes
-that are the arguments of the linkage.
-Linkage relations are another source of multiple parents for a node, which we do not yet handle
-in parsing and evaluation.
-
-\paragraph{Implicit units.}
-
-UCCA graphs may contain implicit units with no correspondent in the text.
-The following figure shows the annotation for the sentence
-``A similar technique is almost impossible to apply to other crops, such as cotton, soybeans and rice.''.
-The sentence was used by \cite{oepen2015semeval} to compare between different semantic
-dependency schemes.
-It includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
-In addition, the scenes includes an implicit argument, which represents the agent of the
-``apply'' relation.
-
-The parsing of these units is deferred to future work, as it is likely to require different methods
-than those explored in this paper \cite{roth2015inducing}.
-
-\begin{figure}[h]
-  \centering
-  \scalebox{.6}{
-  \begin{tikzpicture}[level distance=20mm, ->,
-  level 1/.style={sibling distance=8em},
-  level 2/.style={sibling distance=4em},
-  level 3/.style={sibling distance=4em}]
-    \node (ROOT) [fill=black, circle] {}
-      child {node [fill=black, circle] {}
-      {
-        child {node {A} edge from parent node[left] {\scriptsize $E$}}
-        child {node {similar} edge from parent node[left] {\scriptsize $E$}}
-        child {node {technique} edge from parent node[right] {\scriptsize $C$}}
-      } edge from parent node[left] {\scriptsize $A\quad$ \hspace{1mm} } }
-      child {node {is} edge from parent node[left] {\scriptsize $F$}}
-      child {node [fill=black, circle] {}
-      {
-        child {node {almost} edge from parent node[left] {\scriptsize $E$}}
-        child {node {impossible} edge from parent node[right] {\scriptsize $C$}}
-      } edge from parent node[left] {\scriptsize $D$} }
-      child {node {\textbf{IMPLICIT}} edge from parent node[left] {\scriptsize $A$}}
-      child {node {to} edge from parent node[left] {\scriptsize $F$}}
-      child {node {apply} edge from parent node[left] {\scriptsize $P\quad$}}
-      child {node [fill=black, circle] {}
-      {
-        child {node {to} edge from parent node[left] {\scriptsize $R$}}
-        child {node {other} edge from parent node[left] {\scriptsize $E$}}
-        child {node {crops} edge from parent node[left] {\scriptsize $C$}}
-        child {node {,} edge from parent node[left] {\scriptsize $U$}}
-        child {node [fill=black, circle] {}
-        {
-          child {node {such as} edge from parent node[left] {\scriptsize $R$}}
-          child {node {cotton} edge from parent node[left] {\scriptsize $C$}}
-          child {node {,} edge from parent node[left] {\scriptsize $U$}}
-          child {node {soybeans} edge from parent node[left] {\scriptsize $C$}}
-          child {node {and} edge from parent node[left] {\scriptsize $N$}}
-          child {node {rice} edge from parent node[right] {\scriptsize $\; C$}}
-        } edge from parent node[right] {\scriptsize $\; E$ \hspace{1mm} } }
-      } edge from parent node[left] {\scriptsize $A\;$ \hspace{1mm} } }
-      child {node {.} edge from parent node[right] {\scriptsize $\quad \quad U$}}
-      ;
-  \end{tikzpicture}
-  }
-  \caption{UCCA example with an implicit unit.}
-\end{figure}
-
-\paragraph{Statistics of Linkage and Implicit Nodes}
-
-\tabref{table:data_linkage_implicit} shows the statistics of linkage and implicit nodes
-in the corpora.
-
-\begin{table}[h]
-\centering
-\begin{tabular}{l|ccc|c}
-& \multicolumn{3}{c|}{Wiki} & 20K \\
-& \small Train & \small Dev & \small Test & Leagues \\
-\hline
-nodes \\
-\# implicit & 900 & 119 & 80 & 241 \\
-\# linkage & 2833 & 241 & 364 & 376 \\
-\hline
-edges \\
-\# linkage & 8853 & 737 & 1105 & 957
-\end{tabular}
-\caption{Statistics of linkage and implicit nodes in the
-\textit{Wiki} and \textit{20K Leagues} UCCA corpora.
-Cf. \tabref{main:table:data} in the paper.
-}
-\label{table:data_linkage_implicit}
-\end{table}
-
-\section{Conversion algorithms}
+\section{Conversion Protocols for the Bilexical DAG and Tree Approximations}
 \label{sec:conversion}
 
 Here we describe the algorithms used in the conversion referred to in \secref{main:sec:exp_setup}
@@ -517,6 +388,137 @@ Columns are the same as in \tabref{main:table:results} in the paper.
 \caption{Results for feature ablation experiments on \parser{sparse}.}
 \label{tab:ablation}
 \end{table}
+
+
+\section{Extended Presentation of UCCA}
+
+\paragraph{Linkage.}
+
+The following figure demonstrates a linkage relation, omitted from \figref{main:fig:graduation}
+in the paper.
+
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}[level distance=10mm, ->]
+    \node (ROOT) [fill=black, circle] {}
+      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
+      child {node (graduation) [fill=black, circle] {}
+      {
+        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
+      } edge from parent node[left] {\scriptsize $H$} }
+      child {node {,} edge from parent node[right] {\scriptsize $U$}}
+      child {node (moved) [fill=black, circle] {}
+      {
+        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
+        child {node [fill=black, circle] {}
+        {
+          child {node {to} edge from parent node[left] {\scriptsize $R$}}
+          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
+        } edge from parent node[left] {\scriptsize $A$} }
+      } edge from parent node[right] {\scriptsize $H$} }
+      ;
+    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+    \node (LKG) at (-1.8,0) [fill=black!20, circle] {};
+          \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
+          \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
+          \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
+  \end{tikzpicture}
+  \caption{UCCA example with linkage.}
+\end{figure}
+
+The linkage relation is represented by the gray node.
+$LA$ is \emph{link argument}, and $LR$ is \emph{link relation}.
+The relation represents the fact that the \emph{linker} ``After'' links the two parallel scenes
+that are the arguments of the linkage.
+Linkage relations are another source of multiple parents for a node, which we do not yet handle
+in parsing and evaluation.
+
+\paragraph{Implicit units.}
+
+UCCA graphs may contain implicit units with no correspondent in the text.
+The following figure shows the annotation for the sentence
+``A similar technique is almost impossible to apply to other crops, such as cotton, soybeans and rice.''.
+The sentence was used by \cite{oepen2015semeval} to compare between different semantic
+dependency schemes.
+It includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
+In addition, the scenes includes an implicit argument, which represents the agent of the
+``apply'' relation.
+
+The parsing of these units is deferred to future work, as it is likely to require different methods
+than those explored in this paper \cite{roth2015inducing}.
+
+\begin{figure}[h]
+  \centering
+  \scalebox{.6}{
+  \begin{tikzpicture}[level distance=20mm, ->,
+  level 1/.style={sibling distance=8em},
+  level 2/.style={sibling distance=4em},
+  level 3/.style={sibling distance=4em}]
+    \node (ROOT) [fill=black, circle] {}
+      child {node [fill=black, circle] {}
+      {
+        child {node {A} edge from parent node[left] {\scriptsize $E$}}
+        child {node {similar} edge from parent node[left] {\scriptsize $E$}}
+        child {node {technique} edge from parent node[right] {\scriptsize $C$}}
+      } edge from parent node[left] {\scriptsize $A\quad$ \hspace{1mm} } }
+      child {node {is} edge from parent node[left] {\scriptsize $F$}}
+      child {node [fill=black, circle] {}
+      {
+        child {node {almost} edge from parent node[left] {\scriptsize $E$}}
+        child {node {impossible} edge from parent node[right] {\scriptsize $C$}}
+      } edge from parent node[left] {\scriptsize $D$} }
+      child {node {\textbf{IMPLICIT}} edge from parent node[left] {\scriptsize $A$}}
+      child {node {to} edge from parent node[left] {\scriptsize $F$}}
+      child {node {apply} edge from parent node[left] {\scriptsize $P\quad$}}
+      child {node [fill=black, circle] {}
+      {
+        child {node {to} edge from parent node[left] {\scriptsize $R$}}
+        child {node {other} edge from parent node[left] {\scriptsize $E$}}
+        child {node {crops} edge from parent node[left] {\scriptsize $C$}}
+        child {node {,} edge from parent node[left] {\scriptsize $U$}}
+        child {node [fill=black, circle] {}
+        {
+          child {node {such as} edge from parent node[left] {\scriptsize $R$}}
+          child {node {cotton} edge from parent node[left] {\scriptsize $C$}}
+          child {node {,} edge from parent node[left] {\scriptsize $U$}}
+          child {node {soybeans} edge from parent node[left] {\scriptsize $C$}}
+          child {node {and} edge from parent node[left] {\scriptsize $N$}}
+          child {node {rice} edge from parent node[right] {\scriptsize $\; C$}}
+        } edge from parent node[right] {\scriptsize $\; E$ \hspace{1mm} } }
+      } edge from parent node[left] {\scriptsize $A\;$ \hspace{1mm} } }
+      child {node {.} edge from parent node[right] {\scriptsize $\quad \quad U$}}
+      ;
+  \end{tikzpicture}
+  }
+  \caption{UCCA example with an implicit unit.}
+\end{figure}
+
+\paragraph{Statistics of Linkage and Implicit Nodes}
+
+\tabref{table:data_linkage_implicit} shows the statistics of linkage and implicit nodes
+in the corpora.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l|ccc|c}
+& \multicolumn{3}{c|}{Wiki} & 20K \\
+& \small Train & \small Dev & \small Test & Leagues \\
+\hline
+nodes \\
+\# implicit & 900 & 119 & 80 & 241 \\
+\# linkage & 2833 & 241 & 364 & 376 \\
+\hline
+edges \\
+\# linkage & 8853 & 737 & 1105 & 957
+\end{tabular}
+\caption{Statistics of linkage and implicit nodes in the
+\textit{Wiki} and \textit{20K Leagues} UCCA corpora.
+Cf. \tabref{main:table:data} in the paper.
+}
+\label{table:data_linkage_implicit}
+\end{table}
+
 
 
 \bibliography{references}
