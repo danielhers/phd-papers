@@ -416,8 +416,8 @@ Otherwise, a random optimal transition is applied,
 and for the perceptron-based parser, the classifier's weights are updated according
 to the perceptron update rule.
 
-We train the perceptron classifiers for 16 iterations, using $\textsc{MinUpdate}=5$
-and $\textsc{Importance}=2$, doubling weight updates
+We train the perceptron classifiers for 16 iterations, using $\textsc{MinUpdate}=5$,
+and doubling weight updates
 for gold \textsc{Swap} transitions to address the sparsity of discontinuous nodes,
 as in \newcite{maier2015discontinuous}.
 POS tags are extracted using the averaged perceptron tagger of NLTK \cite{bird2009natural}.
