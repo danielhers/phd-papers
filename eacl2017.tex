@@ -653,11 +653,11 @@ remote edges.
 Replacing the sparse representation with dense embeddings, \parser{dense} obtains
 lower results than its sparse counterpart (although its recall on remote edges is
 better in the in-domain setting).
-Finally, using a feed-forward, \parser{NN} manages to exploit the embeddings,
+Finally, using a feedforward NN, \parser{NN} manages to exploit the embeddings,
 and obtains substantially higher scores in all measures, both
 in the in-domain and out-of-domain settings.
-Its performance in absolute terms, of .. \%\oa{missing} F-score, is encouraging in light of the
-inter-annotator agreement, given UCCA’s inter-annotator agreement of 80--85\%
+Its performance in absolute terms, of .. \%\oa{missing} F-score, is encouraging in light of
+UCCA's inter-annotator agreement of 80--85\%
 F-score on primary edges \cite{abend2013universal}.
 
 %Using embeddings, \parser{dense}, using pre-trained word vectors, is less accurate
@@ -697,13 +697,13 @@ We also train the \parser{} variants without remote edge transitions, yielding a
 & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Approximation} \\
+Upper Bound & 100 & 100 & 100 \vspace{.1cm} \\
 \textsc{uparse} & 63 & 64.7 & 63.7 \\
-Upper Bound & 100 & 100 & 100 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Dependency Tree Approximation} \\
+Upper Bound & 93.7 & 83.6 & 88.4 \vspace{.1cm} \\
 MaltParser & 64.9 & 57.9 & 61 \\
 LSTM Parser & {\bf 74.9} & {\bf 66.4} & {\bf 70.2} \\
-Upper Bound & 93.7 & 83.6 & 88.4 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Tree Parsing} \\
 \parser{sparse} $-$ \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
