@@ -31,6 +31,7 @@
 
 \flushbottom \onecolumn
 
+\newcommand{\parser}[1]{TUPA\textsubscript{#1}}
 \newcommand{\secref}[1]{Section~\ref{#1}}
 \newcommand{\figref}[1]{Figure~\ref{#1}}
 \newcommand{\tabref}[1]{Table~\ref{#1}}
@@ -173,11 +174,11 @@ in the corpora.
 & \small Train & \small Dev & \small Test & Leagues \\
 \hline
 nodes \\
-\% implicit & 0.30 & 0.35 & 0.21 & 0.81 \\
-\% linkage & 0.94 & 0.72 & 0.97 & 1.26 \\
+\# implicit & 900 & 119 & 80 & 241 \\
+\# linkage & 2833 & 241 & 364 & 376 \\
 \hline
 edges \\
-\% linkage & 2.99 & 2.25 & 2.99 & 3.33
+\# linkage & 8853 & 737 & 1105 & 957
 \end{tabular}
 \caption{Statistics of linkage and implicit nodes in the
 \textit{Wiki} and \textit{20K Leagues} UCCA corpora.
@@ -189,7 +190,7 @@ Cf. \tabref{main:table:data} in the paper.
 \section{Conversion algorithms}
 \label{sec:conversion}
 
-Here we describe the algorithms used in the conversion referred to in \secref{main:sec:conversion}
+Here we describe the algorithms used in the conversion referred to in \secref{main:sec:exp_setup}
 in the paper.
 
 \paragraph{Notation.}
@@ -467,7 +468,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
 \end{adjustbox}
 \captionsetup{singlelinecheck=off}
 \caption[]{\label{fig:features}
-  Binary feature templates for UCCP. Notation:
+  Binary feature templates for \parser{sparse}. Notation:
   \begin{itemize}
   \item $s_i$, $b_i$: $i$th stack and buffer items.
   \item $w$, $t$: word form and POS tag of the terminal returned by $h^*(\cdot)$
@@ -490,7 +491,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
 The following results, in percents,
 were obtained on the development set in the feature ablation experiment
 (\secref{main:sec:results} in the paper).
-The first row corresponds to UCCP as in the main experiment.
+The first row corresponds to \parser{sparse} as in the main experiment.
 In each of the other rows, one feature set is excluded.
 Columns are the same as in \tabref{main:table:results} in the paper.
   
@@ -500,20 +501,20 @@ Columns are the same as in \tabref{main:table:results} in the paper.
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-UCCP & 62.6	& 55.7 & 58.9 & 20 & 12.9 & 15.7 \\
-UCCP$-$\textbf{unigrams} & 62.5 & 52.6 & 57.1 & 18.9 & 10.1 & 13.2 \\
-UCCP$-$\textbf{bigrams} & 59.8 & 50.0 & 54.4 & 18.2 & 12.2 & 14.6 \\
-UCCP$-$\textbf{trigrams} & 63.7 & 55.0 & 59.0 & 20.7 & 12.0 & 15.2 \\
-UCCP$-$\textbf{separator} & 62.9 & 53.5 & 57.8 & 17.8 & 11.7 & 14.1 \\
-UCCP$-$\textbf{extended} & 62.9 & 52.8 & 57.4 & 17.4 & 11.5 & 13.9 \\
-UCCP$-$\textbf{disco} & 63.6 & 53.6 & 58.2 & 19.7 & 11.5 & 14.5 \\
-UCCP$-$\textbf{counts} & 63.3 & 52.8 & 57.6 & 14.6 & 10.6 & 12.3 \\
-UCCP$-$\textbf{edges} & 63.5 & 54.9 & 58.9 & 23.6 & 14.5 & 17.9 \\
-UCCP$-$\textbf{history} & 63.1 & 53.2 & 57.8 & 23.7 & 14.5 & 18.0 \\
-UCCP$-$\textbf{remote} & 63.5 & 53.2 & 57.9 & 17.2 & 10.6 & 13.1 \\
-UCCP$-$\textbf{ratio} & 63.7 & 48.3 & 55.0 & 25.4 & 13.6 & 17.7
+\parser{sparse} & 62.6	& 55.7 & 58.9 & 20 & 12.9 & 15.7 \\
+\parser{sparse}$-$\textbf{unigrams} & 62.5 & 52.6 & 57.1 & 18.9 & 10.1 & 13.2 \\
+\parser{sparse}$-$\textbf{bigrams} & 59.8 & 50.0 & 54.4 & 18.2 & 12.2 & 14.6 \\
+\parser{sparse}$-$\textbf{trigrams} & 63.7 & 55.0 & 59.0 & 20.7 & 12.0 & 15.2 \\
+\parser{sparse}$-$\textbf{separator} & 62.9 & 53.5 & 57.8 & 17.8 & 11.7 & 14.1 \\
+\parser{sparse}$-$\textbf{extended} & 62.9 & 52.8 & 57.4 & 17.4 & 11.5 & 13.9 \\
+\parser{sparse}$-$\textbf{disco} & 63.6 & 53.6 & 58.2 & 19.7 & 11.5 & 14.5 \\
+\parser{sparse}$-$\textbf{counts} & 63.3 & 52.8 & 57.6 & 14.6 & 10.6 & 12.3 \\
+\parser{sparse}$-$\textbf{edges} & 63.5 & 54.9 & 58.9 & 23.6 & 14.5 & 17.9 \\
+\parser{sparse}$-$\textbf{history} & 63.1 & 53.2 & 57.8 & 23.7 & 14.5 & 18.0 \\
+\parser{sparse}$-$\textbf{remote} & 63.5 & 53.2 & 57.9 & 17.2 & 10.6 & 13.1 \\
+\parser{sparse}$-$\textbf{ratio} & 63.7 & 48.3 & 55.0 & 25.4 & 13.6 & 17.7
 \end{tabular}
-\caption{Results for feature ablation experiments.}
+\caption{Results for feature ablation experiments on \parser{sparse}.}
 \label{tab:ablation}
 \end{table}
 
