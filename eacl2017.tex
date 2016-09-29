@@ -36,7 +36,6 @@
 \DeclareMathOperator*{\argmin}{argmin}
 \DeclareMathOperator*{\argmax}{argmax}
 \SetKwRepeat{Do}{do}{while}
-\renewcommand\AlCapFnt{\normalfont\small}
 \hyphenation{SemEval}
 
 %\eaclfinalcopy % Uncomment this line for the final submission
@@ -372,7 +371,7 @@ Second, we experiment with a linear classifier using dense embedding features (s
 which we also train using the averaged structured perceptron.
 We refer to this parser as \parser{dense}.
 Third, we use a feedforward neural network, similar in architecture to that of \newcite{chen2014fast}, with the following modifications: two hidden layers instead of one, using the sigmoid activation function instead of the cube,
-and applying dropout after each layer \cite{srivastava2014dropout}.\oa{do these things have hyperparameters we should mention? if so, in the exp setup}
+and applying dropout after each layer \cite{srivastava2014dropout}.
 We refer to the NN-based parser as \parser{NN}.
 
 For all classifiers, inference is performed greedily, i.e., without beam search.
@@ -385,9 +384,9 @@ three buffer elements, in addition to their children and grandchildren in the gr
 We also use bi- and trigram features based on these values \cite{zhang2009transition,zhu2013fast},
 features related to discontinuous nodes adopted from \cite{maier2015discontinuous},
 and features representing existing edges and the number of parents and children a node has, following \cite{tokgoz2015transition}.
-In addition, we use novel, UCCA-specific features related to remote edges\footnote{See
-  supplementary material for a full listing of the feature templates.}.\oa{we need to describe
-  the UCCA features here because they are novel}.
+In addition, we use novel, UCCA-specific features:
+the number of remote children a node has\footnote{See
+supplementary material for a full listing of the feature templates.}.
 
 For the dense perceptron-based (\parser{dense}) and the NN-based parser (\parser{NN}),
 we replace all binary features by a
@@ -428,8 +427,8 @@ the same ones used by \newcite{dyer2015transition}\footnote{
 
 For the NN classifier, word embeddings are initialized to random
 100-dimensional vectors (which were found to give better results than the pre-trained vectors). We use 1000-dimensional hidden layers.
-For both the dense perceptron and the NN classifiers, we initialize the POS tag embeddings as random 20-dimensional vectors. The embeddings for existing\oa{what do you mean existing?} edge labels are 10-dimensional, and embeddings for parser actions are 5-dimensional.
-We use the categorical cross-entropy objective function and train the
+For both the dense perceptron and the NN classifiers, we initialize the POS tag embeddings as random 20-dimensional vectors. The embeddings for edge labels are 10-dimensional, and embeddings for parser actions are 5-dimensional.
+We use the max margin objective function and train the
 NN classifier with the Adam optimizer \cite{kingma2014adam}. We use a dropout probability of 0.2,
 and train the network for 50 epochs on a batch of 100 sentences at a time.
 We use the Keras package \cite{chollet2015keras} for implementing the NN classifier.
