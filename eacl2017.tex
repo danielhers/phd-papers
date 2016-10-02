@@ -606,8 +606,8 @@ TurboParser
 & 55 & 54.8 & 54.9 & 15.2 & 16.9 & 16 
 & 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
 \parser{NN}
-& {\bf 56.6} & {\bf 52.9} & {\bf 54.7} & {\bf 10.1} & {\bf 5.6} & {\bf 7.2}
-& {\bf 58.3} & {\bf 56.4} & {\bf 57.3} & {\bf 15.2} & {\bf 3.8} & {\bf 6}
+& {\bf 64.6} & {\bf 60.9} & {\bf 62.7} & {\bf 18.1} & {\bf 13.6} & {\bf 15.6}
+& {\bf 62.3} & {\bf 62.4} & {\bf 61.3} & {\bf 22.2} & {\bf 10.8} & {\bf 14.5}
 \end{tabular}
 \caption{\label{table:results}
   Main experimental results in percents, on the \textit{Wiki} test set (left, in-domain)
@@ -656,7 +656,7 @@ better in the in-domain setting).
 Finally, using a feedforward NN, \parser{NN} manages to exploit the embeddings,
 and obtains substantially higher scores in all measures, both
 in the in-domain and out-of-domain settings.
-Its performance in absolute terms, of .. \%\oa{missing} F-score, is encouraging in light of
+Its performance in absolute terms, of 62.7\% F-score, is encouraging in light of
 UCCA's inter-annotator agreement of 80--85\%
 F-score on primary edges \cite{abend2013universal}.
 
@@ -708,7 +708,7 @@ LSTM Parser & {\bf 74.9} & {\bf 66.4} & {\bf 70.2} \\
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Tree Parsing} \\
 \parser{sparse} $-$ \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
 \parser{dense} $-$ \textsc{Remote} & 57.2 & 57.3 & 57.2 \\
-\parser{NN} $-$ \textsc{Remote} & 55.8 & 53.3 & 54.5 \\
+\parser{NN} $-$ \textsc{Remote} & 65.8 & 63.3 & 64.5 \\
 \end{tabular}
 \caption{\label{fig:tree_approx_results}
   Results of tree approximation experiment, in percents (on the \textit{Wiki} test set).
@@ -1168,7 +1168,7 @@ In each of the other rows, one feature set is excluded.
 Columns are the same as in \tabref{table:results}.
   
 \begin{table}[ht]
-\scalebox{.8}{
+\scalebox{.75}{
 \centering
 \begin{tabular}{l|ccc|ccc}
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
