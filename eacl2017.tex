@@ -429,9 +429,10 @@ the same ones used by \newcite{dyer2015transition}\footnote{
 For the NN classifier, word embeddings are initialized to random
 100-dimensional vectors (which were found to give better results than the pre-trained vectors). We use 1000-dimensional hidden layers.
 For both the dense perceptron and the NN classifiers, we initialize the POS tag embeddings as random 20-dimensional vectors. The embeddings for edge labels are 10-dimensional, and embeddings for parser actions are 5-dimensional.
-We use the max margin objective function and train the
+We use the categorical cross-entropy objective function and train the
 NN classifier with the Adam optimizer \cite{kingma2014adam}. We use a dropout probability of 0.2,
-and train the network for 50 epochs on a batch of 100 sentences at a time.
+and train the network on the correct transitions for the whole training set,
+for 50 epochs with a mini-batch of 200 samples at a time.
 We use the Keras package \cite{chollet2015keras} for implementing the NN classifier.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -606,8 +607,8 @@ TurboParser
 & 55 & 54.8 & 54.9 & 15.2 & 16.9 & 16 
 & 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
 \parser{NN}
-& {\bf 64.6} & {\bf 60.9} & {\bf 62.7} & {\bf 18.1} & {\bf 13.6} & {\bf 15.6}
-& {\bf 62.3} & {\bf 62.4} & {\bf 61.3} & {\bf 22.2} & {\bf 10.8} & {\bf 14.5}
+& {\bf 65} & {\bf 62.5} & {\bf 63.7} & {\bf 20.7} & {\bf 11.3} & {\bf 14.6}
+& {\bf 58.3} & {\bf 56.4} & {\bf 57.3} & {\bf 15.2} & {\bf 3.8} & {\bf 6}
 \end{tabular}
 \caption{\label{table:results}
   Main experimental results in percents, on the \textit{Wiki} test set (left, in-domain)
@@ -708,7 +709,7 @@ LSTM Parser & {\bf 74.9} & {\bf 66.4} & {\bf 70.2} \\
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Tree Parsing} \\
 \parser{sparse} $-$ \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
 \parser{dense} $-$ \textsc{Remote} & 57.2 & 57.3 & 57.2 \\
-\parser{NN} $-$ \textsc{Remote} & 65.8 & 63.3 & 64.5 \\
+\parser{NN} $-$ \textsc{Remote} & 66.3 & 64.4 & 65.3 \\
 \end{tabular}
 \caption{\label{fig:tree_approx_results}
   Results of tree approximation experiment, in percents (on the \textit{Wiki} test set).
