@@ -15,6 +15,9 @@
 \usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
 \usepackage{amsfonts, amsmath, amsthm, amssymb} % For math fonts, symbols and environments
 \usepackage{wrapfig} % Allows wrapping text around tables and figures
+\usepackage{tikz}
+\usepackage{tikz-dependency}
+\usetikzlibrary{arrows.meta}
 
 \begin{document}
 
@@ -57,7 +60,20 @@
 
 \begin{abstract}
 
-Sed fringilla tempus hendrerit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam ut elit sit amet metus lobortis consequat sit amet in libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel sem magna. Nunc at convallis urna. isus ante. Pellentesque condimentum dui. Etiam sagittis purus non tellus tempor volutpat. Donec et dui non massa tristique adipiscing. Quisque vestibulum eros eu. Phasellus imperdiet, tortor vitae congue bibendum, felis enim sagittis lorem, et volutpat ante orci sagittis mi. Morbi rutrum laoreet semper. Morbi accumsan enim nec tortor consectetur non commodo nisi sollicitudin. Proin sollicitudin. Pellentesque eget orci eros. Fusce ultricies, tellus et pellentesque fringilla, ante massa luctus libero, quis tristique purus urna nec nibh.
+  We present the first parser for UCCA, a
+  cross-linguistically applicable framework for semantic
+  representation, that builds on extensive
+  typological work, and supports rapid annotation.
+  UCCA poses a challenge for existing parsing techniques,
+  as it exhibits reentrancy (resulting in DAG structures),
+  discontinuous structures and non-terminal nodes corresponding
+  to complex semantic units. To our knowledge, the conjunction
+  of these formal properties is not supported by any existing parser.
+  Our transition-based parser, using novel transition set
+  and features, has value not just for UCCA parsing:
+  its ability to handle more general graph structures will inform
+  the development of parsers for other semantic DAG structures, 
+  and in languages which frequently use discontinuous structures.
 
 \end{abstract}
 
@@ -65,32 +81,93 @@ Sed fringilla tempus hendrerit. Vestibulum ante ipsum primis in faucibus orci lu
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
 
-\color{SaddleBrown} % SaddleBrown color for the introduction
+\color{Black} % SaddleBrown color for the introduction
 
 \section*{Introduction}
 
-Aliquam non lacus dolor, \textit{a aliquam quam} \cite{Smith:2012qr}. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla in nibh mauris. Donec vel ligula nisi, a lacinia arcu. Sed mi dui, malesuada vel consectetur et, egestas porta nisi. Sed eleifend pharetra dolor, et dapibus est vulputate eu. \textbf{Integer faucibus elementum felis vitae fringilla.} In hac habitasse platea dictumst. Duis tristique rutrum nisl, nec vulputate elit porta ut. Donec sodales sollicitudin turpis sed convallis. Etiam mauris ligula, blandit adipiscing condimentum eu, dapibus pellentesque risus.
+Universal Conceptual Cognitive Annotation \cite{abend2013universal},
+is a cross-linguistically applicable semantic representation scheme,
+building on the established Basic Linguistic Theory typological framework
+\cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive
+Linguistics literature \cite{croft2004cognitive}.
+UCCA has demonstrated applicability to multiple languages, including
+English, French, German and Czech, support for rapid annotation,
+and semantic stability in translation \cite{sulem2015conceptual}.
+The scheme has proven useful for machine translation evaluation \cite{birch2016hume},
+but its applicability has been so far limited by the absence of a UCCA parser,
+a gap this paper addresses.
 
-\textit{Aliquam auctor}, metus id ultrices porta, risus enim cursus sapien, quis iaculis sapien tortor sed odio. Mauris ante orci, euismod vitae tincidunt eu, porta ut neque. Aenean sapien est, viverra vel lacinia nec, venenatis eu nulla. Maecenas ut nunc nibh, et tempus libero. Aenean vitae risus ante. Pellentesque condimentum dui. Etiam sagittis purus non tellus tempor volutpat. Donec et dui non massa tristique adipiscing.
+Formally, a UCCA structure is a DAG whose leaves correspond to the tokens of
+the text. Nodes (or {\it units}) either correspond to a terminal or
+to several sub-units (not necessarily contiguous) jointly viewed as a
+single entity according to some semantic or cognitive consideration.
+Edges bear a category, indicating the role of the sub-unit in the relation
+that the parent represents.
 
-%----------------------------------------------------------------------------------------
-%	OBJECTIVES
-%----------------------------------------------------------------------------------------
+\begin{center}
+  \begin{tikzpicture}[level distance=4cm, sibling distance=4cm, -{Latex[length=5mm]},
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node (After) {After} edge from parent node[left] {L}}
+      child {node (graduation) [circle] {}
+      {
+        child {node {graduation} edge from parent node[left] {P}}
+      } edge from parent node[left] {H} }
+      child {node {,} edge from parent node[right] {U}}
+      child {node (moved) [circle] {}
+      {
+        child {node (John) {John} edge from parent node[left] {A}}
+        child {node {moved} edge from parent node[left] {P}}
+        child {node [circle] {}
+        {
+          child {node {to} edge from parent node[left] {R}}
+          child {node {Paris} edge from parent node[left] {C}}
+        } edge from parent node[left] {A} }
+      } edge from parent node[right] {H} }
+      ;
+    \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [auto] {A} (John);
+  \end{tikzpicture}
+  \begin{tikzpicture}[level distance=5cm, sibling distance=4cm, -{Latex[length=5mm]},
+      every node/.append style={midway},
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node {John} edge from parent node[left] {A}}
+      child {node [circle] {}
+      {
+      	child {node {gave} edge from parent node[left] {C}}
+      	child {node (everything) {everything} edge from parent[white]}
+      	child {node {up} edge from parent node[left] {C}}
+      } edge from parent node[right] {P} }
+      ;
+    \draw[bend right,-{Latex[length=5mm]}] (ROOT) to[out=-20, in=180] node [left] {A} (everything);
+  \end{tikzpicture}
+  \begin{tikzpicture}[level distance=5cm, sibling distance=4cm, -{Latex[length=5mm]},
+      every node/.append style={midway},
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node [circle] {}
+      {
+        child {node {John} edge from parent node[left] {C}}
+        child {node {and} edge from parent node[left] {N}}
+        child {node {Mary} edge from parent node[left] {C}}
+      } edge from parent node[left] {A} }
+      child {node {went} edge from parent node[left] {P}}
+      child {node {home} edge from parent node[left] {A}}
+      ;
+  \end{tikzpicture}
+%    UCCA structures demonstrating three structural properties exhibited by
+%    the scheme.
+%    (\subref{fig:graduation}) includes a remote edge (dashed),
+%    resulting in ``John'' having two parents.
+%    (\subref{fig:gave}) includes a discontinuous unit (``gave ... up'').
+%    (\subref{fig:home}) includes a coordination construction (``John and Mary'').
+%    Legend: $P$ -- process (a scene's main relation), $A$ -- participant,
+%    $L$ -- inter-scene linker, $H$ -- linked scene, $C$ -- center,
+%    $R$ -- relator, $N$ -- connector, $U$ -- punctuation, $F$ -- function unit.
+%    Pre-terminal nodes are omitted for brevity.
+\end{center}
 
 \color{DarkSlateGray} % DarkSlateGray color for the rest of the content
-
-\section*{Main Objectives}
-
-\begin{enumerate}
-\item Lorem ipsum dolor sit amet, consectetur.
-\item Nullam at mi nisl. Vestibulum est purus, ultricies cursus volutpat sit amet, vestibulum eu.
-\item Praesent tortor libero, vulputate quis elementum a, iaculis.
-\item Phasellus a quam mauris, non varius mauris. Fusce tristique, enim tempor varius porta, elit purus commodo velit, pretium mattis ligula nisl nec ante.
-\item Ut adipiscing accumsan sapien, sit amet pretium.
-\item Estibulum est purus, ultricies cursus volutpat
-\item Nullam at mi nisl. Vestibulum est purus, ultricies cursus volutpat sit amet, vestibulum eu.
-\item Praesent tortor libero, vulputate quis elementum a, iaculis.
-\end{enumerate}
 
 %----------------------------------------------------------------------------------------
 %	MATERIALS AND METHODS
@@ -205,7 +282,7 @@ Vivamus sed nibh ac metus tristique tristique a vitae ante. Sed lobortis mi ut a
 %	FORTHCOMING RESEARCH
 %----------------------------------------------------------------------------------------
 
-\section*{Forthcoming Research}
+\section*{Future Work}
 
 Vivamus molestie, risus tempor vehicula mattis, libero arcu volutpat purus, sed blandit sem nibh eget turpis. Maecenas rutrum dui blandit lorem vulputate gravida. Praesent venenatis mi vel lorem tempor at varius diam sagittis. Nam eu leo id turpis interdum luctus a sed augue. Nam tellus.
 
@@ -221,9 +298,9 @@ Vivamus molestie, risus tempor vehicula mattis, libero arcu volutpat purus, sed 
 %	ACKNOWLEDGEMENTS
 %----------------------------------------------------------------------------------------
 
-\section*{Acknowledgements}
-
-Etiam fermentum, arcu ut gravida fringilla, dolor arcu laoreet justo, ut imperdiet urna arcu a arcu. Donec nec ante a dui tempus consectetur. Cras nisi turpis, dapibus sit amet mattis sed, laoreet.
+%\section*{Acknowledgements}
+%
+%Etiam fermentum, arcu ut gravida fringilla, dolor arcu laoreet justo, ut imperdiet urna arcu a arcu. Donec nec ante a dui tempus consectetur. Cras nisi turpis, dapibus sit amet mattis sed, laoreet.
 
 %----------------------------------------------------------------------------------------
 
