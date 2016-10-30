@@ -17,16 +17,14 @@
 \usepackage{wrapfig} % Allows wrapping text around tables and figures
 \usepackage{lipsum,adjustbox}
 \usepackage{multirow}
+\usepackage{url}
 \usepackage{tikz}
 \usepackage{tikz-dependency}
 \usetikzlibrary{arrows.meta}
 \newcommand{\parser}[1]{TUPA\textsubscript{#1}}
+\captionsetup{labelformat=empty}
 
 \begin{document}
-
-%----------------------------------------------------------------------------------------
-%	POSTER HEADER 
-%----------------------------------------------------------------------------------------
 
 % The header is divided into two boxes:
 % The first is 75% wide and houses the title, subtitle, names, university/organization and contact information
@@ -55,10 +53,6 @@
 
 \begin{multicols}{2} % This is how many columns your poster will be broken into, a portrait poster is generally split into 2 columns
 
-%----------------------------------------------------------------------------------------
-%	ABSTRACT
-%----------------------------------------------------------------------------------------
-
 \color{Navy} % Navy color for the abstract
 
 \begin{abstract}
@@ -80,9 +74,8 @@
 
 \end{abstract}
 
-%----------------------------------------------------------------------------------------
-%	INTRODUCTION
-%----------------------------------------------------------------------------------------
+
+
 
 \color{Black} % SaddleBrown color for the introduction
 
@@ -130,6 +123,7 @@ that the parent represents.
       ;
     \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [auto] {A} (John);
   \end{tikzpicture}
+	\captionof{figure}{\color{Green} Remote edge (dashed), resulting in ``John'' having two parents.}
   \begin{tikzpicture}[level distance=5cm, sibling distance=4cm, -{Latex[length=5mm]},
       every node/.append style={midway},
       every circle node/.append style={fill=black}]
@@ -144,6 +138,7 @@ that the parent represents.
       ;
     \draw[bend right,-{Latex[length=5mm]}] (ROOT) to[out=-20, in=180] node [left] {A} (everything);
   \end{tikzpicture}
+	\captionof{figure}{\color{Green} Discontinuous unit (``gave ... up'').}
   \begin{tikzpicture}[level distance=5cm, sibling distance=4cm, -{Latex[length=5mm]},
       every node/.append style={midway},
       every circle node/.append style={fill=black}]
@@ -158,21 +153,21 @@ that the parent represents.
       child {node {home} edge from parent node[left] {A}}
       ;
   \end{tikzpicture}
-%    UCCA structures demonstrating three structural properties exhibited by
-%    the scheme.
-%    (\subref{fig:graduation}) includes a remote edge (dashed),
-%    resulting in ``John'' having two parents.
-%    (\subref{fig:gave}) includes a discontinuous unit (``gave ... up'').
-%    (\subref{fig:home}) includes a coordination construction (``John and Mary'').
-%    Legend: $P$ -- process (a scene's main relation), $A$ -- participant,
-%    $L$ -- inter-scene linker, $H$ -- linked scene, $C$ -- center,
-%    $R$ -- relator, $N$ -- connector, $U$ -- punctuation, $F$ -- function unit.
-%    Pre-terminal nodes are omitted for brevity.
+	\captionof{figure}{\color{Green} Coordination construction (``John and Mary'').}
+	\captionof{figure}{\color{Green} UCCA structures demonstrating three structural properties
+	exhibited by the scheme.
+	Legend: $P$ -- process (a scene's main relation), $A$ -- participant,
+    $L$ -- inter-scene linker, $H$ -- linked scene, $C$ -- center,
+    $R$ -- relator, $N$ -- connector, $U$ -- punctuation, $F$ -- function unit.
+    Pre-terminal nodes are omitted for brevity.}
 \end{center}
 
 \color{DarkSlateGray} % DarkSlateGray color for the rest of the content
 
-\section*{The UCCA Scheme}\label{sec:ucca}
+
+
+
+\section*{The UCCA Scheme}
 
 UCCA is a multi-layered representation, each layer corresponding
 to a ``module'' of semantic distinctions.
@@ -197,7 +192,10 @@ Further categories account for relations between Scenes and the internal structu
 complex arguments and relations (e.g. coordination; complex
 adverbials such as ``very clearly'').
 
-\section*{Transition-based UCCA Parsing}\label{sec:direct_approach}
+
+
+
+\section*{Transition-based UCCA Parsing}
 
 We now turn to presenting \parser{},
 a transition-based parser supporting the structural properties of UCCA.
@@ -225,38 +223,43 @@ adding the \textsc{Node} transition for creating new non-terminal nodes.
 \textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge.
 
 
-\begin{figure*}
-\begin{adjustbox}{width=\textwidth,margin=3pt,frame}
-\begin{tabular}{llll|l|llllc|c}
-\multicolumn{4}{c|}{\textbf{\small Before Transition}} & \textbf{\small Transition} & \multicolumn{5}{c|}{\textbf{\small After Transition}} & \textbf{\small Condition} \\
-\textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & \textbf{\footnotesize Terminal?} & \\
-$S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ & $-$ & \\
-$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & \\
-$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ &
-$x \neq \mathrm{root}$ \\
-$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ &
-\multirow{4}{50pt}{\vspace{-5mm}\[\left\{\begin{array}{l}
-x \not\in w_{1:n},\\
-y \neq \mathrm{root},\\
-y \not\leadsto_G x
-\end{array}\right.\]} \\
-$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ & \\
-$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
-$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
-$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ & $-$ &
-$\mathrm{i}(x) < \mathrm{i}(y)$ \\
-$[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & $+$ & \\
-\end{tabular}
-\end{adjustbox}
-\caption{\label{fig:transitions}
-  The transition set of \parser{}. %Following standard practice,
-  We write the stack with its top to the right and the buffer with its head to the left.
-  $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
-  $\mathrm{i}(x)$ is a running index for the created nodes.
-  \textsc{Edge} transitions have an additional condition: the prospective child may not
-  already have a primary parent.
-}
-\end{figure*}
+
+
+
+\begin{center}
+	\begin{wraptable}{l}{\columnwidth}
+	\begin{adjustbox}{margin=3pt,frame}
+	\begin{tabular}{llll|l|llllc|c}
+	\multicolumn{4}{c|}{\textbf{\small Before Transition}} & \textbf{\small Transition} & \multicolumn{5}{c|}{\textbf{\small After Transition}} & \textbf{\small Condition} \\
+	\textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & \textbf{\footnotesize Terminal?} & \\
+	$S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ & $-$ & \\
+	$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & \\
+	$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ &
+	$x \neq \mathrm{root}$ \\
+	$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ &
+	\multirow{4}{50pt}{\vspace{-5mm}\[\left\{\begin{array}{l}
+	x \not\in w_{1:n},\\
+	y \neq \mathrm{root},\\
+	y \not\leadsto_G x
+	\end{array}\right.\]} \\
+	$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ & \\
+	$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
+	$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
+	$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ & $-$ &
+	$\mathrm{i}(x) < \mathrm{i}(y)$ \\
+	$[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & $+$ & \\
+	\end{tabular}
+	\end{adjustbox}
+	\captionof{table}{
+	  The transition set of \parser{}. %Following standard practice,
+	  We write the stack with its top to the right and the buffer with its head to the left.
+	  $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
+	  $\mathrm{i}(x)$ is a running index for the created nodes.
+	  \textsc{Edge} transitions have an additional condition: the prospective child may not
+	  already have a primary parent.
+	}
+	\end{wraptable}
+\end{center}
 
 \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new primary $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively.
 As a UCCA node may only have one incoming primary edge,
@@ -278,8 +281,7 @@ named transition in previous work \cite{nivre2009non,maier2015discontinuous}.
 Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 
 \paragraph{Classifier.}
-We experiment with three classifiers\footnote{A link to the code repository will
-be released upon publication.}.
+We experiment with three classifiers.
 First, following \cite{maier2015discontinuous} and \cite{maier-lichte:2016:DiscoNLP},
 we use a linear classifier, using sparse features and
 the averaged structured perceptron algorithm for training it
@@ -305,8 +307,7 @@ We also use bi- and trigram features based on these values \cite{zhang2009transi
 features related to discontinuous nodes \cite{maier2015discontinuous},
 and features representing existing edges and the number of parents and children a node has \cite{tokgoz2015transition}.
 In addition, we use novel, UCCA-specific features:
-the number of remote children a node has\footnote{See
-Appendix~\ref{appendix:features} for a full listing of the feature templates.}.
+the number of remote children a node has.
 
 For the dense perceptron-based (\parser{dense}) and the NN-based parser (\parser{NN}),
 we replace all binary features by a
@@ -352,100 +353,405 @@ and train the network on the correct transitions for the whole training set,
 for 50 epochs with a mini-batch of 200 samples at a time.
 We use the Keras package \cite{chollet2015keras} for implementing the NN classifier.
 
-%----------------------------------------------------------------------------------------
-%	RESULTS 
-%----------------------------------------------------------------------------------------
+
+
+
+\section*{Experimental Setup}
+
+\paragraph{Data.}
+We conduct our main experiments on the UCCA Wikipedia corpus (henceforth, \textit{Wiki}),
+and use the English part of the UCCA \textit{Twenty Thousand Leagues Under the Sea} English-French parallel corpus (henceforth, \textit{20K Leagues}) as
+out-of-domain data.\footnote{Both are available at \url{http://www.cs.huji.ac.il/~oabend/ucca.html}}
+We use passages of indices up to 675
+of the \textit{Wiki} corpus as our training set, passages 676--807 as development set,
+and passages 808--1028 as in-domain test set.
+While UCCA edges can cross sentence boundaries, we adhere to the common
+practice in semantic parsing and train our parsers on individual sentences,
+discarding inter-relations between them (0.18\% of the edges).
+We also discard linkage nodes and edges (as they often express inter-sentence
+relations and are thus mostly redundant when applied at the sentence level)
+as well as implicit nodes.
+In the out-of-domain experiments, we apply the same parsers
+(trained on the \textit{Wiki} corpus) to the \textit{20K Leagues} corpus
+without parameter re-tuning.
+
+
+\begin{center}
+	\begin{tabular}{l|ccc|c}
+	& \multicolumn{3}{c|}{Wiki} & 20K \\
+	& \small Train & \small Dev & \small Test & Leagues \\
+	\hline
+	\# passages & 300 & 34 & 34 & 154 \\
+	\# sentences & 4267 & 453 & 518 & 506 \\
+	\hline
+	\# nodes & 298,665 & 33,263 & 37,262 & 29,315 \\
+	\% terminal & 42.95 & 43.62 & 42.89 & 42.09 \\
+	\% non-term. & 58.30 & 57.46 & 58.31 & 60.01 \\
+	\% discont. & 0.53 & 0.51 & 0.47 & 0.81 \\
+	\% reentrant & 2.31 & 1.76 & 2.18 & 2.03 \\
+	\hline
+	\# edges & 287,381 & 32,015 & 35,846 & 27,749 \\
+	\% primary & 98.29 & 98.81 & 98.75 & 97.73 \\
+	\% remote & 1.71 & 1.19 & 1.25 & 2.27 \\
+	\hline
+	\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
+	\# children & 1.67 & 1.68 & 1.66 & 1.61 
+	\end{tabular}
+	\captionof{table}{Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.
+	All counts exclude the root node, implicit nodes, and linkage nodes and edges.}
+\end{center}
+
+
+\paragraph{Evaluation.}
+Since there are no standard evaluation measures for UCCA, we define
+two simple measures for comparing such structures.
+Assume $G_p=(V_p,E_p,\ell_p)$ and $G_g=(V_g,E_g,\ell_g)$
+are the predicted and gold-standard graphs over the same
+sequence of terminals $W = \{w_1,\ldots,w_n\}$, respectively.
+For an edge $e=(u,v)$ in either graph,
+where $u$ is the parent and $v$ is the child, define its yield $y(e) \subseteq W$ as the
+set of terminals in $W$ that are descendants of $v$.
+Define the set of \textit{mutual edges} between $G_p$ and $G_g$:
+
+\[
+    M(G_p,G_g) =
+    \left\{(e_1,e_2) \in E_p \times E_g \;|\;
+    y(e_1) = y(e_2) \wedge \ell_p(e_1)=\ell_g(e_2)\right\}
+\]
+
+Labeled precision and recall are defined by dividing $|M(G_p,G_g)|$ by $|E_p|$ and $|E_g|$, respectively.
+We report two variants of this measure: one where we consider only primary edges,
+and another for remote edges. We note that the measure collapses to the standard
+PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
+Punctuation is excluded from the evaluation, but not from the datasets.
+
+\paragraph{Comparison to bilexical DAG parsers.}
+As \parser{} is the first parser to support reentrancy, discontinuous units and
+non-terminal nodes, no direct comparison with an existing parser is possible.
+We instead compare \parser{} to bilexical DAG parsers,
+which we view as the closest existing match (they support two of the properties,
+but not non-terminal nodes).
+Our approach is similar in spirit
+to the \textit{tree approximation} approach used for dependency DAG parsing
+\cite{agic2015semantic,fernandez2015parsing},
+where dependency DAGs were converted into dependency trees
+and then parsed by existing dependency tree parsers.
+
+\begin{center}
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\depedge{2}{1}{L}
+	\depedge{2}{3}{U}
+	\depedge[dashed]{2}{4}{A}
+	\depedge{5}{4}{A}
+	\depedge{2}{5}{H}
+	\depedge{7}{6}{R}
+	\depedge{5}{7}{A}
+	\end{dependency}
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	John \^ gave \^ everything \^ up \\
+	\end{deptext}
+	\depedge{1}{2}{A}
+	\depedge{3}{2}{A}
+	\depedge{4}{2}{C}
+	\end{dependency}
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	John \^ and \^ Mary \^ went \^ home \\
+	\end{deptext}
+	\depedge[edge start x offset=-6pt]{1}{4}{A}
+	\depedge{2}{1}{N}
+	\depedge{3}{1}{C}
+	\depedge{5}{4}{A}
+	\end{dependency}
+	\captionof{figure}{Bilexical approximation.}
+\end{center}
+
+We first convert UCCA into bilexical dependencies, and train each parser on the resulting
+training set.
+We evaluate the trained parsers by applying them to the test set
+and then reconstructing UCCA graphs, which are compared with the gold standard.
+Upper bounds for the conversion-based method are computed by applying
+the conversion and inverse conversion on the gold standard
+graphs and comparing them to the original gold standard.
+
+\begin{center}
+	\begin{tabular}{l|ccc|ccc||ccc|ccc}
+	& \multicolumn{6}{c||}{Wiki (in-domain)} & \multicolumn{6}{c}{20K Leagues (out-of-domain)} \\
+	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c||}{Remote}
+	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF}
+	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+	\hline
+	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
+	Upper Bound % on the test set and ood set only
+	& 93.4 & 83.7 & 88.3 & 73.9 & 49.5 & 59.3
+	& 93.5 & 83.5 & 88.2 & 66.7 & 31.6 & 42.9 \vspace{.1cm} \\
+	DAGParser
+	& 63.7 & 	56.1	 & 59.5	 & 0.8	 & 9.5	 &  1.4
+	& 58	 & 49.8	 & 53.4 & -- & 0 & 0 \\
+	TurboParser
+	& 60.2	 & 47.4	 & 52.9	 & 2.2	 & 7.8	 &  3.4
+	& 52.6	 & 39	 & 44.7	 & 100	 & 0.3	 & 0.6 \\
+	\hline
+	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
+	\parser{sparse}
+	& 64 & 55.6 & 59.5 & 16 & 11.6 & 13.4 
+	& 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
+	\parser{dense} 
+	& 55 & 54.8 & 54.9 & 15.2 & 16.9 & 16 
+	& 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
+	\parser{NN}
+	& {\bf 65} & {\bf 62.5} & {\bf 63.7} & {\bf 20.7} & {\bf 11.3} & {\bf 14.6}
+	& {\bf 58.3} & {\bf 56.4} & {\bf 57.3} & {\bf 15.2} & {\bf 3.8} & {\bf 6}
+	\end{tabular}
+	\captionof{table}{
+	  Main experimental results in percents, on the \textit{Wiki} test set (left, in-domain)
+	  and the \textit{20K Leagues} set (right, out-of-domain).
+	  Columns correspond to labeled precision, recall and F-score for the different parsers,
+	  for both primary and remote edges.
+	  Top: results for DAGParser and TurboParser, after conversion to bilexical DAGs.
+	  Bottom: results for our \parser{}, trained on the original UCCA graphs, using each of the
+	  three classifiers.
+	  \parser{NN} obtains the highest scores in all metrics, surpassing the bilexical parsers
+	  and the other classifiers.
+	}
+\end{center}
+
+We evaluate two parsers in the bilexical approximation setting:
+DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, the leading transition-based parser which participated in the SDP task of SemEval 2014 \cite{oepen2014semeval},
+and the semantic variant of TurboParser \cite{almeida-martins:2015:SemEval},
+a second-order graph-based parser that uses dual decomposition for optimization,
+which obtained some of the best results in the SDP task of SemEval 2015 \cite{oepen2015semeval}. Default settings are used in all cases.
+We note that DAGParser uses beam search by default, with a beam size of 5.
+
+
+
+
 
 \section*{Results}
 
-Donec faucibus purus at tortor egestas eu fermentum dolor facilisis. Maecenas tempor dui eu neque fringilla rutrum. Mauris \emph{lobortis} nisl accumsan. Aenean vitae risus ante.
-%
-\begin{wraptable}{l}{12cm} % Left or right alignment is specified in the first bracket, the width of the table is in the second
-\begin{tabular}{l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
+Our main experimental results, as well as
+upper bounds for the approximation-based method,
+reflecting the error resulting from converting the test set into bilexical DAGs and then
+back into UCCA---the conversion procedure loses some of the information about non-terminal nodes.
+
+DAGParser is most directly comparable to \parser{sparse}, as both parsers
+use the perceptron classifier over a sparse feature representation.
+Despite the lossy conversion, DAGParser obtains comparable results to
+\parser{sparse} on primary edges, but on remote edges, \parser{sparse}
+surpasses it considerably in performance
+(DAGParser does not predict any remote edges in the out-of-domain setting).
+TurboParser fares worse in this comparison, despite somewhat better results on
+remote edges.
+
+Replacing the sparse representation with dense embeddings, \parser{dense} obtains
+lower results than its sparse counterpart (although its recall on remote edges is
+better in the in-domain setting).
+Finally, using a feedforward NN, \parser{NN} manages to exploit the embeddings,
+and obtains substantially higher scores in all measures, both
+in the in-domain and out-of-domain settings.
+Its performance in absolute terms, of 63.7\% F-score, is encouraging in light of
+UCCA's inter-annotator agreement of 80--85\%
+F-score on primary edges \cite{abend2013universal}.
+
+
+
+
+\section*{Discussion}
+
+\paragraph{Tree approximation.}
+For completeness, we further explore a conversion-based approach that
+lossily converts UCCA structures into trees. 
+This approach resembles the bilexical approximation approach, but here it results in a simplified task for the underlying parser: parsing into tree structures.
+
+Performance on remote edges is of pivotal importance in this investigation, which focuses on extending the class of graphs supported by statistical parsers. Nevertheless, we believe that exploring tree approximation methods, thus building on the maturity and cumulative experience with transition-based tree parsing, can inform the future development of DAG parsers in general and of UCCA parsers in particular.
+
+We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
+and one into bilexical dependency trees. In the first setting we experiment with \textsc{uparse}
+\cite{maier-lichte:2016:DiscoNLP},
+the only transition-based constituency parser, to our knowledge, able to parse trees with
+discontinuous constituents.
+In the second setting we use MaltParser \cite{nivre2007maltparser} with the
+arc-eager transition set and the SVM classifier,
+and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
+Default settings are used in all cases.
+\textsc{uparse} uses beam search by default,
+with a beam size of 4, and the other parsers are greedy.
+We also train the \parser{} variants without remote edge transitions, yielding a tree parser.
+
+\begin{center}
+\begin{tabular}{l|ccc}
+& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Approximation} \\
+Upper Bound & 100 & 100 & 100 \vspace{.1cm} \\
+\textsc{uparse} & 63 & 64.7 & 63.7 \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Dependency Tree Approximation} \\
+Upper Bound & 93.7 & 83.6 & 88.4 \vspace{.1cm} \\
+MaltParser & 64.9 & 57.9 & 61 \\
+LSTM Parser & {\bf 74.9} & {\bf 66.4} & {\bf 70.2} \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Tree Parsing} \\
+\parser{sparse} $-$ \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
+\parser{dense} $-$ \textsc{Remote} & 57.2 & 57.3 & 57.2 \\
+\parser{NN} $-$ \textsc{Remote} & 66.3 & 64.4 & 65.3 \\
 \end{tabular}
-\captionof{table}{\color{Green} Table caption}
-\end{wraptable}
-%
-Phasellus imperdiet, tortor vitae congue bibendum, felis enim sagittis lorem, et volutpat ante orci sagittis mi. Morbi rutrum laoreet semper. Morbi accumsan enim nec tortor consectetur non commodo nisi sollicitudin. Proin sollicitudin. Pellentesque eget orci eros. Fusce ultricies, tellus et pellentesque fringilla, ante massa luctus libero, quis tristique purus urna nec nibh.
+\captionof{table}{
+  Results of tree approximation experiment, in percents (on the \textit{Wiki} test set).
+  Columns correspond to labeled precision,
+  recall and F-score for the different parsers, including only primary edges
+  (remote edges are removed at training).
+  Top: results for \textsc{uparse}
+  after conversion to constituency tree annotation. Upper middle: results for the
+  MaltParser and the LSTM parser, after conversion to dependency tree annotation.
+  Bottom: results for our \parser{}, trained on
+  UCCA trees, obtained by removing remote edges ($-$\textsc{Remote}).
+}
+\end{center}
 
-Nulla ut porttitor enim. Suspendisse venenatis dui eget eros gravida tempor. Mauris feugiat elit et augue placerat ultrices. Morbi accumsan enim nec tortor consectetur non commodo. Pellentesque condimentum dui. Etiam sagittis purus non tellus tempor volutpat. Donec et dui non massa tristique adipiscing. Quisque vestibulum eros eu. Phasellus imperdiet, tortor vitae congue bibendum, felis enim sagittis lorem, et volutpat ante orci sagittis mi. Morbi rutrum laoreet semper. Morbi accumsan enim nec tortor consectetur non commodo nisi sollicitudin.
+The conversion to constituency format only removes remote edges,
+and thus obtains a perfect primary edge score.
+The conversion to dependency format loses considerably more information, since
+all non-terminal nodes have to be reconstructed by a simple rule-based inverse
+conversion. Both conversions yield zero scores on remote edges,
+since these are invariably removed when converting to trees.
 
-\begin{center}\vspace{1cm}
-%\includegraphics[width=0.8\linewidth]{placeholder}
-\captionof{figure}{\color{Green} Figure caption}
-\end{center}\vspace{1cm}
+The LSTM parser obtains the highest primary F-score,
+with a considerable margin. Importantly, it obtains 9.2\% F-score
+higher than the MaltParser,
+despite being limited by the same approximation error upper bound,
+and using a similar transition set.
+This shows that the LSTM classifier has a significant contribution
+to the accuracy of
+the parser, suggesting that a recurrent neural network (RNN) model
+may also improve \parser{}.
+This is in line with the recent success of RNNs
+(specifically, LSTMs and GRUs) in NLP tasks, including DAG-structured LSTM
+\cite{zhu-sobhani-guo:2016:N16-1}.
 
-In hac habitasse platea dictumst. Etiam placerat, risus ac.
+\paragraph{Feature Ablation.}
+To evaluate the relative impact of the different feature sets on \parser{},
+we remove a set of features at a time, and evaluate the
+resulting sparse perceptron-based parser on the development set.
+Almost all feature sets have a positive contribution to the primary
+edge F-score, or otherwise to the prediction of remote edges.
+\textbf{unigrams} and \textbf{bigrams} features are especially
+important (they contribute 1.1\% to 4.5\% to the F-score),
+and the \textbf{ratio} feature greatly improves recall on
+primary edges (by 7.4\%, leading to  a 3.9\% F-score improvement).
+\textbf{disco} features have a positive contribution
+(0.7\% primary, 1.2\% remote F-scores),
+likely to be amplified in languages with a higher percentage of
+discontinuous units, e.g. German.
 
-Adipiscing lectus in magna blandit:
 
-\begin{center}\vspace{1cm}
-\begin{tabular}{l l l l}
-\toprule
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2} \\
-\midrule
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\bottomrule
-\end{tabular}
-\captionof{table}{\color{Green} Table caption}
-\end{center}\vspace{1cm}
 
-Vivamus sed nibh ac metus tristique tristique a vitae ante. Sed lobortis mi ut arcu fringilla et adipiscing ligula rutrum. Aenean turpis velit, placerat eget tincidunt nec, ornare in nisl. In placerat.
 
-\begin{center}\vspace{1cm}
-%\includegraphics[width=0.8\linewidth]{placeholder}
-\captionof{figure}{\color{Green} Figure caption}
-\end{center}\vspace{1cm}
+\section*{Related Work}
 
-%----------------------------------------------------------------------------------------
-%	CONCLUSIONS
-%----------------------------------------------------------------------------------------
+While earlier work on anchored semantic parsing has mostly concentrated on shallow semantic analysis,
+focusing on semantic role labeling of verbal argument structures,
+the focus has recently shifted to parsing of more elaborate representations that account
+for a wider range of phenomena.
+
+\paragraph{Broad-Coverage Semantic Parsing.}
+Most closely related to this work is Broad-Coverage Semantic Dependency Parsing (SDP),
+addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval}.
+Like UCCA parsing, SDP addresses a wide range of semantic phenomena,
+and supports discontinuous units and reentrancy.
+However, SDP uses bilexical dependencies, disallowing non-terminal nodes, which
+are useful for representing structures that have no clear head, such as coordination
+\cite{Ivanova2012who}. It also differs from UCCA in the type
+of distinctions it makes, which are more closely related to the syntax-semantics interface,
+where UCCA aims to capture purely semantic cross-linguistically applicable notions, abstracting
+away, as much as possible, from syntactic distinctions.
+Recent interest in SDP has yielded numerable works on DAG parsing
+\cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on DAG parsing
+by tree approximation (i.e., methods that lossily convert DAG structures
+into trees in order to train existing tree parsers to produce tree structures
+that approximate the target DAGs) \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
+and on joint syntactic/semantic parsing
+\cite{henderson2013multilingual,swayamdipta-EtAl:2016:CoNLL}.
+
+\paragraph{Abstract Meaning Representation.}
+Another line of work addresses parsing into unanchored
+semantic representation, notably Abstract Meaning Representation (AMR)
+\cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad},
+where, unlike in UCCA parsing, the alignment between the semantic units and the text tokens
+is not explicitly marked.
+While sharing much of this work's motivation, not anchoring the representation in the text
+complicates the parsing task, as it requires
+that the alignment between words and logical symbols be automatically
+(and imprecisely) detected. Indeed, despite considerable technical effort,
+using rule-based methods \cite{flanigan2014discriminative}, machine
+translation methods \cite{pourdamghani2014aligning} and Boolean LP methods
+\cite{werling2015robust}, alignments are only about 80\%--90\% correct.
+Furthermore, anchoring allows breaking down sentences into semantically meaningful sub-spans,
+which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
+
+\paragraph{Grammar-Based Parsing.}
+Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steedman:00} and TAG \cite{Joshi:97}
+provide a theory of the syntax-semantics interface, and have been used as a basis for semantic parsers
+by defining compositional semantics on top of them \cite[among others]{Flic:00,bos2005towards}.
+Depending on the grammar and the implementation, such semantic parsers can support
+some or all of the structural properties UCCA supports.
+Nevertheless, this line of work differs from our grammarless approach in two important ways.
+First, the semantic representations are different. UCCA does not attempt to model
+the syntax-semantics interface and is thus less coupled with syntax in comparison to
+compositional semantic structures.
+Second, while grammar-based parsers explicitly model syntax, grammarless
+approaches, such as the ones presented here, seek to directly model the relation between
+strings and semantic structures.
+
+
+
 
 \color{SaddleBrown} % SaddleBrown color for the conclusions to make them stand out
 
 \section*{Conclusions}
 
-\begin{itemize}
-\item Pellentesque eget orci eros. Fusce ultricies, tellus et pellentesque fringilla, ante massa luctus libero, quis tristique purus urna nec nibh. Phasellus fermentum rutrum elementum. Nam quis justo lectus.
-\item Vestibulum sem ante, hendrerit a gravida ac, blandit quis magna.
-\item Donec sem metus, facilisis at condimentum eget, vehicula ut massa. Morbi consequat, diam sed convallis tincidunt, arcu nunc.
-\item Nunc at convallis urna. isus ante. Pellentesque condimentum dui. Etiam sagittis purus non tellus tempor volutpat. Donec et dui non massa tristique adipiscing.
-\end{itemize}
+We present \parser{}, the first parser for UCCA.
+Evaluated in both in-domain and out-of-domain settings, we show that coupled with a
+NN classifier, \parser{NN} surpasses bilexical DAG parsers on the task of UCCA parsing.
+While much recent work focused on semantic parsing of different types,
+the effectiveness of different parsing approaches for schemes with
+different structural and semantic properties is not well-understood 
+\cite{kuhlmann2016towards}.
+This paper makes a contribution to this literature first by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, through detailed experiments with different architectures for the local classifier, and comparison both to bilexical approximations and to tree approximations.
+
+
+
 
 \color{DarkSlateGray} % Set the color back to DarkSlateGray for the rest of the content
 
-%----------------------------------------------------------------------------------------
-%	FORTHCOMING RESEARCH
-%----------------------------------------------------------------------------------------
-
 \section*{Future Work}
 
-Vivamus molestie, risus tempor vehicula mattis, libero arcu volutpat purus, sed blandit sem nibh eget turpis. Maecenas rutrum dui blandit lorem vulputate gravida. Praesent venenatis mi vel lorem tempor at varius diam sagittis. Nam eu leo id turpis interdum luctus a sed augue. Nam tellus.
+Future work will delve deeper in the exploration of
+conversion-based parsing approaches, including different target
+representations and more sophisticated conversion procedures \cite{kong-15},
+in order to shed light on the commonalities and differences between
+representations, suggesting ways for a data-driven design of semantic structures.
+A parser for UCCA will enable using the framework for new tasks,
+in addition to existing applications for evaluation of
+machine translation \cite{birch2016hume}.
+We believe that UCCA's merits in providing a cross-linguistically applicable,
+broad-coverage annotation will support ongoing efforts to incorporate deeper
+semantic structures into a variety of applications,
+such as machine translation \cite{jones2012semantics}
+and summarization \cite{liu2015toward}.
 
-%----------------------------------------------------------------------------------------
-%	REFERENCES
-%----------------------------------------------------------------------------------------
+
+
 
 %\nocite{*} % Print all references regardless of whether they were cited in the poster or not
 \bibliographystyle{plain} % Plain referencing style
 \bibliography{references}
 
-%----------------------------------------------------------------------------------------
-%	ACKNOWLEDGEMENTS
-%----------------------------------------------------------------------------------------
-
-%\section*{Acknowledgements}
-%
-%Etiam fermentum, arcu ut gravida fringilla, dolor arcu laoreet justo, ut imperdiet urna arcu a arcu. Donec nec ante a dui tempus consectetur. Cras nisi turpis, dapibus sit amet mattis sed, laoreet.
 
 %----------------------------------------------------------------------------------------
 
