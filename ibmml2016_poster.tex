@@ -43,7 +43,7 @@
 \begin{minipage}[b]{.16\linewidth}
 \includegraphics[width=\linewidth]{huji_banner.png}
 \includegraphics[width=\linewidth]{cse_banner.jpg}
-\vspace{1cm}
+\vspace{.8mm}
 \end{minipage}
 \hspace{1cm}
 \begin{minipage}[b]{0.57\linewidth}
@@ -121,13 +121,15 @@
   \captionof{table}{Edge labels.}
 \end{wraptable}
 
-Universal Conceptual Cognitive Annotation \cite{abend2013universal},
+UCCA or Universal Conceptual Cognitive Annotation \cite{abend2013universal}
 is a cross-linguistically applicable semantic representation scheme.
-UCCA has demonstrated applicability to multiple languages, including
-English, French, German and Czech, support for rapid annotation,
-and semantic stability in translation \cite{sulem2015conceptual}.
-The scheme has proven useful for machine translation evaluation \cite{birch2016hume},
-but its applicability has been so far limited by the absence of a UCCA parser.
+\begin{itemize}
+ \item Demonstrated applicability to English, French, German \& Czech.
+ \item Support for rapid annotation.
+ \item Semantic stability in translation \cite{sulem2015conceptual}.
+ \item Proven useful for machine translation evaluation \cite{birch2016hume}.
+ \item Applicability has been so far limited by the absence of a parser.
+\end{itemize}
 
 Formally, a UCCA structure is a DAG whose leaves correspond to the tokens of
 the text. Nodes (or {\it units}) either correspond to a terminal or
@@ -191,57 +193,57 @@ that the parent represents.
   \end{tikzpicture}
   \captionof{figure}{Discontinuous unit (``gave ... up''). \hspace{4cm}
   Coordination construction (``John and Mary'').}
-  \captionof{figure}{UCCA structures demonstrating three structural properties.
-	Pre-terminal nodes omitted for brevity.}
+  \captionof{figure}{UCCA structures demonstrating three structural properties:
+  reentrancy, discontinuity and non-terminal nodes.}
 \end{center}
 
 
 
 \section*{Transition-based UCCA Parsing}
 
-\parser{} is a transition-based parser supporting the structural properties of UCCA.\footnote{The
-corpora are available at \url{http://www.cs.huji.ac.il/~oabend/ucca.html},
-and the parser code at \url{https://github.com/danielhers/ucca}.}
-Transition-based parsers \cite{Nivre03anefficient} scan the text from start to end,
-and create the parse incrementally by applying a \textit{transition}
-at each step to the parser state,
-defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
-a stack $S$ of nodes currently being processed,
-and a graph $G=(V,E,\ell)$ of constructed nodes and edges,
-where $V$ is the set of \emph{nodes}, $E$ is the set of \emph{edges},
-and $\ell : E \to L$ is the \emph{label} function, $L$ being the set of possible labels.
-Some of the states are marked as \textit{terminal}, meaning that $G$ is the final output.
-A classifier is used at each step to select the next transition based on features
-encoding the parser's current state.
-During training, an oracle creates training instances for the classifier,
-based on gold-standard annotations.
+\parser{} is our transition-based parser, supporting the structural properties of UCCA.\footnote{
+Corpora are available at \url{http://www.cs.huji.ac.il/~oabend/ucca.html},
+and parser code at \url{https://github.com/danielhers/ucca}
+(written in Python using Keras: \url{https://github.com/fchollet/keras}).}
 
-\begin{flushleft}
-	\begin{tikzpicture}[level distance=27mm, sibling distance=4cm]
-	\draw[xstep=5cm,ystep=1cm,color=gray] (-5.01,0) grid (5,1);
-	\node[anchor=west] at (0,2) {$S$};
-	\node[anchor=west] at (-5,.35) {After};
-	\node[anchor=west] at (0,.35) {graduation};
-	\draw[xstep=3cm,ystep=1cm,color=gray] (9,0) grid (21,1);
-	\node[anchor=west] at (14,2) {$B$};
-	\node[anchor=west] at (9,.35) {John};
-	\node[anchor=west] at (12,.35) {moved};
-	\node[anchor=west] at (15,.35) {to};
-	\node[anchor=west] at (18,.35) {Paris};
+\begin{center}
+	\begin{tikzpicture}[level distance=25mm, sibling distance=4cm]
+	\draw[xstep=3cm,ystep=1cm,color=gray] (-0.01,0) grid (9,1);
+	\node[anchor=west] at (4,2) {$S$};
+	\node[fill=black, circle] at (1.5,.45) {};
+	\node[fill=blue, circle] at (4.5,.45) {};
+	\node[anchor=west] at (6,.35) {John};
+	\draw[xstep=3cm,ystep=1cm,color=gray] (12,0) grid (21,1);
+	\node[anchor=west] at (16,2) {$B$};
+	\node[anchor=west] at (12,.45) {moved};
+	\node[anchor=west] at (16,.35) {to};
+	\node[anchor=west] at (18.2,.35) {Paris};
 	\node[anchor=west] at (25,3) {$G$};
-	\node (ROOT) [fill=black, circle] at (26,1) {}
-	  child {node  {After} edge from parent [-{Latex[length=5mm]}] node[left] {L}}
-	  child {node [fill=black, circle] {}
+	\node[fill=black, circle] at (26,1.5) {}
+	  child {node  {\small After} edge from parent [-{Latex[length=4mm]}] node[left] {\small L}}
+	  child {node [fill=blue, circle] {}
 	  {
-	    child {node {graduation} edge from parent [-{Latex[length=5mm]}] node[right] {P}}
-	  } edge from parent [-{Latex[length=5mm]}] node[right] {H} };
+	    child {node {\small graduation} edge from parent [-{Latex[length=4mm]}] node[right] {\small P}}
+	  } edge from parent [-{Latex[length=5mm]}] node[right] {\small H} };
+	\node[anchor=west] at (0,-3) {Transitions:
+	\textsc{Shift}, \textsc{Right-Edge\textsubscript L}, \textsc{Reduce}, \textsc{Shift},};
+	\node[anchor=west] at (3,-4) {\textsc{Node\textsubscript P}, \textsc{Reduce}, \textsc{Shift},
+	\textsc{Right-Edge\textsubscript H}, \textsc{Shift}
+	};
 	\end{tikzpicture}
-\end{flushleft}
+	\captionof{figure}{Example for intermediate state during transition-based parsing.}
+\end{center}
+
+Transition-based parsers work by applying a \textit{transition}
+at each step to the parser state,
+defined using a buffer $B$ of tokens and nodes to be processed,
+a stack $S$ of nodes currently being processed,
+and a graph $G=(V,E,\ell)$ of constructed nodes and edges.
 
 \begin{center}
 	\begin{adjustbox}{margin=3pt,frame}
-	\begin{tabular}{llll|l|llll}
-	\multicolumn{4}{c|}{\textbf{\small Before Transition}} & \textbf{\small Transition} & \multicolumn{4}{c}{\textbf{\small After Transition}} \\
+	\begin{tabular}{llll|c|llll}
+	\multicolumn{4}{c|}{\textbf{\small Before Transition}} & & \multicolumn{4}{c}{\textbf{\small After Transition}} \\
 	\textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} \\
 	$S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ \\
 	$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ \\
@@ -255,37 +257,23 @@ based on gold-standard annotations.
 	\end{tabular}
 	\end{adjustbox}
 	\captionof{table}{\parser{} transitions.
-	  We write the stack with its top to the right and the buffer with its head to the left.\\
 	  $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
 	}
 \end{center}
 
-
-\paragraph{Classifier.}
+A classifier selects the next transition based on the current state's features.
+It is trained by an oracle based on gold-standard annotations.
 We experiment with three classifiers:
-(1) \parser{sparse}: perceptron with sparse features,
-(2) \parser{dense}: perceptron with dense embedding features,
-(3) \parser{NN}: feedforward neural network with embedding features.
+\begin{flushleft}
+	\begin{tabular}{ll}
+	\parser{sparse} & Perceptron, sparse features: words, POS tags \& edge label combinations. \\
+	\parser{dense} & Perceptron, dense embedding features: word2vec \cite{mikolov2013efficient} for words, else random. \\
+	\parser{NN} & 2-layer MLP, learned embedding features, logistic activation + dropout. \\
+	\end{tabular}
+\end{flushleft}
 
 For all classifiers, inference is performed greedily, i.e., without beam search.
-
-\paragraph{Features.}
-For the sparse perceptron-based parser (\parser{sparse}),
-we use binary indicator features representing
-the words, POS tags and existing edge labels related to the top four stack elements and the next
-three buffer elements, in addition to their children and grandchildren in the graph.
-We also use bi- and trigram features based on these values \cite{zhang2009transition,zhu2013fast},
-features related to discontinuous nodes \cite{maier2015discontinuous},
-and features representing existing edges and the number of parents and children a node has \cite{tokgoz2015transition}.
-In addition, we use novel, UCCA-specific features:
-the number of remote children a node has.
-
-For the dense perceptron-based (\parser{dense}) and the NN-based parser (\parser{NN}),
-we replace all binary features by a
-concatenation of the vector embeddings of all the represented elements:
-words, POS tags, edge labels and parser actions.
-
-Finally, for all classifiers we employ a real-valued feature,
+We also employ a real-valued feature,
 \textbf{ratio}, corresponding to the ratio between the number of terminals to number of nodes
 in the graph $G$.
 This novel feature serves as a regularizer for the creation of new nodes,
@@ -296,8 +284,8 @@ and should be beneficial for other transition-based constituency parsers too.
 
 \section*{Experimental Setup}
 
-
-\begin{center}
+\begin{wraptable}{r}{18cm}
+	\vspace{-2cm}
 	\begin{tabular}{l|ccc|c}
 	& \multicolumn{3}{c|}{Wiki} & 20K \\
 	& \small Train & \small Dev & \small Test & Leagues \\
@@ -318,28 +306,31 @@ and should be beneficial for other transition-based constituency parsers too.
 	\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
 	\# children & 1.67 & 1.68 & 1.66 & 1.61 
 	\end{tabular}
-	\captionof{table}{Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.\\
-	The latter was used for out-of-domain experiments.}
-\end{center}
+	\captionof{table}{Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.}
+\end{wraptable}
 
+We conduct our main experiment on the UCCA Wikipedia corpus,
+and use the English part of the UCCA \textit{Twenty Thousand Leagues Under the Sea}
+English-French parallel corpus as out-of-domain data.
 
 \paragraph{Evaluation.}
-We define two simple measures for comparing UCCA structures.
-Assume $G_p=(V_p,E_p,\ell_p)$ and $G_g=(V_g,E_g,\ell_g)$
-are the predicted and gold-standard graphs over the same
-sequence of terminals $W = \{w_1,\ldots,w_n\}$, respectively.
-For an edge $e=(u,v)$ in either graph,
-where $u$ is the parent and $v$ is the child, define its yield $y(e) \subseteq W$ as the
-set of terminals in $W$ that are descendants of $v$.
-Define the set of \textit{mutual edges} between $G_p$ and $G_g$:
-\[
-    M(G_p,G_g) =
+We report two variants of labeled precision, recall and F-score:
+one where we consider only primary edges, and another for remote edges.
+Given graphs $G_p=(V_p,E_p,\ell_p)$ and $G_g=(V_g,E_g,\ell_g)$
+over terminals $W = \{w_1,\ldots,w_n\}$,
+the yield $y(e) \subseteq W$ of an edge $e=(u,v)$ in either graph
+is the set of terminals in $W$ that are descendants of $v$.
+The \textit{mutual edges} between the graphs are:
+\begin{flushleft}
+\begin{tabular}{lcr}
+	\multicolumn{3}{l}{$M(G_p,G_g) =
     \left\{(e_1,e_2) \in E_p \times E_g \;|\;
-    y(e_1) = y(e_2) \wedge \ell_p(e_1)=\ell_g(e_2)\right\}
-\]
-Labeled precision and recall are defined by dividing $|M(G_p,G_g)|$ by $|E_p|$ and $|E_g|$, respectively.
-We report two variants of this measure: one where we consider only primary edges,
-and another for remote edges.
+    y(e_1) = y(e_2) \wedge \ell_p(e_1)=\ell_g(e_2)\right\}$;} \vspace{5mm} \\
+	$\text{LP} = |M(G_p,G_g)| / |E_p|$ \hspace{2cm} &
+	$\text{LR} = |M(G_p,G_g)| / |E_g|$ \hspace{2cm} &
+	$\text{LF} = 2 \cdot \text{LP} \cdot \text{LR} / (\text{LP} + \text{LR})$
+\end{tabular}
+\end{flushleft}
 
 \paragraph{Comparison to bilexical DAG parsers.}
 As \parser{} is the first parser to support reentrancy, discontinuous units and
