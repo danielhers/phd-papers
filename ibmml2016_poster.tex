@@ -392,8 +392,7 @@ a second-order graph-based parser that uses dual decomposition for optimization.
 
 \section*{Results}
 
-\parser{NN} obtains the highest scores in all metrics, surpassing the bilexical parsers
-and the other classifiers:
+\parser{NN} obtains the highest scores in nearly all metrics:
 	  
 \begin{center}
 	\begin{tabular}{l|ccc|ccc||ccc|ccc}
@@ -419,22 +418,16 @@ and the other classifiers:
 	& 64 & 55.6 & 59.5 & 16 & 11.6 & 13.4 
 	& 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
 	\parser{dense} 
-	& 55 & 54.8 & 54.9 & 15.2 & 16.9 & 16 
+	& 55 & 54.8 & 54.9 & 15.2 & {\bf 16.9} & {\bf 16}
 	& 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
 	\parser{NN}
-	& {\bf 65} & {\bf 62.5} & {\bf 63.7} & {\bf 20.7} & {\bf 11.3} & {\bf 14.6}
+	& {\bf 65} & {\bf 62.5} & {\bf 63.7} & {\bf 20.7} & 11.3 & 14.6
 	& {\bf 58.3} & {\bf 56.4} & {\bf 57.3} & {\bf 15.2} & {\bf 3.8} & {\bf 6}
 	\end{tabular}
 	\captionof{table}{Main experimental results in percents.}
 \end{center}
 
-Replacing the sparse representation with dense embeddings, \parser{dense} obtains
-lower results than its sparse counterpart (although its recall on remote edges is
-better in the in-domain setting).
-Finally, using a feedforward NN, \parser{NN} manages to exploit the embeddings,
-and obtains substantially higher scores in all measures, both
-in the in-domain and out-of-domain settings.
-Its performance in absolute terms, of 63.7\% F-score, is encouraging in light of
+The performance is encouraging in light of
 UCCA's inter-annotator agreement of 80--85\%
 F-score on primary edges \cite{abend2013universal}.
 
