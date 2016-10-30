@@ -96,8 +96,9 @@
 
 \section*{Introduction}
 
+\setlength{\columnsep}{1cm}
 
-\begin{wraptable}{R}{55mm}
+\begin{wraptable}[11]{R}{55mm}
   \vspace{-25mm}
   \begin{adjustbox}{margin=2mm,frame}
   \scalebox{.9}{
@@ -334,7 +335,7 @@ The \textit{mutual edges} between the graphs are:
 
 \paragraph{Baselines.}
 
-\begin{wrapfigure}{l}{14cm}
+\begin{wrapfigure}[13]{l}{14cm}
 	\scalebox{.7}{
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
@@ -433,41 +434,20 @@ F-score on primary edges \cite{abend2013universal}.
 
 
 
-
-\section*{Discussion}
-
 \paragraph{Tree approximation.}
-For completeness, we further explore a conversion-based approach that
-lossily converts UCCA structures into trees. 
-This approach resembles the bilexical approximation approach, but here it results in a simplified task for the underlying parser: parsing into tree structures.
-
-Performance on remote edges is of pivotal importance in this investigation, which focuses on extending the class of graphs supported by statistical parsers. Nevertheless, we believe that exploring tree approximation methods, thus building on the maturity and cumulative experience with transition-based tree parsing, can inform the future development of DAG parsers in general and of UCCA parsers in particular.
-
-We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
-and one into bilexical dependency trees. In the first setting we experiment with \textsc{uparse}
-\cite{maier-lichte:2016:DiscoNLP},
-the only transition-based constituency parser, to our knowledge, able to parse trees with
-discontinuous constituents.
-In the second setting we use MaltParser \cite{nivre2007maltparser} with the
-arc-eager transition set and the SVM classifier,
-and the stack LSTM-based arc-standard parser \cite{dyer2015transition}.
-Default settings are used in all cases.
-\textsc{uparse} uses beam search by default,
-with a beam size of 4, and the other parsers are greedy.
-We also train the \parser{} variants without remote edge transitions, yielding a tree parser.
-
-\begin{center}
+\begin{wraptable}[9]{r}{15cm}
+\vspace{-3cm}
 \begin{tabular}{l|ccc}
 & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Approximation} \\
 Upper Bound & 100 & 100 & 100 \vspace{.1cm} \\
-\textsc{uparse} & 63 & 64.7 & 63.7 \\
+\textsc{uparse} \cite{maier-lichte:2016:DiscoNLP} & 63 & 64.7 & 63.7 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Dependency Tree Approximation} \\
 Upper Bound & 93.7 & 83.6 & 88.4 \vspace{.1cm} \\
-MaltParser & 64.9 & 57.9 & 61 \\
-LSTM Parser & {\bf 74.9} & {\bf 66.4} & {\bf 70.2} \\
+MaltParser \cite{nivre2007maltparser} & 64.9 & 57.9 & 61 \\
+LSTM Parser \cite{dyer2015transition} & {\bf 74.9} & {\bf 66.4} & {\bf 70.2} \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Tree Parsing} \\
 \parser{sparse} $-$ \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
@@ -475,34 +455,18 @@ LSTM Parser & {\bf 74.9} & {\bf 66.4} & {\bf 70.2} \\
 \parser{NN} $-$ \textsc{Remote} & 66.3 & 64.4 & 65.3 \\
 \end{tabular}
 \captionof{table}{
-  Results of tree approximation experiment, in percents (on the \textit{Wiki} test set).
+  Tree approximation results (on \textit{Wiki} test set).
 }
-\end{center}
+\end{wraptable}
 
-The conversion to constituency format only removes remote edges,
-and thus obtains a perfect primary edge score.
-The conversion to dependency format loses considerably more information, since
-all non-terminal nodes have to be reconstructed by a simple rule-based inverse
-conversion. Both conversions yield zero scores on remote edges,
-since these are invariably removed when converting to trees.
+For completeness, we also explore lossily converting UCCA into trees,
+resulting in a simplified task for the underlying parser,
+in addition to the maturity of tree-based parsers.
 
-The LSTM parser obtains the highest primary F-score,
-with a considerable margin. Importantly, it obtains 9.2\% F-score
-higher than the MaltParser,
-despite being limited by the same approximation error upper bound,
-and using a similar transition set.
-This shows that the LSTM classifier has a significant contribution
-to the accuracy of
-the parser, suggesting that a recurrent neural network (RNN) model
-may also improve \parser{}.
-This is in line with the recent success of RNNs
-(specifically, LSTMs and GRUs) in NLP tasks, including DAG-structured LSTM
-\cite{zhu-sobhani-guo:2016:N16-1}.
+Although remote edges are of pivotal importance, exploring tree approximation methods
+can inform the future development of DAG parsers in general and of UCCA parsers in particular.
 
 
-
-
-\color{SaddleBrown} % SaddleBrown color for the conclusions to make them stand out
 
 \section*{Conclusions}
 
@@ -517,8 +481,6 @@ We make a contribution to this literature by proposing the first grammarless par
 
 
 
-
-\color{DarkSlateGray} % Set the color back to DarkSlateGray for the rest of the content
 
 \section*{Future Work}
 
@@ -537,6 +499,7 @@ such as machine translation \cite{jones2012semantics}
 and summarization \cite{liu2015toward}.
 
 
+\color{DarkSlateGray} % Set the color back to DarkSlateGray for the rest of the content
 
 
 %\nocite{*} % Print all references regardless of whether they were cited in the poster or not
