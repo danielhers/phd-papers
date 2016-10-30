@@ -332,19 +332,10 @@ The \textit{mutual edges} between the graphs are:
 \end{tabular}
 \end{flushleft}
 
-\paragraph{Comparison to bilexical DAG parsers.}
-As \parser{} is the first parser to support reentrancy, discontinuous units and
-non-terminal nodes, no direct comparison with an existing parser is possible.
-We instead compare \parser{} to bilexical DAG parsers,
-which we view as the closest existing match (they support two of the properties,
-but not non-terminal nodes).
-Our approach is similar in spirit
-to the \textit{tree approximation} approach used for dependency DAG parsing
-\cite{agic2015semantic,fernandez2015parsing},
-where dependency DAGs were converted into dependency trees
-and then parsed by existing dependency tree parsers.
+\paragraph{Baselines.}
 
-\begin{center}
+\begin{wrapfigure}{l}{14cm}
+	\scalebox{.7}{
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
 	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
@@ -356,7 +347,8 @@ and then parsed by existing dependency tree parsers.
 	\depedge{2}{5}{H}
 	\depedge{7}{6}{R}
 	\depedge{5}{7}{A}
-	\end{dependency}\\
+	\end{dependency}
+	}
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
 	John \^ gave \^ everything \^ up \\
@@ -365,7 +357,6 @@ and then parsed by existing dependency tree parsers.
 	\depedge{3}{2}{A}
 	\depedge{4}{2}{C}
 	\end{dependency}
-	\hspace{1cm}
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
 	John \^ and \^ Mary \^ went \^ home \\
@@ -375,22 +366,25 @@ and then parsed by existing dependency tree parsers.
 	\depedge{3}{1}{C}
 	\depedge{5}{4}{A}
 	\end{dependency}
-	\captionof{figure}{Bilexical approximation.}
-\end{center}
+	\captionof{figure}{Bilexical approximation for UCCA graphs.}
+\end{wrapfigure}
 
-We first convert UCCA into bilexical dependencies, and train each parser on the resulting
-training set.
-We evaluate the trained parsers by applying them to the test set
-and then reconstructing UCCA graphs, which are compared with the gold standard.
-Upper bounds for the conversion-based method are computed by applying
-the conversion and inverse conversion on the gold standard
-graphs and comparing them to the original gold standard.
+Since there are no existing UCCA parsers, we use bilexical DAG parsers:
+\begin{enumerate}
+ \item Convert UCCA into bilexical dependencies.
+ \item Train parsers on the resulting training set.
+ \item Apply trained parsers to the test set.
+ \item Reconstruct UCCA graphs.
+ \item Compare with gold standard.
+\end{enumerate}
+Upper bounds are computed by applying
+the conversion both ways to the gold standard
+graphs and comparing to the original.
 
 We evaluate two parsers in the bilexical approximation setting:
-DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, the leading transition-based parser which participated in the SDP task of SemEval 2014 \cite{oepen2014semeval},
-and the semantic variant of TurboParser \cite{almeida-martins:2015:SemEval},
-a second-order graph-based parser that uses dual decomposition for optimization,
-which obtained some of the best results in the SDP task of SemEval 2015 \cite{oepen2015semeval}. Default settings are used in all cases.
+DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, a transition-based parser,
+and TurboParser \cite{almeida-martins:2015:SemEval},
+a second-order graph-based parser that uses dual decomposition for optimization.
 
 
 
