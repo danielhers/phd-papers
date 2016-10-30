@@ -16,6 +16,7 @@
 \usepackage{amsfonts, amsmath, amsthm, amssymb} % For math fonts, symbols and environments
 \usepackage{wrapfig} % Allows wrapping text around tables and figures
 \usepackage{lipsum,adjustbox}
+\usepackage[absolute,overlay]{textpos}
 \usepackage{multirow}
 \usepackage{url}
 \usepackage{tikz}
@@ -51,7 +52,6 @@
 
 %----------------------------------------------------------------------------------------
 
-\begin{multicols}{2} % This is how many columns your poster will be broken into, a portrait poster is generally split into 2 columns
 
 \color{Navy} % Navy color for the abstract
 
@@ -75,6 +75,7 @@
 \end{abstract}
 
 
+\begin{multicols}{2} % This is how many columns your poster will be broken into, a portrait poster is generally split into 2 columns
 
 
 \color{Black} % SaddleBrown color for the introduction
@@ -82,16 +83,12 @@
 \section*{Introduction}
 
 Universal Conceptual Cognitive Annotation \cite{abend2013universal},
-is a cross-linguistically applicable semantic representation scheme,
-building on the established Basic Linguistic Theory typological framework
-\cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive
-Linguistics literature \cite{croft2004cognitive}.
+is a cross-linguistically applicable semantic representation scheme.
 UCCA has demonstrated applicability to multiple languages, including
 English, French, German and Czech, support for rapid annotation,
 and semantic stability in translation \cite{sulem2015conceptual}.
 The scheme has proven useful for machine translation evaluation \cite{birch2016hume},
-but its applicability has been so far limited by the absence of a UCCA parser,
-a gap this paper addresses.
+but its applicability has been so far limited by the absence of a UCCA parser.
 
 Formally, a UCCA structure is a DAG whose leaves correspond to the tokens of
 the text. Nodes (or {\it units}) either correspond to a terminal or
@@ -117,13 +114,13 @@ that the parent represents.
         child {node [circle] {}
         {
           child {node {to} edge from parent node[left] {R}}
-          child {node {Paris} edge from parent node[left] {C}}
-        } edge from parent node[left] {A} }
+          child {node {Paris} edge from parent node[right] {C}}
+        } edge from parent node[right] {A} }
       } edge from parent node[right] {H} }
       ;
     \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [auto] {A} (John);
   \end{tikzpicture}
-	\captionof{figure}{\color{Green} Remote edge (dashed), resulting in ``John'' having two parents.}
+  \captionof{figure}{\color{Green} Remote edge (dashed), resulting in ``John'' having two parents.}
   \begin{tikzpicture}[level distance=5cm, sibling distance=4cm, -{Latex[length=5mm]},
       every node/.append style={midway},
       every circle node/.append style={fill=black}]
@@ -133,12 +130,12 @@ that the parent represents.
       {
       	child {node {gave} edge from parent node[left] {C}}
       	child {node (everything) {everything} edge from parent[white]}
-      	child {node {up} edge from parent node[left] {C}}
+      	child {node {up} edge from parent node[right] {C}}
       } edge from parent node[right] {P} }
       ;
     \draw[bend right,-{Latex[length=5mm]}] (ROOT) to[out=-20, in=180] node [left] {A} (everything);
   \end{tikzpicture}
-	\captionof{figure}{\color{Green} Discontinuous unit (``gave ... up'').}
+  \hspace{4cm}
   \begin{tikzpicture}[level distance=5cm, sibling distance=4cm, -{Latex[length=5mm]},
       every node/.append style={midway},
       every circle node/.append style={fill=black}]
@@ -147,51 +144,37 @@ that the parent represents.
       {
         child {node {John} edge from parent node[left] {C}}
         child {node {and} edge from parent node[left] {N}}
-        child {node {Mary} edge from parent node[left] {C}}
+        child {node {Mary} edge from parent node[right] {C}}
       } edge from parent node[left] {A} }
       child {node {went} edge from parent node[left] {P}}
-      child {node {home} edge from parent node[left] {A}}
+      child {node {home} edge from parent node[right] {A}}
       ;
   \end{tikzpicture}
-	\captionof{figure}{\color{Green} Coordination construction (``John and Mary'').}
-	\captionof{figure}{\color{Green} UCCA structures demonstrating three structural properties
-	exhibited by the scheme.
-	Legend: $P$ -- process (a scene's main relation), $A$ -- participant,
-    $L$ -- inter-scene linker, $H$ -- linked scene, $C$ -- center,
-    $R$ -- relator, $N$ -- connector, $U$ -- punctuation, $F$ -- function unit.
-    Pre-terminal nodes are omitted for brevity.}
+  \captionof{figure}{\color{Green} Discontinuous unit (``gave ... up''). \hspace{4cm}
+  Coordination construction (``John and Mary'').}
+  \captionof{figure}{\color{Green} UCCA structures demonstrating three structural properties.
+	Pre-terminal nodes omitted for brevity.}
 \end{center}
 
-\color{DarkSlateGray} % DarkSlateGray color for the rest of the content
 
-
-
-
-\section*{The UCCA Scheme}
-
-UCCA is a multi-layered representation, each layer corresponding
-to a ``module'' of semantic distinctions.
-The UCCA foundational layer, which we target in this paper, covers the predicate-argument
-structure evoked by predicates of all grammatical categories
-(verbal, nominal, adjectival and others), the inter-relations between them,
-and other major linguistic phenomena such as coordination and multi-word expressions.
-
-The layer's basic notion is the {\it Scene}, describing a movement, action or state.
-Each Scene contains one main relation (marked as either a Process or a State),
-as well as one or more Participants.
-For example, the sentence ``After graduation, John moved to Paris''
-contains two Scenes, whose main relations are ``graduation'' and ``moved''.
-``John'' is a Participant in both Scenes, while ``Paris'' only in the latter.
-One incoming edge for each non-root node is marked as ``primary'',
-and the rest (mostly denoting implied relations) as ``remote'' edges.
-This distinction is made by the annotator.
-The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
-thus forming a DAG.
-
-Further categories account for relations between Scenes and the internal structure of
-complex arguments and relations (e.g. coordination; complex
-adverbials such as ``very clearly'').
-
+\begin{wraptable}{r}{45mm}
+  \begin{tabular}{cl}
+	  P & process \\
+	  S & state \\
+	  A & participant \\
+	  L & linker \\
+	  H & linked scene \\
+	  C & center \\
+	  E & elaborator \\
+	  D & adverbial \\
+	  R & relator \\
+	  N & connector \\
+	  U & punctuation \\
+	  F & function unit \\
+	  G & ground
+  \end{tabular}
+  \captionof{table}{Edge labels.}
+\end{wraptable}
 
 
 
