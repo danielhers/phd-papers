@@ -15,9 +15,12 @@
 \usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
 \usepackage{amsfonts, amsmath, amsthm, amssymb} % For math fonts, symbols and environments
 \usepackage{wrapfig} % Allows wrapping text around tables and figures
+\usepackage{lipsum,adjustbox}
+\usepackage{multirow}
 \usepackage{tikz}
 \usepackage{tikz-dependency}
 \usetikzlibrary{arrows.meta}
+\newcommand{\parser}[1]{TUPA\textsubscript{#1}}
 
 \begin{document}
 
@@ -169,43 +172,185 @@ that the parent represents.
 
 \color{DarkSlateGray} % DarkSlateGray color for the rest of the content
 
-%----------------------------------------------------------------------------------------
-%	MATERIALS AND METHODS
-%----------------------------------------------------------------------------------------
+\section*{The UCCA Scheme}\label{sec:ucca}
 
-\section*{Materials and Methods}
+UCCA is a multi-layered representation, each layer corresponding
+to a ``module'' of semantic distinctions.
+The UCCA foundational layer, which we target in this paper, covers the predicate-argument
+structure evoked by predicates of all grammatical categories
+(verbal, nominal, adjectival and others), the inter-relations between them,
+and other major linguistic phenomena such as coordination and multi-word expressions.
 
-Fusce magna risus, molestie ut porttitor in, consectetur sed mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Pellentesque consectetur blandit pellentesque. Sed odio justo, viverra nec porttitor vel, lacinia a nunc. Suspendisse pulvinar euismod arcu, sit amet accumsan enim fermentum quis. In id mauris ut dui feugiat egestas. Vestibulum ac turpis lacinia nisl commodo sagittis eget sit amet sapien.
+The layer's basic notion is the {\it Scene}, describing a movement, action or state.
+Each Scene contains one main relation (marked as either a Process or a State),
+as well as one or more Participants.
+For example, the sentence ``After graduation, John moved to Paris''
+contains two Scenes, whose main relations are ``graduation'' and ``moved''.
+``John'' is a Participant in both Scenes, while ``Paris'' only in the latter.
+One incoming edge for each non-root node is marked as ``primary'',
+and the rest (mostly denoting implied relations) as ``remote'' edges.
+This distinction is made by the annotator.
+The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
+thus forming a DAG.
 
-%------------------------------------------------
+Further categories account for relations between Scenes and the internal structure of
+complex arguments and relations (e.g. coordination; complex
+adverbials such as ``very clearly'').
 
-\subsection*{Mathematical Section}
+\section*{Transition-based UCCA Parsing}\label{sec:direct_approach}
 
-Nulla vel nisl sed mauris auctor mollis non sed. 
+We now turn to presenting \parser{},
+a transition-based parser supporting the structural properties of UCCA.
+Transition-based parsers \cite{Nivre03anefficient} scan the text from start to end,
+and create the parse incrementally by applying a \textit{transition}
+at each step to the parser state,
+defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
+a stack $S$ of nodes currently being processed,
+and a graph $G=(V,E,\ell)$ of constructed nodes and edges,
+where $V$ is the set of \emph{nodes}, $E$ is the set of \emph{edges},
+and $\ell : E \to L$ is the \emph{label} function, $L$ being the set of possible labels.
+Some of the states are marked as \textit{terminal}, meaning that $G$ is the final output.
+A classifier is used at each step to select the next transition based on features
+encoding the parser's current state.
+During training, an oracle creates training instances for the classifier,
+based on gold-standard annotations.
 
-\begin{equation}
-E = mc^{2}
-\label{eqn:Einstein}
-\end{equation}
+\paragraph{Transition Set.}
+Given a sequence of tokens $w_1, \ldots, w_n$, we predict a UCCA graph $G$ over the sequence.
+Parsing starts with a single node on the stack (an artificial root node), and the input tokens
+in the buffer.
+In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
+we follow previous work in transition-based constituency parsing \cite{sagae2005classifier},
+adding the \textsc{Node} transition for creating new non-terminal nodes.
+\textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge.
 
-Curabitur mi sem, pulvinar quis aliquam rutrum. (1) edf (2)
-, $\Omega=[-1,1]^3$, maecenas leo est, ornare at. $z=-1$ edf $z=1$ sed interdum felis dapibus sem. $x$ set $y$ ytruem. 
-Turpis $j$ amet accumsan enim $y$-lacina; 
-ref $k$-viverra nec porttitor $x$-lacina. 
 
-Vestibulum ac diam a odio tempus congue. Vivamus id enim nisi:
+\begin{figure*}
+\begin{adjustbox}{width=\textwidth,margin=3pt,frame}
+\begin{tabular}{llll|l|llllc|c}
+\multicolumn{4}{c|}{\textbf{\small Before Transition}} & \textbf{\small Transition} & \multicolumn{5}{c|}{\textbf{\small After Transition}} & \textbf{\small Condition} \\
+\textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & \textbf{\footnotesize Terminal?} & \\
+$S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ & $-$ & \\
+$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & \\
+$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ &
+$x \neq \mathrm{root}$ \\
+$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ &
+\multirow{4}{50pt}{\vspace{-5mm}\[\left\{\begin{array}{l}
+x \not\in w_{1:n},\\
+y \neq \mathrm{root},\\
+y \not\leadsto_G x
+\end{array}\right.\]} \\
+$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ & \\
+$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
+$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
+$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ & $-$ &
+$\mathrm{i}(x) < \mathrm{i}(y)$ \\
+$[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & $+$ & \\
+\end{tabular}
+\end{adjustbox}
+\caption{\label{fig:transitions}
+  The transition set of \parser{}. %Following standard practice,
+  We write the stack with its top to the right and the buffer with its head to the left.
+  $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
+  $\mathrm{i}(x)$ is a running index for the created nodes.
+  \textsc{Edge} transitions have an additional condition: the prospective child may not
+  already have a primary parent.
+}
+\end{figure*}
 
-\begin{eqnarray}
-\cos\bar{\phi}_k Q_{j,k+1,t} + Q_{j,k+1,x}+\frac{\sin^2\bar{\phi}_k}{T\cos\bar{\phi}_k} Q_{j,k+1} &=&\nonumber\\ 
--\cos\phi_k Q_{j,k,t} + Q_{j,k,x}-\frac{\sin^2\phi_k}{T\cos\phi_k} Q_{j,k}\label{edgek}
-\end{eqnarray}
-and
-\begin{eqnarray}
-\cos\bar{\phi}_j Q_{j+1,k,t} + Q_{j+1,k,y}+\frac{\sin^2\bar{\phi}_j}{T\cos\bar{\phi}_j} Q_{j+1,k}&=&\nonumber \\
--\cos\phi_j Q_{j,k,t} + Q_{j,k,y}-\frac{\sin^2\phi_j}{T\cos\phi_j} Q_{j,k}.\label{edgej}
-\end{eqnarray} 
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new primary $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively.
+As a UCCA node may only have one incoming primary edge,
+\textsc{Edge} transitions are disallowed if the child node already
+has an incoming primary edge.
+\textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do not have this restriction,
+and the created edge is additionally marked as \textit{remote}.
+We distinguish between these two pairs of transitions to allow the parser to create remote edges
+without the possibility of producing invalid graphs.
+To support the prediction of multiple parents, node and edge transitions
+leave the stack unchanged, as in other work on
+transition-based DAG dependency parsing
+\cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition}.
+Once all edges for a node have been created, it is removed from the stack
+by applying \textsc{Reduce}.
+To handle discontinuous nodes, \textsc{Swap} pops the second
+node on the stack and adds it to the top of the buffer, as with the similarly
+named transition in previous work \cite{nivre2009non,maier2015discontinuous}.
+Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 
-Nulla sed arcu arcu. Duis et ante gravida orci venenatis tincidunt. Fusce vitae lacinia metus. Pellentesque habitant morbi. $\mathbf{A}\underline{\xi}=\underline{\beta}$ Vim $\underline{\xi}$ enum nidi $3(P+2)^{2}$ lacina. Id feugain $\mathbf{A}$ nun quis; magno.
+\paragraph{Classifier.}
+We experiment with three classifiers\footnote{A link to the code repository will
+be released upon publication.}.
+First, following \cite{maier2015discontinuous} and \cite{maier-lichte:2016:DiscoNLP},
+we use a linear classifier, using sparse features and
+the averaged structured perceptron algorithm for training it
+\cite{Coll:04}. We use the \textsc{MinUpdate} procedure \cite{goldberg2011learning}:
+a minimum number of updates to a feature has to occur in training for it
+to be included in the model.
+We refer to the parser using this classifier as \parser{sparse}.
+Second, we experiment with a linear classifier using dense embedding features (see below),
+which we also train using the averaged structured perceptron.
+We refer to this parser as \parser{dense}.
+Third, we use a feedforward neural network \cite{chen2014fast}, with the following modifications: two hidden layers instead of one, using the sigmoid activation function instead of the cube,
+and applying dropout after each layer \cite{srivastava2014dropout}.
+We refer to the NN-based parser as \parser{NN}.
+
+For all classifiers, inference is performed greedily, i.e., without beam search.
+
+\paragraph{Features.}
+For the sparse perceptron-based parser (\parser{sparse}),
+we use binary indicator features representing
+the words, POS tags and existing edge labels related to the top four stack elements and the next
+three buffer elements, in addition to their children and grandchildren in the graph.
+We also use bi- and trigram features based on these values \cite{zhang2009transition,zhu2013fast},
+features related to discontinuous nodes \cite{maier2015discontinuous},
+and features representing existing edges and the number of parents and children a node has \cite{tokgoz2015transition}.
+In addition, we use novel, UCCA-specific features:
+the number of remote children a node has\footnote{See
+Appendix~\ref{appendix:features} for a full listing of the feature templates.}.
+
+For the dense perceptron-based (\parser{dense}) and the NN-based parser (\parser{NN}),
+we replace all binary features by a
+concatenation of the vector embeddings of all the represented elements:
+words, POS tags, edge labels and parser actions.
+
+Finally, for all classifiers we employ a real-valued feature,
+\textbf{ratio}, corresponding to the ratio between the number of terminals to number of nodes
+in the graph $G$.
+This novel feature serves as a regularizer for the creation of new nodes,
+and should be beneficial for other transition-based constituency parsers too.
+
+\paragraph{Training.}
+For training the transition classifier, we use a dynamic oracle \cite{goldberg2012dynamic},
+i.e., an oracle that outputs a set of optimal transitions: when
+applied to the current parser state, the gold
+standard graph is reachable from the resulting state.
+For example, the oracle would predict a \textsc{Node} transition if the stack 
+has on its top a parent in the gold graph that has not been created,
+but would predict a \textsc{Right-Edge} transition if the second stack
+element is a parent of the
+first element according to the gold graph and the edge between them has not been created.
+The transition predicted by the classifier is deemed correct
+and is applied to the parser state to reach the subsequent state,
+if the transition is included in the set of optimal transitions.
+Otherwise, a random optimal transition is applied,
+and for the perceptron-based parser, the classifier's weights are updated according
+to the perceptron update rule.
+
+We train the perceptron classifiers for 16 iterations, using $\textsc{MinUpdate}=5$,
+and doubling weight updates
+for gold \textsc{Swap} transitions to address the sparsity of discontinuous nodes
+\cite{maier2015discontinuous}.
+POS tags are extracted using the averaged perceptron tagger of NLTK \cite{bird2009natural}.
+Word embeddings for the dense perceptron are initialized with the 100-dimensional pre-trained word2vec vectors \cite{mikolov2013efficient,dyer2015transition}.
+
+For the NN classifier, word embeddings are initialized to random
+100-dimensional vectors (which were found to give better results than the pre-trained vectors). We use 1000-dimensional hidden layers.
+For both the dense perceptron and the NN classifiers, we initialize the POS tag embeddings as random 20-dimensional vectors. The embeddings for edge labels are 10-dimensional, and embeddings for parser actions are 5-dimensional.
+We use the categorical cross-entropy objective function and train the
+NN classifier with the Adam optimizer \cite{kingma2014adam}. We use a dropout probability of 0.2,
+and train the network on the correct transitions for the whole training set,
+for 50 epochs with a mini-batch of 200 samples at a time.
+We use the Keras package \cite{chollet2015keras} for implementing the NN classifier.
 
 %----------------------------------------------------------------------------------------
 %	RESULTS 
