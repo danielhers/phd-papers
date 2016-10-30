@@ -196,6 +196,28 @@ encoding the parser's current state.
 During training, an oracle creates training instances for the classifier,
 based on gold-standard annotations.
 
+\begin{flushleft}
+	\begin{tikzpicture}[level distance=3cm, sibling distance=4cm]
+	\draw[xstep=4cm,ystep=1cm,color=gray] (-4.01,0) grid (4,1);
+	\node[anchor=west] at (-6,.5) {$S$};
+	\node[anchor=west] at (-4,.5) {After};
+	\node[anchor=west] at (0,.5) {graduation};
+	\draw[xstep=3cm,ystep=1cm,color=gray] (9,0) grid (21,1);
+	\node[anchor=west] at (7,.5) {$B$};
+	\node[anchor=west] at (9,.5) {John};
+	\node[anchor=west] at (12,.5) {moved};
+	\node[anchor=west] at (15,.5) {to};
+	\node[anchor=west] at (18,.5) {Paris};
+	\node[anchor=west] at (3,-2) {$G$};
+	\node (ROOT) [fill=black, circle] at (9,-1) {}
+	  child {node  {After} edge from parent [-{Latex[length=5mm]}] node[left] {L}}
+	  child {node [fill=black, circle] {}
+	  {
+	    child {node {graduation} edge from parent [-{Latex[length=5mm]}] node[right] {P}}
+	  } edge from parent [-{Latex[length=5mm]}] node[right] {H} };
+	\end{tikzpicture}
+\end{flushleft}
+
 \paragraph{Transition Set.}
 Given a sequence of tokens $w_1, \ldots, w_n$, we predict a UCCA graph $G$ over the sequence.
 Parsing starts with a single node on the stack (an artificial root node), and the input tokens
