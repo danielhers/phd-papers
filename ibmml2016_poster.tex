@@ -68,25 +68,12 @@
 
 
 \color{Navy} % Navy color for the abstract
-
-\begin{abstract}
-
-  We present the first parser for UCCA, a
-  cross-linguistically applicable framework for semantic
-  representation, that builds on extensive
-  typological work, and supports rapid annotation.
-  UCCA poses a challenge for existing parsing techniques,
-  as it exhibits reentrancy (resulting in DAG structures),
-  discontinuous structures and non-terminal nodes corresponding
-  to complex semantic units. To our knowledge, the conjunction
-  of these formal properties is not supported by any existing parser.
-  Our transition-based parser, using novel transition set
-  and features, has value not just for UCCA parsing:
-  its ability to handle more general graph structures will inform
-  the development of parsers for other semantic DAG structures, 
-  and in languages which frequently use discontinuous structures.
-
-\end{abstract}
+\fboxsep=3mm
+\fbox{
+\large\bf
+  UCCA exhibits formal properties important for semantic representation.
+  We present the first parser for UCCA and the first to support these properties.
+}
 
 
 \begin{multicols}{2} % This is how many columns your poster will be broken into, a portrait poster is generally split into 2 columns
@@ -99,7 +86,7 @@
 \setlength{\columnsep}{1cm}
 
 \begin{wraptable}[11]{R}{55mm}
-  \vspace{-25mm}
+  \vspace{-2cm}
   \begin{adjustbox}{margin=2mm,frame}
   \scalebox{.9}{
   \begin{tabular}{cl}
@@ -125,6 +112,8 @@
 UCCA or Universal Conceptual Cognitive Annotation \cite{abend2013universal}
 is a cross-linguistically applicable semantic representation scheme.
 \begin{itemize}
+ \item Builds on typological \cite{Dixon:basic}
+ 	and Cognitive Linguistics literature \cite{croft2004cognitive}.
  \item Demonstrated applicability to English, French, German \& Czech.
  \item Support for rapid annotation.
  \item Semantic stability in translation \cite{sulem2015conceptual}.
@@ -162,7 +151,7 @@ that the parent represents.
       ;
     \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [auto] {A} (John);
   \end{tikzpicture}
-  \captionof{figure}{Remote edge (dashed), resulting in ``John'' having two parents.}
+  \captionof{figure}{Remote edge (dashed), resulting in ``John'' having two parents (reentrancy).}
   \begin{tikzpicture}[level distance=5cm, sibling distance=4cm, -{Latex[length=5mm]},
       every node/.append style={midway},
       every circle node/.append style={fill=black}]
@@ -194,8 +183,8 @@ that the parent represents.
   \end{tikzpicture}
   \captionof{figure}{Discontinuous unit (``gave ... up''). \hspace{4cm}
   Coordination construction (``John and Mary'').}
-  \captionof{figure}{UCCA structures demonstrating three structural properties:
-  reentrancy, discontinuity and non-terminal nodes.}
+  \captionof{figure}{UCCA structures demonstrating
+  \textbf{reentrancy}, \textbf{discontinuity} and \textbf{non-terminal nodes}.}
 \end{center}
 
 
@@ -261,18 +250,18 @@ and a graph $G=(V,E,\ell)$ of constructed nodes and edges.
 	  $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
 	}
 \end{center}
-
+\vspace{5mm}
 A classifier selects the next transition based on the current state's features.
 It is trained by an oracle based on gold-standard annotations.
 We experiment with three classifiers:
 \begin{flushleft}
 	\begin{tabular}{ll}
-	\parser{sparse} & Perceptron, sparse features: words, POS tags \& edge label combinations. \\
-	\parser{dense} & Perceptron, dense embedding features: word2vec \cite{mikolov2013efficient} for words, else random. \\
-	\parser{NN} & 2-layer MLP, learned embedding features, logistic activation + dropout. \\
+	\textbf{\parser{sparse}} & Perceptron, sparse features: words, POS tags \& edge label combinations. \\
+	\textbf{\parser{dense}} & Perceptron, dense embedding features: word2vec \cite{mikolov2013efficient} for words, else random. \\
+	\textbf{\parser{NN}} & 2-layer MLP, learned embedding features, logistic activation + dropout. \\
 	\end{tabular}
 \end{flushleft}
-
+\vspace{5mm}
 For all classifiers, inference is performed greedily, i.e., without beam search.
 We also employ a real-valued feature,
 \textbf{ratio}, corresponding to the ratio between the number of terminals to number of nodes
@@ -313,7 +302,7 @@ and should be beneficial for other transition-based constituency parsers too.
 We conduct our main experiment on the UCCA Wikipedia corpus,
 and use the English part of the UCCA \textit{Twenty Thousand Leagues Under the Sea}
 English-French parallel corpus as out-of-domain data.
-
+\vspace{-5mm}
 \paragraph{Evaluation.}
 We report two variants of labeled precision, recall and F-score:
 one where we consider only primary edges, and another for remote edges.
@@ -326,17 +315,18 @@ The \textit{mutual edges} between the graphs are:
 \begin{tabular}{lcr}
 	\multicolumn{3}{l}{$M(G_p,G_g) =
     \left\{(e_1,e_2) \in E_p \times E_g \;|\;
-    y(e_1) = y(e_2) \wedge \ell_p(e_1)=\ell_g(e_2)\right\}$;} \vspace{5mm} \\
+    y(e_1) = y(e_2) \wedge \ell_p(e_1)=\ell_g(e_2)\right\}$} \vspace{5mm} \\
+    and we define\\
 	$\text{LP} = |M(G_p,G_g)| / |E_p|$ \hspace{2cm} &
 	$\text{LR} = |M(G_p,G_g)| / |E_g|$ \hspace{2cm} &
-	$\text{LF} = 2 \cdot \text{LP} \cdot \text{LR} / (\text{LP} + \text{LR})$
+	$\text{LF} = 2 \cdot \text{LP} \cdot \text{LR} / (\text{LP} + \text{LR})$.
 \end{tabular}
 \end{flushleft}
 
 \paragraph{Baselines.}
 
 \begin{wrapfigure}[11]{r}{14cm}
-	\vspace{-1cm}
+	\centering
 	\scalebox{.7}{
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
@@ -351,6 +341,7 @@ The \textit{mutual edges} between the graphs are:
 	\depedge{5}{7}{A}
 	\end{dependency}
 	}
+	\scalebox{.7}{
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
 	John \^ gave \^ everything \^ up \\
@@ -359,6 +350,8 @@ The \textit{mutual edges} between the graphs are:
 	\depedge{3}{2}{A}
 	\depedge{4}{2}{C}
 	\end{dependency}
+	}
+	\scalebox{.7}{
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
 	John \^ and \^ Mary \^ went \^ home \\
@@ -368,6 +361,7 @@ The \textit{mutual edges} between the graphs are:
 	\depedge{3}{1}{C}
 	\depedge{5}{4}{A}
 	\end{dependency}
+	}
 	\captionof{figure}{Bilexical approximation for UCCA graphs.}
 \end{wrapfigure}
 
@@ -385,7 +379,7 @@ graphs and comparing to the original.
 
 
 
-
+\vspace{-5mm}
 
 \section*{Results}
 
@@ -458,7 +452,7 @@ in addition to the maturity of tree-based parsers.
 Although remote edges are of pivotal importance, exploring tree approximation methods
 can inform the future development of DAG parsers in general and of UCCA parsers in particular.
 
-
+\vspace{-5mm}
 
 \section*{Conclusions}
 
@@ -467,20 +461,17 @@ evaluate it in both in-domain and out-of-domain settings,
 showing it surpasses bilexical DAG parsers on the task of UCCA parsing.
 
 Future work will incorporate LSTMs into \parser{},
-improve the conversion-based methods and explore different target representations.
-\parser{} will enable using UCCA for new tasks.
+and apply the parser to more languages such as German,
+demonstrating the importance of broad-coverage parsing.
+We will also improve the conversion-based methods and explore different target representations.
+A UCCA parser will enable using the scheme for representation in NLP tasks.
 
 
 \color{DarkSlateGray} % Set the color back to DarkSlateGray for the rest of the content
-\tiny
-
-
+\scriptsize
 %\nocite{*} % Print all references regardless of whether they were cited in the poster or not
 \bibliographystyle{plain} % Plain referencing style
 \bibliography{references}
-
-
-%----------------------------------------------------------------------------------------
 
 \end{multicols}
 \end{document}
