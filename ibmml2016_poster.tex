@@ -18,6 +18,7 @@
 \usepackage{lipsum,adjustbox}
 \usepackage[absolute,overlay]{textpos}
 \usepackage{multirow}
+\usepackage{titlesec}
 \usepackage{url}
 \usepackage{tikz}
 \usepackage{tikz-dependency}
@@ -63,17 +64,18 @@
 \end{minipage}
 
 \vspace{1cm} % A bit of extra whitespace between the header and poster content
+\titlespacing*{\section}{0pt}{8mm}{5mm}
+%\titlespacing*{\paragraph}{0pt}{3mm}{5mm}
 
 %----------------------------------------------------------------------------------------
 
-
-\color{Navy} % Navy color for the abstract
-\fboxsep=3mm
-\fbox{
-\large\bf
-  UCCA exhibits formal properties important for semantic representation.
-  We present the first parser for UCCA and the first to support these properties.
-}
+\begin{adjustbox}{margin=3mm,frame,minipage=.6\linewidth,center}
+\Large\color{Navy}
+  UCCA supports \textbf{reentrancy}, \textbf{discontinuity} and \textbf{non-terminal nodes},\\
+  which are essential for representing natural language semantics.
+  
+  We present the \textbf{first parser for UCCA} and the first to support these properties.
+\end{adjustbox}
 
 
 \begin{multicols}{2} % This is how many columns your poster will be broken into, a portrait poster is generally split into 2 columns
@@ -302,7 +304,7 @@ and should be beneficial for other transition-based constituency parsers too.
 We conduct our main experiment on the UCCA Wikipedia corpus,
 and use the English part of the UCCA \textit{Twenty Thousand Leagues Under the Sea}
 English-French parallel corpus as out-of-domain data.
-\vspace{-5mm}
+
 \paragraph{Evaluation.}
 We report two variants of labeled precision, recall and F-score:
 one where we consider only primary edges, and another for remote edges.
@@ -379,8 +381,6 @@ graphs and comparing to the original.
 
 
 
-\vspace{-5mm}
-
 \section*{Results}
 
 \parser{NN} obtains the highest scores in nearly all metrics:
@@ -452,7 +452,6 @@ in addition to the maturity of tree-based parsers.
 Although remote edges are of pivotal importance, exploring tree approximation methods
 can inform the future development of DAG parsers in general and of UCCA parsers in particular.
 
-\vspace{-5mm}
 
 \section*{Conclusions}
 
@@ -468,7 +467,7 @@ A UCCA parser will enable using the scheme for representation in NLP tasks.
 
 
 \color{DarkSlateGray} % Set the color back to DarkSlateGray for the rest of the content
-\scriptsize
+\tiny
 %\nocite{*} % Print all references regardless of whether they were cited in the poster or not
 \bibliographystyle{plain} % Plain referencing style
 \bibliography{references}
