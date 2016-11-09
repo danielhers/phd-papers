@@ -113,6 +113,12 @@ Hebrew University of Jerusalem}
 
 \begin{frame}
 \frametitle{Semantic Annotation Schemes}
+Represent semantic structure of text as a graph.
+
+Used by NLP applications for features and structure,
+providing information such as \textit{who did what to whom?}
+\vfill
+Examples:
 \begin{itemize}
  \item Semantic Role Labeling
  \item Semantic Dependencies
@@ -123,10 +129,13 @@ Hebrew University of Jerusalem}
 
 \begin{frame}
 \frametitle{Semantic Role Labeling (SRL)}
+Annotate predicates and their arguments as a flat structure.
+Examples:
+
 \centering
-\vspace*{\fill}
+\vfill
 {\color{blue} PropBank}
-\vspace*{\fill}
+\vfill
 
 \begin{dependency}
 	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
@@ -156,16 +165,19 @@ Hebrew University of Jerusalem}
 	child{node at ($(\wordref{1}{7})$) {}};
 \end{dependency}
 
-\vspace*{\fill}
+\vfill
 {\color{red} FrameNet}
 \end{frame}
 
 \begin{frame}
 \frametitle{Semantic Dependency Parsing (SDP)}
+Graph on the text tokens, including internal structure of arguments.
+Examples:
+
 \centering
-\vspace*{\fill}
+\vfill
 {\color{blue} DELPH-IN MRS-derived bi-lexical dependencies (DM)}
-\vspace*{\fill}
+\vfill
 
 \begin{dependency}[theme=simple]
 	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
@@ -183,12 +195,14 @@ Hebrew University of Jerusalem}
 	\depedge[edge below]{5}{7}{\color{red} DIR3-arg}
 \end{dependency}
 
-\vspace*{\fill}
+\vfill
 {\color{red} Prague Dependency Treebank tectogrammatical layer (PSD)}
 \end{frame}
 
 \begin{frame}
 \frametitle{Abstract Meaning Representation (AMR)}
+Graph on knowledge resource entries inferred from the tokens.
+
 \begin{tikzpicture}
 \graph[layered layout, sibling distance=5cm, layer distance=2cm, edges={nodes={sloped}}]{
 a4 Paris[as={Paris}, black];
@@ -217,10 +231,10 @@ a4 ->  ["op1"' above, black] a4 Paris;
 \begin{frame}
 \frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
 \centering
-\vspace*{\fill}
+\vfill
 Cross-linguistically applicable semantic representation scheme.
 \begin{itemize}
- \item Builds on typological \cite{Dixon:basic}
+ \item Builds on typological \parencite{Dixon:basic}
  	and Cognitive Linguistics literature \cite{croft2004cognitive}.
  \item Demonstrated applicability to English, French, German \& Czech.
  \item Support for rapid annotation.
@@ -228,7 +242,7 @@ Cross-linguistically applicable semantic representation scheme.
  \item Proven useful for machine translation evaluation \cite{birch2016hume}.
  \item Applicability has been so far limited by the absence of a parser.
 \end{itemize}
-\vspace*{\fill}
+\vfill
 \end{frame}
 
 \begin{frame}
@@ -236,7 +250,7 @@ Cross-linguistically applicable semantic representation scheme.
 \noindent
 (1) non-terminal nodes, (2) reentrancy, (3) discontinuity
 \centering
-\vspace*{\fill}
+\vfill
 \begin{minipage}{.48\linewidth}{\centering
   \begin{tikzpicture}[level distance=12mm, sibling distance=16mm, ->,
       every node/.append style={midway}]
@@ -352,7 +366,7 @@ Cross-linguistically applicable semantic representation scheme.
 Parse sentence $w_1 \ldots w_n$ to graph $G=(V,E,\ell)$ incrementally, using buffer $B$ and stack $S$.
 Classifier determines transition to apply at each step.
 
-\vspace*{\fill}
+\vfill
 \pause
 
 Transition-based parsers work by applying a \textit{transition}
@@ -386,7 +400,7 @@ It is trained by an oracle based on gold-standard annotations.
 	\end{tikzpicture}
 \end{center}
 
-\vspace*{\fill}
+\vfill
 \pause
 Transitions for UCCA parsing:\\
 \textsc{Shift, Reduce, Node$_X$,}\\
@@ -710,7 +724,7 @@ F-score on primary edges \cite{abend2013universal}.
 Vector representation for sentences and documents,
 based on recursive composition on the UCCA graph.
 
-\vspace*{\fill}
+\vfill
 Impact:
 \begin{itemize}
 \item General automatic semantic feature extractor for text.
@@ -718,7 +732,7 @@ Impact:
 \item Understand the semantic contribution of different elements.
 \end{itemize}
 
-\vspace*{\fill}
+\vfill
 \begin{center}
   \begin{tikzpicture}[level distance=1cm, sibling distance=2cm, ->]
     \node (ROOT) [fill=black, vector] {}
