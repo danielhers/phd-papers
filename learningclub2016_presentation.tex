@@ -9,7 +9,25 @@
 \fi
 \mode<presentation>
 \usetheme{Warsaw}
-\useoutertheme{infolines} 
+\useoutertheme{infolines}
+\makeatother
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.1\paperwidth,ht=2.25ex,dp=1ex,center]{date in head/foot}%
+    \insertframenumber{} / \inserttotalframenumber\hspace*{1ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatletter
+\setbeamertemplate{navigation symbols}{} 
 
 % Includes
 %\usepackage{times} % Use the times font
@@ -58,13 +76,14 @@
 
 % Outline slides
 \AtBeginSection
-{\begin{frame} \frametitle{Outline} \tableofcontents[currentsection,currentsubsection] \end{frame}}
+{\begin{frame} \frametitle{Outline} \tableofcontents[currentsection] \end{frame}}
 
 
 \begin{document}
 
-\title[]{Broad-Coverage Transition-Based UCCA Parsing}
-\author{\textbf{Daniel Hershcovich}$^{1,2}$ \And Omri Abend$^2$ \And Ari Rappoport$^2$
+
+\title{Broad-Coverage Transition-Based UCCA Parsing}
+\author[Daniel Hershcovich]{\textbf{Daniel Hershcovich}$^{1,2}$ \And Omri Abend$^2$ \And Ari Rappoport$^2$
 }
 \institute[]{$^1$Edmond and Lily Safra Center for Brain Sciences, Hebrew University of Jerusalem \\
 $^2$School of Computer Science and Engineering, Hebrew University of Jerusalem}
@@ -72,20 +91,19 @@ $^2$School of Computer Science and Engineering, Hebrew University of Jerusalem}
 
 \begin{frame}
 \titlepage
-\end{frame}
 
-\begin{minipage}[b]{.07\linewidth}
-\includegraphics[width=\linewidth]{huji_logo.jpg}
-\vspace{5mm}
-\end{minipage}
-\begin{minipage}[b]{.16\linewidth}
-\includegraphics[width=\linewidth]{huji_banner.png}
-\includegraphics[width=\linewidth]{cse_banner.jpg}
-\vspace{.8mm}
-\end{minipage}
 \begin{minipage}[b]{.13\linewidth}
+\includegraphics[width=\linewidth]{huji_logo.jpg}
+\end{minipage}
+\begin{minipage}[b]{.3\linewidth}
+\includegraphics[width=.3\pagewidth]{huji_banner.png}\\
+\includegraphics[width=.4\pagewidth]{cse_banner.jpg}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{.2\linewidth}
 \includegraphics[width=\linewidth]{elsc_logo.png}
 \end{minipage}
+\end{frame}
 
 
 %----------------------------------------------------------------------------------------
