@@ -234,7 +234,7 @@ a4 ->  ["op1"' above, black] a4 Paris;
 \vfill
 Cross-linguistically applicable semantic representation scheme.
 \begin{itemize}
- \item Builds on typological \parencite{Dixon:basic}
+ \item Builds on typological \cite{Dixon:basic}
  	and Cognitive Linguistics literature \cite{croft2004cognitive}.
  \item Demonstrated applicability to English, French, German \& Czech.
  \item Support for rapid annotation.
@@ -482,75 +482,75 @@ We experiment with three classifiers:
 For all classifiers, inference is performed greedily, i.e., without beam search.
 \end{frame}
 
-\begin{frame}
-\frametitle{\parser{} Features}
-\begin{adjustbox}{margin=3pt,frame}
-\begin{tabular}{l}
-{\footnotesize Features from \cite{zhang2009transition}:} \\
-\textbf{unigrams} \\
-$s_0te, s_0we, s_1te, s_1we, s_2te, s_2we, s_3te, s_3we,$ \\
-$b_0wt, b_1wt, b_2wt, b_3wt,$ \\
-$s_0lwe, s_0rwe, s_0uwe, s_1lwe, s_1rwe, s_1uwe$ \\
-\textbf{bigrams} \\
-$s_0ws_1w, s_0ws_1e, s_0es_1w, s_0es_1e, s_0wb_0w, s_0wb_0t,$ \\
-$s_0eb_0w, s_0eb_0t, s_1wb_0w, s_1wb_0t, s_1eb_0w, s_1eb_0t,$ \\
-$b_0wb_1w, b_0wb_1t, b_0tb_1w, b_0tb_1t$ \\
-\textbf{trigrams} \\
-$s_0es_1es_2w, s_0es_1es_2e, s_0es_1eb_0w, s_0es_1eb_0t,$ \\
-$s_0es_1wb_0w, s_0es_1wb_0t, s_0ws_1es_2e, s_0ws_1eb_0t$ \\
-\textbf{separator} \\
-$s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
-$s_1wp, s_1wep, s_1wq, s_1weq$ \\
-
-\textbf{extended} \footnotesize \cite{zhu2013fast} \\
-$s_0llwe, s_0lrwe, s_0luwe, s_0rlwe, s_0rrwe,$ \\
-$s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
-$s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
-\end{tabular}
-\begin{tabular}{l}
-\textbf{disco} \footnotesize \cite{maier2015discontinuous} \\
-$s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
-$s_0xte, s_1xte, s_2xte, s_3xte,$ \\
-$s_0xy, s_1xy, s_2xy, s_3xy$ \\
-$s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
-$s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
-$s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$ \\
-
-{\footnotesize Features from \cite{tokgoz2015transition}:} \\
-\textbf{counts} \\
-$s_0P, s_0C, s_0wP, s_0wC, b_0P, b_0C, b_0wP, b_0wC$ \\
-\textbf{edges} \\
-$s_0s_1, s_1s_0, s_0b_0, b_0s_0, s_0b_0e, b_0s_0e$ \\
-\textbf{history} \\
-$a_0, a_1$ \\
-
-\textbf{remote} \footnotesize (Novel, UCCA-specific features) \\
-$s_0R, s_0wR, b_0R, b_0wR$
-\end{tabular}
-\end{adjustbox}
-\captionsetup{singlelinecheck=off}
-\captionof{table}{
-  Binary feature templates for \parser{sparse}. Notation:\\
-  $s_i$, $b_i$: $i$th stack and buffer items.\\
-  $w$, $t$: word form and POS tag of the terminal returned by $h^*(\cdot)$
-  (see Appendix~\ref{appendix:conversion}).\\
-  $e$: edge label to the node returned by $h(\cdot)$.\\
-  $l$, $r$ ($ll$, $rr$): leftmost and rightmost (grand)children.\\
-  $u$ ($uu$): unary (grand)child, when only one exists.\\
-  $p$: unique separator punctuation between $s_0$ and $s_1$. $q$: separator count.\\
-  $x$: gap type (``none'', ``pass'' or ``gap'') at the sub-graph under the current node.\\
-  $y$: sum of gap lengths \protect\cite{Maier:Lichte:11}.\\
-  $P$, $C$: number of parents and children.\\
-  $R$: number of remote children.\\
-  $a_i$: action taken $i$ steps back.
-}
-
-We also employ a real-valued feature,
-\textbf{ratio}, corresponding to the ratio between the number of terminals to number of nodes
-in the graph $G$.
-This novel feature serves as a regularizer for the creation of new nodes,
-and should be beneficial for other transition-based constituency parsers too.
-\end{frame}
+%\begin{frame}
+%\frametitle{\parser{} Features}
+%\begin{adjustbox}{margin=3pt,frame}
+%\begin{tabular}{l}
+%{\footnotesize Features from \cite{zhang2009transition}:} \\
+%\textbf{unigrams} \\
+%$s_0te, s_0we, s_1te, s_1we, s_2te, s_2we, s_3te, s_3we,$ \\
+%$b_0wt, b_1wt, b_2wt, b_3wt,$ \\
+%$s_0lwe, s_0rwe, s_0uwe, s_1lwe, s_1rwe, s_1uwe$ \\
+%\textbf{bigrams} \\
+%$s_0ws_1w, s_0ws_1e, s_0es_1w, s_0es_1e, s_0wb_0w, s_0wb_0t,$ \\
+%$s_0eb_0w, s_0eb_0t, s_1wb_0w, s_1wb_0t, s_1eb_0w, s_1eb_0t,$ \\
+%$b_0wb_1w, b_0wb_1t, b_0tb_1w, b_0tb_1t$ \\
+%\textbf{trigrams} \\
+%$s_0es_1es_2w, s_0es_1es_2e, s_0es_1eb_0w, s_0es_1eb_0t,$ \\
+%$s_0es_1wb_0w, s_0es_1wb_0t, s_0ws_1es_2e, s_0ws_1eb_0t$ \\
+%\textbf{separator} \\
+%$s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
+%$s_1wp, s_1wep, s_1wq, s_1weq$ \\
+%
+%\textbf{extended} \footnotesize \cite{zhu2013fast} \\
+%$s_0llwe, s_0lrwe, s_0luwe, s_0rlwe, s_0rrwe,$ \\
+%$s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
+%$s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
+%\end{tabular}
+%\begin{tabular}{l}
+%\textbf{disco} \footnotesize \cite{maier2015discontinuous} \\
+%$s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
+%$s_0xte, s_1xte, s_2xte, s_3xte,$ \\
+%$s_0xy, s_1xy, s_2xy, s_3xy$ \\
+%$s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
+%$s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
+%$s_0ys_1y, s_0ys_2y, s_0xb_0t, s_0xb_0w$ \\
+%
+%{\footnotesize Features from \cite{tokgoz2015transition}:} \\
+%\textbf{counts} \\
+%$s_0P, s_0C, s_0wP, s_0wC, b_0P, b_0C, b_0wP, b_0wC$ \\
+%\textbf{edges} \\
+%$s_0s_1, s_1s_0, s_0b_0, b_0s_0, s_0b_0e, b_0s_0e$ \\
+%\textbf{history} \\
+%$a_0, a_1$ \\
+%
+%\textbf{remote} \footnotesize (Novel, UCCA-specific features) \\
+%$s_0R, s_0wR, b_0R, b_0wR$
+%\end{tabular}
+%\end{adjustbox}
+%\captionsetup{singlelinecheck=off}
+%\captionof{table}{
+%  Binary feature templates for \parser{sparse}. Notation:\\
+%  $s_i$, $b_i$: $i$th stack and buffer items.\\
+%  $w$, $t$: word form and POS tag of the terminal returned by $h^*(\cdot)$
+%  (see Appendix~\ref{appendix:conversion}).\\
+%  $e$: edge label to the node returned by $h(\cdot)$.\\
+%  $l$, $r$ ($ll$, $rr$): leftmost and rightmost (grand)children.\\
+%  $u$ ($uu$): unary (grand)child, when only one exists.\\
+%  $p$: unique separator punctuation between $s_0$ and $s_1$. $q$: separator count.\\
+%  $x$: gap type (``none'', ``pass'' or ``gap'') at the sub-graph under the current node.\\
+%  $y$: sum of gap lengths \protect\cite{Maier:Lichte:11}.\\
+%  $P$, $C$: number of parents and children.\\
+%  $R$: number of remote children.\\
+%  $a_i$: action taken $i$ steps back.
+%}
+%
+%We also employ a real-valued feature,
+%\textbf{ratio}, corresponding to the ratio between the number of terminals to number of nodes
+%in the graph $G$.
+%This novel feature serves as a regularizer for the creation of new nodes,
+%and should be beneficial for other transition-based constituency parsers too.
+%\end{frame}
 
 
 
@@ -792,12 +792,15 @@ A UCCA parser will enable using the scheme for representation in NLP tasks.
 
 
 
-\begin{frame}
+\begin{frame}[allowframebreaks]
 \frametitle{References}
-\scriptsize
-%\nocite{*} % Print all references regardless of whether they were cited in the poster or not
-\bibliographystyle{plain} % Plain referencing style
-\bibliography{references}
+%\setbeamerfont{bibliography item}{size=\tiny}
+%\setbeamerfont{bibliography entry author}{size=\tiny}
+%\setbeamerfont{bibliography entry title}{size=\tiny}
+%\setbeamerfont{bibliography entry location}{size=\tiny}
+%\setbeamerfont{bibliography entry note}{size=\tiny}
+\bibliographystyle{apalike}
+\tiny\bibliography{references}
 \end{frame}
 
 \end{document}
