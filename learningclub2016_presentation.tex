@@ -1,5 +1,5 @@
 % Presentation flag: uncomment to enable presentation features (slower compilation)
-%\newcommand*{\PRESENTATION}
+\newcommand*{\PRESENTATION}
 
 % Preliminaries
 \ifdefined\PRESENTATION
@@ -51,6 +51,7 @@
 \usepackage{tikz-dependency}
 \usetikzlibrary{arrows.meta,graphs,graphs.standard,graphdrawing,quotes,shapes}
 \usegdlibrary{layered}
+\captionsetup{labelformat=empty}
 \newcommand{\parser}[1]{TUPA\textsubscript{#1}}
 
 \makeatletter
@@ -229,19 +230,89 @@ a4 ->  ["op1"' above, black] a4 Paris;
 
 \begin{frame}
 \frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
-\centering
-\vfill
-Cross-linguistically applicable semantic representation scheme.
+\begin{tikzpicture}[level distance=25mm, sibling distance=25mm, ->,
+    every circle node/.append style={fill=black}]
+  \node (ROOT) [circle] {}
+    child {node (After) {After} edge from parent node[left] {L}}
+    child {node (graduation) [circle] {}
+    {
+      child {node {graduation} edge from parent node[left] {P}}
+    } edge from parent node[left] {H} }
+    child {node {,} edge from parent node[right] {U}}
+    child {node (moved) [circle] {}
+    {
+      child {node (John) {John} edge from parent node[left] {A}}
+      child {node {moved} edge from parent node[left] {P}}
+      child {node [circle] {}
+      {
+        child {node {to} edge from parent node[left] {R}}
+        child {node {Paris} edge from parent node[right] {C}}
+      } edge from parent node[right] {A} }
+    } edge from parent node[right] {H} }
+    ;
+  \draw[dashed,->] (graduation) to node [auto] {A} (John);
+\end{tikzpicture}
+\begin{wraptable}{l}{4.8mm}
+  \vspace{-3cm}
+  \scalebox{.75}{
+  \begin{adjustbox}{margin=2mm,frame}
+  \begin{tabular}{cl|cl|cl}
+	  P & process &
+	  S & state &
+	  A & participant \\
+	  L & linker &
+	  H & linked scene &
+	  C & center \\
+	  E & elaborator &
+	  D & adverbial &
+	  R & relator \\
+	  N & connector &
+	  U & punctuation &
+	  F & function unit \\
+	  G & ground &&
+	  \multicolumn{3}{c}{- - - remote edge}
+  \end{tabular}
+  \end{adjustbox}
+  }
+\end{wraptable}
+\end{frame}
+
+\begin{frame}
+\frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
+\begin{wraptable}{r}{35mm}
+  \vspace{-5mm}
+  \begin{adjustbox}{margin=2mm,frame}
+  \begin{tabular}{cl}
+	  P & process \\
+	  S & state \\
+	  A & participant \\
+	  L & linker \\
+	  H & linked scene \\
+	  C & center \\
+	  E & elaborator \\
+	  D & adverbial \\
+	  R & relator \\
+	  N & connector \\
+	  U & punctuation \\
+	  F & function unit \\
+	  G & ground
+  \end{tabular}
+  \end{adjustbox}
+  \captionof{table}{Edge labels of the foundational layer.}
+\end{wraptable}
+Semantic representation scheme giving an alternative approach to syntax.
 \begin{itemize}
- \item Builds on typological \cite{Dixon:basic}
- 	and Cognitive Linguistics literature \cite{croft2004cognitive}.
+ \item Builds on typological and Cognitive Linguistics literature \cite{Dixon:basic,croft2004cognitive}.
  \item Demonstrated applicability to English, French, German \& Czech.
  \item Support for rapid annotation.
+ \pause
  \item Semantic stability in translation \cite{sulem2015conceptual}.
- \item Proven useful for machine translation evaluation \cite{birch2016hume}.
- \item Applicability has been so far limited by the absence of a parser.
+ \item Useful for machine translation evaluation \cite{birch2016hume}.
+ \item Applicability limited by absence of parser.
+ \pause
+ \item Also supported: linkage (discourse relations) and implicit units,
+ but deferred to later work.
 \end{itemize}
-\vfill
 \end{frame}
 
 \begin{frame}
@@ -284,7 +355,7 @@ Cross-linguistically applicable semantic representation scheme.
   }
 \end{minipage}
 
-\vspace{-6mm}
+\vspace{-1mm}
   \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
       every node/.append style={midway}]
     \node (ROOT) [fill=black, circle] {}
@@ -310,50 +381,29 @@ Cross-linguistically applicable semantic representation scheme.
 
 \begin{frame}
 \frametitle{UCCA Corpora}
-\begin{minipage}{.6\linewidth}
-	\begin{tabular}{l|ccc|c}
-	& \multicolumn{3}{c|}{Wiki} & 20K \\
-	& \small Train & \small Dev & \small Test & Leagues \\
-	\hline
-	\# passages & 300 & 34 & 34 & 154 \\
-	\# sentences & 4267 & 453 & 518 & 506 \\
-	\hline
-	\# nodes & 298,665 & 33,263 & 37,262 & 29,315 \\
-	\% terminal & 42.95 & 43.62 & 42.89 & 42.09 \\
-	\% non-term. & 58.30 & 57.46 & 58.31 & 60.01 \\
-	\% discont. & 0.53 & 0.51 & 0.47 & 0.81 \\
-	\% reentrant & 2.31 & 1.76 & 2.18 & 2.03 \\
-	\hline
-	\# edges & 287,381 & 32,015 & 35,846 & 27,749 \\
-	\% primary & 98.29 & 98.81 & 98.75 & 97.73 \\
-	\% remote & 1.71 & 1.19 & 1.25 & 2.27 \\
-	\hline
-	\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
-	\# children & 1.67 & 1.68 & 1.66 & 1.61 
-	\end{tabular}\footnote{
-	Corpora are available at \url{http://www.cs.huji.ac.il/~oabend/ucca.html}}
-	Excluding root node, implicit nodes, and linkage nodes and edges.
-\end{minipage}
-\begin{minipage}{.3\linewidth}
-  \begin{adjustbox}{margin=2mm,frame}
-  \begin{tabular}{cl}
-	  P & process \\
-	  S & state \\
-	  A & participant \\
-	  L & linker \\
-	  H & linked scene \\
-	  C & center \\
-	  E & elaborator \\
-	  D & adverbial \\
-	  R & relator \\
-	  N & connector \\
-	  U & punctuation \\
-	  F & function unit \\
-	  G & ground
-  \end{tabular}
-  \end{adjustbox}
-  \captionof{table}{Edge labels.}
-\end{minipage}
+\centering
+\begin{tabular}{l|ccc|c}
+& \multicolumn{3}{c|}{Wiki} & 20K \\
+& \small Train & \small Dev & \small Test & Leagues \\
+\hline
+\# passages & 300 & 34 & 34 & 154 \\
+\# sentences & 4267 & 453 & 518 & 506 \\
+\hline
+\# nodes & 298,665 & 33,263 & 37,262 & 29,315 \\
+\% terminal & 42.95 & 43.62 & 42.89 & 42.09 \\
+\% non-term. & 58.30 & 57.46 & 58.31 & 60.01 \\
+\% \bf discont. & \bf 0.53 & \bf 0.51 & \bf 0.47 & \bf 0.81 \\
+\% \bf reentrant & \bf 2.31 & \bf 1.76 & \bf 2.18 & \bf 2.03 \\
+\hline
+\# edges & 287,381 & 32,015 & 35,846 & 27,749 \\
+\% primary & 98.29 & 98.81 & 98.75 & 97.73 \\
+\% remote & 1.71 & 1.19 & 1.25 & 2.27 \\
+\hline
+\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
+\# children & 1.67 & 1.68 & 1.66 & 1.61 
+\end{tabular}
+\captionof{table}{Corpus statistics
+excluding root, implicit and linkage units.}
 \end{frame}
 
 
@@ -362,110 +412,75 @@ Cross-linguistically applicable semantic representation scheme.
 
 \begin{frame}
 \frametitle{Transition-Based Parsing}
-Parse sentence $w_1 \ldots w_n$ to graph $G=(V,E,\ell)$ incrementally, using buffer $B$ and stack $S$.
-Classifier determines transition to apply at each step.
+\begin{itemize}
+ \item Parse sentence $w_1 \ldots w_n$ to graph $G=(V,E,\ell)$ incrementally.
+ \item Using buffer $B$ and stack $S$.
+ \item Classifier determines transition to apply at each step.
+ \item Trained by an oracle based on gold-standard graph.
+\end{itemize}
 
-\vfill
-\pause
-
-Transition-based parsers work by applying a \textit{transition}
-at each step to the parser state,
-defined using a buffer $B$ of tokens and nodes to be processed,
-a stack $S$ of nodes currently being processed,
-and a graph $G=(V,E,\ell)$ of constructed nodes and edges.
-A classifier selects the next transition based on the current state's features.
-It is trained by an oracle based on gold-standard annotations.
-
-\pause
 \begin{center}
 	\begin{tikzpicture}
-	\draw[xstep=2cm,ystep=0.5cm,color=gray] (-.01,0) grid (4,.5);
-	\node[anchor=west] at (-.5,.25) {$S$};
-	\node[anchor=west] at (0,.25) {After};
-	\node[anchor=west] at (2,.25) {graduation};
-	\draw[xstep=1.5cm,ystep=0.5cm,color=gray] (4.49,0) grid (10.5,.5);
-	\node[anchor=west] at (4,.25) {$B$};
-	\node[anchor=west] at (4.5,.25) {John};
-	\node[anchor=west] at (6,.25) {moved};
-	\node[anchor=west] at (7.5,.25) {to};
-	\node[anchor=west] at (9,.25) {Paris};
-	\node[anchor=west] at (3,-.5) {$G$};
-	\node (ROOT) [fill=black, circle] at (5,-.5) {}
-	  child {node  {After} edge from parent [->] node[left] {\scriptsize $L$\;}}
-	  child {node [fill=black, circle] {}
-	  {
-	    child {node {graduation} edge from parent [->] node[right] {\scriptsize $P$}}
-	  } edge from parent [->] node[right] {\scriptsize $H$} };
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
+	\node[anchor=west] at (.2,1) {$S$};
+	\node[fill=black, circle] at (.5,.25) {};
+	\draw[xstep=18mm,ystep=5mm,color=gray] (1.79,0) grid (12.4,.5);
+	\node[anchor=west] at (1.9,1) {$B$};
+	\node[anchor=west] at (2,.25) {After};
+	\node[anchor=west] at (3.5,.25) {graduation};
+	\node[anchor=west] at (5.6,.25) {John};
+	\node[anchor=west] at (7.2,.25) {moved};
+	\node[anchor=west] at (9.4,.25) {to};
+	\node[anchor=west] at (10.9,.25) {Paris};
 	\end{tikzpicture}
 \end{center}
 
 \vfill
 \pause
-Transitions for UCCA parsing:\\
-\textsc{Shift, Reduce, Node$_X$,}\\
-\textsc{Left-Edge$_X$, Right-Edge$_X$, Left-Remote$_X$, Right-Remote$_X$,}
-\textsc{Swap, Finish}
+Transitions defined for UCCA parsing:\\
+\{\textsc{Shift, Reduce, Node$_X$, Left-Edge$_X$, Right-Edge$_X$,}\\
+\hspace{5mm}\textsc{Left-Remote$_X$, Right-Remote$_X$, Swap, Finish}\}
+
+\vfill
+\pause
+Supports non-terminal nodes, reentrancy and discontinuity.
 \end{frame}
 
 \begin{frame}
 \frametitle{Transition-Based Parsing}
 \begin{center}
-	\begin{tikzpicture}[level distance=25mm, sibling distance=4cm]
-	\draw[xstep=3cm,ystep=1cm,color=gray] (-0.01,0) grid (9,1);
-	\node[anchor=west] at (4,2) {$S$};
-	\node[fill=black, circle] at (1.5,.45) {};
-	\node[fill=blue, circle] at (4.5,.45) {};
-	\node[anchor=west] at (6,.35) {John};
-	\draw[xstep=3cm,ystep=1cm,color=gray] (12,0) grid (21,1);
-	\node[anchor=west] at (16,2) {$B$};
-	\node[anchor=west] at (12,.45) {moved};
-	\node[anchor=west] at (16,.35) {to};
-	\node[anchor=west] at (18.2,.35) {Paris};
-	\node[anchor=west] at (25,3) {$G$};
-	\node[fill=black, circle] at (26,1.5) {}
-	  child {node  {\small After} edge from parent [-{Latex[length=4mm]}] node[left] {\small L}}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=2cm]
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (3,.5);
+	\node[anchor=west] at (1.2,1) {$S$};
+	\node[fill=black, circle] at (.5,.25) {};
+	\node[fill=blue, circle] at (1.5,.25) {};
+	\node[anchor=west] at (2,.25) {John};
+	\draw[xstep=12mm,ystep=5mm,color=gray] (3.59,0) grid (7.2,.5);
+	\node[anchor=west] at (5,1) {$B$};
+	\node[anchor=west] at (3.5,.25) {moved};
+	\node[anchor=west] at (5,.25) {to};
+	\node[anchor=west] at (6,.25) {Paris};
+	\node[anchor=west] at (8,1) {$G$};
+	\node[fill=black, circle] at (9,.5) {}
+	  child {node  {\small After} edge from parent [->] node[left] {\small L}}
 	  child {node [fill=blue, circle] {}
 	  {
-	    child {node {\small graduation} edge from parent [-{Latex[length=4mm]}] node[right] {\small P}}
-	  } edge from parent [-{Latex[length=5mm]}] node[right] {\small H} };
-	\node[anchor=west] at (0,-3) {Transitions:
-	\textsc{Shift}, \textsc{Right-Edge\textsubscript L}, \textsc{Reduce}, \textsc{Shift},};
-	\node[anchor=west] at (3,-4) {\textsc{Node\textsubscript P}, \textsc{Reduce}, \textsc{Shift},
-	\textsc{Right-Edge\textsubscript H}, \textsc{Shift}
-	};
+	    child {node {\small graduation} edge from parent [->] node[right] {\small P}}
+	  } edge from parent [->] node[right] {\small H} };
+	\node[anchor=west] at (0,-1) {History:};
+	\node[anchor=west] at (1.5,-1) {\textsc{Shift},};
+	\node[anchor=west] at (1.5,-1.5) {\textsc{Right-Edge\textsubscript L},};
+	\node[anchor=west] at (1.5,-2) {\textsc{Reduce},};
+	\node[anchor=west] at (1.5,-2.5) {\textsc{Shift},};
+	\node[anchor=west] at (1.5,-3) {\textsc{Node\textsubscript P},}; 
+	\node[anchor=west] at (1.5,-3.5) {\textsc{Reduce},};
+	\node[anchor=west] at (1.5,-4) {\textsc{Shift},};
+	\node[anchor=west] at (1.5,-4.5) {\textsc{Right-Edge\textsubscript H},};
+	\node[anchor=west] at (1.5,-5) {\textsc{Shift}};
 	\end{tikzpicture}
 	\captionof{figure}{Example for intermediate state during transition-based parsing.}
 \end{center}
 \end{frame}
-
-\begin{frame}
-\frametitle{\parser{} (Transition-Based UCCA Parser)}
-Our parser supports the structural properties of UCCA.\footnote{
-Parser code available at \url{https://github.com/danielhers/ucca}.}
-\begin{center}
-	\begin{adjustbox}{margin=3pt,frame}
-	\begin{tabular}{llll|c|llll}
-	\multicolumn{4}{c|}{\textbf{\small Before Transition}} & & \multicolumn{4}{c}{\textbf{\small After Transition}} \\
-	\textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} \\
-	$S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ \\
-	$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ \\
-	$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ \\
-	$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ \\
-	$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ \\
-	$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ \\
-	$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ \\
-	$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ \\
-	$[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & $V$ & $E$ \\
-	\end{tabular}
-	\end{adjustbox}
-	\captionof{table}{\parser{} transitions.
-	  $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
-	}
-\end{center}
-\end{frame}
-
-\footnote{
-Written in Python using Keras: \url{https://github.com/fchollet/keras}.}
 
 \begin{frame}
 \frametitle{\parser{} Classifiers}
@@ -787,6 +802,17 @@ A UCCA parser will enable using the scheme for representation in NLP tasks.
  \item UCCA exhibits formal properties important for semantic representation.
  \item We present the first parser for UCCA and the first to support these properties.
 \end{itemize}
+
+Corpora are available at \url{http://www.cs.huji.ac.il/~oabend/ucca.html}.
+Parser code available at \url{https://github.com/danielhers/ucca}.
+Written in Python using Keras: \url{https://github.com/fchollet/keras}.
+\end{frame}
+
+\begin{frame}
+\vfill
+\begin{center}
+Thank you
+\end{center}
 \end{frame}
 
 
