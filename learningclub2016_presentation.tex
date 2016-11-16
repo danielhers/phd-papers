@@ -280,41 +280,49 @@ a4 ->  ["op1"' above, black] a4 Paris;
 
 \begin{frame}
 \frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
-\begin{wraptable}{r}{35mm}
-  \vspace{-5mm}
+Semantic representation scheme \cite{abend2013universal}
+based on typological and Cognitive Linguistics literature \cite{Dixon:basic,croft2004cognitive}.
+\begin{itemize}
+ \item Demonstrated applicability to English, French, German \& Czech.
+ \item Support for rapid annotation.
+ \pause
+ \item Stability in translation \cite{sulem2015conceptual}.
+ \item Useful for MT evaluation \cite{birch2016hume}.
+ \item Applicability limited by absence of parser.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
+\begin{itemize}
+ \item \textbf{Remote edges} represent implied relations, support argument sharing.
+ \item Also supported: \textbf{linkage} (discourse relations) and \textbf{implicit} units,
+ but deferred to later work.
+ \item Foundational layer: mostly predicate-argument structure.
+ \item The scheme is extensible to allow other distinctions.
+\end{itemize}
+
+\vfill
+\begin{center}
   \begin{adjustbox}{margin=2mm,frame}
-  \begin{tabular}{cl}
-	  P & process \\
-	  S & state \\
+  \begin{tabular}{cl|cl|cl}
+	  P & process &
+	  S & state &
 	  A & participant \\
-	  L & linker \\
-	  H & linked scene \\
+	  L & linker &
+	  H & linked scene &
 	  C & center \\
-	  E & elaborator \\
-	  D & adverbial \\
+	  E & elaborator &
+	  D & adverbial &
 	  R & relator \\
-	  N & connector \\
-	  U & punctuation \\
+	  N & connector &
+	  U & punctuation &
 	  F & function unit \\
 	  G & ground
   \end{tabular}
   \end{adjustbox}
   \captionof{table}{Edge labels of the foundational layer.}
-\end{wraptable}
-Semantic representation scheme giving an alternative approach to syntax.
-\begin{itemize}
- \item Builds on typological and Cognitive Linguistics literature \cite{Dixon:basic,croft2004cognitive}.
- \item Demonstrated applicability to English, French, German \& Czech.
- \item Support for rapid annotation.
- \pause
- \item Semantic stability in translation \cite{sulem2015conceptual}.
- \item Useful for machine translation evaluation \cite{birch2016hume}.
- \item Applicability limited by absence of parser.
- \pause
- \item Remote edges represent implied relations, support argument sharing.
- \item Also supported: linkage (discourse relations) and implicit units,
- but deferred to later work.
-\end{itemize}
+\end{center}
 \end{frame}
 
 \begin{frame}
@@ -584,18 +592,6 @@ one for primary edges, and another for remote edges.
 \begin{frame}
 \frametitle{Baselines}
 There are no existing UCCA parsers. Compare to bilexical DAG parsers:
-\begin{enumerate}
- \item Convert UCCA to bilexical dependencies (edges only between tokens).
- \item Train parsers on the resulting training set.
- \item Apply trained parsers to the test set.
- \item Reconstruct UCCA graphs.
- \item Compare with gold standard.
-\end{enumerate}
-
-Upper bounds computed by replacing 1-3 with conversion of the test set.
-
-\vfill
-\pause
 \begin{center}
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
@@ -609,30 +605,59 @@ Upper bounds computed by replacing 1-3 with conversion of the test set.
 	\depedge{7}{6}{R}
 	\depedge{5}{7}{A}
 	\end{dependency}
-%	\begin{dependency}[theme = simple]
-%	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-%	John \^ gave \^ everything \^ up \\
-%	\end{deptext}
-%	\depedge{1}{2}{A}
-%	\depedge{3}{2}{A}
-%	\depedge{4}{2}{C}
-%	\end{dependency}
-%	\begin{dependency}[theme = simple]
-%	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-%	John \^ and \^ Mary \^ went \^ home \\
-%	\end{deptext}
-%	\depedge[edge start x offset=-6pt]{1}{4}{A}
-%	\depedge{2}{1}{N}
-%	\depedge{3}{1}{C}
-%	\depedge{5}{4}{A}
-%	\end{dependency}
 	\captionof{figure}{Bilexical approximation for UCCA graph.}
+\end{center}
+
+\vfill
+\pause
+\begin{enumerate}
+ \item Convert UCCA to bilexical dependencies (edges only between tokens).
+ \item Train parsers on the resulting training set.
+ \item Apply trained parsers to the test set.
+ \item Reconstruct UCCA graphs.
+ \item Compare with gold standard.
+\end{enumerate}
+
+Upper bounds computed by replacing 1-3 with conversion of the test set.
+\end{frame}
+
+\begin{frame}
+\frametitle{Baselines}
+Bilexical DAG parsers used:
+\begin{itemize}
+ \item DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}:
+ transition-based parser.
+ \item TurboParser \cite{almeida-martins:2015:SemEval}:
+ graph-based parser.
+\end{itemize}
+
+\vfill
+\pause
+\begin{center}
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	John \^ gave \^ everything \^ up \\
+	\end{deptext}
+	\depedge{1}{2}{A}
+	\depedge{3}{2}{A}
+	\depedge{4}{2}{C}
+	\end{dependency}
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	John \^ and \^ Mary \^ went \^ home \\
+	\end{deptext}
+	\depedge[edge start x offset=-6pt]{1}{4}{A}
+	\depedge{2}{1}{N}
+	\depedge{3}{1}{C}
+	\depedge{5}{4}{A}
+	\end{dependency}
+	\captionof{figure}{More bilexical approximation examples.}
 \end{center}
 \end{frame}
 
 \begin{frame}
 \frametitle{Results}
-MLP obtains the highest scores in nearly all metrics:
+Our MLP-based parser obtains the highest scores in nearly all metrics:
 \begin{center}
 	\begin{tabular}{l|ccc|ccc}
 	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
@@ -669,9 +694,9 @@ Similar differences on out-of-domain test set:
 	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
 	Upper Bound % on the test set and ood set only
 	& 93.5 & 83.5 & 88.2 & 66.7 & 31.6 & 42.9 \vspace{.1cm} \\
-	DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}
+	DAGParser
 	& 58	 & 49.8	 & 53.4 & -- & 0 & 0 \\
-	TurboParser \cite{almeida-martins:2015:SemEval}
+	TurboParser
 	& 52.6	 & 39	 & 44.7	 & 100	 & 0.3	 & 0.6 \\
 	\hline
 	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
@@ -693,17 +718,39 @@ For completeness, we also explore lossily converting UCCA into trees.
 \begin{itemize}
  \item Results in a simplified task for the underlying parser.
  \item Takes advantage of maturity of tree-based parsers.
- \item Loses important information encoded in remote edges.
+ \item But loses important information encoded in remote edges
+   (all scores are zero, as they are ignored).
 \end{itemize}
 
+\vfill
+\begin{center}
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\depedge{2}{1}{L}
+	\depedge{2}{3}{U}
+	\depedge{5}{4}{A}
+	\depedge{2}{5}{H}
+	\depedge{7}{6}{R}
+	\depedge{5}{7}{A}
+	\end{dependency}
+	\captionof{figure}{Bilexical tree approximation for UCCA graph.}
+\end{center}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Tree Approximation}
+LSTM transition-based parser: significantly higher primary edge scores.
 \begin{center}
 	\begin{tabular}{l|ccc}
 	& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 	\hline
-%	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Approximation} \\
-%	Upper Bound & 100 & 100 & 100 \vspace{.1cm} \\
-%	\textsc{uparse} \cite{maier-lichte:2016:DiscoNLP} & 63 & 64.7 & 63.7 \\
-%	\hline
+	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Approximation} \\
+	Upper Bound & 100 & 100 & 100 \vspace{.1cm} \\
+	\textsc{uparse} \cite{maier-lichte:2016:DiscoNLP} & 63 & 64.7 & 63.7 \\
+	\hline
 	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Dependency Tree Approximation} \\
 	Upper Bound & 93.7 & 83.6 & 88.4 \vspace{.1cm} \\
 	MaltParser \cite{nivre2007maltparser} & 64.9 & 57.9 & 61 \\
@@ -718,18 +765,43 @@ For completeness, we also explore lossily converting UCCA into trees.
 \end{center}
 \end{frame}
 
+\begin{frame}
+\frametitle{Discussion}
+Remote edge performance is of pivotal importance here: we focus on extending the class of graphs supported by statistical parsers.
+
+\vfill
+\pause
+However, exploring tree approximation methods
+can inform the future development of DAG parsers in general and of UCCA parsers in particular.
+
+\vfill
+\pause
+The performance is encouraging in light of
+UCCA's inter-annotator agreement: 80--85\%
+primary LF \cite{abend2013universal}.
+\end{frame}
+
 
 
 \section{Future Work}
 
 \begin{frame}
-\frametitle{Discussion}
+In light of the results, promising future directions are:
 \begin{itemize}
- \item Exploring tree approximation methods
-can inform the future development of DAG parsers in general and of UCCA parsers in particular.
- \item The performance is encouraging in light of
-UCCA's inter-annotator agreement of 80--85\%
-F-score on primary edges \cite{abend2013universal}.
+ \item Replace MLP by LSTM classifier.
+ \item Replace word embeddings by LSTM-based features.
+\end{itemize}
+
+\vfill
+\pause
+Other future directions:
+\begin{itemize}
+ \item Means to recover from mistakes during parsing:
+ beam search, training with exploration.
+ \item More languages (e.g. German),
+ demonstrating the importance of broad-coverage parsing.
+ \item Improving the conversion-based methods and exploring different target representations.
+ \item Using UCCA for representation in NLP tasks.
 \end{itemize}
 \end{frame}
 
@@ -739,16 +811,8 @@ Vector representation for sentences and documents,
 based on recursive composition on the UCCA graph.
 
 \vfill
-Impact:
-\begin{itemize}
-\item General automatic semantic feature extractor for text.
-\item Accurate measure for text similarity.
-\item Understand the semantic contribution of different elements.
-\end{itemize}
-
-\vfill
 \begin{center}
-  \begin{tikzpicture}[level distance=1cm, sibling distance=2cm, ->]
+  \begin{tikzpicture}[level distance=15mm, sibling distance=2.5cm, ->]
     \node (ROOT) [fill=black, vector] {}
       child {node (After) {After} edge from parent [shorten <=3mm]
         node[left] {\scriptsize $L$\;}}
@@ -788,29 +852,24 @@ Impact:
 
 \begin{frame}
 \frametitle{Conclusions}
-We present \parser{}, the first parser for UCCA, and
-evaluate it in both in-domain and out-of-domain settings,
-showing it surpasses bilexical DAG parsers on the task of UCCA parsing.
-
-Future work will incorporate LSTMs into \parser{},
-and apply the parser to more languages such as German,
-demonstrating the importance of broad-coverage parsing.
-We will also improve the conversion-based methods and explore different target representations.
-A UCCA parser will enable using the scheme for representation in NLP tasks.
-
 \begin{itemize}
  \item UCCA exhibits formal properties important for semantic representation.
  \item We present the first parser for UCCA and the first to support these properties.
 \end{itemize}
 
-Corpora are available at \url{http://www.cs.huji.ac.il/~oabend/ucca.html}.
-Parser code available at \url{https://github.com/danielhers/ucca}.
-Written in Python using Keras: \url{https://github.com/fchollet/keras}.
+\vfill
+\pause
+\begin{itemize}
+ \item Corpora: \url{http://www.cs.huji.ac.il/~oabend/ucca.html}
+ \item Code: \url{https://github.com/danielhers/ucca}
+ \item NN written with Keras: \url{https://github.com/fchollet/keras}
+\end{itemize}
 \end{frame}
 
 \begin{frame}
 \vfill
 \begin{center}
+\LARGE
 Thank you
 \end{center}
 \end{frame}
