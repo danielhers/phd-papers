@@ -134,9 +134,6 @@ Examples:
 
 \centering
 \vfill
-{\color{blue} PropBank}
-\vfill
-
 \begin{dependency}
 	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
 	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
@@ -152,6 +149,23 @@ Examples:
 	\node[xshift=10.5em,yshift=3em,color=blue]{A2}
 	child{node at ($(\wordref{1}{6})$) {}}
 	child{node at ($(\wordref{1}{7})$) {}};
+\end{dependency}
+
+\vfill
+{\color{blue} PropBank}
+\end{frame}
+
+\begin{frame}
+\frametitle{Semantic Role Labeling (SRL)}
+Annotate predicates and their arguments as a flat structure.
+Examples:
+
+\centering
+\vfill
+\begin{dependency}
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
 	% FrameNet
 	\node[xshift=4.91em,yshift=-3em,color=red]{Motion}
 	child{node at ($(\wordref{1}{5})$) {}};
@@ -176,9 +190,6 @@ Examples:
 
 \centering
 \vfill
-{\color{blue} DELPH-IN MRS-derived bi-lexical dependencies (DM)}
-\vfill
-
 \begin{dependency}[theme=simple]
 	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
 	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
@@ -189,6 +200,23 @@ Examples:
 	\depedge{5}{4}{\color{blue} ARG1}
 	\depedge{6}{5}{\color{blue} ARG1}
 	\depedge{6}{7}{\color{blue} ARG2}
+\end{dependency}
+\vfill
+{\color{blue} DELPH-IN MRS-derived bi-lexical dependencies (DM)}
+\end{frame}
+
+\begin{frame}
+\frametitle{Semantic Dependency Parsing (SDP)}
+Graph on the text tokens, including internal structure of arguments.
+Examples:
+
+\centering
+\vfill
+
+\begin{dependency}[theme=simple]
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
 	\deproot[edge below]{5}{\color{red} top}
 	\depedge[edge below]{5}{2}{\color{red} TWHEN}
 	\depedge[edge below]{5}{4}{\color{red} ACT-arg}
@@ -288,8 +316,13 @@ based on typological and Cognitive Linguistics literature \cite{Dixon:basic,crof
  \pause
  \item Stability in translation \cite{sulem2015conceptual}.
  \item Useful for MT evaluation \cite{birch2016hume}.
- \item Applicability limited by absence of parser.
+ \item Applicability so far limited by absence of parser.
 \end{itemize}
+
+\vfill
+\begin{center}
+  \includegraphics[width=\linewidth]{hume.png}
+\end{center}
 \end{frame}
 
 \begin{frame}
@@ -297,8 +330,8 @@ based on typological and Cognitive Linguistics literature \cite{Dixon:basic,crof
 \begin{itemize}
  \item \textbf{Remote edges} represent implied relations, support argument sharing.
  \item Also supported: \textbf{linkage} (discourse relations) and \textbf{implicit} units,
- but deferred to later work.
- \item Foundational layer: mostly predicate-argument structure.
+ but parsing them is deferred to later work.
+ \item Foundational layer covers predicate-argument structure and other major linguistic phenomena.
  \item The scheme is extensible to allow other distinctions.
 \end{itemize}
 
@@ -321,7 +354,7 @@ based on typological and Cognitive Linguistics literature \cite{Dixon:basic,crof
 	  G & ground
   \end{tabular}
   \end{adjustbox}
-  \captionof{table}{Edge labels of the foundational layer.}
+  \captionof{table}{Edge labels of the foundational layer (excluding linkage).}
 \end{center}
 \end{frame}
 
@@ -483,7 +516,6 @@ For all classifiers, inference is performed greedily, i.e., without beam search.
 \vfill
 \pause
 + real-valued feature, \textbf{ratio} between number of terminals to number of nodes in the graph $G$.
-
 Serves as regularizer for creation of new nodes.
 \end{frame}
 
@@ -498,6 +530,12 @@ Serves as regularizer for creation of new nodes.
  \item Out-of-domain data: English part of English-French parallel corpus,
  	\textit{Twenty Thousand Leagues Under the Sea}.
 \end{itemize}
+
+\vfill
+\begin{center}
+  \includegraphics[width=.5\linewidth]{wikipedia.png}
+  \includegraphics[width=.5\linewidth]{squid.jpg}
+\end{center}
 \end{frame}
 
 
@@ -642,6 +680,7 @@ Bilexical DAG parsers used:
 	\depedge{3}{2}{A}
 	\depedge{4}{2}{C}
 	\end{dependency}
+	
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
 	John \^ and \^ Mary \^ went \^ home \\
@@ -657,7 +696,7 @@ Bilexical DAG parsers used:
 
 \begin{frame}
 \frametitle{Results}
-Our MLP-based parser obtains the highest scores in nearly all metrics:
+Our NN-based parser obtains the highest scores in nearly all metrics:
 \begin{center}
 	\begin{tabular}{l|ccc|ccc}
 	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
