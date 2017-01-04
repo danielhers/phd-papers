@@ -2,8 +2,8 @@
 % File acl2017.tex
 %
 
-\documentclass[11pt]{article}
-\usepackage{eacl2017}
+\documentclass[11pt,a4paper]{article}
+\usepackage[hyperref]{acl2017}
 \usepackage{times}
 \usepackage{url}
 \usepackage{latexsym}
@@ -18,7 +18,6 @@
 \usepackage{multirow}
 \usepackage[font=small]{caption}
 \usepackage{subcaption}
-%\usepackage{hyperref}
 \usepackage{color}
 \usepackage{float}
 \usepackage{lipsum,adjustbox}
@@ -38,6 +37,15 @@
 \DeclareMathOperator*{\argmax}{argmax}
 \SetKwRepeat{Do}{do}{while}
 \hyphenation{SemEval}
+
+%\aclfinalcopy % Uncomment this line for the final submission
+%\def\aclpaperid{***} %  Enter the acl Paper ID here
+
+%\setlength\titlebox{5cm}
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
 
 \title{Broad-Coverage Transition-Based UCCA Parsing}
 
@@ -76,7 +84,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:introduction}
 
-Universal Conceptual Cognitive Annotation, (UCCA, \newcite{abend2013universal}),
+Universal Conceptual Cognitive Annotation, (UCCA, \citet{abend2013universal}),
 is a cross-linguistically applicable semantic representation scheme,
 building on the established Basic Linguistic Theory typological framework
 \cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive
@@ -352,7 +360,7 @@ Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 \paragraph{Classifier.}
 We experiment with three classifiers\footnote{A link to the code repository will
 be released upon publication.}.
-First, following \newcite{maier2015discontinuous} and \newcite{maier-lichte:2016:DiscoNLP},
+First, following \citet{maier2015discontinuous} and \citet{maier-lichte:2016:DiscoNLP},
 we use a linear classifier, using sparse features and
 the averaged structured perceptron algorithm for training it
 \cite{Coll:04}. We use the \textsc{MinUpdate} procedure \cite{goldberg2011learning}:
@@ -362,7 +370,7 @@ We refer to the parser using this classifier as \parser{sparse}.
 Second, we experiment with a linear classifier using dense embedding features (see below),
 which we also train using the averaged structured perceptron.
 We refer to this parser as \parser{dense}.
-Third, we use a feedforward neural network, similar in architecture to that of \newcite{chen2014fast}, with the following modifications: two hidden layers instead of one, using the sigmoid activation function instead of the cube,
+Third, we use a feedforward neural network, similar in architecture to that of \citet{chen2014fast}, with the following modifications: two hidden layers instead of one, using the sigmoid activation function instead of the cube,
 and applying dropout after each layer \cite{srivastava2014dropout}.
 We refer to the NN-based parser as \parser{NN}.
 
@@ -374,8 +382,8 @@ we use binary indicator features representing
 the words, POS tags and existing edge labels related to the top four stack elements and the next
 three buffer elements, in addition to their children and grandchildren in the graph.
 We also use bi- and trigram features based on these values \cite{zhang2009transition,zhu2013fast},
-features related to discontinuous nodes adopted from \newcite{maier2015discontinuous},
-and features representing existing edges and the number of parents and children a node has, following \newcite{tokgoz2015transition}.
+features related to discontinuous nodes adopted from \citet{maier2015discontinuous},
+and features representing existing edges and the number of parents and children a node has, following \citet{tokgoz2015transition}.
 In addition, we use novel, UCCA-specific features:
 the number of remote children a node has\footnote{See
 Appendix~\ref{appendix:features} for a full listing of the feature templates.}.
@@ -411,10 +419,10 @@ to the perceptron update rule.
 We train the perceptron classifiers for 16 iterations, using $\textsc{MinUpdate}=5$,
 and doubling weight updates
 for gold \textsc{Swap} transitions to address the sparsity of discontinuous nodes,
-as in \newcite{maier2015discontinuous}.
+as in \citet{maier2015discontinuous}.
 POS tags are extracted using the averaged perceptron tagger of NLTK \cite{bird2009natural}.
 Word embeddings for the dense perceptron are initialized with the 100-dimensional pre-trained word2vec vectors \cite{mikolov2013efficient},
-the same ones used by \newcite{dyer2015transition}\footnote{
+the same ones used by \citet{dyer2015transition}\footnote{
 \url{https://github.com/clab/lstm-parser}}.
 
 For the NN classifier, word embeddings are initialized to random
@@ -677,7 +685,7 @@ arc-eager transition set and the SVM classifier\footnote{Preliminary
 experiments with arc-standard and non-projective variants of MaltParser yielded slightly
 lower scores, and were thus discarded from the final evaluation.
 Experiments with a linear classifier also obtained slightly lower scores.},
-and the stack LSTM-based arc-standard parser of \newcite{dyer2015transition}.
+and the stack LSTM-based arc-standard parser of \citet{dyer2015transition}.
 Default settings are used in all cases.
 \textsc{uparse} uses beam search by default,
 with a beam size of 4, and the other parsers are greedy.
@@ -799,7 +807,7 @@ translation methods \cite{pourdamghani2014aligning} and Boolean LP methods
 Furthermore, anchoring allows breaking down sentences into semantically meaningful sub-spans,
 which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
 
-\newcite[2016]{wang2015transition} applied a transition-based approach to AMR parsing,
+\citet[2016]{wang2015transition} applied a transition-based approach to AMR parsing,
 but their method involved first syntactically parsing the input, and then converting
 the result into AMR, while our approach involves no such syntactic pre-processing.
 
@@ -845,7 +853,7 @@ and summarization \cite{liu2015toward}.
 
 
 \bibliography{references}
-\bibliographystyle{eacl2017}
+\bibliographystyle{acl_natbib}
 
 
 
