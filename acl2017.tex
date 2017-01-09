@@ -252,7 +252,7 @@ All converters and parsers will be made publicly available upon publication.
 
 UCCA is a multi-layered representation, each layer corresponding
 to a ``module'' of semantic distinctions.
-The UCCA foundational layer, which we target in this paper, covers the predicate-argument
+The UCCA \textbf{foundational layer}, which we target in this paper, covers the predicate-argument
 structure evoked by predicates of all grammatical categories
 (verbal, nominal, adjectival and others), the inter-relations between them,
 and other major linguistic phenomena such as coordination and multi-word expressions.
@@ -263,8 +263,8 @@ as well as one or more Participants.
 For example, the sentence ``After graduation, John moved to Paris'' (\figref{fig:graduation})
 contains two Scenes, whose main relations are ``graduation'' and ``moved''.
 ``John'' is a Participant in both Scenes, while ``Paris'' only in the latter.
-One incoming edge for each non-root node is marked as ``primary'',
-and the rest (mostly denoting implied relations) as ``remote'' edges.
+One incoming edge for each non-root node is marked as \textbf{primary},
+and the rest (mostly denoting implied relations) as \textbf{remote} edges.
 This distinction is made by the annotator.
 The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
 thus forming a DAG.
@@ -333,8 +333,8 @@ $[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\
   We write the stack with its top to the right and the buffer with its head to the left.
   $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
   $\mathrm{i}(x)$ is a running index for the created nodes.
-  \textsc{Edge} transitions have an additional condition: the prospective child may not
-  already have a primary parent.
+  In addition to the specified conditions,
+  the prospective child in an \textsc{Edge} transition must not already have a primary parent.
 }
 \end{figure*}
 
