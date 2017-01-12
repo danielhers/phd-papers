@@ -358,21 +358,22 @@ named transition in previous work \cite{nivre2009non,maier2015discontinuous}.
 Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 
 \paragraph{Classifier.}
-We experiment with three classifiers\footnote{A link to the code repository will
+We experiment with four classifiers\footnote{The code repository will
 be released upon publication.}.
-First, following \citet{maier2015discontinuous} and \citet{maier-lichte:2016:DiscoNLP},
-we use a linear classifier, using sparse features and
+Our first parser (\parser{sparse}), following \citet{maier-lichte:2016:DiscoNLP},
+uses a linear classifier, with sparse features and
 the averaged structured perceptron algorithm for training it
 \cite{Coll:04}. We use the \textsc{MinUpdate} procedure \cite{goldberg2011learning}:
 a minimum number of updates to a feature has to occur in training for it
 to be included in the model.
-We refer to the parser using this classifier as \parser{sparse}.
-Second, we experiment with a linear classifier using dense embedding features (see below),
-which we also train using the averaged structured perceptron.
-We refer to this parser as \parser{dense}.
-Third, we use a feedforward neural network, similar in architecture to that of \citet{chen2014fast}, with the following modifications: two hidden layers instead of one, using the sigmoid activation function instead of the cube,
+Our second parser (\parser{dense}) also uses a linear classifier
+trained using averaged structured perceptron, but with dense embedding features (see below).
+Our third parser (\parser{MLP} for ``multi-layer perceptron'') uses a feedforward neural network,
+similar in architecture to that of \citet{chen2014fast}, with the following modifications:
+two hidden layers instead of one, using the ReLU activation function instead of the cube,
 and applying dropout after each layer \cite{srivastava2014dropout}.
-We refer to the NN-based parser as \parser{NN}.
+Our fourth parser (\parser{BiLSTM}) uses a bidirectional LSTM to represent the tokens,
+similar to \cite{kiperwasser2016simple}, followed by two feedforward layers similar to \parser{MLP}.
 
 For all classifiers, inference is performed greedily, i.e., without beam search.
 
@@ -667,6 +668,8 @@ F-score on primary edges \cite{abend2013universal}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}\label{sec:discussion}
+
+\paragraph{Linguistic constructions.}
 
 \paragraph{Tree approximation.}
 For completeness, we further explore a conversion-based approach that
