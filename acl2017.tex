@@ -565,24 +565,12 @@ Punctuation is excluded from the evaluation, but not from the datasets.
 \paragraph{Linguistic constructions.}
 
 In addition to the overall evaluation on primary and remote edges,
-we perform fine-grained evaluation for \parser{} on various linguistic construction,
+we perform fine-grained evaluation on various linguistic construction,
 which we extract by criteria on the UCCA structure, POS tags and syntactic
 dependency labels.\footnote{See Appendix~\ref{appendix:constructions}
 for a listing of the criteria.}
 For each construction, we report the F-score resulting from calculating the
 mutual edges only among the edges matching the criterion in each graph.
-
-\paragraph{Comparison to bilexical graph parsers.}
-As \parser{} is the first parser to support UCCA's structure,
-no direct comparison with an existing parser is possible.
-We instead compare \parser{} to bilexical graph parsers,
-which we view as the closest existing match (they support two of the properties,
-but not non-terminal nodes).
-Our approach is similar in spirit
-to the \textit{tree approximation} approach used for dependency graph parsing
-\cite{agic2015semantic,fernandez2015parsing},
-where dependency graphs were converted into dependency trees
-and then parsed by existing dependency tree parsers.
 
 \begin{figure}[ht]
 \centering
@@ -621,44 +609,6 @@ John \^ and \^ Mary \^ went \^ home \\
 \label{fig:bilexical_example}
 \end{figure}
 
-We first convert UCCA into bilexical dependencies
-(see examples in \figref{fig:bilexical_example}), and train each parser on the resulting
-training set.\footnote{See Appendix~\ref{appendix:conversion} for details about
-the conversion.}
-We evaluate the trained parsers by applying them to the test set
-and then reconstructing UCCA graphs, which are compared with the gold standard.
-Upper bounds for the resulting scores are computed by applying
-the conversion and inverse conversion on the gold standard
-graphs and comparing them to the original gold standard.
-Upper bounds are reported in \secref{sec:results}.
-
-\paragraph{Comparison to tree parsers.}
-For completeness, and since tree parsers are generally much more developed than graph parsers,
-we also perform a tree approximation experiment, converting UCCA to (bilexical) trees
-and evaluating tree parsers on them.
-In our setting, the conversion to trees consists simply of removing remote edges from the graph.
-Note that this results in a simplified task for the underlying parser,
-and furthermore, that performance on remote edges is of pivotal importance in this investigation,
-which focuses on extending the class of graphs supported by statistical parsers.
-Nevertheless, we believe that exploring tree approximation methods,
-thus building on the maturity and cumulative experience with transition-based tree parsing,
-can inform the future development of graph parsers in general and of UCCA parsers in particular.
-
-We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
-and one into (possibly non-projective) bilexical dependency trees.
-In the first setting we experiment with \textsc{uparse}
-\cite{maier-lichte:2016:DiscoNLP},
-the only transition-based constituency parser, to our knowledge, able to parse trees with
-discontinuous constituents.
-In the second setting we use MaltParser \cite{nivre2007maltparser} with the
-\textsc{ArcEager} transition set and the SVM classifier\footnote{Preliminary
-experiments with other configurations of MaltParser yielded lower scores and
-were thus discarded from the evaluation.},
-and the stack LSTM-based \textsc{ArcStandard} parser of \citet{dyer2015transition}.
-Default settings are used in all cases.
-\textsc{uparse} uses beam search by default,
-with a beam size of 4, and the other parsers are greedy.
-
 \begin{table*}[ht]
 \begin{tabular}{l|ccc|ccc||ccc|ccc}
 & \multicolumn{6}{c||}{Wiki (in-domain)} & \multicolumn{6}{c}{20K Leagues (out-of-domain)} \\
@@ -668,9 +618,9 @@ with a beam size of 4, and the other parsers are greedy.
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
-Upper Bound % on the test set and ood set only
-& 94.5 & 87.7 & 91 & 77.3 & 46.8 & 58.3
-& 94.8 & 88 & 91.3 & 66.3 & 32.3 & 43.4 \vspace{.1cm} \\
+\small Upper Bound
+& \small 94.5 & \small 87.7 & \small 91 & \small 77.3 & \small 46.8 & \small 58.3
+& \small 94.8 & \small 88 & \small 91.3 & \small 66.3 & \small 32.3 & \small 43.4 \\
 DAGParser
 & 61.8 & 55.8 & 58.6 & 9.5 & 0.5 & 1
 & 56.4 & 50.6 & 53.4 & -- & 0 & 0 \\
@@ -679,21 +629,21 @@ TurboParser
 & 50.3 & 37.7 & 43.1 & 100 & 0.4 & 0.8 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Tree Approximation} \\
-Upper Bound
-& 100 & 100 & 100 & & &
-& 100 & 100 & 100 \vspace{.1cm} \\
+\small Upper Bound
+& \small 100 & \small 100 & \small 100 & & &
+& \small 100 & \small 100 & \small 100 \\
 \textsc{uparse}
 & 60.9 & 61.2 & 6 & & &
 & 52.7 & 52.8 & 52.8 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Tree Approximation} \\
-Upper Bound
-& 94.6 & 87.8 & 91.1 & & &
-& 94.9 & 88 & 91.4 \vspace{.1cm} \\
+\small Upper Bound
+& \small 94.5 & \small 87.7 & \small 91 & & &
+& \small 94.8 & \small 88 & \small 91.3 \\
 MaltParser
 & 62.8 & 57.7 & 60.2 & & &
 & 57.8 & 53 & 55.3 \\
-LSTM
+LSTM Parser
 & 73.2 & 66.9 & 69.9 & & &
 & 66.1 & 61.1 & 63.5 \\
 \hline
@@ -721,12 +671,65 @@ LSTM
 }
 \end{table*}
 
+\paragraph{Comparison to bilexical graph parsers.}
+As \parser{} is the first parser to support UCCA's structure,
+no direct comparison with an existing parser is possible.
+We instead compare \parser{} to bilexical graph parsers,
+which we view as the closest existing match (they support
+reentrancy and discontinuity, but not non-terminal nodes).
+Our approach is similar in spirit
+to the \textit{tree approximation} approach used for dependency graph parsing
+\cite{agic2015semantic,fernandez2015parsing},
+where dependency graphs were converted into dependency trees
+and then parsed by existing dependency tree parsers.
+
+We first convert UCCA into bilexical dependencies
+(see examples in \figref{fig:bilexical_example}), and train each parser on the resulting
+training set.\footnote{See Appendix~\ref{appendix:conversion} for details about
+the conversion.}
+We evaluate the trained parsers by applying them to the test set
+and then reconstructing UCCA graphs, which are compared with the gold standard.
+To make the task as similar as possible,
+we chose to keep the UCCA edge label set in the resulting bilexical graphs.
+This inevitably incurs an error resulting from the removal of non-terminal nodes,
+yielding an upper bounds on the achievable scores, reported in \secref{sec:results}.
+
 We evaluate two parsers in the bilexical approximation setting:
-DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, the leading transition-based parser which participated in the SDP task of SemEval 2014 \cite{oepen2014semeval},
+DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, the leading transition-based parser that participated in the SDP task of SemEval 2014 \cite{oepen2014semeval},
 and the semantic variant of TurboParser \cite{almeida-martins:2015:SemEval},
 a second-order graph-based parser that uses dual decomposition for optimization,
 which obtained some of the best results in the SDP task of SemEval 2015 \cite{oepen2015semeval}. Default settings are used in all cases.
 We note that DAGParser uses beam search by default, with a beam size of 5.
+
+\paragraph{Comparison to tree parsers.}
+For completeness,
+we also perform a tree approximation experiment, converting UCCA to (bilexical) trees
+and evaluating tree parsers on them.
+In our setting, the conversion to trees consists simply of removing remote edges from the 
+graph, and then to bilexical trees by applying the same procedure as for bilexical graphs.
+Note that this results in a simplified task for the underlying parser.
+Furthermore, performance on remote edges is of pivotal importance in this investigation,
+which focuses on extending the class of graphs supported by statistical parsers.
+Nevertheless, given the relative maturity of dependency tree parsers, we feel this is
+a mandatory comparison.
+%we believe that exploring tree approximation methods,
+%thus building on the maturity and cumulative experience with transition-based tree parsing,
+%can inform the future development of graph parsers in general and of UCCA parsers in %particular.
+
+We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
+and one into (possibly non-projective) bilexical dependency trees.
+In the first setting we experiment with \textsc{uparse}
+\cite{maier-lichte:2016:DiscoNLP},
+the only transition-based constituency parser, to our knowledge, able to parse trees with
+discontinuous constituents.
+In the second setting we use MaltParser \cite{nivre2007maltparser} with the
+\textsc{ArcEager} transition set and the SVM classifier\footnote{Preliminary
+experiments with other configurations of MaltParser yielded lower scores and
+were thus discarded from the evaluation.},
+and the stack LSTM-based \textsc{ArcStandard} parser of \citet{dyer2015transition}.
+Default settings are used in all cases.
+\textsc{uparse} uses beam search by default,
+with a beam size of 4, and the other parsers are greedy.
 
 
 
@@ -734,50 +737,35 @@ We note that DAGParser uses beam search by default, with a beam size of 5.
 \section{Results}\label{sec:results}
 
 \tabref{table:results} presents our main experimental results, as well as
-upper bounds for the approximation-based method,
-reflecting the error resulting from converting the test set into bilexical graphs and then
-back into UCCA---the conversion procedure loses some of the information about non-terminal nodes.
+upper bounds for the baseline parsers,
+reflecting the error resulting from the conversion.
+The tree approximation parsers are not able to reconstruct any remote edges,
+as these are removed in the conversion and do not even appear in the training set.
 
-DAGParser is most directly comparable to \parser{Sparse}, as both parsers
-use the perceptron classifier over a sparse feature representation.
+DAGParser and \textsc{uparse} are most directly comparable to
+\parser{Sparse}, as they also use a perceptron classifier with sparse features.
 Despite the lossy conversion, DAGParser obtains comparable results to
 \parser{Sparse} on primary edges, but on remote edges, \parser{Sparse}
 surpasses it considerably in performance
 (DAGParser does not predict any remote edges in the out-of-domain setting).
 TurboParser fares worse in this comparison, despite somewhat better results on
 remote edges.
+The LSTM parser obtains the highest primary F-score among the baseline parsers,
+with a considerable margin. Importantly, it obtains 9.7\% F-score
+higher than MaltParser,
+despite being limited by the same approximation error upper bound,
+and using a similar transition set.
 
 Replacing the sparse representation with dense embeddings, \parser{Dense} obtains
-lower results than its sparse counterpart (although its recall on remote edges is
-better in the in-domain setting).
+lower results than its sparse counterpart.
 Using a feedforward NN, \parser{MLP} manages to exploit the embeddings,
 and obtains substantially higher scores in all measures, both
 in the in-domain and out-of-domain settings.
-Finally, using more sophisticated input encoding, \parser{BiLSTM} surpasses \parser{MLP}.
-Its performance in absolute terms, of 63.7\% F-score, is encouraging in light of
+Finally, using more sophisticated input encoding, \parser{BiLSTM} surpasses \parser{MLP}
+and the LSTM parser.
+Its performance in absolute terms, of XX.X\% F-score, is encouraging in light of
 UCCA's inter-annotator agreement of 80--85\%
 F-score on primary edges \cite{abend2013universal}.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The conversion to constituency format only removes remote edges,
-and thus obtains a perfect primary edge score.
-The conversion to dependency format loses considerably more information, since
-all non-terminal nodes have to be reconstructed by a simple rule-based inverse
-conversion. Both conversions yield zero scores on remote edges,
-since these are invariably removed when converting to trees.
-
-The LSTM parser obtains the highest primary F-score,
-with a considerable margin. Importantly, it obtains 9.2\% F-score
-higher than the MaltParser,
-despite being limited by the same approximation error upper bound,
-and using a similar transition set.
-This shows that the LSTM classifier has a significant contribution
-to the accuracy of
-the parser, suggesting that a recurrent neural network (RNN) model
-may also improve \parser{}.
-This is in line with the recent success of RNNs
-(specifically, LSTMs and GRUs) in NLP tasks.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The fine-grained evaluation in \tabref{table:constructions_results} shows that in
 addition to the overall scores, \parser{BiLSTM} dominates in parsing common linguistic
@@ -785,9 +773,21 @@ constructions.
 
 \begin{table*}[ht]
 \begin{tabular}{l|cccccc}
-& Aspectual verbs & Light verbs & MWE & Pred. nouns & Pred. adjectives & Expletive ``it'' \\
+& \small Aspectual verbs & \small Light verbs & \small MWE
+& \small Pred. nouns & \small Pred. adjectives & \small Expletive ``it'' \\
 \hline
 \#edges & 17 & 45 & 721 & 49 & 32 & 15 \\
+\hline
+DAGParser
+&  \\
+TurboParser
+&  \\
+\textsc{uparse}
+&  \\
+MaltParser
+&  \\
+LSTM Parser
+&  \\
 \hline
 \multicolumn{7}{l}{\rule{0pt}{2ex} \footnotesize Parser F-scores (\%)} \\
 \parser{Sparse} & 26.7 & 0 & 42.5 & 10.5 & 44.8 & 0 \\
@@ -796,7 +796,7 @@ constructions.
 \parser{BiLSTM}
 \end{tabular}
 \caption{\label{table:constructions_results}
-Results of evaluation on UCCA edges corresponding to specific linguistic constructions in the Wiki test-set.}
+Results of evaluation (on the Wiki test-set) on UCCA edges corresponding to specific linguistic constructions.}
 \end{table*}
 
 
