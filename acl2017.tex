@@ -229,7 +229,7 @@ dependency DAG parsing
 constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
 discontinuous constituency parsing
 \cite{maier2015discontinuous,maier-lichte:2016:DiscoNLP},
-AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval,dipendra2016neural,goodman2016noise}
+AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval,dipendra2016neural,goodman2016noise,zhou2016amr,damonte2016incremental}
 and CCG parsing \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1},
 as well as joint lexical and syntactic parsing
 \cite{constant-nivre:2016:P16-1}.
@@ -826,7 +826,8 @@ discontinuous units, e.g. German.
 \section{Related Work}\label{sec:related_work}
 
 While earlier work on anchored\footnote{By {\it anchored} we mean that the semantic representation
-  directly corresponds to the words and phrases of the text.} semantic parsing has mostly concentrated on shallow semantic analysis,
+directly corresponds to the words and phrases of the text.}
+semantic parsing has mostly concentrated on shallow semantic analysis,
 focusing on semantic role labeling of verbal argument structures,
 the focus has recently shifted to parsing of more elaborate representations that account
 for a wider range of phenomena.
@@ -851,24 +852,29 @@ and on joint syntactic/semantic parsing
 \cite{henderson2013multilingual,swayamdipta-EtAl:2016:CoNLL}.
 
 \paragraph{Abstract Meaning Representation.}
-Another line of work addresses parsing into unanchored
-semantic representation, notably Abstract Meaning Representation (AMR)
+Another line of work addresses parsing into Abstract Meaning Representation (AMR)
 \cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad},
-where, unlike in UCCA parsing, the alignment between the semantic units and the text tokens
-is not explicitly marked.
+where, unlike in UCCA, the alignment between concepts and the text is not explicitly marked.
 While sharing much of this work's motivation, not anchoring the representation in the text
 complicates the parsing task, as it requires
-that the alignment between words and logical symbols be automatically
-(and imprecisely) detected. Indeed, despite considerable technical effort,
+the alignment to be automatically (and imprecisely) detected.
+Indeed, despite considerable technical effort,
 using rule-based methods \cite{flanigan2014discriminative}, machine
 translation methods \cite{pourdamghani2014aligning} and Boolean LP methods
-\cite{werling2015robust}, alignments are only about 80\%--90\% correct.
+\cite{werling2015robust}, concept identification is only about 80\%--90\% correct.
 Furthermore, anchoring allows breaking down sentences into semantically meaningful sub-spans,
 which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
 
-\citet[2016]{wang2015transition} applied a transition-based approach to AMR parsing,
-but their method involved first syntactically parsing the input, and then converting
-the result into AMR, while our approach involves no such syntactic pre-processing.
+\citet{wang2015transition}, \citet{wang-xue-pradhan:2015:ACL-IJCNLP} and \citet{wang-EtAl:2016:SemEval}
+applied a transition-based approach to AMR parsing, and \citet{goodman2016noise} improved upon
+their parser using imitation-learning algorithms.
+Their method involved first syntactically parsing the input, and then converting
+the result into AMR, while our parser directly processes the input tokens.
+\citet{damonte2016incremental} developed a transition-based AMR parser that
+operates on the input tokens. For concept identification they use
+a simple heuristic that selects the most frequent graph for a given token.
+The transition-based AMR parser by \citet{zhou2016amr} performs concept identification
+and parsing jointly.
 
 \paragraph{Grammar-Based Parsing.}
 Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steedman:00} and TAG \cite{Joshi:97}
@@ -889,15 +895,15 @@ strings and semantic structures.
 \section{Conclusion}\label{sec:conclusion}
 We present \parser{}, the first parser for UCCA.
 Evaluated in both in-domain and out-of-domain settings, we show that coupled with a
-NN classifier, \parser{NN} surpasses bilexical DAG parsers on the task of UCCA parsing.
+NN classifier and feature extractor,
+\parser{BiLSTM} surpasses bilexical DAG parsers on the task of UCCA parsing.
 While much recent work focused on semantic parsing of different types,
 the effectiveness of different parsing approaches for schemes with
 different structural and semantic properties is not well-understood 
 \cite{kuhlmann2016towards}.
 This paper makes a contribution to this literature first by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, through detailed experiments with different architectures for the local classifier, and comparison both to bilexical approximations and to tree approximations.
 
-Future work will delve deeper in the exploration of
-conversion-based parsing approaches, including different target
+Future work will explore different target
 representations and more sophisticated conversion procedures \cite{kong-15},
 in order to shed light on the commonalities and differences between
 representations, suggesting ways for a data-driven design of semantic structures.
