@@ -365,7 +365,7 @@ the averaged structured perceptron algorithm for training it
 \cite{Coll:04}. We use the \textsc{MinUpdate} procedure \cite{goldberg2011learning}:
 a minimum number of updates to a feature has to occur in training for it
 to be included in the model.
-Our second parser (\parser{dense}) also uses a linear classifier
+Our second parser (\parser{Dense}) also uses a linear classifier
 trained using averaged structured perceptron, but with dense embedding features (see below).
 Our third parser (\parser{MLP} for ``multi-layer perceptron'') uses a feedforward neural network,
 similar in architecture to that of \citet{chen2014fast}, with the following modifications:
@@ -391,7 +391,7 @@ We also use a novel, UCCA-specific feature:
 number of remote children\footnote{See
 Appendix~\ref{appendix:features} for a full listing of the feature templates.}.
 
-For the dense perceptron-based (\parser{dense}) and the NN-based parsers
+For the dense perceptron-based (\parser{Dense}) and the NN-based parsers
 (\parser{MLP} and \parser{BiLSTM}),
 we replace all indicator features by a
 concatenation of the vector embeddings of all represented elements:
@@ -558,8 +558,8 @@ PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
 Punctuation is excluded from the evaluation, but not from the datasets.
 
 \paragraph{Comparison to bilexical DAG parsers.}
-As \parser{} is the first parser to support reentrancy, discontinuous units and
-non-terminal nodes, no direct comparison with an existing parser is possible.
+As \parser{} is the first parser to support UCCA's structure,
+no direct comparison with an existing parser is possible.
 We instead compare \parser{} to bilexical DAG parsers,
 which we view as the closest existing match (they support two of the properties,
 but not non-terminal nodes).
@@ -569,7 +569,7 @@ to the \textit{tree approximation} approach used for dependency DAG parsing
 where dependency DAGs were converted into dependency trees
 and then parsed by existing dependency tree parsers.
 
-\paragraph{Tree approximation.}
+\paragraph{Comparison to bilexical tree parsers.}
 For completeness, we further explore a conversion-based approach that
 lossily converts UCCA structures into trees. 
 This approach resembles the bilexical approximation approach described in \secref{sec:exp_setup}, but here it results in a simplified task for the underlying parser: parsing into tree structures.
@@ -682,9 +682,9 @@ LSTM
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
 \parser{Sparse}
-& 
-& \\
-\parser{dense} 
+& 63.6 & 62.9 & 63.3 & 20.6 & 13.7 & 16.5
+& 59.7 & 59.6 & 59.7 & 26.3 & 8.3 & 12.6 \\
+\parser{Dense} 
 & 
 & \\
 \parser{MLP}
@@ -739,7 +739,7 @@ surpasses it considerably in performance
 TurboParser fares worse in this comparison, despite somewhat better results on
 remote edges.
 
-Replacing the sparse representation with dense embeddings, \parser{dense} obtains
+Replacing the sparse representation with dense embeddings, \parser{Dense} obtains
 lower results than its sparse counterpart (although its recall on remote edges is
 better in the in-domain setting).
 Using a feedforward NN, \parser{MLP} manages to exploit the embeddings,
@@ -780,13 +780,16 @@ constructions.
 \begin{tabular}{l|cccccc}
 & Aspectual verbs & Light verbs & MWE & Pred. nouns & Pred. adjectives & Expletive ``it'' \\
 \hline
-\parser{Sparse} \\
-\parser{dense}  \\
+\#edges & 17 & 45 & 721 & 49 & 32 & 15 \\
+\hline
+\multicolumn{7}{l}{\rule{0pt}{2ex} \footnotesize Parser F-scores (\%)} \\
+\parser{Sparse} & 26.7 & 0 & 42.5 & 10.5 & 44.8 & 0 \\
+\parser{Dense}  \\
 \parser{MLP} \\
 \parser{BiLSTM}
 \end{tabular}
 \caption{\label{table:constructions_results}
-F-score on linguistic constructions in the Wiki test-set for each of the \parser{} parsers.}
+Results of evaluation on UCCA edges corresponding to specific linguistic constructions in the Wiki test-set.}
 \end{table*}
 
 
