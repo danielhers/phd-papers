@@ -358,9 +358,8 @@ named transition in previous work \cite{nivre2009non,maier2015discontinuous}.
 Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 
 \paragraph{Classifier.}
-We experiment with four classifiers\footnote{The code repository will
-be released upon publication.}.
-Our first parser (\parser{sparse}), following \citet{maier-lichte:2016:DiscoNLP},
+We experiment with four classifiers.
+Our first parser (\parser{Sparse}), following \citet{maier-lichte:2016:DiscoNLP},
 uses a linear classifier, with sparse features and
 the averaged structured perceptron algorithm for training it
 \cite{Coll:04}. We use the \textsc{MinUpdate} procedure \cite{goldberg2011learning}:
@@ -378,7 +377,7 @@ similar to \cite{kiperwasser2016simple}, followed by two feedforward layers simi
 For all classifiers, inference is performed greedily, i.e., without beam search.
 
 \paragraph{Features.}
-For the sparse perceptron-based parser (\parser{sparse}),
+For the sparse perceptron-based parser (\parser{Sparse}),
 we use binary indicator features representing
 the words, POS tags, syntactic dependency labels and
 existing edge labels related to the top four stack elements and the 
@@ -444,8 +443,8 @@ on the development set.
 \begin{table}
 \scalebox{.9}{
 \begin{tabular}{l|cccc}
-& \multicolumn{2}{c|}{\footnotesize perceptron} & \multicolumn{2}{c}{\footnotesize NN} \\
-& sparse & dense & MLP & BiLSTM \\
+& \multicolumn{2}{c|}{\footnotesize Perceptron} & \multicolumn{2}{c}{\footnotesize NN} \\
+& Sparse & Dense & MLP & BiLSTM \\
 \hline
 \multicolumn{4}{l}{\footnotesize Embedding dim.} \\
 external word & & 100 & 100 & 100 \\
@@ -481,7 +480,7 @@ $\textsc{MinUpdate}$ & 5 & 5 \\
 \paragraph{Data.}
 We conduct our main experiments on the UCCA Wikipedia corpus (henceforth, \textit{Wiki}),
 and use the English part of the UCCA \textit{Twenty Thousand Leagues Under the Sea} English-French parallel corpus (henceforth, \textit{20K Leagues}) as
-out-of-domain data.\footnote{Both are available at \url{http://www.cs.huji.ac.il/~oabend/ucca.html}}
+out-of-domain data.\footnote{\scriptsize \url{http://cs.huji.ac.il/~oabend/ucca.html}}
 \tabref{table:data} presents some statistics for the two corpora, demonstrating that while
 the \textit{Wiki} corpus is over ten times larger, the overall statistics are
 similar.
@@ -493,8 +492,8 @@ practice in semantic parsing and train our parsers on individual sentences,
 discarding inter-relations between them (0.18\% of the edges).
 We also discard linkage nodes and edges (as they often express inter-sentence
 relations and are thus mostly redundant when applied at the sentence level)
-as well as implicit nodes\footnote{See Appendix~\ref{appendix:extended_ucca} for examples
-of Linkage and Implicit nodes, as well as their frequency in the corpora.}.
+as well as implicit nodes\footnote{See Appendix~\ref{appendix:extended_ucca}
+for details about Linkage and Implicit.}.
 In the out-of-domain experiments, we apply the same parsers
 (trained on the \textit{Wiki} corpus) to the \textit{20K Leagues} corpus
 without parameter re-tuning.
@@ -506,18 +505,18 @@ without parameter re-tuning.
 & \multicolumn{3}{c|}{Wiki} & 20K \\
 & \small Train & \small Dev & \small Test & Leagues \\
 \hline
-\# passages & 300 & 34 & 34 & 154 \\
-\# sentences & 4267 & 453 & 518 & 506 \\
+\# passages & 300 & 34 & 33 & 154 \\
+\# sentences & 4268 & 454 & 503 & 506 \\
 \hline
-\# nodes & 298,665 & 33,263 & 37,262 & 29,315 \\
-\% terminal & 42.95 & 43.62 & 42.89 & 42.09 \\
-\% non-term. & 58.30 & 57.46 & 58.31 & 60.01 \\
-\% discont. & 0.53 & 0.51 & 0.47 & 0.81 \\
-\% reentrant & 2.31 & 1.76 & 2.18 & 2.03 \\
+\# nodes & 298,993 & 33,704 & 35,718 & 29,315 \\
+\% terminal & 42.96 & 43.54 & 42.87 & 42.09 \\
+\% non-term. & 58.33 & 57.60 & 58.35 & 60.01 \\
+\% discont. & 0.54 & 0.53 & 0.44 & 0.81 \\
+\% reentrant & 2.38 & 1.88 & 2.15 & 2.03 \\
 \hline
-\# edges & 287,381 & 32,015 & 35,846 & 27,749 \\
-\% primary & 98.29 & 98.81 & 98.75 & 97.73 \\
-\% remote & 1.71 & 1.19 & 1.25 & 2.27 \\
+\# edges & 287,914 & 32,460 & 34,336 & 27,749 \\
+\% primary & 98.25 & 98.75 & 98.74 & 97.73 \\
+\% remote & 1.75 & 1.25 & 1.26 & 2.27 \\
 \hline
 \multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
 \# children & 1.67 & 1.68 & 1.66 & 1.61 
@@ -570,6 +569,29 @@ to the \textit{tree approximation} approach used for dependency DAG parsing
 where dependency DAGs were converted into dependency trees
 and then parsed by existing dependency tree parsers.
 
+\paragraph{Tree approximation.}
+For completeness, we further explore a conversion-based approach that
+lossily converts UCCA structures into trees. 
+This approach resembles the bilexical approximation approach described in \secref{sec:exp_setup}, but here it results in a simplified task for the underlying parser: parsing into tree structures.
+
+Performance on remote edges is of pivotal importance in this investigation, which focuses on extending the class of graphs supported by statistical parsers. Nevertheless, we believe that exploring tree approximation methods, thus building on the maturity and cumulative experience with transition-based tree parsing, can inform the future development of DAG parsers in general and of UCCA parsers in particular.
+
+We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
+and one into bilexical dependency trees. In the first setting we experiment with \textsc{uparse}
+\cite{maier-lichte:2016:DiscoNLP},
+the only transition-based constituency parser, to our knowledge, able to parse trees with
+discontinuous constituents.
+In the second setting we use MaltParser \cite{nivre2007maltparser} with the
+arc-eager transition set and the SVM classifier\footnote{Preliminary
+experiments with arc-standard and non-projective variants of MaltParser yielded slightly
+lower scores, and were thus discarded from the final evaluation.
+Experiments with a linear classifier also obtained slightly lower scores.},
+and the stack LSTM-based arc-standard parser of \citet{dyer2015transition}.
+Default settings are used in all cases.
+\textsc{uparse} uses beam search by default,
+with a beam size of 4, and the other parsers are greedy.
+We also train the \parser{} variants without remote edge transitions, yielding a tree parser.
+
 \begin{figure}[ht]
 \centering
 \scalebox{.9}{
@@ -609,8 +631,8 @@ John \^ and \^ Mary \^ went \^ home \\
 
 We first convert UCCA into bilexical dependencies
 (see examples in \figref{fig:bilexical_example}), and train each parser on the resulting
-training set\footnote{See Appendix~\ref{appendix:conversion} for a detailed description of
-the conversion procedures.}.
+training set\footnote{See Appendix~\ref{appendix:conversion} for details about
+the conversion.}.
 We evaluate the trained parsers by applying them to the test set
 and then reconstructing UCCA graphs, which are compared with the gold standard.
 Upper bounds for the conversion-based method are computed by applying
@@ -634,13 +656,32 @@ Upper Bound % on the test set and ood set only
 & 94.8 & 88 & 91.3 & 66.3 & 32.3 & 43.4 \vspace{.1cm} \\
 DAGParser
 & 61.8 & 55.8 & 58.6 & 9.5 & 0.5 & 1
-&  \\
+& 56.4 & 50.6 & 53.4 & -- & 0 & 0 \\
 TurboParser
 & 57.7 & 46 & 51.2 & 77.8 & 1.8 & 3.7
-&  \\
+& 50.3 & 37.7 & 43.1 & 100 & 0.4 & 0.8 \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Tree Approximation} \\
+Upper Bound
+& 100 & 100 & 100 & & &
+& 100 & 100 & 100 \vspace{.1cm} \\
+\textsc{uparse}
+& 60.9 & 61.2 & 6 & & &
+& 52.7 & 52.8 & 52.8 \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Tree Approximation} \\
+Upper Bound
+& 94.6 & 87.8 & 91.1 & & &
+& 94.9 & 88 & 91.4 \vspace{.1cm} \\
+MaltParser
+& 62.8 & 57.7 & 60.2 & & &
+& 57.8 & 53 & 55.3 \\
+LSTM
+& 73.2 & 66.9 & 69.9 & & &
+& 66.1 & 61.1 & 63.5 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
-\parser{sparse}
+\parser{Sparse}
 & 
 & \\
 \parser{dense} 
@@ -654,14 +695,11 @@ TurboParser
 & 
 \end{tabular}
 \caption{\label{table:results}
-  Main experimental results in percents, on the \textit{Wiki} test set (left, in-domain)
-  and the \textit{20K Leagues} set (right, out-of-domain).
-  Columns correspond to labeled precision, recall and F-score for the different parsers,
+  Main experimental results in percents, on the \textit{Wiki} test set (left)
+  and the \textit{20K Leagues} set (right).
+  Columns correspond to labeled precision, recall and F-score,
   for both primary and remote edges.
-  Top: results for DAGParser and TurboParser, after conversion to bilexical DAGs.
-  Bottom: results for our \parser{}, trained on the original UCCA graphs, using each of the
-  three classifiers.
-  \parser{NN} obtains the highest scores in all metrics, surpassing the bilexical parsers
+  \parser{BiLSTM} obtains the highest scores in all metrics, surpassing the bilexical parsers
   and the other classifiers.
 }
 \end{table*}
@@ -692,10 +730,10 @@ upper bounds for the approximation-based method,
 reflecting the error resulting from converting the test set into bilexical DAGs and then
 back into UCCA---the conversion procedure loses some of the information about non-terminal nodes.
 
-DAGParser is most directly comparable to \parser{sparse}, as both parsers
+DAGParser is most directly comparable to \parser{Sparse}, as both parsers
 use the perceptron classifier over a sparse feature representation.
 Despite the lossy conversion, DAGParser obtains comparable results to
-\parser{sparse} on primary edges, but on remote edges, \parser{sparse}
+\parser{Sparse} on primary edges, but on remote edges, \parser{Sparse}
 surpasses it considerably in performance
 (DAGParser does not predict any remote edges in the out-of-domain setting).
 TurboParser fares worse in this comparison, despite somewhat better results on
@@ -712,84 +750,7 @@ Its performance in absolute terms, of 63.7\% F-score, is encouraging in light of
 UCCA's inter-annotator agreement of 80--85\%
 F-score on primary edges \cite{abend2013universal}.
 
-The fine-grained evaluation in \tabref{table:constructions_results} shows that in
-addition to the overall scores, \parser{BiLSTM} dominates in parsing common linguistic
-constructions.
-
-\begin{table*}[ht]
-\begin{tabular}{l|cccccc}
-& Aspectual verbs & Light verbs & MWE & Pred. nouns & Pred. adjectives & Expletive ``it'' \\
-\hline
-\parser{sparse} \\
-\parser{dense}  \\
-\parser{MLP} \\
-\parser{BiLSTM}
-\end{tabular}
-\caption{\label{table:constructions_results}
-F-score on linguistic constructions in the Wiki test-set for each of the \parser{} parsers.}
-\end{table*}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discussion}\label{sec:discussion}
-
-\paragraph{Tree approximation.}
-For completeness, we further explore a conversion-based approach that
-lossily converts UCCA structures into trees. 
-This approach resembles the bilexical approximation approach described in \secref{sec:exp_setup}, but here it results in a simplified task for the underlying parser: parsing into tree structures.
-
-Performance on remote edges is of pivotal importance in this investigation, which focuses on extending the class of graphs supported by statistical parsers. Nevertheless, we believe that exploring tree approximation methods, thus building on the maturity and cumulative experience with transition-based tree parsing, can inform the future development of DAG parsers in general and of UCCA parsers in particular.
-
-We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
-and one into bilexical dependency trees. In the first setting we experiment with \textsc{uparse}
-\cite{maier-lichte:2016:DiscoNLP},
-the only transition-based constituency parser, to our knowledge, able to parse trees with
-discontinuous constituents.
-In the second setting we use MaltParser \cite{nivre2007maltparser} with the
-arc-eager transition set and the SVM classifier\footnote{Preliminary
-experiments with arc-standard and non-projective variants of MaltParser yielded slightly
-lower scores, and were thus discarded from the final evaluation.
-Experiments with a linear classifier also obtained slightly lower scores.},
-and the stack LSTM-based arc-standard parser of \citet{dyer2015transition}.
-Default settings are used in all cases.
-\textsc{uparse} uses beam search by default,
-with a beam size of 4, and the other parsers are greedy.
-We also train the \parser{} variants without remote edge transitions, yielding a tree parser.
-
-\begin{table}[ht]
-\centering
-\begin{tabular}{l|ccc}
-& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-\hline
-\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Approximation} \\
-Upper Bound & 100 & 100 & 100 \vspace{.1cm} \\
-\textsc{uparse} & 60.9 & 61.2 & 6 \\
-\hline
-\multicolumn{4}{l}{\rule{0pt}{4ex} \footnotesize Dependency Tree Conversion} \\
-Upper Bound & 94.6 & 87.8 & 91.1 \vspace{.1cm} \\
-MaltParser & 62.8 & 57.7 & 60.2 \\
-LSTM & {\bf 73.2} & {\bf 66.9} & {\bf 69.9} \\
-\hline
-\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Tree Parsing} \\
-\parser{sparse} $-$ \textsc{Remote} & \\
-\parser{dense} $-$ \textsc{Remote} & \\
-\parser{MLP} $-$ \textsc{Remote} & \\
-\parser{BiLSTM} $-$ \textsc{Remote} & \\
-\end{tabular}
-\caption{\label{fig:tree_approx_results}
-  Results of tree approximation experiment, in percents (on the \textit{Wiki} test set).
-  Columns correspond to labeled precision,
-  recall and F-score for the different parsers, including only primary edges
-  (remote edges are removed at training).
-  Top: results for \textsc{uparse}
-  after conversion to constituency tree annotation. Upper middle: results for the
-  MaltParser and the LSTM parser, after conversion to dependency tree annotation.
-  Bottom: results for our \parser{}, trained on
-  UCCA trees, obtained by removing remote edges ($-$\textsc{Remote}).
-}
-\end{table}
-
-\tabref{fig:tree_approx_results} presents the results.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 The conversion to constituency format only removes remote edges,
 and thus obtains a perfect primary edge score.
 The conversion to dependency format loses considerably more information, since
@@ -809,6 +770,28 @@ may also improve \parser{}.
 This is in line with the recent success of RNNs
 (specifically, LSTMs and GRUs) in NLP tasks, including DAG-structured LSTM
 \cite{zhu-sobhani-guo:2016:N16-1}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The fine-grained evaluation in \tabref{table:constructions_results} shows that in
+addition to the overall scores, \parser{BiLSTM} dominates in parsing common linguistic
+constructions.
+
+\begin{table*}[ht]
+\begin{tabular}{l|cccccc}
+& Aspectual verbs & Light verbs & MWE & Pred. nouns & Pred. adjectives & Expletive ``it'' \\
+\hline
+\parser{Sparse} \\
+\parser{dense}  \\
+\parser{MLP} \\
+\parser{BiLSTM}
+\end{tabular}
+\caption{\label{table:constructions_results}
+F-score on linguistic constructions in the Wiki test-set for each of the \parser{} parsers.}
+\end{table*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion}\label{sec:discussion}
 
 \paragraph{Feature Ablation.}
 To evaluate the relative impact of the different feature sets on \parser{},
@@ -1189,7 +1172,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
 \end{adjustbox}
 \captionsetup{singlelinecheck=off}
 \caption[]{\label{fig:features}
-  Binary feature templates for \parser{sparse}. Notation:\\
+  Binary feature templates for \parser{Sparse}. Notation:\\
   $s_i$, $b_i$: $i$th stack and buffer items.\\
   $w$, $t$, $d$: word form, POS tag and syntactic dependency label of the terminal returned by $h^*(\cdot)$
   (see Appendix~\ref{appendix:conversion}).\\
@@ -1210,7 +1193,7 @@ $s_0R, s_0wR, b_0R, b_0wR$
 The results in \tabref{tab:ablation}, in percents,
 were obtained on the development set in the feature ablation experiment
 (\secref{sec:results}).
-The first row corresponds to \parser{sparse} as in the main experiment.
+The first row corresponds to \parser{Sparse} as in the main experiment.
 In each of the other rows, one feature set is excluded.
 Columns are the same as in \tabref{table:results}.
   
@@ -1221,21 +1204,21 @@ Columns are the same as in \tabref{table:results}.
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\parser{sparse} & 62.6	& 55.7 & 58.9 & 20 & 12.9 & 15.7 \\
-\parser{sparse}$-$\textbf{unigrams} & 62.5 & 52.6 & 57.1 & 18.9 & 10.1 & 13.2 \\
-\parser{sparse}$-$\textbf{bigrams} & 59.8 & 50.0 & 54.4 & 18.2 & 12.2 & 14.6 \\
-\parser{sparse}$-$\textbf{trigrams} & 63.7 & 55.0 & 59.0 & 20.7 & 12.0 & 15.2 \\
-\parser{sparse}$-$\textbf{separator} & 62.9 & 53.5 & 57.8 & 17.8 & 11.7 & 14.1 \\
-\parser{sparse}$-$\textbf{extended} & 62.9 & 52.8 & 57.4 & 17.4 & 11.5 & 13.9 \\
-\parser{sparse}$-$\textbf{disco} & 63.6 & 53.6 & 58.2 & 19.7 & 11.5 & 14.5 \\
-\parser{sparse}$-$\textbf{counts} & 63.3 & 52.8 & 57.6 & 14.6 & 10.6 & 12.3 \\
-\parser{sparse}$-$\textbf{edges} & 63.5 & 54.9 & 58.9 & 23.6 & 14.5 & 17.9 \\
-\parser{sparse}$-$\textbf{history} & 63.1 & 53.2 & 57.8 & 23.7 & 14.5 & 18.0 \\
-\parser{sparse}$-$\textbf{remote} & 63.5 & 53.2 & 57.9 & 17.2 & 10.6 & 13.1 \\
-\parser{sparse}$-$\textbf{ratio} & 63.7 & 48.3 & 55.0 & 25.4 & 13.6 & 17.7
+\parser{Sparse} & 62.6	& 55.7 & 58.9 & 20 & 12.9 & 15.7 \\
+\parser{Sparse}$-$\textbf{unigrams} & 62.5 & 52.6 & 57.1 & 18.9 & 10.1 & 13.2 \\
+\parser{Sparse}$-$\textbf{bigrams} & 59.8 & 50.0 & 54.4 & 18.2 & 12.2 & 14.6 \\
+\parser{Sparse}$-$\textbf{trigrams} & 63.7 & 55.0 & 59.0 & 20.7 & 12.0 & 15.2 \\
+\parser{Sparse}$-$\textbf{separator} & 62.9 & 53.5 & 57.8 & 17.8 & 11.7 & 14.1 \\
+\parser{Sparse}$-$\textbf{extended} & 62.9 & 52.8 & 57.4 & 17.4 & 11.5 & 13.9 \\
+\parser{Sparse}$-$\textbf{disco} & 63.6 & 53.6 & 58.2 & 19.7 & 11.5 & 14.5 \\
+\parser{Sparse}$-$\textbf{counts} & 63.3 & 52.8 & 57.6 & 14.6 & 10.6 & 12.3 \\
+\parser{Sparse}$-$\textbf{edges} & 63.5 & 54.9 & 58.9 & 23.6 & 14.5 & 17.9 \\
+\parser{Sparse}$-$\textbf{history} & 63.1 & 53.2 & 57.8 & 23.7 & 14.5 & 18.0 \\
+\parser{Sparse}$-$\textbf{remote} & 63.5 & 53.2 & 57.9 & 17.2 & 10.6 & 13.1 \\
+\parser{Sparse}$-$\textbf{ratio} & 63.7 & 48.3 & 55.0 & 25.4 & 13.6 & 17.7
 \end{tabular}
 }
-\caption{Results for feature ablation experiments on \parser{sparse}.}
+\caption{Results for feature ablation experiments on \parser{Sparse}.}
 \label{tab:ablation}
 \end{table}
 
