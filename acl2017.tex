@@ -37,6 +37,7 @@
 \DeclareMathOperator*{\argmax}{argmax}
 \SetKwRepeat{Do}{do}{while}
 \hyphenation{SemEval}
+\hyphenation{PARSEVAL}
 
 %\aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
@@ -96,7 +97,8 @@ The scheme has proven useful for machine translation evaluation \cite{birch2016h
 but its applicability has been so far limited by the absence of a UCCA parser,
 a gap this paper addresses.
 
-Formally, a UCCA structure is a DAG whose leaves correspond to the tokens of
+Formally, a UCCA structure is a DAG (directed acyclic graph)
+whose leaves correspond to the tokens of
 the text. Nodes (or {\it units}) either correspond to a terminal or
 to several sub-units (not necessarily contiguous) jointly viewed as a
 single entity according to some semantic or cognitive consideration.
@@ -224,7 +226,7 @@ centered around predicate-argument structures, to distinctions expressed by depe
 We are further motivated by the strength of transition-based methods
 in similar tasks, including syntactic dependency parsing
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
-dependency DAG parsing
+dependency graph parsing
 \cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition},
 constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
 discontinuous constituency parsing
@@ -234,13 +236,13 @@ and CCG parsing \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1},
 as well as joint lexical and syntactic parsing
 \cite{constant-nivre:2016:P16-1}.
 \parser{} mostly builds on recent advances in discontinuous constituency
-and dependency DAG parsing, and further introduces novel features for UCCA.
+and dependency graph parsing, and further introduces novel features for UCCA.
 
 We evaluate \parser{} on the available English UCCA corpora, in both
 in-domain and out-of-domain settings (\secref{sec:exp_setup}).
-As a point of comparison, we assess the ability of existing bilexical DAG
+As a point of comparison, we assess the ability of existing bilexical graph
 parsers to tackle the task, by developing a conversion protocol
-between UCCA and bilexical DAGs.
+between UCCA and bilexical graphs.
 Results show superior accuracy for \parser{}, demonstrating the effectiveness of
 the presented approach (\secref{sec:results}),
 and suggest concrete paths for further improvement (\secref{sec:discussion}).
@@ -348,7 +350,7 @@ We distinguish between these two pairs of transitions to allow the parser to cre
 without the possibility of producing invalid graphs.
 To support the prediction of multiple parents, node and edge transitions
 leave the stack unchanged, as in other work on
-transition-based DAG dependency parsing
+transition-based dependency graph parsing
 \cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition}.
 Once all edges for a node have been created, it is removed from the stack
 by applying \textsc{Reduce}.
@@ -479,14 +481,15 @@ $\textsc{MinUpdate}$ & 5 & 5 \\
 
 \paragraph{Data.}
 We conduct our main experiments on the UCCA Wikipedia corpus (henceforth, \textit{Wiki}),
-and use the English part of the UCCA \textit{Twenty Thousand Leagues Under the Sea} English-French parallel corpus (henceforth, \textit{20K Leagues}) as
-out-of-domain data.\footnote{\scriptsize \url{http://cs.huji.ac.il/~oabend/ucca.html}}
+and use the English part of the UCCA \textit{Twenty Thousand Leagues Under the Sea}
+English-French parallel corpus (henceforth, \textit{20K Leagues}) as
+out-of-domain data.\footnote{\mbox{\url{http://cs.huji.ac.il/~oabend/ucca.html}}}
 \tabref{table:data} presents some statistics for the two corpora, demonstrating that while
 the \textit{Wiki} corpus is over ten times larger, the overall statistics are
 similar.
-We use passages of indices up to 675
-of the \textit{Wiki} corpus as our training set, passages 676--807 as development set,
-and passages 808--1028 as in-domain test set.
+We use passages of indices up to 676
+of the \textit{Wiki} corpus as our training set, passages 688--808 as development set,
+and passages 942--1028 as in-domain test set.
 While UCCA edges can cross sentence boundaries, we adhere to the common
 practice in semantic parsing and train our parsers on individual sentences,
 discarding inter-relations between them (0.18\% of the edges).
@@ -495,7 +498,7 @@ relations and are thus mostly redundant when applied at the sentence level)
 as well as implicit nodes\footnote{See Appendix~\ref{appendix:extended_ucca}
 for details about Linkage and Implicit.}.
 In the out-of-domain experiments, we apply the same parsers
-(trained on the \textit{Wiki} corpus) to the \textit{20K Leagues} corpus
+(trained on the \textit{Wiki} training set) to the \textit{20K Leagues} corpus
 without parameter re-tuning.
 
 
@@ -551,46 +554,35 @@ Define the set of \textit{mutual edges} between $G_p$ and $G_g$:
 
 \vspace{-.6cm}
 
-Labeled precision and recall are defined by dividing $|M(G_p,G_g)|$ by $|E_p|$ and $|E_g|$, respectively.
+Labeled precision and recall are defined by dividing $|M(G_p,G_g)|$ by $|E_p|$ and $|E_g|$, respectively,
+and F-score by taking their harmonic mean.
 We report two variants of this measure: one where we consider only primary edges,
-and another for remote edges. We note that the measure collapses to the standard
+and another for remote edges (see \secref{sec:ucca}).
+We note that the measure collapses to the standard
 PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
 Punctuation is excluded from the evaluation, but not from the datasets.
 
-\paragraph{Comparison to bilexical DAG parsers.}
+\paragraph{Linguistic constructions.}
+
+In addition to the overall evaluation on primary and remote edges,
+we perform fine-grained evaluation for \parser{} on various linguistic construction,
+which we extract by criteria on the UCCA structure, POS tags and syntactic
+dependency labels.\footnote{See Appendix~\ref{appendix:constructions}
+for a listing of the criteria.}
+For each construction, we report the F-score resulting from calculating the
+mutual edges only among the edges matching the criterion in each graph.
+
+\paragraph{Comparison to bilexical graph parsers.}
 As \parser{} is the first parser to support UCCA's structure,
 no direct comparison with an existing parser is possible.
-We instead compare \parser{} to bilexical DAG parsers,
+We instead compare \parser{} to bilexical graph parsers,
 which we view as the closest existing match (they support two of the properties,
 but not non-terminal nodes).
 Our approach is similar in spirit
-to the \textit{tree approximation} approach used for dependency DAG parsing
+to the \textit{tree approximation} approach used for dependency graph parsing
 \cite{agic2015semantic,fernandez2015parsing},
-where dependency DAGs were converted into dependency trees
+where dependency graphs were converted into dependency trees
 and then parsed by existing dependency tree parsers.
-
-\paragraph{Comparison to bilexical tree parsers.}
-For completeness, we further explore a conversion-based approach that
-lossily converts UCCA structures into trees. 
-This approach resembles the bilexical approximation approach described in \secref{sec:exp_setup}, but here it results in a simplified task for the underlying parser: parsing into tree structures.
-
-Performance on remote edges is of pivotal importance in this investigation, which focuses on extending the class of graphs supported by statistical parsers. Nevertheless, we believe that exploring tree approximation methods, thus building on the maturity and cumulative experience with transition-based tree parsing, can inform the future development of DAG parsers in general and of UCCA parsers in particular.
-
-We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
-and one into bilexical dependency trees. In the first setting we experiment with \textsc{uparse}
-\cite{maier-lichte:2016:DiscoNLP},
-the only transition-based constituency parser, to our knowledge, able to parse trees with
-discontinuous constituents.
-In the second setting we use MaltParser \cite{nivre2007maltparser} with the
-arc-eager transition set and the SVM classifier\footnote{Preliminary
-experiments with arc-standard and non-projective variants of MaltParser yielded slightly
-lower scores, and were thus discarded from the final evaluation.
-Experiments with a linear classifier also obtained slightly lower scores.},
-and the stack LSTM-based arc-standard parser of \citet{dyer2015transition}.
-Default settings are used in all cases.
-\textsc{uparse} uses beam search by default,
-with a beam size of 4, and the other parsers are greedy.
-We also train the \parser{} variants without remote edge transitions, yielding a tree parser.
 
 \begin{figure}[ht]
 \centering
@@ -631,16 +623,41 @@ John \^ and \^ Mary \^ went \^ home \\
 
 We first convert UCCA into bilexical dependencies
 (see examples in \figref{fig:bilexical_example}), and train each parser on the resulting
-training set\footnote{See Appendix~\ref{appendix:conversion} for details about
-the conversion.}.
+training set.\footnote{See Appendix~\ref{appendix:conversion} for details about
+the conversion.}
 We evaluate the trained parsers by applying them to the test set
 and then reconstructing UCCA graphs, which are compared with the gold standard.
-Upper bounds for the conversion-based method are computed by applying
+Upper bounds for the resulting scores are computed by applying
 the conversion and inverse conversion on the gold standard
 graphs and comparing them to the original gold standard.
 Upper bounds are reported in \secref{sec:results}.
 
-%For comparability, we choose to keep the same set of edge labels in the conversion, even though a lower approximation error may have been possible with a larger label set.
+\paragraph{Comparison to tree parsers.}
+For completeness, and since tree parsers are generally much more developed than graph parsers,
+we also perform a tree approximation experiment, converting UCCA to (bilexical) trees
+and evaluating tree parsers on them.
+In our setting, the conversion to trees consists simply of removing remote edges from the graph.
+Note that this results in a simplified task for the underlying parser,
+and furthermore, that performance on remote edges is of pivotal importance in this investigation,
+which focuses on extending the class of graphs supported by statistical parsers.
+Nevertheless, we believe that exploring tree approximation methods,
+thus building on the maturity and cumulative experience with transition-based tree parsing,
+can inform the future development of graph parsers in general and of UCCA parsers in particular.
+
+We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
+and one into (possibly non-projective) bilexical dependency trees.
+In the first setting we experiment with \textsc{uparse}
+\cite{maier-lichte:2016:DiscoNLP},
+the only transition-based constituency parser, to our knowledge, able to parse trees with
+discontinuous constituents.
+In the second setting we use MaltParser \cite{nivre2007maltparser} with the
+\textsc{ArcEager} transition set and the SVM classifier\footnote{Preliminary
+experiments with other configurations of MaltParser yielded lower scores and
+were thus discarded from the evaluation.},
+and the stack LSTM-based \textsc{ArcStandard} parser of \citet{dyer2015transition}.
+Default settings are used in all cases.
+\textsc{uparse} uses beam search by default,
+with a beam size of 4, and the other parsers are greedy.
 
 \begin{table*}[ht]
 \begin{tabular}{l|ccc|ccc||ccc|ccc}
@@ -713,21 +730,12 @@ We note that DAGParser uses beam search by default, with a beam size of 5.
 
 
 
-\paragraph{Linguistic constructions.}
-
-In addition to the overall evaluation on primary and remote edges,
-we perform fine-grained evaluation for \parser{} on various linguistic construction,
-which we extract by rules on the UCCA structure, POS tags and syntactic dependency labels\footnote{
-See Appendix~\ref{appendix:constructions} for a listing of the rules.}.
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}\label{sec:results}
 
 \tabref{table:results} presents our main experimental results, as well as
 upper bounds for the approximation-based method,
-reflecting the error resulting from converting the test set into bilexical DAGs and then
+reflecting the error resulting from converting the test set into bilexical graphs and then
 back into UCCA---the conversion procedure loses some of the information about non-terminal nodes.
 
 DAGParser is most directly comparable to \parser{Sparse}, as both parsers
@@ -768,8 +776,7 @@ to the accuracy of
 the parser, suggesting that a recurrent neural network (RNN) model
 may also improve \parser{}.
 This is in line with the recent success of RNNs
-(specifically, LSTMs and GRUs) in NLP tasks, including DAG-structured LSTM
-\cite{zhu-sobhani-guo:2016:N16-1}.
+(specifically, LSTMs and GRUs) in NLP tasks.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The fine-grained evaluation in \tabref{table:constructions_results} shows that in
@@ -836,11 +843,11 @@ are useful for representing structures that have no clear head, such as coordina
 of distinctions it makes, which are more closely related to the syntax-semantics interface,
 where UCCA aims to capture purely semantic cross-linguistically applicable notions, abstracting
 away, as much as possible, from syntactic distinctions.
-Recent interest in SDP has yielded numerable works on DAG parsing
-\cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on DAG parsing
-by tree approximation (i.e., methods that lossily convert DAG structures
+Recent interest in SDP has yielded numerable works on graph parsing
+\cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on graph parsing
+by tree approximation (i.e., methods that lossily convert graph structures
 into trees in order to train existing tree parsers to produce tree structures
-that approximate the target DAGs) \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
+that approximate the target graphs) \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
 and on joint syntactic/semantic parsing
 \cite{henderson2013multilingual,swayamdipta-EtAl:2016:CoNLL}.
 
@@ -889,7 +896,7 @@ strings and semantic structures.
 We present \parser{}, the first parser for UCCA.
 Evaluated in both in-domain and out-of-domain settings, we show that coupled with a
 NN classifier and feature extractor,
-\parser{BiLSTM} surpasses bilexical DAG parsers on the task of UCCA parsing.
+\parser{BiLSTM} surpasses bilexical graph parsers on the task of UCCA parsing.
 While much recent work focused on semantic parsing of different types,
 the effectiveness of different parsing approaches for schemes with
 different structural and semantic properties is not well-understood 
@@ -920,7 +927,7 @@ and summarization \cite{liu2015toward}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \appendix
-\section{Conversion Protocols for the Bilexical DAG and Tree Approximations}
+\section{Conversion Protocols for the Bilexical Graph and Tree Approximations}
 \label{appendix:conversion}
 
 Here we describe the algorithms used in the conversion referred to in \secref{sec:exp_setup}.
