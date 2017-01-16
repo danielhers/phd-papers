@@ -1246,10 +1246,10 @@ and \textit{tag} to the edge's UCCA tag.
 \begin{tabular}{ll}
 Aspectual verbs & pos=``VERB'' and \\& tag=``Adverbial'' \\
 Light verbs & pos=``VERB'' and \\& tag=``Function'' \\
-Multi-word expressions & \#terminals $>$ 1 and \\& dep $\neq$ ``aux'' \\
+Multi-word expressions & $|\{c\in\text{children}:$\\&\hfill$c\text{.tag}=\text{``Terminal''}\}|>1$ \\
 Predicate nouns & pos=``NOUN'' and \\& tag $\in$ \{``Process'', ``State''\} \\
 Predicate adjectives & pos=``ADJ'' and \\& tag $\in$ \{``Process'', ``State''\} \\
-Expletive ``it'' & terminals=``it'' and \\& tag=``Function''
+Expletives & terminal$\in$\{``it'',``there''\} and \\& tag=``Function''
 \end{tabular}
 \caption{Rules for extracting linguistic constructions.}
 \label{tab:constructions_rules}
