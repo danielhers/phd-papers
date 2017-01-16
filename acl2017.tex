@@ -67,7 +67,7 @@
 \begin{abstract}
   We present the first parser for UCCA, a
   cross-linguistically applicable framework for semantic
-  representation, that builds on extensive
+  representation, which builds on extensive
   typological work, and supports rapid annotation.
   UCCA poses a challenge for existing parsing techniques,
   as it exhibits reentrancy (resulting in DAG structures),
@@ -78,14 +78,14 @@
   and features, has value not just for UCCA parsing:
   its ability to handle more general graph structures will inform
   the development of parsers for other semantic DAG structures, 
-  and in languages which frequently use discontinuous structures.
+  and in languages that frequently use discontinuous structures.
 \end{abstract}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:introduction}
 
-Universal Conceptual Cognitive Annotation, (UCCA, \citet{abend2013universal}),
+Universal Conceptual Cognitive Annotation \cite[UCCA,][]{abend2013universal}
 is a cross-linguistically applicable semantic representation scheme,
 building on the established Basic Linguistic Theory typological framework
 \cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive
@@ -228,10 +228,8 @@ in similar tasks, including syntactic dependency parsing
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
 dependency graph parsing
 \cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition},
-constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast},
-discontinuous constituency parsing
-\cite{maier2015discontinuous,maier-lichte:2016:DiscoNLP},
-AMR parsing \cite{wang2015transition,wang-EtAl:2016:SemEval,dipendra2016neural,goodman2016noise,zhou2016amr,damonte2016incremental}
+constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast,maier2015discontinuous,maier-lichte:2016:DiscoNLP},
+AMR parsing \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,dipendra2016neural,goodman2016noise,zhou2016amr,damonte2016incremental}
 and CCG parsing \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1},
 as well as joint lexical and syntactic parsing
 \cite{constant-nivre:2016:P16-1}.
@@ -240,12 +238,11 @@ and dependency graph parsing, and further introduces novel features for UCCA.
 
 We evaluate \parser{} on the available English UCCA corpora, in both
 in-domain and out-of-domain settings (\secref{sec:exp_setup}).
-As a point of comparison, we assess the ability of existing bilexical graph
-parsers to tackle the task, by developing a conversion protocol
-between UCCA and bilexical graphs.
+As a point of comparison, we assess the ability of existing
+parsers to tackle the task, by developing a conversion procedure
+from UCCA to bilexical graphs and trees.
 Results show superior accuracy for \parser{}, demonstrating the effectiveness of
-the presented approach (\secref{sec:results}),
-and suggest concrete paths for further improvement (\secref{sec:discussion}).
+the presented approach (\secref{sec:results}).
 All converters and parsers will be made publicly available upon publication.
 
 
@@ -799,10 +796,6 @@ LSTM Parser
 Results of evaluation (on the Wiki test-set) on UCCA edges corresponding to specific linguistic constructions.}
 \end{table*}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discussion}\label{sec:discussion}
-
 \paragraph{Feature Ablation.}
 To evaluate the relative impact of the different feature sets on \parser{},
 we remove a set of features at a time, and evaluate the
@@ -865,16 +858,15 @@ translation methods \cite{pourdamghani2014aligning} and Boolean LP methods
 Furthermore, anchoring allows breaking down sentences into semantically meaningful sub-spans,
 which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
 
-\citet{wang2015transition}, \citet{wang-xue-pradhan:2015:ACL-IJCNLP} and \citet{wang-EtAl:2016:SemEval}
-applied a transition-based approach to AMR parsing, and \citet{goodman2016noise} improved upon
-their parser using imitation-learning algorithms.
-Their method involved first syntactically parsing the input, and then converting
-the result into AMR, while our parser directly processes the input tokens.
+CAMR \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,goodman2016noise}
+is a transition-based AMR parser that operates by first syntactically parsing the input,
+and then processing the result into AMR.
 \citet{damonte2016incremental} developed a transition-based AMR parser that
 operates on the input tokens. For concept identification they use
 a simple heuristic that selects the most frequent graph for a given token.
 The transition-based AMR parser by \citet{zhou2016amr} performs concept identification
 and parsing jointly.
+Our parser directly processes the input tokens, and requires no concept identification.
 
 \paragraph{Grammar-Based Parsing.}
 Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steedman:00} and TAG \cite{Joshi:97}
@@ -1246,7 +1238,8 @@ and \textit{tag} to the edge's UCCA tag.
 \begin{tabular}{ll}
 Aspectual verbs & pos=``VERB'' and \\& tag=``Adverbial'' \\
 Light verbs & pos=``VERB'' and \\& tag=``Function'' \\
-Multi-word expressions & $|\{c\in\text{children}:$\\&\hfill$c\text{.tag}=\text{``Terminal''}\}|>1$ \\
+Multi-word expressions & $|\{c\in\text{children}:$ \\
+  & \hfill $c\text{.tag}=\text{``Terminal''}\}|>1$ \\
 Predicate nouns & pos=``NOUN'' and \\& tag $\in$ \{``Process'', ``State''\} \\
 Predicate adjectives & pos=``ADJ'' and \\& tag $\in$ \{``Process'', ``State''\} \\
 Expletives & terminal$\in$\{``it'',``there''\} and \\& tag=``Function''
