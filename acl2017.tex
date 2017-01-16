@@ -38,6 +38,9 @@
 \SetKwRepeat{Do}{do}{while}
 \hyphenation{SemEval}
 \hyphenation{PARSEVAL}
+\hyphenation{DAGParser}
+\hyphenation{TurboSemanticParser}
+\hyphenation{MaltParser}
 
 %\aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
@@ -669,39 +672,27 @@ LSTM Parser
 \end{table*}
 
 \paragraph{Comparison to bilexical graph parsers.}
-As \parser{} is the first parser to support UCCA's structure,
-no direct comparison with an existing parser is possible.
-We instead compare \parser{} to bilexical graph parsers,
-which we view as the closest existing match (they support
-reentrancy and discontinuity, but not non-terminal nodes).
-Our approach is similar in spirit
-to the \textit{tree approximation} approach used for dependency graph parsing
-\cite{agic2015semantic,fernandez2015parsing},
-where dependency graphs were converted into dependency trees
-and then parsed by existing dependency tree parsers.
-
-We first convert UCCA into bilexical dependencies
-(see examples in \figref{fig:bilexical_example}), and train each parser on the resulting
-training set.\footnote{See Appendix~\ref{appendix:conversion} for details about
-the conversion.}
+As no direct comparison with an existing parser is possible,
+we compare \parser{} to bilexical graph parsers,
+which support reentrancy and discontinuity but not non-terminal nodes.
+To facilitate the comparison, we convert the UCCA training set into bilexical graphs
+(see examples in \figref{fig:bilexical_example})
+and use it to train each parser.\footnote{See Appendix~\ref{appendix:conversion}
+for the conversion procedures.}
 We evaluate the trained parsers by applying them to the test set
 and then reconstructing UCCA graphs, which are compared with the gold standard.
-To make the task as similar as possible,
-we chose to keep the UCCA edge label set in the resulting bilexical graphs.
-This inevitably incurs an error resulting from the removal of non-terminal nodes,
-yielding an upper bounds on the achievable scores, reported in \secref{sec:results}.
-
-We evaluate two parsers in the bilexical approximation setting:
-DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, the leading transition-based parser that participated in the SDP task of SemEval 2014 \cite{oepen2014semeval},
-and the semantic variant of TurboParser \cite{almeida-martins:2015:SemEval},
-a second-order graph-based parser that uses dual decomposition for optimization,
-which obtained some of the best results in the SDP task of SemEval 2015 \cite{oepen2015semeval}. Default settings are used in all cases.
-We note that DAGParser uses beam search by default, with a beam size of 5.
+In \secref{sec:results} we report the upper bounds on the achievable scores due to the error
+resulting from the removal of non-terminal nodes.
 
 \paragraph{Comparison to tree parsers.}
 For completeness,
 we also perform a tree approximation experiment, converting UCCA to (bilexical) trees
 and evaluating tree parsers on them.
+Our approach is similar
+to the \textit{tree approximation} approach used for dependency graph parsing
+\cite{agic2015semantic,fernandez2015parsing},
+where dependency graphs were converted into dependency trees
+and then parsed by existing dependency tree parsers.
 In our setting, the conversion to trees consists simply of removing remote edges from the 
 graph, and then to bilexical trees by applying the same procedure as for bilexical graphs.
 Note that this results in a simplified task for the underlying parser.
@@ -709,24 +700,25 @@ Furthermore, performance on remote edges is of pivotal importance in this invest
 which focuses on extending the class of graphs supported by statistical parsers.
 Nevertheless, given the relative maturity of dependency tree parsers, we feel this is
 a mandatory comparison.
-%we believe that exploring tree approximation methods,
-%thus building on the maturity and cumulative experience with transition-based tree parsing,
-%can inform the future development of graph parsers in general and of UCCA parsers in %particular.
 
-We explore two conversion scenarios: one into (possibly discontinuous) constituency trees,
-and one into (possibly non-projective) bilexical dependency trees.
-In the first setting we experiment with \textsc{uparse}
-\cite{maier-lichte:2016:DiscoNLP},
-the only transition-based constituency parser, to our knowledge, able to parse trees with
-discontinuous constituents.
-In the second setting we use MaltParser \cite{nivre2007maltparser} with the
-\textsc{ArcEager} transition set and the SVM classifier\footnote{Preliminary
-experiments with other configurations of MaltParser yielded lower scores and
+\paragraph{Baseline parsers.}
+We evaluate two bilexical graph parsers:
+DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, the leading 
+transition-based semantic dependency parser in SemEval 2014 \cite{oepen2014semeval};
+TurboSemanticParser \cite{almeida-martins:2015:SemEval},
+a second-order graph-based semantic dependency parser from SemEval 2015 
+\cite{oepen2015semeval};
+\textsc{uparse} \cite{maier-lichte:2016:DiscoNLP},
+a transition-based constituency parser supporting discontinuous constituents;
+and two bilexical tree parsers:
+MaltParser \cite{nivre2007maltparser}\footnote{For
+MaltParser we use the \textsc{ArcEager} transition set and SVM classifier.
+Preliminary experiments with other configurations yielded lower scores and
 were thus discarded from the evaluation.},
 and the stack LSTM-based \textsc{ArcStandard} parser of \citet{dyer2015transition}.
 Default settings are used in all cases.
-\textsc{uparse} uses beam search by default,
-with a beam size of 4, and the other parsers are greedy.
+DAGParser and \textsc{uparse} use beam search by default, with a beam size of 5 and 4
+respectively. The other parsers are greedy.
 
 
 
@@ -903,7 +895,236 @@ and summarization \cite{liu2015toward}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \appendix
-\section{Conversion Protocols for the Bilexical Graph and Tree Approximations}
+\section{Feature Templates}
+\label{appendix:features}
+
+\figref{fig:features} presents the feature templates used by \parser{Sparse}.
+All feature templates define binary features.
+For some of the features, we used the notion of \textit{head word},
+defined by the $h^*$ function (see Appendix~\ref{appendix:conversion}).
+While head words are not explicitly represented in the UCCA scheme, these
+features proved useful as means of encoding word-to-word relations.
+
+\begin{figure*}
+\centering
+\begin{adjustbox}{margin=3pt,frame}
+\begin{tabular}{l}
+{\footnotesize Features from \cite{zhang2009transition}:} \\
+\textbf{unigrams} \\
+$s_0tde, s_0we, s_1tde, s_1we, s_2tde, s_2we, s_3tde, s_3we,$ \\
+$b_0wtd, b_1wtd, b_2wtd, b_3wtd,$ \\
+$s_0lwe, s_0rwe, s_0uwe, s_1lwe, s_1rwe, s_1uwe$ \\
+\textbf{bigrams} \\
+$s_0ws_1w, s_0ws_1e, s_0es_1w, s_0es_1e, s_0wb_0w, s_0wb_0td,$ \\
+$s_0eb_0w, s_0eb_0td, s_1wb_0w, s_1wb_0td, s_1eb_0w, s_1eb_0td,$ \\
+$b_0wb_1w, b_0wb_1td, b_0tdb_1w, b_0tdb_1td$ \\
+\textbf{trigrams} \\
+$s_0es_1es_2w, s_0es_1es_2e, s_0es_1eb_0w, s_0es_1eb_0td,$ \\
+$s_0es_1wb_0w, s_0es_1wb_0td, s_0ws_1es_2e, s_0ws_1eb_0td$ \\
+\textbf{separator} \\
+$s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
+$s_1wp, s_1wep, s_1wq, s_1weq$ \\
+
+\textbf{extended} \footnotesize \cite{zhu2013fast} \\
+$s_0llwe, s_0lrwe, s_0luwe, s_0rlwe, s_0rrwe,$ \\
+$s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
+$s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
+\end{tabular}
+\begin{tabular}{l}
+\textbf{disco} \footnotesize \cite{maier2015discontinuous} \\
+$s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
+$s_0xtde, s_1xtde, s_2xtde, s_3xtde,$ \\
+$s_0xy, s_1xy, s_2xy, s_3xy$ \\
+$s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
+$s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
+$s_0ys_1y, s_0ys_2y, s_0xb_0td, s_0xb_0w$ \\
+
+{\footnotesize Features from \cite{tokgoz2015transition}:} \\
+\textbf{counts} \\
+$s_0P, s_0C, s_0wP, s_0wC, b_0P, b_0C, b_0wP, b_0wC$ \\
+\textbf{edges} \\
+$s_0s_1, s_1s_0, s_0b_0, b_0s_0, s_0b_0e, b_0s_0e$ \\
+\textbf{history} \\
+$a_0, a_1$ \\
+
+\textbf{remote} \footnotesize (Novel, UCCA-specific features) \\
+$s_0R, s_0wR, b_0R, b_0wR$
+\end{tabular}
+\end{adjustbox}
+\captionsetup{singlelinecheck=off}
+\caption[]{\label{fig:features}
+  Binary feature templates for \parser{Sparse}. Notation:\\
+  $s_i$, $b_i$: $i$th stack and buffer items.\\
+  $w$, $t$, $d$: word form, POS tag and syntactic dependency label of the terminal returned by $h^*(\cdot)$
+  (see Appendix~\ref{appendix:conversion}).\\
+  $e$: edge label to the node returned by $h(\cdot)$.\\
+  $l$, $r$ ($ll$, $rr$): leftmost and rightmost (grand)children.\\
+  $u$ ($uu$): unary (grand)child, when only one exists.\\
+  $p$: unique separator punctuation between $s_0$ and $s_1$. $q$: separator count.\\
+  $x$: gap type (``none'', ``pass'' or ``gap'') at the sub-graph under the current node.\\
+  $y$: sum of gap lengths \protect\cite{Maier:Lichte:11}.\\
+  $P$, $C$: number of parents and children.\\
+  $R$: number of remote children.\\
+  $a_i$: action taken $i$ steps back.
+}
+\end{figure*}
+
+\section{Extended Presentation of UCCA}
+\label{appendix:extended_ucca}
+
+\paragraph{Linkage.}
+
+\figref{fig:example_linkage} demonstrates a linkage relation, omitted from \figref{fig:graduation}.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[level distance=10mm, ->]
+    \node (ROOT) [fill=black, circle] {}
+      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
+      child {node (graduation) [fill=black, circle] {}
+      {
+        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
+      } edge from parent node[left] {\scriptsize $H$} }
+      child {node {,} edge from parent node[right] {\scriptsize $U$}}
+      child {node (moved) [fill=black, circle] {}
+      {
+        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
+        child {node [fill=black, circle] {}
+        {
+          child {node {to} edge from parent node[left] {\scriptsize $R$}}
+          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
+        } edge from parent node[left] {\scriptsize $A$} }
+      } edge from parent node[right] {\scriptsize $H$} }
+      ;
+    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+    \node (LKG) at (-1.8,0) [fill=black!20, circle] {};
+          \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
+          \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
+          \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
+  \end{tikzpicture}
+  \caption{UCCA example with linkage.}
+  \label{fig:example_linkage}
+\end{figure}
+
+The linkage relation is represented by the gray node.
+$LA$ is \emph{link argument}, and $LR$ is \emph{link relation}.
+The relation represents the fact that the \emph{linker} ``After'' links the two parallel scenes
+that are the arguments of the linkage.
+Linkage relations are another source of multiple parents for a node, which we do not yet handle
+in parsing and evaluation.
+
+\paragraph{Implicit units.}
+
+UCCA graphs may contain implicit units with no correspondent in the text.
+\figref{fig:example_implicit} shows the annotation for the sentence
+``A similar technique is almost impossible to apply to other crops, such as cotton, soybeans and rice.''.
+The sentence was used by \cite{oepen2015semeval} to compare between different semantic
+dependency schemes.
+It includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
+In addition, the scene includes an implicit argument, which represents the agent of the
+``apply'' relation.
+
+The parsing of these units is deferred to future work, as it is likely to require different methods
+than those explored in this paper \cite{roth2015inducing}.
+
+\begin{figure*}
+  \centering
+  \scalebox{.6}{
+  \begin{tikzpicture}[level distance=20mm, ->,
+  level 1/.style={sibling distance=8em},
+  level 2/.style={sibling distance=4em},
+  level 3/.style={sibling distance=4em}]
+    \node (ROOT) [fill=black, circle] {}
+      child {node [fill=black, circle] {}
+      {
+        child {node {A} edge from parent node[left] {\scriptsize $E$}}
+        child {node {similar} edge from parent node[left] {\scriptsize $E$}}
+        child {node {technique} edge from parent node[right] {\scriptsize $C$}}
+      } edge from parent node[left] {\scriptsize $A\quad$ \hspace{1mm} } }
+      child {node {is} edge from parent node[left] {\scriptsize $F$}}
+      child {node [fill=black, circle] {}
+      {
+        child {node {almost} edge from parent node[left] {\scriptsize $E$}}
+        child {node {impossible} edge from parent node[right] {\scriptsize $C$}}
+      } edge from parent node[left] {\scriptsize $D$} }
+      child {node {\textbf{IMPLICIT}} edge from parent node[left] {\scriptsize $A$}}
+      child {node {to} edge from parent node[left] {\scriptsize $F$}}
+      child {node {apply} edge from parent node[left] {\scriptsize $P\quad$}}
+      child {node [fill=black, circle] {}
+      {
+        child {node {to} edge from parent node[left] {\scriptsize $R$}}
+        child {node {other} edge from parent node[left] {\scriptsize $E$}}
+        child {node {crops} edge from parent node[left] {\scriptsize $C$}}
+        child {node {,} edge from parent node[left] {\scriptsize $U$}}
+        child {node [fill=black, circle] {}
+        {
+          child {node {such as} edge from parent node[left] {\scriptsize $R$}}
+          child {node {cotton} edge from parent node[left] {\scriptsize $C$}}
+          child {node {,} edge from parent node[left] {\scriptsize $U$}}
+          child {node {soybeans} edge from parent node[left] {\scriptsize $C$}}
+          child {node {and} edge from parent node[left] {\scriptsize $N$}}
+          child {node {rice} edge from parent node[right] {\scriptsize $\; C$}}
+        } edge from parent node[right] {\scriptsize $\; E$ \hspace{1mm} } }
+      } edge from parent node[left] {\scriptsize $A\;$ \hspace{1mm} } }
+      child {node {.} edge from parent node[right] {\scriptsize $\quad \quad U$}}
+      ;
+  \end{tikzpicture}
+  }
+  \caption{UCCA example with an implicit unit.}
+  \label{fig:example_implicit}
+\end{figure*}
+
+\paragraph{Statistics of linkage and implicit units.}
+
+\tabref{table:data_linkage_implicit} shows the statistics of linkage nodes and edges and implicit nodes
+in the corpora.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{l|ccc|c}
+& \multicolumn{3}{c|}{Wiki} & 20K \\
+& \small Train & \small Dev & \small Test & Leagues \\
+\hline
+nodes \\
+\# implicit & 900 & 119 & 80 & 241 \\
+\# linkage & 2833 & 241 & 364 & 376 \\
+\hline
+edges \\
+\# linkage & 8853 & 737 & 1105 & 957
+\end{tabular}
+\caption{Statistics of linkage and implicit nodes in the
+\textit{Wiki} and \textit{20K Leagues} UCCA corpora.
+Cf. \tabref{table:data}.
+}
+\label{table:data_linkage_implicit}
+\end{table}
+
+\section{Rules for Extracting Linguistic Constructions}
+\label{appendix:constructions}
+
+\tabref{tab:constructions_rules} lists the rules used for extracting each linguistic
+construction. All rules are on UCCA edges.
+\textit{terminals} refers to the set of terminals in the edge's yield,
+\textit{pos} to their parts of speech,
+\textit{dep} to their incoming dependnecy edge tags,
+and \textit{tag} to the edge's UCCA tag.
+
+\begin{table}
+\begin{tabular}{ll}
+Aspectual verbs & pos=``VERB'' and \\& tag=``Adverbial'' \\
+Light verbs & pos=``VERB'' and \\& tag=``Function'' \\
+Multi-word expressions & $|\{c\in\text{children}:$ \\
+  & \hfill $c\text{.tag}=\text{``Terminal''}\}|>1$ \\
+Predicate nouns & pos=``NOUN'' and \\& tag $\in$ \{``Process'', ``State''\} \\
+Predicate adjectives & pos=``ADJ'' and \\& tag $\in$ \{``Process'', ``State''\} \\
+Expletives & terminal$\in$\{``it'',``there''\} and \\& tag=``Function''
+\end{tabular}
+\caption{Rules for extracting linguistic constructions.}
+\label{tab:constructions_rules}
+\end{table}
+
+\section{Conversion Procedures for the Bilexical Graph and Tree Approximations}
 \label{appendix:conversion}
 
 Here we describe the algorithms used in the conversion referred to in \secref{sec:exp_setup}.
@@ -1099,234 +1320,5 @@ After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
   \caption{Bilexical tree approximation for the UCCA graph in \figref{fig:graduation}.}
   \label{fig:dep_example}
 \end{figure}
-
-\section{Feature templates for sparse linear classifier}
-\label{appendix:features}
-
-\figref{fig:features} presents the feature templates used by the perceptron-based parser.
-All feature templates define binary features.
-For some of the features, we used the notion of \textit{head word},
-defined by the $h^*$ function (see Appendix~\ref{appendix:conversion}).
-While head words are not explicitly represented in the UCCA scheme, these
-features proved useful as means of encoding word-to-word relations.
-
-\begin{figure*}
-\centering
-\begin{adjustbox}{margin=3pt,frame}
-\begin{tabular}{l}
-{\footnotesize Features from \cite{zhang2009transition}:} \\
-\textbf{unigrams} \\
-$s_0tde, s_0we, s_1tde, s_1we, s_2tde, s_2we, s_3tde, s_3we,$ \\
-$b_0wtd, b_1wtd, b_2wtd, b_3wtd,$ \\
-$s_0lwe, s_0rwe, s_0uwe, s_1lwe, s_1rwe, s_1uwe$ \\
-\textbf{bigrams} \\
-$s_0ws_1w, s_0ws_1e, s_0es_1w, s_0es_1e, s_0wb_0w, s_0wb_0td,$ \\
-$s_0eb_0w, s_0eb_0td, s_1wb_0w, s_1wb_0td, s_1eb_0w, s_1eb_0td,$ \\
-$b_0wb_1w, b_0wb_1td, b_0tdb_1w, b_0tdb_1td$ \\
-\textbf{trigrams} \\
-$s_0es_1es_2w, s_0es_1es_2e, s_0es_1eb_0w, s_0es_1eb_0td,$ \\
-$s_0es_1wb_0w, s_0es_1wb_0td, s_0ws_1es_2e, s_0ws_1eb_0td$ \\
-\textbf{separator} \\
-$s_0wp, s_0wep, s_0wq, s_0wcq, s_0es_1ep, s_0es_1eq,$ \\
-$s_1wp, s_1wep, s_1wq, s_1weq$ \\
-
-\textbf{extended} \footnotesize \cite{zhu2013fast} \\
-$s_0llwe, s_0lrwe, s_0luwe, s_0rlwe, s_0rrwe,$ \\
-$s_0ruwe, s_0ulwe, s_0urwe, s_0uuwe, s_1llwe,$ \\
-$s_1lrwe, s_1luwe, s_1rlwe, s_1rrwe, s_1ruwe$ \\
-\end{tabular}
-\begin{tabular}{l}
-\textbf{disco} \footnotesize \cite{maier2015discontinuous} \\
-$s_0xwe, s_1xwe, s_2xwe, s_3xwe,$ \\
-$s_0xtde, s_1xtde, s_2xtde, s_3xtde,$ \\
-$s_0xy, s_1xy, s_2xy, s_3xy$ \\
-$s_0xs_1e, s_0xs_1w, s_0xs_1x, s_0ws_1x, s_0es_1x,$ \\
-$s_0xs_2e, s_0xs_2w, s_0xs_2x, s_0ws_2x, s_0es_2x,$ \\
-$s_0ys_1y, s_0ys_2y, s_0xb_0td, s_0xb_0w$ \\
-
-{\footnotesize Features from \cite{tokgoz2015transition}:} \\
-\textbf{counts} \\
-$s_0P, s_0C, s_0wP, s_0wC, b_0P, b_0C, b_0wP, b_0wC$ \\
-\textbf{edges} \\
-$s_0s_1, s_1s_0, s_0b_0, b_0s_0, s_0b_0e, b_0s_0e$ \\
-\textbf{history} \\
-$a_0, a_1$ \\
-
-\textbf{remote} \footnotesize (Novel, UCCA-specific features) \\
-$s_0R, s_0wR, b_0R, b_0wR$
-\end{tabular}
-\end{adjustbox}
-\captionsetup{singlelinecheck=off}
-\caption[]{\label{fig:features}
-  Binary feature templates for \parser{Sparse}. Notation:\\
-  $s_i$, $b_i$: $i$th stack and buffer items.\\
-  $w$, $t$, $d$: word form, POS tag and syntactic dependency label of the terminal returned by $h^*(\cdot)$
-  (see Appendix~\ref{appendix:conversion}).\\
-  $e$: edge label to the node returned by $h(\cdot)$.\\
-  $l$, $r$ ($ll$, $rr$): leftmost and rightmost (grand)children.\\
-  $u$ ($uu$): unary (grand)child, when only one exists.\\
-  $p$: unique separator punctuation between $s_0$ and $s_1$. $q$: separator count.\\
-  $x$: gap type (``none'', ``pass'' or ``gap'') at the sub-graph under the current node.\\
-  $y$: sum of gap lengths \protect\cite{Maier:Lichte:11}.\\
-  $P$, $C$: number of parents and children.\\
-  $R$: number of remote children.\\
-  $a_i$: action taken $i$ steps back.
-}
-\end{figure*}
-
-\section{Rules for Extracting Linguistic Constructions}
-\label{appendix:constructions}
-
-\tabref{tab:constructions_rules} lists the rules used for extracting each linguistic
-construction. All rules are on UCCA edges.
-\textit{terminals} refers to the set of terminals in the edge's yield,
-\textit{pos} to their parts of speech,
-\textit{dep} to their incoming dependnecy edge tags,
-and \textit{tag} to the edge's UCCA tag.
-
-\begin{table}
-\begin{tabular}{ll}
-Aspectual verbs & pos=``VERB'' and \\& tag=``Adverbial'' \\
-Light verbs & pos=``VERB'' and \\& tag=``Function'' \\
-Multi-word expressions & $|\{c\in\text{children}:$ \\
-  & \hfill $c\text{.tag}=\text{``Terminal''}\}|>1$ \\
-Predicate nouns & pos=``NOUN'' and \\& tag $\in$ \{``Process'', ``State''\} \\
-Predicate adjectives & pos=``ADJ'' and \\& tag $\in$ \{``Process'', ``State''\} \\
-Expletives & terminal$\in$\{``it'',``there''\} and \\& tag=``Function''
-\end{tabular}
-\caption{Rules for extracting linguistic constructions.}
-\label{tab:constructions_rules}
-\end{table}
-
-\section{Extended Presentation of UCCA}
-\label{appendix:extended_ucca}
-
-\paragraph{Linkage.}
-
-\figref{fig:example_linkage} demonstrates a linkage relation, omitted from \figref{fig:graduation}.
-
-\begin{figure}[H]
-  \centering
-  \begin{tikzpicture}[level distance=10mm, ->]
-    \node (ROOT) [fill=black, circle] {}
-      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
-      child {node (graduation) [fill=black, circle] {}
-      {
-        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
-      } edge from parent node[left] {\scriptsize $H$} }
-      child {node {,} edge from parent node[right] {\scriptsize $U$}}
-      child {node (moved) [fill=black, circle] {}
-      {
-        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
-        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
-        child {node [fill=black, circle] {}
-        {
-          child {node {to} edge from parent node[left] {\scriptsize $R$}}
-          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
-        } edge from parent node[left] {\scriptsize $A$} }
-      } edge from parent node[right] {\scriptsize $H$} }
-      ;
-    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
-    \node (LKG) at (-1.8,0) [fill=black!20, circle] {};
-          \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
-          \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
-          \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
-  \end{tikzpicture}
-  \caption{UCCA example with linkage.}
-  \label{fig:example_linkage}
-\end{figure}
-
-The linkage relation is represented by the gray node.
-$LA$ is \emph{link argument}, and $LR$ is \emph{link relation}.
-The relation represents the fact that the \emph{linker} ``After'' links the two parallel scenes
-that are the arguments of the linkage.
-Linkage relations are another source of multiple parents for a node, which we do not yet handle
-in parsing and evaluation.
-
-\paragraph{Implicit units.}
-
-UCCA graphs may contain implicit units with no correspondent in the text.
-\figref{fig:example_implicit} shows the annotation for the sentence
-``A similar technique is almost impossible to apply to other crops, such as cotton, soybeans and rice.''.
-The sentence was used by \cite{oepen2015semeval} to compare between different semantic
-dependency schemes.
-It includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
-In addition, the scene includes an implicit argument, which represents the agent of the
-``apply'' relation.
-
-The parsing of these units is deferred to future work, as it is likely to require different methods
-than those explored in this paper \cite{roth2015inducing}.
-
-\begin{figure*}
-  \centering
-  \scalebox{.6}{
-  \begin{tikzpicture}[level distance=20mm, ->,
-  level 1/.style={sibling distance=8em},
-  level 2/.style={sibling distance=4em},
-  level 3/.style={sibling distance=4em}]
-    \node (ROOT) [fill=black, circle] {}
-      child {node [fill=black, circle] {}
-      {
-        child {node {A} edge from parent node[left] {\scriptsize $E$}}
-        child {node {similar} edge from parent node[left] {\scriptsize $E$}}
-        child {node {technique} edge from parent node[right] {\scriptsize $C$}}
-      } edge from parent node[left] {\scriptsize $A\quad$ \hspace{1mm} } }
-      child {node {is} edge from parent node[left] {\scriptsize $F$}}
-      child {node [fill=black, circle] {}
-      {
-        child {node {almost} edge from parent node[left] {\scriptsize $E$}}
-        child {node {impossible} edge from parent node[right] {\scriptsize $C$}}
-      } edge from parent node[left] {\scriptsize $D$} }
-      child {node {\textbf{IMPLICIT}} edge from parent node[left] {\scriptsize $A$}}
-      child {node {to} edge from parent node[left] {\scriptsize $F$}}
-      child {node {apply} edge from parent node[left] {\scriptsize $P\quad$}}
-      child {node [fill=black, circle] {}
-      {
-        child {node {to} edge from parent node[left] {\scriptsize $R$}}
-        child {node {other} edge from parent node[left] {\scriptsize $E$}}
-        child {node {crops} edge from parent node[left] {\scriptsize $C$}}
-        child {node {,} edge from parent node[left] {\scriptsize $U$}}
-        child {node [fill=black, circle] {}
-        {
-          child {node {such as} edge from parent node[left] {\scriptsize $R$}}
-          child {node {cotton} edge from parent node[left] {\scriptsize $C$}}
-          child {node {,} edge from parent node[left] {\scriptsize $U$}}
-          child {node {soybeans} edge from parent node[left] {\scriptsize $C$}}
-          child {node {and} edge from parent node[left] {\scriptsize $N$}}
-          child {node {rice} edge from parent node[right] {\scriptsize $\; C$}}
-        } edge from parent node[right] {\scriptsize $\; E$ \hspace{1mm} } }
-      } edge from parent node[left] {\scriptsize $A\;$ \hspace{1mm} } }
-      child {node {.} edge from parent node[right] {\scriptsize $\quad \quad U$}}
-      ;
-  \end{tikzpicture}
-  }
-  \caption{UCCA example with an implicit unit.}
-  \label{fig:example_implicit}
-\end{figure*}
-
-\paragraph{Statistics of linkage and implicit units.}
-
-\tabref{table:data_linkage_implicit} shows the statistics of linkage nodes and edges and implicit nodes
-in the corpora.
-
-\begin{table}[ht]
-\centering
-\begin{tabular}{l|ccc|c}
-& \multicolumn{3}{c|}{Wiki} & 20K \\
-& \small Train & \small Dev & \small Test & Leagues \\
-\hline
-nodes \\
-\# implicit & 900 & 119 & 80 & 241 \\
-\# linkage & 2833 & 241 & 364 & 376 \\
-\hline
-edges \\
-\# linkage & 8853 & 737 & 1105 & 957
-\end{tabular}
-\caption{Statistics of linkage and implicit nodes in the
-\textit{Wiki} and \textit{20K Leagues} UCCA corpora.
-Cf. \tabref{table:data}.
-}
-\label{table:data_linkage_implicit}
-\end{table}
 
 \end{document}
