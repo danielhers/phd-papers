@@ -767,22 +767,22 @@ constructions.
 & \small Aspectual verbs & \small Light verbs & \small MWE
 & \small Pred. nouns & \small Pred. adjectives & \small Expletives \\
 \hline
-\#edges & 17 & 292 & 721 & 41 & 7 & 22 \\
-\hline
-DAGParser
-& 16 & 0 & 33.1 & 6.1 & 5.2 & 0 \\
-TurboParser
-& 28.6 & 0 & 34.6 & 8.4 & 8.1 & 0 \\
-\textsc{uparse}
-& 32.3 & 0 & 35.9 & 9.4 & 22 & 0 \\
-MaltParser
-& 41.7 & 0 & 35.5 & 5.6 & 6.4 & 0 \\
-LSTM Parser
-& 74.3 & 0 & 48.8 & 7.5 & 4.6 & 0 \\
+\#edges & 17 & 292 & 721 & 47 & 35 & 22 \\
 \hline
 \multicolumn{7}{l}{\rule{0pt}{2ex} \footnotesize Parser F-scores (\%)} \\
-\parser{Sparse} & 26.7 & 0 & 42.5 & 10.5 & 44.8 & 0 \\
-\parser{Dense}  \\
+DAGParser
+& 16 & 73.5 & 33.1 & 5.1 & 4.8 & 26.7 \\
+TurboParser
+& 28.6 & 70.7 & 34.6 & 8.2 & 6.9 & 0 \\
+\textsc{uparse}
+& 32.3 & 73 & 35.9 & 9.1 & 18.2 & 27.6 \\
+MaltParser
+& 41.7 & 74.1 & 35.5 & 5.5 & 6.1 & 54.5 \\
+LSTM Parser
+& 74.3 & 74.1 & 48.8 & 7.3 & 4.4 & 43.8 \\
+\hline
+\parser{Sparse} & 26.7 & 72 & 42.5 & 9.7 & 38 & 38.7 \\
+\parser{Dense} & 0 & 72.1 & 30.9 & 7 & 27.8 & 38.9 \\
 \parser{MLP} \\
 \parser{BiLSTM}
 \end{tabular}
