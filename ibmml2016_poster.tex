@@ -1,0 +1,476 @@
+\documentclass[a0,portrait]{a0poster}
+
+\usepackage{multicol} % This is so we can have multiple columns of text side-by-side
+\columnsep=100pt % This is the amount of white space between the columns in the poster
+\columnseprule=3pt % This is the thickness of the black line between the columns in the poster
+
+\usepackage[svgnames]{xcolor} % Specify colors by their 'svgnames', for a full list of all colors available see here: http://www.latextemplates.com/svgnames-colors
+
+\usepackage{times} % Use the times font
+\usepackage{palatino} % Uncomment to use the Palatino font
+
+\usepackage{graphicx} % Required for including images
+\graphicspath{{figures/}} % Location of the graphics files
+\usepackage{booktabs} % Top and bottom rules for table
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+\usepackage{amsfonts, amsmath, amsthm, amssymb} % For math fonts, symbols and environments
+\usepackage{wrapfig} % Allows wrapping text around tables and figures
+\usepackage{lipsum,adjustbox}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{multirow}
+\usepackage{titlesec}
+\usepackage{url}
+\usepackage{tikz}
+\usepackage{tikz-dependency}
+\usetikzlibrary{arrows.meta}
+\newcommand{\parser}[1]{TUPA\textsubscript{#1}}
+\captionsetup{labelformat=empty}
+
+\begin{document}
+
+% The header is divided into two boxes:
+% The first is 75% wide and houses the title, subtitle, names, university/organization and contact information
+% The second is 25% wide and houses a logo for your university/organization or a photo of you
+% The widths of these boxes can be easily edited to accommodate your content as you see fit
+
+\begin{center}
+	\veryHuge \color{NavyBlue} \textbf{Broad-Coverage Transition-Based UCCA Parsing}
+\end{center}
+\vspace{-1cm}
+\begin{minipage}[b]{.07\linewidth}
+\includegraphics[width=\linewidth]{huji_logo.jpg}
+\vspace{5mm}
+\end{minipage}
+\begin{minipage}[b]{.16\linewidth}
+\includegraphics[width=\linewidth]{huji_banner.png}
+\includegraphics[width=\linewidth]{cse_banner.jpg}
+\vspace{.8mm}
+\end{minipage}
+\hspace{1cm}
+\begin{minipage}[b]{0.57\linewidth}
+\LARGE \textbf{Daniel Hershcovich$^{1,2}$ \And Omri Abend$^2$ \And Ari Rappoport$^2$} \\[0.5cm] % Author(s)
+\Large $^1$The Edmond and Lily Safra Center for Brain Sciences \\
+  $^2$School of Computer Science and Engineering
+  \setlength{\columnseprule}{0pt}
+  \setlength\multicolsep{-20pt}
+  \begin{multicols}{2}
+  The Hebrew University of Jerusalem
+  \large \texttt{\{danielh,oabend,arir\}@cs.huji.ac.il}
+  \end{multicols}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{.13\linewidth}
+\includegraphics[width=\linewidth]{elsc_logo.png}
+\end{minipage}
+
+\vspace{1cm} % A bit of extra whitespace between the header and poster content
+\titlespacing*{\section}{0pt}{8mm}{5mm}
+%\titlespacing*{\paragraph}{0pt}{3mm}{5mm}
+
+%----------------------------------------------------------------------------------------
+
+\begin{adjustbox}{margin=3mm,frame,minipage=.6\linewidth,center}
+\Large\color{Navy}
+  UCCA supports \textbf{reentrancy}, \textbf{discontinuity} and \textbf{non-terminal nodes},\\
+  which are essential for representing natural language semantics.
+  
+  We present the \textbf{first parser for UCCA} and the first to support these properties.
+\end{adjustbox}
+
+
+\begin{multicols}{2} % This is how many columns your poster will be broken into, a portrait poster is generally split into 2 columns
+
+
+\color{Black} % SaddleBrown color for the introduction
+
+\section*{Introduction}
+
+\setlength{\columnsep}{1cm}
+
+\begin{wraptable}[11]{R}{55mm}
+  \vspace{-2cm}
+  \begin{adjustbox}{margin=2mm,frame}
+  \scalebox{.9}{
+  \begin{tabular}{cl}
+	  P & process \\
+	  S & state \\
+	  A & participant \\
+	  L & linker \\
+	  H & linked scene \\
+	  C & center \\
+	  E & elaborator \\
+	  D & adverbial \\
+	  R & relator \\
+	  N & connector \\
+	  U & punctuation \\
+	  F & function unit \\
+	  G & ground
+  \end{tabular}
+  }
+  \end{adjustbox}
+  \captionof{table}{Edge labels.}
+\end{wraptable}
+
+UCCA or Universal Conceptual Cognitive Annotation \cite{abend2013universal}
+is a cross-linguistically applicable semantic representation scheme.
+\begin{itemize}
+ \item Builds on typological \cite{Dixon:basic}
+ 	and Cognitive Linguistics literature \cite{croft2004cognitive}.
+ \item Demonstrated applicability to English, French, German \& Czech.
+ \item Support for rapid annotation.
+ \item Semantic stability in translation \cite{sulem2015conceptual}.
+ \item Proven useful for machine translation evaluation \cite{birch2016hume}.
+ \item Applicability has been so far limited by the absence of a parser.
+\end{itemize}
+
+Formally, a UCCA structure is a DAG whose leaves correspond to the tokens of
+the text. Nodes (or {\it units}) either correspond to a terminal or
+to several sub-units (not necessarily contiguous) jointly viewed as a
+single entity according to some semantic or cognitive consideration.
+Edges bear a category, indicating the role of the sub-unit in the relation
+that the parent represents.
+
+\begin{center}
+  \begin{tikzpicture}[level distance=4cm, sibling distance=4cm, -{Latex[length=5mm]},
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node (After) {After} edge from parent node[left] {L}}
+      child {node (graduation) [circle] {}
+      {
+        child {node {graduation} edge from parent node[left] {P}}
+      } edge from parent node[left] {H} }
+      child {node {,} edge from parent node[right] {U}}
+      child {node (moved) [circle] {}
+      {
+        child {node (John) {John} edge from parent node[left] {A}}
+        child {node {moved} edge from parent node[left] {P}}
+        child {node [circle] {}
+        {
+          child {node {to} edge from parent node[left] {R}}
+          child {node {Paris} edge from parent node[right] {C}}
+        } edge from parent node[right] {A} }
+      } edge from parent node[right] {H} }
+      ;
+    \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [auto] {A} (John);
+  \end{tikzpicture}
+  \captionof{figure}{Remote edge (dashed), resulting in ``John'' having two parents (reentrancy).}
+  \begin{tikzpicture}[level distance=5cm, sibling distance=4cm, -{Latex[length=5mm]},
+      every node/.append style={midway},
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node {John} edge from parent node[left] {A}}
+      child {node [circle] {}
+      {
+      	child {node {gave} edge from parent node[left] {C}}
+      	child {node (everything) {everything} edge from parent[white]}
+      	child {node {up} edge from parent node[right] {C}}
+      } edge from parent node[right] {P} }
+      ;
+    \draw[bend right,-{Latex[length=5mm]}] (ROOT) to[out=-20, in=180] node [left] {A} (everything);
+  \end{tikzpicture}
+  \hspace{4cm}
+  \begin{tikzpicture}[level distance=5cm, sibling distance=4cm, -{Latex[length=5mm]},
+      every node/.append style={midway},
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node [circle] {}
+      {
+        child {node {John} edge from parent node[left] {C}}
+        child {node {and} edge from parent node[left] {N}}
+        child {node {Mary} edge from parent node[right] {C}}
+      } edge from parent node[left] {A} }
+      child {node {went} edge from parent node[left] {P}}
+      child {node {home} edge from parent node[right] {A}}
+      ;
+  \end{tikzpicture}
+  \captionof{figure}{Discontinuous unit (``gave ... up''). \hspace{4cm}
+  Coordination construction (``John and Mary'').}
+  \captionof{figure}{UCCA structures demonstrating
+  \textbf{reentrancy}, \textbf{discontinuity} and \textbf{non-terminal nodes}.}
+\end{center}
+
+
+
+\section*{Transition-based UCCA Parsing}
+
+\parser{} is our transition-based parser, supporting the structural properties of UCCA.\footnote{
+Corpora are available at \url{http://www.cs.huji.ac.il/~oabend/ucca.html},
+and parser code at \url{https://github.com/danielhers/ucca}
+(written in Python using Keras: \url{https://github.com/fchollet/keras}).}
+
+\begin{center}
+	\begin{tikzpicture}[level distance=25mm, sibling distance=4cm]
+	\draw[xstep=3cm,ystep=1cm,color=gray] (-0.01,0) grid (9,1);
+	\node[anchor=west] at (4,2) {$S$};
+	\node[fill=black, circle] at (1.5,.45) {};
+	\node[fill=blue, circle] at (4.5,.45) {};
+	\node[anchor=west] at (6,.35) {John};
+	\draw[xstep=3cm,ystep=1cm,color=gray] (12,0) grid (21,1);
+	\node[anchor=west] at (16,2) {$B$};
+	\node[anchor=west] at (12,.45) {moved};
+	\node[anchor=west] at (16,.35) {to};
+	\node[anchor=west] at (18.2,.35) {Paris};
+	\node[anchor=west] at (25,3) {$G$};
+	\node[fill=black, circle] at (26,1.5) {}
+	  child {node  {\small After} edge from parent [-{Latex[length=4mm]}] node[left] {\small L}}
+	  child {node [fill=blue, circle] {}
+	  {
+	    child {node {\small graduation} edge from parent [-{Latex[length=4mm]}] node[right] {\small P}}
+	  } edge from parent [-{Latex[length=5mm]}] node[right] {\small H} };
+	\node[anchor=west] at (0,-3) {Transitions:
+	\textsc{Shift}, \textsc{Right-Edge\textsubscript L}, \textsc{Reduce}, \textsc{Shift},};
+	\node[anchor=west] at (3,-4) {\textsc{Node\textsubscript P}, \textsc{Reduce}, \textsc{Shift},
+	\textsc{Right-Edge\textsubscript H}, \textsc{Shift}
+	};
+	\end{tikzpicture}
+	\captionof{figure}{Example for intermediate state during transition-based parsing.}
+\end{center}
+
+Transition-based parsers work by applying a \textit{transition}
+at each step to the parser state,
+defined using a buffer $B$ of tokens and nodes to be processed,
+a stack $S$ of nodes currently being processed,
+and a graph $G=(V,E,\ell)$ of constructed nodes and edges.
+
+\begin{center}
+	\begin{adjustbox}{margin=3pt,frame}
+	\begin{tabular}{llll|c|llll}
+	\multicolumn{4}{c|}{\textbf{\small Before Transition}} & & \multicolumn{4}{c}{\textbf{\small After Transition}} \\
+	\textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} \\
+	$S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ \\
+	$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ \\
+	$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ \\
+	$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ \\
+	$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ \\
+	$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ \\
+	$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ \\
+	$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ \\
+	$[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & $V$ & $E$ \\
+	\end{tabular}
+	\end{adjustbox}
+	\captionof{table}{\parser{} transitions.
+	  $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
+	}
+\end{center}
+\vspace{5mm}
+A classifier selects the next transition based on the current state's features.
+It is trained by an oracle based on gold-standard annotations.
+We experiment with three classifiers:
+\begin{flushleft}
+	\begin{tabular}{ll}
+	\textbf{\parser{sparse}} & Perceptron, sparse features: words, POS tags \& edge label combinations. \\
+	\textbf{\parser{dense}} & Perceptron, dense embedding features: word2vec \cite{mikolov2013efficient} for words, else random. \\
+	\textbf{\parser{NN}} & 2-layer MLP, learned embedding features, logistic activation + dropout. \\
+	\end{tabular}
+\end{flushleft}
+\vspace{5mm}
+For all classifiers, inference is performed greedily, i.e., without beam search.
+We also employ a real-valued feature,
+\textbf{ratio}, corresponding to the ratio between the number of terminals to number of nodes
+in the graph $G$.
+This novel feature serves as a regularizer for the creation of new nodes,
+and should be beneficial for other transition-based constituency parsers too.
+
+
+
+
+\section*{Experimental Setup}
+
+\begin{wraptable}{r}{18cm}
+	\vspace{-2cm}
+	\begin{tabular}{l|ccc|c}
+	& \multicolumn{3}{c|}{Wiki} & 20K \\
+	& \small Train & \small Dev & \small Test & Leagues \\
+	\hline
+	\# passages & 300 & 34 & 34 & 154 \\
+	\# sentences & 4267 & 453 & 518 & 506 \\
+	\hline
+	\# nodes & 298,665 & 33,263 & 37,262 & 29,315 \\
+	\% terminal & 42.95 & 43.62 & 42.89 & 42.09 \\
+	\% non-term. & 58.30 & 57.46 & 58.31 & 60.01 \\
+	\% discont. & 0.53 & 0.51 & 0.47 & 0.81 \\
+	\% reentrant & 2.31 & 1.76 & 2.18 & 2.03 \\
+	\hline
+	\# edges & 287,381 & 32,015 & 35,846 & 27,749 \\
+	\% primary & 98.29 & 98.81 & 98.75 & 97.73 \\
+	\% remote & 1.71 & 1.19 & 1.25 & 2.27 \\
+	\hline
+	\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
+	\# children & 1.67 & 1.68 & 1.66 & 1.61 
+	\end{tabular}
+	\captionof{table}{Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.}
+\end{wraptable}
+
+We conduct our main experiment on the UCCA Wikipedia corpus,
+and use the English part of the UCCA \textit{Twenty Thousand Leagues Under the Sea}
+English-French parallel corpus as out-of-domain data.
+
+\paragraph{Evaluation.}
+We report two variants of labeled precision, recall and F-score:
+one where we consider only primary edges, and another for remote edges.
+Given graphs $G_p=(V_p,E_p,\ell_p)$ and $G_g=(V_g,E_g,\ell_g)$
+over terminals $W = \{w_1,\ldots,w_n\}$,
+the yield $y(e) \subseteq W$ of an edge $e=(u,v)$ in either graph
+is the set of terminals in $W$ that are descendants of $v$.
+The \textit{mutual edges} between the graphs are:
+\begin{flushleft}
+\begin{tabular}{lcr}
+	\multicolumn{3}{l}{$M(G_p,G_g) =
+    \left\{(e_1,e_2) \in E_p \times E_g \;|\;
+    y(e_1) = y(e_2) \wedge \ell_p(e_1)=\ell_g(e_2)\right\}$} \vspace{5mm} \\
+    and we define\\
+	$\text{LP} = |M(G_p,G_g)| / |E_p|$ \hspace{2cm} &
+	$\text{LR} = |M(G_p,G_g)| / |E_g|$ \hspace{2cm} &
+	$\text{LF} = 2 \cdot \text{LP} \cdot \text{LR} / (\text{LP} + \text{LR})$.
+\end{tabular}
+\end{flushleft}
+
+\paragraph{Baselines.}
+
+\begin{wrapfigure}[11]{r}{14cm}
+	\centering
+	\scalebox{.7}{
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\depedge{2}{1}{L}
+	\depedge{2}{3}{U}
+	\depedge[dashed]{2}{4}{A}
+	\depedge{5}{4}{A}
+	\depedge{2}{5}{H}
+	\depedge{7}{6}{R}
+	\depedge{5}{7}{A}
+	\end{dependency}
+	}
+	\scalebox{.7}{
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	John \^ gave \^ everything \^ up \\
+	\end{deptext}
+	\depedge{1}{2}{A}
+	\depedge{3}{2}{A}
+	\depedge{4}{2}{C}
+	\end{dependency}
+	}
+	\scalebox{.7}{
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	John \^ and \^ Mary \^ went \^ home \\
+	\end{deptext}
+	\depedge[edge start x offset=-6pt]{1}{4}{A}
+	\depedge{2}{1}{N}
+	\depedge{3}{1}{C}
+	\depedge{5}{4}{A}
+	\end{dependency}
+	}
+	\captionof{figure}{Bilexical approximation for UCCA graphs.}
+\end{wrapfigure}
+
+Since there are no existing UCCA parsers, we use bilexical DAG parsers:
+\begin{enumerate}
+ \item Convert UCCA into bilexical dependencies.
+ \item Train parsers on the resulting training set.
+ \item Apply trained parsers to the test set.
+ \item Reconstruct UCCA graphs.
+ \item Compare with gold standard.
+\end{enumerate}
+Upper bounds are computed by applying
+the conversion both ways to the gold standard
+graphs and comparing to the original.
+
+
+
+\section*{Results}
+
+\parser{NN} obtains the highest scores in nearly all metrics:
+	  
+\begin{center}
+	\begin{tabular}{l|ccc|ccc||ccc|ccc}
+	& \multicolumn{6}{c||}{Wiki (in-domain)} & \multicolumn{6}{c}{20K Leagues (out-of-domain)} \\
+	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c||}{Remote}
+	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF}
+	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+	\hline
+	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
+	Upper Bound % on the test set and ood set only
+	& 93.4 & 83.7 & 88.3 & 73.9 & 49.5 & 59.3
+	& 93.5 & 83.5 & 88.2 & 66.7 & 31.6 & 42.9 \vspace{.1cm} \\
+	DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}
+	& 63.7 & 	56.1	 & 59.5	 & 0.8	 & 9.5	 &  1.4
+	& 58	 & 49.8	 & 53.4 & -- & 0 & 0 \\
+	TurboParser \cite{almeida-martins:2015:SemEval}
+	& 60.2	 & 47.4	 & 52.9	 & 2.2	 & 7.8	 &  3.4
+	& 52.6	 & 39	 & 44.7	 & 100	 & 0.3	 & 0.6 \\
+	\hline
+	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
+	\parser{sparse}
+	& 64 & 55.6 & 59.5 & 16 & 11.6 & 13.4 
+	& 60.6 & 53.9 & 57.1 & 20.2 & 10.3 & 13.6 \\
+	\parser{dense} 
+	& 55 & 54.8 & 54.9 & 15.2 & {\bf 16.9} & {\bf 16}
+	& 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
+	\parser{NN}
+	& {\bf 65} & {\bf 62.5} & {\bf 63.7} & {\bf 20.7} & 11.3 & 14.6
+	& {\bf 58.3} & {\bf 56.4} & {\bf 57.3} & {\bf 15.2} & {\bf 3.8} & {\bf 6}
+	\end{tabular}
+\end{center}
+
+\begin{wraptable}[11]{l}{15cm}
+\hspace{-6mm}
+\begin{tabular}{l|ccc}
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Approximation} \\
+Upper Bound & 100 & 100 & 100 \vspace{.1cm} \\
+\textsc{uparse} \cite{maier-lichte:2016:DiscoNLP} & 63 & 64.7 & 63.7 \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Dependency Tree Approximation} \\
+Upper Bound & 93.7 & 83.6 & 88.4 \vspace{.1cm} \\
+MaltParser \cite{nivre2007maltparser} & 64.9 & 57.9 & 61 \\
+LSTM Parser \cite{dyer2015transition} & {\bf 74.9} & {\bf 66.4} & {\bf 70.2} \\
+\hline
+\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Tree Parsing} \\
+\parser{sparse} $-$ \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
+\parser{dense} $-$ \textsc{Remote} & 57.2 & 57.3 & 57.2 \\
+\parser{NN} $-$ \textsc{Remote} & 66.3 & 64.4 & 65.3 \\
+\end{tabular}
+\end{wraptable}
+
+The performance is encouraging in light of
+UCCA's inter-annotator agreement of 80--85\%
+F-score on primary edges \cite{abend2013universal}.
+
+
+
+\paragraph{Tree approximation.}
+
+For completeness, we also explore lossily converting UCCA into trees,
+resulting in a simplified task for the underlying parser,
+in addition to the maturity of tree-based parsers.
+
+Although remote edges are of pivotal importance, exploring tree approximation methods
+can inform the future development of DAG parsers in general and of UCCA parsers in particular.
+
+
+\section*{Conclusions}
+
+We present \parser{}, the first parser for UCCA, and
+evaluate it in both in-domain and out-of-domain settings,
+showing it surpasses bilexical DAG parsers on the task of UCCA parsing.
+
+Future work will incorporate LSTMs into \parser{},
+and apply the parser to more languages such as German,
+demonstrating the importance of broad-coverage parsing.
+We will also improve the conversion-based methods and explore different target representations.
+A UCCA parser will enable using the scheme for representation in NLP tasks.
+
+
+\color{DarkSlateGray} % Set the color back to DarkSlateGray for the rest of the content
+\tiny
+%\nocite{*} % Print all references regardless of whether they were cited in the poster or not
+\bibliographystyle{plain} % Plain referencing style
+\bibliography{references}
+
+\end{multicols}
+\end{document}

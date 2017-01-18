@@ -6,3 +6,8 @@
 *.bbl
 *.blg
 *.dvi
+*.bcf
+*.nav
+*.run.xml
+*.snm
+*.toc
