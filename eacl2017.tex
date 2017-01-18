@@ -214,14 +214,17 @@ some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases (either the preposition or the head noun can serve as the constituent's head).
 
 No existing parser, to our knowledge, supports the three structural properties described above.
-We propose \parser{} (Transition-based UCCA Parser), taking a transition-based approach.
+We propose \parser{} (Transition-based UCCA Parser), taking a
+transition-based approach.
 Building on existing knowledge in tackling these three properties
 in isolation, we define an extended set of transitions and features
 that support reentrancy, discontinuities and non-terminal nodes.
 
 Transition-based techniques are a natural
-starting point for UCCA parsing, given the conceptual similarity of UCCA's distinctions,
-centered around predicate-argument structures, to distinctions expressed by dependency schemes.
+starting point for UCCA parsing, given the conceptual similarity of
+UCCA's distinctions,
+centered around predicate-argument structures, to distinctions expressed
+by dependency schemes.
 We are further motivated by the strength of transition-based methods
 in similar tasks, including syntactic dependency parsing
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
