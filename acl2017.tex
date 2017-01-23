@@ -377,9 +377,10 @@ to be included in the model.
 As a minimal variation, \textbf{\parser{Dense}} uses dense embedding features rather than binary indicator
 features, but still uses a linear model with averaged structured perceptron.
 \item
-Further changing the model to a feedforward neural network, \textbf{\parser{MLP}}
+Changing the model to a feedforward neural network, \textbf{\parser{MLP}}
 (``multi-layer perceptron'') uses an architecture similar to that of \citet{chen2014fast},
-but with dropout applied after each layer \cite{srivastava2014dropout}.
+but with two layers of rectified linear units,
+and dropout applied after each layer \cite{srivastava2014dropout}.
 The embeddings in this case are trained jointly with the classifier,
 updating the feature representation.
 \item
@@ -443,10 +444,10 @@ and for the perceptron-based parser, the classifier's weights are updated accord
 to the perceptron update rule.
 
 For the perceptron classifiers, we double the weight updates
-for gold \textsc{Swap} transitions to address the sparsity of discontinuous nodes,
-as in \citet{maier2015discontinuous}.
-POS tags and syntactic dependnecy labels are extracted using spaCy\footnote{\url{https://spacy.io}}
-\cite{honnibal-johnson:2015:EMNLP}.
+for gold \textsc{Swap} transitions to address the sparsity of discontinuous nodes
+\cite{maier2015discontinuous}.
+POS tags and syntactic dependnecy labels are extracted using spaCy
+\cite{honnibal-johnson:2015:EMNLP}.\footnote{\url{https://spacy.io}}
 We use the categorical cross-entropy objective function and optimize the
 NN classifiers with the Adam optimizer \cite{kingma2014adam}.
 
@@ -506,8 +507,7 @@ All counts exclude the root node, implicit nodes, and linkage nodes and edges.
 \end{table}
 
 \paragraph{Implementation.}
-We use the DyNet package\footnote{\url{https://github.com/clab/dynet}}
-\cite{neubig2017dynet} for implementing the NN classifiers.
+We use the DyNet package \cite{neubig2017dynet} for implementing the NN classifiers.
 Unless otherwise noted, we use the default values provided by the package.
 \tabref{table:hyperparameters} lists the hyperparameter values we found by tuning
 on the development set.
@@ -518,7 +518,7 @@ on the development set.
 & \multicolumn{2}{c|}{\footnotesize Perceptron} & \multicolumn{2}{c}{\footnotesize NN} \\
 & Sparse & Dense & MLP & BiLSTM \\
 \hline
-\multicolumn{4}{l}{\footnotesize Embedding dim.} \\
+\multicolumn{4}{l}{\footnotesize Embedding dimensions} \\
 external word & & 100 & 100 & 100 \\
 word & & 0 & 200 & 200 \\
 POS tag & & 10 & 20 & 20 \\
@@ -529,7 +529,6 @@ gap & & 2 & 3 & 3 \\
 action & & 5 & 3 & 3 \\
 \hline
 \multicolumn{4}{l}{\footnotesize Other parameters} \\
-activation & & & ReLU & ReLU \\
 MLP \#layers & & & 2 & 2 \\
 MLP layer dim. & & & 100 & 50 \\
 LSTM \#layers & & & & 2 \\
