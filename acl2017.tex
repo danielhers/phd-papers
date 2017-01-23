@@ -564,15 +564,6 @@ We note that the measure collapses to the standard
 PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
 Punctuation is excluded from the evaluation, but not from the datasets.
 
-\paragraph{Linguistic constructions.}
-
-In addition to the overall evaluation on primary and remote edges,
-we perform fine-grained evaluation on various linguistic construction,
-which we extract by criteria on UCCA edge labels and POS tags.\footnote{See
-Appendix~\ref{appendix:constructions} for a listing of the criteria.}
-For each construction, we report the F-score resulting from calculating the
-mutual edges only among the edges matching the criterion in each graph.
-
 \begin{figure}[ht]
 \centering
 \scalebox{.9}{
@@ -757,6 +748,22 @@ Its performance in absolute terms, of XX.X\% F-score, is encouraging in light of
 UCCA's inter-annotator agreement of 80--85\%
 F-score on primary edges \cite{abend2013universal}.
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Discussion}\label{sec:discussion}
+
+\paragraph{Per-construction evaluation.}
+
+In addition to the overall evaluation on primary and remote edges,
+we perform fine-grained evaluation on various linguistic construction,
+which we extract by criteria on UCCA edge labels and POS tags.\footnote{See
+Appendix~\ref{appendix:constructions} for a listing of the criteria.}
+For each construction, we report the F-score resulting from calculating the
+mutual edges (see \secref{sec:exp_setup}) only among the edges matching the
+criterion in each graph.
+
 The fine-grained evaluation in \tabref{table:constructions_results} shows that in
 addition to the overall scores, \parser{BiLSTM} dominates in parsing common linguistic
 constructions.
@@ -766,29 +773,31 @@ constructions.
 & \small Aspectual verbs & \small Light verbs & \small MWE
 & \small Pred. nouns & \small Pred. adjectives & \small Expletives \\
 \hline
-\#edges & 17 & 292 & 721 & 47 & 35 & 22 \\
-\hline
-\multicolumn{7}{l}{\rule{0pt}{2ex} \footnotesize Parser F-scores (\%)} \\
-DAGParser
-& 16 & 73.5 & 33.1 & 5.1 & 4.8 & 26.7 \\
-TurboParser
-& 28.6 & 70.7 & 34.6 & 8.2 & 6.9 & 0 \\
-\textsc{uparse}
-& 32.3 & 73 & 35.9 & 9.1 & 18.2 & 27.6 \\
-MaltParser
-& 41.7 & 74.1 & 35.5 & 5.5 & 6.1 & 54.5 \\
-LSTM Parser
-& 74.3 & 74.1 & 48.8 & 7.3 & 4.4 & 43.8 \\
-\hline
-\parser{Sparse} & 26.7 & 72 & 42.5 & 9.7 & 38 & 38.7 \\
-\parser{Dense} & 0 & 72.1 & 30.9 & 7 & 27.8 & 38.9 \\
-\parser{MLP} \\
-\parser{BiLSTM}
+\#edges in UCCA Dev set &  \\
+%\#edges in UCCA Test set & 17 & 292 & 721 & 47 & 35 & 22 \\
+%\hline
+%\multicolumn{7}{l}{\rule{0pt}{2ex} \footnotesize Parser F-scores (\%)} \\
+%DAGParser
+%& 16 & 73.5 & 33.1 & 5.1 & 4.8 & 26.7 \\
+%TurboParser
+%& 28.6 & 70.7 & 34.6 & 8.2 & 6.9 & 0 \\
+%\textsc{uparse}
+%& 32.3 & 73 & 35.9 & 9.1 & 18.2 & 27.6 \\
+%MaltParser
+%& 41.7 & 74.1 & 35.5 & 5.5 & 6.1 & 54.5 \\
+%LSTM Parser
+%& 74.3 & 74.1 & 48.8 & 7.3 & 4.4 & 43.8 \\
+%\hline
+%\parser{Sparse} & 26.7 & 72 & 42.5 & 9.7 & 38 & 38.7 \\
+%\parser{Dense} & 0 & 72.1 & 30.9 & 7 & 27.8 & 38.9 \\
+%\parser{MLP} \\
+%\parser{BiLSTM}
+\parser{BiLSTM} F-scores (\%) &
 \end{tabular}
 \caption{\label{table:constructions_results}
-Results of evaluation (on the Wiki test-set) on UCCA edges corresponding to specific linguistic constructions.
-Top: number of edges corresponding to each construction in the UCCA test corpus.
-Bottom: F-score (in percentages) calculated just on these edges, for each parser.}
+Results of evaluation on UCCA edges corresponding to specific linguistic constructions.
+Top: number of edges corresponding to each construction in the UCCA development corpus.
+Bottom: F-score (in percentages) calculated just on these edges.}
 \end{table*}
 
 
