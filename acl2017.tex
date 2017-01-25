@@ -419,6 +419,10 @@ These embeddings are initialized randomly (and for \parser{Dense} they then stay
 We additionally use external word embeddings initialized with
 pre-trained word2vec vectors \cite{mikolov2013efficient},\footnote{\url{
 https://goo.gl/6ovEhC}} updated during training.
+In addition to dropout between NN layers, we apply word dropout 
+\cite{kiperwasser2016simple}: with a certain probability, the embedding for a
+word is replaced with a zero vector. We apply it separately to the external
+word embeddings.
 
 Finally, for all classifiers we add another real-valued feature to the input vector,
 \textbf{ratio}, corresponding to the ratio between the number of terminals to number of nodes
@@ -529,6 +533,7 @@ gap & & 2 & 3 & 3 \\
 action & & 5 & 3 & 3 \\
 \hline
 \multicolumn{4}{l}{\footnotesize Other parameters} \\
+$\textsc{MinUpdate}$ & 5 \\
 MLP \#layers & & & 2 & 2 \\
 MLP layer dim. & & & 100 & 50 \\
 LSTM \#layers & & & & 2 \\
@@ -538,8 +543,7 @@ ex. word dropout & & & 0 & 0 \\
 L2 regularizer & & & $10^{-5}$ & $10^{-5}$ \\
 dropout & & & 0.4 & 0.4 \\
 mini-batch size & & & 100 & 100 \\
-training epochs & 13 & 11 & 28 & 44 \\
-$\textsc{MinUpdate}$ & 5 \\
+training epochs & 13 & 11 & 28 & 44
 \end{tabular}
 }
 \caption{Hyperparameters used for the different classifiers.}
@@ -769,11 +773,13 @@ F-score on primary edges \cite{abend2013universal}.
 
 
 \paragraph{Per-construction evaluation.}
+Many linguistic constructions are naturally encoded in UCCA,
+although syntactically they may be less easily characterized.
 
 In addition to the overall evaluation on primary and remote edges,
-we perform fine-grained evaluation on various linguistic construction,
+we perform fine-grained evaluation on five linguistic construction types,
 which we extract by criteria on UCCA edge labels and POS tags.\footnote{See
-Appendix~\ref{appendix:constructions} for a listing of the criteria.}
+Appendix~\ref{appendix:constructions} for a formal listing of the criteria.}
 For each construction, we report the F-score resulting from calculating the
 mutual edges (see \secref{sec:exp_setup}) only among the edges matching the
 criterion in each graph. We evaluate the scores on the UCCA development set.
@@ -808,8 +814,24 @@ LF (\%) & 79.7 & 54 & 33.1 & 30.8 & 55.6
 \caption{\label{table:constructions_results}
 Results of evaluating \parser{BiLSTM} on UCCA edges corresponding to specific linguistic constructions.
 Top: number of edges corresponding to each construction in the UCCA development corpus.
-Bottom: F-score of \parser{BiLSTM} (in percentages) calculated just on these edges.}
+Bottom: labeled F-score of \parser{BiLSTM} (in percentages) calculated just on these edges.}
 \end{table}
+
+Light verbs are verbs with little semantic content.
+They are characterized in UCCA as verbs with the Function label.
+
+Multi-word expressions are annotated as a flat unit, with all terminals as
+direct children. Parsing these correctly allows proper handling of
+non-analyzable semantic units.
+
+Predicate nouns and adjectives are identified by the respective part of speech
+and by a Process or State label (meaning the unit is a Scene).
+These represent relations or events not necessarily expressed by verbs,
+and thus often ignored by other schemes.
+
+Finally, expletive constructions are simply ``it'' or ``there'' with a Function
+label. These are semantically vacuous and should be ignored in co-reference
+resolution, for example.
 
 
 
@@ -889,13 +911,15 @@ strings and semantic structures.
 \section{Conclusion}\label{sec:conclusion}
 We present \parser{}, the first parser for UCCA.
 Evaluated in both in-domain and out-of-domain settings, we show that coupled with a
-NN classifier and feature extractor,
-\parser{BiLSTM} surpasses bilexical graph parsers on the task of UCCA parsing.
+NN classifier and BiLSTM feature extractor,
+it is able to accurately predict UCCA graphs from text.
 While much recent work focused on semantic parsing of different types,
 the effectiveness of different parsing approaches for schemes with
 different structural and semantic properties is not well-understood 
 \cite{kuhlmann2016towards}.
-This paper makes a contribution to this literature first by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, through detailed experiments with different architectures for the local classifier, and comparison both to bilexical approximations and to tree approximations.
+This paper makes a contribution to this literature by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, through detailed experiments with different architectures for the local classifier, and comparison to bilexical and tree approximations.
+The benefit of this approach is further demonstrated by the identification of
+common linguistic constructions, readable from UCCA graphs.
 
 Future work will explore different target
 representations and more sophisticated conversion procedures \cite{kong-15},
@@ -1135,7 +1159,7 @@ construction, used for fine-grained evaluation (see \tabref{table:constructions_
 \begin{table}
 \scalebox{.9}{
 \begin{tabular}{l|l}
-Aspectual verbs & $e.P=\{\text{VERB}\} \wedge e.\ell=\text{Adverbial}$ \\
+%Aspectual verbs & $e.P=\{\text{VERB}\} \wedge e.\ell=\text{Adverbial}$ \\
 Light verbs & $e.P=\{\text{VERB}\} \wedge e.\ell=\text{Function}$ \\
 MWE & $|\{e^\prime\in e.C:e^\prime.\ell=\text{Terminal}\}|>1$ \\
 Pred. nouns & $\text{ADJ}\not\in e.P \wedge \text{NOUN}\in e.P \wedge {}$
