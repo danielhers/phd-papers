@@ -896,10 +896,14 @@ and summarization \cite{liu2015toward}.
 
 \figref{fig:features} presents the feature templates used by \parser{Sparse}.
 All feature templates define binary features.
+The other classifiers use the same elements listed in the feature templates,
+but all categorical features are replaced by vector embeddings,
+and all count-based features are replaced by their numeric value.
+
 For some of the features, we used the notion of \textit{head word},
 defined by the $h^*$ function (see Appendix~\ref{appendix:conversion}).
 While head words are not explicitly represented in the UCCA scheme, these
-features proved useful as means of encoding word-to-word relations.
+features prove useful as means of encoding word-to-word relations.
 
 \begin{figure*}
 \centering
@@ -967,6 +971,11 @@ $s_0R, s_0wR, b_0R, b_0wR$
 
 \section{Extended Presentation of UCCA}
 \label{appendix:extended_ucca}
+
+This work does not handle two important constructions in the UCCA foundational layer:
+Linkage, representing discourse relations, and Implicit, representing covert entities.
+\tabref{table:data_linkage_implicit} shows the statistics of linkage nodes and edges and
+implicit nodes in the corpora.
 
 \paragraph{Linkage.}
 
@@ -1071,11 +1080,6 @@ than those explored in this paper \cite{roth2015inducing}.
   \label{fig:example_implicit}
 \end{figure*}
 
-\paragraph{Statistics of linkage and implicit units.}
-
-\tabref{table:data_linkage_implicit} shows the statistics of linkage nodes and edges and
-implicit nodes in the corpora.
-
 \begin{table}[ht]
 \centering
 \begin{tabular}{l|ccc|c}
@@ -1096,7 +1100,7 @@ Cf. \tabref{table:data}.
 \label{table:data_linkage_implicit}
 \end{table}
 
-\section{Conversion Procedures for the Bilexical Graph and Tree Approximations}
+\section{Bilexical Graph and Tree Conversion}
 \label{appendix:conversion}
 
 Here we describe the algorithms used in the conversion referred to in \secref{sec:exp_setup}.
@@ -1125,14 +1129,7 @@ N(t) = \{(u,v)\in E \;|\; t=h^*(v) \wedge t \neq h^*(u) \}
 \]
 For each edge $(u,v)\in N(t)$, we add $h^*(u)$ as a head of $t$ in $A$,
 with the label $\ell(u,v)$.
-The complete conversion procedure to a bilexical graph is given in
-Algorithm~\ref{alg:to_bilexical}\footnote{Note that this conversion procedure
-is simpler than the head percolation procedure used for converting syntactic constituency
-trees to dependency trees,
-since $h(u)$ (similar to $u$'s head-containing child)
-depends only on $\ell(u,h(u))$ and not on the sub-tree spanned by $u$,
-because edge labels in UCCA directly express the role of the child in the parent unit, and
-are thus sufficient for determining which of $u$'s children contains the head node.}.
+This procedure is given in Algorithm~\ref{alg:to_bilexical}.
 
 \begin{algorithm}[ht]
  \KwData{UCCA graph ${G}=(V,E,\ell)$}
@@ -1146,6 +1143,14 @@ are thus sufficient for determining which of $u$'s children contains the head no
  \caption{Conversion to bilexical graphs.}
  \label{alg:to_bilexical}
 \end{algorithm}
+
+Note that this conversion procedure
+is simpler than the head percolation procedure used for converting syntactic constituency
+trees to dependency trees \cite{Coll:97},
+since $h(u)$ (similar to $u$'s head-containing child)
+depends only on $\ell(u,h(u))$ and not on the sub-tree spanned by $u$,
+because edge labels in UCCA directly express the role of the child in the parent unit, and
+are thus sufficient for determining which of $u$'s children contains the head node.
 
 \paragraph{Conversion from bilexical graphs.}
 The inverse conversion introduces non-terminal nodes back into the graph.
@@ -1236,7 +1241,7 @@ This procedure is given in Algorithm~\ref{alg:from_bilexical}.
 \item $\mathit{Terminal}$ (\textit{Terminal})
 \item $U$ (\textit{Punctuation})
 \end{enumerate}
-\caption{Priority order of edge labels, used in Algorithm~\ref{alg:to_bilexical}.}
+\caption{Priority order of edge labels used by $h(u)$.}
 \label{fig:priority}
 \end{figure}
 
@@ -1245,9 +1250,13 @@ This procedure is given in Algorithm~\ref{alg:from_bilexical}.
 To convert a UCCA graph to a tree, we simply remove the remote edges.
 Converting the sentence in \figref{fig:graduation}
 results in the tree given in \figref{fig:con_example}.
+To convert a UCCA graph to a bilexical tree, we first convert it to a bilexical graph, and then
+remove the remote edges.
+The corresponding bilexical tree is given in \figref{fig:dep_example}.
+The inverse conversion is simply the identity function, as every tree is also a graph.
 
 \begin{figure}[ht]
-  \centering
+  \begin{subfigure}[t]{\columnwidth}
   \begin{tikzpicture}[level distance=10mm, ->]
     \node (ROOT) [fill=black, circle] {}
       child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
@@ -1270,27 +1279,22 @@ results in the tree given in \figref{fig:con_example}.
   \end{tikzpicture}
   \caption{Tree approximation for the UCCA graph in \figref{fig:graduation}.}
   \label{fig:con_example}
-\end{figure}
-
-To convert a UCCA graph to a bilexical tree, we first convert it to a bilexical graph, and then
-remove the remote edges.
-The corresponding dependency tree is given in \figref{fig:dep_example}.
-
-\begin{figure}[ht]
-\centering
-\begin{dependency}[theme = simple]
-\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
-\end{deptext}
-\depedge{2}{1}{L}
-\depedge{2}{3}{U}
-\depedge{5}{4}{A}
-\depedge{2}{5}{H}
-\depedge{7}{6}{R}
-\depedge{5}{7}{A}
-\end{dependency}
-  \caption{Bilexical tree approximation for the UCCA graph in \figref{fig:graduation}.}
+  \end{subfigure}
+  \begin{subfigure}[t]{\columnwidth}
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\depedge{2}{1}{L}
+	\depedge{2}{3}{U}
+	\depedge{5}{4}{A}
+	\depedge{2}{5}{H}
+	\depedge{7}{6}{R}
+	\depedge{5}{7}{A}
+	\end{dependency}
+  \caption{Bilexical tree approximation for the same graph.}
   \label{fig:dep_example}
+  \end{subfigure}
 \end{figure}
 
 \end{document}
