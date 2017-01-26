@@ -101,6 +101,17 @@ The scheme has proven useful for machine translation evaluation \cite{birch2016h
 but its applicability has been so far limited by the absence of a UCCA parser,
 a gap this paper addresses.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO add semantic justification to UCCA
+%predicate nouns, adjectives.
+%scene is not clause.
+%syntactic possessives are sometimes scenes and sometimes semantic possession
+%(the destruction of the city).
+%remote participants: semantic arguments without syntactic arguments
+%cf. AMR about these points
+%see \secref{sec:related_work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 Formally, a UCCA structure is a DAG (directed acyclic graph)
 whose leaves correspond to the tokens of
 the text. Nodes (or {\it units}) either correspond to a terminal or
@@ -850,9 +861,10 @@ While much recent work focused on semantic parsing of different types,
 the effectiveness of different parsing approaches for schemes with
 different structural and semantic properties is not well-understood 
 \cite{kuhlmann2016towards}.
-This paper makes a contribution to this literature by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, through detailed experiments with different architectures for the local classifier, and comparison to bilexical and tree approximations.
-The benefit of this approach is further demonstrated by the identification of
-common linguistic constructions, readable from UCCA graphs.
+This paper makes a contribution to this literature by proposing a general grammarless parser
+that supports multiple parents, non-terminal nodes and discontinuous units, through detailed
+experiments with different architectures for the local classifier, and comparison to bilexical
+and tree approximations.
 
 Future work will explore different target
 representations and more sophisticated conversion procedures \cite{kong-15},
