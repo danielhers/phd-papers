@@ -521,42 +521,8 @@ All counts exclude the root node, implicit nodes, and linkage nodes and edges.
 \paragraph{Implementation.}
 We use the DyNet package \cite{neubig2017dynet} for implementing the NN classifiers.
 Unless otherwise noted, we use the default values provided by the package.
-\tabref{table:hyperparameters} lists the hyperparameter values we found by tuning
+See Appendix~\ref{appendix:hyperparameters} for the hyperparameter values we found by tuning
 on the development set.
-
-\begin{table}
-\scalebox{.9}{
-\begin{tabular}{l|cccc}
-& \multicolumn{2}{c|}{\footnotesize Perceptron} & \multicolumn{2}{c}{\footnotesize NN} \\
-& Sparse & Dense & MLP & BiLSTM \\
-\hline
-\multicolumn{4}{l}{\footnotesize Embedding dimensions} \\
-external word & & 100 & 100 & 100 \\
-word & & 0 & 200 & 200 \\
-POS tag & & 10 & 20 & 20 \\
-syntactic dep. & & 10 & 10 & 10 \\
-edge label & & 20 & 20 & 20 \\
-punctuation & & 2 & 1 & 1 \\
-gap & & 2 & 3 & 3 \\
-action & & 5 & 3 & 3 \\
-\hline
-\multicolumn{4}{l}{\footnotesize Other parameters} \\
-$\textsc{MinUpdate}$ & 5 \\
-MLP \#layers & & & 2 & 2 \\
-MLP layer dim. & & & 100 & 50 \\
-LSTM \#layers & & & & 2 \\
-LSTM layer dim. & & & & 500 \\
-word dropout & & & 0.2 & 0.2 \\
-ex. word dropout & & & 0 & 0 \\
-L2 regularizer & & & $10^{-5}$ & $10^{-5}$ \\
-dropout & & & 0.4 & 0.4 \\
-mini-batch size & & & 100 & 100 \\
-training epochs & 13 & 11 & 28 & 44
-\end{tabular}
-}
-\caption{Hyperparameters used for the different classifiers.}
-\label{table:hyperparameters}
-\end{table}
 
 \paragraph{Evaluation.}
 Since there are no standard evaluation measures for UCCA, we define
@@ -1098,6 +1064,46 @@ edges \\
 Cf. \tabref{table:data}.
 }
 \label{table:data_linkage_implicit}
+\end{table}
+
+\section{Hyperparameter Values}
+\label{appendix:hyperparameters}
+
+\tabref{table:hyperparameters} lists the hyperparameter values we found
+for the different classifiers by tuning on the development set.
+
+\begin{table}
+\scalebox{.9}{
+\begin{tabular}{l|cccc}
+& \multicolumn{2}{c|}{\footnotesize Perceptron} & \multicolumn{2}{c}{\footnotesize NN} \\
+& Sparse & Dense & MLP & BiLSTM \\
+\hline
+\multicolumn{4}{l}{\footnotesize Embedding dimensions} \\
+external word & & 100 & 100 & 100 \\
+word & & 0 & 200 & 200 \\
+POS tag & & 10 & 20 & 20 \\
+syntactic dep. & & 10 & 10 & 10 \\
+edge label & & 20 & 20 & 20 \\
+punctuation & & 2 & 1 & 1 \\
+gap & & 2 & 3 & 3 \\
+action & & 5 & 3 & 3 \\
+\hline
+\multicolumn{4}{l}{\footnotesize Other parameters} \\
+$\textsc{MinUpdate}$ & 5 \\
+MLP \#layers & & & 2 & 2 \\
+MLP layer dim. & & & 100 & 50 \\
+LSTM \#layers & & & & 2 \\
+LSTM layer dim. & & & & 500 \\
+word dropout & & & 0.2 & 0.2 \\
+ex. word dropout & & & 0 & 0 \\
+L2 regularizer & & & $10^{-5}$ & $10^{-5}$ \\
+dropout & & & 0.4 & 0.4 \\
+mini-batch size & & & 100 & 100 \\
+training epochs & 13 & 11 & 28 & 59
+\end{tabular}
+}
+\caption{Hyperparameters used for the different classifiers.}
+\label{table:hyperparameters}
 \end{table}
 
 \section{Bilexical Graph and Tree Conversion}
