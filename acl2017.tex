@@ -447,9 +447,6 @@ Otherwise, a random optimal transition is applied,
 and for the perceptron-based parser, the classifier's weights are updated according
 to the perceptron update rule.
 
-For the perceptron classifiers, we double the weight updates
-for gold \textsc{Swap} transitions to address the sparsity of discontinuous nodes
-\cite{maier2015discontinuous}.
 POS tags and syntactic dependnecy labels are extracted using spaCy
 \cite{honnibal-johnson:2015:EMNLP}.\footnote{\url{https://spacy.io}}
 We use the categorical cross-entropy objective function and optimize the
@@ -772,70 +769,6 @@ F-score on primary edges \cite{abend2013universal}.
 
 
 
-\paragraph{Per-construction evaluation.}
-Many linguistic constructions are naturally encoded in UCCA,
-although syntactically they may be less easily characterized.
-
-In addition to the overall evaluation on primary and remote edges,
-we perform fine-grained evaluation on five linguistic construction types,
-which we extract by criteria on UCCA edge labels and POS tags.\footnote{See
-Appendix~\ref{appendix:constructions} for a formal listing of the criteria.}
-For each construction, we report the F-score resulting from calculating the
-mutual edges (see \secref{sec:exp_setup}) only among the edges matching the
-criterion in each graph. We evaluate the scores on the UCCA development set.
-
-\begin{table}[ht]
-\scalebox{.8}{
-\begin{tabular}{l|cccccc}
-& \small Light verbs & \small MWE & \small Pred. nouns & \small Pred. adj. & \small Expletives \\
-\hline
-\#edges & 264 & 835 & 108 & 51 & 10 \\
-%\#edges in UCCA test set & 17 & 292 & 721 & 47 & 35 & 22 \\
-%\hline
-%\multicolumn{7}{l}{\rule{0pt}{2ex} \footnotesize Parser F-scores (\%)} \\
-%DAGParser
-%& 16 & 73.5 & 33.1 & 5.1 & 4.8 & 26.7 \\
-%TurboParser
-%& 28.6 & 70.7 & 34.6 & 8.2 & 6.9 & 0 \\
-%\textsc{uparse}
-%& 32.3 & 73 & 35.9 & 9.1 & 18.2 & 27.6 \\
-%MaltParser
-%& 41.7 & 74.1 & 35.5 & 5.5 & 6.1 & 54.5 \\
-%LSTM Parser
-%& 74.3 & 74.1 & 48.8 & 7.3 & 4.4 & 43.8 \\
-%\hline
-%\parser{Sparse} & 26.7 & 72 & 42.5 & 9.7 & 38 & 38.7 \\
-%\parser{Dense} & 0 & 72.1 & 30.9 & 7 & 27.8 & 38.9 \\
-%\parser{MLP} \\
-%\parser{BiLSTM}
-LF (\%) & 79.7 & 54 & 33.1 & 30.8 & 55.6
-\end{tabular}
-}
-\caption{\label{table:constructions_results}
-Results of evaluating \parser{BiLSTM} on UCCA edges corresponding to specific linguistic constructions.
-Top: number of edges corresponding to each construction in the UCCA development corpus.
-Bottom: labeled F-score of \parser{BiLSTM} (in percentages) calculated just on these edges.}
-\end{table}
-
-Light verbs are verbs with little semantic content.
-They are characterized in UCCA as verbs with the Function label.
-
-Multi-word expressions are annotated as a flat unit, with all terminals as
-direct children. Parsing these correctly allows proper handling of
-non-analyzable semantic units.
-
-Predicate nouns and adjectives are identified by the respective part of speech
-and by a Process or State label (meaning the unit is a Scene).
-These represent relations or events not necessarily expressed by verbs,
-and thus often ignored by other schemes.
-
-Finally, expletive constructions are simply ``it'' or ``there'' with a Function
-label. These are semantically vacuous and should be ignored in co-reference
-resolution, for example.
-
-
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -944,6 +877,7 @@ and summarization \cite{liu2015toward}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\newpage
 \appendix
 \section{Feature Templates}
 \label{appendix:features}
@@ -1148,40 +1082,6 @@ edges \\
 Cf. \tabref{table:data}.
 }
 \label{table:data_linkage_implicit}
-\end{table}
-
-\section{Rules for Extracting Linguistic Constructions}
-\label{appendix:constructions}
-
-\tabref{tab:constructions_rules} lists the rules used for extracting each linguistic
-construction, used for fine-grained evaluation (see \tabref{table:constructions_results}).
-
-\begin{table}
-\scalebox{.9}{
-\begin{tabular}{l|l}
-%Aspectual verbs & $e.P=\{\text{VERB}\} \wedge e.\ell=\text{Adverbial}$ \\
-Light verbs & $e.P=\{\text{VERB}\} \wedge e.\ell=\text{Function}$ \\
-MWE & $|\{e^\prime\in e.C:e^\prime.\ell=\text{Terminal}\}|>1$ \\
-Pred. nouns & $\text{ADJ}\not\in e.P \wedge \text{NOUN}\in e.P \wedge {}$
- \\& $e.\ell\in\{\text{Process, State}\} \wedge {}$
- \\ \multicolumn{2}{r}{$\{e^\prime.\ell:e^\prime\in e.C\}
- 	\subseteq\{\text{Center, Function, Terminal}\} \wedge {}$}
- \\& $\text{to}\not\in e.T$ \\
-Pred. adjectives & $\text{ADJ}\in e.P \wedge \text{NOUN}\not\in e.P \wedge {}$
- \\& $e.\ell\in\{\text{Process, State}\} \wedge {}$
- \\ \multicolumn{2}{r}{$\{e^\prime.\ell:e^\prime\in e.C\}
- 	\subseteq\{\text{Center, Function, Terminal}\} \wedge {}$}
- \\& $\text{to}\not\in e.T$ \\
-Expletives & $e.T\subseteq\{\text{it, there}\} \wedge e.\ell=\text{Function}$
-\end{tabular}
-}
-\caption{Rules for extracting linguistic constructions.
-All rules are on UCCA edges. For an edge $e$ in the graph,
-$e.T$ refers to the set of tokens in $e$'s yield,
-and $e.P$ to their coarse parts of speech.
-$e.C$ refers to the set of outgoing edges from the edge's child,
-and $e.\ell$ to the edge's UCCA label.}
-\label{tab:constructions_rules}
 \end{table}
 
 \section{Conversion Procedures for the Bilexical Graph and Tree Approximations}
