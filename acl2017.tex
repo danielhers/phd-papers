@@ -376,7 +376,7 @@ Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 The choice of classifier and feature representation has been shown to have an important role in
 transition-based parsing \cite{chen2014fast,andor2016globally,kiperwasser2016simple}.
 To investigate the impact of the type of transition classifier in UCCA parsing,
-we experiment with four different models.
+we experiment with three different models.
 \begin{enumerate}
 \item
 Starting with a simple and common choice \cite[e.g.,][]{maier-lichte:2016:DiscoNLP},
@@ -384,16 +384,17 @@ Starting with a simple and common choice \cite[e.g.,][]{maier-lichte:2016:DiscoN
 the averaged structured perceptron algorithm
 \cite{Coll:04}. We use the \textsc{MinUpdate} procedure \cite{goldberg2011learning}:
 a minimum number of updates to a feature has to occur in training for it
-to be included in the model.
+to be included in the model.\footnote{As a minimal variation,
+we also experimented with a linear model using
+dense embedding features, but still trained with averaged structured perceptron.
+It performed worse than the sparse perceptron model.}
 \item
-As a minimal variation, \textbf{\parser{Dense}} uses dense embedding features rather than binary indicator
-features, but still uses a linear model with averaged structured perceptron.
-\item
-Changing the model to a feedforward neural network, \textbf{\parser{MLP}}
+Using dense embedding features rather than binary indicator and
+changing the model to a feedforward neural network, \textbf{\parser{MLP}}
 (``multi-layer perceptron'') uses an architecture similar to that of \citet{chen2014fast},
 but with two layers of rectified linear units,
 and dropout applied after each layer \cite{srivastava2014dropout}.
-The embeddings in this case are trained jointly with the classifier,
+The embeddings are trained jointly with the classifier,
 updating the feature representation.
 \item
 Finally, \textbf{\parser{BiLSTM}} uses a bidirectional LSTM for feature representation,
@@ -423,11 +424,11 @@ We also use a novel, UCCA-specific feature:
 number of remote children.\footnote{See
 Appendix~\ref{appendix:features} for a full listing of the feature templates.}
 
-For \parser{Dense} and the NN-based parsers (\parser{MLP} and \parser{BiLSTM}),
+For the NN-based parsers (\parser{MLP} and \parser{BiLSTM}),
 we replace all indicator features by a
 concatenation of the vector embeddings of all represented elements:
 words, POS tags, syntactic dependency labels, edge labels, punctuation, gap type and parser actions.
-These embeddings are initialized randomly (and for \parser{Dense} they then stay constant).
+These embeddings are initialized randomly.
 We additionally use external word embeddings initialized with
 pre-trained word2vec vectors \cite{mikolov2013efficient},\footnote{\url{
 https://goo.gl/6ovEhC}} updated during training.
@@ -635,9 +636,9 @@ LSTM Parser
 \parser{Sparse}
 & 63.6 & 62.9 & 63.3 & 20.6 & 13.7 & 16.5
 & 59.7 & 59.6 & 59.7 & 26.3 & 8.3 & 12.6 \\
-\parser{Dense} 
-& 59.1 & 58.9 & 59 & 17.4 & 12.4 & 14.5
-& 57.0 & 57.9 & 57.4 & 10.8 & 4.2 & 6.0 \\
+%\parser{Dense} 
+%& 59.1 & 58.9 & 59 & 17.4 & 12.4 & 14.5
+%& 57.0 & 57.9 & 57.4 & 10.8 & 4.2 & 6.0 \\
 \parser{MLP}
 & 65.2 & 64.6 & 64.9 & 23.7 & 13.2 & 16.9
 & 62.3 & 62.6 & 62.5 & 20.9 & 6.3 & 9.7 \\
@@ -733,8 +734,6 @@ higher than MaltParser,
 despite being limited by the same approximation error upper bound,
 and using a similar transition set.
 
-Replacing the sparse representation with dense embeddings, \parser{Dense} obtains
-lower results than its sparse counterpart.
 Using a feedforward NN, \parser{MLP} manages to exploit the embeddings,
 and obtains substantially higher scores in all measures, both
 in the in-domain and out-of-domain settings.
@@ -1075,32 +1074,31 @@ for the different classifiers by tuning on the development set.
 
 \begin{table}
 \scalebox{.9}{
-\begin{tabular}{l|cccc}
-& \multicolumn{2}{c|}{\footnotesize Perceptron} & \multicolumn{2}{c}{\footnotesize NN} \\
-& Sparse & Dense & MLP & BiLSTM \\
+\begin{tabular}{l|ccc}
+& Sparse & MLP & BiLSTM \\
 \hline
 \multicolumn{4}{l}{\footnotesize Embedding dimensions} \\
-external word & & 100 & 100 & 100 \\
-word & & 0 & 200 & 200 \\
-POS tag & & 10 & 20 & 20 \\
-syntactic dep. & & 10 & 10 & 10 \\
-edge label & & 20 & 20 & 20 \\
-punctuation & & 2 & 1 & 1 \\
-gap & & 2 & 3 & 3 \\
-action & & 5 & 3 & 3 \\
+external word & & 100 & 100 \\
+word & & 200 & 200 \\
+POS tag & & 20 & 20 \\
+syntactic dep. & & 10 & 10 \\
+edge label & & 20 & 20 \\
+punctuation & & 1 & 1 \\
+gap & & 3 & 3 \\
+action & & 3 & 3 \\
 \hline
 \multicolumn{4}{l}{\footnotesize Other parameters} \\
 $\textsc{MinUpdate}$ & 5 \\
-MLP \#layers & & & 2 & 2 \\
-MLP layer dim. & & & 100 & 50 \\
-LSTM \#layers & & & & 2 \\
-LSTM layer dim. & & & & 500 \\
-word dropout & & & 0.2 & 0.2 \\
-ex. word dropout & & & 0 & 0 \\
-L2 regularizer & & & $10^{-5}$ & $10^{-5}$ \\
-dropout & & & 0.4 & 0.4 \\
-mini-batch size & & & 100 & 100 \\
-training epochs & 13 & 11 & 28 & 59
+MLP \#layers & & 2 & 2 \\
+MLP layer dim. & & 100 & 50 \\
+LSTM \#layers & & & 2 \\
+LSTM layer dim. & & & 500 \\
+word dropout & & 0.2 & 0.2 \\
+ex. word dropout & & 0 & 0 \\
+L2 regularizer & & $10^{-5}$ & $10^{-5}$ \\
+dropout & & 0.4 & 0.4 \\
+mini-batch size & & 100 & 100 \\
+training epochs & 13 & 28 & 59
 \end{tabular}
 }
 \caption{Hyperparameters used for the different classifiers.}
