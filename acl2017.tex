@@ -622,7 +622,7 @@ TurboParser
 & & & \small 100 & & &
 & & & \small 100 \\
 \textsc{uparse}
-& 60.9 & 61.2 & 6 & & &
+& 60.9 & 61.2 & 61.1 & & &
 & 52.7 & 52.8 & 52.8 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Tree Approximation} \\
@@ -649,16 +649,16 @@ LSTM Parser
 & 65.2 & 64.6 & 64.9 & 23.7 & 13.2 & 16.9
 & 62.3 & 62.6 & 62.5 & 20.9 & 6.3 & 9.7 \\
 \parser{BiLSTM}
-& \textbf{74.4} & \textbf{72.7} & \textbf{73.5} & \textbf{47.4} & \textbf{51.6} & \textbf{49.4}
-& \textbf{68.7} & \textbf{68.5} & \textbf{68.6} & \textbf{38.6} & \textbf{18.8} & \textbf{25.3}
+& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4}
+& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3}
 \end{tabular}
 \caption{\label{table:results}
   Main experimental results in percents, on the \textit{Wiki} test set (left)
   and the \textit{20K Leagues} set (right).
   Columns correspond to labeled precision, recall and F-score,
   for both primary and remote edges.
-  \parser{BiLSTM} obtains the highest scores in all metrics, surpassing the bilexical parsers
-  and the other classifiers.
+  \parser{BiLSTM} obtains the highest F-scores in all metrics, surpassing the
+  bilexical parsers, tree parsers and other classifiers.
 }
 \end{table*}
 
