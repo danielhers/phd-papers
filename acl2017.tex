@@ -89,37 +89,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:introduction}
 
-Universal Conceptual Cognitive Annotation \cite[UCCA,][]{abend2013universal}
-is a cross-linguistically applicable semantic representation scheme,
-building on the established Basic Linguistic Theory typological framework
-\cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive
-Linguistics literature \cite{croft2004cognitive}.
-UCCA has demonstrated applicability to multiple languages, including
-English, French, German and Czech, support for rapid annotation,
-and semantic stability in translation \cite{sulem2015conceptual}.
-The scheme has proven useful for machine translation evaluation \cite{birch2016hume},
-but its applicability has been so far limited by the absence of a UCCA parser,
-a gap this paper addresses.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TODO add semantic justification to UCCA
-%predicate nouns, adjectives.
-%scene is not clause.
-%syntactic possessives are sometimes scenes and sometimes semantic possession
-%(the destruction of the city).
-%remote participants: semantic arguments without syntactic arguments
-%cf. AMR about these points
-%see \secref{sec:related_work}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Formally, a UCCA structure is a DAG (directed acyclic graph)
-whose leaves correspond to the tokens of
-the text. Nodes (or {\it units}) either correspond to a terminal or
-to several sub-units (not necessarily contiguous) jointly viewed as a
-single entity according to some semantic or cognitive consideration.
-Edges bear a category, indicating the role of the sub-unit in the relation
-that the parent represents. \figref{fig:examples} presents a few UCCA-annotated examples.
-
 \begin{figure}[t]
   \begin{subfigure}[t]{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:graduation}}
@@ -185,7 +154,8 @@ that the parent represents. \figref{fig:examples} presents a few UCCA-annotated 
         child {node {and} edge from parent node[left] {\scriptsize N}}
         child {node {Mary} edge from parent node[left] {\scriptsize C}}
       } edge from parent node[left] {\scriptsize A} }
-      child {node {went} edge from parent node[left] {\scriptsize P}}
+      child {node {'s} edge from parent node[left] {\scriptsize F}}
+      child {node {trip} edge from parent node[left] {\scriptsize P}}
       child {node {home} edge from parent node[left] {\scriptsize A}}
       ;
   \end{tikzpicture}
@@ -204,6 +174,66 @@ that the parent represents. \figref{fig:examples} presents a few UCCA-annotated 
     Pre-terminal nodes are omitted for brevity.
   }
 \end{figure}
+
+Universal Conceptual Cognitive Annotation \cite[UCCA,][]{abend2013universal}
+is a cross-linguistically applicable semantic representation scheme,
+building on the established Basic Linguistic Theory typological framework
+\cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive
+Linguistics literature \cite{croft2004cognitive}.
+UCCA has demonstrated applicability to multiple languages, including
+English, French, German and Czech, support for rapid annotation,
+and semantic stability in translation \cite{sulem2015conceptual}.
+The scheme has proven useful for machine translation evaluation \cite{birch2016hume},
+but its applicability has been so far limited by the absence of a UCCA parser,
+a gap this paper addresses.
+
+UCCA is a multi-layered representation, each layer corresponding
+to a ``module'' of semantic distinctions.
+The UCCA \textbf{foundational layer}, which we target in this paper, covers the predicate-argument
+structure evoked by predicates of all grammatical categories
+(verbal, nominal, adjectival and others), the inter-relations between them,
+and other major linguistic phenomena such as coordination and multi-word expressions.
+
+The layer's basic notion is the {\it scene}, describing a movement, action or state.
+Each scene contains one main relation (marked as either a Process or a State),
+as well as one or more Participants.
+For example, the sentence ``After graduation, John moved to Paris'' (\figref{fig:graduation})
+contains two scenes, whose main relations are ``graduation'' and ``moved''.
+``John'' is a Participant in both scenes, while ``Paris'' only in the latter.
+One incoming edge for each non-root node is marked as \textbf{primary},
+and the rest (mostly denoting implied relations) as \textbf{remote} edges.
+This distinction is made by the annotator.
+The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
+thus forming a DAG.
+
+Further categories account for relations between scenes and the internal structure of
+complex arguments and relations (e.g. coordination; complex
+adverbials such as ``very clearly'').
+
+UCCA abstracts away syntactic distinctions when the meaning is unchanged:
+predicate nouns and adjectives are represented like verbal ones,
+even when not expressed by a copula clause.
+For example, in \figref{fig:graduation}, ``graduation'' evokes a scene,
+despite lacking a verb.
+Furthermore, ``John'' is marked as a Participant in this
+scene, this being clear from the sentence despite not being represented
+syntactically.
+In general, the concept of a scene is distinct from the syntactic concept of
+a clause.
+Another example is possessive constructions,
+which only sometimes actually express semantic possession.
+In \figref{fig:home}, ``trip'' evokes a scene in which ``John and Mary'' is
+a participant, despite being linked with a possessive construction thereto.
+Some of these semantic distinctions are missing from other schemes, e.g. AMR
+(see \secref{sec:related_work}).
+
+Formally, a UCCA structure is a DAG (directed acyclic graph)
+whose leaves correspond to the tokens of
+the text. Nodes (or {\it units}) either correspond to a terminal or
+to several sub-units (not necessarily contiguous) jointly viewed as a
+single entity according to some semantic or cognitive consideration.
+Edges bear a category, indicating the role of the sub-unit in the relation
+that the parent represents. \figref{fig:examples} presents a few UCCA-annotated examples.
 
 Alongside recent progress in dependency parsing into projective trees
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
@@ -225,7 +255,7 @@ expressions \cite{schneider2014discriminative}.
 Finally, UCCA uses \textbf{non-terminal nodes}
 to represent units comprising more than one word.
 The use of non-terminal nodes is motivated by constructions that have no clear head, including
-coordination structures (e.g., ``\textit{John and Mary} went home''; \figref{fig:home}),
+coordination structures (e.g., ``\textit{John and Mary}'s trip home''; \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases (either the preposition or the head noun can serve as the constituent's head).
 
@@ -259,35 +289,6 @@ from UCCA to bilexical graphs and trees.
 Results show superior accuracy for \parser{}, demonstrating the effectiveness of
 the presented approach (\secref{sec:results}).
 All converters and parsers will be made publicly available upon publication.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The UCCA Scheme}\label{sec:ucca}
-
-UCCA is a multi-layered representation, each layer corresponding
-to a ``module'' of semantic distinctions.
-The UCCA \textbf{foundational layer}, which we target in this paper, covers the predicate-argument
-structure evoked by predicates of all grammatical categories
-(verbal, nominal, adjectival and others), the inter-relations between them,
-and other major linguistic phenomena such as coordination and multi-word expressions.
-
-The layer's basic notion is the {\it Scene}, describing a movement, action or state.
-Each Scene contains one main relation (marked as either a Process or a State),
-as well as one or more Participants.
-For example, the sentence ``After graduation, John moved to Paris'' (\figref{fig:graduation})
-contains two Scenes, whose main relations are ``graduation'' and ``moved''.
-``John'' is a Participant in both Scenes, while ``Paris'' only in the latter.
-One incoming edge for each non-root node is marked as \textbf{primary},
-and the rest (mostly denoting implied relations) as \textbf{remote} edges.
-This distinction is made by the annotator.
-The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
-thus forming a DAG.
-
-Further categories account for relations between Scenes and the internal structure of
-complex arguments and relations (e.g. coordination; complex
-adverbials such as ``very clearly'').
-%\footnote{All UCCA-related resources can be found here:
-%  \url{http://www.cs.huji.ac.il/~oabend/ucca.html}.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -550,7 +551,7 @@ Define the set of \textit{mutual edges} between $G_p$ and $G_g$:
 Labeled precision and recall are defined by dividing $|M(G_p,G_g)|$ by $|E_p|$ and $|E_g|$, respectively,
 and F-score by taking their harmonic mean.
 We report two variants of this measure: one where we consider only primary edges,
-and another for remote edges (see \secref{sec:ucca}).
+and another for remote edges (see \secref{sec:introduction}).
 We note that the measure collapses to the standard
 PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
 Punctuation is excluded from the evaluation, but not from the datasets.
@@ -992,7 +993,7 @@ UCCA graphs may contain implicit units with no correspondent in the text.
 ``A similar technique is almost impossible to apply to other crops, such as cotton, soybeans and rice.''.
 The sentence was used by \citet{oepen2015semeval} to compare between different semantic
 dependency schemes.
-It includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
+It includes a single scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
 In addition, the scene includes an implicit argument, which represents the agent of the
 ``apply'' relation.
 
