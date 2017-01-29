@@ -153,8 +153,8 @@
         child {node {John} edge from parent node[left] {\scriptsize C}}
         child {node {and} edge from parent node[left] {\scriptsize N}}
         child {node {Mary} edge from parent node[left] {\scriptsize C}}
+        child {node {'s} edge from parent node[right] {\scriptsize F}}
       } edge from parent node[left] {\scriptsize A} }
-      child {node {'s} edge from parent node[left] {\scriptsize F}}
       child {node {trip} edge from parent node[left] {\scriptsize P}}
       child {node {home} edge from parent node[left] {\scriptsize A}}
       ;
@@ -189,19 +189,19 @@ a gap this paper addresses.
 
 UCCA is a multi-layered representation, each layer corresponding
 to a ``module'' of semantic distinctions.
-The UCCA \textbf{foundational layer}, which we target in this paper, covers the predicate-argument
+The UCCA \textit{foundational layer}, which we target in this paper, covers the predicate-argument
 structure evoked by predicates of all grammatical categories
 (verbal, nominal, adjectival and others), the inter-relations between them,
 and other major linguistic phenomena such as coordination and multi-word expressions.
 
-The layer's basic notion is the {\it scene}, describing a movement, action or state.
+The layer's basic notion is the \textit{scene}, describing a movement, action or state.
 Each scene contains one main relation (marked as either a Process or a State),
 as well as one or more Participants.
 For example, the sentence ``After graduation, John moved to Paris'' (\figref{fig:graduation})
 contains two scenes, whose main relations are ``graduation'' and ``moved''.
 ``John'' is a Participant in both scenes, while ``Paris'' only in the latter.
-One incoming edge for each non-root node is marked as \textbf{primary},
-and the rest (mostly denoting implied relations) as \textbf{remote} edges.
+One incoming edge for each non-root node is marked as \textit{primary},
+and the rest (mostly denoting implied relations) as \textit{remote} edges.
 This distinction is made by the annotator.
 The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
 thus forming a DAG.
@@ -604,8 +604,10 @@ John \^ and \^ Mary \^ went \^ home \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
 \small Upper Bound
-& \small 94.5 & \small 87.7 & \small 91 & \small 77.3 & \small 46.8 & \small 58.3
-& \small 94.8 & \small 88 & \small 91.3 & \small 66.3 & \small 32.3 & \small 43.4 \\
+%& \small 94.5 & \small 87.7 & \small 91 & \small 77.3 & \small 46.8 & \small 58.3
+%& \small 94.8 & \small 88 & \small 91.3 & \small 66.3 & \small 32.3 & \small 43.4 \\
+& & & \small 91 & & & \small 58.3
+& & & \small 91.3 & & & \small 43.4 \\
 DAGParser
 & 61.8 & 55.8 & 58.6 & 9.5 & 0.5 & 1
 & 56.4 & 50.6 & 53.4 & -- & 0 & 0 \\
@@ -615,16 +617,20 @@ TurboParser
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Tree Approximation} \\
 \small Upper Bound
-& \small 100 & \small 100 & \small 100 & & &
-& \small 100 & \small 100 & \small 100 \\
+%& \small 100 & \small 100 & \small 100 & & &
+%& \small 100 & \small 100 & \small 100 \\
+& & & \small 100 & & &
+& & & \small 100 \\
 \textsc{uparse}
 & 60.9 & 61.2 & 6 & & &
 & 52.7 & 52.8 & 52.8 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Tree Approximation} \\
 \small Upper Bound
-& \small 94.5 & \small 87.7 & \small 91 & & &
-& \small 94.8 & \small 88 & \small 91.3 \\
+%& \small 94.5 & \small 87.7 & \small 91 & & &
+%& \small 94.8 & \small 88 & \small 91.3 \\
+& & & \small 91 & & &
+& & & \small 91.3 \\
 MaltParser
 & 62.8 & 57.7 & 60.2 & & &
 & 57.8 & 53 & 55.3 \\
