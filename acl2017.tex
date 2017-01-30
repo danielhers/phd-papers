@@ -420,6 +420,62 @@ The feedforward layers, BiLSTM and embeddings are all trained jointly.
 For all classifiers, inference is performed greedily, i.e., without beam search.
 Hyperparameters are tuned on the development set (see \secref{sec:exp_setup}).
 
+\begin{figure}
+	\begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
+	\node[anchor=west] at (0,1.5) {Parser state};
+	\draw[color=gray,dashed] (0,-1.2) rectangle (7.5,1.25);
+	\draw[color=gray] (.1,0) rectangle (1.5,.5);
+	\node[anchor=west] at (.1,.8) {$S$};
+	\node[fill=black, circle] at (.4,.275) {};
+	\node[fill=blue, circle] at (.9,.275) {};
+	\node[anchor=west] at (1.15,.175) {\small ,};
+	\draw[color=gray] (1.95,0) rectangle (4.9,.5);
+	\node[anchor=west] at (1.95,.8) {$B$};
+	\node[anchor=west] at (1.95,.275) {\small John moved to Paris .};
+	\node[anchor=west] at (5.1,.8) {$G$};
+	\node[fill=black, circle] at (6.35,.75) {}
+	  child {node  {\scriptsize After} edge from parent [->] node[left] {\small L}}
+	  child {node [fill=blue, circle] {}
+	  {
+	    child {node {\scriptsize graduation} edge from parent [->] node[right] {\small P}}
+	  } edge from parent [->] node[right] {\small H} };
+	\end{tikzpicture}
+	\vspace{5mm}
+	\begin{tikzpicture}[->]
+	\node[anchor=west] at (1,2.5) {Action classifier};
+	\tiny
+	\tikzstyle{main}=[circle, minimum size=7mm, draw=black!80, node distance=12mm]
+	\foreach \i/\word in {1/{After},2/{graduation},4/{to},5/{Paris},6/{.}} {
+	    \node[main, fill=white!100] (l\i) at (\i.5,2.3) {LSTM};
+	    \node[main, fill=white!100] (k\i) at (\i,3.1) {LSTM};
+	    \node[main, fill=white!100] (i\i) at (\i.5,.8) {LSTM};
+	    \node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
+	    \node (x\i) at (\i,-1.5) {\word};
+        \path (x\i) edge [bend right] (i\i);
+        \path (x\i) edge (h\i);
+        \path (i\i) edge [bend left] (k\i);
+        \path (h\i) edge [bend left] (l\i);
+        \path (h\i) edge [bend left] (k\i);
+        \path (i\i) edge (l\i);
+	}
+    \node (l3) at (3.5,2.3) {\ldots};
+    \node (k3) at (3,3.1) {\ldots};
+    \node (i3) at (3.5,.8) {\ldots};
+    \node (h3) at (3,0) {\ldots};
+    \node (x3) at (\i,-1.5) {\ldots};
+	\foreach \current/\next in {1/2,2/3,3/4,4/5,5/6} {
+        \path (i\next) edge (i\current);
+        \path (h\current) edge (h\next);
+        \path (k\next) edge (k\current);
+        \path (l\current) edge (l\next);
+	}
+	\end{tikzpicture}
+	\caption{Illustration of the parser model.
+	Top: parser state (stack, buffer and intermediate graph).
+	Bottom: \parser{BiLTSM} architecture.}
+	\label{fig:model}
+\end{figure}
+
 \paragraph{Features.}
 \parser{Sparse} uses binary indicator features representing
 the words, POS tags, syntactic dependency labels and
