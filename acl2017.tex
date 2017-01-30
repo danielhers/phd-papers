@@ -232,6 +232,10 @@ Another example is possessive constructions,
 which only sometimes express semantic possession.
 In \figref{fig:home}, ``trip'' evokes a scene in which ``John and Mary'' is
 a Participant, and this is expressed through a possessive construction.
+These properties distinguish UCCA from syntactic schemes that
+already have established parsing techonology,
+and will likely require different techniques.
+See \secref{sec:related_work} for details about other semantic schemes.
 
 Formally, a UCCA structure is a DAG
 whose leaves correspond to the tokens of
@@ -761,7 +765,8 @@ MaltParser \cite{nivre2007maltparser}\footnote{For
 MaltParser we use the \textsc{ArcEager} transition set and SVM classifier.
 Preliminary experiments with other configurations yielded lower scores and
 were thus discarded from the evaluation.},
-and the stack LSTM-based \textsc{ArcStandard} parser of \citet{dyer2015transition}.
+and the stack LSTM-based \textsc{ArcStandard} parser of
+\citet[henceforce ``LSTM Parser'']{dyer2015transition}.
 Default settings are used in all cases.
 DAGParser and \textsc{uparse} use beam search by default, with a beam size of 5 and 4
 respectively. The other parsers are greedy.
@@ -778,31 +783,36 @@ The tree approximation parsers are not able to reconstruct any remote edges,
 as these are removed in the conversion and do not even appear in the training set.\footnote{We
 also experimented with a version of \parser{} lacking
 \textsc{Remote} transitions. For each classifier type, this simpler version achieves a labeled
-F-score on primary edges higher by about 2 percents than its counterpart with \textsc{Remote}
+F-score on primary edges higher by 0.5--2 percents than its counterpart with \textsc{Remote}
 transitions, but of course, is unable to produce any remote edges.}
 
 DAGParser and \textsc{uparse} are most directly comparable to
 \parser{Sparse}, as they also use a perceptron classifier with sparse features.
-Despite the lossy conversion, DAGParser obtains comparable results to
+Despite the lossy conversion limiting DAGParser,
+both obtain only a few F-score percentage points below
 \parser{Sparse} on primary edges, but on remote edges, \parser{Sparse}
-surpasses it considerably in performance
+surpasses DAGParser considerably in performance
 (DAGParser does not predict any remote edges in the out-of-domain setting).
 TurboParser fares worse in this comparison, despite somewhat better results on
 remote edges.
-The LSTM parser obtains the highest primary F-score among the baseline parsers,
+The LSTM parser of \citet{dyer2015transition} obtains the highest primary F-score
+among the baseline parsers,
 with a considerable margin. Importantly, it obtains 9.7\% F-score
 higher than MaltParser,
 despite being limited by the same approximation error upper bound,
 and using a similar transition set.
 
-Using a feedforward NN, \parser{MLP} manages to exploit the embeddings,
-and obtains substantially higher scores in all measures, both
-in the in-domain and out-of-domain settings.
-Finally, using more sophisticated input encoding, \parser{BiLSTM} surpasses \parser{MLP}
-and the LSTM parser.
-Its performance in absolute terms, of 74.1\% F-score on primary edges, is encouraging in light of
+Using a feedforward NN and embeddings features,
+\parser{MLP} obtains higher scores than \parser{Sparse},
+but still does not manage to surpass the LSTM parser.
+Finally, using more sophisticated input encoding,
+\parser{BiLSTM} obtains substantially higher scores than \parser{MLP}
+and all other parsers, on both primary and remote edges,
+in both in-domain and out-of-domain settings.
+Its performance in absolute terms, of 73.5\% F-score on primary edges,
+is encouraging in light of
 UCCA's inter-annotator agreement of 80--85\%
-F-score on primary edges \cite{abend2013universal}.
+F-score on them \cite{abend2013universal}.
 
 
 
