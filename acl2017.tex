@@ -89,8 +89,43 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}\label{sec:introduction}
 
-\begin{figure}[t]
-  \begin{subfigure}[t]{.9\columnwidth}
+Universal Conceptual Cognitive Annotation \cite[UCCA,][]{abend2013universal}
+is a cross-linguistically applicable semantic representation scheme,
+building on the established Basic Linguistic Theory typological framework
+\cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive
+Linguistics literature \cite{croft2004cognitive}.
+UCCA has demonstrated applicability to multiple languages, including
+English, French, German and Czech, support for rapid annotation,
+and semantic stability in translation \cite{sulem2015conceptual}.
+The scheme has proven useful for machine translation evaluation \cite{birch2016hume},
+but its applicability has been so far limited by the absence of a UCCA parser,
+a gap this paper addresses.
+
+UCCA is a multi-layered representation, each layer corresponding
+to a ``module'' of semantic distinctions.
+The UCCA \textit{foundational layer}, which we target in this paper, covers the predicate-argument
+structure evoked by predicates of all grammatical categories
+(verbal, nominal, adjectival and others), the inter-relations between them,
+and other major linguistic phenomena such as coordination and multi-word expressions.
+
+The layer's basic notion is the \textit{scene}, describing a movement, action or state.
+Each scene contains one main relation (marked as either a Process or a State),
+as well as one or more Participants.
+For example, the sentence ``After graduation, John moved to Paris'' (\figref{fig:graduation})
+contains two scenes, whose main relations are ``graduation'' and ``moved''.
+``John'' is a Participant in both scenes, while ``Paris'' only in the latter.
+One incoming edge for each non-root node is marked as \textit{primary},
+and the rest (mostly denoting implied relations) as \textit{remote} edges,
+a distinction made by the annotator.
+The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
+thus forming a DAG.
+
+Further categories account for relations between scenes and the internal structure of
+complex arguments and relations (e.g. coordination; complex
+adverbials such as ``very clearly'').
+
+\begin{figure}
+  \begin{subfigure}{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:graduation}}
   \parbox{.8\columnwidth}{
   \scalebox{.9}{
@@ -118,7 +153,7 @@
   \end{tikzpicture}
   }}
   \end{subfigure}
-  \begin{subfigure}[t]{.9\columnwidth}
+  \begin{subfigure}{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:gave}}
   \hspace{.25\columnwidth}
   \parbox{.55\columnwidth}{
@@ -139,7 +174,7 @@
   \end{tikzpicture}
   }}
   \end{subfigure}
-  \begin{subfigure}[t]{.9\columnwidth}
+  \begin{subfigure}{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:home}}
   \hspace{.1\columnwidth}
   \parbox{.7\columnwidth}{
@@ -174,41 +209,6 @@
     Pre-terminal nodes are omitted for brevity.
   }
 \end{figure}
-
-Universal Conceptual Cognitive Annotation \cite[UCCA,][]{abend2013universal}
-is a cross-linguistically applicable semantic representation scheme,
-building on the established Basic Linguistic Theory typological framework
-\cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive
-Linguistics literature \cite{croft2004cognitive}.
-UCCA has demonstrated applicability to multiple languages, including
-English, French, German and Czech, support for rapid annotation,
-and semantic stability in translation \cite{sulem2015conceptual}.
-The scheme has proven useful for machine translation evaluation \cite{birch2016hume},
-but its applicability has been so far limited by the absence of a UCCA parser,
-a gap this paper addresses.
-
-UCCA is a multi-layered representation, each layer corresponding
-to a ``module'' of semantic distinctions.
-The UCCA \textit{foundational layer}, which we target in this paper, covers the predicate-argument
-structure evoked by predicates of all grammatical categories
-(verbal, nominal, adjectival and others), the inter-relations between them,
-and other major linguistic phenomena such as coordination and multi-word expressions.
-
-The layer's basic notion is the \textit{scene}, describing a movement, action or state.
-Each scene contains one main relation (marked as either a Process or a State),
-as well as one or more Participants.
-For example, the sentence ``After graduation, John moved to Paris'' (\figref{fig:graduation})
-contains two scenes, whose main relations are ``graduation'' and ``moved''.
-``John'' is a Participant in both scenes, while ``Paris'' only in the latter.
-One incoming edge for each non-root node is marked as \textit{primary},
-and the rest (mostly denoting implied relations) as \textit{remote} edges.
-This distinction is made by the annotator.
-The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
-thus forming a DAG.
-
-Further categories account for relations between scenes and the internal structure of
-complex arguments and relations (e.g. coordination; complex
-adverbials such as ``very clearly'').
 
 UCCA abstracts away syntactic distinctions when the meaning is unchanged:
 predicate nouns and adjectives are represented like verbal ones,
@@ -557,7 +557,7 @@ We note that the measure collapses to the standard
 PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
 Punctuation is excluded from the evaluation, but not from the datasets.
 
-\begin{figure}[ht]
+\begin{figure}
 \centering
 \scalebox{.9}{
 \begin{dependency}[theme = simple]
@@ -573,6 +573,7 @@ After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 \depedge{5}{7}{A}
 \end{dependency}
 }
+\scalebox{.9}{
 \begin{dependency}[theme = simple]
 \begin{deptext}[column sep=.7em,ampersand replacement=\^]
 John \^ gave \^ everything \^ up \\
@@ -581,6 +582,8 @@ John \^ gave \^ everything \^ up \\
 \depedge{3}{2}{A}
 \depedge{4}{2}{C}
 \end{dependency}
+}
+\scalebox{.9}{
 \begin{dependency}[theme = simple]
 \begin{deptext}[column sep=.7em,ampersand replacement=\^]
 John \^ and \^ Mary \^ went \^ home \\
@@ -590,11 +593,12 @@ John \^ and \^ Mary \^ went \^ home \\
 \depedge{3}{1}{C}
 \depedge{5}{4}{A}
 \end{dependency}
+}
 \caption{Bilexical approximation for sentences in \figref{fig:examples}.}
 \label{fig:bilexical_example}
 \end{figure}
 
-\begin{table*}[ht]
+\begin{table*}
 \begin{tabular}{l|ccc|ccc||ccc|ccc}
 & \multicolumn{6}{c||}{Wiki (in-domain)} & \multicolumn{6}{c}{20K Leagues (out-of-domain)} \\
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c||}{Remote}
@@ -652,7 +656,7 @@ LSTM Parser
 & 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4}
 & 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3}
 \end{tabular}
-\caption{\label{table:results}
+\caption{
   Main experimental results in percents, on the \textit{Wiki} test set (left)
   and the \textit{20K Leagues} set (right).
   Columns correspond to labeled precision, recall and F-score,
@@ -660,6 +664,7 @@ LSTM Parser
   \parser{BiLSTM} obtains the highest F-scores in all metrics, surpassing the
   bilexical parsers, tree parsers and other classifiers.
 }
+\label{table:results}
 \end{table*}
 
 \paragraph{Comparison to bilexical graph parsers.}
@@ -675,8 +680,9 @@ and then reconstructing UCCA graphs, which are compared with the gold standard.
 In \secref{sec:results} we report the upper bounds on the achievable scores due to the error
 resulting from the removal of non-terminal nodes.
 
-\begin{figure}[ht]
-  \begin{subfigure}[t]{\columnwidth}
+\begin{figure}
+\centering
+\scalebox{.9}{
   \begin{tikzpicture}[level distance=10mm, ->]
     \node (ROOT) [fill=black, circle] {}
       child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
@@ -697,8 +703,8 @@ resulting from the removal of non-terminal nodes.
       } edge from parent node[right] {\scriptsize $H$} }
       ;
   \end{tikzpicture}
-  \end{subfigure}
-  \begin{subfigure}[t]{\columnwidth}
+}
+\scalebox{.9}{
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
 	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
@@ -710,10 +716,12 @@ resulting from the removal of non-terminal nodes.
 	\depedge{7}{6}{R}
 	\depedge{5}{7}{A}
 	\end{dependency}
-  \end{subfigure}
-  \label{fig:tree_example}
+  }
   \caption{Tree approximation for the UCCA graph in \figref{fig:graduation} (top),
-  and bilexical tree approximation for the same graph (bottom).}
+  and bilexical tree approximation for the same graph (bottom).
+  These are identical to the original graphs,
+  apart from the removal of remote edges.}
+  \label{fig:tree_example}
 \end{figure}
 
 \paragraph{Comparison to tree parsers.}
