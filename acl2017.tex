@@ -124,7 +124,7 @@ Further categories account for relations between scenes and the internal structu
 complex arguments and relations (e.g. coordination; complex
 adverbials such as ``very clearly'').
 
-\begin{figure}
+\begin{figure}[t]
   \begin{subfigure}{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:graduation}}
   \parbox{.8\columnwidth}{
@@ -155,8 +155,8 @@ adverbials such as ``very clearly'').
   \end{subfigure}
   \begin{subfigure}{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:gave}}
-  \hspace{.25\columnwidth}
-  \parbox{.55\columnwidth}{
+  \hspace{.15\columnwidth}
+  \parbox{.65\columnwidth}{
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway},
@@ -177,7 +177,7 @@ adverbials such as ``very clearly'').
   \begin{subfigure}{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:home}}
   \hspace{.1\columnwidth}
-  \parbox{.7\columnwidth}{
+  \parbox{.8\columnwidth}{
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway},
@@ -196,6 +196,16 @@ adverbials such as ``very clearly'').
   \end{tikzpicture}
   }}
   \end{subfigure}
+  \begin{subfigure}{.9\columnwidth}
+  \hspace{.05\columnwidth}
+  \begin{adjustbox}{width=\columnwidth,margin=1pt,frame}
+  \begin{tabular}{ll|ll|ll}
+  P & process & H & linked scene & N & connector \\
+  A & participant & C & center & U & punctuation \\
+  L & inter-scene linker & R & relator & F & function unit
+  \end{tabular}
+  \end{adjustbox}
+  \end{subfigure}
   \caption{\label{fig:examples}
     UCCA structures demonstrating three structural properties exhibited by
     the scheme.
@@ -203,10 +213,8 @@ adverbials such as ``very clearly'').
     resulting in ``John'' having two parents.
     (\subref{fig:gave}) includes a discontinuous unit (``gave ... up'').
     (\subref{fig:home}) includes a coordination construction (``John and Mary'').
-    Legend: $P$ -- process (a scene's main relation), $A$ -- participant,
-    $L$ -- inter-scene linker, $H$ -- linked scene, $C$ -- center,
-    $R$ -- relator, $N$ -- connector, $U$ -- punctuation, $F$ -- function unit.
     Pre-terminal nodes are omitted for brevity.
+    Bottom: legend of edge labels.
   }
 \end{figure}
 
@@ -224,8 +232,6 @@ Another example is possessive constructions,
 which only sometimes express semantic possession.
 In \figref{fig:home}, ``trip'' evokes a scene in which ``John and Mary'' is
 a Participant, and this is expressed through a possessive construction.
-These properties distinguish UCCA from other schemes, e.g., AMR
-(see \secref{sec:related_work}).
 
 Formally, a UCCA structure is a DAG
 whose leaves correspond to the tokens of
