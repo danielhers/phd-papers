@@ -118,7 +118,7 @@ One incoming edge for each non-root node is marked as \textit{primary},
 and the rest (mostly denoting implied relations) as \textit{remote} edges,
 a distinction made by the annotator.
 The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
-thus forming a DAG.
+thus forming a DAG (directed acyclic graph) in general.
 
 Further categories account for relations between scenes and the internal structure of
 complex arguments and relations (e.g. coordination; complex
@@ -211,23 +211,23 @@ adverbials such as ``very clearly'').
 \end{figure}
 
 UCCA abstracts away syntactic distinctions when the meaning is unchanged:
-predicate nouns and adjectives are represented like verbal ones,
-even when not expressed by a copula clause.
-For example, in \figref{fig:graduation}, ``graduation'' evokes a scene,
+non-verbal predicate are represented like verbal ones,
+even when not expressed by a copula clause, for example:
+in \figref{fig:graduation}, ``graduation'' evokes a scene,
 despite lacking a verb.
-Furthermore, ``John'' is marked as a Participant in this
+Furthermore, ``John'' is marked as a (remote) Participant in this
 scene, this being clear from the sentence despite not being represented
 syntactically.
 In general, the concept of a scene is distinct from the syntactic concept of
 a clause.
 Another example is possessive constructions,
-which only sometimes actually express semantic possession.
+which only sometimes express semantic possession.
 In \figref{fig:home}, ``trip'' evokes a scene in which ``John and Mary'' is
-a participant, despite being linked with a possessive construction thereto.
-Some of these semantic distinctions are missing from other schemes, e.g. AMR
+a Participant, and this is expressed through a possessive construction.
+These properties distinguish UCCA from other schemes, e.g., AMR
 (see \secref{sec:related_work}).
 
-Formally, a UCCA structure is a DAG (directed acyclic graph)
+Formally, a UCCA structure is a DAG
 whose leaves correspond to the tokens of
 the text. Nodes (or {\it units}) either correspond to a terminal or
 to several sub-units (not necessarily contiguous) jointly viewed as a
