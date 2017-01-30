@@ -850,7 +850,10 @@ and on joint syntactic/semantic parsing
 \paragraph{Abstract Meaning Representation.}
 Another line of work addresses parsing into Abstract Meaning Representation (AMR)
 \cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad},
-where, unlike in UCCA, the alignment between concepts and the text is not explicitly marked.
+which also attempts to abstract away from syntactic distinctions
+and represent meaning directly, using OntoNotes predicates.
+Events in AMR may also be evoked by non-verbal predicates, including possessive constructions.
+Unlike in UCCA, in AMR, the alignment between concepts and the text is not explicitly marked.
 While sharing much of this work's motivation, not anchoring the representation in the text
 complicates the parsing task, as it requires
 the alignment to be automatically (and imprecisely) detected.
