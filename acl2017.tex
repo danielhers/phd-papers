@@ -843,9 +843,7 @@ where UCCA aims to capture purely semantic cross-linguistically applicable notio
 away, as much as possible, from syntactic distinctions.
 Recent interest in SDP has yielded numerable works on graph parsing
 \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on graph parsing
-by tree approximation (i.e., methods that lossily convert graph structures
-into trees in order to train existing tree parsers to produce tree structures
-that approximate the target graphs) \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
+by tree approximation \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
 and on joint syntactic/semantic parsing
 \cite{henderson2013multilingual,swayamdipta-EtAl:2016:CoNLL}.
 
@@ -866,8 +864,9 @@ which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
 CAMR \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,goodman2016noise}
 is a transition-based AMR parser that operates by first syntactically parsing the input,
 and then processing the result into AMR.
+In contrast,
 \citet{damonte2016incremental} developed a transition-based AMR parser that
-operates on the input tokens. For concept identification they use
+operates on the input tokens, but still requires concept identification, using
 a simple heuristic that selects the most frequent graph for a given token.
 The transition-based AMR parser by \citet{zhou2016amr} performs concept identification
 and parsing jointly.
