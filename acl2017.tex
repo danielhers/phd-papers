@@ -1214,6 +1214,9 @@ Cf. \tabref{table:data}.
 
 \tabref{table:hyperparameters} lists the hyperparameter values we found
 for the different classifiers by tuning on the development set.
+Note that learning rate decay is multiplicative and is applied at each epoch.
+Mini-batch size is in number of transitions,
+but a mini-batch must contain only whole sentences.
 
 \begin{table}
 \scalebox{.9}{
@@ -1231,7 +1234,10 @@ gap & & 3 & 3 \\
 action & & 3 & 3 \\
 \hline
 \multicolumn{4}{l}{\footnotesize Other parameters} \\
+training epochs & 19 & 28 & 59 \\
 $\textsc{MinUpdate}$ & 5 \\
+initial learning rate & 1 & 1 & 1 \\
+learning rate decay & 0.1 & 1 & 1 \\
 MLP \#layers & & 2 & 2 \\
 MLP layer dim. & & 100 & 50 \\
 LSTM \#layers & & & 2 \\
@@ -1240,8 +1246,7 @@ word dropout & & 0.2 & 0.2 \\
 ex. word dropout & & 0 & 0 \\
 L2 regularizer & & $10^{-5}$ & $10^{-5}$ \\
 dropout & & 0.4 & 0.4 \\
-mini-batch size & & 100 & 100 \\
-training epochs & 13 & 28 & 59
+mini-batch size & & 100 & 100
 \end{tabular}
 }
 \caption{Hyperparameters used for the different classifiers.}
