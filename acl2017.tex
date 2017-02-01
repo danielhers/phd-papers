@@ -723,7 +723,21 @@ John \^ and \^ Mary \^ went \^ home \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF}
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
+\parser{Sparse}
+& 64.5 & 63.7 & 64.1 & 19.8 & 13.4 & 16
+& 59.6 & 59.9 & 59.8 & 22.2 & 7.7 & 11.5 \\
+%\parser{Dense} 
+%& 59.1 & 58.9 & 59 & 17.4 & 12.4 & 14.5
+%& 57.0 & 57.9 & 57.4 & 10.8 & 4.2 & 6.0 \\
+\parser{MLP}
+& 65.2 & 64.6 & 64.9 & 23.7 & 13.2 & 16.9
+& 62.3 & 62.6 & 62.5 & 20.9 & 6.3 & 9.7 \\
+\parser{BiLSTM}
+& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4}
+& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3} \\
+\hline
+\multicolumn{8}{l}{\rule{0pt}{2ex} \footnotesize
+Bilexical Approximation (Dependency DAG Parsers)} \\
 \small Upper Bound
 %& \small 94.5 & \small 87.7 & \small 91 & \small 77.3 & \small 46.8 & \small 58.3
 %& \small 94.8 & \small 88 & \small 91.3 & \small 66.3 & \small 32.3 & \small 43.4 \\
@@ -736,7 +750,8 @@ TurboParser
 & 57.7 & 46 & 51.2 & 77.8 & 1.8 & 3.7
 & 50.3 & 37.7 & 43.1 & 100 & 0.4 & 0.8 \\
 \hline
-\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Tree Approximation} \\
+\multicolumn{8}{l}{\rule{0pt}{2ex} \footnotesize
+Tree Approximation (Constituency Tree Parser)} \\
 \small Upper Bound
 %& \small 100 & \small 100 & \small 100 & & &
 %& \small 100 & \small 100 & \small 100 \\
@@ -746,7 +761,8 @@ TurboParser
 & 60.9 & 61.2 & 61.1 & & &
 & 52.7 & 52.8 & 52.8 \\
 \hline
-\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Tree Approximation} \\
+\multicolumn{8}{l}{\rule{0pt}{2ex} \footnotesize
+Bilexical Tree Approximation (Dependency Tree Parsers)} \\
 \small Upper Bound
 %& \small 94.5 & \small 87.7 & \small 91 & & &
 %& \small 94.8 & \small 88 & \small 91.3 \\
@@ -757,21 +773,7 @@ MaltParser
 & 57.8 & 53 & 55.3 \\
 LSTM Parser
 & 73.2 & 66.9 & 69.9 & & &
-& 66.1 & 61.1 & 63.5 \\
-\hline
-\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
-\parser{Sparse}
-& 64.5 & 63.7 & 64.1 & 19.8 & 13.4 & 16
-& 59.6 & 59.9 & 59.8 & 22.2 & 7.7 & 11.5 \\
-%\parser{Dense} 
-%& 59.1 & 58.9 & 59 & 17.4 & 12.4 & 14.5
-%& 57.0 & 57.9 & 57.4 & 10.8 & 4.2 & 6.0 \\
-\parser{MLP}
-& 65.2 & 64.6 & 64.9 & 23.7 & 13.2 & 16.9
-& 62.3 & 62.6 & 62.5 & 20.9 & 6.3 & 9.7 \\
-\parser{BiLSTM}
-& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4}
-& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3}
+& 66.1 & 61.1 & 63.5
 \end{tabular}
 \caption{
   Main experimental results in percents, on the \textit{Wiki} test set (left)
@@ -786,7 +788,7 @@ LSTM Parser
 
 \paragraph{Comparison to bilexical graph parsers.}
 As no direct comparison with an existing parser is possible,
-we compare \parser{} to bilexical graph parsers,
+we compare \parser{} to bilexical dependency graph parsers,
 which support reentrancy and discontinuity but not non-terminal nodes.
 To facilitate the comparison, we convert the UCCA training set into bilexical graphs
 (see examples in \figref{fig:bilexical_example})
@@ -842,13 +844,14 @@ In \secref{sec:results} we report the upper bounds on the achievable scores due 
 
 \paragraph{Comparison to tree parsers.}
 For completeness,
-we also perform a tree approximation experiment, converting UCCA to (bilexical) trees
-and evaluating tree parsers on them (see examples in \figref{fig:tree_example}).
+we also perform a \textit{tree approximation} experiment, converting UCCA to (bilexical) trees
+and evaluating constituency and dependency tree parsers on them
+(see examples in \figref{fig:tree_example}).
 Our approach is similar
-to the \textit{tree approximation} approach used for dependency graph parsing
+to the tree approximation approach used for dependency graph parsing
 \cite{agic2015semantic,fernandez2015parsing},
 where dependency graphs were converted into dependency trees
-and then parsed by existing dependency tree parsers.
+and then parsed by dependency tree parsers.
 In our setting, the conversion to trees consists simply of removing remote edges from the 
 graph, and then to bilexical trees by applying the same procedure as for bilexical graphs.
 Note that this results in a simplified task for the underlying parser.
