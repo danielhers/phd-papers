@@ -112,15 +112,14 @@ is a cross-linguistically applicable semantic representation scheme,
 building on the established Basic Linguistic Theory typological framework
 \cite{Dixon:10b,Dixon:10a,Dixon:12}, and on Cognitive
 Linguistics literature \cite{croft2004cognitive}.
-UCCA has demonstrated applicability to multiple languages, including
-English, French, German and Czech, support for rapid annotation,
-and preservation of structure in translation \cite{sulem2015conceptual}.
-The scheme has proven useful for machine translation evaluation \cite{birch2016hume},
-but its applicability has been so far limited by the absence of a UCCA parser,
-a gap this paper addresses.
-
 UCCA is distinct from other syntactic and semantic
 schemes in terms of its content and formal structure.
+It has demonstrated applicability to multiple languages, including
+English, French, German and Czech, support for rapid annotation,
+and stability under translation \cite{sulem2015conceptual}.
+The scheme has proven useful for machine translation evaluation \cite{birch2016hume},
+but its applicability has been so far limited by the absence of a parser,
+a gap this paper addresses.
 
 We present the first UCCA parser, \parser{}
 (Transition-based UCCA Parser),
@@ -137,22 +136,22 @@ in similar tasks, including dependency graph parsing
 \cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition},
 constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast,maier2015discontinuous,maier-lichte:2016:DiscoNLP},
 AMR parsing \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,dipendra2016neural,goodman2016noise,zhou2016amr,damonte2016incremental}
-and CCG parsing \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1}.
+and CCG parsing \cite{zhang2011shift,ambati2015incremental,ambati-deoskar-steedman:2016:N16-1}.
 
 We evaluate \parser{} on the English UCCA corpora, including an out-of-domain setting.
 As a point of comparison, we assess the ability of existing
 parsers to tackle the task, by developing a conversion procedure
 from UCCA to bilexical graphs and trees.
 Results show superior accuracy for \parser{}, demonstrating the effectiveness of
-the presented approach.
-All converters and parsers will be made publicly available upon publication.
+the presented approach.\footnote{Our code will be made freely available upon publication.}
 
 The rest of this paper is structured as follows:
-\secref{sec:ucca} describes UCCA and its semantic and structural properties in more detail.
+\secref{sec:ucca} describes UCCA in more detail.
 \secref{sec:parser} introduces \parser{}.
 \secref{sec:exp_setup} discusses the data and experimental setup.
 \secref{sec:results} presents the experimental results.
-\secref{sec:related_work} summarizes related work, and \secref{sec:conclusion} concludes the paper.
+\secref{sec:related_work} summarizes related work, and
+\secref{sec:conclusion} concludes the paper.
 
 
 
