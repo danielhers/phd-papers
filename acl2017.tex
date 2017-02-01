@@ -145,7 +145,7 @@ from UCCA to bilexical graphs and trees.
 Results show superior accuracy for \parser{}, demonstrating the effectiveness of
 the presented approach.\footnote{Our code will be made freely available upon publication.}
 
-The rest of this paper is structured as follows:
+The rest of the paper is structured as follows:
 \secref{sec:ucca} describes UCCA in more detail.
 \secref{sec:parser} introduces \parser{}.
 \secref{sec:exp_setup} discusses the data and experimental setup.
@@ -158,6 +158,7 @@ The rest of this paper is structured as follows:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The UCCA Scheme}\label{sec:ucca}
+
 UCCA graphs are labeled, directed acyclic graphs (DAGs),
 whose leaves correspond to the tokens of
 the text. A node (or {\it unit}) corresponds to a terminal or
@@ -166,9 +167,9 @@ single entity according to semantic or cognitive consideration.
 Edges bear a category, indicating the role of the sub-unit in the parent relation.
 \figref{fig:examples} presents a few examples.
 
-UCCA is a multi-layered representation, each layer corresponding
+UCCA is a multi-layered representation, where each layer corresponds
 to a ``module'' of semantic distinctions.
-The UCCA \textit{foundational layer}, which we target in this paper, covers the predicate-argument
+UCCA's \textit{foundational layer}, which we target in this paper, covers the predicate-argument
 structure evoked by predicates of all grammatical categories
 (verbal, nominal, adjectival and others), the inter-relations between them,
 and other major linguistic phenomena such as coordination and multi-word expressions.
@@ -285,9 +286,11 @@ While parsing technology in general, and transition-based parsing in particular,
 is well-established for syntactic parsing, UCCA
 has several distinct properties
 that distinguishes it from syntactic representations, mostly in cases where it
-abstracts away from syntactic detail that does not affect meaning.\footnote{More precisely,
-UCCA abstracts away from syntactic variations not affecting the aspects of meaning
-it models.}
+abstracts away from syntactic detail that does not
+affect meaning.\footnote{As essentially any change in form results
+  in some change in meaning, it would be more precise to say that
+  UCCA's foundational layer abstracts away from syntactic variation
+  not affecting those aspects of meaning which it covers.}
 For instance, consider the following examples where the concept of a scene
 has a different rationale from the syntactic concept of a clause.
 First, non-verbal predicates are represented like verbal ones,
@@ -299,16 +302,21 @@ in the graduation scene, despite not being overtly marked.
 Third, consider the possessive construction in \figref{fig:home}.
 While in UCCA ``trip'' evokes a scene in which ``John and Mary'' is
 a Participant, a syntactic scheme would analyze this phrase similarly to ``John and Mary's children''.
-See \secref{sec:related_work} for a discussion of UCCA relative to other semantic schemes, such
-as AMR \cite{banarescu2013abstract}.
+
+As such information is not explicit in the sentence's structure
+(e.g., ``after graduation'' is formally and syntactically very similar to ``after 2pm''
+which does not evoke a scene), semantic parsers are required to produce
+different types of generalizations than those required by their syntactic counterparts.
+See \secref{sec:related_work} for a discussion of UCCA in the context of other semantic schemes,
+such as AMR \cite{banarescu2013abstract}.
 
 %These properties distinguish UCCA from syntactic schemes that already have
 %established parsing techonology, and will likely require different techniques.
 
 Alongside recent progress in dependency parsing into projective trees,
-there is increasing interest in broad-coverage parsing
-(see \secref{sec:related_work}),
-directed at representations supporting more general structural properties.
+there is increasing interest in parsing into 
+representations with more general structural properties  (see \secref{sec:related_work}).
+
 One such property is \textit{reentrancy},
 referring to semantic units shared between predicates.
 For instance, in \figref{fig:graduation},
@@ -318,21 +326,23 @@ A second property is \textit{discontinuity},
 as in \figref{fig:gave}, where ``gave up'' forms a discontinuous semantic unit.
 Discontinuities are pervasive, e.g.,  with multi-word
 expressions \cite{schneider2014discriminative}.
-Finally, UCCA uses \textit{non-terminal nodes}
+Finally, unlike most dependency schemes, UCCA uses \textit{non-terminal nodes}
 to represent units comprising more than one word.
 The use of non-terminal nodes is motivated by constructions with no clear head, including
 coordination structures (e.g., ``John and Mary'' in \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases (either the preposition or the head noun can serve as the constituent's head).
 
-%No existing parser, to our knowledge, supports the three structural properties described above.
+No existing parser, to our knowledge, supports all these structural properties, required for UCCA
+parsing.
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Transition-based UCCA Parsing}\label{sec:parser}
 
-We now turn to presenting \parser{} (Transition-based UCCA Parser).
+We now turn to presenting \parser{}.
+% (Transition-based UCCA Parser).
 Building on existing knowledge in tackling reentrancy, discontinuities and non-terminal nodes,
 we define an extended set of transitions and features supporting their conjunction.
 Transition-based parsers \cite{Nivre03anefficient} scan the text from start to end,
@@ -343,7 +353,7 @@ a stack $S$ of nodes currently being processed,
 and a graph $G=(V,E,\ell)$ of constructed nodes and edges,
 where $V$ is the set of \emph{nodes}, $E$ is the set of \emph{edges},
 and $\ell : E \to L$ is the \emph{label} function, $L$ being the set of possible labels.
-Some of the states are marked as \textit{terminal}, meaning that $G$ is the final output.
+Some states are \textit{terminal}, meaning that $G$ is the final output.
 A classifier is used at each step to select the next transition based on features
 encoding the parser's current state.
 During training, an oracle creates training instances for the classifier,
@@ -412,7 +422,7 @@ named transition in previous work \cite{nivre2009non,maier2015discontinuous}.
 Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 
 \paragraph{Classifier.}
-The choice of classifier and feature representation has been shown to have an important role in
+The choice of classifier and feature representation has been shown to play an important role in
 transition-based parsing \cite{chen2014fast,andor2016globally,kiperwasser2016simple}.
 To investigate the impact of the type of transition classifier in UCCA parsing,
 we experiment with three different models.
@@ -423,14 +433,13 @@ Starting with a simple and common choice \cite[e.g.,][]{maier-lichte:2016:DiscoN
 the averaged structured perceptron algorithm
 \cite{Coll:04}. We use the \textsc{MinUpdate} procedure \cite{goldberg2011learning}:
 a minimum number of updates to a feature has to occur in training for it
-to be included in the model.\footnote{As a minimal variation,
-we also experimented with a linear model using
+to be included in the model.\footnote{We also experimented with a linear model using
 dense embedding features, but still trained with averaged structured perceptron.
-It performed worse than the sparse perceptron model.}
+It performed worse than the sparse perceptron model and was hence discarded.}
 \item
 Using dense embedding features rather than binary indicator and
 changing the model to a feedforward neural network, \textbf{\parser{MLP}}
-(``multi-layer perceptron'') uses an architecture similar to that of \citet{chen2014fast},
+(``multi-layer perceptron''), using an architecture similar to that of \citet{chen2014fast},
 but with two layers of rectified linear units,
 and dropout applied after each layer \cite{srivastava2014dropout}.
 The embeddings are trained jointly with the classifier,
@@ -531,7 +540,7 @@ features representing existing edges and the number of parents and children a no
 and the past actions taken by the parser.
 We also use a novel, UCCA-specific feature:
 number of remote children.\footnote{See
-Appendix~\ref{appendix:features} for a full listing of the feature templates.}
+Appendix~\ref{appendix:features} for a full list of used feature templates.}
 
 For the NN-based parsers (\parser{MLP} and \parser{BiLSTM}),
 we replace all indicator features by a
@@ -595,8 +604,8 @@ practice in semantic parsing and train our parsers on individual sentences,
 discarding inter-relations between them (0.18\% of the edges).
 We also discard linkage nodes and edges (as they often express inter-sentence
 relations and are thus mostly redundant when applied at the sentence level)
-as well as implicit nodes\footnote{See Appendix~\ref{appendix:extended_ucca}
-for details about Linkage and Implicit.}.
+as well as implicit nodes\footnote{Appendix~\ref{appendix:extended_ucca}
+further discusses linkage and implicit units.}.
 In the out-of-domain experiments, we apply the same parsers
 (trained on the \textit{Wiki} training set) to the \textit{20K Leagues} corpus
 without parameter re-tuning.
@@ -663,7 +672,10 @@ Define the set of \textit{mutual edges} between $G_p$ and $G_g$:
 Labeled precision and recall are defined by dividing $|M(G_p,G_g)|$ by $|E_p|$ and $|E_g|$, respectively,
 and F-score by taking their harmonic mean.
 We report two variants of this measure: one where we consider only primary edges,
-and another for remote edges (see \secref{sec:introduction}).
+and another for remote edges (see \secref{sec:ucca}).
+Performance on remote edges is of pivotal importance in this investigation,
+which focuses on extending the class of graphs supported by statistical parsers.
+
 We note that the measure collapses to the standard
 PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
 Punctuation is excluded from the evaluation, but not from the datasets.
@@ -785,7 +797,7 @@ As no direct comparison with an existing parser is possible,
 we compare \parser{} to bilexical dependency graph parsers,
 which support reentrancy and discontinuity but not non-terminal nodes.
 To facilitate the comparison, we convert the UCCA training set into bilexical graphs
-(see examples in \figref{fig:bilexical_example})
+(examples in \figref{fig:bilexical_example})
 and use it to train each parser.\footnote{See Appendix~\ref{appendix:conversion}
 for the conversion procedures.}
 We evaluate the trained parsers by applying them to the test set
@@ -848,11 +860,11 @@ where dependency graphs were converted into dependency trees
 and then parsed by dependency tree parsers.
 In our setting, the conversion to trees consists simply of removing remote edges from the 
 graph, and then to bilexical trees by applying the same procedure as for bilexical graphs.
-Note that this results in a simplified task for the underlying parser.
-Furthermore, performance on remote edges is of pivotal importance in this investigation,
-which focuses on extending the class of graphs supported by statistical parsers.
-Nevertheless, given the relative maturity of dependency tree parsers, we feel this is
-a mandatory comparison.
+
+\oa{removed paragraph here; it's no longer necessary given the new results}
+%Note that these conversion protocls result in a simplified task for the underlying parser.
+%Nevertheless, given the relative maturity of dependency tree parsers, we feel this is
+%a mandatory comparison.
 
 \paragraph{Baseline parsers.}
 We evaluate two bilexical graph parsers:
@@ -884,8 +896,8 @@ reflecting the error resulting from the conversion.
 
 DAGParser and \textsc{uparse} are most directly comparable to
 \parser{Sparse}, as they also use a perceptron classifier with sparse features.
-It surpasses both considerably in performance
-(DAGParser does not predict any remote edges in the out-of-domain setting).
+\parser{Sparse} considerably outperforms both, where
+DAGParser does not predict any remote edges in the out-of-domain setting.
 TurboParser fares worse in this comparison, despite somewhat better results on
 remote edges.
 The LSTM parser of \citet{dyer2015transition} obtains the highest primary F-score
@@ -893,30 +905,30 @@ among the baseline parsers, with a considerable margin.
 It obtains 9.7\% F-score higher than MaltParser,
 despite being limited by the same approximation error upper bound,
 and using a similar transition set.
-The difference must be attributed to the classifier.
+This performance difference between them should therefore attributed to the classifier.
 
-Using a feedforward NN and embeddings features,
+Using a feedforward NN and embedding features,
 \parser{MLP} obtains higher scores than \parser{Sparse},
-but still does not manage to surpass the LSTM parser on primary edges.
-Finally, using more sophisticated input encoding,
+but is outperformed by the LSTM parser on primary edges.
+However, using better encoding of the input sentence,
 \parser{BiLSTM} obtains substantially higher scores than \parser{MLP}
 and all other parsers, on both primary and remote edges,
-in both in-domain and out-of-domain settings.
+both in the in-domain and out-of-domain settings.
 Its performance in absolute terms, of 73.5\% F-score on primary edges,
 is encouraging in light of
 UCCA's inter-annotator agreement of 80--85\%
 F-score on them \cite{abend2013universal}.
 
-The tree approximation parsers are not able to reconstruct any remote edges,
+The parsers resulting from tree approximation are unable to recover any remote edges,
 as these are removed in the conversion and do not even appear in the training set.\footnote{We
 also experimented with a simpler version of \parser{} lacking
-\textsc{Remote} transitions, achieving a labeled
-F-score on primary edges higher by up to 2\%,
-but without remote edges.}
-The bilexical DAG parsers are also quite limited in that respect,
-due to the conversion error upper bound of 58.3\%.
-However, the order-of-magnitude difference in favor of \parser{BiLSTM} suggests
-the parser itself is a major factor.
+\textsc{Remote} transitions, obtaining an increase of about 2\% of labeled F-score
+points on primary edges, at the cost of not being able to predict remote edges. {\bf\color{red} OK?}}
+The bilexical DAG parsers are also quite limited in this respect,
+due to a conversion error upper bound of 58.3\%.
+However, this upper bound cannot in itself account for the bilexical DAG parsers'
+poor performance on remote edges, which is an order of magnitude lower than that
+of \parser{BiLSTM}.
 
 
 
@@ -941,10 +953,10 @@ Like UCCA parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and reentrancy.
 However, SDP uses bilexical dependencies, disallowing non-terminal nodes, which
 are useful for representing structures that have no clear head, such as coordination
-\cite[see \secref{sec:introduction}]{Ivanova2012who}. It also differs from UCCA in the type
+\cite[see \secref{sec:ucca}]{Ivanova2012who}. It also differs from UCCA in the type
 of distinctions it makes, which are more closely related to the syntax-semantics interface,
 where UCCA aims to capture purely semantic cross-linguistically applicable notions, abstracting
-away, as much as possible, from syntactic distinctions.
+away, as much as possible, from syntactic distinctions.\oa{I need to sharpen this}
 Recent interest in SDP has yielded numerable works on graph parsing
 \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on graph parsing
 by tree approximation \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
@@ -952,9 +964,9 @@ and on joint syntactic/semantic parsing
 \cite{henderson2013multilingual,swayamdipta-EtAl:2016:CoNLL}.
 
 \paragraph{Abstract Meaning Representation.}
-Another line of work addresses parsing into Abstract Meaning Representation (AMR)
+Another line of work addresses parsing into AMR structures
 \cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad},
-which also attempts to abstract away from syntactic distinctions
+which, like UCCA, abstract away from syntactic distinctions
 and represent meaning directly, using OntoNotes predicates.
 Events in AMR may also be evoked by non-verbal predicates, including possessive constructions.
 Unlike in UCCA, in AMR, the alignment between concepts and the text is not explicitly marked.
@@ -977,7 +989,9 @@ operates on the input tokens, but still requires concept identification, using
 a simple heuristic that selects the most frequent graph for a given token.
 The transition-based AMR parser by \citet{zhou2016amr} performs concept identification
 and parsing jointly.
-Our parser directly processes the input tokens, and requires no concept identification.
+Our parser directly processes the input tokens,
+and requires no concept identification.\oa{this last sentence may be misleading, because UCCA
+  doesn't have such a term.}
 
 \paragraph{Grammar-Based Parsing.}
 Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steedman:00} and TAG \cite{Joshi:97}
@@ -997,6 +1011,7 @@ strings and semantic structures.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}\label{sec:conclusion}
+
 We present \parser{}, the first parser for UCCA.
 Evaluated in both in-domain and out-of-domain settings, we show that coupled with a
 NN classifier and BiLSTM feature extractor,
@@ -1005,23 +1020,27 @@ While much recent work focused on semantic parsing of different types,
 the effectiveness of different parsing approaches for schemes with
 different structural and semantic properties is not well-understood 
 \cite{kuhlmann2016towards}.
-This paper makes a contribution to this literature by proposing a general grammarless parser
-that supports multiple parents, non-terminal nodes and discontinuous units, through detailed
-experiments with different architectures for the local classifier, and comparison to bilexical
-and tree approximations.
+We make a contribution to this literature by proposing a general grammarless parser
+that supports multiple parents, non-terminal nodes and discontinuous units.
+We evaluate the proposed parser in both an in-domain and an out-of-domain scenario,
+using several different transition-based approaches, outperforming a variety of
+strong baselines by a margin.
+
+% experiments with different architectures for the local classifier, and comparison to bilexical
+% and tree approximations.
 
 Future work will explore different target
 representations and more sophisticated conversion procedures \cite{kong-15},
 in order to shed light on the commonalities and differences between
-representations, suggesting ways for a data-driven design of semantic structures.
+representations, suggesting ways for a data-driven design of semantic annotation.
 A parser for UCCA will enable using the framework for new tasks,
-in addition to existing applications for evaluation of
-machine translation \cite{birch2016hume}.
+in addition to existing applications such as machine translation
+evaluation \cite{birch2016hume}.
 We believe that UCCA's merits in providing a cross-linguistically applicable,
 broad-coverage annotation will support ongoing efforts to incorporate deeper
 semantic structures into a variety of applications,
-such as machine translation \cite{jones2012semantics}
-and summarization \cite{liu2015toward}.
+such as sentence simplification \cite{narayan2014hybrid} and summarization \cite{liu2015toward}.
+
 
 \newpage
 \bibliography{references}
