@@ -119,41 +119,45 @@ The scheme has proven useful for machine translation evaluation \cite{birch2016h
 but its applicability has been so far limited by the absence of a UCCA parser,
 a gap this paper addresses.
 
-Missing short paragraph on UCCA being distinct from other syntactic and semantic
+UCCA is distinct from other syntactic and semantic
 schemes in terms of its content and formal structure.
 
-We propose the first UCCA parser ... (short)
-
+We present the first UCCA parser, \parser{}
+(Transition-based UCCA Parser),
+building on recent advances in discontinuous constituency
+and dependency graph parsing, and further introducing novel transitions and features for UCCA.
 Transition-based techniques are a natural
 starting point for UCCA parsing, given the conceptual similarity of
 UCCA's distinctions,
 centered around predicate-argument structures, to distinctions expressed
-by dependency schemes.
+by dependency schemes, on which these methods excel
+\cite{dyer2015transition,andor2016globally,kiperwasser2016simple}.
 We are further motivated by the strength of transition-based methods
-in similar tasks, including syntactic dependency parsing
-\cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
-dependency graph parsing
+in similar tasks, including dependency graph parsing
 \cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition},
 constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast,maier2015discontinuous,maier-lichte:2016:DiscoNLP},
 AMR parsing \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,dipendra2016neural,goodman2016noise,zhou2016amr,damonte2016incremental}
-and CCG parsing \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1},
-as well as joint lexical and syntactic parsing
-\cite{constant-nivre:2016:P16-1}.
-\parser{} mostly builds on recent advances in discontinuous constituency
-and dependency graph parsing, and further introduces novel features for UCCA.
+and CCG parsing \cite{ambati2015incremental,ambati-deoskar-steedman:2016:N16-1}.
 
-We evaluate \parser{} on the available English UCCA corpora, in both
-in-domain and out-of-domain settings (\secref{sec:exp_setup}).
+We evaluate \parser{} on the English UCCA corpora, including an out-of-domain setting.
 As a point of comparison, we assess the ability of existing
 parsers to tackle the task, by developing a conversion procedure
 from UCCA to bilexical graphs and trees.
 Results show superior accuracy for \parser{}, demonstrating the effectiveness of
-the presented approach (\secref{sec:results}).
+the presented approach.
 All converters and parsers will be made publicly available upon publication.
 
-??? The rest of the paper is constructed as follows.
+The rest of this paper is structured as follows:
+\secref{sec:ucca} describes UCCA and its semantic and structural properties in more detail.
+\secref{sec:parser} introduces \parser{}.
+\secref{sec:exp_setup} discusses the data and experimental setup.
+\secref{sec:results} presents the experimental results.
+\secref{sec:related_work} summarizes related work, and \secref{sec:conclusion} concludes the paper.
 
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The UCCA Scheme}\label{sec:ucca}
 
 UCCA is a multi-layered representation, each layer corresponding
@@ -339,7 +343,7 @@ that support reentrancy, discontinuities and non-terminal nodes.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Transition-based UCCA Parsing}\label{sec:direct_approach}
+\section{Transition-based UCCA Parsing}\label{sec:parser}
 
 We now turn to presenting \parser{},
 a transition-based parser supporting the structural properties of UCCA.
@@ -581,6 +585,8 @@ POS tags and syntactic dependnecy labels are extracted using spaCy
 \cite{honnibal-johnson:2015:EMNLP}.\footnote{\url{https://spacy.io}}
 We use the categorical cross-entropy objective function and optimize the
 NN classifiers with the Adam optimizer \cite{kingma2014adam}.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experimental Setup}\label{sec:exp_setup}
@@ -998,6 +1004,7 @@ compositional semantic structures.
 Second, while grammar-based parsers explicitly model syntax, grammarless
 approaches, such as the ones presented here, seek to directly model the relation between
 strings and semantic structures.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
