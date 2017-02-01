@@ -101,16 +101,31 @@ The scheme has proven useful for machine translation evaluation \cite{birch2016h
 but its applicability has been so far limited by the absence of a UCCA parser,
 a gap this paper addresses.
 
-Formally, a UCCA structure is a DAG (directed acyclic graph)
-whose leaves correspond to the tokens of
-the text. Nodes (or {\it units}) either correspond to a terminal or
-to several sub-units (not necessarily contiguous) jointly viewed as a
-single entity according to some semantic or cognitive consideration.
-Edges bear a category, indicating the role of the sub-unit in the relation
-that the parent represents. \figref{fig:examples} presents a few UCCA-annotated examples.
+UCCA is a multi-layered representation, each layer corresponding
+to a ``module'' of semantic distinctions.
+The UCCA \textit{foundational layer}, which we target in this paper, covers the predicate-argument
+structure evoked by predicates of all grammatical categories
+(verbal, nominal, adjectival and others), the inter-relations between them,
+and other major linguistic phenomena such as coordination and multi-word expressions.
+
+The layer's basic notion is the \textit{scene}, describing a movement, action or state.
+Each scene contains one main relation (marked as either a Process or a State),
+as well as one or more Participants.
+For example, the sentence ``After graduation, John moved to Paris'' (\figref{fig:graduation})
+contains two scenes, whose main relations are ``graduation'' and ``moved''.
+``John'' is a Participant in both scenes, while ``Paris'' only in the latter.
+One incoming edge for each non-root node is marked as \textit{primary},
+and the rest (mostly denoting implied relations) as \textit{remote} edges,
+a distinction made by the annotator.
+The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
+thus forming a DAG (directed acyclic graph) in general.
+
+Further categories account for relations between scenes and the internal structure of
+complex arguments and relations (e.g. coordination; complex
+adverbials such as ``very clearly'').
 
 \begin{figure}[t]
-  \begin{subfigure}[t]{.9\columnwidth}
+  \begin{subfigure}{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:graduation}}
   \parbox{.8\columnwidth}{
   \scalebox{.9}{
@@ -138,10 +153,10 @@ that the parent represents. \figref{fig:examples} presents a few UCCA-annotated 
   \end{tikzpicture}
   }}
   \end{subfigure}
-  \begin{subfigure}[t]{.9\columnwidth}
+  \begin{subfigure}{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:gave}}
-  \hspace{.25\columnwidth}
-  \parbox{.55\columnwidth}{
+  \hspace{.15\columnwidth}
+  \parbox{.65\columnwidth}{
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway},
@@ -159,10 +174,10 @@ that the parent represents. \figref{fig:examples} presents a few UCCA-annotated 
   \end{tikzpicture}
   }}
   \end{subfigure}
-  \begin{subfigure}[t]{.9\columnwidth}
+  \begin{subfigure}{.9\columnwidth}
   \parbox{.1\columnwidth}{\caption{}\label{fig:home}}
   \hspace{.1\columnwidth}
-  \parbox{.7\columnwidth}{
+  \parbox{.8\columnwidth}{
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway},
@@ -173,12 +188,23 @@ that the parent represents. \figref{fig:examples} presents a few UCCA-annotated 
         child {node {John} edge from parent node[left] {\scriptsize C}}
         child {node {and} edge from parent node[left] {\scriptsize N}}
         child {node {Mary} edge from parent node[left] {\scriptsize C}}
+        child {node {'s} edge from parent node[right] {\scriptsize F}}
       } edge from parent node[left] {\scriptsize A} }
-      child {node {went} edge from parent node[left] {\scriptsize P}}
+      child {node {trip} edge from parent node[left] {\scriptsize P}}
       child {node {home} edge from parent node[left] {\scriptsize A}}
       ;
   \end{tikzpicture}
   }}
+  \end{subfigure}
+  \begin{subfigure}{.9\columnwidth}
+  \hspace{.05\columnwidth}
+  \begin{adjustbox}{width=\columnwidth,margin=1pt,frame}
+  \begin{tabular}{ll|ll|ll}
+  P & process & H & linked scene & N & connector \\
+  A & participant & C & center & U & punctuation \\
+  L & inter-scene linker & R & relator & F & function unit
+  \end{tabular}
+  \end{adjustbox}
   \end{subfigure}
   \caption{\label{fig:examples}
     UCCA structures demonstrating three structural properties exhibited by
@@ -187,12 +213,37 @@ that the parent represents. \figref{fig:examples} presents a few UCCA-annotated 
     resulting in ``John'' having two parents.
     (\subref{fig:gave}) includes a discontinuous unit (``gave ... up'').
     (\subref{fig:home}) includes a coordination construction (``John and Mary'').
-    Legend: $P$ -- process (a scene's main relation), $A$ -- participant,
-    $L$ -- inter-scene linker, $H$ -- linked scene, $C$ -- center,
-    $R$ -- relator, $N$ -- connector, $U$ -- punctuation, $F$ -- function unit.
     Pre-terminal nodes are omitted for brevity.
+    Bottom: legend of edge labels.
   }
 \end{figure}
+
+UCCA abstracts away syntactic distinctions when the meaning is unchanged:
+non-verbal predicate are represented like verbal ones,
+even when not expressed by a copula clause, for example:
+in \figref{fig:graduation}, ``graduation'' evokes a scene,
+despite lacking a verb.
+Furthermore, ``John'' is marked as a (remote) Participant in this
+scene, this being clear from the sentence despite not being represented
+syntactically.
+In general, the concept of a scene is distinct from the syntactic concept of
+a clause.
+Another example is possessive constructions,
+which only sometimes express semantic possession.
+In \figref{fig:home}, ``trip'' evokes a scene in which ``John and Mary'' is
+a Participant, and this is expressed through a possessive construction.
+These properties distinguish UCCA from syntactic schemes that
+already have established parsing techonology,
+and will likely require different techniques.
+See \secref{sec:related_work} for details about other semantic schemes.
+
+Formally, a UCCA structure is a DAG
+whose leaves correspond to the tokens of
+the text. Nodes (or {\it units}) either correspond to a terminal or
+to several sub-units (not necessarily contiguous) jointly viewed as a
+single entity according to some semantic or cognitive consideration.
+Edges bear a category, indicating the role of the sub-unit in the relation
+that the parent represents. \figref{fig:examples} presents a few UCCA-annotated examples.
 
 Alongside recent progress in dependency parsing into projective trees
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
@@ -214,7 +265,7 @@ expressions \cite{schneider2014discriminative}.
 Finally, UCCA uses \textbf{non-terminal nodes}
 to represent units comprising more than one word.
 The use of non-terminal nodes is motivated by constructions that have no clear head, including
-coordination structures (e.g., ``\textit{John and Mary} went home''; \figref{fig:home}),
+coordination structures (e.g., ``\textit{John and Mary}'s trip home''; \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases (either the preposition or the head noun can serve as the constituent's head).
 
@@ -251,35 +302,6 @@ from UCCA to bilexical graphs and trees.
 Results show superior accuracy for \parser{}, demonstrating the effectiveness of
 the presented approach (\secref{sec:results}).
 All converters and parsers will be made publicly available upon publication.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The UCCA Scheme}\label{sec:ucca}
-
-UCCA is a multi-layered representation, each layer corresponding
-to a ``module'' of semantic distinctions.
-The UCCA \textbf{foundational layer}, which we target in this paper, covers the predicate-argument
-structure evoked by predicates of all grammatical categories
-(verbal, nominal, adjectival and others), the inter-relations between them,
-and other major linguistic phenomena such as coordination and multi-word expressions.
-
-The layer's basic notion is the {\it Scene}, describing a movement, action or state.
-Each Scene contains one main relation (marked as either a Process or a State),
-as well as one or more Participants.
-For example, the sentence ``After graduation, John moved to Paris'' (\figref{fig:graduation})
-contains two Scenes, whose main relations are ``graduation'' and ``moved''.
-``John'' is a Participant in both Scenes, while ``Paris'' only in the latter.
-One incoming edge for each non-root node is marked as \textbf{primary},
-and the rest (mostly denoting implied relations) as \textbf{remote} edges.
-This distinction is made by the annotator.
-The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
-thus forming a DAG.
-
-Further categories account for relations between Scenes and the internal structure of
-complex arguments and relations (e.g. coordination; complex
-adverbials such as ``very clearly'').
-%\footnote{All UCCA-related resources can be found here:
-%  \url{http://www.cs.huji.ac.il/~oabend/ucca.html}.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -367,7 +389,7 @@ Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 The choice of classifier and feature representation has been shown to have an important role in
 transition-based parsing \cite{chen2014fast,andor2016globally,kiperwasser2016simple}.
 To investigate the impact of the type of transition classifier in UCCA parsing,
-we experiment with four different models.
+we experiment with three different models.
 \begin{enumerate}
 \item
 Starting with a simple and common choice \cite[e.g.,][]{maier-lichte:2016:DiscoNLP},
@@ -375,16 +397,17 @@ Starting with a simple and common choice \cite[e.g.,][]{maier-lichte:2016:DiscoN
 the averaged structured perceptron algorithm
 \cite{Coll:04}. We use the \textsc{MinUpdate} procedure \cite{goldberg2011learning}:
 a minimum number of updates to a feature has to occur in training for it
-to be included in the model.
+to be included in the model.\footnote{As a minimal variation,
+we also experimented with a linear model using
+dense embedding features, but still trained with averaged structured perceptron.
+It performed worse than the sparse perceptron model.}
 \item
-As a minimal variation, \textbf{\parser{Dense}} uses dense embedding features rather than binary indicator
-features, but still uses a linear model with averaged structured perceptron.
-\item
-Changing the model to a feedforward neural network, \textbf{\parser{MLP}}
+Using dense embedding features rather than binary indicator and
+changing the model to a feedforward neural network, \textbf{\parser{MLP}}
 (``multi-layer perceptron'') uses an architecture similar to that of \citet{chen2014fast},
 but with two layers of rectified linear units,
 and dropout applied after each layer \cite{srivastava2014dropout}.
-The embeddings in this case are trained jointly with the classifier,
+The embeddings are trained jointly with the classifier,
 updating the feature representation.
 \item
 Finally, \textbf{\parser{BiLSTM}} uses a bidirectional LSTM for feature representation,
@@ -400,6 +423,76 @@ The feedforward layers, BiLSTM and embeddings are all trained jointly.
 For all classifiers, inference is performed greedily, i.e., without beam search.
 Hyperparameters are tuned on the development set (see \secref{sec:exp_setup}).
 
+\begin{figure}[t]
+	\begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
+	\node[anchor=west] at (0,1.5) {Parser state};
+	\draw[color=gray,dashed] (0,-1.2) rectangle (7.5,1.25);
+	\draw[color=gray] (.1,0) rectangle (1.5,.5);
+	\node[anchor=west] at (.1,.8) {$S$};
+	\node[fill=black, circle] at (.4,.275) {};
+	\node[fill=blue, circle] at (.9,.275) {};
+	\node[anchor=west] at (1.15,.175) {\small ,};
+	\draw[color=gray] (1.95,0) rectangle (4.9,.5);
+	\node[anchor=west] at (1.95,.8) {$B$};
+	\node[anchor=west] at (1.95,.275) {\small John moved to Paris .};
+	\node[anchor=west] at (5.1,.8) {$G$};
+	\node[fill=black, circle] at (6.35,.75) {}
+	  child {node  {\scriptsize After} edge from parent [->] node[left] {\small L}}
+	  child {node [fill=blue, circle] {}
+	  {
+	    child {node {\scriptsize graduation} edge from parent [->] node[right] {\small P}}
+	  } edge from parent [->] node[right] {\small H} };
+	\end{tikzpicture}
+	\begin{tikzpicture}[->]
+	\node[anchor=west] at (0,6) {Transition classifier};
+	\tiny
+	\tikzstyle{main}=[circle, minimum size=7mm, draw=black!80, node distance=12mm]
+	\foreach \i/\word in {1/{After},3/{graduation},5/{to},7/{Paris}} {
+	    \node (x\i) at (\i,-1.5) {\word};
+	    \node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
+        \path (x\i) edge (h\i);
+	    \node[main, fill=white!100] (i\i) at (\i.5,.8) {LSTM};
+        \path (x\i) edge [bend right] (i\i);
+	    \node[main, fill=white!100] (l\i) at (\i.5,2.3) {LSTM};
+        \path (h\i) edge [bend left] (l\i);
+        \path (i\i) edge (l\i);
+	    \node[main, fill=white!100] (k\i) at (\i,3.1) {LSTM};
+        \path (i\i) edge [bend left] (k\i);
+        \path (h\i) edge [bend left] (k\i);
+	}
+    \node (l4) at (4.5,2.3) {\ldots};
+    \node (k4) at (4,3.1) {\ldots};
+    \node (i4) at (4.5,.8) {\ldots};
+    \node (h4) at (4,0) {\ldots};
+    \node (x4) at (4,-1.5) {\ldots};
+	\foreach \current/\next in {1/3,3/4,4/5,5/7} {
+        \path (i\next) edge (i\current);
+        \path (h\current) edge (h\next);
+        \path (k\next) edge (k\current);
+        \path (l\current) edge (l\next);
+	}
+    \node[main, fill=white!100] (mlp) at (4,5) {MLP};
+	\foreach \i in {1,3} {
+        \path (l\i) edge (mlp);
+        \path (k\i) edge (mlp);
+    }
+    \coordinate (state) at (6.5,6.5);
+    \path (state) edge [bend left] (mlp);
+    \node (transition) at (4,6) {Transition};
+    \path (mlp) edge (transition);
+	\end{tikzpicture}
+	\caption{Illustration of the parser model.
+	Top: parser state (stack, buffer and intermediate graph).
+	Bottom: \parser{BiLTSM} architecture.
+	Vectors representation for the input tokens is computed
+	by two layers of bidirectional LSTMs.
+	The vectors for specific tokens is concatenated with
+	embedding and numeric features from the parser state
+	(for existing edge labels, number of children, etc.),
+	and fed into the MLP for selecting the next transition.}
+	\label{fig:model}
+\end{figure}
+
 \paragraph{Features.}
 \parser{Sparse} uses binary indicator features representing
 the words, POS tags, syntactic dependency labels and
@@ -414,11 +507,11 @@ We also use a novel, UCCA-specific feature:
 number of remote children.\footnote{See
 Appendix~\ref{appendix:features} for a full listing of the feature templates.}
 
-For \parser{Dense} and the NN-based parsers (\parser{MLP} and \parser{BiLSTM}),
+For the NN-based parsers (\parser{MLP} and \parser{BiLSTM}),
 we replace all indicator features by a
 concatenation of the vector embeddings of all represented elements:
 words, POS tags, syntactic dependency labels, edge labels, punctuation, gap type and parser actions.
-These embeddings are initialized randomly (and for \parser{Dense} they then stay constant).
+These embeddings are initialized randomly.
 We additionally use external word embeddings initialized with
 pre-trained word2vec vectors \cite{mikolov2013efficient},\footnote{\url{
 https://goo.gl/6ovEhC}} updated during training.
@@ -450,9 +543,6 @@ Otherwise, a random optimal transition is applied,
 and for the perceptron-based parser, the classifier's weights are updated according
 to the perceptron update rule.
 
-For the perceptron classifiers, we double the weight updates
-for gold \textsc{Swap} transitions to address the sparsity of discontinuous nodes
-\cite{maier2015discontinuous}.
 POS tags and syntactic dependnecy labels are extracted using spaCy
 \cite{honnibal-johnson:2015:EMNLP}.\footnote{\url{https://spacy.io}}
 We use the categorical cross-entropy objective function and optimize the
@@ -516,42 +606,8 @@ All counts exclude the root node, implicit nodes, and linkage nodes and edges.
 \paragraph{Implementation.}
 We use the DyNet package \cite{neubig2017dynet} for implementing the NN classifiers.
 Unless otherwise noted, we use the default values provided by the package.
-\tabref{table:hyperparameters} lists the hyperparameter values we found by tuning
+See Appendix~\ref{appendix:hyperparameters} for the hyperparameter values we found by tuning
 on the development set.
-
-\begin{table}
-\scalebox{.9}{
-\begin{tabular}{l|cccc}
-& \multicolumn{2}{c|}{\footnotesize Perceptron} & \multicolumn{2}{c}{\footnotesize NN} \\
-& Sparse & Dense & MLP & BiLSTM \\
-\hline
-\multicolumn{4}{l}{\footnotesize Embedding dimensions} \\
-external word & & 100 & 100 & 100 \\
-word & & 0 & 200 & 200 \\
-POS tag & & 10 & 20 & 20 \\
-syntactic dep. & & 10 & 10 & 10 \\
-edge label & & 20 & 20 & 20 \\
-punctuation & & 2 & 1 & 1 \\
-gap & & 2 & 3 & 3 \\
-action & & 5 & 3 & 3 \\
-\hline
-\multicolumn{4}{l}{\footnotesize Other parameters} \\
-$\textsc{MinUpdate}$ & 5 \\
-MLP \#layers & & & 2 & 2 \\
-MLP layer dim. & & & 100 & 50 \\
-LSTM \#layers & & & & 2 \\
-LSTM layer dim. & & & & 500 \\
-word dropout & & & 0.2 & 0.2 \\
-ex. word dropout & & & 0 & 0 \\
-L2 regularizer & & & $10^{-5}$ & $10^{-5}$ \\
-dropout & & & 0.4 & 0.4 \\
-mini-batch size & & & 100 & 100 \\
-training epochs & 13 & 11 & 28 & 44
-\end{tabular}
-}
-\caption{Hyperparameters used for the different classifiers.}
-\label{table:hyperparameters}
-\end{table}
 
 \paragraph{Evaluation.}
 Since there are no standard evaluation measures for UCCA, we define
@@ -579,12 +635,12 @@ Define the set of \textit{mutual edges} between $G_p$ and $G_g$:
 Labeled precision and recall are defined by dividing $|M(G_p,G_g)|$ by $|E_p|$ and $|E_g|$, respectively,
 and F-score by taking their harmonic mean.
 We report two variants of this measure: one where we consider only primary edges,
-and another for remote edges (see \secref{sec:ucca}).
+and another for remote edges (see \secref{sec:introduction}).
 We note that the measure collapses to the standard
 PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
 Punctuation is excluded from the evaluation, but not from the datasets.
 
-\begin{figure}[ht]
+\begin{figure}
 \centering
 \scalebox{.9}{
 \begin{dependency}[theme = simple]
@@ -600,6 +656,7 @@ After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 \depedge{5}{7}{A}
 \end{dependency}
 }
+\scalebox{.9}{
 \begin{dependency}[theme = simple]
 \begin{deptext}[column sep=.7em,ampersand replacement=\^]
 John \^ gave \^ everything \^ up \\
@@ -608,6 +665,8 @@ John \^ gave \^ everything \^ up \\
 \depedge{3}{2}{A}
 \depedge{4}{2}{C}
 \end{dependency}
+}
+\scalebox{.9}{
 \begin{dependency}[theme = simple]
 \begin{deptext}[column sep=.7em,ampersand replacement=\^]
 John \^ and \^ Mary \^ went \^ home \\
@@ -617,11 +676,12 @@ John \^ and \^ Mary \^ went \^ home \\
 \depedge{3}{1}{C}
 \depedge{5}{4}{A}
 \end{dependency}
+}
 \caption{Bilexical approximation for sentences in \figref{fig:examples}.}
 \label{fig:bilexical_example}
 \end{figure}
 
-\begin{table*}[ht]
+\begin{table*}
 \begin{tabular}{l|ccc|ccc||ccc|ccc}
 & \multicolumn{6}{c||}{Wiki (in-domain)} & \multicolumn{6}{c}{20K Leagues (out-of-domain)} \\
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c||}{Remote}
@@ -631,8 +691,10 @@ John \^ and \^ Mary \^ went \^ home \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
 \small Upper Bound
-& \small 94.5 & \small 87.7 & \small 91 & \small 77.3 & \small 46.8 & \small 58.3
-& \small 94.8 & \small 88 & \small 91.3 & \small 66.3 & \small 32.3 & \small 43.4 \\
+%& \small 94.5 & \small 87.7 & \small 91 & \small 77.3 & \small 46.8 & \small 58.3
+%& \small 94.8 & \small 88 & \small 91.3 & \small 66.3 & \small 32.3 & \small 43.4 \\
+& & & \small 91 & & & \small 58.3
+& & & \small 91.3 & & & \small 43.4 \\
 DAGParser
 & 61.8 & 55.8 & 58.6 & 9.5 & 0.5 & 1
 & 56.4 & 50.6 & 53.4 & -- & 0 & 0 \\
@@ -642,16 +704,20 @@ TurboParser
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Tree Approximation} \\
 \small Upper Bound
-& \small 100 & \small 100 & \small 100 & & &
-& \small 100 & \small 100 & \small 100 \\
+%& \small 100 & \small 100 & \small 100 & & &
+%& \small 100 & \small 100 & \small 100 \\
+& & & \small 100 & & &
+& & & \small 100 \\
 \textsc{uparse}
-& 60.9 & 61.2 & 6 & & &
+& 60.9 & 61.2 & 61.1 & & &
 & 52.7 & 52.8 & 52.8 \\
 \hline
 \multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Tree Approximation} \\
 \small Upper Bound
-& \small 94.5 & \small 87.7 & \small 91 & & &
-& \small 94.8 & \small 88 & \small 91.3 \\
+%& \small 94.5 & \small 87.7 & \small 91 & & &
+%& \small 94.8 & \small 88 & \small 91.3 \\
+& & & \small 91 & & &
+& & & \small 91.3 \\
 MaltParser
 & 62.8 & 57.7 & 60.2 & & &
 & 57.8 & 53 & 55.3 \\
@@ -663,24 +729,25 @@ LSTM Parser
 \parser{Sparse}
 & 63.6 & 62.9 & 63.3 & 20.6 & 13.7 & 16.5
 & 59.7 & 59.6 & 59.7 & 26.3 & 8.3 & 12.6 \\
-\parser{Dense} 
-& 59.1 & 58.9 & 59 & 17.4 & 12.4 & 14.5
-& 57.0 & 57.9 & 57.4 & 10.8 & 4.2 & 6.0 \\
+%\parser{Dense} 
+%& 59.1 & 58.9 & 59 & 17.4 & 12.4 & 14.5
+%& 57.0 & 57.9 & 57.4 & 10.8 & 4.2 & 6.0 \\
 \parser{MLP}
-& 
-& \\
+& 65.2 & 64.6 & 64.9 & 23.7 & 13.2 & 16.9
+& 62.3 & 62.6 & 62.5 & 20.9 & 6.3 & 9.7 \\
 \parser{BiLSTM}
-& 
-& 
+& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4}
+& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3}
 \end{tabular}
-\caption{\label{table:results}
+\caption{
   Main experimental results in percents, on the \textit{Wiki} test set (left)
   and the \textit{20K Leagues} set (right).
   Columns correspond to labeled precision, recall and F-score,
   for both primary and remote edges.
-  \parser{BiLSTM} obtains the highest scores in all metrics, surpassing the bilexical parsers
-  and the other classifiers.
+  \parser{BiLSTM} obtains the highest F-scores in all metrics, surpassing the
+  bilexical parsers, tree parsers and other classifiers.
 }
+\label{table:results}
 \end{table*}
 
 \paragraph{Comparison to bilexical graph parsers.}
@@ -696,10 +763,54 @@ and then reconstructing UCCA graphs, which are compared with the gold standard.
 In \secref{sec:results} we report the upper bounds on the achievable scores due to the error
 resulting from the removal of non-terminal nodes.
 
+\begin{figure}
+\centering
+\scalebox{.9}{
+  \begin{tikzpicture}[level distance=10mm, ->]
+    \node (ROOT) [fill=black, circle] {}
+      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
+      child {node (graduation) [fill=black, circle] {}
+      {
+        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
+      } edge from parent node[left] {\scriptsize $H$} }
+      child {node {,} edge from parent node[right] {\scriptsize $U$}}
+      child {node (moved) [fill=black, circle] {}
+      {
+        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
+        child {node [fill=black, circle] {}
+        {
+          child {node {to} edge from parent node[left] {\scriptsize $R$}}
+          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
+        } edge from parent node[left] {\scriptsize $A$} }
+      } edge from parent node[right] {\scriptsize $H$} }
+      ;
+  \end{tikzpicture}
+}
+\scalebox{.9}{
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\depedge{2}{1}{L}
+	\depedge{2}{3}{U}
+	\depedge{5}{4}{A}
+	\depedge{2}{5}{H}
+	\depedge{7}{6}{R}
+	\depedge{5}{7}{A}
+	\end{dependency}
+  }
+  \caption{Tree approximation for the UCCA graph in \figref{fig:graduation} (top),
+  and bilexical tree approximation for the same graph (bottom).
+  These are identical to the original graphs,
+  apart from the removal of remote edges.}
+  \label{fig:tree_example}
+\end{figure}
+
 \paragraph{Comparison to tree parsers.}
 For completeness,
 we also perform a tree approximation experiment, converting UCCA to (bilexical) trees
-and evaluating tree parsers on them.
+and evaluating tree parsers on them (see examples in \figref{fig:tree_example}).
 Our approach is similar
 to the \textit{tree approximation} approach used for dependency graph parsing
 \cite{agic2015semantic,fernandez2015parsing},
@@ -727,7 +838,8 @@ MaltParser \cite{nivre2007maltparser}\footnote{For
 MaltParser we use the \textsc{ArcEager} transition set and SVM classifier.
 Preliminary experiments with other configurations yielded lower scores and
 were thus discarded from the evaluation.},
-and the stack LSTM-based \textsc{ArcStandard} parser of \citet{dyer2015transition}.
+and the stack LSTM-based \textsc{ArcStandard} parser of
+\citet[henceforce ``LSTM Parser'']{dyer2015transition}.
 Default settings are used in all cases.
 DAGParser and \textsc{uparse} use beam search by default, with a beam size of 5 and 4
 respectively. The other parsers are greedy.
@@ -744,97 +856,36 @@ The tree approximation parsers are not able to reconstruct any remote edges,
 as these are removed in the conversion and do not even appear in the training set.\footnote{We
 also experimented with a version of \parser{} lacking
 \textsc{Remote} transitions. For each classifier type, this simpler version achieves a labeled
-F-score on primary edges higher by about 2 percents than its counterpart with \textsc{Remote}
+F-score on primary edges higher by 0.5--2 percents than its counterpart with \textsc{Remote}
 transitions, but of course, is unable to produce any remote edges.}
 
 DAGParser and \textsc{uparse} are most directly comparable to
 \parser{Sparse}, as they also use a perceptron classifier with sparse features.
-Despite the lossy conversion, DAGParser obtains comparable results to
+Despite the lossy conversion limiting DAGParser,
+both obtain only a few F-score percentage points below
 \parser{Sparse} on primary edges, but on remote edges, \parser{Sparse}
-surpasses it considerably in performance
+surpasses DAGParser considerably in performance
 (DAGParser does not predict any remote edges in the out-of-domain setting).
 TurboParser fares worse in this comparison, despite somewhat better results on
 remote edges.
-The LSTM parser obtains the highest primary F-score among the baseline parsers,
+The LSTM parser of \citet{dyer2015transition} obtains the highest primary F-score
+among the baseline parsers,
 with a considerable margin. Importantly, it obtains 9.7\% F-score
 higher than MaltParser,
 despite being limited by the same approximation error upper bound,
 and using a similar transition set.
 
-Replacing the sparse representation with dense embeddings, \parser{Dense} obtains
-lower results than its sparse counterpart.
-Using a feedforward NN, \parser{MLP} manages to exploit the embeddings,
-and obtains substantially higher scores in all measures, both
-in the in-domain and out-of-domain settings.
-Finally, using more sophisticated input encoding, \parser{BiLSTM} surpasses \parser{MLP}
-and the LSTM parser.
-Its performance in absolute terms, of 74.1\% F-score on primary edges, is encouraging in light of
+Using a feedforward NN and embeddings features,
+\parser{MLP} obtains higher scores than \parser{Sparse},
+but still does not manage to surpass the LSTM parser.
+Finally, using more sophisticated input encoding,
+\parser{BiLSTM} obtains substantially higher scores than \parser{MLP}
+and all other parsers, on both primary and remote edges,
+in both in-domain and out-of-domain settings.
+Its performance in absolute terms, of 73.5\% F-score on primary edges,
+is encouraging in light of
 UCCA's inter-annotator agreement of 80--85\%
-F-score on primary edges \cite{abend2013universal}.
-
-
-
-
-\paragraph{Per-construction evaluation.}
-Many linguistic constructions are naturally encoded in UCCA,
-although syntactically they may be less easily characterized.
-
-In addition to the overall evaluation on primary and remote edges,
-we perform fine-grained evaluation on five linguistic construction types,
-which we extract by criteria on UCCA edge labels and POS tags.\footnote{See
-Appendix~\ref{appendix:constructions} for a formal listing of the criteria.}
-For each construction, we report the F-score resulting from calculating the
-mutual edges (see \secref{sec:exp_setup}) only among the edges matching the
-criterion in each graph. We evaluate the scores on the UCCA development set.
-
-\begin{table}[ht]
-\scalebox{.8}{
-\begin{tabular}{l|cccccc}
-& \small Light verbs & \small MWE & \small Pred. nouns & \small Pred. adj. & \small Expletives \\
-\hline
-\#edges & 264 & 835 & 108 & 51 & 10 \\
-%\#edges in UCCA test set & 17 & 292 & 721 & 47 & 35 & 22 \\
-%\hline
-%\multicolumn{7}{l}{\rule{0pt}{2ex} \footnotesize Parser F-scores (\%)} \\
-%DAGParser
-%& 16 & 73.5 & 33.1 & 5.1 & 4.8 & 26.7 \\
-%TurboParser
-%& 28.6 & 70.7 & 34.6 & 8.2 & 6.9 & 0 \\
-%\textsc{uparse}
-%& 32.3 & 73 & 35.9 & 9.1 & 18.2 & 27.6 \\
-%MaltParser
-%& 41.7 & 74.1 & 35.5 & 5.5 & 6.1 & 54.5 \\
-%LSTM Parser
-%& 74.3 & 74.1 & 48.8 & 7.3 & 4.4 & 43.8 \\
-%\hline
-%\parser{Sparse} & 26.7 & 72 & 42.5 & 9.7 & 38 & 38.7 \\
-%\parser{Dense} & 0 & 72.1 & 30.9 & 7 & 27.8 & 38.9 \\
-%\parser{MLP} \\
-%\parser{BiLSTM}
-LF (\%) & 79.7 & 54 & 33.1 & 30.8 & 55.6
-\end{tabular}
-}
-\caption{\label{table:constructions_results}
-Results of evaluating \parser{BiLSTM} on UCCA edges corresponding to specific linguistic constructions.
-Top: number of edges corresponding to each construction in the UCCA development corpus.
-Bottom: labeled F-score of \parser{BiLSTM} (in percentages) calculated just on these edges.}
-\end{table}
-
-Light verbs are verbs with little semantic content.
-They are characterized in UCCA as verbs with the Function label.
-
-Multi-word expressions are annotated as a flat unit, with all terminals as
-direct children. Parsing these correctly allows proper handling of
-non-analyzable semantic units.
-
-Predicate nouns and adjectives are identified by the respective part of speech
-and by a Process or State label (meaning the unit is a Scene).
-These represent relations or events not necessarily expressed by verbs,
-and thus often ignored by other schemes.
-
-Finally, expletive constructions are simply ``it'' or ``there'' with a Function
-label. These are semantically vacuous and should be ignored in co-reference
-resolution, for example.
+F-score on them \cite{abend2013universal}.
 
 
 
@@ -865,16 +916,17 @@ where UCCA aims to capture purely semantic cross-linguistically applicable notio
 away, as much as possible, from syntactic distinctions.
 Recent interest in SDP has yielded numerable works on graph parsing
 \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on graph parsing
-by tree approximation (i.e., methods that lossily convert graph structures
-into trees in order to train existing tree parsers to produce tree structures
-that approximate the target graphs) \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
+by tree approximation \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
 and on joint syntactic/semantic parsing
 \cite{henderson2013multilingual,swayamdipta-EtAl:2016:CoNLL}.
 
 \paragraph{Abstract Meaning Representation.}
 Another line of work addresses parsing into Abstract Meaning Representation (AMR)
 \cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad},
-where, unlike in UCCA, the alignment between concepts and the text is not explicitly marked.
+which also attempts to abstract away from syntactic distinctions
+and represent meaning directly, using OntoNotes predicates.
+Events in AMR may also be evoked by non-verbal predicates, including possessive constructions.
+Unlike in UCCA, in AMR, the alignment between concepts and the text is not explicitly marked.
 While sharing much of this work's motivation, not anchoring the representation in the text
 complicates the parsing task, as it requires
 the alignment to be automatically (and imprecisely) detected.
@@ -888,8 +940,9 @@ which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
 CAMR \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,goodman2016noise}
 is a transition-based AMR parser that operates by first syntactically parsing the input,
 and then processing the result into AMR.
+In contrast,
 \citet{damonte2016incremental} developed a transition-based AMR parser that
-operates on the input tokens. For concept identification they use
+operates on the input tokens, but still requires concept identification, using
 a simple heuristic that selects the most frequent graph for a given token.
 The transition-based AMR parser by \citet{zhou2016amr} performs concept identification
 and parsing jointly.
@@ -920,9 +973,10 @@ While much recent work focused on semantic parsing of different types,
 the effectiveness of different parsing approaches for schemes with
 different structural and semantic properties is not well-understood 
 \cite{kuhlmann2016towards}.
-This paper makes a contribution to this literature by proposing the first grammarless parser that supports multiple parents, non-terminal nodes and discontinuous units, through detailed experiments with different architectures for the local classifier, and comparison to bilexical and tree approximations.
-The benefit of this approach is further demonstrated by the identification of
-common linguistic constructions, readable from UCCA graphs.
+This paper makes a contribution to this literature by proposing a general grammarless parser
+that supports multiple parents, non-terminal nodes and discontinuous units, through detailed
+experiments with different architectures for the local classifier, and comparison to bilexical
+and tree approximations.
 
 Future work will explore different target
 representations and more sophisticated conversion procedures \cite{kong-15},
@@ -937,7 +991,7 @@ semantic structures into a variety of applications,
 such as machine translation \cite{jones2012semantics}
 and summarization \cite{liu2015toward}.
 
-
+\newpage
 \bibliography{references}
 \bibliographystyle{acl_natbib}
 
@@ -947,16 +1001,21 @@ and summarization \cite{liu2015toward}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\newpage
 \appendix
 \section{Feature Templates}
 \label{appendix:features}
 
 \figref{fig:features} presents the feature templates used by \parser{Sparse}.
 All feature templates define binary features.
+The other classifiers use the same elements listed in the feature templates,
+but all categorical features are replaced by vector embeddings,
+and all count-based features are replaced by their numeric value.
+
 For some of the features, we used the notion of \textit{head word},
 defined by the $h^*$ function (see Appendix~\ref{appendix:conversion}).
 While head words are not explicitly represented in the UCCA scheme, these
-features proved useful as means of encoding word-to-word relations.
+features prove useful as means of encoding word-to-word relations.
 
 \begin{figure*}
 \centering
@@ -1025,6 +1084,11 @@ $s_0R, s_0wR, b_0R, b_0wR$
 \section{Extended Presentation of UCCA}
 \label{appendix:extended_ucca}
 
+This work does not handle two important constructions in the UCCA foundational layer:
+Linkage, representing discourse relations, and Implicit, representing covert entities.
+\tabref{table:data_linkage_implicit} shows the statistics of linkage nodes and edges and
+implicit nodes in the corpora.
+
 \paragraph{Linkage.}
 
 \figref{fig:example_linkage} demonstrates a linkage relation, omitted from \figref{fig:graduation}.
@@ -1074,7 +1138,7 @@ UCCA graphs may contain implicit units with no correspondent in the text.
 ``A similar technique is almost impossible to apply to other crops, such as cotton, soybeans and rice.''.
 The sentence was used by \citet{oepen2015semeval} to compare between different semantic
 dependency schemes.
-It includes a single Scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
+It includes a single scene, whose main relation is ``apply'', a secondary relation ``almost impossible'', as well as two complex arguments: ``a similar technique'' and the coordinated argument ``such as cotton, soybeans, and rice.''
 In addition, the scene includes an implicit argument, which represents the agent of the
 ``apply'' relation.
 
@@ -1128,11 +1192,6 @@ than those explored in this paper \cite{roth2015inducing}.
   \label{fig:example_implicit}
 \end{figure*}
 
-\paragraph{Statistics of linkage and implicit units.}
-
-\tabref{table:data_linkage_implicit} shows the statistics of linkage nodes and edges and
-implicit nodes in the corpora.
-
 \begin{table}[ht]
 \centering
 \begin{tabular}{l|ccc|c}
@@ -1153,41 +1212,51 @@ Cf. \tabref{table:data}.
 \label{table:data_linkage_implicit}
 \end{table}
 
-\section{Rules for Extracting Linguistic Constructions}
-\label{appendix:constructions}
+\section{Hyperparameter Values}
+\label{appendix:hyperparameters}
 
-\tabref{tab:constructions_rules} lists the rules used for extracting each linguistic
-construction, used for fine-grained evaluation (see \tabref{table:constructions_results}).
+\tabref{table:hyperparameters} lists the hyperparameter values we found
+for the different classifiers by tuning on the development set.
+Note that learning rate decay is multiplicative and is applied at each epoch.
+Mini-batch size is in number of transitions,
+but a mini-batch must contain only whole sentences.
 
 \begin{table}
 \scalebox{.9}{
-\begin{tabular}{l|l}
-%Aspectual verbs & $e.P=\{\text{VERB}\} \wedge e.\ell=\text{Adverbial}$ \\
-Light verbs & $e.P=\{\text{VERB}\} \wedge e.\ell=\text{Function}$ \\
-MWE & $|\{e^\prime\in e.C:e^\prime.\ell=\text{Terminal}\}|>1$ \\
-Pred. nouns & $\text{ADJ}\not\in e.P \wedge \text{NOUN}\in e.P \wedge {}$
- \\& $e.\ell\in\{\text{Process, State}\} \wedge {}$
- \\ \multicolumn{2}{r}{$\{e^\prime.\ell:e^\prime\in e.C\}
- 	\subseteq\{\text{Center, Function, Terminal}\} \wedge {}$}
- \\& $\text{to}\not\in e.T$ \\
-Pred. adjectives & $\text{ADJ}\in e.P \wedge \text{NOUN}\not\in e.P \wedge {}$
- \\& $e.\ell\in\{\text{Process, State}\} \wedge {}$
- \\ \multicolumn{2}{r}{$\{e^\prime.\ell:e^\prime\in e.C\}
- 	\subseteq\{\text{Center, Function, Terminal}\} \wedge {}$}
- \\& $\text{to}\not\in e.T$ \\
-Expletives & $e.T\subseteq\{\text{it, there}\} \wedge e.\ell=\text{Function}$
+\begin{tabular}{l|ccc}
+& Sparse & MLP & BiLSTM \\
+\hline
+\multicolumn{4}{l}{\footnotesize Embedding dimensions} \\
+external word & & 100 & 100 \\
+word & & 200 & 200 \\
+POS tag & & 20 & 20 \\
+syntactic dep. & & 10 & 10 \\
+edge label & & 20 & 20 \\
+punctuation & & 1 & 1 \\
+gap & & 3 & 3 \\
+action & & 3 & 3 \\
+\hline
+\multicolumn{4}{l}{\footnotesize Other parameters} \\
+training epochs & 19 & 28 & 59 \\
+$\textsc{MinUpdate}$ & 5 \\
+initial learning rate & 1 & 1 & 1 \\
+learning rate decay & 0.1 & 1 & 1 \\
+MLP \#layers & & 2 & 2 \\
+MLP layer dim. & & 100 & 50 \\
+LSTM \#layers & & & 2 \\
+LSTM layer dim. & & & 500 \\
+word dropout & & 0.2 & 0.2 \\
+ex. word dropout & & 0 & 0 \\
+L2 regularizer & & $10^{-5}$ & $10^{-5}$ \\
+dropout & & 0.4 & 0.4 \\
+mini-batch size & & 100 & 100
 \end{tabular}
 }
-\caption{Rules for extracting linguistic constructions.
-All rules are on UCCA edges. For an edge $e$ in the graph,
-$e.T$ refers to the set of tokens in $e$'s yield,
-and $e.P$ to their coarse parts of speech.
-$e.C$ refers to the set of outgoing edges from the edge's child,
-and $e.\ell$ to the edge's UCCA label.}
-\label{tab:constructions_rules}
+\caption{Hyperparameters used for the different classifiers.}
+\label{table:hyperparameters}
 \end{table}
 
-\section{Conversion Procedures for the Bilexical Graph and Tree Approximations}
+\section{Bilexical Graph Conversion}
 \label{appendix:conversion}
 
 Here we describe the algorithms used in the conversion referred to in \secref{sec:exp_setup}.
@@ -1216,14 +1285,7 @@ N(t) = \{(u,v)\in E \;|\; t=h^*(v) \wedge t \neq h^*(u) \}
 \]
 For each edge $(u,v)\in N(t)$, we add $h^*(u)$ as a head of $t$ in $A$,
 with the label $\ell(u,v)$.
-The complete conversion procedure to a bilexical graph is given in
-Algorithm~\ref{alg:to_bilexical}\footnote{Note that this conversion procedure
-is simpler than the head percolation procedure used for converting syntactic constituency
-trees to dependency trees,
-since $h(u)$ (similar to $u$'s head-containing child)
-depends only on $\ell(u,h(u))$ and not on the sub-tree spanned by $u$,
-because edge labels in UCCA directly express the role of the child in the parent unit, and
-are thus sufficient for determining which of $u$'s children contains the head node.}.
+This procedure is given in Algorithm~\ref{alg:to_bilexical}.
 
 \begin{algorithm}[ht]
  \KwData{UCCA graph ${G}=(V,E,\ell)$}
@@ -1237,6 +1299,14 @@ are thus sufficient for determining which of $u$'s children contains the head no
  \caption{Conversion to bilexical graphs.}
  \label{alg:to_bilexical}
 \end{algorithm}
+
+Note that this conversion procedure
+is simpler than the head percolation procedure used for converting syntactic constituency
+trees to dependency trees \cite{Coll:97},
+since $h(u)$ (similar to $u$'s head-containing child)
+depends only on $\ell(u,h(u))$ and not on the sub-tree spanned by $u$,
+because edge labels in UCCA directly express the role of the child in the parent unit, and
+are thus sufficient for determining which of $u$'s children contains the head node.
 
 \paragraph{Conversion from bilexical graphs.}
 The inverse conversion introduces non-terminal nodes back into the graph.
@@ -1327,61 +1397,8 @@ This procedure is given in Algorithm~\ref{alg:from_bilexical}.
 \item $\mathit{Terminal}$ (\textit{Terminal})
 \item $U$ (\textit{Punctuation})
 \end{enumerate}
-\caption{Priority order of edge labels, used in Algorithm~\ref{alg:to_bilexical}.}
+\caption{Priority order of edge labels used by $h(u)$.}
 \label{fig:priority}
-\end{figure}
-
-\paragraph{Conversion to trees.}
-
-To convert a UCCA graph to a tree, we simply remove the remote edges.
-Converting the sentence in \figref{fig:graduation}
-results in the tree given in \figref{fig:con_example}.
-
-\begin{figure}[ht]
-  \centering
-  \begin{tikzpicture}[level distance=10mm, ->]
-    \node (ROOT) [fill=black, circle] {}
-      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
-      child {node (graduation) [fill=black, circle] {}
-      {
-        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
-      } edge from parent node[left] {\scriptsize $H$} }
-      child {node {,} edge from parent node[right] {\scriptsize $U$}}
-      child {node (moved) [fill=black, circle] {}
-      {
-        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
-        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
-        child {node [fill=black, circle] {}
-        {
-          child {node {to} edge from parent node[left] {\scriptsize $R$}}
-          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
-        } edge from parent node[left] {\scriptsize $A$} }
-      } edge from parent node[right] {\scriptsize $H$} }
-      ;
-  \end{tikzpicture}
-  \caption{Tree approximation for the UCCA graph in \figref{fig:graduation}.}
-  \label{fig:con_example}
-\end{figure}
-
-To convert a UCCA graph to a bilexical tree, we first convert it to a bilexical graph, and then
-remove the remote edges.
-The corresponding dependency tree is given in \figref{fig:dep_example}.
-
-\begin{figure}[ht]
-\centering
-\begin{dependency}[theme = simple]
-\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
-\end{deptext}
-\depedge{2}{1}{L}
-\depedge{2}{3}{U}
-\depedge{5}{4}{A}
-\depedge{2}{5}{H}
-\depedge{7}{6}{R}
-\depedge{5}{7}{A}
-\end{dependency}
-  \caption{Bilexical tree approximation for the UCCA graph in \figref{fig:graduation}.}
-  \label{fig:dep_example}
 \end{figure}
 
 \end{document}
