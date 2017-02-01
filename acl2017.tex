@@ -796,7 +796,7 @@ and use it to train each parser.\footnote{See Appendix~\ref{appendix:conversion}
 for the conversion procedures.}
 We evaluate the trained parsers by applying them to the test set
 and then reconstructing UCCA graphs, which are compared with the gold standard.
-In \secref{sec:results} we report the upper bounds on the achievable scores due to the error resulting from the removal of non-terminal nodes\oa{the upper bounds for remote are really low; how likely is it that this explains the conversion-based parsers' miserable performance on remotes?}.
+In \secref{sec:results} we report the upper bounds on the achievable scores due to the error resulting from the removal of non-terminal nodes.
 
 \begin{figure}
 \centering
@@ -887,32 +887,23 @@ respectively. The other parsers are greedy.
 \tabref{table:results} presents our main experimental results, as well as
 upper bounds for the baseline parsers,
 reflecting the error resulting from the conversion.
-The tree approximation parsers are not able to reconstruct any remote edges,
-as these are removed in the conversion and do not even appear in the training set.\footnote{We
-also experimented with a simpler version of \parser{} lacking
-\textsc{Remote} transitions, achieving a labeled
-F-score on primary edges higher by up to 2\%,
-but without remote edges.}
 
 DAGParser and \textsc{uparse} are most directly comparable to
 \parser{Sparse}, as they also use a perceptron classifier with sparse features.
-Despite the lossy conversion limiting DAGParser,
-both obtain only a few F-score percentage points below
-\parser{Sparse} on primary edges, but on remote edges, \parser{Sparse}
-surpasses DAGParser considerably in performance
+It surpasses both considerably in performance
 (DAGParser does not predict any remote edges in the out-of-domain setting).
 TurboParser fares worse in this comparison, despite somewhat better results on
 remote edges.
 The LSTM parser of \citet{dyer2015transition} obtains the highest primary F-score
-among the baseline parsers,
-with a considerable margin. Importantly, it obtains 9.7\% F-score
-higher than MaltParser,
+among the baseline parsers, with a considerable margin.
+It obtains 9.7\% F-score higher than MaltParser,
 despite being limited by the same approximation error upper bound,
 and using a similar transition set.
+The difference must be attributed to the classifier.
 
 Using a feedforward NN and embeddings features,
 \parser{MLP} obtains higher scores than \parser{Sparse},
-but still does not manage to surpass the LSTM parser.
+but still does not manage to surpass the LSTM parser on primary edges.
 Finally, using more sophisticated input encoding,
 \parser{BiLSTM} obtains substantially higher scores than \parser{MLP}
 and all other parsers, on both primary and remote edges,
@@ -921,6 +912,17 @@ Its performance in absolute terms, of 73.5\% F-score on primary edges,
 is encouraging in light of
 UCCA's inter-annotator agreement of 80--85\%
 F-score on them \cite{abend2013universal}.
+
+The tree approximation parsers are not able to reconstruct any remote edges,
+as these are removed in the conversion and do not even appear in the training set.\footnote{We
+also experimented with a simpler version of \parser{} lacking
+\textsc{Remote} transitions, achieving a labeled
+F-score on primary edges higher by up to 2\%,
+but without remote edges.}
+The bilexical DAG parsers are also quite limited in that respect,
+due to the conversion error upper bound of 58.3\%.
+However, the order-of-magnitude difference in favor of \parser{BiLSTM} suggests
+the parser itself is a major factor.
 
 
 
