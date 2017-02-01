@@ -158,6 +158,13 @@ The rest of this paper is structured as follows:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The UCCA Scheme}\label{sec:ucca}
+UCCA graphs are labeled, directed acyclic graphs (DAGs),
+whose leaves correspond to the tokens of
+the text. A node (or {\it unit}) corresponds to a terminal or
+to several sub-units (not necessarily contiguous) viewed as a
+single entity according to semantic or cognitive consideration.
+Edges bear a category, indicating the role of the sub-unit in the parent relation.
+\figref{fig:examples} presents a few examples.
 
 UCCA is a multi-layered representation, each layer corresponding
 to a ``module'' of semantic distinctions.
@@ -178,7 +185,7 @@ One incoming edge for each non-root node is marked as \textit{primary},
 and the rest (mostly used for implicit relations and arguments) as \textit{remote} edges,
 a distinction made by the annotator.
 The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
-forming a DAG (directed acyclic graph).
+forming a DAG.
 
 \begin{figure}[t]
   \begin{subfigure}{.9\columnwidth}
@@ -297,14 +304,6 @@ as AMR \cite{banarescu2013abstract}.
 
 %These properties distinguish UCCA from syntactic schemes that already have
 %established parsing techonology, and will likely require different techniques.
-
-Formally, a UCCA structure is a DAG
-whose leaves correspond to the tokens of
-the text. Nodes (or {\it units}) either correspond to a terminal or
-to several sub-units (not necessarily contiguous) jointly viewed as a
-single entity according to some semantic or cognitive consideration.
-Edges bear a category, indicating the role of the sub-unit in the relation
-that the parent represents. \figref{fig:examples} presents a few UCCA-annotated examples.
 
 Alongside recent progress in dependency parsing into projective trees,
 there is increasing interest in broad-coverage parsing
