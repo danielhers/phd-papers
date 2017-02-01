@@ -20,6 +20,7 @@
 \usepackage{lipsum,adjustbox}
 \usepackage{tikz}
 \usepackage{tikz-dependency}
+\usepackage{enumitem}
 \usetikzlibrary{shapes,fit,calc,er,positioning,intersections,decorations.shapes,mindmap,trees}
 \tikzset{decorate sep/.style 2 args={decorate,decoration={shape backgrounds,shape=circle,
       shape size=#1,shape sep=#2}}}
@@ -119,7 +120,7 @@ English, French, German and Czech, support for rapid annotation,
 and stability under translation \cite{sulem2015conceptual}.
 The scheme has proven useful for machine translation evaluation \cite{birch2016hume},
 but its applicability has been so far limited by the absence of a parser,
-a gap this paper addresses.
+a gap we address in this work.
 
 We present the first UCCA parser, \parser{}
 (Transition-based UCCA Parser),
@@ -342,8 +343,7 @@ parsing.
 \section{Transition-based UCCA Parsing}\label{sec:parser}
 
 We now turn to presenting \parser{}.
-% (Transition-based UCCA Parser).
-Building on existing knowledge in tackling reentrancy, discontinuities and non-terminal nodes,
+Building on existing knowledge in handling reentrancy, discontinuities and non-terminal nodes,
 we define an extended set of transitions and features supporting their conjunction.
 Transition-based parsers \cite{Nivre03anefficient} scan the text from start to end,
 and create the parse incrementally by applying a \textit{transition}
@@ -426,7 +426,7 @@ The choice of classifier and feature representation has been shown to play an im
 transition-based parsing \cite{chen2014fast,andor2016globally,kiperwasser2016simple}.
 To investigate the impact of the type of transition classifier in UCCA parsing,
 we experiment with three different models.
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
 \item
 Starting with a simple and common choice \cite[e.g.,][]{maier-lichte:2016:DiscoNLP},
 \textbf{\parser{Sparse}} uses a linear classifier with sparse features, trained with
@@ -437,9 +437,9 @@ to be included in the model.\footnote{We also experimented with a linear model u
 dense embedding features, but still trained with averaged structured perceptron.
 It performed worse than the sparse perceptron model and was hence discarded.}
 \item
-Using dense embedding features rather than binary indicator and
+Using dense embedding features rather than binary indicators and
 changing the model to a feedforward neural network, \textbf{\parser{MLP}}
-(``multi-layer perceptron''), using an architecture similar to that of \citet{chen2014fast},
+(``multi-layer perceptron''), uses an architecture similar to that of \citet{chen2014fast},
 but with two layers of rectified linear units,
 and dropout applied after each layer \cite{srivastava2014dropout}.
 The embeddings are trained jointly with the classifier,
@@ -578,7 +578,7 @@ Otherwise, a random optimal transition is applied,
 and for the perceptron-based parser, the classifier's weights are updated according
 to the perceptron update rule.
 
-POS tags and syntactic dependnecy labels are extracted using spaCy
+POS tags and syntactic dependency labels are extracted using spaCy
 \cite{honnibal-johnson:2015:EMNLP}.\footnote{\url{https://spacy.io}}
 We use the categorical cross-entropy objective function and optimize the
 NN classifiers with the Adam optimizer \cite{kingma2014adam}.
@@ -604,8 +604,8 @@ practice in semantic parsing and train our parsers on individual sentences,
 discarding inter-relations between them (0.18\% of the edges).
 We also discard linkage nodes and edges (as they often express inter-sentence
 relations and are thus mostly redundant when applied at the sentence level)
-as well as implicit nodes\footnote{Appendix~\ref{appendix:extended_ucca}
-further discusses linkage and implicit units.}.
+as well as implicit nodes.\footnote{Appendix~\ref{appendix:extended_ucca}
+further discusses linkage and implicit units.}
 In the out-of-domain experiments, we apply the same parsers
 (trained on the \textit{Wiki} training set) to the \textit{20K Leagues} corpus
 without parameter re-tuning.
@@ -677,7 +677,7 @@ Performance on remote edges is of pivotal importance in this investigation,
 which focuses on extending the class of graphs supported by statistical parsers.
 
 We note that the measure collapses to the standard
-PARSEVAL constituency evaluation measure if $G_p$ are $G_g$ are trees.
+PARSEVAL constituency evaluation measure if $G_p$ and $G_g$ are trees.
 Punctuation is excluded from the evaluation, but not from the datasets.
 
 \begin{figure}
@@ -861,24 +861,19 @@ and then parsed by dependency tree parsers.
 In our setting, the conversion to trees consists simply of removing remote edges from the 
 graph, and then to bilexical trees by applying the same procedure as for bilexical graphs.
 
-\oa{removed paragraph here; it's no longer necessary given the new results}
-%Note that these conversion protocls result in a simplified task for the underlying parser.
-%Nevertheless, given the relative maturity of dependency tree parsers, we feel this is
-%a mandatory comparison.
-
 \paragraph{Baseline parsers.}
 We evaluate two bilexical graph parsers:
 DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}, the leading 
-transition-based semantic dependency parser in SemEval 2014 \cite{oepen2014semeval};
+transition-based semantic dependency parser in SemEval 2014 \cite{oepen2014semeval} and
 TurboSemanticParser \cite{almeida-martins:2015:SemEval},
 a second-order graph-based semantic dependency parser from SemEval 2015 
 \cite{oepen2015semeval};
 \textsc{uparse} \cite{maier-lichte:2016:DiscoNLP},
 a transition-based constituency parser supporting discontinuous constituents;
 and two bilexical tree parsers:
-MaltParser \cite{nivre2007maltparser}\footnote{For
+MaltParser \cite{nivre2007maltparser},\footnote{For
 MaltParser we use the \textsc{ArcEager} transition set and SVM classifier.
-Other configurations yielded lower scores.},
+Other configurations yielded lower scores.}
 and the stack LSTM-based \textsc{ArcStandard} parser of
 \citet[henceforce ``LSTM Parser'']{dyer2015transition}.
 Default settings are used in all cases.
@@ -905,7 +900,7 @@ among the baseline parsers, with a considerable margin.
 It obtains 9.7\% F-score higher than MaltParser,
 despite being limited by the same approximation error upper bound,
 and using a similar transition set.
-This performance difference between them should therefore attributed to the classifier.
+This performance difference between them should therefore be attributed to the classifier.
 
 Using a feedforward NN and embedding features,
 \parser{MLP} obtains higher scores than \parser{Sparse},
@@ -922,8 +917,8 @@ F-score on them \cite{abend2013universal}.
 The parsers resulting from tree approximation are unable to recover any remote edges,
 as these are removed in the conversion and do not even appear in the training set.\footnote{We
 also experimented with a simpler version of \parser{} lacking
-\textsc{Remote} transitions, obtaining an increase of about 2\% of labeled F-score
-points on primary edges, at the cost of not being able to predict remote edges. {\bf\color{red} OK?}}
+\textsc{Remote} transitions, obtaining an increase of up to 2 labeled F-score
+points on primary edges, at the cost of not being able to predict remote edges.}
 The bilexical DAG parsers are also quite limited in this respect,
 due to a conversion error upper bound of 58.3\%.
 However, this upper bound cannot in itself account for the bilexical DAG parsers'
@@ -979,7 +974,6 @@ translation methods \cite{pourdamghani2014aligning} and Boolean LP methods
 \cite{werling2015robust}, concept identification is only about 80\%--90\% correct.
 Furthermore, anchoring allows breaking down sentences into semantically meaningful sub-spans,
 which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
-
 CAMR \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,goodman2016noise}
 is a transition-based AMR parser that operates by first syntactically parsing the input,
 and then processing the result into AMR.
@@ -989,9 +983,8 @@ operates on the input tokens, but still requires concept identification, using
 a simple heuristic that selects the most frequent graph for a given token.
 The transition-based AMR parser by \citet{zhou2016amr} performs concept identification
 and parsing jointly.
-Our parser directly processes the input tokens,
-and requires no concept identification.\oa{this last sentence may be misleading, because UCCA
-  doesn't have such a term.}
+Our parser does not require separately aligning the input tokens to the graph,
+processing them directly instead.
 
 \paragraph{Grammar-Based Parsing.}
 Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steedman:00} and TAG \cite{Joshi:97}
