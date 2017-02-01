@@ -7,11 +7,8 @@
 \usepackage{times}
 \usepackage{url}
 \usepackage{latexsym}
-\usepackage{times}
-\usepackage{url}
 \usepackage{amsmath}
 \usepackage{breqn}
-\usepackage{latexsym}
 \usepackage{pgfplotstable}
 \usepackage{algorithm2e}
 \usepackage{hhline}
@@ -36,11 +33,32 @@
 \DeclareMathOperator*{\argmin}{argmin}
 \DeclareMathOperator*{\argmax}{argmax}
 \SetKwRepeat{Do}{do}{while}
+
 \hyphenation{SemEval}
 \hyphenation{PARSEVAL}
 \hyphenation{DAGParser}
 \hyphenation{TurboSemanticParser}
 \hyphenation{MaltParser}
+
+\def\linkspace#1#2{\leavevmode
+\def\tmp##1{\nolinebreak[2]\href{#1}{\hbox{##1}}}%
+\xlinkspace#2 \relax}
+
+\def\xlinkspace#1 #2{%
+ \ifx\relax#2%
+ \xlinkdash#1-\relax
+ \else
+ \xlinkdash#1 -\relax
+ \expandafter\xlinkspace\expandafter#2%
+ \fi}
+
+\def\xlinkdash#1-#2{%
+ \ifx\relax#2%
+ \tmp{#1}%
+ \else
+ \tmp{#1-}%
+ \expandafter\xlinkdash\expandafter#2%
+ \fi}
 
 %\aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
@@ -464,7 +482,7 @@ Hyperparameters are tuned on the development set (see \secref{sec:exp_setup}).
 	\tiny
 	\tikzstyle{main}=[circle, minimum size=7mm, draw=black!80, node distance=12mm]
 	\foreach \i/\word in {1/{After},3/{graduation},5/{to},7/{Paris}} {
-	    \node (x\i) at (\i,-1.5) {\word};
+	    \node (x\i) at (\i,-1.3) {\word};
 	    \node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
         \path (x\i) edge (h\i);
 	    \node[main, fill=white!100] (i\i) at (\i.5,.8) {LSTM};
@@ -480,27 +498,27 @@ Hyperparameters are tuned on the development set (see \secref{sec:exp_setup}).
     \node (k4) at (4,3.1) {\ldots};
     \node (i4) at (4.5,.8) {\ldots};
     \node (h4) at (4,0) {\ldots};
-    \node (x4) at (4,-1.5) {\ldots};
+    \node (x4) at (4,-1.3) {\ldots};
 	\foreach \current/\next in {1/3,3/4,4/5,5/7} {
         \path (i\next) edge (i\current);
         \path (h\current) edge (h\next);
         \path (k\next) edge (k\current);
         \path (l\current) edge (l\next);
 	}
-    \node[main, fill=white!100] (mlp) at (4,5) {MLP};
+    \node[main, fill=white!100] (mlp) at (4,4.6) {MLP};
 	\foreach \i in {1,3} {
         \path (l\i) edge (mlp);
         \path (k\i) edge (mlp);
     }
     \coordinate (state) at (6.5,6.5);
     \path (state) edge [bend left] (mlp);
-    \node (transition) at (4,6) {Transition};
+    \node (transition) at (4,5.8) {\textsc{Node}\textsubscript{U}};
     \path (mlp) edge (transition);
 	\end{tikzpicture}
 	\caption{Illustration of the parser model.
 	Top: parser state (stack, buffer and intermediate graph).
 	Bottom: \parser{BiLTSM} architecture.
-	Vectors representation for the input tokens is computed
+	Vector representation for the input tokens is computed
 	by two layers of bidirectional LSTMs.
 	The vectors for specific tokens is concatenated with
 	embedding and numeric features from the parser state
@@ -815,8 +833,8 @@ In \secref{sec:results} we report the upper bounds on the achievable scores due 
 	\depedge{5}{7}{A}
 	\end{dependency}
   }
-  \caption{Tree approximation for the UCCA graph in \figref{fig:graduation} (top),
-  and bilexical tree approximation for the same graph (bottom).
+  \caption{Tree approximation for the sentence in \figref{fig:graduation} (top),
+  and bilexical tree approximation for the same sentence (bottom).
   These are identical to the original graphs,
   apart from the removal of remote edges.}
   \label{fig:tree_example}
@@ -851,8 +869,7 @@ a transition-based constituency parser supporting discontinuous constituents;
 and two bilexical tree parsers:
 MaltParser \cite{nivre2007maltparser}\footnote{For
 MaltParser we use the \textsc{ArcEager} transition set and SVM classifier.
-Preliminary experiments with other configurations yielded lower scores and
-were thus discarded from the evaluation.},
+Other configurations yielded lower scores.},
 and the stack LSTM-based \textsc{ArcStandard} parser of
 \citet[henceforce ``LSTM Parser'']{dyer2015transition}.
 Default settings are used in all cases.
@@ -869,10 +886,10 @@ upper bounds for the baseline parsers,
 reflecting the error resulting from the conversion.
 The tree approximation parsers are not able to reconstruct any remote edges,
 as these are removed in the conversion and do not even appear in the training set.\footnote{We
-also experimented with a version of \parser{} lacking
-\textsc{Remote} transitions. For each classifier type, this simpler version achieves a labeled
-F-score on primary edges higher by 0.5--2 percents than its counterpart with \textsc{Remote}
-transitions, but of course, is unable to produce any remote edges.}
+also experimented with a simpler version of \parser{} lacking
+\textsc{Remote} transitions, achieving a labeled
+F-score on primary edges higher by up to 2\%,
+but without remote edges.}
 
 DAGParser and \textsc{uparse} are most directly comparable to
 \parser{Sparse}, as they also use a perceptron classifier with sparse features.
