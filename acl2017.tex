@@ -165,21 +165,20 @@ The UCCA \textit{foundational layer}, which we target in this paper, covers the 
 structure evoked by predicates of all grammatical categories
 (verbal, nominal, adjectival and others), the inter-relations between them,
 and other major linguistic phenomena such as coordination and multi-word expressions.
-
 The layer's basic notion is the \textit{scene}, describing a movement, action or state.
 Each scene contains one main relation (marked as either a Process or a State),
 as well as one or more Participants.
 For example, the sentence ``After graduation, John moved to Paris'' (\figref{fig:graduation})
 contains two scenes, whose main relations are ``graduation'' and ``moved''.
 ``John'' is a Participant in both scenes, while ``Paris'' only in the latter.
+Further categories account for inter-scene relations and the internal structure of
+complex arguments and relations (e.g. coordination, multi-word expressions and modification).
+
 One incoming edge for each non-root node is marked as \textit{primary},
 and the rest (mostly used for implicit relations and arguments) as \textit{remote} edges,
 a distinction made by the annotator.
 The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
-thus forming a DAG (directed acyclic graph).
-
-Further categories account for inter-scene relations and the internal structure of
-complex arguments and relations (e.g. coordination, multi-word expressions and modification).
+forming a DAG (directed acyclic graph).
 
 \begin{figure}[t]
   \begin{subfigure}{.9\columnwidth}
@@ -275,16 +274,16 @@ complex arguments and relations (e.g. coordination, multi-word expressions and m
   }
 \end{figure}
 
-While parsing technology in general, and transition-based parsing in particular
+While parsing technology in general, and transition-based parsing in particular,
 is well-established for syntactic parsing, UCCA
 has several distinct properties
 that distinguishes it from syntactic representations, mostly in cases where it
 abstracts away from syntactic detail that does not affect meaning.\footnote{More precisely,
-  UCCA abstracts away from syntactic variation that does not affect the aspects of meaning
-  it models.}
-For instnace, consider the following examples where the concept of a UCCA scene
+UCCA abstracts away from syntactic variations not affecting the aspects of meaning
+it models.}
+For instance, consider the following examples where the concept of a scene
 has a different rationale from the syntactic concept of a clause.
-First, non-verbal predicate are represented like verbal ones,
+First, non-verbal predicates are represented like verbal ones,
 such as when they appear in copula clauses or in noun phrases. Indeed,
 in \figref{fig:graduation}, ``graduation'' and ``moved'' are considered separate events,
 despite appearing in the same clause. 
@@ -293,8 +292,7 @@ in the graduation scene, despite not being overtly marked.
 Third, consider the possessive construction in \figref{fig:home}.
 While in UCCA ``trip'' evokes a scene in which ``John and Mary'' is
 a Participant, a syntactic scheme would analyze this phrase similarly to ``John and Mary's children''.
-
-See \secref{sec:related_work} for a discussion of UCCA relative to other semantic schemes such
+See \secref{sec:related_work} for a discussion of UCCA relative to other semantic schemes, such
 as AMR \cite{banarescu2013abstract}.
 
 %These properties distinguish UCCA from syntactic schemes that already have
@@ -308,44 +306,36 @@ single entity according to some semantic or cognitive consideration.
 Edges bear a category, indicating the role of the sub-unit in the relation
 that the parent represents. \figref{fig:examples} presents a few UCCA-annotated examples.
 
-Alongside recent progress in dependency parsing into projective trees
-\cite{dyer2015transition,andor2016globally,kiperwasser2016simple},
+Alongside recent progress in dependency parsing into projective trees,
 there is increasing interest in broad-coverage parsing
 (see \secref{sec:related_work}),
 directed at representations supporting more general structural properties.
-One such property is \textbf{reentrancy},
-referring to arguments and relations (semantic units) that are shared between predicates.
-For instance, in the sentence
-``After graduation, John moved to Paris'' (\figref{fig:graduation}),
+One such property is \textit{reentrancy},
+referring to semantic units shared between predicates.
+For instance, in \figref{fig:graduation},
 ``John'' is an argument of both ``graduation''
-and ``moved'', yielding a UCCA structure that is a DAG rather than a tree.
-
-A second property is \textbf{discontinuity} (similar to \textit{non-projectivity} in bilexical schemes), as in ``John \textit{gave} everything \textit{up}''
-(\figref{fig:gave}), where ``gave up'' forms a discontinuous semantic unit.
+and ``moved'', yielding a DAG rather than a tree.
+A second property is \textit{discontinuity},
+as in \figref{fig:gave}, where ``gave up'' forms a discontinuous semantic unit.
 Discontinuities are pervasive, e.g.,  with multi-word
 expressions \cite{schneider2014discriminative}.
-
-Finally, UCCA uses \textbf{non-terminal nodes}
+Finally, UCCA uses \textit{non-terminal nodes}
 to represent units comprising more than one word.
-The use of non-terminal nodes is motivated by constructions that have no clear head, including
-coordination structures (e.g., ``\textit{John and Mary}'s trip home''; \figref{fig:home}),
+The use of non-terminal nodes is motivated by constructions with no clear head, including
+coordination structures (e.g., ``John and Mary'' in \figref{fig:home}),
 some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
 and prepositional phrases (either the preposition or the head noun can serve as the constituent's head).
 
-No existing parser, to our knowledge, supports the three structural properties described above.
-We propose \parser{} (Transition-based UCCA Parser), taking a
-transition-based approach.
-Building on existing knowledge in tackling these three properties
-in isolation, we define an extended set of transitions and features
-that support reentrancy, discontinuities and non-terminal nodes.
+%No existing parser, to our knowledge, supports the three structural properties described above.
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Transition-based UCCA Parsing}\label{sec:parser}
 
-We now turn to presenting \parser{},
-a transition-based parser supporting the structural properties of UCCA.
+We now turn to presenting \parser{} (Transition-based UCCA Parser).
+Building on existing knowledge in tackling reentrancy, discontinuities and non-terminal nodes,
+we define an extended set of transitions and features supporting their conjunction.
 Transition-based parsers \cite{Nivre03anefficient} scan the text from start to end,
 and create the parse incrementally by applying a \textit{transition}
 at each step to the parser state,
