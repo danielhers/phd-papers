@@ -191,7 +191,7 @@ forming a DAG.
 
 \begin{figure}[t]
   \begin{subfigure}{.9\columnwidth}
-  \parbox{.1\columnwidth}{\caption{}\label{fig:graduation}}
+  \parbox{.05\columnwidth}{\caption{}\label{fig:graduation}}
   \parbox{.8\columnwidth}{
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=10mm, ->,
@@ -219,9 +219,9 @@ forming a DAG.
   }}
   \end{subfigure}
   \begin{subfigure}{.9\columnwidth}
-  \parbox{.1\columnwidth}{\caption{}\label{fig:gave}}
-  \hspace{.15\columnwidth}
-  \parbox{.65\columnwidth}{
+  \vspace{-2cm}
+  \parbox{.05\columnwidth}{\caption{}\label{fig:gave}}
+  \parbox{.75\columnwidth}{\hspace{1cm}
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway},
@@ -238,11 +238,27 @@ forming a DAG.
     \draw[bend right,->] (ROOT) to[out=-20, in=180] node [left] {\scriptsize A} (everything);
   \end{tikzpicture}
   }}
+  \parbox{.1\columnwidth}{
+  \vspace{2cm}
+  \begin{adjustbox}{width=.3\columnwidth,margin=1pt,frame}
+  \begin{tabular}{ll}
+  P & process \\
+  A & participant \\
+  H & linked scene \\
+  C & center \\
+  R & relator \\
+  N & connector \\
+  L & scene linker \\
+  U & punctuation \\
+  F & function unit
+  \end{tabular}
+  \end{adjustbox}
+  }
   \end{subfigure}
   \begin{subfigure}{.9\columnwidth}
-  \parbox{.1\columnwidth}{\caption{}\label{fig:home}}
-  \hspace{.1\columnwidth}
-  \parbox{.8\columnwidth}{
+  \vspace{-1cm}
+  \parbox{.05\columnwidth}{\caption{}\label{fig:home}}
+  \parbox{.65\columnwidth}{
   \scalebox{.9}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={midway},
@@ -261,16 +277,6 @@ forming a DAG.
   \end{tikzpicture}
   }}
   \end{subfigure}
-  \begin{subfigure}{.9\columnwidth}
-  \hspace{.05\columnwidth}
-  \begin{adjustbox}{width=\columnwidth,margin=1pt,frame}
-  \begin{tabular}{ll|ll|ll}
-  P & process & H & linked scene & N & connector \\
-  A & participant & C & center & U & punctuation \\
-  L & inter-scene linker & R & relator & F & function unit
-  \end{tabular}
-  \end{adjustbox}
-  \end{subfigure}
   \caption{\label{fig:examples}
     UCCA structures demonstrating three structural properties exhibited by
     the scheme.
@@ -279,7 +285,7 @@ forming a DAG.
     (\subref{fig:gave}) includes a discontinuous unit (``gave ... up'').
     (\subref{fig:home}) includes a coordination construction (``John and Mary'').
     Pre-terminal nodes are omitted for brevity.
-    Bottom: legend of edge labels.
+    Right: legend of edge labels.
   }
 \end{figure}
 
@@ -359,15 +365,6 @@ encoding the parser's current state.
 During training, an oracle creates training instances for the classifier,
 based on gold-standard annotations.
 
-\paragraph{Transition Set.}
-Given a sequence of tokens $w_1, \ldots, w_n$, we predict a UCCA graph $G$ over the sequence.
-Parsing starts with a single node on the stack (an artificial root node), and the input tokens
-in the buffer. The set of transitions is given in \figref{fig:transitions}.
-In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
-we follow previous work in transition-based constituency parsing \cite{sagae2005classifier},
-adding the \textsc{Node} transition for creating new non-terminal nodes.
-\textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge.
-
 
 \begin{figure*}
 \begin{adjustbox}{width=\textwidth,margin=3pt,frame}
@@ -401,6 +398,15 @@ $[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\
   the prospective child in an \textsc{Edge} transition must not already have a primary parent.
 }
 \end{figure*}
+
+\paragraph{Transition Set.}
+Given a sequence of tokens $w_1, \ldots, w_n$, we predict a UCCA graph $G$ over the sequence.
+Parsing starts with a single node on the stack (an artificial root node), and the input tokens
+in the buffer. The set of transitions is given in \figref{fig:transitions}.
+In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
+we follow previous work in transition-based constituency parsing \cite{sagae2005classifier},
+adding the \textsc{Node} transition for creating new non-terminal nodes.
+\textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge.
 
 \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new primary $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively.
 As a UCCA node may only have one incoming primary edge,
@@ -780,7 +786,7 @@ LSTM Parser
 & 66.1 & 61.1 & 63.5
 \end{tabular}
 \caption{
-  Main experimental results in percents, on the \textit{Wiki} test set (left)
+  Experimental results, in percents, on the \textit{Wiki} test set (left)
   and the \textit{20K Leagues} set (right).
   Columns correspond to labeled precision, recall and F-score,
   for both primary and remote edges.
