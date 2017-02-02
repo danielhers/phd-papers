@@ -556,7 +556,7 @@ pre-trained word2vec vectors \cite{mikolov2013efficient},\footnote{\url{
 https://goo.gl/6ovEhC}} updated during training.
 In addition to dropout between NN layers, we apply word dropout 
 \cite{kiperwasser2016simple}: with a certain probability, the embedding for a
-word is replaced with a zero vector. We apply it separately to the external
+word is replaced with a zero vector. We do not apply word dropout to the external
 word embeddings.
 
 Finally, for all classifiers we add another real-valued feature to the input vector,
@@ -1291,9 +1291,8 @@ MLP layer dim. & & 100 & 50 \\
 LSTM \#layers & & & 2 \\
 LSTM layer dim. & & & 500 \\
 word dropout & & 0.2 & 0.2 \\
-ex. word dropout & & 0 & 0 \\
-L2 regularizer & & $10^{-5}$ & $10^{-5}$ \\
 dropout & & 0.4 & 0.4 \\
+weight decay & & $10^{-5}$ & $10^{-5}$ \\
 mini-batch size & & 100 & 100
 \end{tabular}
 }
