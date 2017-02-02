@@ -945,6 +945,20 @@ focusing on semantic role labeling of verbal argument structures,
 the focus has recently shifted to parsing of more elaborate representations that account
 for a wider range of phenomena.
 
+\paragraph{Grammar-Based Parsing.}
+Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steedman:00} and TAG \cite{Joshi:97}
+provide a theory of the syntax-semantics interface, and have been used as a basis for semantic parsers
+by defining compositional semantics on top of them \cite[among others]{Flic:00,bos2005towards}.
+Depending on the grammar and the implementation, such semantic parsers can support
+some or all of the structural properties UCCA supports.
+Nevertheless, this line of work differs from our grammarless approach in two important ways.
+First, the semantic representations are different. UCCA does not attempt to model
+the syntax-semantics interface and is thus less coupled with syntax in comparison to
+compositional semantic structures.
+Second, while grammar-based parsers explicitly model syntax, grammarless
+approaches, such as the ones presented here, seek to directly model the relation between
+strings and semantic structures.
+
 \paragraph{Broad-Coverage Semantic Parsing.}
 Most closely related to this work is Broad-Coverage Semantic Dependency Parsing (SDP),
 addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval}.
@@ -956,6 +970,12 @@ are useful for representing structures that have no clear head, such as coordina
 of distinctions it makes, which are more closely related to the syntax-semantics interface,
 where UCCA aims to capture purely semantic cross-linguistically applicable notions, abstracting
 away, as much as possible, from syntactic distinctions.\oa{I need to sharpen this}
+The target representations comprising SDP are formed on the basis of functional syntactic
+analysis, with the addition of semantic roles and other relations.
+However, in comparison to UCCA they remain syntactic in nature.
+For instance, the ``poss'' label in the DM target representation is used to
+annotate syntactic possessive constructions, regardless of whether they correspond to
+semantic possession or denote a different meaning, such as evoking a predicate.
 Recent interest in SDP has yielded numerable works on graph parsing
 \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on graph parsing
 by tree approximation \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
@@ -989,20 +1009,6 @@ The transition-based AMR parser by \citet{zhou2016amr} performs concept identifi
 and parsing jointly.
 Our parser does not require separately aligning the input tokens to the graph,
 processing them directly instead.
-
-\paragraph{Grammar-Based Parsing.}
-Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steedman:00} and TAG \cite{Joshi:97}
-provide a theory of the syntax-semantics interface, and have been used as a basis for semantic parsers
-by defining compositional semantics on top of them \cite[among others]{Flic:00,bos2005towards}.
-Depending on the grammar and the implementation, such semantic parsers can support
-some or all of the structural properties UCCA supports.
-Nevertheless, this line of work differs from our grammarless approach in two important ways.
-First, the semantic representations are different. UCCA does not attempt to model
-the syntax-semantics interface and is thus less coupled with syntax in comparison to
-compositional semantic structures.
-Second, while grammar-based parsers explicitly model syntax, grammarless
-approaches, such as the ones presented here, seek to directly model the relation between
-strings and semantic structures.
 
 
 
