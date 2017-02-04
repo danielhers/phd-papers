@@ -959,19 +959,23 @@ Most closely related to this work is Broad-Coverage Semantic Dependency Parsing 
 addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval}.
 Like UCCA parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and reentrancy.
+
 However, SDP uses bilexical dependencies, disallowing non-terminal nodes, which
 are useful for representing structures that have no clear head, such as coordination
 \cite[see \secref{sec:ucca}]{Ivanova2012who}. It also differs from UCCA in the type
-of distinctions it makes, which are more closely related to the syntax-semantics interface,
-where UCCA aims to capture purely semantic cross-linguistically applicable notions, abstracting
-away, as much as possible, from syntactic distinctions.\oa{I need to sharpen this}
-The target representations comprising SDP are formed on the basis of functional syntactic
-analysis, with the addition of semantic roles and other relations.
-However, in comparison to UCCA they remain syntactic in nature.
+of distinctions it makes, which are more tightly coupled with syntactic considerations,
+where UCCA aims to capture purely semantic cross-linguistically applicable notions.
+%, abstracting
+%away, as much as possible from syntactic distinctions.
+%The target representations comprising SDP are formed on the basis of functional syntactic
+%analysis, with the addition of semantic roles and other relations.
+%However, in comparison to UCCA they remain syntactic in nature.
 For instance, the ``poss'' label in the DM target representation is used to
 annotate syntactic possessive constructions, regardless of whether they correspond to
-semantic possession or denote a different meaning, such as evoking a predicate.
-Recent interest in SDP has yielded numerable works on graph parsing
+semantic ownership (e.g., ``John's dog'') or other semantic relations,
+such as marking an argument of a nominal predicate (e.g., ``John's kick'').
+
+Recent interest in SDP has yielded numerous works on graph parsing
 \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on graph parsing
 by tree approximation \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
 and on joint syntactic/semantic parsing
