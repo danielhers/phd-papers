@@ -1014,6 +1014,11 @@ The transition-based AMR parser by \citet{zhou2016amr} performs concept identifi
 and parsing jointly.
 \parser{} does not require separately aligning the input tokens to the graph,
 processing them directly instead.
+It creates non-terminal units as part of the parsing process, and does not require them
+to be pre-calculated.
+Furthermore, these parsers are AMR-specific, and support only a sub-class of graphs
+that may be used in semantic parsing.
+\parser{}, on the other hand, is theoretically able to achieve perfect accuracy on the UCCA corpus.
 
 
 
@@ -1033,8 +1038,8 @@ We make a contribution to this literature by proposing a general grammarless par
 that supports multiple parents, discontinuous units and non-terminal nodes.
 
 Future work will explore different target
-representations and more sophisticated conversion procedures \cite{kong-15},
-to shed light on the commonalities and differences between
+representations and conversion procedures \cite{kong-15},
+to compare different
 representations, suggesting ways for a data-driven design of semantic annotation.
 A parser for UCCA will enable using the framework for new tasks,
 in addition to existing applications such as machine translation
