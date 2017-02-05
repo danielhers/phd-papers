@@ -115,13 +115,15 @@ is a cross-linguistically applicable semantic representation scheme,
 building on the established Basic Linguistic Theory typological framework
 \cite{Dixon:10b,Dixon:10a,Dixon:12}, and Cognitive
 Linguistics literature \cite{croft2004cognitive}.
-UCCA is distinct from syntactic
-schemes in terms of content and formal structure.
 It has demonstrated applicability to multiple languages, including
 English, French, German and Czech, support for rapid annotation,
 and stability under translation \cite{sulem2015conceptual}.
 The scheme has proven useful for machine translation evaluation \cite{birch2016hume}.
-However, lacking a parser, UCCA's applicability has been so far limited,
+UCCA differs from syntactic
+schemes in terms of content and formal structure.
+It exhibits reentrancy, discontinuous nodes and non-terminals,
+which no single existing parser supports.
+Lacking a parser, UCCA's applicability has been so far limited,
 a gap this work addresses.
 
 We present the first UCCA parser, \parser{}
@@ -141,10 +143,8 @@ AMR parsing \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:
 and CCG parsing \cite{zhang2011shift,ambati2015incremental,ambati-deoskar-steedman:2016:N16-1}.
 
 We evaluate \parser{} on the English UCCA corpora, including in-domain and out-of-domain settings.
-As no existing parser directly supports UCCA parsing, 
-%a point of comparison,
-we assess the ability of existing
-parsers to tackle the task, by developing a conversion procedure
+To assess the ability of existing
+parsers to tackle the task, we develop a conversion procedure
 from UCCA to bilexical graphs and trees.
 Results show superior accuracy for \parser{}, demonstrating the effectiveness of
 the presented approach.\footnote{Our code will be made freely available upon publication.}
