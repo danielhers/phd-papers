@@ -999,22 +999,25 @@ Indeed, despite considerable technical effort
 concept identification is only about 80\%--90\% accurate.
 Furthermore, anchoring allows breaking down sentences into semantically meaningful sub-spans,
 which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
-CAMR is a transition-based AMR parser that assumes syntactically parsed input,
+
+Several transition-based AMR parsers have been proposed:
+CAMR assumes syntactically parsed input,
 processing dependency trees into AMR
 \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,goodman2016noise}.
 In contrast,
-\citet{damonte-17} developed a transition-based AMR parser that
+the parser of \citet{damonte-17}
 operates on the input tokens, but still requires concept identification, using
-a simple heuristic selecting the most frequent graph for each token.
-The transition-based AMR parser by \citet{zhou2016amr} performs concept identification
-and parsing jointly.
+a simple heuristic selecting the most frequent graph for each token, and
+\citet{zhou2016amr} perform concept identification and parsing jointly.
 \parser{} does not require separately aligning the input tokens to the graph,
-processing them directly instead.
-It creates non-terminal units as part of the parsing process, and does not require them
-to be pre-calculated.
-Furthermore, these parsers are AMR-specific, and support only a sub-class of graphs
-that may be used in semantic parsing.
-\parser{}, on the other hand, is theoretically able to achieve perfect accuracy on the UCCA corpus.
+processing them directly instead,
+and creating non-terminal units as part of the parsing process.
+Furthermore, the transition sets used by the AMR parsers mentioned above
+handle only a subset of reentrancies and discontinuities
+(for example, \citet{damonte-17} pop the dependent in LArc transitions).
+They are thus limited to a sub-class of AMRs in particular,
+and of graphs that may be used in semantic parsing in general.
+\parser{}'s transition set, on the other hand, allows general DAG parsing.
 
 
 
