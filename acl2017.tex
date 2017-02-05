@@ -957,38 +957,31 @@ by defining compositional semantics on top of them \cite[among others]{Flic:00,b
 Depending on the grammar and the implementation, such semantic parsers can support
 some or all of the structural properties UCCA exhibits.
 Nevertheless, this line of work differs from our grammarless approach in two important ways.
-First, the semantic \textit{representations} are different. UCCA does not attempt to model
-the syntax-semantics interface and is thus less coupled with syntax in comparison to
-compositional semantic structures.
+First, the \textit{representations} are different. UCCA does not attempt to model
+the syntax-semantics interface and is thus less coupled with syntax.
 Second, while grammar-based \textit{parsers} explicitly model syntax, grammarless
-approaches, such as the ones presented here, seek to directly model the relation between
-strings and semantic structures.
+approaches, as presented here, directly model the relation between
+tokens and semantic structures.
 
 \paragraph{Broad-Coverage Semantic Parsing.}
 Most closely related to this work is Broad-Coverage Semantic Dependency Parsing (SDP),
 addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval}.
 Like UCCA parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and reentrancy.
-
-However, SDP uses bilexical dependencies, disallowing non-terminal nodes, which
-are useful for representing structures that have no clear head, such as coordination
-\cite[see \secref{sec:ucca}]{Ivanova2012who}. It also differs from UCCA in the type
+However, SDP uses bilexical dependencies, disallowing non-terminal nodes,
+useful for representing structures that have no clear head, such as coordination
+\cite{Ivanova2012who}. It also differs from UCCA in the type
 of distinctions it makes, which are more tightly coupled with syntactic considerations,
 where UCCA aims to capture purely semantic cross-linguistically applicable notions.
-%, abstracting
-%away, as much as possible from syntactic distinctions.
-%The target representations comprising SDP are formed on the basis of functional syntactic
-%analysis, with the addition of semantic roles and other relations.
-%However, in comparison to UCCA they remain syntactic in nature.
 For instance, the ``poss'' label in the DM target representation is used to
 annotate syntactic possessive constructions, regardless of whether they correspond to
 semantic ownership (e.g., ``John's dog'') or other semantic relations,
 such as marking an argument of a nominal predicate (e.g., ``John's kick'').
 
 Recent interest in SDP has yielded numerous works on graph parsing
-\cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including work on graph parsing
-by tree approximation \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
-and on joint syntactic/semantic parsing
+\cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including
+tree approximation \cite{agic-koller:2014:SemEval,schluter-EtAl:2014:SemEval}
+and joint syntactic/semantic parsing
 \cite{henderson2013multilingual,swayamdipta-EtAl:2016:CoNLL}.
 
 \paragraph{Abstract Meaning Representation.}
@@ -997,7 +990,7 @@ Another line of work addresses parsing into AMRs
 which, like UCCA, abstract away from syntactic distinctions
 and represent meaning directly, using OntoNotes predicates \cite{weischedel2013ontonotes}.
 Events in AMR may also be evoked by non-verbal predicates, including possessive constructions.
-Unlike in UCCA, in AMR, the alignment between concepts and the text is not explicitly marked.
+Unlike in UCCA, the alignment between AMR concepts and the text is not explicitly marked.
 While sharing much of this work's motivation, not anchoring the representation in the text
 complicates the parsing task, as it requires
 the alignment to be automatically (and imprecisely) detected.
@@ -1006,9 +999,9 @@ Indeed, despite considerable technical effort
 concept identification is only about 80\%--90\% accurate.
 Furthermore, anchoring allows breaking down sentences into semantically meaningful sub-spans,
 which is useful for many applications \cite{fernandez2015parsing,birch2016hume}.
-CAMR \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,goodman2016noise}
-is a transition-based AMR parser that operates by first syntactically parsing the input,
-and then processing the result into AMR.
+CAMR is a transition-based AMR parser that assumes syntactically parsed input,
+processing dependency trees into AMR
+\cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,goodman2016noise}.
 In contrast,
 \citet{damonte-17} developed a transition-based AMR parser that
 operates on the input tokens, but still requires concept identification, using
