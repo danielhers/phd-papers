@@ -96,7 +96,7 @@
   discontinuous structures and non-terminal nodes corresponding
   to complex semantic units. To our knowledge, the conjunction
   of these formal properties is not supported by any existing parser.
-  Our transition-based parser, using a novel transition set
+  Our transition-based parser, which uses a novel transition set
   and features based on bidirectional LSTMs,
   has value not just for UCCA parsing:
   its ability to handle more general graph structures will inform
@@ -119,7 +119,7 @@ It has demonstrated applicability to multiple languages, including
 English, French, German and Czech, support for rapid annotation,
 and stability under translation \cite{sulem2015conceptual}.
 The scheme has proven useful for machine translation evaluation \cite{birch2016hume}.
-Lacking a parser, its applicability has been so far limited,
+However, lacking a parser, UCCA's applicability has been so far limited,
 a gap this work addresses.
 
 We present the first UCCA parser, \parser{}
@@ -128,19 +128,20 @@ building on recent advances in discontinuous constituency
 and dependency graph parsing, and further introducing novel transitions and features for UCCA.
 Transition-based techniques are a natural
 starting point for UCCA parsing, given the conceptual similarity of
-UCCA's distinctions,
-centered around predicate-argument structures, to distinctions expressed
-by dependency schemes, on which these methods excel
+UCCA's distinctions, centered around predicate-argument structures, to distinctions expressed
+by dependency schemes, and the achievements of transition-based methods in dependency parsing
 \cite{dyer2015transition,andor2016globally,kiperwasser2016simple}.
 We are further motivated by the strength of transition-based methods
-in similar tasks, including dependency graph parsing
+in related tasks, including dependency graph parsing
 \cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,tokgoz2015transition},
 constituency parsing \cite{sagae2005classifier,zhang2009transition,zhu2013fast,maier2015discontinuous,maier-lichte:2016:DiscoNLP},
 AMR parsing \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,dipendra2016neural,goodman2016noise,zhou2016amr,damonte-17}
 and CCG parsing \cite{zhang2011shift,ambati2015incremental,ambati-deoskar-steedman:2016:N16-1}.
 
-We evaluate \parser{} on the English UCCA corpora, including an out-of-domain setting.
-As a point of comparison, we assess the ability of existing
+We evaluate \parser{} on the English UCCA corpora, including in-domain and out-of-domain settings.
+As no existing parser directly supports UCCA parsing, 
+%a point of comparison,
+we assess the ability of existing
 parsers to tackle the task, by developing a conversion procedure
 from UCCA to bilexical graphs and trees.
 Results show superior accuracy for \parser{}, demonstrating the effectiveness of
@@ -164,7 +165,7 @@ UCCA graphs are labeled, directed acyclic graphs (DAGs),
 whose leaves correspond to the tokens of
 the text. A node (or {\it unit}) corresponds to a terminal or
 to several sub-units (not necessarily contiguous) viewed as a
-single entity according to semantic or cognitive consideration.
+single entity according to semantic or cognitive considerations.
 Edges bear a category, indicating the role of the sub-unit in the parent relation.
 \figref{fig:examples} presents a few examples.
 
@@ -292,15 +293,16 @@ forming a DAG.
 While parsing technology in general, and transition-based parsing in particular,
 is well-established for syntactic parsing, UCCA
 has several distinct properties
-that distinguish it from syntactic representations, mostly in cases where it
-abstracts away from syntactic detail that does not
-affect meaning.\footnote{As essentially any change in form results
-in some change in meaning, it would be more precise to say that
-UCCA's foundational layer abstracts away from syntactic variation
-not affecting those aspects of meaning which it covers.}
+that distinguish it from syntactic representations,
+mostly UCCA's tendency to abstract away from syntactic detail that do not
+affect argument structure.
+%.\footnote{As essentially any change in form results
+%in some change in meaning, it would be more precise to say that
+%UCCA's foundational layer abstracts away from syntactic variation
+%not affecting argument structure and other aspects of meaning it covers.}
 For instance, consider the following examples where the concept of a scene
 has a different rationale from the syntactic concept of a clause.
-First, non-verbal predicates are represented like verbal ones,
+First, non-verbal predicates in UCCA are represented like verbal ones,
 such as when they appear in copula clauses or noun phrases. Indeed,
 in \figref{fig:graduation}, ``graduation'' and ``moved'' are considered separate events,
 despite appearing in the same clause. 
@@ -309,10 +311,11 @@ in the graduation scene, despite not being overtly marked.
 Third, consider the possessive construction in \figref{fig:home}.
 While in UCCA ``trip'' evokes a scene in which ``John and Mary'' is
 a Participant, a syntactic scheme would analyze this phrase similarly to ``John and Mary's children''.
-As such information is not structurally explicit
-(e.g., ``after graduation'' is formally and syntactically very similar to ``after 2pm'',
-which does not evoke a scene), semantic parsers are required to produce
-different types of generalizations than those required by their syntactic counterparts.
+
+These abstractions are not structurally explicit by their nature
+(e.g., ``after graduation'' is formally very similar to ``after 2pm'',
+which does not evoke a scene), suggesting that a UCCA parser, and more generally semantic parsers,
+are required to produce different types of generalizations than those required by their syntactic counterparts.
 See \secref{sec:related_work} for a discussion of UCCA in the context of other semantic schemes,
 such as AMR \cite{banarescu2013abstract}.
 
@@ -323,7 +326,7 @@ Alongside recent progress in dependency parsing into projective trees,
 there is increasing interest in parsing into 
 representations with more general structural properties  (see \secref{sec:related_work}).
 One such property is \textit{reentrancy},
-referring to semantic units shared between predicates.
+namely the sharing of semantic units between predicates.
 For instance, in \figref{fig:graduation},
 ``John'' is an argument of both ``graduation''
 and ``moved'', yielding a DAG rather than a tree.
@@ -346,8 +349,10 @@ parsing.
 \section{Transition-based UCCA Parsing}\label{sec:parser}
 
 We now turn to presenting \parser{}.
-Building on existing knowledge in handling reentrancy, discontinuities and non-terminal nodes,
-we define an extended set of transitions and features supporting their conjunction.
+Building on previous work on parsing reentrancies, discontinuities and non-terminal nodes,
+we define an extended set of transitions and features that supports the conjunction of
+these properties.
+
 Transition-based parsers \cite{Nivre03anefficient} scan the text from start to end,
 and create the parse incrementally by applying a \textit{transition}
 at each step to the parser state,
@@ -356,7 +361,7 @@ a stack $S$ of nodes currently being processed,
 and a graph $G=(V,E,\ell)$ of constructed nodes and edges,
 where $V$ is the set of \emph{nodes}, $E$ is the set of \emph{edges},
 and $\ell : E \to L$ is the \emph{label} function, $L$ being the set of possible labels.
-Some states are \textit{terminal}, meaning that $G$ is the final output.
+Some states are marked as \textit{terminal}, meaning that $G$ is the final output.
 A classifier is used at each step to select the next transition based on features
 encoding the parser's current state.
 During training, an oracle creates training instances for the classifier,
