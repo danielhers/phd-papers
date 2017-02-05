@@ -318,7 +318,7 @@ These abstractions are not structurally explicit by their nature
 (e.g., ``after graduation'' is formally very similar to ``after 2pm'',
 which does not evoke a scene), suggesting that a UCCA parser, and more generally semantic parsers,
 are required to produce different types of generalizations than those required by their syntactic counterparts.
-See \secref{sec:related_work} for a discussion of UCCA in the context of other semantic schemes,
+\secref{sec:related_work} discusses UCCA in the context of other semantic schemes,
 such as AMR \cite{banarescu2013abstract}.
 
 %These properties distinguish UCCA from syntactic schemes that already have
@@ -1030,17 +1030,20 @@ Evaluated in in-domain and out-of-domain settings, we show that coupled with a
 NN classifier and BiLSTM feature extractor,
 it accurately predicts UCCA graphs from text, outperforming a variety of
 strong baselines by a margin.
-While much recent work focused on semantic parsing of different types,
-the effectiveness of different parsing approaches for schemes with
-different structural and semantic properties is not well-understood
+Especially striking is the contribution of the LSTM-based feature representation,
+unprecedented in syntactic dependency parsing \cite{andor2016globally}:
+we speculate that semantic parsing inherently requires stronger models
+to generalize across surface structures.
+Despite the recent diversity of semantic parsing work,
+the effectiveness of different approaches for
+structurally and semantically different schemes is not well-understood
 \cite{kuhlmann2016towards}.
-We make a contribution to this literature by proposing a general grammarless parser
+Our contribution to this literature is a general grammarless parser
 that supports multiple parents, discontinuous units and non-terminal nodes.
 
 Future work will explore different target
 representations and conversion procedures \cite{kong-15},
-to compare different
-representations, suggesting ways for a data-driven design of semantic annotation.
+to compare different representations, suggesting ways for a data-driven design of semantic annotation.
 A parser for UCCA will enable using the framework for new tasks,
 in addition to existing applications such as machine translation
 evaluation \cite{birch2016hume}.
