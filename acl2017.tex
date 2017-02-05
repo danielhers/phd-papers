@@ -530,7 +530,7 @@ Hyperparameters are tuned on the development set (see \secref{sec:exp_setup}).
 	Bottom: \parser{BiLTSM} architecture.
 	Vector representation for the input tokens is computed
 	by two layers of bidirectional LSTMs.
-	The vectors for specific tokens is concatenated with
+	The vectors for specific tokens are concatenated with
 	embedding and numeric features from the parser state
 	(for existing edge labels, number of children, etc.),
 	and fed into the MLP for selecting the next transition.}
@@ -598,7 +598,7 @@ NN classifiers with the Adam optimizer \cite{kingma2014adam}.
 \section{Experimental Setup}\label{sec:exp_setup}
 
 \paragraph{Data.}
-We conduct our main experiments on the UCCA Wikipedia corpus (henceforth, \textit{Wiki}),
+We conduct our experiments on the UCCA Wikipedia corpus (henceforth, \textit{Wiki}),
 and use the English part of the UCCA \textit{Twenty Thousand Leagues Under the Sea}
 English-French parallel corpus (henceforth, \textit{20K Leagues}) as
 out-of-domain data.\footnote{\mbox{\url{http://cs.huji.ac.il/~oabend/ucca.html}}}
@@ -952,12 +952,12 @@ Linguistically expressive grammars such as HPSG \cite{PandS:94}, CCG \cite{Steed
 provide a theory of the syntax-semantics interface, and have been used as a basis for semantic parsers
 by defining compositional semantics on top of them \cite[among others]{Flic:00,bos2005towards}.
 Depending on the grammar and the implementation, such semantic parsers can support
-some or all of the structural properties UCCA supports.
+some or all of the structural properties UCCA exhibits.
 Nevertheless, this line of work differs from our grammarless approach in two important ways.
-First, the semantic representations are different. UCCA does not attempt to model
+First, the semantic \textit{representations} are different. UCCA does not attempt to model
 the syntax-semantics interface and is thus less coupled with syntax in comparison to
 compositional semantic structures.
-Second, while grammar-based parsers explicitly model syntax, grammarless
+Second, while grammar-based \textit{parsers} explicitly model syntax, grammarless
 approaches, such as the ones presented here, seek to directly model the relation between
 strings and semantic structures.
 
@@ -992,7 +992,7 @@ and on joint syntactic/semantic parsing
 Another line of work addresses parsing into AMRs
 \cite{flanigan2014discriminative,vanderwende2015amr,pust2015parsing,artzi2015broad},
 which, like UCCA, abstract away from syntactic distinctions
-and represent meaning directly, using OntoNotes predicates.
+and represent meaning directly, using OntoNotes predicates \cite{weischedel2013ontonotes}.
 Events in AMR may also be evoked by non-verbal predicates, including possessive constructions.
 Unlike in UCCA, in AMR, the alignment between concepts and the text is not explicitly marked.
 While sharing much of this work's motivation, not anchoring the representation in the text
