@@ -792,6 +792,9 @@ LSTM Parser
   and the \textit{20K Leagues} set (right).
   Columns correspond to labeled precision, recall and F-score,
   for both primary and remote edges.
+  F-score upper bounds are reported for the conversions.
+  For the tree approximation experiments, only primary edges scores are reported,
+  as they are unable to predict remote edges.
   \parser{BiLSTM} obtains the highest F-scores in all metrics, surpassing the
   bilexical parsers, tree parsers and other classifiers.
 }
