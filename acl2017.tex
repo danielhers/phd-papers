@@ -1012,17 +1012,18 @@ do not require syntactic pre-processing.
 \citet{damonte-17} perform concept identification using
 a simple heuristic selecting the most frequent graph for each token, and
 \citet{zhou2016amr} perform concept identification and parsing jointly.
-UCCA parsing does not require separately aligning the input tokens to the graph,
-processing them directly instead,
-and creating non-terminal units as part of the parsing process.
+UCCA parsing does not require separately aligning the input tokens to the graph.
+\parser{} creates non-terminal units as part of the parsing process.
 
-Furthermore, existing transition-based AMR parsers
-are not general DAG parsers, but are
-only able to predict a subset of reentrancies and discontinuities
-(for example, \citet{damonte-17} pop the dependent in LArc transitions\daniel{clarify}).
+Furthermore, existing transition-based AMR parsers are not general DAG parsers.
+They are only able to predict a subset of reentrancies and discontinuities,
+as they may remove nodes before their parents have been predicted
+\cite{damonte-17}.
 They are thus limited to a sub-class of AMRs in particular,
 and of graphs that may be used in semantic parsing in general.
-\parser{}'s transition set, on the other hand, allows general DAG parsing\daniel{prove}.
+\parser{}'s transition set, on the other hand, allows general DAG
+parsing\footnote{See Appendix~\ref{appendix:completeness_proof} for a proof sketch for the
+completeness of \parser{}'s transition set.}.
 
 
 
