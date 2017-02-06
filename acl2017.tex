@@ -118,7 +118,7 @@ Linguistics literature \cite{croft2004cognitive}.
 It has demonstrated applicability to multiple languages, including
 English, French, German and Czech, support for rapid annotation,
 and stability under translation \cite{sulem2015conceptual}.
-The scheme has proven useful for machine translation evaluation \cite{birch2016hume}.
+It has also proven useful for machine translation evaluation \cite{birch2016hume}.
 UCCA differs from syntactic
 schemes in terms of content and formal structure.
 It exhibits reentrancy, discontinuous nodes and non-terminals,
@@ -146,8 +146,8 @@ We evaluate \parser{} on the English UCCA corpora, including in-domain and out-o
 To assess the ability of existing
 parsers to tackle the task, we develop a conversion procedure
 from UCCA to bilexical graphs and trees.
-Results show superior accuracy for \parser{}, demonstrating the effectiveness of
-the presented approach.\footnote{Our code will be made freely available upon publication.}
+Results show superior performance for \parser{}, demonstrating the effectiveness of
+the presented approach.\footnote{Our code and models will be made freely available upon publication.}
 
 The rest of the paper is structured as follows:
 \secref{sec:ucca} describes UCCA in more detail.
@@ -314,10 +314,10 @@ Third, consider the possessive construction in \figref{fig:home}.
 While in UCCA ``trip'' evokes a scene in which ``John and Mary'' is
 a Participant, a syntactic scheme would analyze this phrase similarly to ``John and Mary's children''.
 
-These abstractions are not structurally explicit by their nature
+These examples demonstrate that a UCCA parser, and more generally semantic parsers,
+face an additional level of ambiguity compared to their syntactic counterparts
 (e.g., ``after graduation'' is formally very similar to ``after 2pm'',
-which does not evoke a scene), suggesting that a UCCA parser, and more generally semantic parsers,
-are required to produce different types of generalizations than those required by their syntactic counterparts.
+which does not evoke a scene).
 \secref{sec:related_work} discusses UCCA in the context of other semantic schemes,
 such as AMR \cite{banarescu2013abstract}.
 
@@ -357,7 +357,7 @@ these properties.
 
 Transition-based parsers \cite{Nivre03anefficient} scan the text from start to end,
 and create the parse incrementally by applying a \textit{transition}
-at each step to the parser state,
+at each step to the parser's state,
 defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
 a stack $S$ of nodes currently being processed,
 and a graph $G=(V,E,\ell)$ of constructed nodes and edges,
@@ -407,11 +407,12 @@ $[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\
 Given a sequence of tokens $w_1, \ldots, w_n$, we predict a UCCA graph $G$ over the sequence.
 Parsing starts with a single node on the stack (an artificial root node), and the input tokens
 in the buffer. The set of transitions is given in \figref{fig:transitions}.
+
 In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
 we follow previous work in transition-based constituency parsing \cite{sagae2005classifier},
 adding the \textsc{Node} transition for creating new non-terminal nodes.
+For every $X\in L$,
 \textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge.
-
 \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new primary $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively.
 As a UCCA node may only have one incoming primary edge,
 \textsc{Edge} transitions are disallowed if the child node already
@@ -444,14 +445,13 @@ the averaged structured perceptron algorithm
 \cite{Coll:04} and \textsc{MinUpdate} \cite{goldberg2011learning}:
 each feature requires a minimum number of updates in training
 to be included in the model.\footnote{We also experimented with a linear model using
-dense embedding features, but still trained with averaged structured perceptron.
+dense embedding features, trained with the averaged structured perceptron algorithm.
 It performed worse than the sparse perceptron model and was hence discarded.}
 \item
 Changing the model to a feedforward neural network with dense embedding features,
 \textbf{\parser{MLP}}
 (``multi-layer perceptron''), uses an architecture similar to that of \citet{chen2014fast},
-but with two rectified linear layers
-and dropout \cite{srivastava2014dropout}.
+but with two rectified linear layers instead of one layer with cube activation.
 The embeddings are trained jointly with the classifier.
 \item
 Finally, \textbf{\parser{BiLSTM}} uses a bidirectional LSTM for feature representation,
@@ -459,7 +459,7 @@ on top of the dense embedding features,
 using an architecture similar to \citet{kiperwasser2016simple}.
 The BiLSTM runs on the input tokens in both forward and backward directions,
 yielding a vector representation that is then concatenated with dense features representing the
-parser state (e.g., existing edge labels and previous parser actions).
+parser state (e.g., existing edge labels and previous parser actions; see below).
 This representation is then fed into a feedforward network similar to \parser{MLP}.
 The feedforward layers, BiLSTM and embeddings are all trained jointly.
 \end{enumerate}
@@ -525,7 +525,7 @@ Hyperparameters are tuned on the development set (see \secref{sec:exp_setup}).
     \node (transition) at (4,5.8) {\textsc{Node}\textsubscript{U}};
     \path (mlp) edge (transition);
 	\end{tikzpicture}
-	\caption{Illustration of the parser model.
+	\caption{Illustration of the \parser{} model.
 	Top: parser state (stack, buffer and intermediate graph).
 	Bottom: \parser{BiLTSM} architecture.
 	Vector representation for the input tokens is computed
@@ -546,8 +546,8 @@ We also use bi- and trigram features based on these values \cite{zhang2009transi
 features related to discontinuous nodes
 \cite[including separating punctuation and gap type]{maier2015discontinuous},
 features representing existing edges and the number of parents and children a node has,
-and the past actions taken by the parser.
-We also use a novel, UCCA-specific feature:
+as well as the past actions taken by the parser.
+In addition, we use use a novel, UCCA-specific feature:
 number of remote children.\footnote{See
 Appendix~\ref{appendix:features} for a full list of used feature templates.}
 
@@ -564,10 +564,10 @@ In addition to dropout between NN layers, we apply word dropout
 word is replaced with a zero vector. We do not apply word dropout to the external
 word embeddings.
 
-Finally, for all classifiers we add another real-valued feature to the input vector,
+Finally, for all classifiers we add a novel real-valued feature to the input vector,
 \textbf{ratio}, corresponding to the ratio between the number of terminals to number of nodes
 in the graph $G$.
-This novel feature serves as a regularizer for the creation of new nodes,
+This feature serves as a regularizer for the creation of new nodes,
 and should be beneficial for other transition-based constituency parsers too.
 
 \paragraph{Training.}
@@ -723,7 +723,7 @@ John \^ and \^ Mary \^ went \^ home \\
 \depedge{5}{4}{A}
 \end{dependency}
 }
-\caption{Bilexical approximation for sentences in \figref{fig:examples}.}
+\caption{Bilexical graph approximation for sentences in \figref{fig:examples}.}
 \label{fig:bilexical_example}
 \end{figure}
 
@@ -770,22 +770,22 @@ Tree Approximation (Constituency Tree Parser)} \\
 & & & \small 100 & & &
 & & & \small 100 \\
 \textsc{uparse}
-& 60.9 & 61.2 & 61.1 & & &
-& 52.7 & 52.8 & 52.8 \\
+& 60.9 & 61.2 & 61.1 & -- & -- & --
+& 52.7 & 52.8 & 52.8 & -- & -- & -- \\
 \hline
 \multicolumn{8}{l}{\rule{0pt}{2ex} \footnotesize
 Bilexical Tree Approximation (Dependency Tree Parsers)} \\
 \small Upper Bound
 %& \small 94.5 & \small 87.7 & \small 91 & & &
 %& \small 94.8 & \small 88 & \small 91.3 \\
-& & & \small 91 & & &
+& & & \small 91 & -- & -- & --
 & & & \small 91.3 \\
 MaltParser
-& 62.8 & 57.7 & 60.2 & & &
-& 57.8 & 53 & 55.3 \\
+& 62.8 & 57.7 & 60.2 & -- & -- & --
+& 57.8 & 53 & 55.3 & -- & -- & -- \\
 LSTM Parser
-& 73.2 & 66.9 & 69.9 & & &
-& 66.1 & 61.1 & 63.5
+& 73.2 & 66.9 & 69.9 & -- & -- & --
+& 66.1 & 61.1 & 63.5 & -- & -- & --
 \end{tabular}
 \caption{
   Experimental results, in percents, on the \textit{Wiki} test set (left)
@@ -850,8 +850,8 @@ In \secref{sec:results} we report the upper bounds on the achievable scores due 
 	\depedge{5}{7}{A}
 	\end{dependency}
   }
-  \caption{Tree approximation for the sentence in \figref{fig:graduation} (top),
-  and bilexical tree approximation for the same sentence (bottom).
+  \caption{Tree approximation (constituency) for the sentence in \figref{fig:graduation} (top),
+  and bilexical tree approximation (dependency) for the same sentence (bottom).
   These are identical to the original graphs,
   apart from the removal of remote edges.}
   \label{fig:tree_example}
@@ -859,6 +859,7 @@ In \secref{sec:results} we report the upper bounds on the achievable scores due 
 
 \paragraph{Comparison to tree parsers.}
 For completeness,
+and as parsing technology is considerably more mature for tree (rather than graph) parsing,
 we also perform a \textit{tree approximation} experiment, converting UCCA to (bilexical) trees
 and evaluating constituency and dependency tree parsers on them
 (see examples in \figref{fig:tree_example}).
@@ -906,10 +907,10 @@ TurboParser fares worse in this comparison, despite somewhat better results on
 remote edges.
 The LSTM parser of \citet{dyer2015transition} obtains the highest primary F-score
 among the baseline parsers, with a considerable margin.
-It obtains 9.7\% F-score higher than MaltParser,
-despite being limited by the same approximation error upper bound,
-and using a similar transition set.
-The performance difference between them should therefore be attributed to the classification model.
+%It obtains 9.7\% F-score higher than MaltParser,
+%despite being limited by the same approximation error upper bound,
+%and using a similar transition set.
+%The performance difference between them should therefore be attributed to the classification model.
 
 Using a feedforward NN and embedding features,
 \parser{MLP} obtains higher scores than \parser{Sparse},
@@ -928,9 +929,9 @@ as these are removed in the conversion.\footnote{We
 also experimented with a simpler version of \parser{} lacking
 \textsc{Remote} transitions, obtaining an increase of up to 2 labeled F-score
 points on primary edges, at the cost of not being able to predict remote edges.}
-The bilexical DAG parsers are also quite limited in this respect,
-due to a conversion error upper bound of 58.3\%.
-However, this upper bound cannot in itself account for the bilexical DAG parsers'
+The bilexical DAG parsers are quite limited in this respect as well.
+While some of the DAG parsers' difficulty can be attributed to the conversion upper bound of 58.3\%,
+this in itself cannot account for their
 poor performance on remote edges, which is an order of magnitude lower than that
 of \parser{BiLSTM}.
 
@@ -977,6 +978,7 @@ For instance, the ``poss'' label in the DM target representation is used to
 annotate syntactic possessive constructions, regardless of whether they correspond to
 semantic ownership (e.g., ``John's dog'') or other semantic relations,
 such as marking an argument of a nominal predicate (e.g., ``John's kick'').
+UCCA reflects the difference between these constructions.
 
 Recent interest in SDP has yielded numerous works on graph parsing
 \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval,thomson-EtAl:2014:SemEval,almeida-martins:2015:SemEval,du-EtAl:2015:SemEval}, including
@@ -990,6 +992,7 @@ Another line of work addresses parsing into AMRs
 which, like UCCA, abstract away from syntactic distinctions
 and represent meaning directly, using OntoNotes predicates \cite{weischedel2013ontonotes}.
 Events in AMR may also be evoked by non-verbal predicates, including possessive constructions.
+
 Unlike in UCCA, the alignment between AMR concepts and the text is not explicitly marked.
 While sharing much of this work's motivation, not anchoring the representation in the text
 complicates the parsing task, as it requires
@@ -1004,20 +1007,22 @@ Several transition-based AMR parsers have been proposed:
 CAMR assumes syntactically parsed input,
 processing dependency trees into AMR
 \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,goodman2016noise}.
-In contrast,
-the parser of \citet{damonte-17}
-operates on the input tokens, but still requires concept identification, using
+In contrast, the parsers of \citet{damonte-17} and \citet{zhou2016amr}
+do not require syntactic pre-processing.
+\citet{damonte-17} perform concept identification using
 a simple heuristic selecting the most frequent graph for each token, and
 \citet{zhou2016amr} perform concept identification and parsing jointly.
-\parser{} does not require separately aligning the input tokens to the graph,
+UCCA parsing does not require separately aligning the input tokens to the graph,
 processing them directly instead,
 and creating non-terminal units as part of the parsing process.
-Furthermore, the transition sets used by the AMR parsers mentioned above
-handle only a subset of reentrancies and discontinuities
-(for example, \citet{damonte-17} pop the dependent in LArc transitions).
+
+Furthermore, existing transition-based AMR parsers
+are not general DAG parsers, but are
+only able to predict a subset of reentrancies and discontinuities
+(for example, \citet{damonte-17} pop the dependent in LArc transitions\daniel{clarify}).
 They are thus limited to a sub-class of AMRs in particular,
 and of graphs that may be used in semantic parsing in general.
-\parser{}'s transition set, on the other hand, allows general DAG parsing.
+\parser{}'s transition set, on the other hand, allows general DAG parsing\daniel{prove}.
 
 
 
@@ -1029,10 +1034,11 @@ Evaluated in in-domain and out-of-domain settings, we show that coupled with a
 NN classifier and BiLSTM feature extractor,
 it accurately predicts UCCA graphs from text, outperforming a variety of
 strong baselines by a margin.
-Especially striking is the contribution of the LSTM-based feature representation,
-unprecedented in syntactic dependency parsing \cite{andor2016globally}:
-we speculate that semantic parsing inherently requires stronger models
-to generalize across surface structures.
+%Interestingly, the contribution of the LSTM-based feature representation,
+%unprecedented in syntactic dependency parsing \cite{andor2016globally}:
+%we speculate that semantic parsing inherently requires stronger models
+%to generalize across surface structures.
+
 Despite the recent diversity of semantic parsing work,
 the effectiveness of different approaches for
 structurally and semantically different schemes is not well-understood
