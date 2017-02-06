@@ -406,7 +406,7 @@ $[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\
 \paragraph{Transition Set.}
 Given a sequence of tokens $w_1, \ldots, w_n$, we predict a UCCA graph $G$ over the sequence.
 Parsing starts with a single node on the stack (an artificial root node), and the input tokens
-in the buffer. The set of transitions is given in \figref{fig:transitions}.
+in the buffer. \figref{fig:transitions} shows the transition set.
 
 In addition to the standard \textsc{Shift} and \textsc{Reduce} operations, 
 we follow previous work in transition-based constituency parsing \cite{sagae2005classifier},
@@ -452,12 +452,12 @@ Changing the model to a feedforward neural network with dense embedding features
 \textbf{\parser{MLP}}
 (``multi-layer perceptron''), uses an architecture similar to that of \citet{chen2014fast},
 but with two rectified linear layers instead of one layer with cube activation.
-The embeddings are trained jointly with the classifier.
+The embeddings and classifier are trained jointly.
 \item
 Finally, \textbf{\parser{BiLSTM}} uses a bidirectional LSTM for feature representation,
 on top of the dense embedding features,
-using an architecture similar to \citet{kiperwasser2016simple}.
-The BiLSTM runs on the input tokens in both forward and backward directions,
+an architecture similar to \citet{kiperwasser2016simple}.
+The BiLSTM runs on the input tokens in forward and backward directions,
 yielding a vector representation that is then concatenated with dense features representing the
 parser state (e.g., existing edge labels and previous parser actions; see below).
 This representation is then fed into a feedforward network similar to \parser{MLP}.
@@ -545,7 +545,7 @@ next three buffer elements, in addition to their children and grandchildren in t
 We also use bi- and trigram features based on these values \cite{zhang2009transition,zhu2013fast},
 features related to discontinuous nodes
 \cite[including separating punctuation and gap type]{maier2015discontinuous},
-features representing existing edges and the number of parents and children a node has,
+features representing existing edges and the number of parents and children,
 as well as the past actions taken by the parser.
 In addition, we use use a novel, UCCA-specific feature:
 number of remote children.\footnote{See
@@ -723,7 +723,7 @@ John \^ and \^ Mary \^ went \^ home \\
 \depedge{5}{4}{A}
 \end{dependency}
 }
-\caption{Bilexical graph approximation for sentences in \figref{fig:examples}.}
+\caption{Bilexical graph approximation (dependency graph) for the sentences in \figref{fig:examples}.}
 \label{fig:bilexical_example}
 \end{figure}
 
@@ -767,8 +767,8 @@ Tree Approximation (Constituency Tree Parser)} \\
 \small Upper Bound
 %& \small 100 & \small 100 & \small 100 & & &
 %& \small 100 & \small 100 & \small 100 \\
-& & & \small 100 & & &
-& & & \small 100 \\
+& & & \small 100 & & & \small --
+& & & \small 100 & & & \small -- \\
 \textsc{uparse}
 & 60.9 & 61.2 & 61.1 & -- & -- & --
 & 52.7 & 52.8 & 52.8 & -- & -- & -- \\
@@ -778,8 +778,8 @@ Bilexical Tree Approximation (Dependency Tree Parsers)} \\
 \small Upper Bound
 %& \small 94.5 & \small 87.7 & \small 91 & & &
 %& \small 94.8 & \small 88 & \small 91.3 \\
-& & & \small 91 & -- & -- & --
-& & & \small 91.3 \\
+& & & \small 91 & & & \small --
+& & & \small 91.3 & & & \small -- \\
 MaltParser
 & 62.8 & 57.7 & 60.2 & -- & -- & --
 & 57.8 & 53 & 55.3 & -- & -- & -- \\
