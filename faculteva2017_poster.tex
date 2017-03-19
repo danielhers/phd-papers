@@ -572,15 +572,18 @@ F-score on primary edges \cite{abend2013universal}.
 
 \section*{Conclusions}
 
-We present \parser{}, the first parser for UCCA, and
-evaluate it in both in-domain and out-of-domain settings,
-showing it surpasses bilexical DAG parsers on the task of UCCA parsing.
+We present \parser{}, the first parser for UCCA.
+Evaluated in in-domain and out-of-domain settings, we show that coupled with a
+NN classifier and BiLSTM feature extractor,
+it accurately predicts UCCA graphs from text, outperforming a variety of
+strong baselines by a margin.
 
-Future work will incorporate LSTMs into \parser{},
+Future work will explore different target
+representations and conversion procedures,
 and apply the parser to more languages such as German,
 demonstrating the importance of broad-coverage parsing.
 We will also improve the conversion-based methods and explore different target representations.
-A UCCA parser will enable using the scheme for representation in NLP tasks.
+A parser for UCCA will enable using the framework for new tasks.
 
 
 \color{DarkSlateGray} % Set the color back to DarkSlateGray for the rest of the content
