@@ -180,10 +180,11 @@ that the parent represents.
       {
         child {node {John} edge from parent node[left] {C}}
         child {node {and} edge from parent node[left] {N}}
-        child {node {Mary} edge from parent node[right] {C}}
+        child {node {Mary} edge from parent node[left] {C}}
+        child {node {'s} edge from parent node[right] {F}}
       } edge from parent node[left] {A} }
-      child {node {went} edge from parent node[left] {P}}
-      child {node {home} edge from parent node[right] {A}}
+      child {node {trip} edge from parent node[left] {P}}
+      child {node {home} edge from parent node[left] {A}}
       ;
   \end{tikzpicture}
   \captionof{figure}{Discontinuous unit (``gave ... up''). \hspace{4cm}
