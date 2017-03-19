@@ -192,7 +192,7 @@ Edges bear a category, indicating the role of the node in the parent relation.
   \textbf{reentrancy}, \textbf{discontinuity} and \textbf{non-terminal nodes}.}
 \end{center}
 
-
+\rule{\columnwidth}{1pt}
 
 \section*{Transition-based UCCA Parsing}
 
@@ -395,100 +395,59 @@ We experiment with three classifiers:
 \begin{flushleft}
 	\begin{tabular}{ll}
 	\textbf{\parser{Sparse}} & Perceptron with features: words, POS, dependency \& edge label combinations. \\
-	\textbf{\parser{MLP}} & 2-layer NN, learned embedding features. \\
+	\textbf{\parser{MLP}} & 2-layer NN, learned embedding features + external word embeddings. \\
 	\textbf{\parser{BiLSTM}} & 2-layer bidirectional RNN to encode features, 2-layer NN for classification. \\
 	\end{tabular}
 \end{flushleft}
 \vspace{5mm}
 For all classifiers, inference is performed greedily, i.e., without beam search.
 
-\begin{wrapfigure}{r}{18cm}
-	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm]
-	\node[anchor=west] at (0,3.3) {Parser state};
-	\draw[color=gray,dashed] (0,-3.2) rectangle (18,2.7);
-	\draw[color=gray] (0.2,0) rectangle (3.6,1);
-	\node[anchor=west] at (1,2) {$S$};
-	\node[fill=black, circle] at (1,.45) {};
-	\node[fill=blue, circle] at (2,.45) {};
-	\node[anchor=west] at (3,.25) {\small ,};
-	\draw[color=gray] (3.9,0) rectangle (11.5,1);
-	\node[anchor=west] at (5,2) {$B$};
-	\node[anchor=west] at (3.9,.45) {\small John moved to Paris .};
-	\node[anchor=west] at (12,2) {$G$};
-	\node[fill=black, circle] at (14.7,1.5) {}
-	  child {node  {\scriptsize After} edge from parent [-{Latex[length=4mm]}] node[left] {\small L}}
-	  child {node [fill=blue, circle] {}
-	  {
-	    child {node {\scriptsize graduation} edge from parent [-{Latex[length=4mm]}] node[right] {\small P}}
-	  } edge from parent [-{Latex[length=5mm]}] node[right] {\small H} };
-	\end{tikzpicture}
-	\begin{tikzpicture}[->]
-	\node[anchor=west] at (0,17) {Transition classifier};
-	\tiny
-	\tikzstyle{main}=[circle, minimum size=1cm, draw=black!80, node distance=24mm]
-	\foreach \i/\word in {1/{After},4/{graduation},11/{to},14/{Paris}} {
-	    \node (x\i) at (\i,-3) {\word};
-	    \node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
-        \path (x\i) edge (h\i);
-	    \node[main, fill=white!100] (i\i) at (\i.5,2) {LSTM};
-        \path (x\i) edge [bend right] (i\i);
-	    \node[main, fill=white!100] (l\i) at (\i.5,6) {LSTM};
-        \path (h\i) edge [bend left] (l\i);
-        \path (i\i) edge (l\i);
-	    \node[main, fill=white!100] (k\i) at (\i,8) {LSTM};
-        \path (i\i) edge [bend left] (k\i);
-        \path (h\i) edge [bend left] (k\i);
-	}
-    \node (k7) at (7,8) {\ldots};
-    \node (l7) at (7.5,6) {\ldots};
-    \node (i7) at (7.5,2) {\ldots};
-    \node (h7) at (7,0) {\ldots};
-    \node (x7) at (7,-3) {\ldots};
-	\foreach \current/\next in {1/4,4/7,7/11,11/14} {
-        \path (i\next) edge (i\current);
-        \path (h\current) edge (h\next);
-        \path (k\next) edge (k\current);
-        \path (l\current) edge (l\next);
-	}
-    \node[main, fill=white!100] (mlp) at (7,14) {MLP};
-	\foreach \i in {1,4} {
-        \path (l\i) edge (mlp);
-        \path (k\i) edge (mlp);
-    }
-    \coordinate (state) at (15,17);
-    \path (state) edge [bend left] (mlp);
-    \node (transition) at (7,16) {\textsc{Node}\textsubscript{U}};
-    \path (mlp) edge (transition);
-	\end{tikzpicture}
-	\caption{Illustration of the \parser{} model.}
-\end{wrapfigure}
 
 
 
+\begin{wraptable}{r}{15cm}
+	\begin{tabular}{l|ccc|c}
+		& \multicolumn{3}{c|}{Wiki} & 20K \\
+		& \small Train & \small Dev & \small Test & Leagues \\
+		\hline
+		\# passages & 300 & 34 & 33 & 154 \\
+		\# sentences & 4268 & 454 & 503 & 506 \\
+		\hline
+		\# nodes & 298,993 & 33,704 & 35,718 & 29,315 \\
+		\% terminal & 42.96 & 43.54 & 42.87 & 42.09 \\
+		\% non-term. & 58.33 & 57.60 & 58.35 & 60.01 \\
+		\% discont. & 0.54 & 0.53 & 0.44 & 0.81 \\
+		\% reentrant & 2.38 & 1.88 & 2.15 & 2.03 \\
+		\hline
+		\# edges & 287,914 & 32,460 & 34,336 & 27,749 \\
+		\% primary & 98.25 & 98.75 & 98.74 & 97.73 \\
+		\% remote & 1.75 & 1.25 & 1.26 & 2.27 \\
+		\hline
+		\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
+		\# children & 1.67 & 1.68 & 1.66 & 1.61 
+	\end{tabular}
+	\captionof{table}{Statistics of \textit{Wiki} and \textit{20K Leagues} corpora.}
+\end{wraptable}
 
 \section*{Experimental Setup}
 
-Corpora: English Wikipedia, and as
-out-of-domain corpus, English part of \textit{Twenty Thousand Leagues Under the Sea}
-English-French parallel corpus.
+\paragraph{Corpora.}
+English Wikipedia (in-domain), English part of \textit{Twenty Thousand Leagues Under the Sea}
+English-French parallel corpus (out-of-domain).
 
 \paragraph{Evaluation.}
-Labeled precision, recall and F-score on graph edges, where an edge is represented
-by its terminal yield.
-Two variants:
-\begin{itemize}
-\item Primary edges
-\item Remote edges
-\end{itemize}
+Labeled precision, recall and F-score on graph edges,
+represented by their terminal yields.
+Primary and remote evaluated separately.
 
 \paragraph{Baselines.}
-Existing parsers trained on converted bilexical graphs and trees.
-
+Parsers trained on bilexical graphs and trees converted from UCCA training set,
+and evaluated by converting test set output to UCCA.
 
 
 \section*{Results}
 
-\parser{BiLSTM} obtains the highest scores in all metrics:
+\parser{BiLSTM} obtains the highest scores:
 	  
 \begin{center}
 	\begin{tabular}{l|ccc|ccc||ccc|ccc}
@@ -556,6 +515,70 @@ The performance is encouraging in light of
 UCCA's inter-annotator agreement of 80--85\%
 F-score on primary edges \cite{abend2013universal}.
 
+
+\rule{\columnwidth}{1pt}
+
+
+\begin{wrapfigure}{l}{18cm}
+	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm]
+	\node[anchor=west] at (0,3.3) {Parser state};
+	\draw[color=gray,dashed] (0,-3.2) rectangle (18,2.7);
+	\draw[color=gray] (0.2,0) rectangle (3.6,1);
+	\node[anchor=west] at (1,2) {$S$};
+	\node[fill=black, circle] at (1,.45) {};
+	\node[fill=blue, circle] at (2,.45) {};
+	\node[anchor=west] at (3,.25) {\small ,};
+	\draw[color=gray] (3.9,0) rectangle (11.5,1);
+	\node[anchor=west] at (5,2) {$B$};
+	\node[anchor=west] at (3.9,.45) {\small John moved to Paris .};
+	\node[anchor=west] at (12,2) {$G$};
+	\node[fill=black, circle] at (14.7,1.5) {}
+	  child {node  {\scriptsize After} edge from parent [-{Latex[length=4mm]}] node[left] {\small L}}
+	  child {node [fill=blue, circle] {}
+	  {
+	    child {node {\scriptsize graduation} edge from parent [-{Latex[length=4mm]}] node[right] {\small P}}
+	  } edge from parent [-{Latex[length=5mm]}] node[right] {\small H} };
+	\end{tikzpicture}
+	\begin{tikzpicture}[->]
+	\node[anchor=west] at (0,17) {Transition classifier};
+	\tiny
+	\tikzstyle{main}=[circle, minimum size=1cm, draw=black!80, node distance=24mm]
+	\foreach \i/\word in {1/{After},4/{graduation},11/{to},14/{Paris}} {
+	    \node (x\i) at (\i,-3) {\word};
+	    \node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
+        \path (x\i) edge (h\i);
+	    \node[main, fill=white!100] (i\i) at (\i.5,2) {LSTM};
+        \path (x\i) edge [bend right] (i\i);
+	    \node[main, fill=white!100] (l\i) at (\i.5,6) {LSTM};
+        \path (h\i) edge [bend left] (l\i);
+        \path (i\i) edge (l\i);
+	    \node[main, fill=white!100] (k\i) at (\i,8) {LSTM};
+        \path (i\i) edge [bend left] (k\i);
+        \path (h\i) edge [bend left] (k\i);
+	}
+    \node (k7) at (7,8) {\ldots};
+    \node (l7) at (7.5,6) {\ldots};
+    \node (i7) at (7.5,2) {\ldots};
+    \node (h7) at (7,0) {\ldots};
+    \node (x7) at (7,-3) {\ldots};
+	\foreach \current/\next in {1/4,4/7,7/11,11/14} {
+        \path (i\next) edge (i\current);
+        \path (h\current) edge (h\next);
+        \path (k\next) edge (k\current);
+        \path (l\current) edge (l\next);
+	}
+    \node[main, fill=white!100] (mlp) at (7,14) {MLP};
+	\foreach \i in {1,4} {
+        \path (l\i) edge (mlp);
+        \path (k\i) edge (mlp);
+    }
+    \coordinate (state) at (15,17);
+    \path (state) edge [bend left] (mlp);
+    \node (transition) at (7,16) {\textsc{Node}\textsubscript{U}};
+    \path (mlp) edge (transition);
+	\end{tikzpicture}
+	\caption{Illustration of the \parser{} model.}
+\end{wrapfigure}
 
 \section*{Conclusions}
 
