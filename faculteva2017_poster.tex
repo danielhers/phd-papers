@@ -91,7 +91,7 @@
 \setlength{\columnsep}{1cm}
 
 \begin{wraptable}[11]{R}{55mm}
-  \vspace{-2cm}
+  \vspace{-1cm}
   \begin{adjustbox}{margin=2mm,frame}
   \scalebox{.9}{
   \begin{tabular}{cl}
@@ -114,7 +114,7 @@
   \captionof{table}{Edge labels.}
 \end{wraptable}
 
-UCCA or Universal Conceptual Cognitive Annotation \cite{abend2013universal}
+Universal Conceptual Cognitive Annotation \cite{abend2013universal}
 is a cross-linguistically applicable semantic representation scheme.
 \begin{itemize}
  \item Builds on typological \cite{Dixon:basic}
@@ -126,15 +126,14 @@ is a cross-linguistically applicable semantic representation scheme.
  \item Applicability has been so far limited by the absence of a parser.
 \end{itemize}
 
-Formally, a UCCA structure is a DAG whose leaves correspond to the tokens of
-the text. Nodes (or {\it units}) either correspond to a terminal or
-to several sub-units (not necessarily contiguous) jointly viewed as a
-single entity according to some semantic or cognitive consideration.
-Edges bear a category, indicating the role of the sub-unit in the relation
-that the parent represents.
+UCCA graphs are labeled, directed acyclic graphs (DAGs).
+Leaves correspond to the tokens of the text.
+A node corresponds to one or more terminals (not necessarily contiguous) semantically viewed as a
+single entity.
+Edges bear a category, indicating the role of the node in the parent relation.
 
 \begin{center}
-  \begin{tikzpicture}[level distance=4cm, sibling distance=4cm, -{Latex[length=5mm]},
+  \begin{tikzpicture}[level distance=35mm, sibling distance=4cm, -{Latex[length=5mm]},
       every circle node/.append style={fill=black}]
     \node (ROOT) [circle] {}
       child {node (After) {After} edge from parent node[left] {L}}
@@ -157,7 +156,7 @@ that the parent represents.
     \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [auto] {A} (John);
   \end{tikzpicture}
   \captionof{figure}{Remote edge (dashed), resulting in ``John'' having two parents (reentrancy).}
-  \begin{tikzpicture}[level distance=5cm, sibling distance=4cm, -{Latex[length=5mm]},
+  \begin{tikzpicture}[level distance=35mm, sibling distance=4cm, -{Latex[length=5mm]},
       every node/.append style={midway},
       every circle node/.append style={fill=black}]
     \node (ROOT) [circle] {}
@@ -172,7 +171,7 @@ that the parent represents.
     \draw[bend right,-{Latex[length=5mm]}] (ROOT) to[out=-20, in=180] node [left] {A} (everything);
   \end{tikzpicture}
   \hspace{4cm}
-  \begin{tikzpicture}[level distance=5cm, sibling distance=4cm, -{Latex[length=5mm]},
+  \begin{tikzpicture}[level distance=35mm, sibling distance=4cm, -{Latex[length=5mm]},
       every node/.append style={midway},
       every circle node/.append style={fill=black}]
     \node (ROOT) [circle] {}
@@ -197,12 +196,18 @@ that the parent represents.
 
 \section*{Transition-based UCCA Parsing}
 
-\parser{} is our transition-based parser, supporting the structural properties of UCCA.\footnote{
+\parser{}, our transition-based parser, supports the structural properties of UCCA.\footnote{
 Corpora are available at \url{http://www.cs.huji.ac.il/~oabend/ucca.html},
 and parser code at \url{https://github.com/danielhers/tupa}
 (written in Python using DyNet: \url{https://github.com/clab/dynet}).}
 
-\hspace{-2cm}
+Transition-based parsers work by applying a \textit{transition}
+at each step to the parser state,
+defined using a buffer $B$ of tokens and nodes to be processed,
+a stack $S$ of nodes currently being processed,
+and a graph $G=(V,E,\ell)$ of constructed nodes and edges.
+
+\scalebox{.9}{
 \begin{minipage}{.55\columnwidth}
 	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm]
 	\draw[color=gray,dashed] (.2,-.2) rectangle (19.5,2.7);
@@ -214,7 +219,7 @@ and parser code at \url{https://github.com/danielhers/tupa}
 	\node[anchor=west] at (3,.45) {\small After graduation , John moved to Paris .};
 	\node[anchor=west] at (18,2) {$G$};
 	\node[fill=black, circle] at (18.5,.45) {};
-	\node[anchor=west] at (10,-.8) {\textsc{Shift}};
+	\node[anchor=west] at (10,-.8) {\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm]
@@ -228,7 +233,7 @@ and parser code at \url{https://github.com/danielhers/tupa}
 	\node[anchor=west] at (5,.45) {\small graduation , John moved to Paris .};
 	\node[anchor=west] at (18,2) {$G$};
 	\node[fill=black, circle] at (18.5,.45) {};
-	\node[anchor=west] at (10,-.9) {\textsc{Right-Edge\textsubscript L}};
+	\node[anchor=west] at (10,-.9) {\small\textsc{Right-Edge\textsubscript L}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm]
@@ -243,7 +248,7 @@ and parser code at \url{https://github.com/danielhers/tupa}
 	\node[anchor=west] at (16.5,2) {$G$};
 	\node[fill=black, circle] at (18.5,2.2) {}
 	  child {node  {\scriptsize After} edge from parent [-{Latex[length=4mm]},red] node[left] {\small L}};
-	\node[anchor=west] at (10,-1.2) {\textsc{Reduce}};
+	\node[anchor=west] at (10,-1.2) {\small\textsc{Reduce}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm]
@@ -257,7 +262,7 @@ and parser code at \url{https://github.com/danielhers/tupa}
 	\node[anchor=west] at (16.5,2) {$G$};
 	\node[fill=black, circle] at (18.5,2.2) {}
 	  child {node  {\scriptsize After} edge from parent [-{Latex[length=4mm]}] node[left] {\small L}};
-	\node[anchor=west] at (10,-1.2) {\textsc{Shift}};
+	\node[anchor=west] at (10,-1.2) {\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm]
@@ -272,7 +277,7 @@ and parser code at \url{https://github.com/danielhers/tupa}
 	\node[anchor=west] at (16.5,2) {$G$};
 	\node[fill=black, circle] at (18.5,2.2) {}
 	  child {node  {\scriptsize After} edge from parent [-{Latex[length=4mm]}] node[left] {\small L}};
-	\node[anchor=west] at (10,-1.2) {\textsc{Node\textsubscript P}};
+	\node[anchor=west] at (10,-1.2) {\small\textsc{Node\textsubscript P}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm]
@@ -290,10 +295,11 @@ and parser code at \url{https://github.com/danielhers/tupa}
 	  child {node  {\scriptsize After} edge from parent [-{Latex[length=4mm]}] node[left] {\small L}};
 	\node[fill=blue, draw=red, circle] at (18.3,2.2) {}
 	  child {node {\scriptsize graduation} edge from parent [-{Latex[length=4mm]},red] node[right] {\small P}};
-	\node[anchor=west] at (10,-1.2) {\textsc{Reduce}};
+	\node[anchor=west] at (10,-1.2) {\small\textsc{Reduce}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
 \end{minipage}
+\hspace{1cm}
 \begin{minipage}{.4\columnwidth}
 	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm]
 	\draw[color=gray,dashed] (0,-.6) rectangle (18,2.7);
@@ -309,7 +315,7 @@ and parser code at \url{https://github.com/danielhers/tupa}
 	  child {node  {\scriptsize After} edge from parent [-{Latex[length=4mm]}] node[left] {\small L}};
 	\node[fill=blue, circle] at (16.2,2.2) {}
 	  child {node {\scriptsize graduation} edge from parent [-{Latex[length=4mm]}] node[right] {\small P}};
-	\node[anchor=west] at (6,-1.2) {\textsc{Right-Edge\textsubscript H}};
+	\node[anchor=west] at (6,-1.2) {\small\textsc{Right-Edge\textsubscript H}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-.6) -- (5,-1.7);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm]
@@ -328,7 +334,7 @@ and parser code at \url{https://github.com/danielhers/tupa}
 	  {
 	    child {node {\scriptsize graduation} edge from parent [-{Latex[length=4mm]},black] node[right] {\small P}}
 	  } edge from parent [-{Latex[length=5mm]},red] node[right] {\small H} };
-	\node[anchor=west] at (6,-3.6) {\textsc{Shift}};
+	\node[anchor=west] at (6,-3.6) {\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-3.2) -- (5,-4.3);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm]
@@ -379,15 +385,10 @@ and parser code at \url{https://github.com/danielhers/tupa}
     \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [auto] {\small A} (John);
 	\end{tikzpicture}
 \end{minipage}
-\captionof{figure}{Example for intermediate states during transition-based parsing.}
-
-Transition-based parsers work by applying a \textit{transition}
-at each step to the parser state,
-defined using a buffer $B$ of tokens and nodes to be processed,
-a stack $S$ of nodes currently being processed,
-and a graph $G=(V,E,\ell)$ of constructed nodes and edges.
-
+}
+\captionof{figure}{Example for intermediate states during transition-based UCCA parsing.}
 \vspace{5mm}
+
 A classifier selects the next transition based on the current state's features.
 It is trained by an oracle based on gold-standard annotations.
 We experiment with three classifiers:
@@ -401,35 +402,71 @@ We experiment with three classifiers:
 \vspace{5mm}
 For all classifiers, inference is performed greedily, i.e., without beam search.
 
+\begin{wrapfigure}{r}{18cm}
+	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm]
+	\node[anchor=west] at (0,3.3) {Parser state};
+	\draw[color=gray,dashed] (0,-3.2) rectangle (18,2.7);
+	\draw[color=gray] (0.2,0) rectangle (3.6,1);
+	\node[anchor=west] at (1,2) {$S$};
+	\node[fill=black, circle] at (1,.45) {};
+	\node[fill=blue, circle] at (2,.45) {};
+	\node[anchor=west] at (3,.25) {\small ,};
+	\draw[color=gray] (3.9,0) rectangle (11.5,1);
+	\node[anchor=west] at (5,2) {$B$};
+	\node[anchor=west] at (3.9,.45) {\small John moved to Paris .};
+	\node[anchor=west] at (12,2) {$G$};
+	\node[fill=black, circle] at (14.7,1.5) {}
+	  child {node  {\scriptsize After} edge from parent [-{Latex[length=4mm]}] node[left] {\small L}}
+	  child {node [fill=blue, circle] {}
+	  {
+	    child {node {\scriptsize graduation} edge from parent [-{Latex[length=4mm]}] node[right] {\small P}}
+	  } edge from parent [-{Latex[length=5mm]}] node[right] {\small H} };
+	\end{tikzpicture}
+	\begin{tikzpicture}[->]
+	\node[anchor=west] at (0,17) {Transition classifier};
+	\tiny
+	\tikzstyle{main}=[circle, minimum size=1cm, draw=black!80, node distance=24mm]
+	\foreach \i/\word in {1/{After},4/{graduation},11/{to},14/{Paris}} {
+	    \node (x\i) at (\i,-3) {\word};
+	    \node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
+        \path (x\i) edge (h\i);
+	    \node[main, fill=white!100] (i\i) at (\i.5,2) {LSTM};
+        \path (x\i) edge [bend right] (i\i);
+	    \node[main, fill=white!100] (l\i) at (\i.5,6) {LSTM};
+        \path (h\i) edge [bend left] (l\i);
+        \path (i\i) edge (l\i);
+	    \node[main, fill=white!100] (k\i) at (\i,8) {LSTM};
+        \path (i\i) edge [bend left] (k\i);
+        \path (h\i) edge [bend left] (k\i);
+	}
+    \node (k7) at (7,8) {\ldots};
+    \node (l7) at (7.5,6) {\ldots};
+    \node (i7) at (7.5,2) {\ldots};
+    \node (h7) at (7,0) {\ldots};
+    \node (x7) at (7,-3) {\ldots};
+	\foreach \current/\next in {1/4,4/7,7/11,11/14} {
+        \path (i\next) edge (i\current);
+        \path (h\current) edge (h\next);
+        \path (k\next) edge (k\current);
+        \path (l\current) edge (l\next);
+	}
+    \node[main, fill=white!100] (mlp) at (7,14) {MLP};
+	\foreach \i in {1,4} {
+        \path (l\i) edge (mlp);
+        \path (k\i) edge (mlp);
+    }
+    \coordinate (state) at (15,17);
+    \path (state) edge [bend left] (mlp);
+    \node (transition) at (7,16) {\textsc{Node}\textsubscript{U}};
+    \path (mlp) edge (transition);
+	\end{tikzpicture}
+	\caption{Illustration of the \parser{} model.}
+\end{wrapfigure}
+
 
 
 
 \section*{Experimental Setup}
-
-\begin{wraptable}{r}{18cm}
-	\vspace{-2cm}
-	\begin{tabular}{l|ccc|c}
-		& \multicolumn{3}{c|}{Wiki} & 20K \\
-		& \small Train & \small Dev & \small Test & Leagues \\
-		\hline
-		\# passages & 300 & 34 & 33 & 154 \\
-		\# sentences & 4268 & 454 & 503 & 506 \\
-		\hline
-		\# nodes & 298,993 & 33,704 & 35,718 & 29,315 \\
-		\% terminal & 42.96 & 43.54 & 42.87 & 42.09 \\
-		\% non-term. & 58.33 & 57.60 & 58.35 & 60.01 \\
-		\% discont. & 0.54 & 0.53 & 0.44 & 0.81 \\
-		\% reentrant & 2.38 & 1.88 & 2.15 & 2.03 \\
-		\hline
-		\# edges & 287,914 & 32,460 & 34,336 & 27,749 \\
-		\% primary & 98.25 & 98.75 & 98.74 & 97.73 \\
-		\% remote & 1.75 & 1.25 & 1.26 & 2.27 \\
-		\hline
-		\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
-		\# children & 1.67 & 1.68 & 1.66 & 1.61 
-	\end{tabular}
-	\captionof{table}{Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.}
-\end{wraptable}
 
 Corpora: English Wikipedia, and as
 out-of-domain corpus, English part of \textit{Twenty Thousand Leagues Under the Sea}
@@ -445,58 +482,7 @@ Two variants:
 \end{itemize}
 
 \paragraph{Baselines.}
-
-\begin{wrapfigure}{r}{14cm}
-	\centering
-	\scalebox{.7}{
-	\begin{dependency}[theme = simple]
-	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
-	\end{deptext}
-	\depedge{2}{1}{L}
-	\depedge{2}{3}{U}
-	\depedge[dashed]{2}{4}{A}
-	\depedge{5}{4}{A}
-	\depedge{2}{5}{H}
-	\depedge{7}{6}{R}
-	\depedge{5}{7}{A}
-	\end{dependency}
-	}
-	\scalebox{.7}{
-	\begin{dependency}[theme = simple]
-	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-	John \^ gave \^ everything \^ up \\
-	\end{deptext}
-	\depedge{2}{1}{A}
-	\depedge{2}{3}{A}
-	\depedge{2}{4}{C}
-	\end{dependency}
-	}
-	\scalebox{.7}{
-	\begin{dependency}[theme = simple]
-	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-	John \^ and \^ Mary \^ went \^ home \\
-	\end{deptext}
-	\depedge[edge start x offset=-6pt]{1}{4}{A}
-	\depedge{1}{2}{N}
-	\depedge{1}{3}{C}
-	\depedge{4}{5}{A}
-	\end{dependency}
-	}
-	\captionof{figure}{Bilexical approximation for UCCA graphs.}
-\end{wrapfigure}
-
-Since there are no existing UCCA parsers, we use bilexical DAG parsers:
-\begin{enumerate}
- \item Convert UCCA into bilexical dependencies.
- \item Train parsers on the resulting training set.
- \item Apply trained parsers to the test set.
- \item Reconstruct UCCA graphs.
- \item Compare with gold standard.
-\end{enumerate}
-Upper bounds are computed by applying
-the conversion both ways to the gold standard
-graphs and comparing to the original.
+Existing parsers trained on converted bilexical graphs and trees.
 
 
 
