@@ -129,7 +129,7 @@ UCCA graphs are labeled, directed acyclic graphs (DAGs).
 Leaves correspond to the tokens of the text.
 A node corresponds to one or more terminals (not necessarily contiguous) semantically viewed as a
 single entity.
-Edges bear a category, indicating the role of the node in the parent relation.
+Edges bear a category, indicating the role of the child in the parent relation.
 
 \begin{center}
   \begin{tikzpicture}[level distance=35mm, sibling distance=4cm, -{Latex[length=5mm]},
@@ -195,10 +195,7 @@ Edges bear a category, indicating the role of the node in the parent relation.
 
 \section*{Transition-based UCCA Parsing}
 
-\parser{}, our transition-based parser, supports the structural properties of UCCA.\footnote{
-Corpora are available at \url{http://www.cs.huji.ac.il/~oabend/ucca.html},
-and parser code at \url{https://github.com/danielhers/tupa}
-(written in Python using DyNet: \url{https://github.com/clab/dynet}).}
+\parser{}, our transition-based parser, supports the structural properties of UCCA.
 
 Transition-based parsers work by applying a \textit{transition}
 at each step to the parser state,
@@ -401,8 +398,10 @@ We experiment with three classifiers:
 \vspace{5mm}
 For all classifiers, inference is performed greedily, i.e., without beam search.
 
+Parser code available at \url{https://github.com/danielhers/tupa}\\
+All corpora available at \url{http://www.cs.huji.ac.il/~oabend/ucca.html}\\
+Parser written in Python using DyNet: \url{https://github.com/clab/dynet}
 
-\vspace{5cm}
 
 \begin{wraptable}{r}{.42\columnwidth}
 	\scalebox{.9}{
