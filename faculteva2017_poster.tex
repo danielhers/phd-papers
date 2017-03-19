@@ -393,7 +393,6 @@ We experiment with three classifiers:
 \begin{flushleft}
 	\begin{tabular}{ll}
 	\textbf{\parser{Sparse}} & Perceptron with features: words, POS, dependency \& edge label combinations. \\
-	\textbf{\parser{Dense}} & Perceptron with embedding features: word2vec \cite{mikolov2013efficient} for words, else random. \\
 	\textbf{\parser{MLP}} & 2-layer NN, learned embedding features. \\
 	\textbf{\parser{BiLSTM}} & 2-layer bidirectional RNN to encode features, 2-layer NN for classification. \\
 	\end{tabular}
@@ -527,9 +526,6 @@ graphs and comparing to the original.
 	\parser{Sparse}
 	& 63.6 & 62.9 & 63.3 & 20.6 & 13.7 & 16.5
 	& 59.7 & 59.6 & 59.7 & 26.3 & 8.3 & 12.6 \\
-	\parser{Dense} 
-	& 59.1 & 58.9 & 59 & 17.4 & 12.4 & 14.5
-	& 57.0 & 57.9 & 57.4 & 10.8 & 4.2 & 6.0 \\
 	\parser{MLP}
 	&  \\
 	\parser{BiLSTM}
