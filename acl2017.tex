@@ -63,7 +63,7 @@
  \expandafter\xlinkdash\expandafter#2%
  \fi}
 
-%\aclfinalcopy % Uncomment this line for the final submission
+\aclfinalcopy % Uncomment this line for the final submission
 \def\aclpaperid{193} %  Enter the acl Paper ID here
 
 %\setlength\titlebox{5cm}
@@ -74,10 +74,15 @@
 
 \title{Broad-Coverage Transition-Based UCCA Parsing}
 
-\author{Daniel Hershcovich$^{1,2}$ \And Omri Abend$^2$ \And Ari Rappoport$^2$ \\
-  $^1$Edmond and Lily Safra Center for Brain Sciences, Hebrew University of Jerusalem \\
-  $^2$School of Computer Science and Engineering, Hebrew University of Jerusalem \\
+\author{Daniel Hershcovich$^{1,2}$ \\
+  \\\And
+  Omri Abend$^2$ \\
+  $^1$The Edmond and Lily Safra Center for Brain Sciences \\
+  $^2$School of Computer Science and Engineering \\
+  Hebrew University of Jerusalem \\
   \texttt{\{danielh,oabend,arir\}@cs.huji.ac.il}
+  \\\And
+  Ari Rappoport$^2$
 }
 
 \date{}
@@ -245,15 +250,15 @@ forming a DAG.
   \vspace{2cm}
   \begin{adjustbox}{width=.3\columnwidth,margin=1pt,frame}
   \begin{tabular}{ll}
-  P & process \\
-  A & participant \\
-  H & linked scene \\
-  C & center \\
-  R & relator \\
-  N & connector \\
-  L & scene linker \\
-  U & punctuation \\
-  F & function unit
+	  P & process \\
+	  A & participant \\
+	  H & linked scene \\
+	  C & center \\
+	  R & relator \\
+	  N & connector \\
+	  L & scene linker \\
+	  U & punctuation \\
+	  F & function unit
   \end{tabular}
   \end{adjustbox}
   }
@@ -371,36 +376,36 @@ based on gold-standard annotations.
 
 
 \begin{figure*}
-\begin{adjustbox}{width=\textwidth,margin=3pt,frame}
-\begin{tabular}{llll|l|llllc|c}
-\multicolumn{4}{c|}{\textbf{\small Before Transition}} & \textbf{\small Transition} & \multicolumn{5}{c|}{\textbf{\small After Transition}} & \textbf{\small Condition} \\
-\textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & \textbf{\footnotesize Terminal?} & \\
-$S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ & $-$ & \\
-$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & \\
-$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ &
-$x \neq \mathrm{root}$ \\
-$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ &
-\multirow{4}{50pt}{\vspace{-5mm}\[\left\{\begin{array}{l}
-x \not\in w_{1:n},\\
-y \neq \mathrm{root},\\
-y \not\leadsto_G x
-\end{array}\right.\]} \\
-$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ & \\
-$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
-$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
-$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ & $-$ &
-$\mathrm{i}(x) < \mathrm{i}(y)$ \\
-$[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & $+$ & \\
-\end{tabular}
-\end{adjustbox}
-\caption{\label{fig:transitions}
-  The transition set of \parser{}. %Following standard practice,
-  We write the stack with its top to the right and the buffer with its head to the left.
-  $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
-  $\mathrm{i}(x)$ is a running index for the created nodes.
-  In addition to the specified conditions,
-  the prospective child in an \textsc{Edge} transition must not already have a primary parent.
-}
+	\begin{adjustbox}{width=\textwidth,margin=3pt,frame}
+	\begin{tabular}{llll|l|llllc|c}
+		\multicolumn{4}{c|}{\textbf{\small Before Transition}} & \textbf{\small Transition} & \multicolumn{5}{c|}{\textbf{\small After Transition}} & \textbf{\small Condition} \\
+		\textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & & \textbf{\footnotesize Stack} & \textbf{\footnotesize Buffer} & \textbf{\footnotesize Nodes} & \textbf{\footnotesize Edges} & \textbf{\footnotesize Terminal?} & \\
+		$S$ & $x \;|\; B$ & $V$ & $E$ & \textsc{Shift} & $S \;|\; x$ & $B$ & $V$ & $E$ & $-$ & \\
+		$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & \\
+		$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ &
+		$x \neq \mathrm{root}$ \\
+		$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ &
+		\multirow{4}{50pt}{\vspace{-5mm}\[\left\{\begin{array}{l}
+		x \not\in w_{1:n},\\
+		y \neq \mathrm{root},\\
+		y \not\leadsto_G x
+		\end{array}\right.\]} \\
+		$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ & \\
+		$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
+		$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
+		$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ & $-$ &
+		$\mathrm{i}(x) < \mathrm{i}(y)$ \\
+		$[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & $+$ & \\
+	\end{tabular}
+	\end{adjustbox}
+	\caption{\label{fig:transitions}
+	  The transition set of \parser{}. %Following standard practice,
+	  We write the stack with its top to the right and the buffer with its head to the left.
+	  $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
+	  $\mathrm{i}(x)$ is a running index for the created nodes.
+	  In addition to the specified conditions,
+	  the prospective child in an \textsc{Edge} transition must not already have a primary parent.
+	}
 \end{figure*}
 
 \paragraph{Transition Set.}
@@ -526,14 +531,14 @@ Hyperparameters are tuned on the development set (see \secref{sec:exp_setup}).
     \path (mlp) edge (transition);
 	\end{tikzpicture}
 	\caption{Illustration of the \parser{} model.
-	Top: parser state (stack, buffer and intermediate graph).
-	Bottom: \parser{BiLTSM} architecture.
-	Vector representation for the input tokens is computed
-	by two layers of bidirectional LSTMs.
-	The vectors for specific tokens are concatenated with
-	embedding and numeric features from the parser state
-	(for existing edge labels, number of children, etc.),
-	and fed into the MLP for selecting the next transition.}
+		Top: parser state (stack, buffer and intermediate graph).
+		Bottom: \parser{BiLTSM} architecture.
+		Vector representation for the input tokens is computed
+		by two layers of bidirectional LSTMs.
+		The vectors for specific tokens are concatenated with
+		embedding and numeric features from the parser state
+		(for existing edge labels, number of children, etc.),
+		and fed into the MLP for selecting the next transition.}
 	\label{fig:model}
 \end{figure}
 
@@ -619,32 +624,32 @@ without parameter re-tuning.
 
 
 \begin{table}
-\scalebox{.9}{
-\begin{tabular}{l|ccc|c}
-& \multicolumn{3}{c|}{Wiki} & 20K \\
-& \small Train & \small Dev & \small Test & Leagues \\
-\hline
-\# passages & 300 & 34 & 33 & 154 \\
-\# sentences & 4268 & 454 & 503 & 506 \\
-\hline
-\# nodes & 298,993 & 33,704 & 35,718 & 29,315 \\
-\% terminal & 42.96 & 43.54 & 42.87 & 42.09 \\
-\% non-term. & 58.33 & 57.60 & 58.35 & 60.01 \\
-\% discont. & 0.54 & 0.53 & 0.44 & 0.81 \\
-\% reentrant & 2.38 & 1.88 & 2.15 & 2.03 \\
-\hline
-\# edges & 287,914 & 32,460 & 34,336 & 27,749 \\
-\% primary & 98.25 & 98.75 & 98.74 & 97.73 \\
-\% remote & 1.75 & 1.25 & 1.26 & 2.27 \\
-\hline
-\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
-\# children & 1.67 & 1.68 & 1.66 & 1.61 
-\end{tabular}
-}
-\caption{Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.
-All counts exclude the root node, implicit nodes, and linkage nodes and edges.
-}
-\label{table:data}
+	\scalebox{.9}{
+	\begin{tabular}{l|ccc|c}
+		& \multicolumn{3}{c|}{Wiki} & 20K \\
+		& \small Train & \small Dev & \small Test & Leagues \\
+		\hline
+		\# passages & 300 & 34 & 33 & 154 \\
+		\# sentences & 4268 & 454 & 503 & 506 \\
+		\hline
+		\# nodes & 298,993 & 33,704 & 35,718 & 29,315 \\
+		\% terminal & 42.96 & 43.54 & 42.87 & 42.09 \\
+		\% non-term. & 58.33 & 57.60 & 58.35 & 60.01 \\
+		\% discont. & 0.54 & 0.53 & 0.44 & 0.81 \\
+		\% reentrant & 2.38 & 1.88 & 2.15 & 2.03 \\
+		\hline
+		\# edges & 287,914 & 32,460 & 34,336 & 27,749 \\
+		\% primary & 98.25 & 98.75 & 98.74 & 97.73 \\
+		\% remote & 1.75 & 1.25 & 1.26 & 2.27 \\
+		\hline
+		\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
+		\# children & 1.67 & 1.68 & 1.66 & 1.61 
+	\end{tabular}
+	}
+	\caption{Statistics of the \textit{Wiki} and \textit{20K Leagues} UCCA corpora.
+		All counts exclude the root node, implicit nodes, and linkage nodes and edges.
+	}
+	\label{table:data}
 \end{table}
 
 \paragraph{Implementation.}
@@ -687,118 +692,118 @@ PARSEVAL constituency evaluation measure if $G_p$ and $G_g$ are trees.
 Punctuation is excluded from the evaluation, but not from the datasets.
 
 \begin{figure}
-\centering
-\scalebox{.9}{
-\begin{dependency}[theme = simple]
-\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
-\end{deptext}
-\depedge{2}{1}{L}
-\depedge{2}{3}{U}
-\depedge[dashed]{2}{4}{A}
-\depedge{5}{4}{A}
-\depedge{2}{5}{H}
-\depedge{7}{6}{R}
-\depedge{5}{7}{A}
-\end{dependency}
-}
-\scalebox{.9}{
-\begin{dependency}[theme = simple]
-\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-John \^ gave \^ everything \^ up \\
-\end{deptext}
-\depedge{2}{1}{A}
-\depedge{2}{3}{A}
-\depedge{2}{4}{C}
-\end{dependency}
-}
-\scalebox{.9}{
-\begin{dependency}[theme = simple]
-\begin{deptext}[column sep=.7em,ampersand replacement=\^]
-John \^ and \^ Mary \^ went \^ home \\
-\end{deptext}
-\depedge[edge start x offset=-6pt]{1}{4}{A}
-\depedge{1}{2}{N}
-\depedge{1}{3}{C}
-\depedge{4}{5}{A}
-\end{dependency}
-}
-\caption{Bilexical graph approximation (dependency graph) for the sentences in \figref{fig:examples}.}
-\label{fig:bilexical_example}
+	\centering
+	\scalebox{.9}{
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+		\depedge{2}{1}{L}
+		\depedge{2}{3}{U}
+		\depedge[dashed]{2}{4}{A}
+		\depedge{5}{4}{A}
+		\depedge{2}{5}{H}
+		\depedge{7}{6}{R}
+		\depedge{5}{7}{A}
+	\end{dependency}
+	}
+	\scalebox{.9}{
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	John \^ gave \^ everything \^ up \\
+	\end{deptext}
+		\depedge{2}{1}{A}
+		\depedge{2}{3}{A}
+		\depedge{2}{4}{C}
+	\end{dependency}
+	}
+	\scalebox{.9}{
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	John \^ and \^ Mary \^ went \^ home \\
+	\end{deptext}
+		\depedge[edge start x offset=-6pt]{1}{4}{A}
+		\depedge{1}{2}{N}
+		\depedge{1}{3}{C}
+		\depedge{4}{5}{A}
+	\end{dependency}
+	}
+	\caption{Bilexical graph approximation (dependency graph) for the sentences in \figref{fig:examples}.}
+	\label{fig:bilexical_example}
 \end{figure}
 
 \begin{table*}
-\begin{tabular}{l|ccc|ccc||ccc|ccc}
-& \multicolumn{6}{c||}{Wiki (in-domain)} & \multicolumn{6}{c}{20K Leagues (out-of-domain)} \\
-& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c||}{Remote}
-& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
-& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF}
-& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-\hline
-\parser{Sparse}
-& 64.5 & 63.7 & 64.1 & 19.8 & 13.4 & 16
-& 59.6 & 59.9 & 59.8 & 22.2 & 7.7 & 11.5 \\
-%\parser{Dense} 
-%& 59.1 & 58.9 & 59 & 17.4 & 12.4 & 14.5
-%& 57.0 & 57.9 & 57.4 & 10.8 & 4.2 & 6.0 \\
-\parser{MLP}
-& 65.2 & 64.6 & 64.9 & 23.7 & 13.2 & 16.9
-& 62.3 & 62.6 & 62.5 & 20.9 & 6.3 & 9.7 \\
-\parser{BiLSTM}
-& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4}
-& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3} \\
-\hline
-\multicolumn{8}{l}{\rule{0pt}{2ex} \footnotesize
-Bilexical Approximation (Dependency DAG Parsers)} \\
-\small Upper Bound
-%& \small 94.5 & \small 87.7 & \small 91 & \small 77.3 & \small 46.8 & \small 58.3
-%& \small 94.8 & \small 88 & \small 91.3 & \small 66.3 & \small 32.3 & \small 43.4 \\
-& & & \small 91 & & & \small 58.3
-& & & \small 91.3 & & & \small 43.4 \\
-DAGParser
-& 61.8 & 55.8 & 58.6 & 9.5 & 0.5 & 1
-& 56.4 & 50.6 & 53.4 & -- & 0 & 0 \\
-TurboParser
-& 57.7 & 46 & 51.2 & 77.8 & 1.8 & 3.7
-& 50.3 & 37.7 & 43.1 & 100 & 0.4 & 0.8 \\
-\hline
-\multicolumn{8}{l}{\rule{0pt}{2ex} \footnotesize
-Tree Approximation (Constituency Tree Parser)} \\
-\small Upper Bound
-%& \small 100 & \small 100 & \small 100 & & &
-%& \small 100 & \small 100 & \small 100 \\
-& & & \small 100 & & & \small --
-& & & \small 100 & & & \small -- \\
-\textsc{uparse}
-& 60.9 & 61.2 & 61.1 & -- & -- & --
-& 52.7 & 52.8 & 52.8 & -- & -- & -- \\
-\hline
-\multicolumn{8}{l}{\rule{0pt}{2ex} \footnotesize
-Bilexical Tree Approximation (Dependency Tree Parsers)} \\
-\small Upper Bound
-%& \small 94.5 & \small 87.7 & \small 91 & & &
-%& \small 94.8 & \small 88 & \small 91.3 \\
-& & & \small 91 & & & \small --
-& & & \small 91.3 & & & \small -- \\
-MaltParser
-& 62.8 & 57.7 & 60.2 & -- & -- & --
-& 57.8 & 53 & 55.3 & -- & -- & -- \\
-LSTM Parser
-& 73.2 & 66.9 & 69.9 & -- & -- & --
-& 66.1 & 61.1 & 63.5 & -- & -- & --
-\end{tabular}
-\caption{
-  Experimental results, in percents, on the \textit{Wiki} test set (left)
-  and the \textit{20K Leagues} set (right).
-  Columns correspond to labeled precision, recall and F-score,
-  for both primary and remote edges.
-  F-score upper bounds are reported for the conversions.
-  For the tree approximation experiments, only primary edges scores are reported,
-  as they are unable to predict remote edges.
-  \parser{BiLSTM} obtains the highest F-scores in all metrics, surpassing the
-  bilexical parsers, tree parsers and other classifiers.
-}
-\label{table:results}
+	\begin{tabular}{l|ccc|ccc||ccc|ccc}
+		& \multicolumn{6}{c||}{Wiki (in-domain)} & \multicolumn{6}{c}{20K Leagues (out-of-domain)} \\
+		& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c||}{Remote}
+		& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+		& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF}
+		& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+		\hline
+		\parser{Sparse}
+		& 64.5 & 63.7 & 64.1 & 19.8 & 13.4 & 16
+		& 59.6 & 59.9 & 59.8 & 22.2 & 7.7 & 11.5 \\
+		%\parser{Dense} 
+		%& 59.1 & 58.9 & 59 & 17.4 & 12.4 & 14.5
+		%& 57.0 & 57.9 & 57.4 & 10.8 & 4.2 & 6.0 \\
+		\parser{MLP}
+		& 65.2 & 64.6 & 64.9 & 23.7 & 13.2 & 16.9
+		& 62.3 & 62.6 & 62.5 & 20.9 & 6.3 & 9.7 \\
+		\parser{BiLSTM}
+		& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4}
+		& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3} \\
+		\hline
+		\multicolumn{8}{l}{\rule{0pt}{2ex} \footnotesize
+		Bilexical Approximation (Dependency DAG Parsers)} \\
+		\small Upper Bound
+		%& \small 94.5 & \small 87.7 & \small 91 & \small 77.3 & \small 46.8 & \small 58.3
+		%& \small 94.8 & \small 88 & \small 91.3 & \small 66.3 & \small 32.3 & \small 43.4 \\
+		& & & \small 91 & & & \small 58.3
+		& & & \small 91.3 & & & \small 43.4 \\
+		DAGParser
+		& 61.8 & 55.8 & 58.6 & 9.5 & 0.5 & 1
+		& 56.4 & 50.6 & 53.4 & -- & 0 & 0 \\
+		TurboParser
+		& 57.7 & 46 & 51.2 & 77.8 & 1.8 & 3.7
+		& 50.3 & 37.7 & 43.1 & 100 & 0.4 & 0.8 \\
+		\hline
+		\multicolumn{8}{l}{\rule{0pt}{2ex} \footnotesize
+		Tree Approximation (Constituency Tree Parser)} \\
+		\small Upper Bound
+		%& \small 100 & \small 100 & \small 100 & & &
+		%& \small 100 & \small 100 & \small 100 \\
+		& & & \small 100 & & & \small --
+		& & & \small 100 & & & \small -- \\
+		\textsc{uparse}
+		& 60.9 & 61.2 & 61.1 & -- & -- & --
+		& 52.7 & 52.8 & 52.8 & -- & -- & -- \\
+		\hline
+		\multicolumn{8}{l}{\rule{0pt}{2ex} \footnotesize
+		Bilexical Tree Approximation (Dependency Tree Parsers)} \\
+		\small Upper Bound
+		%& \small 94.5 & \small 87.7 & \small 91 & & &
+		%& \small 94.8 & \small 88 & \small 91.3 \\
+		& & & \small 91 & & & \small --
+		& & & \small 91.3 & & & \small -- \\
+		MaltParser
+		& 62.8 & 57.7 & 60.2 & -- & -- & --
+		& 57.8 & 53 & 55.3 & -- & -- & -- \\
+		LSTM Parser
+		& 73.2 & 66.9 & 69.9 & -- & -- & --
+		& 66.1 & 61.1 & 63.5 & -- & -- & --
+	\end{tabular}
+	\caption{
+	  Experimental results, in percents, on the \textit{Wiki} test set (left)
+	  and the \textit{20K Leagues} set (right).
+	  Columns correspond to labeled precision, recall and F-score,
+	  for both primary and remote edges.
+	  F-score upper bounds are reported for the conversions.
+	  For the tree approximation experiments, only primary edges scores are reported,
+	  as they are unable to predict remote edges.
+	  \parser{BiLSTM} obtains the highest F-scores in all metrics, surpassing the
+	  bilexical parsers, tree parsers and other classifiers.
+	}
+	\label{table:results}
 \end{table*}
 
 \paragraph{Comparison to bilexical graph parsers.}
@@ -814,40 +819,40 @@ Appendix~\ref{appendix:conversion} for the conversion procedures.}
 In \secref{sec:results} we report the upper bounds on the achievable scores due to the error resulting from the removal of non-terminal nodes.
 
 \begin{figure}
-\centering
-\scalebox{.9}{
-  \begin{tikzpicture}[level distance=10mm, ->]
-    \node (ROOT) [fill=black, circle] {}
-      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
-      child {node (graduation) [fill=black, circle] {}
-      {
-        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
-      } edge from parent node[left] {\scriptsize $H$} }
-      child {node {,} edge from parent node[right] {\scriptsize $U$}}
-      child {node (moved) [fill=black, circle] {}
-      {
-        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
-        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
-        child {node [fill=black, circle] {}
-        {
-          child {node {to} edge from parent node[left] {\scriptsize $R$}}
-          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
-        } edge from parent node[left] {\scriptsize $A$} }
-      } edge from parent node[right] {\scriptsize $H$} }
-      ;
-  \end{tikzpicture}
-}
-\scalebox{.9}{
+	\centering
+	\scalebox{.9}{
+	  \begin{tikzpicture}[level distance=10mm, ->]
+	    \node (ROOT) [fill=black, circle] {}
+	      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
+	      child {node (graduation) [fill=black, circle] {}
+	      {
+	        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
+	      } edge from parent node[left] {\scriptsize $H$} }
+	      child {node {,} edge from parent node[right] {\scriptsize $U$}}
+	      child {node (moved) [fill=black, circle] {}
+	      {
+	        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+	        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
+	        child {node [fill=black, circle] {}
+	        {
+	          child {node {to} edge from parent node[left] {\scriptsize $R$}}
+	          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
+	        } edge from parent node[left] {\scriptsize $A$} }
+	      } edge from parent node[right] {\scriptsize $H$} }
+	      ;
+	  \end{tikzpicture}
+	}
+	\scalebox{.9}{
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
 	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 	\end{deptext}
-	\depedge{2}{1}{L}
-	\depedge{2}{3}{U}
-	\depedge{5}{4}{A}
-	\depedge{2}{5}{H}
-	\depedge{7}{6}{R}
-	\depedge{5}{7}{A}
+		\depedge{2}{1}{L}
+		\depedge{2}{3}{U}
+		\depedge{5}{4}{A}
+		\depedge{2}{5}{H}
+		\depedge{7}{6}{R}
+		\depedge{5}{7}{A}
 	\end{dependency}
   }
   \caption{Tree approximation (constituency) for the sentence in \figref{fig:graduation} (top),
