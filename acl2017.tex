@@ -921,7 +921,8 @@ among the baseline parsers, with a considerable margin.
 Using a feedforward NN and embedding features,
 \parser{MLP} obtains higher scores than \parser{Sparse},
 but is outperformed by the LSTM parser on primary edges.
-However, using better input encoding,
+However, using better input encoding
+allowing virtual look-ahead and look-behind in the token representation,
 \parser{BiLSTM} obtains substantially higher scores than \parser{MLP}
 and all other parsers, on both primary and remote edges,
 both in the in-domain and out-of-domain settings.
@@ -963,12 +964,12 @@ provide a theory of the syntax-semantics interface, and have been used as a basi
 by defining compositional semantics on top of them \cite[among others]{Flic:00,bos2005towards}.
 Depending on the grammar and the implementation, such semantic parsers can support
 some or all of the structural properties UCCA exhibits.
-Nevertheless, this line of work differs from our grammarless approach in two important ways.
+Nevertheless, this line of work differs from our approach in two important ways.
 First, the \textit{representations} are different. UCCA does not attempt to model
 the syntax-semantics interface and is thus less coupled with syntax.
-Second, while grammar-based \textit{parsers} explicitly model syntax, grammarless
-approaches, as presented here, directly model the relation between
-tokens and semantic structures.
+Second, while grammar-based \textit{parsers} explicitly model syntax,
+our approach directly models the relation between tokens and semantic structures,
+without explicit composition rules.
 
 \paragraph{Broad-Coverage Semantic Parsing.}
 Most closely related to this work is Broad-Coverage Semantic Dependency Parsing (SDP),
@@ -1050,7 +1051,7 @@ Despite the recent diversity of semantic parsing work,
 the effectiveness of different approaches for
 structurally and semantically different schemes is not well-understood
 \cite{kuhlmann2016towards}.
-Our contribution to this literature is a general grammarless parser
+Our contribution to this literature is a general parser
 that supports multiple parents, discontinuous units and non-terminal nodes.
 
 Future work will explore different target
