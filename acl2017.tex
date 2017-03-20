@@ -811,13 +811,21 @@ Punctuation is excluded from the evaluation, but not from the datasets.
 As no direct comparison with existing parsers is possible,
 we compare \parser{} to bilexical dependency graph parsers,
 which support reentrancy and discontinuity but not non-terminal nodes.
+
 To facilitate the comparison, we convert our training set into bilexical graphs
 (see examples in \figref{fig:bilexical_example}),
-train each of the parsers,
-and evaluate them by applying them to the test set
-and then reconstructing UCCA graphs, which are compared with the gold standard.\footnote{See
-Appendix~\ref{appendix:conversion} for the conversion procedures.}
-In \secref{sec:results} we report the upper bounds on the achievable scores due to the error resulting from the removal of non-terminal nodes.
+train each of the parsers, and evaluate them by applying them to the test set
+and then reconstructing UCCA graphs, which are compared with the gold standard.
+The conversion to bilexical graphs is done by heuristically selecting a head terminal for each
+non-terminal node, and attaching all terminal descendents to the head terminal.
+In the inverse conversion, we traverse the bilexical graph in topological order,
+creating non-terminal parents for all terminals, and attaching them to the previously-created
+non-terminals corresponding to the bilexical
+heads.\footnote{See Appendix~\ref{appendix:conversion} for a detailed description of
+the conversion procedures.}
+
+In \secref{sec:results} we report the upper bounds on the achievable scores due to the
+error resulting from the removal of non-terminal nodes.
 
 \begin{figure}
 	\centering
@@ -887,12 +895,12 @@ a graph-based parser from SemEval 2015
 \textsc{uparse} \cite{maier-lichte:2016:DiscoNLP},
 a transition-based constituency parser supporting discontinuous constituents;
 and two bilexical tree parsers:
-MaltParser \cite{nivre2007maltparser},\footnote{For
-MaltParser we use the \textsc{ArcEager} transition set and SVM classifier.
-Other configurations yielded lower scores.}
+MaltParser \cite{nivre2007maltparser},
 and the stack LSTM-based parser of
 \citet[henceforce ``LSTM Parser'']{dyer2015transition}.
-Default settings are used in all cases.
+Default settings are used in all cases.\footnote{For
+MaltParser we use the \textsc{ArcEager} transition set and SVM classifier.
+Other configurations yielded lower scores.}
 DAGParser and \textsc{uparse} use beam search by default, with a beam size of 5 and 4
 respectively. The other parsers are greedy.
 
