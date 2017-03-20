@@ -323,7 +323,9 @@ The conversion to a bilexical graph requires calculating the set $A$.
 All non-terminals in $G$ are removed.
 
 We define a linear order over possible edge labels $L$ (see \figref{fig:priority}).
+The priority order generally places core-like categories before adjunct-like ones, and was decided heuristically.
 For each node $u \in V$, denote by $h(u)$ its child with the highest-priority edge label.
+The leftmost edge is chosen in case of a tie.
 Let $h^*(u)$ be the terminal reached by recursively applying $h(\cdot)$ over $u$.
 For each terminal $t$, we define
 \[
