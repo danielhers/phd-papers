@@ -976,10 +976,12 @@ Most closely related to this work is Broad-Coverage Semantic Dependency Parsing 
 addressed in two SemEval tasks \cite{oepen2014semeval,oepen2015semeval}.
 Like UCCA parsing, SDP addresses a wide range of semantic phenomena,
 and supports discontinuous units and reentrancy.
-However, SDP uses bilexical dependencies, disallowing non-terminal nodes,
-useful for representing structures that have no clear head, such as coordination
-\cite{Ivanova2012who}. It also differs from UCCA in the type
-of distinctions it makes, which are more tightly coupled with syntactic considerations,
+In SDP, however, bilexical dependencies are used,
+and a head must be selected for every relation---even in constructions that have no clear head,
+such as coordination \cite{Ivanova2012who}.
+The use of non-terminal nodes is a simple way to avoid this liability.
+SDP also differs from UCCA in the type of distinctions it makes,
+which are more tightly coupled with syntactic considerations,
 where UCCA aims to capture purely semantic cross-linguistically applicable notions.
 For instance, the ``poss'' label in the DM target representation is used to
 annotate syntactic possessive constructions, regardless of whether they correspond to
