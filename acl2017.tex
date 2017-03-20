@@ -903,7 +903,10 @@ respectively. The other parsers are greedy.
 
 \tabref{table:results} presents our main experimental results, as well as
 upper bounds for the baseline parsers,
-reflecting the error resulting from the conversion.
+reflecting the error resulting from the conversion.\footnote{The low
+upper bound for remote edges is partly due to the removal of implicit nodes (not supported
+in bilexical representations), where the whole sub-graph headed by such nodes,
+often containing remote edges, must be discarded.}
 
 DAGParser and \textsc{uparse} are most directly comparable to
 \parser{Sparse}, as they also use a perceptron classifier with sparse features.
