@@ -182,7 +182,8 @@ UCCA's \textit{foundational layer}, targeted in this paper, covers the predicate
 structure evoked by predicates of all grammatical categories
 (verbal, nominal, adjectival and others), the inter-relations between them,
 and other major linguistic phenomena such as coordination and multi-word expressions.
-The layer's basic notion is the \textit{scene}, describing a movement, action or state.
+The layer's basic notion is the \textit{scene},
+describing a state, action, movement or some other relation that evolves in time.
 Each scene contains one main relation (marked as either a Process or a State),
 as well as one or more Participants.
 For example, the sentence ``After graduation, John moved to Paris'' (\figref{fig:graduation})
@@ -317,7 +318,7 @@ Second, in the same example, ``John'' is marked as a (remote) Participant
 in the graduation scene, despite not being overtly marked.
 Third, consider the possessive construction in \figref{fig:home}.
 While in UCCA ``trip'' evokes a scene in which ``John and Mary'' is
-a Participant, a syntactic scheme would analyze this phrase similarly to ``John and Mary's children''.
+a Participant, a syntactic scheme would analyze this phrase similarly to ``John and Mary's shoes''.
 
 These examples demonstrate that a UCCA parser, and more generally semantic parsers,
 face an additional level of ambiguity compared to their syntactic counterparts
@@ -699,8 +700,8 @@ Punctuation is excluded from the evaluation, but not from the datasets.
 	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 	\end{deptext}
 		\depedge{2}{1}{L}
-		\depedge{2}{3}{U}
-		\depedge[dashed]{2}{4}{A}
+		\depedge[edge start x offset=7pt]{2}{3}{U}
+		\depedge[edge start x offset=3pt,dashed]{2}{4}{A}
 		\depedge{5}{4}{A}
 		\depedge{2}{5}{H}
 		\depedge{7}{6}{R}
@@ -722,8 +723,8 @@ Punctuation is excluded from the evaluation, but not from the datasets.
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
 	John \^ and \^ Mary \^ went \^ home \\
 	\end{deptext}
-		\depedge[edge start x offset=-6pt]{1}{4}{A}
-		\depedge{1}{2}{N}
+		\depedge{4}{1}{A}
+		\depedge[edge start x offset=3pt]{1}{2}{N}
 		\depedge{1}{3}{C}
 		\depedge{4}{5}{A}
 	\end{dependency}
