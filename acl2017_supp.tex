@@ -451,54 +451,7 @@ This procedure is given in Algorithm~\ref{alg:from_bilexical}.
 \label{fig:priority}
 \end{figure}
 
-\section{Proof Sketch for Completeness of the \parser{} Transition Set}
-\label{appendix:completeness_proof}
-
-Here we sketch a proof for the fact that the transition set defined in \secref{sec:parser}
-is capable of producing any rooted, labeled, anchored DAG.
-This proves that the transition set is complete with respect to the class of graphs that
-comprise UCCA.
-
-Let $G=(V,E,\ell)$ be a graph with labels $\ell:E\rightarrow L$
-over a sequence of tokens $w_1, \ldots, w_n$.
-Parsing starts with $w_1, \ldots, w_n$ on the buffer,
-and the root node on the stack.
-
-First we show that every node can be created, by induction on the node height:
-every terminal (height zero) already exists at the beginning of the parse
-(and so does the root node).
-Let $v\in V$ be of height $k$, and assume all nodes of height less than $k$ can be created.
-Take any (primary) child $u$ of $v$: its height must be less than $k$.
-If $u$ is a terminal, apply \textsc{Shift} until it lies at the head of the buffer.
-Otherwise, by our assumption, $u$ can still be created.
-Right after $u$ is created, it lies at the head of the buffer.
-A \textsc{Shift} transition followed by a \textsc{Node}$_{\ell(v,u)}$ transition will
-move $u$ to the stack and create $v$ on the buffer, with the correct edge label.
-
-Next, we show that every edge can be created.
-Let $(v,u) \in E$ be any edge with parent $v$ and child $u$.
-Assume $v$ and $u$ have both been created (we already showed that both are created eventually).
-If either $v$ or $u$ are in the buffer, apply \textsc{Shift} until both are in the stack.
-If both are in the stack but neither is at the stack top, apply \textsc{Swap} transitions
-until either moves to the buffer, and then apply \textsc{Shift}.
-Now, assume either $v$ or $u$ is at the stack top.
-If the other is not the second element on the stack, apply \textsc{Swap} transitions until it is.
-Finally, $v$ and $u$ are the top two elements on the stack.
-If they are in that order, apply \textsc{Right-Edge}$_{\ell(v,u)}$
-(or \textsc{Right-Remote}$_{\ell(v,u)}$ if the edge between them is remote).
-Otherwise, apply \textsc{Left-Edge}$_{\ell(v,u)}$
-(or \textsc{Left-Remote}$_{\ell(v,u)}$ if the edge between them is remote).
-This creates $(v,u)$ with the correct edge label.
-
-Once all nodes and edges have been created, we can apply \textsc{Reduce} until only the
-root node remains on the stack, and then \textsc{Finish}.
-This yields exactly the graph $G$.
-
-Note that the distinction we made between primary and remote transitions is suitable for UCCA parsing.
-For general graph parsing without this distinction,
-the \textsc{Remote} transitions can be removed, as well as the single-primary-parent
-restriction on \textsc{Edge} transition.
-
+\newpage
 \bibliography{references}
 \bibliographystyle{acl_natbib}
 
