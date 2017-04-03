@@ -115,7 +115,7 @@ as well as easy-first parsing rather than following the order of tokens \cite{go
 A \textit{transition system} \cite{Nivr:06,nivre2008algorithms} may in general be used to cast structure prediction
 problems as sequence prediction problems.
 The framework has been applied successfully to many NLP tasks
-\cite[][among others]{lample-EtAl:2016:N16-1,kiperwasser2016simple,zhang-zhang-fu:2016:P16-1,kong2017dragnn,hershcovich2017a}.
+\cite[][among others]{bohnet2012transition,lample-EtAl:2016:N16-1,kiperwasser2016simple,zhang-zhang-fu:2016:P16-1,kong2017dragnn,hershcovich2017a}.
 
 \paragraph{Anchored graphs.}
 We introduce the notion of an \textit{anchored graph},
@@ -176,7 +176,6 @@ and prepositional phrases (either the preposition or the head noun can serve as 
   }}
   \end{subfigure}
   \begin{subfigure}{.9\columnwidth}
-  \vspace{-2cm}
   \parbox{.05\columnwidth}{\caption{}\label{fig:gave}}
   \parbox{.75\columnwidth}{\hspace{1cm}
   \scalebox{.9}{
@@ -195,25 +194,8 @@ and prepositional phrases (either the preposition or the head noun can serve as 
     \draw[bend right,->] (ROOT) to[out=-20, in=180] node [left] {\scriptsize A} (everything);
   \end{tikzpicture}
   }}
-  \parbox{.1\columnwidth}{
-  \vspace{2cm}
-  \begin{adjustbox}{width=.3\columnwidth,margin=1pt,frame}
-  \begin{tabular}{ll}
-	  P & process \\
-	  A & participant \\
-	  H & linked scene \\
-	  C & center \\
-	  R & relator \\
-	  N & connector \\
-	  L & scene linker \\
-	  U & punctuation \\
-	  F & function unit
-  \end{tabular}
-  \end{adjustbox}
-  }
   \end{subfigure}
   \begin{subfigure}{.9\columnwidth}
-  \vspace{-1cm}
   \parbox{.05\columnwidth}{\caption{}\label{fig:home}}
   \parbox{.65\columnwidth}{
   \scalebox{.9}{
@@ -242,13 +224,20 @@ and prepositional phrases (either the preposition or the head noun can serve as 
     (\subref{fig:gave}) includes a discontinuous unit (``gave ... up'').
     (\subref{fig:home}) includes a coordination construction (``John and Mary'').
     Pre-terminal nodes are omitted for brevity.
-    Right: legend of edge labels.
   }
 \end{figure}
 
+\paragraph{Coverage.}
+The \textit{coverage} $\mathcal{C}$ of a transition system coupled with an oracle is the set of graphs
+it can assign to any input $\langle w\rangle_1^n$ \cite{kuhlmann2010transition}.
+A system with coverage $\mathcal{C}$ is \textit{complete} with respect to a set of graphs $mathcal{G}$
+if $\mathcal{G}\subseteq\mathcal{C}$, and \textit{sound} with respect to it if
+$\mathcal{C}\subseteq\mathcal{G}$.
+
 We present a general transition system for graph parsing,
-and verify experimentally that it is capable of parsing many different representation
-schemes.\footnote{Our code will be made freely available upon publication.}
+and show both by means of a formal proof and by experimental means that
+it is complete and sound with respect to the class of anchored graphs $\mathcal{A}$.\footnote{Our
+code will be made freely available upon publication.}
 
 The rest of the paper is structured as follows:
 \secref{sec:system} describes our transition system.
