@@ -37,12 +37,6 @@
 \DeclareMathOperator*{\argmax}{argmax}
 \SetKwRepeat{Do}{do}{while}
 
-\hyphenation{SemEval}
-\hyphenation{PARSEVAL}
-\hyphenation{DAGParser}
-\hyphenation{TurboSemanticParser}
-\hyphenation{MaltParser}
-
 \def\linkspace#1#2{\leavevmode
 \def\tmp##1{\nolinebreak[2]\href{#1}{\hbox{##1}}}%
 \xlinkspace#2 \relax}
@@ -91,7 +85,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 Transition systems have been proposed for many tasks in NLP.
-We present a general transition system that is complete and sound with respect to DAG parsing,
+We present a general transition system that is complete and sound with respect to graph parsing,
 and verify experimentally that it is suitable for many different representation schemes.
 \end{abstract}
 
@@ -123,15 +117,142 @@ problems as sequence prediction problems.
 The framework has been applied successfully to many NLP tasks
 \cite[][among others]{lample-EtAl:2016:N16-1,kiperwasser2016simple,zhang-zhang-fu:2016:P16-1,kong2017dragnn,hershcovich2017a}.
 
-Broad coverage of graph structures is important for 
+\paragraph{Anchored graphs.}
+We introduce the notion of an \textit{anchored graph},
+a generalization of existing notions such as (semantic) dependency graph and phrase structure graph,
+as well as UCCA DAGs and AMRs.
+An anchored graph $G$ over a sequence $\langle w\rangle_1^n=w_1, \ldots, w_n$ of tokens
+(or \textit{terminals}) is a labeled graph $G=(V,E)$ where $\langle w\rangle_1^n \subseteq V$ and
+$\mathrm{deg}^+(w_i) = 0$ for all $i=1,\ldots,n$ (the terminals have no outgoing edges).
+Since parsing of natural language is inherently based on the uttered tokens,
+we claim this formulation is general enough to encompass all parsing schemes.
 
-We present a general transition system for DAG parsing,
+Broad coverage of graph structures is important for parsing of current semantic representation schemes
+\cite{abend2017the}, which exhibit structural properties traditionally ignored in transition-based
+parsing.
+One such property is \textit{reentrancy},
+namely the sharing of semantic units between predicates.
+For instance, in \figref{fig:graduation},
+``John'' is an argument of both ``graduation''
+and ``moved'', yielding a graph rather than a tree.
+A second property is \textit{discontinuity},
+as in \figref{fig:gave}, where ``gave up'' forms a discontinuous semantic unit.
+Discontinuities are pervasive, e.g.,  with multi-word
+expressions \cite{schneider2014discriminative}.
+Finally, unlike most dependency schemes, some schemes (e.g. UCCA, AMR) use \textit{non-terminal nodes}
+to represent units comprising more than one word.
+The use of non-terminal nodes is motivated by constructions with no clear head, including
+coordination structures (e.g., ``John and Mary'' in \figref{fig:home}),
+some multi-word expressions (e.g., ``The Haves and the \textit{Have Nots}''),
+and prepositional phrases (either the preposition or the head noun can serve as the constituent's head).
+
+\begin{figure}[t]
+  \begin{subfigure}{.9\columnwidth}
+  \parbox{.05\columnwidth}{\caption{}\label{fig:graduation}}
+  \parbox{.8\columnwidth}{
+  \scalebox{.9}{
+  \begin{tikzpicture}[level distance=10mm, ->,
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node (After) {After} edge from parent node[left] {\scriptsize L}}
+      child {node (graduation) [circle] {}
+      {
+        child {node {graduation} edge from parent node[left] {\scriptsize P}}
+      } edge from parent node[left] {\scriptsize H} }
+      child {node {,} edge from parent node[right] {\scriptsize U}}
+      child {node (moved) [circle] {}
+      {
+        child {node (John) {John} edge from parent node[left] {\scriptsize A}}
+        child {node {moved} edge from parent node[left] {\scriptsize P}}
+        child {node [circle] {}
+        {
+          child {node {to} edge from parent node[left] {\scriptsize R}}
+          child {node {Paris} edge from parent node[left] {\scriptsize C}}
+        } edge from parent node[left] {\scriptsize A} }
+      } edge from parent node[right] {\scriptsize H} }
+      ;
+    \draw[dashed,->] (graduation) to node [auto] {\scriptsize A} (John);
+  \end{tikzpicture}
+  }}
+  \end{subfigure}
+  \begin{subfigure}{.9\columnwidth}
+  \vspace{-2cm}
+  \parbox{.05\columnwidth}{\caption{}\label{fig:gave}}
+  \parbox{.75\columnwidth}{\hspace{1cm}
+  \scalebox{.9}{
+  \begin{tikzpicture}[level distance=12mm, ->,
+      every node/.append style={midway},
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node {John} edge from parent node[left] {\scriptsize A}}
+      child {node [circle] {}
+      {
+      	child {node {gave} edge from parent node[left] {\scriptsize C}}
+      	child {node (everything) {everything} edge from parent[white]}
+      	child {node {up} edge from parent node[left] {\scriptsize C}}
+      } edge from parent node[right] {\scriptsize P} }
+      ;
+    \draw[bend right,->] (ROOT) to[out=-20, in=180] node [left] {\scriptsize A} (everything);
+  \end{tikzpicture}
+  }}
+  \parbox{.1\columnwidth}{
+  \vspace{2cm}
+  \begin{adjustbox}{width=.3\columnwidth,margin=1pt,frame}
+  \begin{tabular}{ll}
+	  P & process \\
+	  A & participant \\
+	  H & linked scene \\
+	  C & center \\
+	  R & relator \\
+	  N & connector \\
+	  L & scene linker \\
+	  U & punctuation \\
+	  F & function unit
+  \end{tabular}
+  \end{adjustbox}
+  }
+  \end{subfigure}
+  \begin{subfigure}{.9\columnwidth}
+  \vspace{-1cm}
+  \parbox{.05\columnwidth}{\caption{}\label{fig:home}}
+  \parbox{.65\columnwidth}{
+  \scalebox{.9}{
+  \begin{tikzpicture}[level distance=12mm, ->,
+      every node/.append style={midway},
+      every circle node/.append style={fill=black}]
+    \node (ROOT) [circle] {}
+      child {node [circle] {}
+      {
+        child {node {John} edge from parent node[left] {\scriptsize C}}
+        child {node {and} edge from parent node[left] {\scriptsize N}}
+        child {node {Mary} edge from parent node[left] {\scriptsize C}}
+        child {node {'s} edge from parent node[right] {\scriptsize F}}
+      } edge from parent node[left] {\scriptsize A} }
+      child {node {trip} edge from parent node[left] {\scriptsize P}}
+      child {node {home} edge from parent node[left] {\scriptsize A}}
+      ;
+  \end{tikzpicture}
+  }}
+  \end{subfigure}
+  \caption{\label{fig:examples}
+    UCCA structures demonstrating three structural properties exhibited by
+    the scheme.
+    (\subref{fig:graduation}) includes a remote edge (dashed),
+    resulting in ``John'' having two parents.
+    (\subref{fig:gave}) includes a discontinuous unit (``gave ... up'').
+    (\subref{fig:home}) includes a coordination construction (``John and Mary'').
+    Pre-terminal nodes are omitted for brevity.
+    Right: legend of edge labels.
+  }
+\end{figure}
+
+We present a general transition system for graph parsing,
 and verify experimentally that it is capable of parsing many different representation
 schemes.\footnote{Our code will be made freely available upon publication.}
 
 The rest of the paper is structured as follows:
 \secref{sec:system} describes our transition system.
-\secref{sec:completeness} proves our transition system is complete with respect to anchored DAGs, and
+\secref{sec:completeness} proves our transition system is complete with respect to anchored graphs, and
 \secref{sec:soundness} proves it is sound.
 \secref{sec:related_work} summarizes related work, and
 \secref{sec:conclusion} concludes the paper.
@@ -140,7 +261,7 @@ The rest of the paper is structured as follows:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Transition System}\label{sec:system}
 
-Given a sequence of tokens $w_1, \ldots, w_n$, we predict a UCCA graph $G$ over the sequence.
+Given a sequence of tokens $w_1, \ldots, w_n$, we predict a graph $G$ over the sequence.
 Parsing starts with a single node on the stack (an artificial root node), and the input tokens
 in the buffer. \figref{fig:transitions} shows the transition set.
 
@@ -151,15 +272,12 @@ adding the \textsc{Node} transition for creating new non-terminal nodes.
 For every $X\in L$,
 \textsc{Node$_X$} creates a new node on the buffer as a parent of the first element on the stack, with an $X$-labeled edge.
 
-\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new primary $X$-labeled edge between the first two elements on the stack, where the parent is the left or the right node, respectively.
-As a UCCA node may only have one incoming primary edge,
-\textsc{Edge} transitions are disallowed if the child node already
-has an incoming primary edge.
+\textsc{Implicit$_X$} acts similarly, but the created node is a child instead,
+representing a unit that does not appear explicitly in the text.
 
-\textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} do not have this restriction,
-and the created edge is additionally marked as \textit{remote}.
-We distinguish between these two pairs of transitions to allow the parser to create remote edges
-without the possibility of producing invalid graphs.
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} create a new primary $X$-labeled edge
+between the first two elements on the stack,
+where the parent is the left or the right node, respectively.
 To support the prediction of multiple parents, node and edge transitions
 leave the stack unchanged, as in other work on
 transition-based dependency graph parsing
@@ -193,36 +311,39 @@ Finally, \textsc{Finish} pops the root node and marks the state as terminal.
 		$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Reduce} & $S$ & $B$ & $V$ & $E$ & $-$ & \\
 		$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Node$_X$} & $S \;|\; x$ & $y \;|\; B$ & $V \cup \{ y \}$ & $E \cup \{ (y,x)_X \}$ & $-$ &
 		$x \neq \mathrm{root}$ \\
+		$S \;|\; x$ & $B$ & $V$ & $E$ & \textsc{Implicit$_X$} & $S \;|\; x$ & $y^* \;|\; B$ & $V \cup \{ y^* \}$ & $E \cup \{ (x,y^*)_X \}$ & $-$ & $x \not\in w_{1:n}$ \\
 		$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Edge$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ &
-		\multirow{4}{50pt}{\vspace{-5mm}\[\left\{\begin{array}{l}
+		\multirow{4}{50pt}{\vspace{-1cm}\[\left\{\begin{array}{l}
 		x \not\in w_{1:n},\\
-		y \neq \mathrm{root},\\
-		y \not\leadsto_G x
+		y \neq \mathrm{root}
 		\end{array}\right.\]} \\
 		$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Edge$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X \}$ & $-$ & \\
-		$S \;|\; y,x$ & $B$ & $V$ & $E$ & \textsc{Left-Remote$_X$} & $S \;|\; y,x$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
-		$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Right-Remote$_X$} & $S \;|\; x,y$ & $B$ & $V$ & $E \cup \{ (x,y)_X^* \}$ & $-$ & \\
 		$S \;|\; x,y$ & $B$ & $V$ & $E$ & \textsc{Swap} & $S \;|\; y$ & $x \;|\; B$ & $V$ & $E$ & $-$ &
 		$\mathrm{i}(x) < \mathrm{i}(y)$ \\
 		$[\mathrm{root}]$ & $\emptyset$ & $V$ & $E$ & \textsc{Finish} & $\emptyset$ & $\emptyset$ & $V$ & $E$ & $+$ & \\
 	\end{tabular}
 	\end{adjustbox}
 	\caption{\label{fig:transitions}
-	  Transition set for DAG parsing.
+	  Transition set for graph parsing.
 	  We write the stack with its top to the right and the buffer with its head to the left.
-	  $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
-	  $\mathrm{i}(x)$ is a running index for the created nodes.
-	  In addition to the specified conditions,
-	  the prospective child in an \textsc{Edge} transition must not already have a primary parent.
+	  $(\cdot,\cdot)_X$ denotes an $X$-labeled edge.
+	  $\mathrm{i}(x)$ is the swap index of node $x$.
 	}
 \end{figure*}
 
 \paragraph{Oracle.}
-For training the transition classifiers, we use a dynamic oracle \cite{goldberg2012dynamic},
+For training a transition-based parser, we can use an \textit{oracle}.
+In general, it is better to use a \textit{dynamic oracle} \cite{goldberg2012dynamic},
 i.e., an oracle that outputs a set of optimal transitions: when
 applied to the current parser state, the gold
 standard graph is reachable from the resulting state.
-For example, the oracle would predict a \textsc{Node} transition if the stack 
+Another sense of \textit{dynamic oracle} refers to \textit{training with exploration}
+\cite{goldberg2013dynamic,goldberg2013training,ballesteros-EtAl:2016:EMNLP2016}:
+rather than maintaining a state where the gold standard graph is reachable,
+the oracle may return a set of optimal transitions at any state,
+even if the gold standard graph is not reachable from it.
+
+In our case, the oracle would predict a \textsc{Node} transition if the stack 
 has on its top a parent in the gold graph that has not been created,
 but would predict a \textsc{Right-Edge} transition if the second stack
 element is a parent of the
@@ -239,9 +360,8 @@ to the perceptron update rule.
 \section{Completeness}\label{sec:completeness}
 
 Here we sketch a proof for the fact that the transition set defined in \cite{hershcovich2017a}
-is capable of producing any rooted, labeled, anchored DAG.
-This proves that the transition set is complete with respect to the class of graphs that
-comprise UCCA.
+is capable of producing any rooted, labeled, anchored graph.
+This proves that the transition set is complete with respect to anchored graphs.
 
 Let $G=(V,E,\ell)$ be a graph with labels $\ell:E\rightarrow L$
 over a sequence of tokens $w_1, \ldots, w_n$.
@@ -278,17 +398,12 @@ Once all nodes and edges have been created, we can apply \textsc{Reduce} until o
 root node remains on the stack, and then \textsc{Finish}.
 This yields exactly the graph $G$.
 
-Note that the distinction we made between primary and remote transitions is suitable for UCCA parsing.
-For general graph parsing without this distinction,
-the \textsc{Remote} transitions can be removed, as well as the single-primary-parent
-restriction on \textsc{Edge} transition.
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Soundness}\label{sec:soundness}
 
 We now turn to prove the fact that every transition sequence allowed by our transition system
-indeed corresponds to a valid anchored DAG.
+indeed corresponds to a valid anchored graph.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
