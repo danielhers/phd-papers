@@ -72,7 +72,7 @@
 % smaller than 5cm (the original size); we will check this
 % in the camera-ready version and ask you to change it back.
 
-\title{Completeness and Soundness of Transition Systems for DAG Parsing}
+\title{A Complete and Sound Transition System for DAG Parsing}
 
 \author{Daniel Hershcovich$^{1,2}$ \\
   $^1$The Edmond and Lily Safra Center for Brain Sciences \\
@@ -114,6 +114,11 @@ based on gold-standard annotations.
 Many variations to this model have been proposed, such as using more than one stack to support
 non-projective dependency parsing \cite{gomez2010a},
 as well as easy-first parsing rather than following the order of tokens \cite{goldberg2010efficient}.
+
+A \textit{transition system} \cite{Nivr:06} may in general be used to cast structure prediction
+problems as sequence prediction problems.
+The framework has been applied successfully to many NLP tasks
+\cite[][among others]{lample-EtAl:2016:N16-1,kiperwasser2016simple,zhang-zhang-fu:2016:P16-1,kong2017dragnn,hershcovich2017a}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
