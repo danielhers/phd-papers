@@ -502,12 +502,12 @@ Supports non-terminal nodes, reentrancy and discontinuity.
 We experiment with three classifiers:
 \begin{flushleft}
 	\begin{tabular}{ll}
-	Perceptron:&\\
-	\textbf{sparse} & binary features: words, POS tags, edge labels. \\
-	\textbf{dense} & real-valued features: word2vec (words) / random. \\
-	\hline\\
-	Neural Network:&\\
-	\textbf{MLP} & 2 layers, learned representation for all features. \\
+	\textbf{\parser{Sparse}} & Perceptron with features: \\
+	  & words, POS, dependency \& edge label combinations. \\
+	\textbf{\parser{MLP}} & 2-layer NN, learned embedding features + \\
+	  & external word embeddings. \\
+	\textbf{\parser{BiLSTM}} & 2-layer bidirectional RNN to encode features, \\
+	  & 2-layer NN for classification.
 	\end{tabular}
 \end{flushleft}
 \vspace{5mm}
@@ -542,26 +542,26 @@ Serves as regularizer for creation of new nodes.
 \begin{frame}
 \frametitle{UCCA Corpora}
 \centering
-\begin{tabular}{l|ccc|c}
-& \multicolumn{3}{c|}{Wiki} & 20K \\
-& \small Train & \small Dev & \small Test & Leagues \\
-\hline
-\# passages & 300 & 34 & 34 & 154 \\
-\# sentences & 4267 & 453 & 518 & 506 \\
-\hline
-\# nodes & 298,665 & 33,263 & 37,262 & 29,315 \\
-\% terminal & 42.95 & 43.62 & 42.89 & 42.09 \\
-\% non-term. & 58.30 & 57.46 & 58.31 & 60.01 \\
-\% \bf discont. & \bf 0.53 & \bf 0.51 & \bf 0.47 & \bf 0.81 \\
-\% \bf reentrant & \bf 2.31 & \bf 1.76 & \bf 2.18 & \bf 2.03 \\
-\hline
-\# edges & 287,381 & 32,015 & 35,846 & 27,749 \\
-\% primary & 98.29 & 98.81 & 98.75 & 97.73 \\
-\% remote & 1.71 & 1.19 & 1.25 & 2.27 \\
-\hline
-\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
-\# children & 1.67 & 1.68 & 1.66 & 1.61 
-\end{tabular}
+	\begin{tabular}{l|ccc|c}
+		& \multicolumn{3}{c|}{Wiki} & 20K \\
+		& \small Train & \small Dev & \small Test & Leagues \\
+		\hline
+		\# passages & 300 & 34 & 33 & 154 \\
+		\# sentences & 4268 & 454 & 503 & 506 \\
+		\hline
+		\# nodes & 298,993 & 33,704 & 35,718 & 29,315 \\
+		\% terminal & 42.96 & 43.54 & 42.87 & 42.09 \\
+		\% non-term. & 58.33 & 57.60 & 58.35 & 60.01 \\
+		\% \textbf{discont.} & \textbf{0.54} & \textbf{0.53} & \textbf{0.44} & \textbf{0.81} \\
+		\% \textbf{reentrant} & \textbf{2.38} & \textbf{1.88} & \textbf{2.15} & \textbf{2.03} \\
+		\hline
+		\# edges & 287,914 & 32,460 & 34,336 & 27,749 \\
+		\% primary & 98.25 & 98.75 & 98.74 & 97.73 \\
+		\% remote & 1.75 & 1.25 & 1.26 & 2.27 \\
+		\hline
+		\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
+		\# children & 1.67 & 1.68 & 1.66 & 1.61 
+	\end{tabular}
 \captionof{table}{Corpus statistics
 excluding root, implicit and linkage units.}
 \end{frame}
@@ -601,12 +601,12 @@ one for primary edges, and another for remote edges.
 	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 	\hline
-	Sparse perceptron
-	& 64 & 55.6 & 59.5 & 16 & 11.6 & 13.4 \\
-	Dense perceptron
-	& 55 & 54.8 & 54.9 & 15.2 & \bf 16.9 & \bf 16 \\
+	Sparse
+	& 64.5 & 63.7 & 64.1 & 19.8 & 13.4 & 16 \\
 	MLP
-	& \bf 65 & \bf 62.5 & \bf 63.7 & \bf 20.7 & 11.3 & 14.6
+	& 65.2 & 64.6 & 64.9 & 23.7 & 13.2 & 16.9 \\
+	BiLSTM
+	& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4}
 	\end{tabular}
 	\captionof{table}{Results on the Wiki test set.}
 	
@@ -616,12 +616,12 @@ one for primary edges, and another for remote edges.
 	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 	\hline
-	Sparse perceptron
-	& 60.6 & 53.9 & 57.1 & \bf 20.2 & \bf 10.3 & \bf 13.6 \\
-	Dense perceptron
-	& 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
+	Sparse
+	& 59.6 & 59.9 & 59.8 & 22.2 & 7.7 & 11.5 \\
 	MLP
-	& \bf 58.3 & \bf 56.4 & \bf 57.3 & 15.2 & 3.8 & 6
+	& 62.3 & 62.6 & 62.5 & 20.9 & 6.3 & 9.7 \\
+	BiLSTM
+	& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3}
 	\end{tabular}
 	\captionof{table}{Results on the 20K Leagues out-of-domain set.}
 \end{center}
@@ -694,66 +694,10 @@ Bilexical DAG parsers used:
 \end{center}
 \end{frame}
 
-\begin{frame}
-\frametitle{Results}
-Our NN-based parser obtains the highest scores in nearly all metrics:
-\begin{center}
-	\begin{tabular}{l|ccc|ccc}
-	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
-	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-	\hline
-	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
-	Upper Bound % on the test set and ood set only
-	& 93.4 & 83.7 & 88.3 & 73.9 & 49.5 & 59.3 \vspace{.1cm} \\
-	DAGParser
-	& 63.7 & 	56.1	 & 59.5	 & 0.8	 & 9.5	 &  1.4 \\
-	TurboParser
-	& 60.2	 & 47.4	 & 52.9	 & 2.2	 & 7.8	 &  3.4 \\
-	\hline
-	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
-	Sparse perceptron
-	& 64 & 55.6 & 59.5 & 16 & 11.6 & 13.4 \\
-	Dense perceptron
-	& 55 & 54.8 & 54.9 & 15.2 & \bf 16.9 & \bf 16 \\
-	MLP
-	& \bf 65 & \bf 62.5 & \bf 63.7 & \bf 20.7 & 11.3 & 14.6
-	\end{tabular}
-	\captionof{table}{Results on the Wiki test set, including baselines.}
-\end{center}
-\end{frame}
-
-\begin{frame}
-\frametitle{Results}
-Similar differences on out-of-domain test set:
-\begin{center}
-	\begin{tabular}{l|ccc|ccc}
-	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
-	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-	\hline
-	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
-	Upper Bound % on the test set and ood set only
-	& 93.5 & 83.5 & 88.2 & 66.7 & 31.6 & 42.9 \vspace{.1cm} \\
-	DAGParser
-	& 58	 & 49.8	 & 53.4 & -- & 0 & 0 \\
-	TurboParser
-	& 52.6	 & 39	 & 44.7	 & 100	 & 0.3	 & 0.6 \\
-	\hline
-	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
-	Sparse perceptron
-	& 60.6 & 53.9 & 57.1 & \bf 20.2 & \bf 10.3 & \bf 13.6 \\
-	Dense perceptron
-	& 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
-	MLP
-	& \bf 58.3 & \bf 56.4 & \bf 57.3 & 15.2 & 3.8 & 6
-	\end{tabular}
-	\captionof{table}{Results on the 20K Leagues out-of-domain set, including baselines.}
-\end{center}
-\end{frame}
-
 
 \begin{frame}
 \frametitle{Tree Approximation}
-For completeness, we also explore lossily converting UCCA into trees.
+We also explore lossily converting UCCA into trees.
 \begin{itemize}
  \item Results in a simplified task for the underlying parser.
  \item Takes advantage of maturity of tree-based parsers.
@@ -780,27 +724,88 @@ For completeness, we also explore lossily converting UCCA into trees.
 
 
 \begin{frame}
-\frametitle{Tree Approximation}
-LSTM transition-based parser: significantly higher primary edge scores.
+\frametitle{Baselines}
+Tree parsers used:
+\begin{itemize}
+ \item \textsc{uparse} \cite{maier-lichte:2016:DiscoNLP}
+ \item MaltParser \cite{nivre2007maltparser}
+ \item LSTM Parser \cite{dyer2015transition}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+\parser{BiLSTM} obtains the highest F-scores in all metrics:
 \begin{center}
-	\begin{tabular}{l|ccc}
-	& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-	\hline
-	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Approximation} \\
-	Upper Bound & 100 & 100 & 100 \vspace{.1cm} \\
-	\textsc{uparse} \cite{maier-lichte:2016:DiscoNLP} & 63 & 64.7 & 63.7 \\
-	\hline
-	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Dependency Tree Approximation} \\
-	Upper Bound & 93.7 & 83.6 & 88.4 \vspace{.1cm} \\
-	MaltParser \cite{nivre2007maltparser} & 64.9 & 57.9 & 61 \\
-	LSTM Parser \cite{dyer2015transition} & \bf 74.9 & \bf 66.4 & \bf 70.2 \\
-	\hline
-	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Tree Parsing} \\
-	Sparse perceptron without \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
-	Dense perceptron without \textsc{Remote} & 57.2 & 57.3 & 57.2 \\
-	MLP without \textsc{Remote} & 66.3 & 64.4 & 65.3 \\
+	\begin{tabular}{l|ccc|ccc}
+		& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+		& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+		\hline
+		\parser{Sparse}
+		& 64.5 & 63.7 & 64.1 & 19.8 & 13.4 & 16 \\
+		\parser{MLP}
+		& 65.2 & 64.6 & 64.9 & 23.7 & 13.2 & 16.9 \\
+		\parser{BiLSTM}
+		& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4} \\
+		\hline
+		\footnotesize Upper Bound
+		& & & \small 91 & & & \small 58.3 \\
+		DAGParser
+		& 61.8 & 55.8 & 58.6 & 9.5 & 0.5 & 1 \\
+		TurboParser
+		& 57.7 & 46 & 51.2 & 77.8 & 1.8 & 3.7 \\
+		\hline
+		\footnotesize Upper Bound
+		& & & \small 100 & & & \small -- \\
+		\textsc{uparse}
+		& 60.9 & 61.2 & 61.1 & -- & -- & -- \\
+		\hline
+		\footnotesize Upper Bound
+		& & & \footnotesize 91 & & & \footnotesize -- \\
+		MaltParser
+		& 62.8 & 57.7 & 60.2 & -- & -- & -- \\
+		LSTM Parser
+		& 73.2 & 66.9 & 69.9 & -- & -- & --
 	\end{tabular}
-	\captionof{table}{Results of tree approximation experiment on the Wiki test set.}
+	\captionof{table}{Results on the Wiki test set, including baselines.}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+Similar differences on out-of-domain test set:
+\begin{center}
+	\begin{tabular}{l|ccc|ccc}
+		& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+		& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+		\hline
+		\parser{Sparse}
+		& 59.6 & 59.9 & 59.8 & 22.2 & 7.7 & 11.5 \\
+		\parser{MLP}
+		& 62.3 & 62.6 & 62.5 & 20.9 & 6.3 & 9.7 \\
+		\parser{BiLSTM}
+		& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3} \\
+		\hline
+		\footnotesize Upper Bound
+		& & & \footnotesize 91.3 & & & \footnotesize 43.4 \\
+		DAGParser
+		& 56.4 & 50.6 & 53.4 & -- & 0 & 0 \\
+		TurboParser
+		& 50.3 & 37.7 & 43.1 & 100 & 0.4 & 0.8 \\
+		\hline
+		\footnotesize Upper Bound
+		& & & \footnotesize 100 & & & \footnotesize -- \\
+		\textsc{uparse}
+		& 52.7 & 52.8 & 52.8 & -- & -- & -- \\
+		\hline
+		\footnotesize Upper Bound
+		& & & \footnotesize 91.3 & & & \footnotesize -- \\
+		MaltParser
+		& 57.8 & 53 & 55.3 & -- & -- & -- \\
+		LSTM Parser
+		& 66.1 & 61.1 & 63.5 & -- & -- & --
+	\end{tabular}
+	\captionof{table}{Results on the 20K Leagues out-of-domain set, including baselines.}
 \end{center}
 \end{frame}
 
