@@ -1,0 +1,928 @@
+% Presentation flag: uncomment to enable presentation features (slower compilation)
+\newcommand*{\PRESENTATION}
+
+% Preliminaries
+\ifdefined\PRESENTATION
+	\documentclass[t]{beamer}
+\else
+	\documentclass[t,handout]{beamer}
+\fi
+\mode<presentation>
+\usetheme{Warsaw}
+\useoutertheme{infolines}
+\makeatother
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.1\paperwidth,ht=2.25ex,dp=1ex,center]{date in head/foot}%
+    \insertframenumber{} / \inserttotalframenumber\hspace*{1ex}
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatletter
+\setbeamertemplate{navigation symbols}{} 
+
+% Includes
+%\usepackage{times} % Use the times font
+\usepackage{palatino} % Uncomment to use the Palatino font
+
+\usepackage{graphicx} % Required for including images
+\graphicspath{{figures/}} % Location of the graphics files
+\usepackage{booktabs} % Top and bottom rules for table
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+\usepackage{wrapfig} % Allows wrapping text around tables and figures
+\usepackage{lipsum,adjustbox}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{url}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{tikz-dependency}
+\usetikzlibrary{arrows.meta,graphs,graphs.standard,graphdrawing,quotes,shapes}
+\usegdlibrary{layered}
+\captionsetup{labelformat=empty}
+\newcommand{\parser}[1]{TUPA\textsubscript{#1}}
+
+\makeatletter
+\pgfdeclareshape{vector}{
+	  \inheritsavedanchors[from={rectangle}]
+	  \inheritbackgroundpath[from={rectangle}]
+	  \inheritanchorborder[from={rectangle}]
+	  \foreach \x in {center,north east,north west,north,south,south east,south west,east,west}{
+	    \inheritanchor[from={rectangle}]{\x}
+	  }
+
+    \backgroundpath{
+      \pgftransformshift{\pgfpoint{-16pt}{-4pt}}
+		  \draw[rounded corners=2pt] (0,0) rectangle (32pt,8pt);
+    }
+
+    \beforebackgroundpath{
+      \draw[step=8pt,help lines,-] (8pt,.1pt) grid (24pt,7.9pt);
+    }
+}
+\makeatother
+
+% Outline slides
+\AtBeginSection
+{\begin{frame} \frametitle{Outline} \tableofcontents[currentsection] \end{frame}}
+
+
+\begin{document}
+
+
+\title{A Transition-Based Directed Acyclic Graph Parser for UCCA}
+\author[Daniel Hershcovich]{\textbf{Daniel Hershcovich}$^{1,2}$ \And Omri Abend$^2$ \And Ari Rappoport$^2$
+}
+\institute[]{$^1$Edmond and Lily Safra Center for Brain Sciences \\
+$^2$School of Computer Science and Engineering \\
+Hebrew University of Jerusalem}
+\date{ACL \\ August 2, 2017}
+
+\begin{frame}
+\titlepage
+
+%\begin{minipage}[b]{.13\linewidth}
+%\includegraphics[width=\linewidth]{huji_logo.jpg}
+%\end{minipage}
+%\begin{minipage}[b]{.3\linewidth}
+%\includegraphics[width=.3\pagewidth]{huji_banner.png}\\
+%\includegraphics[width=.4\pagewidth]{cse_banner.jpg}
+%\end{minipage}
+%\hfill
+%\begin{minipage}[b]{.2\linewidth}
+%\includegraphics[width=\linewidth]{elsc_logo.png}
+%\end{minipage}
+\end{frame}
+
+
+%----------------------------------------------------------------------------------------
+
+\section{Semantic Annotation Schemes}
+
+\begin{frame}
+\frametitle{Semantic Annotation Schemes}
+Represent semantic structure of text as a graph.
+
+Used by NLP applications for features and structure,
+providing information such as \textit{who did what to whom?}
+\vfill
+Examples:
+\begin{itemize}
+ \item Semantic Role Labeling
+ \item Semantic Dependencies
+ \item Abstract Meaning Representation
+ \item Universal Conceptual Cognitive Annotation
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Semantic Role Labeling (SRL)}
+Annotate predicates and their arguments as a flat structure.
+Examples:
+
+\centering
+\vfill
+\begin{dependency}
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	% PropBank
+	\node[xshift=4.91em,yshift=3em,color=blue]{move.01}
+	child{node at ($(\wordref{1}{5})$) {}};
+	\node[xshift=-9.5em,yshift=3em,color=blue]{AM-TMP}
+	child{node at ($(\wordref{1}{1})$) {}}
+	child{node at ($(\wordref{1}{2})$) {}};
+	\node[xshift=.65em,yshift=3em,color=blue]{A1}
+	child{node at ($(\wordref{1}{4})$) {}};
+	\node[xshift=10.5em,yshift=3em,color=blue]{A2}
+	child{node at ($(\wordref{1}{6})$) {}}
+	child{node at ($(\wordref{1}{7})$) {}};
+\end{dependency}
+
+\vfill
+{\color{blue} PropBank}
+\end{frame}
+
+\begin{frame}
+\frametitle{Semantic Role Labeling (SRL)}
+Annotate predicates and their arguments as a flat structure.
+Examples:
+
+\centering
+\vfill
+\begin{dependency}
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	% FrameNet
+	\node[xshift=4.91em,yshift=-3em,color=red]{Motion}
+	child{node at ($(\wordref{1}{5})$) {}};
+	\node[xshift=-9.5em,yshift=-3em,color=red]{Time}
+	child{node at ($(\wordref{1}{1})$) {}}
+	child{node at ($(\wordref{1}{2})$) {}};
+	\node[xshift=.65em,yshift=-3em,color=red]{Theme}
+	child{node at ($(\wordref{1}{4})$) {}};
+	\node[xshift=10.5em,yshift=-3em,color=red]{Goal}
+	child{node at ($(\wordref{1}{6})$) {}}
+	child{node at ($(\wordref{1}{7})$) {}};
+\end{dependency}
+
+\vfill
+{\color{red} FrameNet}
+\end{frame}
+
+\begin{frame}
+\frametitle{Semantic Dependency Parsing (SDP)}
+Graph on the text tokens, including internal structure of arguments.
+Examples:
+
+\centering
+\vfill
+\begin{dependency}[theme=simple]
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\deproot{5}{\color{blue} top}
+	\depedge{1}{2}{\color{blue} ARG2}
+	\depedge{1}{5}{\color{blue} ARG1}
+	\depedge{5}{4}{\color{blue} ARG1}
+	\depedge{6}{5}{\color{blue} ARG1}
+	\depedge{6}{7}{\color{blue} ARG2}
+\end{dependency}
+\vfill
+{\color{blue} DELPH-IN MRS-derived bi-lexical dependencies (DM)}
+\end{frame}
+
+\begin{frame}
+\frametitle{Semantic Dependency Parsing (SDP)}
+Graph on the text tokens, including internal structure of arguments.
+Examples:
+
+\centering
+\vfill
+
+\begin{dependency}[theme=simple]
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\deproot[edge below]{5}{\color{red} top}
+	\depedge[edge below]{5}{2}{\color{red} TWHEN}
+	\depedge[edge below]{5}{4}{\color{red} ACT-arg}
+	\depedge[edge below]{5}{7}{\color{red} DIR3-arg}
+\end{dependency}
+
+\vfill
+{\color{red} Prague Dependency Treebank tectogrammatical layer (PSD)}
+\end{frame}
+
+\begin{frame}
+\frametitle{Abstract Meaning Representation (AMR)}
+Graph on knowledge resource entries inferred from the tokens.
+
+\begin{tikzpicture}
+\graph[layered layout, sibling distance=5cm, layer distance=2cm, edges={nodes={sloped}}]{
+a4 Paris[as={Paris}, black];
+a2 John[as={John}, black];
+a1[as={person}, black];
+a0[as={move-01}, black];
+a3[as={city}, black];
+a2[as={name}, black];
+a5[as={after}, black];
+a4[as={name}, black];
+a6[as={graduate-01}, black];
+
+a1 ->  ["name"' above, black] a2;
+a0 ->  ["ARG0"' above, black] a1;
+a0 ->  ["ARG2"' above, black] a3;
+a0 ->  ["time"' above, black] a5;
+a3 ->  ["name"' above, black] a4;
+a2 ->  ["op1"' above, black] a2 John;
+a5 ->  ["op1"' above, black] a6;
+a4 ->  ["op1"' above, black] a4 Paris;
+};
+\draw[->, above, black] (a6) to node[sloped] {ARG0} (a1);
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
+\begin{tikzpicture}[level distance=25mm, sibling distance=25mm, ->,
+    every circle node/.append style={fill=black}]
+  \node (ROOT) [circle] {}
+    child {node (After) {After} edge from parent node[left] {L}}
+    child {node (graduation) [circle] {}
+    {
+      child {node {graduation} edge from parent node[left] {P}}
+    } edge from parent node[left] {H} }
+    child {node {,} edge from parent node[right] {U}}
+    child {node (moved) [circle] {}
+    {
+      child {node (John) {John} edge from parent node[left] {A}}
+      child {node {moved} edge from parent node[left] {P}}
+      child {node [circle] {}
+      {
+        child {node {to} edge from parent node[left] {R}}
+        child {node {Paris} edge from parent node[right] {C}}
+      } edge from parent node[right] {A} }
+    } edge from parent node[right] {H} }
+    ;
+  \draw[dashed,->] (graduation) to node [auto] {A} (John);
+  \node at (6,-.3) {\Large ------ primary edge};
+  \node at (6,-1.3) {\Large - - - remote edge};
+\end{tikzpicture}
+\begin{wraptable}{l}{4.8mm}
+  \vspace{-3cm}
+  \scalebox{.75}{
+  \begin{adjustbox}{margin=2mm,frame}
+  \begin{tabular}{cl|cl|cl}
+	  P & process &
+	  S & state &
+	  A & participant \\
+	  L & linker &
+	  H & linked scene &
+	  C & center \\
+	  E & elaborator &
+	  D & adverbial &
+	  R & relator \\
+	  N & connector &
+	  U & punctuation &
+	  F & function unit \\
+	  G & ground
+  \end{tabular}
+  \end{adjustbox}
+  }
+\end{wraptable}
+\end{frame}
+
+\begin{frame}
+\frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
+Semantic representation scheme \cite{abend2013universal}
+based on typological and Cognitive Linguistics literature \cite{Dixon:basic,croft2004cognitive}.
+\begin{itemize}
+ \item Demonstrated applicability to English, French, German \& Czech.
+ \item Support for rapid annotation.
+ \pause
+ \item Stability in translation \cite{sulem2015conceptual}.
+ \item Useful for MT evaluation \cite{birch2016hume}.
+ \item Applicability so far limited by absence of parser.
+\end{itemize}
+
+\vfill
+\begin{center}
+  \includegraphics[width=\linewidth]{hume.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
+\begin{itemize}
+ \item \textbf{Remote edges} represent implied relations, support argument sharing.
+ \item Also supported: \textbf{linkage} (discourse relations) and \textbf{implicit} units,
+ but parsing them is deferred to later work.
+ \item Foundational layer covers predicate-argument structure and other major linguistic phenomena.
+ \item The scheme is extensible to allow other distinctions.
+\end{itemize}
+
+\vfill
+\begin{center}
+  \begin{adjustbox}{margin=2mm,frame}
+  \begin{tabular}{cl|cl|cl}
+	  P & process &
+	  S & state &
+	  A & participant \\
+	  L & linker &
+	  H & linked scene &
+	  C & center \\
+	  E & elaborator &
+	  D & adverbial &
+	  R & relator \\
+	  N & connector &
+	  U & punctuation &
+	  F & function unit \\
+	  G & ground
+  \end{tabular}
+  \end{adjustbox}
+  \captionof{table}{Edge labels of the foundational layer (excluding linkage).}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Structural Properties}
+\noindent
+(1) non-terminal nodes, (2) reentrancy, (3) discontinuity
+\centering
+\vfill
+\begin{minipage}{.48\linewidth}{\centering
+  \begin{tikzpicture}[level distance=12mm, sibling distance=16mm, ->,
+      every node/.append style={midway}]
+    \node (ROOT) [fill=black, circle] {}
+      child {node [fill=black, circle] {}
+      {
+        child {node {John} edge from parent node[left] {\scriptsize $C$}}
+        child {node {and} edge from parent node[left] {\scriptsize $N$}}
+        child {node {Mary} edge from parent node[left] {\scriptsize $C$}}
+      } edge from parent node[left] {\scriptsize $A$} }
+      child {node {went} edge from parent node[left] {\scriptsize $P$}}
+      child {node {home} edge from parent node[left] {\scriptsize $A$}}
+      ;
+  \end{tikzpicture}
+  }
+\end{minipage}
+\hfill
+\begin{minipage}{.48\linewidth}{\centering
+  \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
+      every node/.append style={midway}]
+    \node (ROOT) [fill=black, circle] {}
+      child {node {John} edge from parent node[left] {\scriptsize $A$}}
+      child {node [fill=black, circle] {}
+      {
+      	child {node {gave} edge from parent node[left] {\scriptsize $C$}}
+      	child {node (everything) {everything} edge from parent[white]}
+      	child {node {up} edge from parent node[left] {\scriptsize $C$}}
+      } edge from parent node[right] {\scriptsize $P$} }
+      ;
+    \draw[bend right,->] (ROOT) to[out=-20, in=180] node [left] {\scriptsize $A$} (everything);
+  \end{tikzpicture}
+  }
+\end{minipage}
+
+\vspace{-1mm}
+  \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
+      every node/.append style={midway}]
+    \node (ROOT) [fill=black, circle] {}
+      child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+      child {node {decided} edge from parent node[left] {\scriptsize $P$}}
+      child {node (totakeaquickshower) [fill=black, circle] {}
+      {
+        child {node {to} edge from parent node[left] {\scriptsize $F$}}
+        child {node (takeashower) [fill=black, circle] {}
+        {
+          child {node {take} edge from parent node[left] {\scriptsize $C$}}
+          child {node {a} edge from parent node[right] {\scriptsize $F$}}
+          child {node (quick) {quick} edge from parent[white]}
+          child {node {shower} edge from parent node[right] {\scriptsize $C$}}
+        } edge from parent node[right] {\scriptsize $P$} }
+      } edge from parent node[left] {\scriptsize $A$} }
+      ;
+    \draw[bend left,dashed,->] (takeashower) to node [auto] {\scriptsize $A$} (John);
+    \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
+  \end{tikzpicture}
+\end{frame}
+
+
+
+\section{Transition-based UCCA Parsing}
+
+\begin{frame}
+\frametitle{Transition-Based Parsing}
+\begin{itemize}
+ \item Parse sentence $w_1 \ldots w_n$ to graph $G=(V,E,\ell)$ incrementally.
+ \item Using buffer $B$ and stack $S$.
+ \item Classifier determines transition to apply at each step.
+ \item Trained by an oracle based on gold-standard graph.
+\end{itemize}
+
+\begin{center}
+	\begin{tikzpicture}
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
+	\node[anchor=west] at (.2,1) {$S$};
+	\node[fill=black, circle] at (.5,.25) {};
+	\draw[xstep=18mm,ystep=5mm,color=gray] (1.79,0) grid (12.4,.5);
+	\node[anchor=west] at (1.9,1) {$B$};
+	\node[anchor=west] at (2,.25) {After};
+	\node[anchor=west] at (3.5,.25) {graduation};
+	\node[anchor=west] at (5.6,.25) {John};
+	\node[anchor=west] at (7.2,.25) {moved};
+	\node[anchor=west] at (9.4,.25) {to};
+	\node[anchor=west] at (10.9,.25) {Paris};
+	\end{tikzpicture}
+\end{center}
+
+\vfill
+\pause
+Transitions defined for UCCA parsing:\\
+\{\textsc{Shift, Reduce, Node$_X$, Left-Edge$_X$, Right-Edge$_X$,}\\
+\hspace{5mm}\textsc{Left-Remote$_X$, Right-Remote$_X$, Swap, Finish}\}
+
+\vfill
+\pause
+Supports non-terminal nodes, reentrancy and discontinuity.
+\end{frame}
+
+\begin{frame}
+\frametitle{Transition-Based Parsing}
+\begin{center}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=2cm]
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (3,.5);
+	\node[anchor=west] at (1.2,1) {$S$};
+	\node[fill=black, circle] at (.5,.25) {};
+	\node[fill=blue, circle] at (1.5,.25) {};
+	\node[anchor=west] at (2,.25) {John};
+	\draw[xstep=12mm,ystep=5mm,color=gray] (3.59,0) grid (7.2,.5);
+	\node[anchor=west] at (5,1) {$B$};
+	\node[anchor=west] at (3.5,.25) {moved};
+	\node[anchor=west] at (5,.25) {to};
+	\node[anchor=west] at (6,.25) {Paris};
+	\node[anchor=west] at (8,1) {$G$};
+	\node[fill=black, circle] at (9,.5) {}
+	  child {node  {\small After} edge from parent [->] node[left] {\small L}}
+	  child {node [fill=blue, circle] {}
+	  {
+	    child {node {\small graduation} edge from parent [->] node[right] {\small P}}
+	  } edge from parent [->] node[right] {\small H} };
+	\node[anchor=west] at (0,-1) {History:};
+	\node[anchor=west] at (1.5,-1) {\textsc{Shift},};
+	\node[anchor=west] at (1.5,-1.5) {\textsc{Right-Edge\textsubscript L},};
+	\node[anchor=west] at (1.5,-2) {\textsc{Reduce},};
+	\node[anchor=west] at (1.5,-2.5) {\textsc{Shift},};
+	\node[anchor=west] at (1.5,-3) {\textsc{Node\textsubscript P},}; 
+	\node[anchor=west] at (1.5,-3.5) {\textsc{Reduce},};
+	\node[anchor=west] at (1.5,-4) {\textsc{Shift},};
+	\node[anchor=west] at (1.5,-4.5) {\textsc{Right-Edge\textsubscript H},};
+	\node[anchor=west] at (1.5,-5) {\textsc{Shift}};
+	\end{tikzpicture}
+	\captionof{figure}{Example for intermediate state during transition-based parsing.}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Classifiers}
+We experiment with three classifiers:
+\begin{flushleft}
+	\begin{tabular}{ll}
+	Perceptron:&\\
+	\textbf{sparse} & binary features: words, POS tags, edge labels. \\
+	\textbf{dense} & real-valued features: word2vec (words) / random. \\
+	\hline\\
+	Neural Network:&\\
+	\textbf{MLP} & 2 layers, learned representation for all features. \\
+	\end{tabular}
+\end{flushleft}
+\vspace{5mm}
+For all classifiers, inference is performed greedily, i.e., without beam search.
+
+\vfill
+\pause
++ real-valued feature, \textbf{ratio} between number of terminals to number of nodes in the graph $G$.
+Serves as regularizer for creation of new nodes.
+\end{frame}
+
+
+
+\section{Experiments}
+
+\begin{frame}
+\frametitle{Experimental Setup}
+\begin{itemize}
+ \item Main experiment: UCCA Wikipedia corpus.
+ \item Out-of-domain data: English part of English-French parallel corpus,
+ 	\textit{Twenty Thousand Leagues Under the Sea}.
+\end{itemize}
+
+\vfill
+\begin{center}
+  \includegraphics[width=.5\linewidth]{wikipedia.png}
+  \includegraphics[width=.5\linewidth]{squid.jpg}
+\end{center}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{UCCA Corpora}
+\centering
+\begin{tabular}{l|ccc|c}
+& \multicolumn{3}{c|}{Wiki} & 20K \\
+& \small Train & \small Dev & \small Test & Leagues \\
+\hline
+\# passages & 300 & 34 & 34 & 154 \\
+\# sentences & 4267 & 453 & 518 & 506 \\
+\hline
+\# nodes & 298,665 & 33,263 & 37,262 & 29,315 \\
+\% terminal & 42.95 & 43.62 & 42.89 & 42.09 \\
+\% non-term. & 58.30 & 57.46 & 58.31 & 60.01 \\
+\% \bf discont. & \bf 0.53 & \bf 0.51 & \bf 0.47 & \bf 0.81 \\
+\% \bf reentrant & \bf 2.31 & \bf 1.76 & \bf 2.18 & \bf 2.03 \\
+\hline
+\# edges & 287,381 & 32,015 & 35,846 & 27,749 \\
+\% primary & 98.29 & 98.81 & 98.75 & 97.73 \\
+\% remote & 1.71 & 1.19 & 1.25 & 2.27 \\
+\hline
+\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
+\# children & 1.67 & 1.68 & 1.66 & 1.61 
+\end{tabular}
+\captionof{table}{Corpus statistics
+excluding root, implicit and linkage units.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation}
+\textit{Mutual edges} between predicted graph $G_p=(V_p,E_p,\ell_p)$
+and gold graph $G_g=(V_g,E_g,\ell_g)$,
+both over terminals $W = \{w_1,\ldots,w_n\}$:
+\[
+M(G_p,G_g) =
+    \left\{(e_1,e_2) \in E_p \times E_g \;|\;
+    y(e_1) = y(e_2) \wedge \ell_p(e_1)=\ell_g(e_2)\right\}
+\]
+The yield $y(e) \subseteq W$ of an edge $e=(u,v)$ in either graph
+is the set of terminals in $W$ that are descendants of $v$. \hfill
+$\ell$ is the edge label.
+
+\vfill
+\pause
+Labeled precision, recall and F-score are then defined as:
+\[
+\text{LP} = \frac{|M(G_p,G_g)|}{|E_p|},\quad
+\text{LR} = \frac{|M(G_p,G_g)|}{|E_g|},
+\]
+\[
+\text{LF} = \frac{2 \cdot \text{LP} \cdot \text{LR}}{\text{LP} + \text{LR}}.
+\]
+Two variants:
+one for primary edges, and another for remote edges.
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+\begin{center}
+	\begin{tabular}{l|ccc|ccc}
+	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+	\hline
+	Sparse perceptron
+	& 64 & 55.6 & 59.5 & 16 & 11.6 & 13.4 \\
+	Dense perceptron
+	& 55 & 54.8 & 54.9 & 15.2 & \bf 16.9 & \bf 16 \\
+	MLP
+	& \bf 65 & \bf 62.5 & \bf 63.7 & \bf 20.7 & 11.3 & 14.6
+	\end{tabular}
+	\captionof{table}{Results on the Wiki test set.}
+	
+	\vfill
+	\pause
+	\begin{tabular}{l|ccc|ccc}
+	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+	\hline
+	Sparse perceptron
+	& 60.6 & 53.9 & 57.1 & \bf 20.2 & \bf 10.3 & \bf 13.6 \\
+	Dense perceptron
+	& 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
+	MLP
+	& \bf 58.3 & \bf 56.4 & \bf 57.3 & 15.2 & 3.8 & 6
+	\end{tabular}
+	\captionof{table}{Results on the 20K Leagues out-of-domain set.}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Baselines}
+There are no existing UCCA parsers. Compare to bilexical DAG parsers:
+\begin{center}
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\depedge{2}{1}{L}
+	\depedge{2}{3}{U}
+	\depedge[dashed]{2}{4}{A}
+	\depedge{5}{4}{A}
+	\depedge{2}{5}{H}
+	\depedge{7}{6}{R}
+	\depedge{5}{7}{A}
+	\end{dependency}
+	\captionof{figure}{Bilexical approximation for UCCA graph.}
+\end{center}
+
+\vfill
+\pause
+\begin{enumerate}
+ \item Convert UCCA to bilexical dependencies (edges only between tokens).
+ \item Train parsers on the resulting training set.
+ \item Apply trained parsers to the test set.
+ \item Reconstruct UCCA graphs.
+ \item Compare with gold standard.
+\end{enumerate}
+
+Upper bounds computed by replacing 1-3 with conversion of the test set.
+\end{frame}
+
+\begin{frame}
+\frametitle{Baselines}
+Bilexical DAG parsers used:
+\begin{itemize}
+ \item DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}:
+ transition-based parser.
+ \item TurboParser \cite{almeida-martins:2015:SemEval}:
+ graph-based parser.
+\end{itemize}
+
+\vfill
+\pause
+\begin{center}
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	John \^ gave \^ everything \^ up \\
+	\end{deptext}
+	\depedge{1}{2}{A}
+	\depedge{3}{2}{A}
+	\depedge{4}{2}{C}
+	\end{dependency}
+	
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	John \^ and \^ Mary \^ went \^ home \\
+	\end{deptext}
+	\depedge[edge start x offset=-6pt]{1}{4}{A}
+	\depedge{2}{1}{N}
+	\depedge{3}{1}{C}
+	\depedge{5}{4}{A}
+	\end{dependency}
+	\captionof{figure}{More bilexical approximation examples.}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+Our NN-based parser obtains the highest scores in nearly all metrics:
+\begin{center}
+	\begin{tabular}{l|ccc|ccc}
+	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+	\hline
+	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
+	Upper Bound % on the test set and ood set only
+	& 93.4 & 83.7 & 88.3 & 73.9 & 49.5 & 59.3 \vspace{.1cm} \\
+	DAGParser
+	& 63.7 & 	56.1	 & 59.5	 & 0.8	 & 9.5	 &  1.4 \\
+	TurboParser
+	& 60.2	 & 47.4	 & 52.9	 & 2.2	 & 7.8	 &  3.4 \\
+	\hline
+	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
+	Sparse perceptron
+	& 64 & 55.6 & 59.5 & 16 & 11.6 & 13.4 \\
+	Dense perceptron
+	& 55 & 54.8 & 54.9 & 15.2 & \bf 16.9 & \bf 16 \\
+	MLP
+	& \bf 65 & \bf 62.5 & \bf 63.7 & \bf 20.7 & 11.3 & 14.6
+	\end{tabular}
+	\captionof{table}{Results on the Wiki test set, including baselines.}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+Similar differences on out-of-domain test set:
+\begin{center}
+	\begin{tabular}{l|ccc|ccc}
+	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+	\hline
+	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Bilexical Approximation} \\
+	Upper Bound % on the test set and ood set only
+	& 93.5 & 83.5 & 88.2 & 66.7 & 31.6 & 42.9 \vspace{.1cm} \\
+	DAGParser
+	& 58	 & 49.8	 & 53.4 & -- & 0 & 0 \\
+	TurboParser
+	& 52.6	 & 39	 & 44.7	 & 100	 & 0.3	 & 0.6 \\
+	\hline
+	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Approach} \\
+	Sparse perceptron
+	& 60.6 & 53.9 & 57.1 & \bf 20.2 & \bf 10.3 & \bf 13.6 \\
+	Dense perceptron
+	& 54.8 & 55.2 & 55 & 6 & 3 & 4 \\
+	MLP
+	& \bf 58.3 & \bf 56.4 & \bf 57.3 & 15.2 & 3.8 & 6
+	\end{tabular}
+	\captionof{table}{Results on the 20K Leagues out-of-domain set, including baselines.}
+\end{center}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Tree Approximation}
+For completeness, we also explore lossily converting UCCA into trees.
+\begin{itemize}
+ \item Results in a simplified task for the underlying parser.
+ \item Takes advantage of maturity of tree-based parsers.
+ \item But loses important information encoded in remote edges
+   (all scores are zero, as they are ignored).
+\end{itemize}
+
+\vfill
+\begin{center}
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\depedge{2}{1}{L}
+	\depedge{2}{3}{U}
+	\depedge{5}{4}{A}
+	\depedge{2}{5}{H}
+	\depedge{7}{6}{R}
+	\depedge{5}{7}{A}
+	\end{dependency}
+	\captionof{figure}{Bilexical tree approximation for UCCA graph.}
+\end{center}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Tree Approximation}
+LSTM transition-based parser: significantly higher primary edge scores.
+\begin{center}
+	\begin{tabular}{l|ccc}
+	& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+	\hline
+	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Constituency Tree Approximation} \\
+	Upper Bound & 100 & 100 & 100 \vspace{.1cm} \\
+	\textsc{uparse} \cite{maier-lichte:2016:DiscoNLP} & 63 & 64.7 & 63.7 \\
+	\hline
+	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Dependency Tree Approximation} \\
+	Upper Bound & 93.7 & 83.6 & 88.4 \vspace{.1cm} \\
+	MaltParser \cite{nivre2007maltparser} & 64.9 & 57.9 & 61 \\
+	LSTM Parser \cite{dyer2015transition} & \bf 74.9 & \bf 66.4 & \bf 70.2 \\
+	\hline
+	\multicolumn{4}{l}{\rule{0pt}{2ex} \footnotesize Direct Tree Parsing} \\
+	Sparse perceptron without \textsc{Remote} & 65.5 & 57.5 & 61.3 \\
+	Dense perceptron without \textsc{Remote} & 57.2 & 57.3 & 57.2 \\
+	MLP without \textsc{Remote} & 66.3 & 64.4 & 65.3 \\
+	\end{tabular}
+	\captionof{table}{Results of tree approximation experiment on the Wiki test set.}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Discussion}
+Remote edge performance is of pivotal importance here: we focus on extending the class of graphs supported by statistical parsers.
+
+\vfill
+\pause
+However, exploring tree approximation methods
+can inform the future development of DAG parsers in general and of UCCA parsers in particular.
+
+\vfill
+\pause
+The performance is encouraging in light of
+UCCA's inter-annotator agreement: 80--85\%
+primary LF \cite{abend2013universal}.
+\end{frame}
+
+
+
+
+\section{Conclusions}
+
+\begin{frame}
+\frametitle{Conclusions}
+\begin{itemize}
+ \item UCCA exhibits formal properties important for semantic representation.
+ \item We present the first parser for UCCA and the first to support these properties.
+\end{itemize}
+
+\vfill
+\pause
+\begin{itemize}
+ \item Corpora: \url{http://www.cs.huji.ac.il/~oabend/ucca.html}
+ \item Code: \url{https://github.com/danielhers/ucca}
+ \item NN written with Keras: \url{https://github.com/fchollet/keras}
+\end{itemize}
+\end{frame}
+
+
+
+\section{Future Work}
+
+\begin{frame}
+In light of the results, promising future directions are:
+\begin{itemize}
+ \item Replace MLP by LSTM classifier.
+ \item Replace word embeddings by LSTM-based features.
+\end{itemize}
+
+\vfill
+\pause
+Other future directions:
+\begin{itemize}
+ \item Means to recover from mistakes during parsing:
+ beam search, training with exploration.
+ \item More languages (e.g. German),
+ demonstrating the importance of broad-coverage parsing.
+ \item Improving the conversion-based methods and exploring different target representations.
+ \item Using UCCA for representation in NLP tasks.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{UCCA-Based Distributed Representation}
+Vector representation for sentences and documents,
+based on recursive composition on the UCCA graph.
+
+\vfill
+\begin{center}
+  \begin{tikzpicture}[level distance=15mm, sibling distance=2.5cm, ->]
+    \node (ROOT) [fill=black, vector] {}
+      child {node (After) {After} edge from parent [shorten <=3mm]
+        node[left] {\scriptsize $L$\;}}
+      child {node (graduation) [fill=black, vector] {}
+      {
+        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
+      } edge from parent node[left] {\scriptsize $H$} }
+      child {node {,} edge from parent node[right] {\scriptsize $U$}}
+      child {node (moved) [fill=black, vector] {}
+      {
+        child {node (John) {John} edge from parent [shorten <=2mm]
+          node[left] {\scriptsize $A$}}
+        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
+        child {node [fill=black, vector] {}
+        {
+          child {node {to} edge from parent node[left] {\scriptsize $R$}}
+          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
+        } edge from parent [shorten <=2.5mm,shorten >=3mm] node[left] {\scriptsize $A$} }
+      } edge from parent [shorten <=3.5mm,shorten >=4mm] node[right] {\scriptsize $H$} }
+      ;
+    \draw[dashed,->,shorten <=2.5mm] (graduation) to node [auto] {\scriptsize $A$} (John);
+    \node (LKG) at (-1.8,0) [fill=black!20, vector] {};
+        \draw[bend right,shorten <=4mm] (LKG) to
+          node [auto, left] {\scriptsize $LR$} (After);
+        \draw (LKG) to[out=-60, in=120]
+          node [below] {\scriptsize $LA$\quad\;} (graduation);
+        \draw[shorten <=2mm] (LKG) to[out=30, in=90]
+          node [above] {\scriptsize $LA$} (moved);
+  \end{tikzpicture}
+\end{center}
+\end{frame}
+
+
+
+
+
+\begin{frame}
+\vfill
+\begin{center}
+\LARGE
+Thank you
+\end{center}
+\end{frame}
+
+
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apalike}
+\tiny\bibliography{references}
+\end{frame}
+
+\end{document}
