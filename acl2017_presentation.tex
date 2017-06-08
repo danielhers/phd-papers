@@ -1,36 +1,6 @@
-% Presentation flag: uncomment to enable presentation features (slower compilation)
-\newcommand*{\PRESENTATION}
-
-% Preliminaries
-\ifdefined\PRESENTATION
-	\documentclass[t]{beamer}
-\else
-	\documentclass[t,handout]{beamer}
-\fi
+\documentclass[t]{beamer}
 \mode<presentation>
-%\usetheme{Berlin}
-\useoutertheme{infolines}
-\makeatother
-\setbeamertemplate{footline}
-{
-  \leavevmode%
-  \hbox{%
-  \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
-    \usebeamerfont{author in head/foot}\insertshortauthor
-  \end{beamercolorbox}%
-  \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
-    \usebeamerfont{title in head/foot}\insertshorttitle
-  \end{beamercolorbox}%
-  \begin{beamercolorbox}[wd=.1\paperwidth,ht=2.25ex,dp=1ex,center]{date in head/foot}%
-    \insertframenumber{} / \inserttotalframenumber\hspace*{1ex}
-  \end{beamercolorbox}}%
-  \vskip0pt%
-}
-\makeatletter
-\setbeamertemplate{navigation symbols}{} 
 
-% Includes
-%\usepackage{times} % Use the times font
 \usepackage{palatino} % Uncomment to use the Palatino font
 
 \usepackage{graphicx} % Required for including images
@@ -45,6 +15,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{color}
+\usepackage{array}
 \usepackage{multirow}
 \usepackage{multicol}
 \usepackage{tikz}
@@ -79,7 +50,7 @@
 
 
 \title[A Transition-Based DAG Parser for UCCA]{A Transition-Based Directed Acyclic Graph Parser for Universal Conceptual Cognitive Annotation}
-\author[Daniel Hershcovich]{Daniel Hershcovich, Omri Abend and Ari Rappoport}
+\author{Daniel Hershcovich, Omri Abend and Ari Rappoport}
 \institute[]{\includegraphics[width=.08\pagewidth]{huji_logo.jpg}
 \includegraphics[width=.3\pagewidth]{huji_banner.png}}
 \date{ACL 2017}
@@ -94,154 +65,10 @@
 \section{Universal Conceptual Cognitive Annotation}
 
 \begin{frame}
-\frametitle{Semantic Annotation Schemes}
-Represent semantic structure of text as a graph.
-
-Used by NLP applications for features and structure,
-providing information such as \textit{who did what to whom?}
-\vfill
-Examples:
-\begin{itemize}
- \item Semantic Role Labeling
- \item Semantic Dependencies
- \item Abstract Meaning Representation
- \item Universal Conceptual Cognitive Annotation
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Semantic Role Labeling (SRL)}
-Annotate predicates and their arguments as a flat structure.
-Examples:
-
-\centering
-\vfill
-\begin{dependency}
-	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
-	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
-	\end{deptext}
-	% PropBank
-	\node[xshift=4.91em,yshift=3em,color=blue]{move.01}
-	child{node at ($(\wordref{1}{5})$) {}};
-	\node[xshift=-9.5em,yshift=3em,color=blue]{AM-TMP}
-	child{node at ($(\wordref{1}{1})$) {}}
-	child{node at ($(\wordref{1}{2})$) {}};
-	\node[xshift=.65em,yshift=3em,color=blue]{A1}
-	child{node at ($(\wordref{1}{4})$) {}};
-	\node[xshift=10.5em,yshift=3em,color=blue]{A2}
-	child{node at ($(\wordref{1}{6})$) {}}
-	child{node at ($(\wordref{1}{7})$) {}};
-\end{dependency}
-
-\vfill
-{\color{blue} PropBank}
-\end{frame}
-
-\begin{frame}
-\frametitle{Semantic Role Labeling (SRL)}
-Annotate predicates and their arguments as a flat structure.
-Examples:
-
-\centering
-\vfill
-\begin{dependency}
-	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
-	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
-	\end{deptext}
-	% FrameNet
-	\node[xshift=4.91em,yshift=-3em,color=red]{Motion}
-	child{node at ($(\wordref{1}{5})$) {}};
-	\node[xshift=-9.5em,yshift=-3em,color=red]{Time}
-	child{node at ($(\wordref{1}{1})$) {}}
-	child{node at ($(\wordref{1}{2})$) {}};
-	\node[xshift=.65em,yshift=-3em,color=red]{Theme}
-	child{node at ($(\wordref{1}{4})$) {}};
-	\node[xshift=10.5em,yshift=-3em,color=red]{Goal}
-	child{node at ($(\wordref{1}{6})$) {}}
-	child{node at ($(\wordref{1}{7})$) {}};
-\end{dependency}
-
-\vfill
-{\color{red} FrameNet}
-\end{frame}
-
-\begin{frame}
-\frametitle{Semantic Dependency Parsing (SDP)}
-Graph on the text tokens, including internal structure of arguments.
-Examples:
-
-\centering
-\vfill
-\begin{dependency}[theme=simple]
-	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
-	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
-	\end{deptext}
-	\deproot{5}{\color{blue} top}
-	\depedge{1}{2}{\color{blue} ARG2}
-	\depedge{1}{5}{\color{blue} ARG1}
-	\depedge{5}{4}{\color{blue} ARG1}
-	\depedge{6}{5}{\color{blue} ARG1}
-	\depedge{6}{7}{\color{blue} ARG2}
-\end{dependency}
-\vfill
-{\color{blue} DELPH-IN MRS-derived bi-lexical dependencies (DM)}
-\end{frame}
-
-\begin{frame}
-\frametitle{Semantic Dependency Parsing (SDP)}
-Graph on the text tokens, including internal structure of arguments.
-Examples:
-
-\centering
-\vfill
-
-\begin{dependency}[theme=simple]
-	\begin{deptext}[column sep=1.5em,ampersand replacement=\^]
-	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
-	\end{deptext}
-	\deproot[edge below]{5}{\color{red} top}
-	\depedge[edge below]{5}{2}{\color{red} TWHEN}
-	\depedge[edge below]{5}{4}{\color{red} ACT-arg}
-	\depedge[edge below]{5}{7}{\color{red} DIR3-arg}
-\end{dependency}
-
-\vfill
-{\color{red} Prague Dependency Treebank tectogrammatical layer (PSD)}
-\end{frame}
-
-\begin{frame}
-\frametitle{Abstract Meaning Representation (AMR)}
-Graph on knowledge resource entries inferred from the tokens.
-
-\begin{tikzpicture}
-\graph[layered layout, sibling distance=5cm, layer distance=2cm, edges={nodes={sloped}}]{
-a4 Paris[as={Paris}, black];
-a2 John[as={John}, black];
-a1[as={person}, black];
-a0[as={move-01}, black];
-a3[as={city}, black];
-a2[as={name}, black];
-a5[as={after}, black];
-a4[as={name}, black];
-a6[as={graduate-01}, black];
-
-a1 ->  ["name"' above, black] a2;
-a0 ->  ["ARG0"' above, black] a1;
-a0 ->  ["ARG2"' above, black] a3;
-a0 ->  ["time"' above, black] a5;
-a3 ->  ["name"' above, black] a4;
-a2 ->  ["op1"' above, black] a2 John;
-a5 ->  ["op1"' above, black] a6;
-a4 ->  ["op1"' above, black] a4 Paris;
-};
-\draw[->, above, black] (a6) to node[sloped] {ARG0} (a1);
-\end{tikzpicture}
-\end{frame}
-
-\begin{frame}
 \frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
-\begin{tikzpicture}[level distance=25mm, sibling distance=25mm, ->,
-    every circle node/.append style={fill=black}]
+\begin{tikzpicture}[level distance=25mm, sibling distance=23mm, ->,
+    every circle node/.append style={fill=black},
+    every node/.append style={font=\rmfamily}]
   \node (ROOT) [circle] {}
     child {node (After) {After} edge from parent node[left] {L}}
     child {node (graduation) [circle] {}
@@ -261,14 +88,13 @@ a4 ->  ["op1"' above, black] a4 Paris;
     } edge from parent node[right] {H} }
     ;
   \draw[dashed,->] (graduation) to node [auto] {A} (John);
-  \node at (6,-.3) {\Large ------ primary edge};
-  \node at (6,-1.3) {\Large - - - remote edge};
+  \node at (5.6,-.3) {\Large ------ primary edge};
+  \node at (5.6,-1.3) {\Large - - - remote edge};
 \end{tikzpicture}
 \begin{wraptable}{l}{4.8mm}
   \vspace{-3cm}
-  \scalebox{.75}{
-  \begin{adjustbox}{margin=2mm,frame}
-  \begin{tabular}{cl|cl|cl}
+  \begin{adjustbox}{margin=1mm,frame}
+  \begin{tabular}{c>{\small\it}l|c>{\small\it}l|c>{\small\it}l}
 	  P & process &
 	  S & state &
 	  A & participant \\
@@ -280,11 +106,10 @@ a4 ->  ["op1"' above, black] a4 Paris;
 	  R & relator \\
 	  N & connector &
 	  U & punctuation &
-	  F & function unit \\
+	  F & function \\
 	  G & ground
   \end{tabular}
   \end{adjustbox}
-  }
 \end{wraptable}
 \end{frame}
 
@@ -320,7 +145,7 @@ based on typological and Cognitive Linguistics literature \cite{Dixon:basic,crof
 \vfill
 \begin{center}
   \begin{adjustbox}{margin=2mm,frame}
-  \begin{tabular}{cl|cl|cl}
+  \begin{tabular}{c>{\small\it}l|c>{\small\it}l|c>{\small\it}l}
 	  P & process &
 	  S & state &
 	  A & participant \\
@@ -348,7 +173,7 @@ based on typological and Cognitive Linguistics literature \cite{Dixon:basic,crof
 \vfill
 \begin{minipage}{.48\linewidth}{\centering
   \begin{tikzpicture}[level distance=12mm, sibling distance=16mm, ->,
-      every node/.append style={midway}]
+      every node/.append style={midway,font=\rmfamily}]
     \node (ROOT) [fill=black, circle] {}
       child {node [fill=black, circle] {}
       {
@@ -365,7 +190,7 @@ based on typological and Cognitive Linguistics literature \cite{Dixon:basic,crof
 \hfill
 \begin{minipage}{.48\linewidth}{\centering
   \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
-      every node/.append style={midway}]
+      every node/.append style={midway,font=\rmfamily}]
     \node (ROOT) [fill=black, circle] {}
       child {node {John} edge from parent node[left] {\scriptsize $A$}}
       child {node [fill=black, circle] {}
@@ -382,7 +207,7 @@ based on typological and Cognitive Linguistics literature \cite{Dixon:basic,crof
 
 \vspace{-1mm}
   \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
-      every node/.append style={midway}]
+      every node/.append style={midway,font=\rmfamily}]
     \node (ROOT) [fill=black, circle] {}
       child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
       child {node {decided} edge from parent node[left] {\scriptsize $P$}}
@@ -417,7 +242,7 @@ based on typological and Cognitive Linguistics literature \cite{Dixon:basic,crof
 \end{itemize}
 
 \begin{center}
-	\begin{tikzpicture}
+	\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
 	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
 	\node[anchor=west] at (.2,1) {$S$};
 	\node[fill=black, circle] at (.5,.25) {};
@@ -446,7 +271,8 @@ Supports non-terminal nodes, reentrancy and discontinuity.
 \begin{frame}
 \frametitle{Transition-Based Parsing}
 \begin{center}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=2cm]
+	\begin{tikzpicture}[level distance=15mm, sibling distance=2cm,
+    every node/.append style={font=\rmfamily}]
 	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (3,.5);
 	\node[anchor=west] at (1.2,1) {$S$};
 	\node[fill=black, circle] at (.5,.25) {};
@@ -614,7 +440,7 @@ one for primary edges, and another for remote edges.
 There are no existing UCCA parsers. Compare to bilexical DAG parsers:
 \begin{center}
 	\begin{dependency}[theme = simple]
-	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
 	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 	\end{deptext}
 	\depedge{2}{1}{L}
@@ -655,7 +481,7 @@ Bilexical DAG parsers used:
 \pause
 \begin{center}
 	\begin{dependency}[theme = simple]
-	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
 	John \^ gave \^ everything \^ up \\
 	\end{deptext}
 	\depedge{1}{2}{A}
@@ -664,7 +490,7 @@ Bilexical DAG parsers used:
 	\end{dependency}
 	
 	\begin{dependency}[theme = simple]
-	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
 	John \^ and \^ Mary \^ went \^ home \\
 	\end{deptext}
 	\depedge[edge start x offset=-6pt]{1}{4}{A}
@@ -690,7 +516,7 @@ We also explore lossily converting UCCA into trees.
 \vfill
 \begin{center}
 	\begin{dependency}[theme = simple]
-	\begin{deptext}[column sep=.7em,ampersand replacement=\^]
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
 	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 	\end{deptext}
 	\depedge{2}{1}{L}
@@ -851,7 +677,8 @@ based on recursive composition on the UCCA graph.
 
 \vfill
 \begin{center}
-  \begin{tikzpicture}[level distance=15mm, sibling distance=2.5cm, ->]
+  \begin{tikzpicture}[level distance=15mm, sibling distance=2.5cm, ->,
+    every node/.append style={font=\rmfamily}]
     \node (ROOT) [fill=black, vector] {}
       child {node (After) {After} edge from parent [shorten <=3mm]
         node[left] {\scriptsize $L$\;}}
