@@ -8,7 +8,7 @@
 	\documentclass[t,handout]{beamer}
 \fi
 \mode<presentation>
-\usetheme{Warsaw}
+\usetheme{Berlin}
 \useoutertheme{infolines}
 \makeatother
 \setbeamertemplate{footline}
@@ -841,8 +841,8 @@ primary LF \cite{abend2013universal}.
 \pause
 \begin{itemize}
  \item Corpora: \url{http://www.cs.huji.ac.il/~oabend/ucca.html}
- \item Code: \url{https://github.com/danielhers/ucca}
- \item NN written with Keras: \url{https://github.com/fchollet/keras}
+ \item Code: \url{https://github.com/danielhers/tupa}
+ \item Based on DyNet: \url{https://github.com/clab/dynet}
 \end{itemize}
 \end{frame}
 
@@ -852,14 +852,6 @@ primary LF \cite{abend2013universal}.
 
 \begin{frame}
 In light of the results, promising future directions are:
-\begin{itemize}
- \item Replace MLP by LSTM classifier.
- \item Replace word embeddings by LSTM-based features.
-\end{itemize}
-
-\vfill
-\pause
-Other future directions:
 \begin{itemize}
  \item Means to recover from mistakes during parsing:
  beam search, training with exploration.
