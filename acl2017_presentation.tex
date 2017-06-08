@@ -70,45 +70,47 @@
     every circle node/.append style={fill=black},
     every node/.append style={font=\rmfamily}]
   \node (ROOT) [circle] {}
-    child {node (After) {After} edge from parent node[left] {L}}
+    child {node (After) {After} edge from parent node[left] {$L$}}
     child {node (graduation) [circle] {}
     {
-      child {node {graduation} edge from parent node[left] {P}}
-    } edge from parent node[left] {H} }
-    child {node {,} edge from parent node[right] {U}}
+      child {node {graduation} edge from parent node[left] {$P$}}
+    } edge from parent node[left] {$H$} }
+    child {node {,} edge from parent node[right] {$U$}}
     child {node (moved) [circle] {}
     {
-      child {node (John) {John} edge from parent node[left] {A}}
-      child {node {moved} edge from parent node[left] {P}}
+      child {node (John) {John} edge from parent node[left] {$A$}}
+      child {node {moved} edge from parent node[left] {$P$}}
       child {node [circle] {}
       {
-        child {node {to} edge from parent node[left] {R}}
-        child {node {Paris} edge from parent node[right] {C}}
-      } edge from parent node[right] {A} }
-    } edge from parent node[right] {H} }
+        child {node {to} edge from parent node[left] {$R$}}
+        child {node {Paris} edge from parent node[right] {$C$}}
+      } edge from parent node[right] {$A$} }
+    } edge from parent node[right] {$H$} }
     ;
-  \draw[dashed,->] (graduation) to node [auto] {A} (John);
-  \node at (5.6,-.3) {\Large ------ primary edge};
+  \draw[dashed,->] (graduation) to node [auto] {$A$} (John);
+  \node at (5.6,-.3) {\Large ----- primary edge};
   \node at (5.6,-1.3) {\Large - - - remote edge};
 \end{tikzpicture}
-\begin{wraptable}{l}{4.8mm}
+\begin{wraptable}{l}{1cm}
   \vspace{-3cm}
   \begin{adjustbox}{margin=1mm,frame}
+  \scalebox{.9}{
   \begin{tabular}{c>{\small\it}l|c>{\small\it}l|c>{\small\it}l}
-	  P & process &
-	  S & state &
-	  A & participant \\
-	  L & linker &
-	  H & linked scene &
-	  C & center \\
-	  E & elaborator &
-	  D & adverbial &
-	  R & relator \\
-	  N & connector &
-	  U & punctuation &
-	  F & function \\
-	  G & ground
+	  $P$ & process &
+	  $S$ & state &
+	  $A$ & participant \\
+	  $L$ & linker &
+	  $H$ & linked scene &
+	  $C$ & center \\
+	  $E$ & elaborator &
+	  $D$ & adverbial &
+	  $R$ & relator \\
+	  $N$ & connector &
+	  $U$ & punctuation &
+	  $F$ & function \\
+	  $G$ & ground
   \end{tabular}
+  }
   \end{adjustbox}
 \end{wraptable}
 \end{frame}
@@ -135,34 +137,11 @@ based on typological and Cognitive Linguistics literature \cite{Dixon:basic,crof
 \begin{frame}
 \frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
 \begin{itemize}
- \item \textbf{Remote edges} represent implied relations, support argument sharing.
- \item Also supported: \textbf{linkage} (discourse relations) and \textbf{implicit} units,
- but parsing them is deferred to later work.
- \item Foundational layer covers predicate-argument structure and other major linguistic phenomena.
- \item The scheme is extensible to allow other distinctions.
+ \item \textbf{Remote edges} represent implied relations, allow argument sharing.
+ \item The foundational layer covers predicate-argument structure, relations between predicates,
+and other constructions such as coordination and multi-word expressions.
+ \item Extensible to allow other distinctions.
 \end{itemize}
-
-\vfill
-\begin{center}
-  \begin{adjustbox}{margin=2mm,frame}
-  \begin{tabular}{c>{\small\it}l|c>{\small\it}l|c>{\small\it}l}
-	  P & process &
-	  S & state &
-	  A & participant \\
-	  L & linker &
-	  H & linked scene &
-	  C & center \\
-	  E & elaborator &
-	  D & adverbial &
-	  R & relator \\
-	  N & connector &
-	  U & punctuation &
-	  F & function unit \\
-	  G & ground
-  \end{tabular}
-  \end{adjustbox}
-  \captionof{table}{Edge labels of the foundational layer (excluding linkage).}
-\end{center}
 \end{frame}
 
 \begin{frame}
@@ -170,8 +149,7 @@ based on typological and Cognitive Linguistics literature \cite{Dixon:basic,crof
 \noindent
 (1) non-terminal nodes, (2) reentrancy, (3) discontinuity
 \centering
-\vfill
-\begin{minipage}{.48\linewidth}{\centering
+\begin{minipage}{.4\linewidth}{\centering
   \begin{tikzpicture}[level distance=12mm, sibling distance=16mm, ->,
       every node/.append style={midway,font=\rmfamily}]
     \node (ROOT) [fill=black, circle] {}
@@ -188,7 +166,7 @@ based on typological and Cognitive Linguistics literature \cite{Dixon:basic,crof
   }
 \end{minipage}
 \hfill
-\begin{minipage}{.48\linewidth}{\centering
+\begin{minipage}{.4\linewidth}{\centering
   \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
       every node/.append style={midway,font=\rmfamily}]
     \node (ROOT) [fill=black, circle] {}
@@ -241,25 +219,28 @@ based on typological and Cognitive Linguistics literature \cite{Dixon:basic,crof
  \item Trained by an oracle based on gold-standard graph.
 \end{itemize}
 
-\begin{center}
+\hspace{-1cm}
+\scalebox{.92}{
 	\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
 	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
 	\node[anchor=west] at (.2,1) {$S$};
 	\node[fill=black, circle] at (.5,.25) {};
-	\draw[xstep=18mm,ystep=5mm,color=gray] (1.79,0) grid (12.4,.5);
+	\draw[xstep=18mm,ystep=5mm,color=gray] (1.79,0) grid (12.6,.5);
 	\node[anchor=west] at (1.9,1) {$B$};
 	\node[anchor=west] at (2,.25) {After};
-	\node[anchor=west] at (3.5,.25) {graduation};
+	\node[anchor=west] at (3.5,.2) {graduation};
 	\node[anchor=west] at (5.6,.25) {John};
-	\node[anchor=west] at (7.2,.25) {moved};
-	\node[anchor=west] at (9.4,.25) {to};
-	\node[anchor=west] at (10.9,.25) {Paris};
+	\node[anchor=west] at (7.35,.25) {moved};
+	\node[anchor=west] at (9.25,.25) {to};
+	\node[anchor=west] at (10.95,.25) {Paris};
 	\end{tikzpicture}
-\end{center}
+}
 
 \vfill
 \pause
-Transitions defined for UCCA parsing:\\
+Transitions defined for UCCA parsing:
+
+\vfill
 \{\textsc{Shift, Reduce, Node$_X$, Left-Edge$_X$, Right-Edge$_X$,}\\
 \hspace{5mm}\textsc{Left-Remote$_X$, Right-Remote$_X$, Swap, Finish}\}
 
@@ -301,7 +282,7 @@ Supports non-terminal nodes, reentrancy and discontinuity.
 	\node[anchor=west] at (1.5,-4.5) {\textsc{Right-Edge\textsubscript H},};
 	\node[anchor=west] at (1.5,-5) {\textsc{Shift}};
 	\end{tikzpicture}
-	\captionof{figure}{Example for intermediate state during transition-based parsing.}
+	\captionof{figure}{Intermediate state example.}
 \end{center}
 \end{frame}
 
@@ -314,17 +295,11 @@ We experiment with three classifiers:
 	  & words, POS, dependency \& edge label combinations. \\
 	\textbf{\parser{MLP}} & 2-layer NN, learned embedding features + \\
 	  & external word embeddings. \\
-	\textbf{\parser{BiLSTM}} & 2-layer bidirectional RNN to encode features, \\
+	\textbf{\parser{BiLSTM}} & 2-layer bidirectional LSTM to encode features, \\
 	  & 2-layer NN for classification.
 	\end{tabular}
 \end{flushleft}
-\vspace{5mm}
-For all classifiers, inference is performed greedily, i.e., without beam search.
-
-\vfill
-\pause
-+ real-valued feature, \textbf{ratio} between number of terminals to number of nodes in the graph $G$.
-Serves as regularizer for creation of new nodes.
+Greedy parsing.
 \end{frame}
 
 
@@ -370,12 +345,37 @@ Serves as regularizer for creation of new nodes.
 		\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
 		\# children & 1.67 & 1.68 & 1.66 & 1.61 
 	\end{tabular}
-\captionof{table}{Corpus statistics
-excluding root, implicit and linkage units.}
+\captionof{table}{Corpus statistics.}
 \end{frame}
 
 \begin{frame}
 \frametitle{Evaluation}
+%Given gold and predicted graphs, match edges by \textit{yield} and \textit{label}:
+%\begin{tikzpicture}[level distance=25mm, sibling distance=23mm, ->,
+%    every circle node/.append style={fill=black},
+%    every node/.append style={font=\rmfamily}]
+%  \node (ROOT) [circle] {}
+%    child {node (After) {After} edge from parent node[left] {$L$}}
+%    child {node (graduation) [circle] {}
+%    {
+%      child {node {graduation} edge from parent node[left] {$P$}}
+%    } edge from parent node[left] {$H$} }
+%    child {node {,} edge from parent node[right] {$U$}}
+%    child {node (moved) [circle] {}
+%    {
+%      child {node (John) {John} edge from parent node[left] {$A$}}
+%      child {node {moved} edge from parent node[left] {$P$}}
+%      child {node [circle] {}
+%      {
+%        child {node {to} edge from parent node[left] {$R$}}
+%        child {node {Paris} edge from parent node[right] {$C$}}
+%      } edge from parent node[right] {$A$} }
+%    } edge from parent node[right] {$H$} }
+%    ;
+%  \draw[dashed,->] (graduation) to node [auto] {$A$} (John);
+%  \node at (5.6,-.3) {\Large ----- primary edge};
+%  \node at (5.6,-1.3) {\Large - - - remote edge};
+%\end{tikzpicture}
 \textit{Mutual edges} between predicted graph $G_p=(V_p,E_p,\ell_p)$
 and gold graph $G_g=(V_g,E_g,\ell_g)$,
 both over terminals $W = \{w_1,\ldots,w_n\}$:
