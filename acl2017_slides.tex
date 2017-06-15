@@ -1,8 +1,9 @@
 \documentclass[t]{beamer}
 \mode<presentation>
 
-\usepackage{palatino} % Uncomment to use the Palatino font
-
+\setbeamertemplate{itemize items}[circle]
+\usepackage{palatino}
+\usepackage{apalike}
 \usepackage{graphicx} % Required for including images
 \graphicspath{{figures/}} % Location of the graphics files
 \usepackage{booktabs} % Top and bottom rules for table
@@ -78,7 +79,7 @@
     child {node {,} edge from parent node[right] {$U$}}
     child {node (moved) [circle] {}
     {
-      child {node (John) {John} edge from parent node[left] {$A$}}
+      child {node (Joe) {Joe} edge from parent node[left] {$A$}}
       child {node {moved} edge from parent node[left] {$P$}}
       child {node [circle] {}
       {
@@ -87,17 +88,18 @@
       } edge from parent node[right] {$A$} }
     } edge from parent node[right] {$H$} }
     ;
-  \draw[dashed,->] (graduation) to node [auto] {$A$} (John);
+  \draw[dashed,->] (graduation) to node [auto] {$A$} (Joe);
   \node at (5.6,-.3) {\Large ----- primary edge};
   \node at (5.6,-1.3) {\Large - - - remote edge};
 \end{tikzpicture}
-\begin{wraptable}{l}{1cm}
-  \vspace{-3cm}
+\begin{wraptable}{l}{8cm}
+  \vspace{-27mm}
+  \hspace{14mm} After graduation, Joe moved to Paris
   \begin{adjustbox}{margin=1mm,frame}
-  \scalebox{.9}{
+  \scalebox{.7}{
   \begin{tabular}{c>{\small\it}l|c>{\small\it}l|c>{\small\it}l}
 	  $P$ & process &
-	  $S$ & state &
+	  stack & state &
 	  $A$ & participant \\
 	  $L$ & linker &
 	  $H$ & linked scene &
@@ -116,94 +118,86 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
-Semantic representation scheme \cite{abend2013universal}
-based on typological and Cognitive Linguistics literature \cite{Dixon:basic,croft2004cognitive}.
+\frametitle{The UCCA Scheme}
+Cross-linguistic semantic scheme \cite{abend2013universal}
 \begin{itemize}
- \item Demonstrated applicability to English, French, German \& Czech.
- \item Support for rapid annotation.
- \pause
- \item Stability in translation \cite{sulem2015conceptual}.
- \item Useful for MT evaluation \cite{birch2016hume}.
- \item Applicability so far limited by absence of parser.
+\item Rapid and intuitive annotation interface \cite{abend2017uccaapp}
+\item Stable in translation \cite{sulem2015conceptual}
+\item Useful for MT evaluation \cite{birch2016hume}
 \end{itemize}
-
 \vfill
 \begin{center}
-  \includegraphics[width=\linewidth]{hume.png}
+  \includegraphics[width=\linewidth]{uccaapp.png}
 \end{center}
-\end{frame}
-
-\begin{frame}
-\frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
-\begin{itemize}
- \item \textbf{Remote edges} represent implied relations, allow argument sharing.
- \item The foundational layer covers predicate-argument structure, relations between predicates,
-and other constructions such as coordination and multi-word expressions.
- \item Extensible to allow other distinctions.
-\end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Structural Properties}
 \noindent
-(1) non-terminal nodes, (2) reentrancy, (3) discontinuity
+\begin{enumerate}
+\item \color{blue} non-terminal nodes
+\item \color{orange} reentrancy
+\item \color{red} discontinuity
+\end{enumerate}
+%(1) {\color{blue} non-terminal nodes}, (2) {\color{orange} reentrancy}, (3) {\color{red} discontinuity}
 \centering
-\begin{minipage}{.4\linewidth}{\centering
-  \begin{tikzpicture}[level distance=12mm, sibling distance=16mm, ->,
-      every node/.append style={midway,font=\rmfamily}]
-    \node (ROOT) [fill=black, circle] {}
-      child {node [fill=black, circle] {}
-      {
-        child {node {John} edge from parent node[left] {\scriptsize $C$}}
-        child {node {and} edge from parent node[left] {\scriptsize $N$}}
-        child {node {Mary} edge from parent node[left] {\scriptsize $C$}}
-      } edge from parent node[left] {\scriptsize $A$} }
-      child {node {went} edge from parent node[left] {\scriptsize $P$}}
-      child {node {home} edge from parent node[left] {\scriptsize $A$}}
-      ;
-  \end{tikzpicture}
-  }
-\end{minipage}
-\hfill
-\begin{minipage}{.4\linewidth}{\centering
+%\begin{minipage}{.4\linewidth}{\centering
+%  \begin{tikzpicture}[level distance=12mm, sibling distance=16mm, ->,
+%      every node/.append style={midway,font=\rmfamily}]
+%    \node (ROOT) [fill=blue, circle] {}
+%      child {node [fill=blue, circle] {}
+%      {
+%        child {node {Joe} edge from parent node[left] {\scriptsize $C$}}
+%        child {node {and} edge from parent node[left] {\scriptsize $N$}}
+%        child {node {Mary} edge from parent node[left] {\scriptsize $C$}}
+%      } edge from parent node[left] {\scriptsize $A$} }
+%      child {node {went} edge from parent node[left] {\scriptsize $P$}}
+%      child {node {home} edge from parent node[left] {\scriptsize $A$}}
+%      ;
+%  \end{tikzpicture}
+%  }
+%\end{minipage}
+%\hfill
+%\begin{minipage}{.4\linewidth}{\centering
+%  \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
+%      every node/.append style={midway,font=\rmfamily}]
+%    \node (ROOT) [fill=blue, circle] {}
+%      child {node {Joe} edge from parent node[left] {\scriptsize $A$}}
+%      child {node [fill=blue, circle] {}
+%      {
+%      	child {node {gave} edge from parent node[left] {\scriptsize $C$}}
+%      	child {node (everything) {everything} edge from parent[white]}
+%      	child {node {up} edge from parent node[right] {\scriptsize $C$}}
+%      } edge from parent node[right] {\scriptsize $P$} }
+%      ;
+%    \draw[bend right,->, color=red, line width=1pt] (ROOT) to[out=-20, in=180] node [left] {\scriptsize $A$} (everything);
+%  \end{tikzpicture}
+%  }
+%\end{minipage}
+%
+\vfill
   \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
       every node/.append style={midway,font=\rmfamily}]
-    \node (ROOT) [fill=black, circle] {}
-      child {node {John} edge from parent node[left] {\scriptsize $A$}}
-      child {node [fill=black, circle] {}
-      {
-      	child {node {gave} edge from parent node[left] {\scriptsize $C$}}
-      	child {node (everything) {everything} edge from parent[white]}
-      	child {node {up} edge from parent node[left] {\scriptsize $C$}}
-      } edge from parent node[right] {\scriptsize $P$} }
-      ;
-    \draw[bend right,->] (ROOT) to[out=-20, in=180] node [left] {\scriptsize $A$} (everything);
-  \end{tikzpicture}
-  }
-\end{minipage}
-
-\vspace{-1mm}
-  \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
-      every node/.append style={midway,font=\rmfamily}]
-    \node (ROOT) [fill=black, circle] {}
-      child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+    \node (ROOT) [fill=blue, circle] {}
+      child {node (He) {He} edge from parent node[left] {\scriptsize $A$}}
       child {node {decided} edge from parent node[left] {\scriptsize $P$}}
-      child {node (totakeaquickshower) [fill=black, circle] {}
+      child {node (totakeaquickshower) [fill=blue, circle] {}
       {
         child {node {to} edge from parent node[left] {\scriptsize $F$}}
-        child {node (takeashower) [fill=black, circle] {}
+        child {node (takeashower) [fill=blue, circle] {}
         {
-          child {node {take} edge from parent node[left] {\scriptsize $C$}}
+          child {node {take} edge from parent node[right] {\scriptsize $C$}}
           child {node {a} edge from parent node[right] {\scriptsize $F$}}
           child {node (quick) {quick} edge from parent[white]}
           child {node {shower} edge from parent node[right] {\scriptsize $C$}}
         } edge from parent node[right] {\scriptsize $P$} }
       } edge from parent node[left] {\scriptsize $A$} }
       ;
-    \draw[bend left,dashed,->] (takeashower) to node [auto] {\scriptsize $A$} (John);
-    \draw[bend left,->] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
+    \draw[bend left,dashed,->, color=orange, line width=1pt] (takeashower) to node [auto] {\scriptsize $A$} (He);
+    \draw[bend left,->, color=red, line width=1pt] (totakeaquickshower) to node [auto] {\scriptsize $D$} (quick);
   \end{tikzpicture}
+\vfill
+He decided to take a quick shower
 \end{frame}
 
 
@@ -213,8 +207,7 @@ and other constructions such as coordination and multi-word expressions.
 \begin{frame}
 \frametitle{Transition-Based Parsing}
 \begin{itemize}
- \item Parse sentence $w_1 \ldots w_n$ to graph $G=(V,E,\ell)$ incrementally.
- \item Using buffer $B$ and stack $S$.
+ \item Parse text $w_1 \ldots w_n$ to graph $G=(V,E,\ell)$ incrementally.
  \item Classifier determines transition to apply at each step.
  \item Trained by an oracle based on gold-standard graph.
 \end{itemize}
@@ -223,16 +216,16 @@ and other constructions such as coordination and multi-word expressions.
 \scalebox{.92}{
 	\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
 	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
-	\node[anchor=west] at (.2,1) {$S$};
+	\node[anchor=west] at (0,1) {stack};
 	\node[fill=black, circle] at (.5,.25) {};
 	\draw[xstep=18mm,ystep=5mm,color=gray] (1.79,0) grid (12.6,.5);
-	\node[anchor=west] at (1.9,1) {$B$};
-	\node[anchor=west] at (2,.25) {After};
-	\node[anchor=west] at (3.5,.2) {graduation};
-	\node[anchor=west] at (5.6,.25) {John};
-	\node[anchor=west] at (7.35,.25) {moved};
-	\node[anchor=west] at (9.25,.25) {to};
-	\node[anchor=west] at (10.95,.25) {Paris};
+	\node[anchor=west] at (1.9,1) {buffer};
+	\node[anchor=west] at (2,.25) {\small After};
+	\node[anchor=west] at (3.5,.2) {\small graduation};
+	\node[anchor=west] at (5.6,.25) {\small Joe};
+	\node[anchor=west] at (7.35,.25) {\small moved};
+	\node[anchor=west] at (9.25,.25) {\small to};
+	\node[anchor=west] at (10.95,.25) {\small Paris};
 	\end{tikzpicture}
 }
 
@@ -255,12 +248,12 @@ Supports non-terminal nodes, reentrancy and discontinuity.
 	\begin{tikzpicture}[level distance=15mm, sibling distance=2cm,
     every node/.append style={font=\rmfamily}]
 	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (3,.5);
-	\node[anchor=west] at (1.2,1) {$S$};
+	\node[anchor=west] at (1,1) {stack};
 	\node[fill=black, circle] at (.5,.25) {};
 	\node[fill=blue, circle] at (1.5,.25) {};
-	\node[anchor=west] at (2,.25) {John};
+	\node[anchor=west] at (2,.25) {Joe};
 	\draw[xstep=12mm,ystep=5mm,color=gray] (3.59,0) grid (7.2,.5);
-	\node[anchor=west] at (5,1) {$B$};
+	\node[anchor=west] at (4.8,1) {buffer};
 	\node[anchor=west] at (3.5,.25) {moved};
 	\node[anchor=west] at (5,.25) {to};
 	\node[anchor=west] at (6,.25) {Paris};
@@ -288,7 +281,7 @@ Supports non-terminal nodes, reentrancy and discontinuity.
 
 \begin{frame}
 \frametitle{Classifiers}
-We experiment with three classifiers:
+We perform greedy parsing, and experiment with three classifiers:
 \begin{flushleft}
 	\begin{tabular}{ll}
 	\textbf{\parser{Sparse}} & Perceptron with features: \\
@@ -299,7 +292,6 @@ We experiment with three classifiers:
 	  & 2-layer NN for classification.
 	\end{tabular}
 \end{flushleft}
-Greedy parsing.
 \end{frame}
 
 
@@ -363,7 +355,7 @@ Greedy parsing.
 %    child {node {,} edge from parent node[right] {$U$}}
 %    child {node (moved) [circle] {}
 %    {
-%      child {node (John) {John} edge from parent node[left] {$A$}}
+%      child {node (Joe) {Joe} edge from parent node[left] {$A$}}
 %      child {node {moved} edge from parent node[left] {$P$}}
 %      child {node [circle] {}
 %      {
@@ -372,7 +364,7 @@ Greedy parsing.
 %      } edge from parent node[right] {$A$} }
 %    } edge from parent node[right] {$H$} }
 %    ;
-%  \draw[dashed,->] (graduation) to node [auto] {$A$} (John);
+%  \draw[dashed,->] (graduation) to node [auto] {$A$} (Joe);
 %  \node at (5.6,-.3) {\Large ----- primary edge};
 %  \node at (5.6,-1.3) {\Large - - - remote edge};
 %\end{tikzpicture}
@@ -436,12 +428,19 @@ one for primary edges, and another for remote edges.
 \end{frame}
 
 \begin{frame}
-\frametitle{Baselines}
-There are no existing UCCA parsers. Compare to bilexical DAG parsers:
+\frametitle{Bilexical Graph Approximation}
+No existing UCCA parsers $\Rightarrow$ compare to bilexical parsers:
+\begin{enumerate}
+ \item Convert UCCA to bilexical dependencies
+ \item Train bilexical parsers and apply to test sentences
+ \item Reconstruct UCCA graphs and compare with gold standard
+\end{enumerate}
+\vfill
+
 \begin{center}
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
-	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
 	\end{deptext}
 	\depedge{2}{1}{L}
 	\depedge{2}{3}{U}
@@ -451,73 +450,31 @@ There are no existing UCCA parsers. Compare to bilexical DAG parsers:
 	\depedge{7}{6}{R}
 	\depedge{5}{7}{A}
 	\end{dependency}
-	\captionof{figure}{Bilexical approximation for UCCA graph.}
+	\captionof{figure}{Bilexical DAG approximation.}
 \end{center}
-
-\vfill
-\pause
-\begin{enumerate}
- \item Convert UCCA to bilexical dependencies (edges only between tokens).
- \item Train parsers on the resulting training set.
- \item Apply trained parsers to the test set.
- \item Reconstruct UCCA graphs.
- \item Compare with gold standard.
-\end{enumerate}
-
-Upper bounds computed by replacing 1-3 with conversion of the test set.
 \end{frame}
 
 \begin{frame}
 \frametitle{Baselines}
-Bilexical DAG parsers used:
+Bilexical DAG parsers:
 \begin{itemize}
  \item DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}:
- transition-based parser.
+ transition-based parser
  \item TurboParser \cite{almeida-martins:2015:SemEval}:
- graph-based parser.
+ graph-based
 \end{itemize}
 
-\vfill
-\pause
-\begin{center}
-	\begin{dependency}[theme = simple]
-	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
-	John \^ gave \^ everything \^ up \\
-	\end{deptext}
-	\depedge{1}{2}{A}
-	\depedge{3}{2}{A}
-	\depedge{4}{2}{C}
-	\end{dependency}
-	
-	\begin{dependency}[theme = simple]
-	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
-	John \^ and \^ Mary \^ went \^ home \\
-	\end{deptext}
-	\depedge[edge start x offset=-6pt]{1}{4}{A}
-	\depedge{2}{1}{N}
-	\depedge{3}{1}{C}
-	\depedge{5}{4}{A}
-	\end{dependency}
-	\captionof{figure}{More bilexical approximation examples.}
-\end{center}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Tree Approximation}
-We also explore lossily converting UCCA into trees.
+Tree parsers (all transition-based):
 \begin{itemize}
- \item Results in a simplified task for the underlying parser.
- \item Takes advantage of maturity of tree-based parsers.
- \item But loses important information encoded in remote edges
-   (all scores are zero, as they are ignored).
+ \item MaltParser \cite{nivre2007maltparser}: bilexical tree parser
+ \item LSTM Parser \cite{dyer2015transition}: bilexical tree parser
+ \item \textsc{uparse} \cite{maier2015discontinuous}: allows non-terminals, discontinuity
 \end{itemize}
 
-\vfill
 \begin{center}
 	\begin{dependency}[theme = simple]
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
-	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
 	\end{deptext}
 	\depedge{2}{1}{L}
 	\depedge{2}{3}{U}
@@ -526,19 +483,11 @@ We also explore lossily converting UCCA into trees.
 	\depedge{7}{6}{R}
 	\depedge{5}{7}{A}
 	\end{dependency}
-	\captionof{figure}{Bilexical tree approximation for UCCA graph.}
+	\captionof{figure}{Bilexical tree approximation.}
 \end{center}
-\end{frame}
 
-
-\begin{frame}
-\frametitle{Baselines}
-Tree parsers used:
-\begin{itemize}
- \item \textsc{uparse} \cite{maier-lichte:2016:DiscoNLP}
- \item MaltParser \cite{nivre2007maltparser}
- \item LSTM Parser \cite{dyer2015transition}
-\end{itemize}
+\vfill
+Conversion to trees is just removing remote edges
 \end{frame}
 
 \begin{frame}
@@ -556,32 +505,32 @@ Tree parsers used:
 		\parser{BiLSTM}
 		& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4} \\
 		\hline
-		\footnotesize Upper Bound
-		& & & \small 91 & & & \small 58.3 \\
+		\footnotesize Bilexical DAG
+		& & & \small (91) & & & \small (58.3) \\
 		DAGParser
 		& 61.8 & 55.8 & 58.6 & 9.5 & 0.5 & 1 \\
 		TurboParser
 		& 57.7 & 46 & 51.2 & 77.8 & 1.8 & 3.7 \\
 		\hline
-		\footnotesize Upper Bound
-		& & & \small 100 & & & \small -- \\
-		\textsc{uparse}
-		& 60.9 & 61.2 & 61.1 & -- & -- & -- \\
-		\hline
-		\footnotesize Upper Bound
-		& & & \footnotesize 91 & & & \footnotesize -- \\
+		\footnotesize Bilexical tree
+		& & & \footnotesize (91) & & & \footnotesize -- \\
 		MaltParser
 		& 62.8 & 57.7 & 60.2 & -- & -- & -- \\
 		LSTM Parser
-		& 73.2 & 66.9 & 69.9 & -- & -- & --
+		& 73.2 & 66.9 & 69.9 & -- & -- & -- \\
+		\hline
+		\footnotesize Tree
+		& & & \small (100) & & & \small -- \\
+		\textsc{uparse}
+		& 60.9 & 61.2 & 61.1 & -- & -- & --
 	\end{tabular}
-	\captionof{table}{Results on the Wiki test set, including baselines.}
+	\captionof{table}{Results on the Wiki test set.}
 \end{center}
 \end{frame}
 
 \begin{frame}
 \frametitle{Results}
-Similar differences on out-of-domain test set:
+Similar on out-of-domain test set:
 \begin{center}
 	\begin{tabular}{l|ccc|ccc}
 		& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
@@ -594,45 +543,28 @@ Similar differences on out-of-domain test set:
 		\parser{BiLSTM}
 		& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3} \\
 		\hline
-		\footnotesize Upper Bound
-		& & & \footnotesize 91.3 & & & \footnotesize 43.4 \\
+		\footnotesize Bilexical DAG
+		& & & \footnotesize (91.3) & & & \footnotesize (43.4) \\
 		DAGParser
 		& 56.4 & 50.6 & 53.4 & -- & 0 & 0 \\
 		TurboParser
 		& 50.3 & 37.7 & 43.1 & 100 & 0.4 & 0.8 \\
 		\hline
-		\footnotesize Upper Bound
-		& & & \footnotesize 100 & & & \footnotesize -- \\
-		\textsc{uparse}
-		& 52.7 & 52.8 & 52.8 & -- & -- & -- \\
-		\hline
-		\footnotesize Upper Bound
-		& & & \footnotesize 91.3 & & & \footnotesize -- \\
+		\footnotesize Bilexical tree
+		& & & \footnotesize (91.3) & & & \footnotesize -- \\
 		MaltParser
 		& 57.8 & 53 & 55.3 & -- & -- & -- \\
 		LSTM Parser
-		& 66.1 & 61.1 & 63.5 & -- & -- & --
+		& 66.1 & 61.1 & 63.5 & -- & -- & -- \\
+		\hline
+		\footnotesize Tree
+		& & & \footnotesize (100) & & & \footnotesize -- \\
+		\textsc{uparse}
+		& 52.7 & 52.8 & 52.8 & -- & -- & --
 	\end{tabular}
-	\captionof{table}{Results on the 20K Leagues out-of-domain set, including baselines.}
+	\captionof{table}{Results on the 20K Leagues out-of-domain set.}
 \end{center}
 \end{frame}
-
-\begin{frame}
-\frametitle{Discussion}
-Remote edge performance is of pivotal importance here: we focus on extending the class of graphs supported by statistical parsers.
-
-\vfill
-\pause
-However, exploring tree approximation methods
-can inform the future development of DAG parsers in general and of UCCA parsers in particular.
-
-\vfill
-\pause
-The performance is encouraging in light of
-UCCA's inter-annotator agreement: 80--85\%
-primary LF \cite{abend2013universal}.
-\end{frame}
-
 
 
 
@@ -646,72 +578,21 @@ primary LF \cite{abend2013universal}.
 \end{itemize}
 
 \vfill
-\pause
+Future work:
 \begin{itemize}
- \item Corpora: \url{http://www.cs.huji.ac.il/~oabend/ucca.html}
- \item Code: \url{https://github.com/danielhers/tupa}
- \item Based on DyNet: \url{https://github.com/clab/dynet}
+ \item Beam search, training with exploration
+ \item More languages (e.g. German)
+ \item Different target representations for conversion
+ \item NLP applications
 \end{itemize}
-\end{frame}
-
-
-
-\section{Future Work}
-
-\begin{frame}
-In light of the results, promising future directions are:
-\begin{itemize}
- \item Means to recover from mistakes during parsing:
- beam search, training with exploration.
- \item More languages (e.g. German),
- demonstrating the importance of broad-coverage parsing.
- \item Improving the conversion-based methods and exploring different target representations.
- \item Using UCCA for representation in NLP tasks.
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{UCCA-Based Distributed Representation}
-Vector representation for sentences and documents,
-based on recursive composition on the UCCA graph.
 
 \vfill
-\begin{center}
-  \begin{tikzpicture}[level distance=15mm, sibling distance=2.5cm, ->,
-    every node/.append style={font=\rmfamily}]
-    \node (ROOT) [fill=black, vector] {}
-      child {node (After) {After} edge from parent [shorten <=3mm]
-        node[left] {\scriptsize $L$\;}}
-      child {node (graduation) [fill=black, vector] {}
-      {
-        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
-      } edge from parent node[left] {\scriptsize $H$} }
-      child {node {,} edge from parent node[right] {\scriptsize $U$}}
-      child {node (moved) [fill=black, vector] {}
-      {
-        child {node (John) {John} edge from parent [shorten <=2mm]
-          node[left] {\scriptsize $A$}}
-        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
-        child {node [fill=black, vector] {}
-        {
-          child {node {to} edge from parent node[left] {\scriptsize $R$}}
-          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
-        } edge from parent [shorten <=2.5mm,shorten >=3mm] node[left] {\scriptsize $A$} }
-      } edge from parent [shorten <=3.5mm,shorten >=4mm] node[right] {\scriptsize $H$} }
-      ;
-    \draw[dashed,->,shorten <=2.5mm] (graduation) to node [auto] {\scriptsize $A$} (John);
-    \node (LKG) at (-1.8,0) [fill=black!20, vector] {};
-        \draw[bend right,shorten <=4mm] (LKG) to
-          node [auto, left] {\scriptsize $LR$} (After);
-        \draw (LKG) to[out=-60, in=120]
-          node [below] {\scriptsize $LA$\quad\;} (graduation);
-        \draw[shorten <=2mm] (LKG) to[out=30, in=90]
-          node [above] {\scriptsize $LA$} (moved);
-  \end{tikzpicture}
-\end{center}
+Corpora: \url{http://www.cs.huji.ac.il/~oabend/ucca.html}
+
+Code: \url{https://github.com/danielhers/tupa}
+
+Based on DyNet: \url{https://github.com/clab/dynet}
 \end{frame}
-
-
 
 
 
