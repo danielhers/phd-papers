@@ -422,29 +422,59 @@ Greedy parsing, experimenting with three classifiers:
 
 \begin{frame}
 \frametitle{Evaluation}
-\textit{Mutual edges} between predicted graph $G_p=(V_p,E_p,\ell_p)$
-and gold graph $G_g=(V_g,E_g,\ell_g)$,
-both over terminals $W = \{w_1,\ldots,w_n\}$:
-\[
-M(G_p,G_g) =
-    \left\{(e_1,e_2) \in E_p \times E_g \;|\;
-    y(e_1) = y(e_2) \wedge \ell_p(e_1)=\ell_g(e_2)\right\}
-\]
-The yield $y(e) \subseteq W$ of an edge $e=(u,v)$ in either graph
-is the set of terminals in $W$ that are descendants of $v$. \hfill
-$\ell$ is the edge label.
-
+Comparing graphs over the same sequence of tokens,
+\begin{itemize}
+\item Match edges by their terminal yield and label.
+\item Calculate labeled precision, recall and F1 scores.
+\item Separate primary and remote edges.
+\end{itemize}
 \vfill
-Labeled precision, recall and F-score are then defined as:
-\[
-\text{LP} = \frac{|M(G_p,G_g)|}{|E_p|},\quad
-\text{LR} = \frac{|M(G_p,G_g)|}{|E_g|},
-\]
-\[
-\text{LF} = \frac{2 \cdot \text{LP} \cdot \text{LR}}{\text{LP} + \text{LR}}.
-\]
-Two variants:
-one for primary edges, and another for remote edges.
+\scalebox{.8}{
+\begin{tikzpicture}[level distance=15mm, sibling distance=13mm, ->,
+    every circle node/.append style={fill=black},
+    every node/.append style={font=\rmfamily}]
+  \node at (0,-1) {gold}
+  \node (ROOT) at (0,0) [circle] {}
+    child {node (After) {After} edge from parent node[left] {$L$}}
+    child {node (graduation) [circle] {}
+    {
+      child {node {graduation} edge from parent node[left] {$P$}}
+    } edge from parent node[left] {$H$} }
+    child {node {,} edge from parent node[right] {$U$}}
+    child {node (moved) [circle] {}
+    {
+      child {node (Joe) {Joe} edge from parent node[left] {$A$}}
+      child {node {moved} edge from parent node[left] {$P$}}
+      child {node [circle] {}
+      {
+        child {node {to} edge from parent node[left] {$R$}}
+        child {node {Paris} edge from parent node[right] {$C$}}
+      } edge from parent node[right] {$A$} }
+    } edge from parent node[right] {$H$} }
+    ;
+  \draw[dashed,->] (graduation) to node [auto] {$A$} (Joe);
+  \node at (6,-1) {predicted}
+  \node (ROOT_) at (6,0) [circle] {}
+    child {node (After_) {After} edge from parent node[left] {$L$}}
+    child {node (graduation_) [circle] {}
+    {
+      child {node {graduation} edge from parent node[left] {$P$}}
+    } edge from parent node[left] {$H$} }
+    child {node {,} edge from parent node[right] {$U$}}
+    child {node (moved) [circle] {}
+    {
+      child {node (Joe_) {Joe} edge from parent node[left] {$A$}}
+      child {node {moved} edge from parent node[left] {$P$}}
+      child {node [circle] {}
+      {
+        child {node {to} edge from parent node[left] {$R$}}
+        child {node {Paris} edge from parent node[right] {$C$}}
+      } edge from parent node[right] {$A$} }
+    } edge from parent node[right] {$H$} }
+    ;
+  \draw[dashed,->,red] (graduation_) to node [auto] {$C$} (Joe_);
+\end{tikzpicture}
+}
 \end{frame}
 
 \begin{frame}
@@ -692,6 +722,33 @@ Thank you
 		\# children & 1.67 & 1.68 & 1.66 & 1.61 
 	\end{tabular}
 \captionof{table}{Corpus statistics.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation}
+\textit{Mutual edges} between predicted graph $G_p=(V_p,E_p,\ell_p)$
+and gold graph $G_g=(V_g,E_g,\ell_g)$,
+both over terminals $W = \{w_1,\ldots,w_n\}$:
+\[
+M(G_p,G_g) =
+    \left\{(e_1,e_2) \in E_p \times E_g \;|\;
+    y(e_1) = y(e_2) \wedge \ell_p(e_1)=\ell_g(e_2)\right\}
+\]
+The yield $y(e) \subseteq W$ of an edge $e=(u,v)$ in either graph
+is the set of terminals in $W$ that are descendants of $v$. \hfill
+$\ell$ is the edge label.
+
+\vfill
+Labeled precision, recall and F-score are then defined as:
+\[
+\text{LP} = \frac{|M(G_p,G_g)|}{|E_p|},\quad
+\text{LR} = \frac{|M(G_p,G_g)|}{|E_g|},
+\]
+\[
+\text{LF} = \frac{2 \cdot \text{LP} \cdot \text{LR}}{\text{LP} + \text{LR}}.
+\]
+Two variants:
+one for primary edges, and another for remote edges.
 \end{frame}
 
 \end{document}
