@@ -70,6 +70,92 @@
 
 %----------------------------------------------------------------------------------------
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+\begin{frame}
+\frametitle{Dependency Parsing}
+\begin{itemize}
+	\item Graph representation of syntactic structure.
+	\item Bilexical tree: edges are only between tokens.
+	\item Fast and accurate parsers (\textit{transition-based}, \textit{graph-based}).
+\end{itemize}
+\vfill
+\begin{adjustbox}{frame,center}
+\begin{dependency}
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\deproot{5}{root}
+	\depedge{2}{1}{case}
+	\depedge{5}{2}{nmod}
+	\depedge{5}{3}{punct}
+	\depedge{5}{4}{nsubj}
+	\depedge{7}{6}{case}
+	\depedge{5}{7}{nmod}
+\end{dependency}
+\end{adjustbox}
+
+\pause
+Non-projectivity (discontinuity) is a challenge for parsing.
+\begin{adjustbox}{scale=.8,frame,center}
+\begin{dependency}
+	\begin{deptext}[column sep=1.2em,ampersand replacement=\^,font=\rmfamily]
+	A \^ hearing \^ is \^ scheduled \^ on \^ the \^ issue \^ today \\
+	\end{deptext}
+	\deproot{4}{root}
+	\depedge{2}{1}{det}
+	\depedge{4}{2}{nsubj:pass}
+	\depedge{4}{3}{aux:pass}
+	\depedge{7}{5}{case}
+	\depedge{7}{6}{det}
+	\depedge[edge start x offset=-6pt,red]{2}{7}{nmod}
+	\depedge[edge slant=6pt]{4}{8}{nmod:tmod}
+\end{dependency}
+\end{adjustbox}
+\end{frame}
+
+\begin{frame}
+\frametitle{Semantic Dependency Parsing}
+\begin{itemize}
+	\item Representation of predicate-argument relationships.
+	\item Bilexical graph: allows reentrancy (and discontinuity).
+	\item Various formalisms.
+\end{itemize}
+\vfill
+
+\begin{adjustbox}{scale=.9,frame,center}
+\begin{dependency}
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\deproot[edge style={red}]{5}{top}
+	\depedge{1}{2}{ARG2}
+	\depedge[edge slant=10pt,red]{1}{5}{ARG1}
+	\depedge{5}{4}{ARG1}
+	\depedge[red]{6}{5}{ARG1}
+	\depedge{6}{7}{ARG2}
+\end{dependency}
+\end{adjustbox}
+\captionof{figure}{DELPH-IN MRS-derived bi-lexical dependencies (DM).}
+
+\pause
+\begin{adjustbox}{scale=.9,frame,center}
+\begin{dependency}
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\deproot{5}{top}
+	\depedge{5}{2}{TWHEN}
+	\depedge{5}{4}{ACT-arg}
+	\depedge{5}{7}{DIR3-arg}
+\end{dependency}
+\end{adjustbox}
+\captionof{figure}{Prague Dependency Treebank tectogrammatical layer (PSD).}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \section{Universal Conceptual Cognitive Annotation}
 
 \begin{frame}
@@ -139,12 +225,13 @@ Cross-linguistic semantic scheme \cite{abend2013universal}.
 \end{frame}
 
 \begin{frame}
-\frametitle{Structural Properties}
-\noindent
+\frametitle{Graph Structure}
+UCCA forms a directed acyclic graph (DAG). Tokens are terminals.
+Structural Properties:
 \begin{enumerate}
-\item<1-> \color{blue} non-terminal nodes
-\item<2-> \color{orange} reentrancy
-\item<3-> \color{red} discontinuity
+\item<1-> \color{blue} Non-terminal nodes
+\item<2-> \color{orange} Reentrancy
+\item<3-> \color{red} Discontinuity
 \end{enumerate}
 \centering
 
@@ -554,16 +641,16 @@ No existing UCCA parsers $\Rightarrow$ compare to bilexical parsers:
 Bilexical DAG parsers:
 \begin{itemize}
  \item DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}:
- transition-based parser
+ transition-based.
  \item TurboParser \cite{almeida-martins:2015:SemEval}:
- graph-based
+ graph-based.
 \end{itemize}
 
 Tree parsers (all transition-based):
 \begin{itemize}
- \item MaltParser \cite{nivre2007maltparser}: bilexical tree parser
- \item LSTM Parser \cite{dyer2015transition}: bilexical tree parser
- \item \textsc{uparse} \cite{maier2015discontinuous}: allows non-terminals, discontinuity
+ \item MaltParser \cite{nivre2007maltparser}: bilexical tree parser.
+ \item LSTM Parser \cite{dyer2015transition}: bilexical tree parser.
+ \item \textsc{uparse} \cite{maier2015discontinuous}: allows non-terminals, discontinuity.
 \end{itemize}
 
 \begin{center}
@@ -582,7 +669,7 @@ Tree parsers (all transition-based):
 \end{center}
 
 \vfill
-Conversion to trees is just removing remote edges
+Conversion to trees is just removing remote edges.
 \end{frame}
 
 \begin{frame}
@@ -668,25 +755,15 @@ Similar on out-of-domain test set:
 \begin{frame}
 \frametitle{Conclusions}
 \begin{itemize}
- \item UCCA exhibits formal properties important for semantic representation.
- \item We present the first parser for UCCA and the first to support these properties.
-\end{itemize}
-
-\vfill
-Future work:
-\begin{itemize}
- \item Beam search, training with exploration
- \item More languages (e.g. German)
- \item Different target representations for conversion
- \item NLP applications
+ \item UCCA's semantic distinctions require a graph structure.
+ \item \parser{} is a transition-based parser suitable for UCCA.
+ \item Direct parsing outperforms conversion-based approach.
 \end{itemize}
 
 \vfill
 Corpora: \url{http://www.cs.huji.ac.il/~oabend/ucca.html}
 
 Code: \url{https://github.com/danielhers/tupa}
-
-Based on DyNet: \url{https://github.com/clab/dynet}
 \end{frame}
 
 
@@ -711,28 +788,39 @@ Thank you
 \section{Backup}
 
 \begin{frame}
+\frametitle{Future Work}
+\begin{itemize}
+ \item Beam search, training with exploration.
+ \item More languages (e.g. German).
+ \item Different target representations for conversion.
+ \item NLP applications.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
 \frametitle{UCCA Corpora}
 \centering
-	\begin{tabular}{l|ccc|c}
-		& \multicolumn{3}{c|}{Wiki} & 20K \\
-		& \small Train & \small Dev & \small Test & Leagues \\
-		\hline
-		\# passages & 300 & 34 & 33 & 154 \\
-		\# sentences & 4268 & 454 & 503 & 506 \\
-		\hline
-		\# nodes & 298,993 & 33,704 & 35,718 & 29,315 \\
-		\% terminal & 42.96 & 43.54 & 42.87 & 42.09 \\
-		\% non-term. & 58.33 & 57.60 & 58.35 & 60.01 \\
-		\% \textbf{discont.} & \textbf{0.54} & \textbf{0.53} & \textbf{0.44} & \textbf{0.81} \\
-		\% \textbf{reentrant} & \textbf{2.38} & \textbf{1.88} & \textbf{2.15} & \textbf{2.03} \\
-		\hline
-		\# edges & 287,914 & 32,460 & 34,336 & 27,749 \\
-		\% primary & 98.25 & 98.75 & 98.74 & 97.73 \\
-		\% remote & 1.75 & 1.25 & 1.26 & 2.27 \\
-		\hline
-		\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
-		\# children & 1.67 & 1.68 & 1.66 & 1.61 
-	\end{tabular}
+\begin{tabular}{l|ccc|c}
+	& \multicolumn{3}{c|}{Wiki} & 20K \\
+	& \small Train & \small Dev & \small Test & Leagues \\
+	\hline
+	\# passages & 300 & 34 & 33 & 154 \\
+	\# sentences & 4268 & 454 & 503 & 506 \\
+	\hline
+	\# nodes & 298,993 & 33,704 & 35,718 & 29,315 \\
+	\% terminal & 42.96 & 43.54 & 42.87 & 42.09 \\
+	\% non-term. & 58.33 & 57.60 & 58.35 & 60.01 \\
+	\% \textbf{discont.} & \textbf{0.54} & \textbf{0.53} & \textbf{0.44} & \textbf{0.81} \\
+	\% \textbf{reentrant} & \textbf{2.38} & \textbf{1.88} & \textbf{2.15} & \textbf{2.03} \\
+	\hline
+	\# edges & 287,914 & 32,460 & 34,336 & 27,749 \\
+	\% primary & 98.25 & 98.75 & 98.74 & 97.73 \\
+	\% remote & 1.75 & 1.25 & 1.26 & 2.27 \\
+	\hline
+	\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
+	\# children & 1.67 & 1.68 & 1.66 & 1.61 
+\end{tabular}
 \captionof{table}{Corpus statistics.}
 \end{frame}
 
@@ -743,8 +831,8 @@ and gold graph $G_g=(V_g,E_g,\ell_g)$,
 both over terminals $W = \{w_1,\ldots,w_n\}$:
 \[
 M(G_p,G_g) =
-    \left\{(e_1,e_2) \in E_p \times E_g \;|\;
-    y(e_1) = y(e_2) \wedge \ell_p(e_1)=\ell_g(e_2)\right\}
+    \Bigl\{(e_1,e_2) \in E_p \times E_g \;\Big|\;
+    y(e_1) = y(e_2) \wedge \ell_p(e_1)=\ell_g(e_2)\Bigr\}
 \]
 The yield $y(e) \subseteq W$ of an edge $e=(u,v)$ in either graph
 is the set of terminals in $W$ that are descendants of $v$. \hfill
