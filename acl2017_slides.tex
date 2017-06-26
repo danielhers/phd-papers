@@ -526,14 +526,14 @@ Comparing graphs over the same sequence of tokens,
 \frametitle{Bilexical Graph Approximation}
 No existing UCCA parsers $\Rightarrow$ compare to bilexical parsers:
 \begin{enumerate}
- \item Convert UCCA to bilexical dependencies
- \item Train bilexical parsers and apply to test sentences
- \item Reconstruct UCCA graphs and compare with gold standard
+ \item Convert UCCA to bilexical dependencies.
+ \item Train bilexical parsers and apply to test sentences.
+ \item Reconstruct UCCA graphs and compare with gold standard.
 \end{enumerate}
 \vfill
 
 \begin{center}
-	\begin{dependency}[theme = simple]
+	\begin{dependency}
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
 	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
 	\end{deptext}
@@ -567,7 +567,7 @@ Tree parsers (all transition-based):
 \end{itemize}
 
 \begin{center}
-	\begin{dependency}[theme = simple]
+	\begin{dependency}
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
 	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
 	\end{deptext}
