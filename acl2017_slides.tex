@@ -433,7 +433,7 @@ Comparing graphs over the same sequence of tokens,
 \begin{tikzpicture}[level distance=15mm, sibling distance=13mm, ->,
     every circle node/.append style={fill=black},
     every node/.append style={font=\rmfamily}]
-  \node at (0,-1) {gold}
+  \node at (0,1) {gold};
   \node (ROOT) at (0,0) [circle] {}
     child {node (After) {After} edge from parent node[left] {$L$}}
     child {node (graduation) [circle] {}
@@ -453,7 +453,7 @@ Comparing graphs over the same sequence of tokens,
     } edge from parent node[right] {$H$} }
     ;
   \draw[dashed,->] (graduation) to node [auto] {$A$} (Joe);
-  \node at (6,-1) {predicted}
+  \node at (6,1) {predicted};
   \node (ROOT_) at (6,0) [circle] {}
     child {node (After_) {After} edge from parent node[left] {$L$}}
     child {node (graduation_) [circle] {}
