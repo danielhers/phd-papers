@@ -78,7 +78,7 @@
 \begin{itemize}
 	\item Graph representation of syntactic structure.
 	\item Bilexical tree: edges are only between tokens.
-	\item Fast and accurate parsers (\textit{transition-based}, \textit{graph-based}).
+	\item Fast and accurate parsers (e.g. \textit{transition-based}).
 \end{itemize}
 \vfill
 \begin{adjustbox}{frame,center}
@@ -750,20 +750,33 @@ Similar on out-of-domain test set:
 
 
 
-\section{Conclusions}
+\section{Conclusion}
 
 \begin{frame}
-\frametitle{Conclusions}
+\frametitle{Conclusion}
 \begin{itemize}
  \item UCCA's semantic distinctions require a graph structure.
  \item \parser{} is a transition-based parser suitable for UCCA.
- \item Direct parsing outperforms conversion-based approach.
+ \item Direct parsing outperforms conversion-based approach,
+ 	   with strong bilexical baseline parsers.
 \end{itemize}
 
 \vfill
 Corpora: \url{http://www.cs.huji.ac.il/~oabend/ucca.html}
 
 Code: \url{https://github.com/danielhers/tupa}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Future Work}
+\begin{itemize}
+ \item Beam search, training with exploration.
+ \item More languages (German corpus construction is underway).
+ \item Parsing other schemes, such as AMR.
+ \item Different target representations for conversion.
+ \item NLP applications.
+\end{itemize}
 \end{frame}
 
 
@@ -786,16 +799,6 @@ Thank you
 
 
 \section{Backup}
-
-\begin{frame}
-\frametitle{Future Work}
-\begin{itemize}
- \item Beam search, training with exploration.
- \item More languages (e.g. German).
- \item Different target representations for conversion.
- \item NLP applications.
-\end{itemize}
-\end{frame}
 
 
 \begin{frame}
