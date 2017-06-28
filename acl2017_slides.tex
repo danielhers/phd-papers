@@ -61,7 +61,8 @@
 \author{Daniel Hershcovich, Omri Abend and Ari Rappoport}
 \institute[]{\includegraphics[width=.08\pagewidth]{huji_logo.jpg}
 \includegraphics[width=.3\pagewidth]{huji_banner.png}}
-\date{ACL 2017}
+\date{June 29, 2017}
+%\date{ACL 2017}
 
 \begin{frame}
 \titlepage
@@ -211,37 +212,38 @@ Non-projectivity (discontinuity) is a challenge for parsing.
 \end{frame}
 
 \begin{frame}
-\frametitle{The UCCA Scheme}
-Cross-linguistic semantic scheme \cite{abend2013universal,abend2017the}.
+\frametitle{The UCCA Semantic Representation Scheme}
+Cross-linguistically applicable \cite{abend2013universal}.
 Stable in translation \cite{sulem2015conceptual}.
 \vfill
 \begin{adjustbox}{center}
-  \includegraphics[width=\pagewidth]{crosslinguistic.png}
+  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{crosslinguistic.png}
 \end{adjustbox}
 \end{frame}
 
 \begin{frame}
-\frametitle{The UCCA Scheme}
-Useful for machine translation evaluation \cite{birch2016hume}.
-\vfill
-\begin{adjustbox}{center}
-  \includegraphics[width=\pagewidth]{hume.png}
-\end{adjustbox}
-\end{frame}
-
-\begin{frame}
-\frametitle{The UCCA Scheme}
+\frametitle{UCCAApp}
 Rapid and intuitive annotation interface \cite{abend2017uccaapp}.
+Usable by non-experts.
 \vfill
 \begin{adjustbox}{center}
-  \includegraphics[width=\pagewidth]{uccaapp.png}
+  \includegraphics[width=\pagewidth,height=\textheight,keepaspectratio]{uccaapp.png}
+\end{adjustbox}
+\end{frame}
+
+\begin{frame}
+\frametitle{HUME}
+UCCA facilitates semantics-based human evaluation of machine translation \cite{birch2016hume}.
+\vfill
+\begin{adjustbox}{center}
+  \includegraphics[width=\pagewidth,height=\textheight,keepaspectratio]{hume.png}
 \end{adjustbox}
 \end{frame}
 
 \begin{frame}
 \frametitle{Graph Structure}
 UCCA forms a directed acyclic graph (DAG). Tokens are terminals.
-Structural Properties:
+Structural Properties \cite{abend2017the}:
 \begin{enumerate}
 \item<1-> \color{blue} Non-terminal nodes
 \item<2-> \color{orange} Reentrancy
