@@ -226,6 +226,7 @@ Stable in translation \cite{sulem2015conceptual}.
 \frametitle{UCCAApp}
 Rapid and intuitive annotation interface \cite{abend2017uccaapp}.
 Usable by non-experts.
+\footnotesize\url{http://ucca-demo.cs.huji.ac.il}
 \vfill
 \begin{adjustbox}{center}
   \includegraphics[width=\pagewidth,height=\textheight,keepaspectratio]{uccaapp.png}
@@ -235,6 +236,7 @@ Usable by non-experts.
 \begin{frame}
 \frametitle{HUME}
 UCCA facilitates semantics-based human evaluation of machine translation \cite{birch2016hume}.
+\footnotesize\url{http://ucca.cs.huji.ac.il/mteval}
 \vfill
 \begin{adjustbox}{center}
   \includegraphics[width=\pagewidth,height=\textheight,keepaspectratio]{hume.png}
@@ -298,7 +300,7 @@ You want to take a long bath
  \item Classifier determines transition to apply at each step.
  \item Trained by an oracle based on gold-standard graph.
 \end{itemize}
-
+\pause
 Initial state:
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}, circle]
 	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
@@ -316,7 +318,7 @@ Initial state:
 \end{tikzpicture}
 
 \vfill
-
+\pause
 \parser{} transitions:
 
 \vfill
@@ -328,9 +330,9 @@ Support non-terminal nodes, reentrancy and discontinuity.
 \end{frame}
 
 \begin{frame}
-\frametitle{Transition-Based Parsing}
+\frametitle{Transition-Based UCCA Parsing}
 $\Rightarrow$\textsc{
-\only<1>{Shift}\only<2>{Right-Edge\textsubscript A}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge\textsubscript P}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node-F}\only<10>{Reduce}\only<11>{Shift}\only<12>{Shift}\only<13>{Node-C}\only<14>{Reduce}\only<15>{Shift}\only<16>{Right-Edge\textsubscript P}\only<17>{Shift}\only<18>{Right-Edge\textsubscript F}\only<19>{Reduce}\only<20>{Shift}\only<21>{Swap}\only<22>{Right-Edge\textsubscript D}\only<23>{Reduce}\only<24>{Swap}\only<25>{Right-Edge\textsubscript A}\only<26>{Reduce}\only<27>{Reduce}\only<28>{Shift}\only<29>{Shift}\only<30>{Left-Remote\textsubscript A}\only<31>{Shift}\only<32>{Right-Edge\textsubscript C}\only<33>{Finish}
+\only<1>{Shift}\only<2>{Right-Edge\textsubscript A}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge\textsubscript P}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node\textsubscript F}\only<10>{Reduce}\only<11>{Shift}\only<12>{Shift}\only<13>{Node\textsubscript C}\only<14>{Reduce}\only<15>{Shift}\only<16>{Right-Edge\textsubscript P}\only<17>{Shift}\only<18>{Right-Edge\textsubscript F}\only<19>{Reduce}\only<20>{Shift}\only<21>{Swap}\only<22>{Right-Edge\textsubscript D}\only<23>{Reduce}\only<24>{Swap}\only<25>{Right-Edge\textsubscript A}\only<26>{Reduce}\only<27>{Reduce}\only<28>{Shift}\only<29>{Shift}\only<30>{Left-Remote\textsubscript A}\only<31>{Shift}\only<32>{Right-Edge\textsubscript C}\only<33>{Finish}
 }
 \vfill
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}]
@@ -503,7 +505,7 @@ Greedy parsing, experimenting with three classifiers:
 	\vfill
 	Features:
 	words, POS, syntactic dependencies, existing edge labels \\
-	from the stack and buffer + parents, children, grandchildren,
+	from the stack and buffer + parents, children, grandchildren;
 	ordinal features (height, number of parents and children)
 \end{flushleft}
 \end{frame}
