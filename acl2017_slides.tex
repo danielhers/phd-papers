@@ -409,7 +409,7 @@ $\Rightarrow$\textsc{
 
 \begin{frame}
 \frametitle{Word Embeddings}
-Representing discrete features by dense vectors \cite{goldberg2016primer}.
+Represent discrete features by dense vectors \cite{goldberg2016primer}.
 \vfill
 \begin{adjustbox}{center}
   \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{feats.png}
@@ -417,8 +417,8 @@ Representing discrete features by dense vectors \cite{goldberg2016primer}.
 \end{frame}
 
 \begin{frame}[fragile]
-\frametitle{Feed-Forward Neural Networks (MLP)}
-Learning representation and classification by optimizing weights.
+\frametitle{Feed-Forward Neural Network (MLP)}
+Learns representation and classification by optimizing weights.
 \vfill
 \begin{adjustbox}{center,scale=.9}
 	\begin{neuralnetwork}[height=4,style={rotate=90},layertitleheight=5.5em,toprow=true]
@@ -435,8 +435,8 @@ Learning representation and classification by optimizing weights.
 \end{frame}
 
 \begin{frame}
-\frametitle{Recurrent Neural Networks}
-Applied to sequences, updating state vector.
+\frametitle{Recurrent Neural Network (RNN)}
+Applied to sequences, updates state given input and previous state.
 \vfill
 \begin{adjustbox}{center}
   \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{rnn-unrolled.png}
@@ -445,7 +445,7 @@ Applied to sequences, updating state vector.
 
 \begin{frame}
 \frametitle{Long Short-Term Memory (LSTM)}
-Memory cell to avoid vanishing gradients.
+Memory cell to avoid vanishing gradients in RNNs.
 \vfill
 \begin{adjustbox}{center}
 	\begin{tikzpicture}[
@@ -497,15 +497,14 @@ Greedy parsing, experimenting with three classifiers:
 \begin{flushleft}
 	\begin{tabular}{ll}
 	\textbf{Sparse} & Perceptron with sparse features. \\
-	\textbf{MLP} & Embedding features + feedforward NN classifier. \\
-	\textbf{BiLSTM} & Embedding features + deep bidirectional LSTM + \\
-	  & feedforward NN classifier.
+	\textbf{MLP} & Embeddings + feedforward NN classifier. \\
+	\textbf{BiLSTM} & Embeddings + deep bidirectional LSTM + MLP.
 	\end{tabular}
 	\vfill
 	Features:
-	Words, POS, syntactic dependencies, existing edge labels \\
-	from fixed locations in the stack \& buffer, their parents, children and grandchildren \\
-	+ numeric features (e.g. number of parents)
+	words, POS, syntactic dependencies, existing edge labels \\
+	from the stack and buffer + parents, children, grandchildren,
+	ordinal features (height, number of parents and children)
 \end{flushleft}
 \end{frame}
 
