@@ -511,7 +511,9 @@ Greedy parsing, experimenting with three classifiers:
 \end{frame}
 
 \begin{frame}
+\only<1-4>{\frametitle{BiLSTM}\vspace{-8mm}}
 \centering
+\onslide<5>{
 \fbox{
 \begin{minipage}{.5\textwidth}
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}]
@@ -558,38 +560,39 @@ Greedy parsing, experimenting with three classifiers:
 }
 \end{minipage}
 }
+}
 \scalebox{.7}{
 \begin{tikzpicture}[->]
 	\tiny
 	\tikzstyle{main}=[circle, minimum size=7mm, draw=black!80, node distance=12mm]
 	\foreach \i/\word in {1/{You},3/{want},5/{to},7/{take},9/{a},11/{long},13/{bath}} {
-	    \node (x\i) at (\i,-1.3) {\Large\textrm\word};
-	    \node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
-        \path (x\i) edge (h\i);
-	    \node[main, fill=white!100] (i\i) at (\i.5,.8) {LSTM};
-        \path (x\i) edge [bend right] (i\i);
-	    \node[main, fill=white!100] (l\i) at (\i.5,2.3) {LSTM};
-        \path (h\i) edge [bend left] (l\i);
-        \path (i\i) edge (l\i);
-	    \node[main, fill=white!100] (k\i) at (\i,3.1) {LSTM};
-        \path (i\i) edge [bend left] (k\i);
-        \path (h\i) edge [bend left] (k\i);
+	    \onslide<1->\node (x\i) at (\i,-1.3) {\Large\textrm\word};
+	    \onslide<1->\node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
+        \onslide<1->\path (x\i) edge (h\i);
+	    \onslide<2->\node[main, fill=white!100] (i\i) at (\i.5,.8) {LSTM};
+        \onslide<2->\path (x\i) edge [bend right] (i\i);
+	    \onslide<3->\node[main, fill=white!100] (l\i) at (\i.5,2.3) {LSTM};
+        \onslide<3->\path (h\i) edge [bend left] (l\i);
+        \onslide<3->\path (i\i) edge (l\i);
+	    \onslide<4->\node[main, fill=white!100] (k\i) at (\i,3.1) {LSTM};
+        \onslide<4->\path (i\i) edge [bend left] (k\i);
+        \onslide<4->\path (h\i) edge [bend left] (k\i);
 	}
 	\foreach \current/\next in {1/3,3/5,5/7,7/9,9/11,11/13} {
-        \path (i\next) edge (i\current);
-        \path (h\current) edge (h\next);
-        \path (k\next) edge (k\current);
-        \path (l\current) edge (l\next);
+        \onslide<1->\path (h\current) edge (h\next);
+        \onslide<2->\path (i\next) edge (i\current);
+        \onslide<3->\path (l\current) edge (l\next);
+        \onslide<4->\path (k\next) edge (k\current);
 	}
-    \node[main, fill=white!100] (mlp) at (7,4.6) {MLP};
-	\foreach \i in {5,7,9} {
+    \onslide<5>\node[main, fill=white!100] (mlp) at (7,4.6) {MLP};
+	\onslide<5>\foreach \i in {5,7,9} {
         \path (l\i) edge (mlp);
         \path (k\i) edge (mlp);
     }
     \coordinate (state) at (10.5,6.5);
-    \path (state) edge [bend left] (mlp);
-    \node (transition) at (7,5.8) {\large\textsc{Node}\textsubscript{C}};
-    \path (mlp) edge (transition);
+    \onslide<5>\path (state) edge [bend left] (mlp);
+    \onslide<5>\node (transition) at (7,5.8) {\large\textsc{Node}\textsubscript{C}};
+    \onslide<5>\path (mlp) edge (transition);
 \end{tikzpicture}
 }
 \end{frame}
@@ -880,7 +883,7 @@ Code: \url{https://github.com/danielhers/tupa}
  \item More languages (German corpus construction is underway).
  \item Parsing other schemes, such as AMR.
  \item Different target representations for conversion.
- \item NLP applications.
+ \item Application to text simplification and other tasks.
 \end{itemize}
 \end{frame}
 
