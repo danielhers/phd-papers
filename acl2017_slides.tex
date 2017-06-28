@@ -76,6 +76,24 @@
 \section{Introduction}
 
 \begin{frame}
+\linespread{1.5}
+\frametitle{Linguistic Annotation Schemes}
+\begin{itemize}
+	\item Dependency grammar \cite{Tesn:59,nivre2005dependency}: \\
+		Purely syntactic analysis.
+	\item Semantic representation \cite{abend2017the}:
+	\begin{itemize}
+		\item Semantic dependencies \cite{oepen2015semeval}: \\
+			Coupled with syntactic representation.
+		\item AMR \cite{banarescu2013abstract}: \\
+			\fbox{\textrm{\ldots showered}} = \fbox{\textrm{\ldots took a shower}}
+		\item UCCA \cite{abend2013universal}: \\
+			\fbox{\textrm{\ldots's war against crime}} = \fbox{\textrm{\ldots fights crime}}
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
 \frametitle{Dependency Parsing}
 \begin{itemize}
 	\item Graph representation of syntactic structure.
@@ -122,7 +140,7 @@ Non-projectivity (discontinuity) is a challenge \cite{nivre2009non}.
 \begin{itemize}
 	\item Representation of predicate-argument relationships.
 	\item Bilexical graph: allows reentrancy (and discontinuity).
-	\item Various formalisms \cite{oepen2015semeval}.
+	\item Various formalisms.
 \end{itemize}
 \vfill
 
@@ -246,7 +264,7 @@ UCCA facilitates semantics-based human evaluation of machine translation \cite{b
 \begin{frame}
 \frametitle{Graph Structure}
 UCCA forms a directed acyclic graph (DAG). Tokens are terminals.
-Its semantic distinctions \cite{abend2017the} require:
+Structural properties:
 \begin{enumerate}
 \item<1-> \color{blue} Non-terminal nodes
 \item<2-> \color{orange} Reentrancy
