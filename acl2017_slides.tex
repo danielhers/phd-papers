@@ -243,7 +243,7 @@ UCCA facilitates semantics-based human evaluation of machine translation \cite{b
 \begin{frame}
 \frametitle{Graph Structure}
 UCCA forms a directed acyclic graph (DAG). Tokens are terminals.
-Structural Properties \cite{abend2017the}:
+Its semantic distinctions \cite{abend2017the} require:
 \begin{enumerate}
 \item<1-> \color{blue} Non-terminal nodes
 \item<2-> \color{orange} Reentrancy
@@ -771,10 +771,9 @@ Similar on out-of-domain test set:
 \begin{frame}
 \frametitle{Conclusion}
 \begin{itemize}
- \item UCCA's semantic distinctions require a graph structure.
- \item \parser{} is a transition-based parser suitable for UCCA.
- \item Direct parsing outperforms conversion-based approach,
- 	   with strong bilexical baseline parsers.
+ \item UCCA's semantic distinctions require a graph structure including challenging structural properties.
+ \item \parser{} is a transition-based parser suitable for UCCA, achieving high accuracy with BiLSTM model.
+ \item Outperforms conversion-based parsing with a variety of strong bilexical DAG and tree baselines.
 \end{itemize}
 
 \vfill
