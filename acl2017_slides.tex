@@ -424,94 +424,6 @@ $\Rightarrow$\textsc{
 \end{tikzpicture}}
 \end{frame}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Deep Learning for NLP}
-
-\begin{frame}
-\frametitle{Word Embeddings}
-Represent discrete features by dense vectors \cite{goldberg2016primer}.
-\vfill
-\begin{adjustbox}{center}
-  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{feats.png}
-\end{adjustbox}
-\end{frame}
-
-\begin{frame}[fragile]
-\frametitle{Feed-Forward Neural Network (MLP)}
-Learns representation and classification by optimizing weights.
-\vfill
-\begin{adjustbox}{center,scale=.9}
-	\begin{neuralnetwork}[height=4,style={rotate=90},layertitleheight=5.5em,toprow=true]
-		\newcommand{\nodetextclear}[2]{}
-		\newcommand{\nodetextx}[2]{$x_#2$}
-		\newcommand{\nodetexty}[2]{$y_#2$}
-		\newcommand{\nodetexts}[2]{$\int$}
-		\inputlayer[count=4, bias=false, title=Input layer, text=\nodetextx]
-		\hiddenlayer[count=6, bias=false, title=Hidden layer, text=\nodetexts] \linklayers
-		\hiddenlayer[count=5, bias=false, title=Hidden layer, text=\nodetexts] \linklayers
-		\outputlayer[count=3, title=Output layer, text=\nodetexty] \linklayers
-	\end{neuralnetwork}
-\end{adjustbox}
-\end{frame}
-
-\begin{frame}
-\frametitle{Recurrent Neural Network (RNN)}
-Applied to sequences, updates state given input and previous state.
-\vfill
-\begin{adjustbox}{center}
-  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{rnn-unrolled.png}
-\end{adjustbox}
-\end{frame}
-
-\begin{frame}
-\frametitle{Long Short-Term Memory (LSTM)}
-Memory cell to avoid vanishing gradients in RNNs.
-\vfill
-\begin{adjustbox}{center}
-	\begin{tikzpicture}[
-		    prod/.style={circle, draw, inner sep=0pt},
-		    ct/.style={circle, draw, inner sep=5pt, ultra thick, minimum width=10mm},
-		    ft/.style={circle, draw, minimum width=8mm, inner sep=1pt},
-		    filter/.style={circle, draw, minimum width=7mm, inner sep=1pt, path picture={\draw[thick, rounded corners] (path picture bounding box.center)--++(65:2mm)--++(0:1mm);
-		    \draw[thick, rounded corners] (path picture bounding box.center)--++(245:2mm)--++(180:1mm);}},
-		    mylabel/.style={font=\scriptsize\sffamily},
-		    >=LaTeX
-		    ]
-		\node[ct, label={[mylabel]Cell}] (ct) {$c_t$};
-		\node[filter, right=of ct] (int1) {};
-		\node[prod, right=of int1] (x1) {$\times$}; 
-		\node[right=of x1] (ht) {$h_t$};
-		\node[prod, left=of ct] (x2) {$\times$}; 
-		\node[filter, left=of x2] (int2) {};
-		\node[prod, below=5mm of ct] (x3) {$\times$}; 
-		\node[ft, below=5mm of x3, label={[mylabel]right:Forget Gate}] (ft) {$f_t$};
-		\node[ft, above=of x2, label={[mylabel]left:Input Gate}] (it) {$i_t$};
-		\node[ft, above=of x1, label={[mylabel]left:Output Gate}] (ot) {$o_t$};
-		\foreach \i/\j in {int2/x2, x2/ct, ct/int1, int1/x1,
-		            x1/ht, it/x2, ct/it, ct/ot, ot/x1, ft/x3}
-		    \draw[->] (\i)--(\j);
-		\draw[->] (ct) to[bend right=45] (ft);
-		\draw[->] (ct) to[bend right=30] (x3);
-		\draw[->] (x3) to[bend right=30] (ct);
-		\node[fit=(int2) (it) (ot) (ft), draw, inner sep=0pt] (fit) {};
-		\draw[<-] (fit.west|-int2) coordinate (aux)--++(180:7mm) node[left]{$x_t$};
-		\draw[<-] ([yshift=1mm]aux)--++(135:7mm);
-		\draw[<-] ([yshift=-1mm]aux)--++(-135:7mm);
-		\draw[<-] (fit.north-|it) coordinate (aux)--++(90:7mm) node[above]{$x_t$};
-		\draw[<-] ([xshift=1mm]aux)--++(45:7mm);
-		\draw[<-] ([xshift=-1mm]aux)--++(135:7mm);
-		\draw[<-] (fit.north-|ot) coordinate (aux)--++(90:7mm) node[above]{$x_t$};
-		\draw[<-] ([xshift=1mm]aux)--++(45:7mm);
-		\draw[<-] ([xshift=-1mm]aux)--++(135:7mm);
-		\draw[<-] (fit.south-|ft) coordinate (aux)--++(-90:7mm) node[below]{$x_t$};
-		\draw[<-] ([xshift=1mm]aux)--++(-45:7mm);
-		\draw[<-] ([xshift=-1mm]aux)--++(-135:7mm);
-	\end{tikzpicture}
-\end{adjustbox}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \begin{frame}
 \frametitle{\parser{} Model}
 Greedy parsing, experimenting with three classifiers:
@@ -527,6 +439,18 @@ Greedy parsing, experimenting with three classifiers:
 	from the stack and buffer + parents, children, grandchildren;
 	ordinal features (height, number of parents and children)
 \end{flushleft}
+\begin{tikzpicture}
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (10,.5);
+	\node[anchor=west] at (-0.1,1.00) {stack};
+	\node[anchor=west] at (8.9,1.00) {buffer};
+	\foreach \i in {0.5,8.5,9.5} {
+		\node[fill=gray, circle] at (\i,0.25) {};
+	}
+	\foreach \i in {1.5,2.5,3.5,5.5,6.5,7.5} {
+		\node[fill=black, circle] at (\i,0.25) {};
+	}
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}
@@ -633,75 +557,6 @@ Greedy parsing, experimenting with three classifiers:
   \includegraphics[width=.5\linewidth]{wikipedia.png}
   \includegraphics[width=.5\linewidth]{squid.jpg}
 \end{center}
-\end{frame}
-
-\begin{frame}
-\frametitle{Evaluation}
-Comparing graphs over the same sequence of tokens,
-\begin{itemize}
-\item Match edges by their terminal yield and label.
-\item Calculate labeled precision, recall and F1 scores.
-\item Separate primary and remote edges.
-\end{itemize}
-\vfill
-\begin{adjustbox}{frame,scale=.75,center}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=15mm, ->,
-	    every circle node/.append style={fill=black}]
-	  \tikzstyle{word} = [font=\rmfamily,color=black]
-	  \node at (-1,.7) {gold};
-	  \node (ROOT) at (0,0) [circle] {}
-	    child {node (After) [word] {After} edge from parent node[left] {$L$}}
-	    child {node (graduation) [circle] {}
-	    {
-	      child {node [word] {graduation} edge from parent node[left] {$P$}}
-	    } edge from parent node[left] {$H$} }
-	    child {node [word] {,} edge from parent node[right] {$U$}}
-	    child {node (moved) [circle] {}
-	    {
-	      child {node (Joe) [word] {Joe} edge from parent node[left] {$A$}}
-	      child {node [word] {moved} edge from parent node[left] {$P$}}
-	      child {node [circle] {}
-	      {
-	        child {node [word] {to} edge from parent node[left] {$R$}}
-	        child {node [word] {Paris} edge from parent node[right] {$C$}}
-	      } edge from parent node[right] {$A$} }
-	    } edge from parent node[right] {$H$} }
-	    ;
-	  \draw[dashed,->] (graduation) to node [auto] {$A$} (Joe);
-	  \node at (6,.7) {predicted};
-	  \node (ROOT_) at (7,0) [circle] {}
-	    child {node (After_) [word] {After} edge from parent node[left] {$L$}}
-	    child {node (graduation_) [circle] {}
-	    {
-	      child[red] {node [word] {graduation} edge from parent node[left] {$S$}}
-	    } edge from parent node[left] {$H$} }
-	    child {node [word] {,} edge from parent node[right] {$U$}}
-	    child {node (moved) [circle,xshift=3mm,yshift=-7mm] {}
-	    {
-	      child {node (Joe_) [word] {Joe} edge from parent node[left] {$A$}}
-	      child {node [word] {moved} edge from parent node[left] {$P$}}
-	      child[red] {node [word] {to} edge from parent node[left] {$F$}}
-	      child[red] {node (Paris_) [word] {Paris} edge from parent node[right] {$A$}}
-	    } edge from parent node[right] {$H$} }
-	    ;
-	  \draw[bend left,dashed,->] (graduation_) to node [auto] {$A$} (Joe_);
-	  \draw[bend left,dashed,->,red] (graduation_) to node [auto] {$A$} (Paris_);
-	\end{tikzpicture}
-\end{adjustbox}
-\vfill
-\begin{adjustbox}{scale=.75,center}
-	Primary:
-	\begin{tabular}{ccc}
-		\textbf{LP} & \textbf{LR} & \textbf{LF} \\ \hline
-		$\frac69=67\%$ & $\frac6{10}=60\%$ & 64\%
-	\end{tabular}
-	\hspace{1cm}
-	Remote:
-	\begin{tabular}{ccc}
-		\textbf{LP} & \textbf{LR} & \textbf{LF} \\ \hline
-		$\frac12=50\%$ & $\frac11=100\%$ & 67\%
-	\end{tabular}
-\end{adjustbox}
 \end{frame}
 
 \begin{frame}
@@ -979,6 +834,75 @@ Labeled precision, recall and F-score are then defined as:
 \]
 Two variants:
 one for primary edges, and another for remote edges.
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation}
+Comparing graphs over the same sequence of tokens,
+\begin{itemize}
+\item Match edges by their terminal yield and label.
+\item Calculate labeled precision, recall and F1 scores.
+\item Separate primary and remote edges.
+\end{itemize}
+\vfill
+\begin{adjustbox}{frame,scale=.75,center}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=15mm, ->,
+	    every circle node/.append style={fill=black}]
+	  \tikzstyle{word} = [font=\rmfamily,color=black]
+	  \node at (-1,.7) {gold};
+	  \node (ROOT) at (0,0) [circle] {}
+	    child {node (After) [word] {After} edge from parent node[left] {$L$}}
+	    child {node (graduation) [circle] {}
+	    {
+	      child {node [word] {graduation} edge from parent node[left] {$P$}}
+	    } edge from parent node[left] {$H$} }
+	    child {node [word] {,} edge from parent node[right] {$U$}}
+	    child {node (moved) [circle] {}
+	    {
+	      child {node (Joe) [word] {Joe} edge from parent node[left] {$A$}}
+	      child {node [word] {moved} edge from parent node[left] {$P$}}
+	      child {node [circle] {}
+	      {
+	        child {node [word] {to} edge from parent node[left] {$R$}}
+	        child {node [word] {Paris} edge from parent node[right] {$C$}}
+	      } edge from parent node[right] {$A$} }
+	    } edge from parent node[right] {$H$} }
+	    ;
+	  \draw[dashed,->] (graduation) to node [auto] {$A$} (Joe);
+	  \node at (6,.7) {predicted};
+	  \node (ROOT_) at (7,0) [circle] {}
+	    child {node (After_) [word] {After} edge from parent node[left] {$L$}}
+	    child {node (graduation_) [circle] {}
+	    {
+	      child[red] {node [word] {graduation} edge from parent node[left] {$S$}}
+	    } edge from parent node[left] {$H$} }
+	    child {node [word] {,} edge from parent node[right] {$U$}}
+	    child {node (moved) [circle,xshift=3mm,yshift=-7mm] {}
+	    {
+	      child {node (Joe_) [word] {Joe} edge from parent node[left] {$A$}}
+	      child {node [word] {moved} edge from parent node[left] {$P$}}
+	      child[red] {node [word] {to} edge from parent node[left] {$F$}}
+	      child[red] {node (Paris_) [word] {Paris} edge from parent node[right] {$A$}}
+	    } edge from parent node[right] {$H$} }
+	    ;
+	  \draw[bend left,dashed,->] (graduation_) to node [auto] {$A$} (Joe_);
+	  \draw[bend left,dashed,->,red] (graduation_) to node [auto] {$A$} (Paris_);
+	\end{tikzpicture}
+\end{adjustbox}
+\vfill
+\begin{adjustbox}{scale=.75,center}
+	Primary:
+	\begin{tabular}{ccc}
+		\textbf{LP} & \textbf{LR} & \textbf{LF} \\ \hline
+		$\frac69=67\%$ & $\frac6{10}=60\%$ & 64\%
+	\end{tabular}
+	\hspace{1cm}
+	Remote:
+	\begin{tabular}{ccc}
+		\textbf{LP} & \textbf{LR} & \textbf{LF} \\ \hline
+		$\frac12=50\%$ & $\frac11=100\%$ & 67\%
+	\end{tabular}
+\end{adjustbox}
 \end{frame}
 
 \end{document}
