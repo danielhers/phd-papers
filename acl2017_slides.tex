@@ -323,10 +323,10 @@ You want to take a long bath
 Initial state:
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}, circle]
 	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
-	\node[anchor=west] at (-0.1,1.00)     {stack};
+	\node[anchor=west,style={font=\sffamily}] at (-0.1,1.00)     {stack};
 	\node[fill=black] at (0.5,0.25) {};
 	\draw[xstep=1cm,ystep=5mm,color=gray] (3,0) grid (10,.5);
-	\node[anchor=west] at (8.9,1.00) {buffer};
+	\node[anchor=west,style={font=\sffamily}] at (8.9,1.00) {buffer};
 	\node[anchor=west] at (3,0.25) {\small You};
 	\node[anchor=west] at (4,0.25) {\small want};
 	\node[anchor=west] at (5,0.25) {\small to};
@@ -361,7 +361,7 @@ $\Rightarrow$\textsc{
 	\only<3,8-9,11,14,23,31->\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (3,.5);
 	\only<12-13,15-16,19,21-22>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
 	\only<17-18,20>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (5,.5);
-	\node[anchor=west] at (-0.1,1.00){stack};
+	\node[anchor=west,style={font=\sffamily}] at (-0.1,1.00){stack};
 	\only<-26>\node[fill=black, circle] at (0.5,0.25) {};
 	\only<24-25> \node[fill=blue, circle] at (1.5,0.25) {};
 	\only<11-23> \node[fill=blue, circle] at (2.5,0.25) {};
@@ -384,7 +384,7 @@ $\Rightarrow$\textsc{
 	\only<17-19,21-23,28>\draw[xstep=1cm,ystep=5mm,color=gray] (8,0) grid (10,.5);
 	\only<20,29-30>\draw[xstep=1cm,ystep=5mm,color=gray] (9,0) grid (10,.5);
 	\only<31->\draw[xstep=1mm,ystep=5mm,color=gray] (9.89,0) grid (10,.5);
-	\node[anchor=west] at (8.9,1) {buffer};
+	\node[anchor=west,style={font=\sffamily}] at (8.9,1) {buffer};
 	\only<9-10> \node[fill=blue, circle] at (5.5,0.25) {};
 	\only<13-14> \node[fill=red, circle] at (6.5,0.25) {};
 	\only<21-28> \node[fill=red, circle] at (8.5,0.25) {};
@@ -401,7 +401,7 @@ $\Rightarrow$\textsc{
 \fbox{
 \begin{tikzpicture}[level distance=15mm, sibling distance=2cm, ->,
     every node/.append style={font=\rmfamily}]
-	\node[anchor=west] at (0,0) {graph};
+	\node[anchor=west,style={font=\sffamily}] at (0,0) {graph};
     \node(ROOT)[fill=black, circle, visible on=<1->] at (3,0) {}
       child [visible on=<2->] {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
       child [visible on=<5->] {node {want} edge from parent node [left] {\scriptsize $P$}}
@@ -460,7 +460,7 @@ Greedy parsing, experimenting with three classifiers:
 \fbox{
 \begin{minipage}{.5\textwidth}
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}]
-	\node[anchor=west] at (-1.2,0.25){stack};
+	\node[anchor=west,style={font=\sffamily}] at (-1.2,0.25){stack};
 	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
 	\node[fill=black, circle] at (0.5,0.25) {};
 	\node[fill=blue, circle] at (2.5,0.25) {};
@@ -470,7 +470,7 @@ Greedy parsing, experimenting with three classifiers:
 
 \vspace{1cm}
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}]
-	\node[anchor=west] at (3.8,0.25){buffer};
+	\node[anchor=west,style={font=\sffamily}] at (3.8,0.25){buffer};
 	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (9,.5);
 	\node[fill=red, circle] at (5.5,0.25) {};
 	\node[anchor=west] at (6,0.25) {\small a};
@@ -482,7 +482,7 @@ Greedy parsing, experimenting with three classifiers:
 \scalebox{.8}{
 \begin{tikzpicture}[level distance=1cm, sibling distance=1cm, ->,
     every node/.append style={font=\rmfamily}]
-    \node[anchor=west] at (5,0) {graph};
+    \node[anchor=west,style={font=\sffamily}] at (5,0) {graph};
     \draw[color=gray] (1.2,.3) rectangle (4.9,-3.2);
     \node(ROOT)[fill=black, circle, visible on=<1->] at (3,0) {}
       child {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
