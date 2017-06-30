@@ -76,85 +76,51 @@
 
 \begin{frame}
 \linespread{1.5}
-\frametitle{Linguistic Annotation Schemes}
+\frametitle{Linguistic Structure Annotation Schemes}
 \begin{itemize}
-	\item Dependency grammar: purely syntactic analysis.
+	\item Dependency grammar: bilexical tree, purely syntactic.
 \end{itemize}
 
 Semantic representation \cite{abend2017the}:
 \begin{itemize}
-	\item Semantic dependencies: coupled with syntactic representation.
-	\item AMR \cite{banarescu2013abstract}, \\ UCCA \cite{abend2013universal}: direct semantic representation.
+	\item Semantic dependencies: bilexical graph, coupled with syntax.
+	\only<2>{
+	\item AMR \cite{banarescu2013abstract}, UCCA \cite{abend2013universal}: direct semantic representation. \\
+		\fbox{\textrm{\ldots showered}} = \fbox{\textrm{\ldots took a shower}} \\
+		\fbox{\textrm{\ldots's war against crime}} = \fbox{\textrm{\ldots fights crime}}
+		}
 \end{itemize}
-\fbox{\textrm{\ldots showered}} = \fbox{\textrm{\ldots took a shower}} \\
-\fbox{\textrm{\ldots's war against crime}} = \fbox{\textrm{\ldots fights crime}}
-\end{frame}
-
-\begin{frame}
-\frametitle{Dependency Parsing}
-\begin{itemize}
-	\item Graph representation of syntactic structure.
-	\item Bilexical tree: edges are only between tokens.
-	\item Fast and accurate parsers (e.g. \textit{transition-based}).
-\end{itemize}
-\vfill
-\begin{adjustbox}{frame,center}
-\begin{dependency}
-	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
-	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
-	\end{deptext}
-	\deproot{5}{root}
-	\depedge{2}{1}{case}
-	\depedge{5}{2}{nmod}
-	\depedge{5}{3}{punct}
-	\depedge{5}{4}{nsubj}
-	\depedge{7}{6}{case}
-	\depedge{5}{7}{nmod}
-\end{dependency}
-\end{adjustbox}
-
-\pause
-Non-projectivity (discontinuity) is a challenge \cite{nivre2009non}.
-\begin{adjustbox}{scale=.8,frame,center}
-\begin{dependency}
-	\begin{deptext}[column sep=1.2em,ampersand replacement=\^,font=\rmfamily]
-	A \^ hearing \^ is \^ scheduled \^ on \^ the \^ issue \^ today \\
-	\end{deptext}
-	\deproot{4}{root}
-	\depedge{2}{1}{det}
-	\depedge{4}{2}{nsubj:pass}
-	\depedge{4}{3}{aux:pass}
-	\depedge{7}{5}{case}
-	\depedge{7}{6}{det}
-	\depedge[edge start x offset=-6pt,red]{2}{7}{nmod}
-	\depedge[edge slant=6pt]{4}{8}{nmod:tmod}
-\end{dependency}
-\end{adjustbox}
-\end{frame}
-
-\begin{frame}
-\frametitle{Semantic Dependency Parsing}
-\begin{itemize}
-	\item Representation of predicate-argument relationships.
-	\item Bilexical graph: allows reentrancy (and discontinuity).
-	\item Various formalisms.
-\end{itemize}
-\vfill
-
-\begin{adjustbox}{scale=.9,frame,center}
-\begin{dependency}
-	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
-	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
-	\end{deptext}
-	\deproot[edge style={red}]{5}{top}
-	\depedge{1}{2}{ARG2}
-	\depedge[edge slant=10pt,red]{1}{5}{ARG1}
-	\depedge{5}{4}{ARG1}
-	\depedge[red]{6}{5}{ARG1}
-	\depedge{6}{7}{ARG2}
-\end{dependency}
-\end{adjustbox}
-\captionof{figure}{DELPH-IN MRS-derived bi-lexical dependencies (DM).}
+\only<1>{
+	\begin{flushleft}
+	\hspace{2mm} Syntactic (UD)\\
+	\end{flushleft}
+	\vspace{-1cm}
+	\begin{adjustbox}{frame,center}
+	\begin{dependency}
+		\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+		After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
+		\end{deptext}
+		\deproot{5}{root}
+		\depedge{2}{1}{case}
+		\depedge{5}{2}{nmod}
+		\depedge{5}{3}{punct}
+		\depedge{5}{4}{nsubj}
+		\depedge{7}{6}{case}
+		\depedge{5}{7}{nmod}
+		\deproot[edge below]{5}{top}
+		\depedge[edge below]{1}{2}{ARG2}
+		\depedge[edge below,edge unit distance=1em,red]{1}{5}{ARG1}
+		\depedge[edge below]{5}{4}{ARG1}
+		\depedge[edge below,red]{6}{5}{ARG1}
+		\depedge[edge below]{6}{7}{ARG2}
+	\end{dependency}
+	\end{adjustbox}\\
+	\vspace{-1cm}
+	\begin{flushright}
+	Semantic (DM)\color{white}---
+	\end{flushright}
+	\captionof{figure}{Bilexical dependencies.}
+}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -337,6 +303,7 @@ $\Rightarrow$\textsc{
 }
 \vfill
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+	\only<1>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (2,.5);
 	\only<27>\draw[xstep=1mm,ystep=5mm,color=gray] (-0.01,0) grid (0.1,.5);
 	\only<6,26,28>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
 	\only<-2,4-5,7,10,24-25,29-30>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (2,.5);
@@ -575,33 +542,6 @@ Greedy parsing, experimenting with three classifiers:
 \end{frame}
 
 \begin{frame}
-\frametitle{Bilexical Graph Approximation}
-No existing UCCA parsers $\Rightarrow$ compare to bilexical parsers:
-\begin{enumerate}
- \item Convert UCCA to bilexical dependencies.
- \item Train bilexical parsers and apply to test sentences.
- \item Reconstruct UCCA graphs and compare with gold standard.
-\end{enumerate}
-\vfill
-
-\begin{center}
-	\begin{dependency}
-	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
-	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
-	\end{deptext}
-	\depedge{2}{1}{L}
-	\depedge{2}{3}{U}
-	\depedge[dashed]{2}{4}{A}
-	\depedge{5}{4}{A}
-	\depedge{2}{5}{H}
-	\depedge{7}{6}{R}
-	\depedge{5}{7}{A}
-	\end{dependency}
-	\captionof{figure}{Bilexical DAG approximation.}
-\end{center}
-\end{frame}
-
-\begin{frame}
 \frametitle{Baselines}
 Bilexical DAG parsers:
 \begin{itemize}
@@ -625,16 +565,14 @@ Tree parsers (all transition-based):
 	\end{deptext}
 	\depedge{2}{1}{L}
 	\depedge{2}{3}{U}
+	\depedge[dashed]{2}{4}{A}
 	\depedge{5}{4}{A}
 	\depedge{2}{5}{H}
 	\depedge{7}{6}{R}
 	\depedge{5}{7}{A}
 	\end{dependency}
-	\captionof{figure}{Bilexical tree approximation.}
+	\captionof{figure}{Bilexical DAG approximation.}
 \end{center}
-
-\vfill
-Conversion to trees is just removing remote edges.
 \end{frame}
 
 \begin{frame}
@@ -735,10 +673,8 @@ Code: \url{https://github.com/danielhers/tupa}
 \begin{frame}
 \frametitle{Future Work}
 \begin{itemize}
- \item Beam search, training with exploration.
  \item More languages (German corpus construction is underway).
  \item Parsing other schemes, such as AMR.
- \item Different target representations for conversion.
  \item Application to text simplification and other tasks.
 \end{itemize}
 \end{frame}
