@@ -368,16 +368,16 @@ $\Rightarrow$\textsc{
 	\node[anchor=west,style={font=\sffamily}] at (0,0) {graph};
     \node(ROOT)[fill=black, circle, visible on=<1->] at (3,0) {}
       child [visible on=<2->] {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
-      child [visible on=<5->] {node {want} edge from parent node [left] {\scriptsize $P$}}
+      child [visible on=<5->] {node (want) {want} edge from parent node [left] {\scriptsize $P$}}
       child [visible on=<9->] {node (totakealongbath) [fill=blue, circle] {}
       {
-        child [visible on=<9->] {node {to} edge from parent node [left] {\scriptsize $F$}}
+        child [visible on=<9->] {node (to) {to} edge from parent node [left] {\scriptsize $F$}}
         child [visible on=<13->] {node (takeabath) [fill=red, circle] {}
         {
-          child [visible on=<13->] {node {take} edge from parent node [right] {\scriptsize $C$}}
-          child [visible on=<18->] {node {a} edge from parent node [right] {\scriptsize $F$}}
+          child [visible on=<13->] {node (take) {take} edge from parent node [right] {\scriptsize $C$}}
+          child [visible on=<18->] {node (a) {a} edge from parent node [right] {\scriptsize $F$}}
           child [visible on=<22->] {node (long) {long} edge from parent [draw=none]}
-          child [visible on=<32->] {node {bath} edge from parent node [right] {\scriptsize $C$}}
+          child [visible on=<32->] {node (bath) {bath} edge from parent node [right] {\scriptsize $C$}}
         } edge from parent [draw=none]}
       } edge from parent [draw=none]}
       ;
@@ -385,6 +385,14 @@ $\Rightarrow$\textsc{
     \draw[visible on=<25->] (ROOT) to node [left] {\scriptsize $A$} (totakealongbath);
     \draw[bend left,dashed, visible on=<30->] (takeabath) to node [auto] {\scriptsize $A$} (You);
     \draw[bend left, visible on=<22->] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
+    \draw[visible on=<2>,red] (ROOT) to node {} (You);
+    \draw[visible on=<5>,red] (ROOT) to node {} (want);
+    \draw[visible on=<16>,red] (totakealongbath) to node {} (takeabath);
+    \draw[visible on=<18>,red] (takeabath) to node {} (a);
+    \draw[bend left, visible on=<22>,red] (totakealongbath) to node {} (long);
+    \draw[visible on=<25>,red] (ROOT) to node {} (totakealongbath);
+    \draw[bend left,dashed, visible on=<30>,red] (takeabath) to node {} (You);
+    \draw[visible on=<32>,red] (takeabath) to node {} (bath);
 \end{tikzpicture}}
 \end{frame}
 
