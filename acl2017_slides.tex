@@ -78,20 +78,16 @@
 \linespread{1.5}
 \frametitle{Linguistic Annotation Schemes}
 \begin{itemize}
-	\setlength{\itemindent}{-3em}
-	\item Dependency grammar \cite{Tesn:59,nivre2005dependency}: \\
-		Purely syntactic analysis.
+	\item Dependency grammar: purely syntactic analysis.
 \end{itemize}
 
 Semantic representation \cite{abend2017the}:
 \begin{itemize}
-	\setlength{\itemindent}{-3em}
-	\item Semantic dependencies \cite{oepen2015semeval}: \\
-		Coupled with syntactic representation.
-	\item AMR \cite{banarescu2013abstract}, UCCA \cite{abend2013universal}: \\
-		\fbox{\textrm{\ldots showered}} = \fbox{\textrm{\ldots took a shower}} \\
-		\fbox{\textrm{\ldots's war against crime}} = \fbox{\textrm{\ldots fights crime}}
+	\item Semantic dependencies: coupled with syntactic representation.
+	\item AMR \cite{banarescu2013abstract}, \\ UCCA \cite{abend2013universal}: direct semantic representation.
 \end{itemize}
+\fbox{\textrm{\ldots showered}} = \fbox{\textrm{\ldots took a shower}} \\
+\fbox{\textrm{\ldots's war against crime}} = \fbox{\textrm{\ldots fights crime}}
 \end{frame}
 
 \begin{frame}
@@ -159,20 +155,6 @@ Non-projectivity (discontinuity) is a challenge \cite{nivre2009non}.
 \end{dependency}
 \end{adjustbox}
 \captionof{figure}{DELPH-IN MRS-derived bi-lexical dependencies (DM).}
-
-\pause
-\begin{adjustbox}{scale=.9,frame,center}
-\begin{dependency}
-	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
-	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
-	\end{deptext}
-	\deproot{5}{top}
-	\depedge{5}{2}{TWHEN}
-	\depedge{5}{4}{ACT-arg}
-	\depedge{5}{7}{DIR3-arg}
-\end{dependency}
-\end{adjustbox}
-\captionof{figure}{Prague Dependency Treebank tectogrammatical layer (PSD).}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
