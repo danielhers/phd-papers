@@ -2,6 +2,9 @@
 \mode<presentation>
 
 \setbeamertemplate{itemize items}[circle]
+\usepackage{pgfpages}
+\setbeameroption{show notes}
+\setbeameroption{show notes on second screen=right}
 \usepackage{palatino}
 \usepackage{apalike}
 \usepackage{graphicx} % Required for including images
@@ -67,9 +70,48 @@
 \begin{frame}
 \titlepage
 \end{frame}
+\note{Do not say paper's title. \\
+Say "hi, I'm Daniel and I'll tell you about a pretty general semantic parser".}
 
 
 %----------------------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{\parser{}}
+The first parser to support the combination of
+\begin{enumerate}
+\item\color{blue} Non-terminal nodes
+\item\color{orange} Reentrancy
+\item\color{red} Discontinuity
+\end{enumerate}
+Needed by AMR, UCCA.
+\begin{center}
+  \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
+      every node/.append style={font=\rmfamily,text=white}]
+    \node (ROOT) [fill=blue, circle] {}
+      child {node (You) {You} edge from parent node[left] {\scriptsize $A$}}
+      child {node {want} edge from parent node[left] {\scriptsize $P$}}
+      child {node (totakealongbath) [fill=blue, circle] {}
+      {
+        child {node {to} edge from parent node[left] {\scriptsize $F$}}
+        child {node (takeabath) [fill=blue, circle] {}
+        {
+          child {node {take} edge from parent node[right] {\scriptsize $C$}}
+          child {node {a} edge from parent node[right] {\scriptsize $F$}}
+          child {node (long) {long} edge from parent[white]}
+          child {node {bath} edge from parent node[right] {\scriptsize $C$}}
+        } edge from parent node[right] {\scriptsize $P$} }
+      } edge from parent node[left] {\scriptsize $A$} }
+      ;
+    \draw[bend left,dashed,->,orange,very thick] (takeabath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left,->,red,very thick] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
+  	\node at (5.6,-.3) {\small ----- primary edge};
+  	\node at (5.6,-.8) {\small - - - remote edge};
+  \end{tikzpicture}
+\end{center}
+\end{frame}
+\note{"What I'll show you today is a parser that can generate output that support X, Y, and Z. This combination is not supported by any other parser. And we do need this combination, because semantic analysis schemes like AMR and UCCA need it." \\
+"But before talking about semantic schemes, let's consider the classical approaches..."}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
@@ -91,6 +133,7 @@ Semantic representation \cite{abend2017the}:
 		}
 \end{itemize}
 \only<1>{
+	\vfill
 	\begin{flushleft}
 	\hspace{2mm} Syntactic (UD)\\
 	\end{flushleft}
@@ -183,11 +226,18 @@ Semantic representation \cite{abend2017the}:
 \frametitle{The UCCA Semantic Representation Scheme}
 Cross-linguistically applicable \cite{abend2013universal}.
 Stable in translation \cite{sulem2015conceptual}.
+
 \vfill
+English\\
+\vspace{-1cm}
 \begin{adjustbox}{center}
   \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{crosslinguistic.png}
 \end{adjustbox}
+\vspace{-1cm}
+Hebrew
 \end{frame}
+\note{A parallel English-French corpus has been annotated,
+and a German corpus is almost complete.}
 
 \begin{frame}
 \frametitle{UCCAApp}
