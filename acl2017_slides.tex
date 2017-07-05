@@ -3,8 +3,8 @@
 
 \setbeamertemplate{itemize items}[circle]
 \usepackage{pgfpages}
-\setbeameroption{show notes}
-\setbeameroption{show notes on second screen=right}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=right}
 \usepackage{palatino}
 \usepackage{apalike}
 \usepackage{graphicx} % Required for including images
@@ -77,14 +77,14 @@ Say "hi, I'm Daniel and I'll tell you about a pretty general semantic parser".}
 %----------------------------------------------------------------------------------------
 
 \begin{frame}
-\frametitle{\parser{}}
+\frametitle{\parser{} --- Transition-based UCCA Parser}
 The first parser to support the combination of
 \begin{enumerate}
 \item\color{blue} Non-terminal nodes
 \item\color{orange} Reentrancy
 \item\color{red} Discontinuity
 \end{enumerate}
-Needed by AMR, UCCA.
+--- properties needed for AMR, UCCA.
 \begin{center}
   \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
       every node/.append style={font=\rmfamily,text=white}]
@@ -263,12 +263,12 @@ UCCA facilitates semantics-based human evaluation of machine translation \cite{b
 
 \begin{frame}
 \frametitle{Graph Structure}
-UCCA forms a directed acyclic graph (DAG). Tokens are terminals.
+UCCA generates a directed acyclic graph (DAG), where the text tokens are terminals.
 Structural properties:
 \begin{enumerate}
-\item<1-> \color{blue} Non-terminal nodes
-\item<2-> \color{orange} Reentrancy
-\item<3-> \color{red} Discontinuity
+\item<1-> {\color{blue} Non-terminal nodes} --- hierarchy of entities and events
+\item<2-> {\color{orange} Reentrancy} --- allow argument sharing
+\item<3-> {\color{red} Discontinuity} -- conceptual units are split
 \end{enumerate}
 \centering
 
@@ -306,6 +306,7 @@ Structural properties:
 \vfill
 You want to take a long bath
 \end{frame}
+\note{No head selection.}
 
 
 
@@ -562,7 +563,43 @@ Greedy parsing, experimenting with three classifiers:
 \end{tikzpicture}
 }
 \end{frame}
+\note{Even though the parser is greedy and looks at specific locations in the stack and buffer for features, the BiLSTM effectively allows it to look further into the past and future in order to determine the best transition to apply.}
 
+\begin{frame}
+\frametitle{Training}
+An \textit{oracle} provides the transition sequence given the correct graph:
+
+\vfill
+\centering
+\scalebox{.8}{
+\begin{tikzpicture}[level distance=15mm, sibling distance=2cm, ->,
+    every node/.append style={font=\rmfamily}]
+    \node(ROOT)[fill=black, circle] at (3,0) {}
+      child {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
+      child {node (want) {want} edge from parent node [left] {\scriptsize $P$}}
+      child {node (totakealongbath) [fill=blue, circle] {} 
+      { 
+        child {node (to) {to} edge from parent node [left] {\scriptsize $F$}}
+        child {node (takeabath) [fill=red, circle] {}
+        {
+          child {node (take) {take} edge from parent node [right] {\scriptsize $C$}}      
+          child {node (a) {a} edge from parent node [right] {\scriptsize $F$}} 
+          child {node (long) {long} edge from parent [draw=none]}
+          child {node (bath) {bath} edge from parent node [right] {\scriptsize $C$}}  
+        } edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      ;
+    \draw(totakealongbath) to node [left] {\scriptsize $P$} (takeabath); 
+    \draw(ROOT) to node [left] {\scriptsize $A$} (totakealongbath);
+    \draw[bend left,dashed] (takeabath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
+\end{tikzpicture}}
+\[\Downarrow\]
+\begin{flushleft}
+\footnotesize
+\textsc{Shift}, \textsc{Right-Edge\textsubscript A}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge\textsubscript P}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node\textsubscript F}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node\textsubscript C}, \textsc{Reduce}, \textsc{Shift}, \textsc{Right-Edge\textsubscript P}, \textsc{Shift}, \textsc{Right-Edge\textsubscript F}, \textsc{Reduce}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge\textsubscript D}, \textsc{Reduce}, \textsc{Swap}, \textsc{Right-Edge\textsubscript A}, \textsc{Reduce}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Left-Remote\textsubscript A}, \textsc{Shift}, \textsc{Right-Edge\textsubscript C}, \textsc{Finish}
+\end{flushleft}
+\end{frame}
 
 
 \section{Experiments}
@@ -583,41 +620,8 @@ Greedy parsing, experimenting with three classifiers:
 \end{frame}
 
 \begin{frame}
-\frametitle{Results}
-\begin{center}
-	\begin{tabular}{l|ccc|ccc}
-	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
-	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-	\hline
-	Sparse
-	& 64.5 & 63.7 & 64.1 & 19.8 & 13.4 & 16 \\
-	MLP
-	& 65.2 & 64.6 & 64.9 & 23.7 & 13.2 & 16.9 \\
-	BiLSTM
-	& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4}
-	\end{tabular}
-	\captionof{table}{Results on the Wiki test set.}
-	
-	\vfill
-	\pause
-	\begin{tabular}{l|ccc|ccc}
-	& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
-	& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-	\hline
-	Sparse
-	& 59.6 & 59.9 & 59.8 & 22.2 & 7.7 & 11.5 \\
-	MLP
-	& 62.3 & 62.6 & 62.5 & 20.9 & 6.3 & 9.7 \\
-	BiLSTM
-	& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3}
-	\end{tabular}
-	\captionof{table}{Results on the 20K Leagues out-of-domain set.}
-\end{center}
-\end{frame}
-
-\begin{frame}
 \frametitle{Baselines}
-Bilexical DAG parsers:
+Bilexical DAG parsers (allow {\color{orange}reentrancy}):
 \begin{itemize}
  \item DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}:
  transition-based.
@@ -628,8 +632,8 @@ Bilexical DAG parsers:
 Tree parsers (all transition-based):
 \begin{itemize}
  \item MaltParser \cite{nivre2007maltparser}: bilexical tree parser.
- \item LSTM Parser \cite{dyer2015transition}: bilexical tree parser.
- \item \textsc{uparse} \cite{maier2015discontinuous}: allows non-terminals, discontinuity.
+ \item LSTM Parser \cite{dyer2015transition}: bilexical tree parser, NN.
+ \item \textsc{uparse} \cite{maier2015discontinuous}: allows {\color{blue}non-terminals}, {\color{red}discontinuity}.
 \end{itemize}
 
 \begin{center}
@@ -645,7 +649,7 @@ Tree parsers (all transition-based):
 	\depedge{7}{6}{R}
 	\depedge{5}{7}{A}
 	\end{dependency}
-	\captionof{figure}{Bilexical DAG approximation.}
+	\captionof{figure}{Bilexical DAG approximation (for tree, delete remote edges).}
 \end{center}
 \end{frame}
 
@@ -686,6 +690,8 @@ Tree parsers (all transition-based):
 	\captionof{table}{Results on the Wiki test set.}
 \end{center}
 \end{frame}
+\note{The experiments show \parser{} outperforms a large variety of baseline parsers. \\
+Remote edges are challenging -- they incorporate the REENTRANCY in the graph, and \parser{} parses them quite effectively.}
 
 \begin{frame}
 \frametitle{Results}
@@ -724,6 +730,7 @@ Similar on out-of-domain test set:
 	\captionof{table}{Results on the 20K Leagues out-of-domain set.}
 \end{center}
 \end{frame}
+\note{We also evaluated all parsers on the out-of-domain set, to test their domain adaptation ability. The results are quite good, despite the different genre.}
 
 
 
@@ -732,9 +739,9 @@ Similar on out-of-domain test set:
 \begin{frame}
 \frametitle{Conclusion}
 \begin{itemize}
- \item UCCA's semantic distinctions require a graph structure including challenging structural properties.
- \item \parser{} is a transition-based parser suitable for UCCA, achieving high accuracy with BiLSTM model.
- \item Outperforms conversion-based parsing with a variety of strong bilexical DAG and tree baselines.
+ \item UCCA's semantic distinctions require a graph structure including {\color{blue}non-terminals}, {\color{orange}reentrancy} and {\color{red}discontinuity}.
+ \item \parser{} is an accurate transition-based UCCA parser.
+ \item Outperforms various bilexical DAG and tree parser baselines.
 \end{itemize}
 
 \onslide<2>{
@@ -748,11 +755,11 @@ Future Work:
 }
 
 \vfill
-Corpora: \url{http://www.cs.huji.ac.il/~oabend/ucca.html}
-
 Code: \url{https://github.com/danielhers/tupa}
 
 Demo: \url{http://bit.ly/tupademo}
+
+Corpora: \url{http://www.cs.huji.ac.il/~oabend/ucca.html}
 \end{frame}
 
 
