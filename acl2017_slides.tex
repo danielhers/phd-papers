@@ -115,20 +115,24 @@ The first parser to support the combination of
 \section{Introduction}
 
 \begin{frame}
-\linespread{1.5}
 \frametitle{Linguistic Structure Annotation Schemes}
 \begin{itemize}
-	\item Dependency grammar: bilexical tree, purely syntactic.
-\end{itemize}
-
-Semantic representation \cite{abend2017the}:
-\begin{itemize}
-	\item Semantic dependencies: bilexical graph, coupled with syntax.
-	\only<2>{
-	\item AMR \cite{banarescu2013abstract}, UCCA \cite{abend2013universal}: direct semantic representation. \\
-		\fbox{\textrm{\ldots showered}} = \fbox{\textrm{\ldots took a shower}} \\
-		\fbox{\textrm{\ldots's war against crime}} = \fbox{\textrm{\ldots fights crime}}
-		}
+	\item Dependency grammar: bilexical tree, syntactic.
+	\item Semantic representation:\\
+	\begin{itemize}
+		\setlength\itemsep{1em}
+		\item Semantic dependencies \cite{oepen2016towards}
+  	\only<2>{
+		\item AMR \cite{banarescu2013abstract}
+		\item UCCA \cite{abend2013universal}
+		\item \ldots\footnote{See recent survey \cite{abend2017the}}
+		\begin{center}
+			\fbox{\textrm{\ldots showered}} = \fbox{\textrm{\ldots took a shower}}
+			
+			\fbox{\textrm{\ldots's war against crime}} = \fbox{\textrm{\ldots fights crime}}		
+		\end{center}
+	}
+	\end{itemize}
 \end{itemize}
 \only<1>{
 	\vfill
@@ -136,7 +140,7 @@ Semantic representation \cite{abend2017the}:
 	\hspace{2mm} Syntactic (UD)\\
 	\end{flushleft}
 	\vspace{-1cm}
-	\begin{adjustbox}{frame,center}
+	\begin{adjustbox}{margin=5mm,frame,center}
 	\begin{dependency}
 		\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
 		After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
@@ -150,9 +154,9 @@ Semantic representation \cite{abend2017the}:
 		\depedge{5}{7}{nmod}
 		\deproot[edge below]{5}{top}
 		\depedge[edge below]{1}{2}{ARG2}
-		\depedge[edge below,edge unit distance=1em,red]{1}{5}{ARG1}
+		\depedge[edge below,edge unit distance=1em,orange]{1}{5}{ARG1}
 		\depedge[edge below]{5}{4}{ARG1}
-		\depedge[edge below,red]{6}{5}{ARG1}
+		\depedge[edge below,orange]{6}{5}{ARG1}
 		\depedge[edge below]{6}{7}{ARG2}
 	\end{dependency}
 	\end{adjustbox}\\
@@ -163,6 +167,7 @@ Semantic representation \cite{abend2017the}:
 	\captionof{figure}{Bilexical dependencies.}
 }
 \end{frame}
+\note{very briefly}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
