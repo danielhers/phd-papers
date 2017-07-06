@@ -65,7 +65,7 @@
 \author{Daniel Hershcovich, Omri Abend and Ari Rappoport}
 \institute[]{\includegraphics[width=.08\pagewidth]{huji_logo.jpg}
 \includegraphics[width=.3\pagewidth]{huji_banner.png}}
-\date{ACL 2017}
+\date{University of Washington \\ July 26, 2017}
 
 \begin{frame}
 \titlepage
@@ -84,27 +84,29 @@ The first parser to support the combination of
 \item\color{orange} Reentrancy
 \item\color{red} Discontinuity
 \end{enumerate}
---- needed for many semantic schemes (e.g. AMR, UCCA).
+--- properties needed for AMR, UCCA.
 \begin{center}
   \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
-      every node/.append style={font=\small}]
-    \node (ROOT) [fill=blue,circle] {}
-      child {node (You) [draw=black,circle,inner sep=1pt] {1} edge from parent}
-      child {node [draw=black,circle,inner sep=1pt] {2} edge from parent}
-      child {node (totakealongbath) [fill=blue,circle] {}
+      every node/.append style={font=\rmfamily,text=white}]
+    \node (ROOT) [fill=blue, circle] {}
+      child {node (You) {You} edge from parent node[left] {\scriptsize $A$}}
+      child {node {want} edge from parent node[left] {\scriptsize $P$}}
+      child {node (totakealongbath) [fill=blue, circle] {}
       {
-        child {node [draw=black,circle,inner sep=1pt] {3} edge from parent}
-        child {node (takeabath) [fill=blue,circle] {}
+        child {node {to} edge from parent node[left] {\scriptsize $F$}}
+        child {node (takeabath) [fill=blue, circle] {}
         {
-          child {node [draw=black,circle,inner sep=1pt] {4} edge from parent}
-          child {node [draw=black,circle,inner sep=1pt] {5} edge from parent}
-          child {node (long) [draw=black,circle,inner sep=1pt] {6} edge from parent[white]}
-          child {node [draw=black,circle,inner sep=1pt] {7} edge from parent}
-        } edge from parent}
-      } edge from parent}
+          child {node {take} edge from parent node[right] {\scriptsize $C$}}
+          child {node {a} edge from parent node[right] {\scriptsize $F$}}
+          child {node (long) {long} edge from parent[white]}
+          child {node {bath} edge from parent node[right] {\scriptsize $C$}}
+        } edge from parent node[right] {\scriptsize $P$} }
+      } edge from parent node[left] {\scriptsize $A$} }
       ;
-    \draw[bend left,dashed,->,orange,very thick] (takeabath) to node {} (You);
-    \draw[bend left,->,red,very thick] (totakealongbath) to node {} (long);
+    \draw[bend left,dashed,->,orange,very thick] (takeabath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left,->,red,very thick] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
+  	\node at (5.6,-.3) {\small ----- primary edge};
+  	\node at (5.6,-.8) {\small - - - remote edge};
   \end{tikzpicture}
 \end{center}
 \end{frame}
@@ -237,17 +239,6 @@ Hebrew
 \end{frame}
 \note{A parallel English-French corpus has been annotated,
 and a German corpus is almost complete.}
-
-\begin{frame}
-\frametitle{UCCAApp}
-Rapid and intuitive annotation interface \cite{abend2017uccaapp}.
-Usable by non-experts.
-\footnotesize\url{http://ucca-demo.cs.huji.ac.il}
-\vfill
-\begin{adjustbox}{center}
-  \includegraphics[width=\pagewidth,height=\textheight,keepaspectratio]{uccaapp.png}
-\end{adjustbox}
-\end{frame}
 
 \begin{frame}
 \frametitle{HUME}
@@ -633,6 +624,17 @@ Tree parsers (all transition-based):
  \item LSTM Parser \cite{dyer2015transition}: bilexical tree parser, NN.
  \item \textsc{uparse} \cite{maier2015discontinuous}: allows {\color{blue}non-terminals}, {\color{red}discontinuity}.
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Bilexical Graph Approximation}
+No existing UCCA parsers $\Rightarrow$ compare to bilexical parsers:
+\begin{enumerate}
+ \item Convert UCCA to bilexical dependencies.
+ \item Train bilexical parsers and apply to test sentences.
+ \item Reconstruct UCCA graphs and compare with gold standard.
+\end{enumerate}
+\vfill
 
 \begin{center}
 	\begin{dependency}
@@ -649,6 +651,75 @@ Tree parsers (all transition-based):
 	\end{dependency}
 	\captionof{figure}{Bilexical DAG approximation (for tree, delete remote edges).}
 \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation}
+Comparing graphs over the same sequence of tokens,
+\begin{itemize}
+\item Match edges by their terminal yield and label.
+\item Calculate labeled precision, recall and F1 scores.
+\item Separate primary and remote edges.
+\end{itemize}
+\vfill
+\begin{adjustbox}{frame,scale=.75,center}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=15mm, ->,
+	    every circle node/.append style={fill=black}]
+	  \tikzstyle{word} = [font=\rmfamily,color=black]
+	  \node at (-1,.7) {gold};
+	  \node (ROOT) at (0,0) [circle] {}
+	    child {node (After) [word] {After} edge from parent node[left] {$L$}}
+	    child {node (graduation) [circle] {}
+	    {
+	      child {node [word] {graduation} edge from parent node[left] {$P$}}
+	    } edge from parent node[left] {$H$} }
+	    child {node [word] {,} edge from parent node[right] {$U$}}
+	    child {node (moved) [circle] {}
+	    {
+	      child {node (Joe) [word] {Joe} edge from parent node[left] {$A$}}
+	      child {node [word] {moved} edge from parent node[left] {$P$}}
+	      child {node [circle] {}
+	      {
+	        child {node [word] {to} edge from parent node[left] {$R$}}
+	        child {node [word] {Paris} edge from parent node[right] {$C$}}
+	      } edge from parent node[right] {$A$} }
+	    } edge from parent node[right] {$H$} }
+	    ;
+	  \draw[dashed,->] (graduation) to node [auto] {$A$} (Joe);
+	  \node at (6,.7) {predicted};
+	  \node (ROOT_) at (7,0) [circle] {}
+	    child {node (After_) [word] {After} edge from parent node[left] {$L$}}
+	    child {node (graduation_) [circle] {}
+	    {
+	      child[red] {node [word] {graduation} edge from parent node[left] {$S$}}
+	    } edge from parent node[left] {$H$} }
+	    child {node [word] {,} edge from parent node[right] {$U$}}
+	    child {node (moved) [circle,xshift=3mm,yshift=-7mm] {}
+	    {
+	      child {node (Joe_) [word] {Joe} edge from parent node[left] {$A$}}
+	      child {node [word] {moved} edge from parent node[left] {$P$}}
+	      child[red] {node [word] {to} edge from parent node[left] {$F$}}
+	      child[red] {node (Paris_) [word] {Paris} edge from parent node[right] {$A$}}
+	    } edge from parent node[right] {$H$} }
+	    ;
+	  \draw[bend left,dashed,->] (graduation_) to node [auto] {$A$} (Joe_);
+	  \draw[bend left,dashed,->,red] (graduation_) to node [auto] {$A$} (Paris_);
+	\end{tikzpicture}
+\end{adjustbox}
+\vfill
+\begin{adjustbox}{scale=.75,center}
+	Primary:
+	\begin{tabular}{ccc}
+		\textbf{LP} & \textbf{LR} & \textbf{LF} \\ \hline
+		$\frac69=67\%$ & $\frac6{10}=60\%$ & 64\%
+	\end{tabular}
+	\hspace{1cm}
+	Remote:
+	\begin{tabular}{ccc}
+		\textbf{LP} & \textbf{LR} & \textbf{LF} \\ \hline
+		$\frac12=50\%$ & $\frac11=100\%$ & 67\%
+	\end{tabular}
+\end{adjustbox}
 \end{frame}
 
 \begin{frame}
