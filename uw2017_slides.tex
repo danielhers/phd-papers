@@ -84,29 +84,27 @@ The first parser to support the combination of
 \item\color{orange} Reentrancy
 \item\color{red} Discontinuity
 \end{enumerate}
---- properties needed for AMR, UCCA.
+--- needed for many semantic schemes (e.g. AMR, UCCA).
 \begin{center}
   \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
-      every node/.append style={font=\rmfamily,text=white}]
-    \node (ROOT) [fill=blue, circle] {}
-      child {node (You) {You} edge from parent node[left] {\scriptsize $A$}}
-      child {node {want} edge from parent node[left] {\scriptsize $P$}}
-      child {node (totakealongbath) [fill=blue, circle] {}
+      every node/.append style={font=\small}]
+    \node (ROOT) [fill=blue,circle] {}
+      child {node (You) [draw=black,circle,inner sep=1pt] {1} edge from parent}
+      child {node [draw=black,circle,inner sep=1pt] {2} edge from parent}
+      child {node (totakealongbath) [fill=blue,circle] {}
       {
-        child {node {to} edge from parent node[left] {\scriptsize $F$}}
-        child {node (takeabath) [fill=blue, circle] {}
+        child {node [draw=black,circle,inner sep=1pt] {3} edge from parent}
+        child {node (takeabath) [fill=blue,circle] {}
         {
-          child {node {take} edge from parent node[right] {\scriptsize $C$}}
-          child {node {a} edge from parent node[right] {\scriptsize $F$}}
-          child {node (long) {long} edge from parent[white]}
-          child {node {bath} edge from parent node[right] {\scriptsize $C$}}
-        } edge from parent node[right] {\scriptsize $P$} }
-      } edge from parent node[left] {\scriptsize $A$} }
+          child {node [draw=black,circle,inner sep=1pt] {4} edge from parent}
+          child {node [draw=black,circle,inner sep=1pt] {5} edge from parent}
+          child {node (long) [draw=black,circle,inner sep=1pt] {6} edge from parent[white]}
+          child {node [draw=black,circle,inner sep=1pt] {7} edge from parent}
+        } edge from parent}
+      } edge from parent}
       ;
-    \draw[bend left,dashed,->,orange,very thick] (takeabath) to node [auto] {\scriptsize $A$} (You);
-    \draw[bend left,->,red,very thick] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
-  	\node at (5.6,-.3) {\small ----- primary edge};
-  	\node at (5.6,-.8) {\small - - - remote edge};
+    \draw[bend left,dashed,->,orange,very thick] (takeabath) to node {} (You);
+    \draw[bend left,->,red,very thick] (totakealongbath) to node {} (long);
   \end{tikzpicture}
 \end{center}
 \end{frame}
@@ -117,20 +115,24 @@ The first parser to support the combination of
 \section{Introduction}
 
 \begin{frame}
-\linespread{1.5}
 \frametitle{Linguistic Structure Annotation Schemes}
 \begin{itemize}
-	\item Dependency grammar: bilexical tree, purely syntactic.
-\end{itemize}
+	\item Dependency grammar: bilexical tree, syntactic.
+	\item Semantic representation:\\
+	\begin{itemize}
+		\setlength\itemsep{1em}
+		\item Semantic dependencies \cite{oepen2016towards}
+  	\only<2>{
+		\item AMR \cite{banarescu2013abstract}
+		\item UCCA \cite{abend2013universal}
+		\item \ldots\footnote{See recent survey \cite{abend2017the}}
+		\begin{center}
+			\fbox{\textrm{\ldots showered}} = \fbox{\textrm{\ldots took a shower}}
 
-Semantic representation \cite{abend2017the}:
-\begin{itemize}
-	\item Semantic dependencies: bilexical graph, coupled with syntax.
-	\only<2>{
-	\item AMR \cite{banarescu2013abstract}, UCCA \cite{abend2013universal}: direct semantic representation. \\
-		\fbox{\textrm{\ldots showered}} = \fbox{\textrm{\ldots took a shower}} \\
 		\fbox{\textrm{\ldots's war against crime}} = \fbox{\textrm{\ldots fights crime}}
+		\end{center}
 		}
+	\end{itemize}
 \end{itemize}
 \only<1>{
 	\vfill
@@ -138,7 +140,7 @@ Semantic representation \cite{abend2017the}:
 	\hspace{2mm} Syntactic (UD)\\
 	\end{flushleft}
 	\vspace{-1cm}
-	\begin{adjustbox}{frame,center}
+	\begin{adjustbox}{margin=5mm,frame,center}
 	\begin{dependency}
 		\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
 		After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
@@ -152,9 +154,9 @@ Semantic representation \cite{abend2017the}:
 		\depedge{5}{7}{nmod}
 		\deproot[edge below]{5}{top}
 		\depedge[edge below]{1}{2}{ARG2}
-		\depedge[edge below,edge unit distance=1em,red]{1}{5}{ARG1}
+		\depedge[edge below,edge unit distance=1em,orange]{1}{5}{ARG1}
 		\depedge[edge below]{5}{4}{ARG1}
-		\depedge[edge below,red]{6}{5}{ARG1}
+		\depedge[edge below,orange]{6}{5}{ARG1}
 		\depedge[edge below]{6}{7}{ARG2}
 	\end{dependency}
 	\end{adjustbox}\\
@@ -165,6 +167,9 @@ Semantic representation \cite{abend2017the}:
 	\captionof{figure}{Bilexical dependencies.}
 }
 \end{frame}
+\note{Very brief introduction to semantic representation.
+For a survey on this topic, see this paper from my lab, which is also in this year's ACL. \\
+Semantic representation abstracts away from syntactic detail that does not affect meaning.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -221,6 +226,8 @@ Semantic representation \cite{abend2017the}:
   \end{adjustbox}
 \end{wraptable}
 \end{frame}
+\note{Some properties of UCCA that make it interesting to work on (not "advantages"). \\
+Two main design principles - cross-linguistic applicability and support for intuitive annotation.}
 
 \begin{frame}
 \frametitle{The UCCA Semantic Representation Scheme}
@@ -237,8 +244,8 @@ English\\
 \vspace{-1cm}
 Hebrew
 \end{frame}
-\note{A parallel English-French corpus has been annotated,
-and a German corpus is almost complete.}
+\note{Same guidelines across languages (not "definitions"). \\
+A parallel English-French corpus has been annotated, and a German corpus is almost complete.}
 
 \begin{frame}
 \frametitle{HUME}
@@ -303,12 +310,12 @@ You want to take a long bath
 
 \begin{frame}
 \frametitle{Transition-Based Parsing}
-\begin{itemize}
- \item Parse text $w_1 \ldots w_n$ to graph $G=(V,E,\ell)$ incrementally.
- \item Classifier determines transition to apply at each step.
- \item Trained by an oracle based on gold-standard graph.
-\end{itemize}
+First used for dependency parsing \cite{nivre2004incrementality}.
+
+Parse text $w_1 \ldots w_n$ to graph $G=(V,E,\ell)$ incrementally.
+
 \pause
+\vfill
 Initial state:
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}, circle]
 	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
@@ -329,12 +336,11 @@ Initial state:
 \pause
 \parser{} transitions:
 
-\vfill
 \{\textsc{Shift, Reduce, Node$_X$, Left-Edge$_X$, Right-Edge$_X$,}\\
 \hspace{5mm}\textsc{Left-Remote$_X$, Right-Remote$_X$, Swap, Finish}\}
 
 \vfill
-Support non-terminal nodes, reentrancy and discontinuity.
+Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color{red}discontinuity}.
 \end{frame}
 
 \begin{frame}
@@ -444,7 +450,7 @@ Greedy parsing, experimenting with three classifiers:
 	\begin{tabular}{ll}
 	\textbf{Sparse} & Perceptron with sparse features. \\
 	\textbf{MLP} & Embeddings + feedforward NN classifier. \\
-	\textbf{BiLSTM} & Embeddings + deep bidirectional LSTM + MLP.
+	\textbf{BiLSTM} & Embeddings + deep bidirectional LSTM + MLP \\& \cite{kiperwasser2016simple}.
 	\end{tabular}
 	\vfill
 	Features:
@@ -652,6 +658,7 @@ No existing UCCA parsers $\Rightarrow$ compare to bilexical parsers:
 	\captionof{figure}{Bilexical DAG approximation (for tree, delete remote edges).}
 \end{center}
 \end{frame}
+\note{Some of the leading parsers. Don't say "the state-of-the-art".}
 
 \begin{frame}
 \frametitle{Evaluation}
@@ -809,8 +816,9 @@ Similar on out-of-domain test set:
 \frametitle{Conclusion}
 \begin{itemize}
  \item UCCA's semantic distinctions require a graph structure including {\color{blue}non-terminals}, {\color{orange}reentrancy} and {\color{red}discontinuity}.
- \item \parser{} is an accurate transition-based UCCA parser.
- \item Outperforms various bilexical DAG and tree parser baselines.
+ \item \parser{} is an accurate transition-based UCCA parser,
+ 	and the first to support any DAG over the text's tokens.
+ \item Outperforms strong conversion-based baselines.
 \end{itemize}
 
 \onslide<2>{
@@ -819,7 +827,7 @@ Future Work:
 \begin{itemize}
  \item More languages (German corpus construction is underway).
  \item Parsing other schemes, such as AMR.
- \item Application to text simplification and other tasks.
+ \item Text simplification, MT evaluation and other applications.
 \end{itemize}
 }
 
