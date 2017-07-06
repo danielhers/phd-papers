@@ -224,6 +224,7 @@ The first parser to support the combination of
   \end{adjustbox}
 \end{wraptable}
 \end{frame}
+\note{Some properties of UCCA that make it interesting to work on (not "advantages")}
 
 \begin{frame}
 \frametitle{The UCCA Semantic Representation Scheme}
@@ -240,8 +241,8 @@ English\\
 \vspace{-1cm}
 Hebrew
 \end{frame}
-\note{A parallel English-French corpus has been annotated,
-and a German corpus is almost complete.}
+\note{Same guidelines across languages.
+A parallel English-French corpus has been annotated, and a German corpus is almost complete.}
 
 \begin{frame}
 \frametitle{UCCAApp}
@@ -317,6 +318,7 @@ You want to take a long bath
 
 \begin{frame}
 \frametitle{Transition-Based Parsing}
+First used for dependency parsing \cite{nivre2004incrementality}.
 \begin{itemize}
  \item Parse text $w_1 \ldots w_n$ to graph $G=(V,E,\ell)$ incrementally.
  \item Classifier determines transition to apply at each step.
@@ -348,7 +350,7 @@ Initial state:
 \hspace{5mm}\textsc{Left-Remote$_X$, Right-Remote$_X$, Swap, Finish}\}
 
 \vfill
-Support non-terminal nodes, reentrancy and discontinuity.
+Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color{red}discontinuity}.
 \end{frame}
 
 \begin{frame}
@@ -458,7 +460,7 @@ Greedy parsing, experimenting with three classifiers:
 	\begin{tabular}{ll}
 	\textbf{Sparse} & Perceptron with sparse features. \\
 	\textbf{MLP} & Embeddings + feedforward NN classifier. \\
-	\textbf{BiLSTM} & Embeddings + deep bidirectional LSTM + MLP.
+	\textbf{BiLSTM} & Embeddings + deep bidirectional LSTM + MLP \\& \cite{kiperwasser2016simple}.
 	\end{tabular}
 	\vfill
 	Features:
@@ -743,8 +745,9 @@ Similar on out-of-domain test set:
 \frametitle{Conclusion}
 \begin{itemize}
  \item UCCA's semantic distinctions require a graph structure including {\color{blue}non-terminals}, {\color{orange}reentrancy} and {\color{red}discontinuity}.
- \item \parser{} is an accurate transition-based UCCA parser.
- \item Outperforms various bilexical DAG and tree parser baselines.
+ \item \parser{} is an accurate transition-based UCCA parser,
+ 	and the first to support any DAG over the text's tokens.
+ \item Outperforms strong conversion-based baselines.
 \end{itemize}
 
 \onslide<2>{
@@ -753,7 +756,7 @@ Future Work:
 \begin{itemize}
  \item More languages (German corpus construction is underway).
  \item Parsing other schemes, such as AMR.
- \item Application to text simplification and other tasks.
+ \item Text simplification, MT evaluation and other applications.
 \end{itemize}
 }
 
