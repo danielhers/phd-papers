@@ -920,4 +920,30 @@ Comparing graphs over the same sequence of tokens,
 \end{adjustbox}
 \end{frame}
 
+\begin{frame}
+\frametitle{Bilexical Graph Approximation}
+No existing UCCA parsers $\Rightarrow$ compare to bilexical parsers:
+\begin{enumerate}
+ \item Convert UCCA to bilexical dependencies.
+ \item Train bilexical parsers and apply to test sentences.
+ \item Reconstruct UCCA graphs and compare with gold standard.
+\end{enumerate}
+\vfill
+
+\begin{center}
+	\begin{dependency}
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
+	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\depedge{2}{1}{L}
+	\depedge{2}{3}{U}
+	\depedge[dashed]{2}{4}{A}
+	\depedge{5}{4}{A}
+	\depedge{2}{5}{H}
+	\depedge{7}{6}{R}
+	\depedge{5}{7}{A}
+	\end{dependency}
+	\captionof{figure}{Bilexical DAG approximation (for tree, delete remote edges).}
+\end{center}
+\end{frame}
 \end{document}

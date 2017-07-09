@@ -2,6 +2,13 @@
 \mode<presentation>
 
 \setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{headline}{% 
+  \hfill% 
+  \usebeamercolor[fg]{page number in head/foot}% 
+  \usebeamerfont{page number in head/foot}% 
+  \insertpagenumber% 
+  \kern1em\vskip-1em% 
+}
 \usepackage{pgfpages}
 %\setbeameroption{show notes}
 %\setbeameroption{show notes on second screen=right}
@@ -117,22 +124,21 @@ The first parser to support the combination of
 \begin{frame}
 \frametitle{Linguistic Structure Annotation Schemes}
 \begin{itemize}
-	\item Dependency grammar: bilexical tree, syntactic.
-	\item Semantic representation:\\
-	\begin{itemize}
 		\setlength\itemsep{1em}
+	\item Syntactic dependencies \cite{nivre2005dependency}
 		\item Semantic dependencies \cite{oepen2016towards}
   	\only<2>{
 		\item AMR \cite{banarescu2013abstract}
 		\item UCCA \cite{abend2013universal}
-		\item \ldots\footnote{See recent survey \cite{abend2017the}}
+	\item Other semantic representation schemes\footnote{See recent survey \cite{abend2017the}}
+	\vfill
 		\begin{center}
 			\fbox{\textrm{\ldots showered}} = \fbox{\textrm{\ldots took a shower}}
-
+		\vfill
 		\fbox{\textrm{\ldots's war against crime}} = \fbox{\textrm{\ldots fights crime}}
+		\vfill
 		\end{center}
 		}
-	\end{itemize}
 \end{itemize}
 \only<1>{
 	\vfill
@@ -771,7 +777,7 @@ Remote edges are challenging -- they incorporate the REENTRANCY in the graph, an
 
 \begin{frame}
 \frametitle{Results}
-Similar on out-of-domain test set:
+Comparable out-of-domain test set:
 \begin{center}
 	\begin{tabular}{l|ccc|ccc}
 		& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
