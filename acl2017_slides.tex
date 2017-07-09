@@ -2,7 +2,13 @@
 \mode<presentation>
 
 \setbeamertemplate{itemize items}[circle]
-\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{headline}{% 
+  \hfill% 
+  \usebeamercolor[fg]{page number in head/foot}% 
+  \usebeamerfont{page number in head/foot}% 
+  \insertpagenumber% 
+  \kern1em\vskip-1em% 
+}
 \usepackage{pgfpages}
 %\setbeameroption{show notes}
 %\setbeameroption{show notes on second screen=right}
