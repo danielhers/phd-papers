@@ -863,6 +863,122 @@ Comparable out-of-domain test set:
 \end{frame}
 
 
+\section{Future Work}
+
+\begin{frame}
+\frametitle{Future Work: UCCA}
+Not yet handled by TUPA:
+\begin{itemize}
+	\item Linkage.
+	\item Implicit units.
+	\item Inter-sentence relations.
+\end{itemize}
+\begin{flushright}
+  \begin{adjustbox}{scale=.7,margin=1mm,frame}
+	  \begin{tabular}{c>{\small\it}l}
+		  $LR$ & link relation \\
+		  $LA$ & link argument
+	  \end{tabular}
+  \end{adjustbox}
+\end{flushright}
+\vspace{-2cm}
+\begin{center}
+  \begin{tikzpicture}[level distance=14mm, sibling distance=22mm, ->,
+      every node/.append style={font=\small}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=black, circle] {}
+      child {node (After) [word] {After} edge from parent node[pos=.8,above] {\scriptsize $L$}}
+      child {node (graduation) [fill=black, circle] {}
+      {
+        child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
+      } edge from parent node[left] {\scriptsize $H$} }
+      child {node [word] {,} edge from parent node[right] {\scriptsize $U$}}
+      child {node (moved) [fill=black, circle] {}
+      {
+        child {node (Joe) [word] {Joe} edge from parent node[left] {\scriptsize $A$}}
+        child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
+        child {node [fill=black, circle] {}
+        {
+          child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
+          child {node [word] {Paris} edge from parent node[left] {\scriptsize $C$}}
+        } edge from parent node[left] {\scriptsize $A$} }
+      } edge from parent node[right] {\scriptsize $H$} }
+      ;
+    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (Joe);
+    \node (LKG) at (-1.8,0) [fill=black!20, circle] {};
+          \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
+          \draw (LKG) to[out=-60, in=90] node [below] {\scriptsize $LA\quad$} (graduation);
+          \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
+  \end{tikzpicture}
+  \captionof{figure}{UCCA graph with a Linkage relation.}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Future Work: AMR}
+Challenges:
+\begin{itemize}
+	\item Node labels.
+	\item Partial alignment.
+	\item Implicit nodes.
+\end{itemize}
+\begin{center}
+  \begin{tikzpicture}[level distance=14mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\small},
+      level 1/.style={sibling distance=36mm},
+	  level 2/.style={sibling distance=16mm},
+	  level 3/.style={sibling distance=12mm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=black, circle] {}
+      child {node [fill=black, circle] {}
+      {
+	        child {node [word] {After} edge from parent node {}}
+	        child {node (graduation) [fill=black, circle] {}
+		    {
+		      child {node [word] {graduation} edge from parent node {}}
+		    } edge from parent node {\scriptsize op1} }
+      } edge from parent node {\scriptsize time} }
+      child {node (Joe) [fill=black, circle] {}
+      {
+      	child {node {}
+	    {
+    	  child {node [word] {,} edge from parent [draw=none]}
+    	} edge from parent [draw=none]}
+        child {node [fill=black, circle] {}
+	    {
+		    child {node [fill=black, circle] {}
+		    {
+		      child {node [word] {Joe} edge from parent node {}}
+		    } edge from parent node {\scriptsize op1} }
+	    } edge from parent node {\scriptsize name} }
+      } edge from parent node {\scriptsize ARG0} }
+      child {node [fill=black, circle] {}
+      {
+        child {node {}
+	    {
+	    	child {node {}
+		    {
+		    	child {node [word] (moved) {moved} edge from parent [draw=none]}
+		        child {node [word] {to} edge from parent [draw=none]}
+		    } edge from parent [draw=none]}
+	    } edge from parent [draw=none]}
+        child {node [fill=black, circle] {}
+	    {
+		    child {node [fill=black, circle] {}
+		    {
+		      child {node [word] {Paris} edge from parent node {}}
+		    } edge from parent node {\scriptsize op1} }
+	    } edge from parent node {\scriptsize name} }
+      } edge from parent node {\scriptsize ARG2} }
+      ;
+      \draw[bend left] (ROOT) to node {} (moved);
+      \draw[dashed] (graduation) to node {\scriptsize ARG0} (Joe);
+  \end{tikzpicture}
+  \captionof{figure}{AMR graph in UCCA format.}
+\end{center}
+\end{frame}
+
+
 
 \section{Conclusion}
 
@@ -880,6 +996,7 @@ Future Work:
 
 \begin{itemize}
  \item More languages (German corpus construction is underway).
+ \item Broad coverage of UCCA (linkage, implicit, inter-sentence).
  \item Parsing other schemes, such as AMR.
  \item Text simplification, MT evaluation and other applications.
 \end{itemize}
