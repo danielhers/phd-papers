@@ -127,7 +127,6 @@ The first parser to support the combination of
 		\setlength\itemsep{1em}
 	\item Syntactic dependencies \cite{nivre2005dependency}
 		\item Semantic dependencies \cite{oepen2016towards}
-  	\only<2>{
 		\item AMR \cite{banarescu2013abstract}
 		\item UCCA \cite{abend2013universal}
 	\item Other semantic representation schemes\footnote{See recent survey \cite{abend2017the}}
@@ -138,44 +137,89 @@ The first parser to support the combination of
 		\fbox{\textrm{\ldots's war against crime}} = \fbox{\textrm{\ldots fights crime}}
 		\vfill
 		\end{center}
-		}
 \end{itemize}
-\only<1>{
-	\vfill
-	\begin{flushleft}
-	\hspace{2mm} Syntactic (UD)\\
-	\end{flushleft}
-	\vspace{-1cm}
-	\begin{adjustbox}{margin=5mm,frame,center}
-	\begin{dependency}
-		\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
-		After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
-		\end{deptext}
-		\deproot{5}{root}
-		\depedge{2}{1}{case}
-		\depedge{5}{2}{nmod}
-		\depedge{5}{3}{punct}
-		\depedge{5}{4}{nsubj}
-		\depedge{7}{6}{case}
-		\depedge{5}{7}{nmod}
-		\deproot[edge below]{5}{top}
-		\depedge[edge below]{1}{2}{ARG2}
-		\depedge[edge below,edge unit distance=1em,orange]{1}{5}{ARG1}
-		\depedge[edge below]{5}{4}{ARG1}
-		\depedge[edge below,orange]{6}{5}{ARG1}
-		\depedge[edge below]{6}{7}{ARG2}
-	\end{dependency}
-	\end{adjustbox}\\
-	\vspace{-1cm}
-	\begin{flushright}
-	Semantic (DM)\color{white}---
-	\end{flushright}
-	\captionof{figure}{Bilexical dependencies.}
-}
 \end{frame}
 \note{Very brief introduction to semantic representation.
 For a survey on this topic, see this paper from my lab, which is also in this year's ACL. \\
 Semantic representation abstracts away from syntactic detail that does not affect meaning.}
+
+\begin{frame}
+\frametitle{Syntactic Dependencies}
+\begin{itemize}
+	\item Bilexical tree representation of syntactic structure.
+	\item Fast and accurate parsers (e.g. \textit{transition-based}).
+\end{itemize}
+\vfill
+\begin{adjustbox}{frame,center}
+\begin{dependency}
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\deproot{5}{root}
+	\depedge{2}{1}{case}
+	\depedge{5}{2}{nmod}
+	\depedge{5}{3}{punct}
+	\depedge{5}{4}{nsubj}
+	\depedge{7}{6}{case}
+	\depedge{5}{7}{nmod}
+\end{dependency}
+\end{adjustbox}
+
+\vfill
+Non-projectivity (discontinuity) is a challenge \cite{nivre2009non}.
+\begin{adjustbox}{scale=.8,frame,center}
+\begin{dependency}
+	\begin{deptext}[column sep=1.2em,ampersand replacement=\^,font=\rmfamily]
+	A \^ hearing \^ is \^ scheduled \^ on \^ the \^ issue \^ today \\
+	\end{deptext}
+	\deproot{4}{root}
+	\depedge{2}{1}{det}
+	\depedge{4}{2}{nsubj:pass}
+	\depedge{4}{3}{aux:pass}
+	\depedge{7}{5}{case}
+	\depedge{7}{6}{det}
+	\depedge[edge start x offset=-6pt,red]{2}{7}{nmod}
+	\depedge[edge slant=6pt]{4}{8}{nmod:tmod}
+\end{dependency}
+\end{adjustbox}
+\end{frame}
+
+\begin{frame}
+\frametitle{Semantic Dependencies}
+\begin{itemize}
+	\item Bilexical graph representation of predicate-argument.
+	\item Derived from theories of syntax-semantics interface.
+\end{itemize}
+\vfill
+
+\begin{adjustbox}{scale=.9,frame,center}
+\begin{dependency}
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\deproot[edge style={red}]{5}{top}
+	\depedge{1}{2}{ARG2}
+	\depedge[edge slant=10pt,red]{1}{5}{ARG1}
+	\depedge{5}{4}{ARG1}
+	\depedge[red]{6}{5}{ARG1}
+	\depedge{6}{7}{ARG2}
+\end{dependency}
+\end{adjustbox}
+\captionof{figure}{DELPH-IN MRS-derived bi-lexical dependencies (DM).}
+
+\begin{adjustbox}{scale=.9,frame,center}
+\begin{dependency}
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\deproot{5}{top}
+	\depedge{5}{2}{TWHEN}
+	\depedge{5}{4}{ACT-arg}
+	\depedge{5}{7}{DIR3-arg}
+\end{dependency}
+\end{adjustbox}
+\captionof{figure}{Prague Dependency Treebank tectogrammatical layer (PSD).}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -237,13 +281,18 @@ Two main design principles - cross-linguistic applicability and support for intu
 
 \begin{frame}
 \frametitle{The UCCA Semantic Representation Scheme}
-Cross-linguistically applicable \cite{abend2013universal}.
-Stable in translation \cite{sulem2015conceptual}.
+\begin{itemize}
+	\item Cross-linguistically applicable \cite{abend2013universal}.
+	\item Stable in translation \cite{sulem2015conceptual}.
+	\item Fast and intuitive to annotate \cite{abend2017uccaapp}.
+	\item Facilitates MT human evaluation \cite{birch2016hume}.
+\end{itemize}
 
 \vfill
+\small
 English\\
 \vspace{-1cm}
-\begin{adjustbox}{center}
+\begin{adjustbox}{scale=.8,center}
   \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{crosslinguistic.png}
 \end{adjustbox}
 \\
@@ -252,16 +301,6 @@ Hebrew
 \end{frame}
 \note{Same guidelines across languages (not "definitions"). \\
 A parallel English-French corpus has been annotated, and a German corpus is almost complete.}
-
-\begin{frame}
-\frametitle{HUME}
-UCCA facilitates semantics-based human evaluation of machine translation \cite{birch2016hume}.
-\footnotesize\url{http://ucca.cs.huji.ac.il/mteval}
-\vfill
-\begin{adjustbox}{center}
-  \includegraphics[width=\pagewidth,height=\textheight,keepaspectratio]{hume.png}
-\end{adjustbox}
-\end{frame}
 
 \begin{frame}
 \frametitle{Graph Structure}
