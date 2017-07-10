@@ -228,23 +228,23 @@ Non-projectivity (discontinuity) is a challenge \cite{nivre2009non}.
 \begin{frame}
 \frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
 \begin{tikzpicture}[level distance=25mm, sibling distance=23mm, ->,
-    every circle node/.append style={fill=black},
-    every node/.append style={font=\rmfamily}]
+    every circle node/.append style={fill=black}]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
   \node (ROOT) [circle] {}
-    child {node (After) {After} edge from parent node[left] {$L$}}
+    child {node (After) [word] {After} edge from parent node[left] {$L$}}
     child {node (graduation) [circle] {}
     {
-      child {node {graduation} edge from parent node[left] {$P$}}
+      child {node [word] {graduation} edge from parent node[left] {$P$}}
     } edge from parent node[left] {$H$} }
-    child {node {,} edge from parent node[right] {$U$}}
+    child {node [word] {,} edge from parent node[right] {$U$}}
     child {node (moved) [circle] {}
     {
-      child {node (Joe) {Joe} edge from parent node[left] {$A$}}
-      child {node {moved} edge from parent node[left] {$P$}}
+      child {node (Joe) [word] {Joe} edge from parent node[left] {$A$}}
+      child {node [word] {moved} edge from parent node[left] {$P$}}
       child {node [circle] {}
       {
-        child {node {to} edge from parent node[left] {$R$}}
-        child {node {Paris} edge from parent node[right] {$C$}}
+        child {node [word] {to} edge from parent node[left] {$R$}}
+        child {node [word] {Paris} edge from parent node[right] {$C$}}
       } edge from parent node[right] {$A$} }
     } edge from parent node[right] {$H$} }
     ;
@@ -322,20 +322,20 @@ Structural properties:
  \newcommand*\diswid{}
  \only<3->{\renewcommand*\discol{red}}
  \only<3->{\renewcommand*\diswid{very thick}}
-  \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
-      every node/.append style={font=\rmfamily}]
+  \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
     \node (ROOT) [fill=blue, circle] {}
-      child {node (You) {You} edge from parent node[left] {\scriptsize $A$}}
-      child {node {want} edge from parent node[left] {\scriptsize $P$}}
+      child {node (You) [word] {You} edge from parent node[left] {\scriptsize $A$}}
+      child {node [word] {want} edge from parent node[left] {\scriptsize $P$}}
       child {node (totakealongbath) [fill=blue, circle] {}
       {
-        child {node {to} edge from parent node[left] {\scriptsize $F$}}
+        child {node [word] {to} edge from parent node[left] {\scriptsize $F$}}
         child {node (takeabath) [fill=blue, circle] {}
         {
-          child {node {take} edge from parent node[right] {\scriptsize $C$}}
-          child {node {a} edge from parent node[right] {\scriptsize $F$}}
-          child {node (long) {long} edge from parent[white]}
-          child {node {bath} edge from parent node[right] {\scriptsize $C$}}
+          child {node [word] {take} edge from parent node[right] {\scriptsize $C$}}
+          child {node [word] {a} edge from parent node[right] {\scriptsize $F$}}
+          child {node [word] (long) {long} edge from parent[white]}
+          child {node [word] {bath} edge from parent node[right] {\scriptsize $C$}}
         } edge from parent node[right] {\scriptsize $P$} }
       } edge from parent node[left] {\scriptsize $A$} }
       ;
