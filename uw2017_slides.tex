@@ -877,6 +877,18 @@ Evaluation of \parser{BiLSTM} per edge type:
 \end{adjustbox}
 \end{frame}
 
+\begin{frame}
+\frametitle{Error Analysis}
+Copular clauses tend to be parsed as identity.
+\begin{adjustbox}{center}
+  \includegraphics[width=.7\textwidth]{sixyearsold.png}
+\end{adjustbox}
+But, from the guidelines:
+\[
+\textrm{John}_A \Big[\textrm{is}_F \big[[\textrm{six}_E \textrm{years}_C]_E \textrm{old}_C\big]_C \Big]_S
+\]
+\end{frame}
+
 
 \section{Future Work}
 
@@ -948,10 +960,10 @@ Challenges:
     \node (ROOT) [draw=black,ellipse] {move-01}
       child {node [draw=black,ellipse] {after}
       {
-	        child {node [word] {After} edge from parent node {}}
+	        child {node [word] {After} edge from parent}
 	        child {node (graduation) [draw=black,ellipse] {graduate-01}
 		    {
-		      child {node [word] {graduation} edge from parent node {}}
+		      child {node [word] {graduation} edge from parent}
 		    } edge from parent node {op1} }
       } edge from parent node {time} }
       child {node (Joe) [draw=black,ellipse] {person}
@@ -964,7 +976,7 @@ Challenges:
 	    {
 		    child {node [draw=black,ellipse] {"Joe"}
 		    {
-		      child {node [word] {Joe} edge from parent node {}}
+		      child {node [word] {Joe} edge from parent}
 		    } edge from parent node {op1} }
 	    } edge from parent node {name} }
       } edge from parent node {ARG0} }
@@ -979,7 +991,7 @@ Challenges:
 	    {
 		    child {node [draw=black,ellipse] {"Paris"}
 		    {
-		      child {node [word] {Paris} edge from parent node {}}
+		      child {node [word] {Paris} edge from parent}
 		    } edge from parent node {op1} }
 	    } edge from parent node {name} }
       } edge from parent node {ARG2} }
@@ -988,6 +1000,45 @@ Challenges:
       \draw[dashed] (graduation) to node {ARG0} (Joe);
   \end{tikzpicture}
   \captionof{figure}{AMR graph in UCCA format.}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Future Work: SDP}
+Should be possible, since:
+\begin{itemize}
+	\item Bilexical approximation can be applied in reverse.
+	\item \parser{} is a general DAG parser.
+\end{itemize}
+\begin{center}
+  \begin{tikzpicture}[level distance=18mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      level 1/.style={sibling distance=36mm},
+	  level 2/.style={sibling distance=16mm},
+	  level 3/.style={sibling distance=12mm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=black,circle] {}
+      child {node (after) [fill=black,circle] {}
+	  {
+	    child {node [word] {After} edge from parent}
+	    child {node [word] {graduation} edge from parent node {ARG2}}
+	    child {node [word] {,} edge from parent [draw=none]}
+	  } edge from parent }
+      child {node (moved) [fill=black,circle] {}
+      {
+        child {node [word] {Joe} edge from parent node {ARG1}}
+        child {node [word] {moved} edge from parent}
+      } edge from parent node {top} }
+      child {node (to) [fill=black,circle] {}
+      {
+      	child {node [word] {to} edge from parent}
+      	child {node [word] {Paris} edge from parent node {ARG2}}
+      } edge from parent }
+      ;
+      \draw[dashed] (after) to node {ARG1} (moved);
+      \draw[dashed] (to) to node {ARG1} (moved);
+  \end{tikzpicture}
+  \captionof{figure}{Semantic dependency graph (DM) in UCCA format.}
 \end{center}
 \end{frame}
 
@@ -1009,7 +1060,7 @@ Future Work:
 
 \begin{itemize}
  \item More languages (German corpus construction is underway).
- \item Broad coverage of UCCA (linkage, implicit, inter-sentence).
+ \item Broad coverage UCCA parsing.
  \item Parsing other schemes, such as AMR.
  \item Text simplification, MT evaluation and other applications.
 \end{itemize}
