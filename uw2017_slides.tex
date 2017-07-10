@@ -922,57 +922,55 @@ Challenges:
 	\item Partial alignment.
 	\item Implicit nodes.
 \end{itemize}
+\vspace{-5mm}
 \begin{center}
-  \begin{tikzpicture}[level distance=14mm, ->,
-      every node/.append style={sloped,anchor=south,auto=false,font=\small},
+  \begin{tikzpicture}[level distance=15mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
       level 1/.style={sibling distance=36mm},
 	  level 2/.style={sibling distance=16mm},
 	  level 3/.style={sibling distance=12mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [fill=black, circle] {}
-      child {node [fill=black, circle] {}
+    \node (ROOT) [draw=black,ellipse] {move-01}
+      child {node [draw=black,ellipse] {after}
       {
 	        child {node [word] {After} edge from parent node {}}
-	        child {node (graduation) [fill=black, circle] {}
+	        child {node (graduation) [draw=black,ellipse] {graduate-01}
 		    {
 		      child {node [word] {graduation} edge from parent node {}}
-		    } edge from parent node {\scriptsize op1} }
-      } edge from parent node {\scriptsize time} }
-      child {node (Joe) [fill=black, circle] {}
+		    } edge from parent node {op1} }
+      } edge from parent node {time} }
+      child {node (Joe) [draw=black,ellipse] {person}
       {
       	child {node {}
 	    {
     	  child {node [word] {,} edge from parent [draw=none]}
     	} edge from parent [draw=none]}
-        child {node [fill=black, circle] {}
+        child {node [draw=black,ellipse] {name}
 	    {
-		    child {node [fill=black, circle] {}
+		    child {node [draw=black,ellipse] {"Joe"}
 		    {
 		      child {node [word] {Joe} edge from parent node {}}
-		    } edge from parent node {\scriptsize op1} }
-	    } edge from parent node {\scriptsize name} }
-      } edge from parent node {\scriptsize ARG0} }
-      child {node [fill=black, circle] {}
+		    } edge from parent node {op1} }
+	    } edge from parent node {name} }
+      } edge from parent node {ARG0} }
+      child {node [draw=black,ellipse] {city}
       {
         child {node {}
 	    {
-	    	child {node {}
-		    {
-		    	child {node [word] (moved) {moved} edge from parent [draw=none]}
-		        child {node [word] {to} edge from parent [draw=none]}
-		    } edge from parent [draw=none]}
+	    	child {node [word] (moved) {moved} edge from parent [draw=none]}
+	        child {node [word] {to} edge from parent [draw=none]}
 	    } edge from parent [draw=none]}
-        child {node [fill=black, circle] {}
+        child {node [draw=black,ellipse] {name}
 	    {
-		    child {node [fill=black, circle] {}
+		    child {node [draw=black,ellipse] {"Paris"}
 		    {
 		      child {node [word] {Paris} edge from parent node {}}
-		    } edge from parent node {\scriptsize op1} }
-	    } edge from parent node {\scriptsize name} }
-      } edge from parent node {\scriptsize ARG2} }
+		    } edge from parent node {op1} }
+	    } edge from parent node {name} }
+      } edge from parent node {ARG2} }
       ;
       \draw[bend left] (ROOT) to node {} (moved);
-      \draw[dashed] (graduation) to node {\scriptsize ARG0} (Joe);
+      \draw[dashed] (graduation) to node {ARG0} (Joe);
   \end{tikzpicture}
   \captionof{figure}{AMR graph in UCCA format.}
 \end{center}
