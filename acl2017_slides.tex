@@ -585,6 +585,8 @@ An \textit{oracle} provides the transition sequence given the correct graph:
 
 \begin{frame}
 \frametitle{Baselines}
+No existing UCCA parsers $\Rightarrow$ conversion-based approximation:
+
 Bilexical DAG parsers (allow {\color{orange}reentrancy}):
 \begin{itemize}
  \item DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}:
@@ -613,7 +615,7 @@ Tree parsers (all transition-based):
 	\depedge{4}{6}{D}
 	\depedge{4}{7}{C}
 	\end{dependency}
-	\captionof{figure}{Bilexical DAG approximation (for tree, delete remote edges).}
+	\captionof{figure}{UCCA bilexical DAG approximation (for tree, delete remote edges).}
 \end{center}
 \end{frame}
 \note{Some of the leading parsers. Don't say "the state-of-the-art".}
@@ -874,7 +876,6 @@ Comparing graphs over the same sequence of tokens,
 
 \begin{frame}
 \frametitle{Bilexical Graph Approximation}
-No existing UCCA parsers $\Rightarrow$ compare to bilexical parsers:
 \begin{enumerate}
  \item Convert UCCA to bilexical dependencies.
  \item Train bilexical parsers and apply to test sentences.
@@ -895,7 +896,7 @@ No existing UCCA parsers $\Rightarrow$ compare to bilexical parsers:
 	\depedge{7}{6}{R}
 	\depedge{5}{7}{A}
 	\end{dependency}
-	\captionof{figure}{Bilexical DAG approximation (for tree, delete remote edges).}
+	\captionof{figure}{UCCA bilexical DAG approximation (for tree, delete remote edges).}
 \end{center}
 \end{frame}
 \end{document}
