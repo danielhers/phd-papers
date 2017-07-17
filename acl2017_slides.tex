@@ -602,16 +602,16 @@ Tree parsers (all transition-based):
 
 \begin{center}
 	\begin{dependency}
-	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
-	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+	You \^ want \^ to \^ take \^ a \^ long \^ bath \\
 	\end{deptext}
-	\depedge{2}{1}{L}
-	\depedge{2}{3}{U}
-	\depedge[dashed]{2}{4}{A}
-	\depedge{5}{4}{A}
-	\depedge{2}{5}{H}
-	\depedge{7}{6}{R}
-	\depedge{5}{7}{A}
+	\depedge{2}{1}{A}
+	\depedge{2}{4}{A}
+	\depedge[dashed,edge start x offset=6pt]{4}{1}{A}
+	\depedge{4}{3}{F}
+	\depedge{4}{5}{F}
+	\depedge{4}{6}{D}
+	\depedge{4}{7}{C}
 	\end{dependency}
 	\captionof{figure}{Bilexical DAG approximation (for tree, delete remote edges).}
 \end{center}
