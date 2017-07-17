@@ -428,20 +428,60 @@ $\Rightarrow$\textsc{
 \end{frame}
 
 \begin{frame}
-\frametitle{\parser{} Model}
-Greedy parsing, experimenting with three classifiers:
+\frametitle{Training}
+An \textit{oracle} provides the transition sequence given the correct graph:
+
+\vfill
+\centering
+\scalebox{.8}{
+\begin{tikzpicture}[level distance=15mm, sibling distance=2cm, ->,
+    every node/.append style={font=\rmfamily}]
+    \node(ROOT)[fill=black, circle] at (3,0) {}
+      child {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
+      child {node (want) {want} edge from parent node [left] {\scriptsize $P$}}
+      child {node (totakealongbath) [fill=blue, circle] {} 
+      { 
+        child {node (to) {to} edge from parent node [left] {\scriptsize $F$}}
+        child {node (takeabath) [fill=red, circle] {}
+        {
+          child {node (take) {take} edge from parent node [right] {\scriptsize $C$}}      
+          child {node (a) {a} edge from parent node [right] {\scriptsize $F$}} 
+          child {node (long) {long} edge from parent [draw=none]}
+          child {node (bath) {bath} edge from parent node [right] {\scriptsize $C$}}  
+        } edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      ;
+    \draw(totakealongbath) to node [left] {\scriptsize $P$} (takeabath); 
+    \draw(ROOT) to node [left] {\scriptsize $A$} (totakealongbath);
+    \draw[bend left,dashed] (takeabath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
+\end{tikzpicture}}
+\[\Downarrow\]
 \begin{flushleft}
+\footnotesize
+\textsc{Shift}, \textsc{Right-Edge$_A$}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge$_P$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node$_F$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node$_C$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Right-Edge$_P$}, \textsc{Shift}, \textsc{Right-Edge$_F$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge$_D$}, \textsc{Reduce}, \textsc{Swap}, \textsc{Right-Edge$_A$}, \textsc{Reduce}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Left-Remote$_A$}, \textsc{Shift}, \textsc{Right-Edge$_C$}, \textsc{Finish}
+\end{flushleft}
+\end{frame}
+
+\begin{frame}
+\frametitle{\parser{} Model}
+Learn to greedily predict transition based on current state.
+
+Experimenting with three classifiers:
+
 	\begin{tabular}{ll}
 	\textbf{Sparse} & Perceptron with sparse features. \\
 	\textbf{MLP} & Embeddings + feedforward NN classifier. \\
-	\textbf{BiLSTM} & Embeddings + deep bidirectional LSTM + MLP \\& \cite{kiperwasser2016simple}.
+	\textbf{BiLSTM} & Embeddings + \only<2>{\textbf}{deep bidirectional LSTM} + MLP \\&
+	\cite{kiperwasser2016simple}.
+	\only<2>{\\& Effective ``lookahead'' encoded in the representation.}
 	\end{tabular}
+\only<1>{
 	\vfill
 	Features:
 	words, POS, syntactic dependencies, existing edge labels \\
 	from the stack and buffer + parents, children, grandchildren;
 	ordinal features (height, number of parents and children)
-\end{flushleft}
 \begin{tikzpicture}
 	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
 	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (10,.5);
@@ -454,6 +494,7 @@ Greedy parsing, experimenting with three classifiers:
 		\node[fill=black, circle] at (\i,0.25) {};
 	}
 \end{tikzpicture}
+}
 \end{frame}
 
 \begin{frame}
@@ -544,42 +585,6 @@ Greedy parsing, experimenting with three classifiers:
 \end{frame}
 \note{Even though the parser is greedy and looks at specific locations in the stack and buffer for features, the BiLSTM effectively allows it to look further into the past and future in order to determine the best transition to apply.}
 
-\begin{frame}
-\frametitle{Training}
-An \textit{oracle} provides the transition sequence given the correct graph:
-
-\vfill
-\centering
-\scalebox{.8}{
-\begin{tikzpicture}[level distance=15mm, sibling distance=2cm, ->,
-    every node/.append style={font=\rmfamily}]
-    \node(ROOT)[fill=black, circle] at (3,0) {}
-      child {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
-      child {node (want) {want} edge from parent node [left] {\scriptsize $P$}}
-      child {node (totakealongbath) [fill=blue, circle] {} 
-      { 
-        child {node (to) {to} edge from parent node [left] {\scriptsize $F$}}
-        child {node (takeabath) [fill=red, circle] {}
-        {
-          child {node (take) {take} edge from parent node [right] {\scriptsize $C$}}      
-          child {node (a) {a} edge from parent node [right] {\scriptsize $F$}} 
-          child {node (long) {long} edge from parent [draw=none]}
-          child {node (bath) {bath} edge from parent node [right] {\scriptsize $C$}}  
-        } edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      ;
-    \draw(totakealongbath) to node [left] {\scriptsize $P$} (takeabath); 
-    \draw(ROOT) to node [left] {\scriptsize $A$} (totakealongbath);
-    \draw[bend left,dashed] (takeabath) to node [auto] {\scriptsize $A$} (You);
-    \draw[bend left] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
-\end{tikzpicture}}
-\[\Downarrow\]
-\begin{flushleft}
-\footnotesize
-\textsc{Shift}, \textsc{Right-Edge$_A$}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge$_P$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node$_F$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node$_C$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Right-Edge$_P$}, \textsc{Shift}, \textsc{Right-Edge$_F$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge$_D$}, \textsc{Reduce}, \textsc{Swap}, \textsc{Right-Edge$_A$}, \textsc{Reduce}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Left-Remote$_A$}, \textsc{Shift}, \textsc{Right-Edge$_C$}, \textsc{Finish}
-\end{flushleft}
-\end{frame}
-
 
 \section{Experiments}
 
@@ -633,7 +638,7 @@ Tree parsers (all transition-based):
 	\captionof{figure}{UCCA bilexical DAG approximation (for tree, delete remote edges).}
 \end{center}
 \end{frame}
-\note{Some of the leading parsers. Don't say "the state-of-the-art".}
+\note{Some of the leading parsers.}
 
 \begin{frame}
 \frametitle{Evaluation}
@@ -746,7 +751,7 @@ Remote edges are challenging -- they incorporate the REENTRANCY in the graph, an
 
 \begin{frame}
 \frametitle{Results}
-Comparable out-of-domain test set:
+Comparable on out-of-domain test set:
 \begin{center}
 	\begin{tabular}{l|ccc|ccc}
 		& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
