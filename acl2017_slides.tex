@@ -598,7 +598,7 @@ Bilexical DAG parsers (allow {\color{orange}reentrancy}):
 Tree parsers (all transition-based):
 \begin{itemize}
  \item MaltParser \cite{nivre2007maltparser}: bilexical tree parser.
- \item LSTM Parser \cite{dyer2015transition}: bilexical tree parser, NN.
+ \item Stack LSTM Parser \cite{dyer2015transition}: bilexical tree parser.
  \item \textsc{uparse} \cite{maier2015discontinuous}: allows {\color{blue}non-terminals}, {\color{red}discontinuity}.
 \end{itemize}
 
@@ -607,13 +607,13 @@ Tree parsers (all transition-based):
 	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
 	You \^ want \^ to \^ take \^ a \^ long \^ bath \\
 	\end{deptext}
-	\depedge{2}{1}{A}
-	\depedge{2}{4}{A}
-	\depedge[dashed,edge start x offset=6pt]{4}{1}{A}
-	\depedge{4}{3}{F}
-	\depedge{4}{5}{F}
-	\depedge{4}{6}{D}
-	\depedge{4}{7}{C}
+	\depedge{2}{1}{$A$}
+	\depedge{2}{4}{$A$}
+	\depedge[dashed,edge start x offset=6pt]{4}{1}{$A$}
+	\depedge{4}{3}{$F$}
+	\depedge{4}{5}{$F$}
+	\depedge{4}{6}{$D$}
+	\depedge{4}{7}{$C$}
 	\end{dependency}
 	\captionof{figure}{UCCA bilexical DAG approximation (for tree, delete remote edges).}
 \end{center}
@@ -646,7 +646,7 @@ Tree parsers (all transition-based):
 		& & & \footnotesize (91) & & & \footnotesize -- \\
 		MaltParser
 		& 62.8 & 57.7 & 60.2 & -- & -- & -- \\
-		LSTM Parser
+		Stack LSTM
 		& 73.2 & 66.9 & 69.9 & -- & -- & -- \\
 		\hline
 		\footnotesize Tree
@@ -686,7 +686,7 @@ Comparable out-of-domain test set:
 		& & & \footnotesize (91.3) & & & \footnotesize -- \\
 		MaltParser
 		& 57.8 & 53 & 55.3 & -- & -- & -- \\
-		LSTM Parser
+		Stack LSTM
 		& 66.1 & 61.1 & 63.5 & -- & -- & -- \\
 		\hline
 		\footnotesize Tree
@@ -883,20 +883,46 @@ Comparing graphs over the same sequence of tokens,
 \end{enumerate}
 \vfill
 
-\begin{center}
+\begin{flushright}
+	\begin{tikzpicture}[level distance=13mm, sibling distance=13mm, ->,
+	    every circle node/.append style={fill=black}]
+	  \tikzstyle{word} = [font=\rmfamily,color=black]
+	  \node (ROOT) [circle] {}
+	    child {node (After) [word] {After} edge from parent node[left] {\scriptsize $L$}}
+	    child {node (graduation) [circle] {}
+	    {
+	      child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
+	    } edge from parent node[left] {\scriptsize $H$} }
+	    child {node [word] {,} edge from parent node[right] {\scriptsize $U$}}
+	    child {node (moved) [circle] {}
+	    {
+	      child {node (Joe) [word] {Joe} edge from parent node[left] {\scriptsize $A$}}
+	      child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
+	      child {node [circle] {}
+	      {
+	        child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
+	        child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
+	      } edge from parent node[right] {\scriptsize $A$} }
+	    } edge from parent node[right] {\scriptsize $H$} }
+	    ;
+	  \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (Joe);
+	\end{tikzpicture}
+\end{flushright}
+
+\vspace{-14mm}
+\begin{flushleft}
 	\begin{dependency}
 	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
 	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
 	\end{deptext}
-	\depedge{2}{1}{L}
-	\depedge{2}{3}{U}
-	\depedge[dashed]{2}{4}{A}
-	\depedge{5}{4}{A}
-	\depedge{2}{5}{H}
-	\depedge{7}{6}{R}
-	\depedge{5}{7}{A}
+	\depedge{2}{1}{$L$}
+	\depedge{2}{3}{$U$}
+	\depedge[dashed]{2}{4}{$A$}
+	\depedge{5}{4}{$A$}
+	\depedge{2}{5}{$H$}
+	\depedge{7}{6}{$R$}
+	\depedge{5}{7}{$A$}
 	\end{dependency}
-	\captionof{figure}{UCCA bilexical DAG approximation (for tree, delete remote edges).}
-\end{center}
+\end{flushleft}
 \end{frame}
 \end{document}
