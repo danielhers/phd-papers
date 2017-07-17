@@ -149,12 +149,12 @@ Necessary for...}
 		\item AMR \cite{banarescu2013abstract}
 		\item UCCA \cite{abend2013universal}
 	\item Other semantic representation schemes\footnote{See recent survey \cite{abend2017the}}
-	\vfill
+\end{itemize}
+\vfill
   Abstract away from syntactic detail that does not affect meaning:
   \begin{center}
     \fbox{\textrm{\ldots bathed}} = \fbox{\textrm{\ldots took a bath}}
   \end{center}
-\end{itemize}
 \end{frame}
 \note{But before talking about TUPA, a brief introduction to semantic representation.}
 
@@ -704,6 +704,21 @@ Tree parsers (all transition-based):
  \item Stack LSTM Parser \cite{dyer2015transition}: bilexical tree parser.
  \item \textsc{uparse} \cite{maier2015discontinuous}: allows {\color{blue}non-terminals}, {\color{red}discontinuity}.
 \end{itemize}
+\begin{center}
+	\begin{dependency}
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+	You \^ want \^ to \^ take \^ a \^ long \^ bath \\
+	\end{deptext}
+	\depedge{2}{1}{$A$}
+	\depedge{2}{4}{$A$}
+	\depedge[dashed,edge start x offset=6pt]{4}{1}{$A$}
+	\depedge{4}{3}{$F$}
+	\depedge{4}{5}{$F$}
+	\depedge{4}{6}{$D$}
+	\depedge{4}{7}{$C$}
+	\end{dependency}
+	\captionof{figure}{UCCA bilexical DAG approximation (for tree, delete remote edges).}
+\end{center}
 \end{frame}
 
 \begin{frame}
@@ -716,7 +731,7 @@ Tree parsers (all transition-based):
 \vfill
 
 \begin{flushright}
-	\begin{tikzpicture}[level distance=13mm, sibling distance=13mm, ->,
+	\begin{tikzpicture}[level distance=13mm, sibling distance=17mm, ->,
 	    every circle node/.append style={fill=black}]
 	  \tikzstyle{word} = [font=\rmfamily,color=black]
 	  \node (ROOT) [circle] {}
@@ -939,7 +954,7 @@ Copular clauses tend to be parsed as identity.
 \begin{adjustbox}{center}
   \includegraphics[width=.7\textwidth]{sixyearsold.png}
 \end{adjustbox}
-But, from the guidelines:
+But, from the guidelines\footnote{\url{http://www.cs.huji.ac.il/~oabend/ucca/guidelines.pdf}}:
 \[
 \textrm{John}_A \Big[\textrm{is}_F \big[[\textrm{six}_E \textrm{years}_C]_E \textrm{old}_C\big]_C \Big]_S
 \]
@@ -950,11 +965,11 @@ But, from the guidelines:
 
 \begin{frame}
 \frametitle{Future Work: UCCA}
-Not yet handled by TUPA:
+Already annotated in UCCA, but not yet handled by TUPA:
 \begin{itemize}
-	\item Linkage.
-	\item Implicit units.
-	\item Inter-sentence relations.
+	\item Linkage: inter-scene relations (see example).
+	\item Implicit units: units not mentioned at all in the text.
+	\item Inter-sentence relations: discourse structure.
 \end{itemize}
 \begin{flushright}
   \begin{adjustbox}{scale=.7,margin=1mm,frame}
@@ -999,11 +1014,10 @@ Not yet handled by TUPA:
 
 \begin{frame}
 \frametitle{Future Work: AMR}
-Challenges:
+Similar in structure and content, but poses several challenges:
 \begin{itemize}
-	\item Node labels.
-	\item Partial alignment.
-	\item Implicit nodes.
+	\item Node labels: not just edges, not also nodes are labeled.
+	\item Partial alignment: orphan tokens, implicit concepts.
 \end{itemize}
 \vspace{-5mm}
 \begin{center}
@@ -1061,11 +1075,11 @@ Challenges:
 
 \begin{frame}
 \frametitle{Future Work: SDP}
-Should be possible, since:
-\begin{itemize}
-	\item Bilexical approximation can be applied in reverse.
-	\item \parser{} is a general DAG parser.
-\end{itemize}
+Similar structure, but without non-terminal nodes.
+
+By applying bilexical conversion in reverse, \parser{} can be used.
+
+\vfill
 \begin{center}
   \begin{tikzpicture}[level distance=18mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
