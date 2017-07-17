@@ -62,6 +62,17 @@
 }
 \makeatother
 
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
 
 \begin{document}
 
@@ -75,8 +86,8 @@
 \begin{frame}
 \titlepage
 \end{frame}
-\note{Do not say paper's title. \\
-Say "hi, I'm Daniel and I'll tell you about a general semantic parser".}
+\note{Hi, I'm Daniel and this is joint work with... \\
+Today I'll tell you about a semantic parser called TUPA.}
 
 
 %----------------------------------------------------------------------------------------
@@ -121,8 +132,10 @@ The first parser to support the combination of three properties:
   \end{tikzpicture}
 \end{center}
 \end{frame}
-\note{"What I'll show you today is a parser that can generate output that support X, Y, and Z. This combination is not supported by any other parser. And we do need this combination, because semantic analysis schemes like AMR and UCCA need it." \\
-"But before talking about semantic schemes, let's consider the classical approaches..."}
+\note{The first parser for UCCA (which we'll see in a minute), \\
+a parser that can generate output that support ... \\
+This combination is not supported by any other parser. \\
+Necessary for...}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
@@ -180,13 +193,12 @@ Abstract away from syntactic detail that does not affect meaning:
 }
 \vfill
 \end{frame}
-\note{Very brief introduction to semantic representation.
-For a survey on this topic, see this paper from my lab, which is also in this year's ACL. \\
-Semantic representation abstracts away from syntactic detail that does not affect meaning.}
+\note{But before talking about TUPA, a brief introduction to semantic representation. \\
+For a survey on this topic, see this paper from my lab, which is also in this year's ACL.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{Universal Conceptual Cognitive Annotation}
+\section{The UCCA Semantic Representation Scheme}
 
 \begin{frame}
 \frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
@@ -203,9 +215,9 @@ English\\
 \vspace{-1cm}
 Hebrew
 \end{frame}
-\note{Some properties of UCCA that make it interesting to work on (not "advantages"). \\
+\note{Some properties of UCCA that make it interesting to work on. \\
 Two main design principles - cross-linguistic applicability and support for intuitive annotation. \\
-Same guidelines across languages (not "definitions"). \\
+Same guidelines across languages. \\
 A parallel English-French corpus has been annotated, and a German corpus is almost complete.}
 
 \begin{frame}
@@ -283,7 +295,8 @@ Allows {\color{blue} non-terminal nodes}, {\color{orange} reentrancy} and {\colo
 \frametitle{Transition-Based Parsing}
 First used for dependency parsing \cite{nivre2004incrementality}.
 
-Parse text $w_1 \ldots w_n$ to graph $G$ incrementally by applying transitions to the parser state.
+Parse text $w_1 \ldots w_n$ to graph $G$ incrementally by applying transitions to the parser state:
+stack, buffer and constructed graph.
 
 \pause
 \vfill
@@ -315,7 +328,7 @@ Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color
 \end{frame}
 
 \begin{frame}
-\frametitle{Transition-Based UCCA Parsing}
+\frametitle{Example}
 $\Rightarrow$\textsc{
 \only<1>{Shift}\only<2>{Right-Edge$_A$}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge$_P$}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node$_F$}\only<10>{Reduce}\only<11>{Shift}\only<12>{Shift}\only<13>{Node$_C$}\only<14>{Reduce}\only<15>{Shift}\only<16>{Right-Edge$_P$}\only<17>{Shift}\only<18>{Right-Edge$_F$}\only<19>{Reduce}\only<20>{Shift}\only<21>{Swap}\only<22>{Right-Edge$_D$}\only<23>{Reduce}\only<24>{Swap}\only<25>{Right-Edge$_A$}\only<26>{Reduce}\only<27>{Reduce}\only<28>{Shift}\only<29>{Shift}\only<30>{Left-Remote$_A$}\only<31>{Shift}\only<32>{Right-Edge$_C$}\only<33>{Finish}
 }
