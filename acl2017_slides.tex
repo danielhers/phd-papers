@@ -76,40 +76,48 @@
 \titlepage
 \end{frame}
 \note{Do not say paper's title. \\
-Say "hi, I'm Daniel and I'll tell you about a pretty general semantic parser".}
+Say "hi, I'm Daniel and I'll tell you about a general semantic parser".}
 
 
 %----------------------------------------------------------------------------------------
 
 \begin{frame}
 \frametitle{\parser{} --- Transition-based UCCA Parser}
-The first parser to support the combination of
+The first parser to support the combination of three properties:
 \begin{enumerate}
-\item\color{blue} Non-terminal nodes
-\item\color{orange} Reentrancy
-\item\color{red} Discontinuity
+\item<1-> {\color{blue} Non-terminal nodes} --- entities and events over the text
+\item<2-> {\color{orange} Reentrancy} --- allow argument sharing
+\item<3-> {\color{red} Discontinuity} -- conceptual units are split
 \end{enumerate}
---- needed for many semantic schemes (e.g. AMR, UCCA).
+\onslide<3->{--- needed for many semantic schemes (e.g. AMR, UCCA).}
 \begin{center}
-  \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->,
-      every node/.append style={font=\small}]
-    \node (ROOT) [fill=blue,circle] {}
-      child {node (You) [draw=black,circle,inner sep=1pt] {1} edge from parent}
-      child {node [draw=black,circle,inner sep=1pt] {2} edge from parent}
-      child {node (totakealongbath) [fill=blue,circle] {}
+ \newcommand*\reecol{}
+ \newcommand*\reewid{}
+ \only<2->{\renewcommand*\reecol{orange}}
+ \only<2->{\renewcommand*\reewid{very thick}}
+ \newcommand*\discol{}
+ \newcommand*\diswid{}
+ \only<3->{\renewcommand*\discol{red}}
+ \only<3->{\renewcommand*\diswid{very thick}}
+  \begin{tikzpicture}[level distance=16mm, sibling distance=2cm, ->]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=blue, circle] {}
+      child {node (You) [word] {You} edge from parent}
+      child {node [word] {want} edge from parent}
+      child {node (totakealongbath) [fill=blue, circle] {}
       {
-        child {node [draw=black,circle,inner sep=1pt] {3} edge from parent}
-        child {node (takeabath) [fill=blue,circle] {}
+        child {node [word] {to} edge from parent}
+        child {node (takeabath) [fill=blue, circle] {}
         {
-          child {node [draw=black,circle,inner sep=1pt] {4} edge from parent}
-          child {node [draw=black,circle,inner sep=1pt] {5} edge from parent}
-          child {node (long) [draw=black,circle,inner sep=1pt] {6} edge from parent[white]}
-          child {node [draw=black,circle,inner sep=1pt] {7} edge from parent}
+          child {node [word] {take} edge from parent}
+          child {node [word] {a} edge from parent}
+          child {node [word] (long) {long} edge from parent[draw=none]}
+          child {node [word] {bath} edge from parent}
         } edge from parent}
       } edge from parent}
       ;
-    \draw[bend left,dashed,->,orange,very thick] (takeabath) to node {} (You);
-    \draw[bend left,->,red,very thick] (totakealongbath) to node {} (long);
+    \draw[bend left,dashed,->,\reecol,\reewid] (takeabath) to (You);
+    \draw[bend left,->,\discol,\diswid] (totakealongbath) to (long);
   \end{tikzpicture}
 \end{center}
 \end{frame}
@@ -131,7 +139,7 @@ The first parser to support the combination of
 	\item Other semantic representation schemes\footnote{See recent survey \cite{abend2017the}}
 	\vfill
 	\begin{center}
-		\fbox{\textrm{\ldots showered}} = \fbox{\textrm{\ldots took a shower}}
+		\fbox{\textrm{\ldots bathed}} = \fbox{\textrm{\ldots took a bath}}
 		\vfill
 		\fbox{\textrm{\ldots's war against crime}} = \fbox{\textrm{\ldots fights crime}}
 		\vfill
@@ -209,8 +217,7 @@ Semantic representation abstracts away from syntactic detail that does not affec
 \begin{wraptable}{l}{8cm}
   \vspace{-27mm}
   \hspace{14mm} After graduation, Joe moved to Paris
-  \begin{adjustbox}{margin=1mm,frame}
-  \scalebox{.7}{
+  \begin{adjustbox}{margin=1mm,frame,scale=.7}
   \begin{tabular}{c>{\small\it}l|c>{\small\it}l|c>{\small\it}l}
 	  $P$ & process &
 	  $S$ & state &
@@ -226,7 +233,6 @@ Semantic representation abstracts away from syntactic detail that does not affec
 	  $F$ & function \\
 	  $G$ & ground
   \end{tabular}
-  }
   \end{adjustbox}
 \end{wraptable}
 \end{frame}
@@ -274,25 +280,12 @@ UCCA facilitates semantics-based human evaluation of machine translation \cite{b
 
 \begin{frame}
 \frametitle{Graph Structure}
-UCCA generates a directed acyclic graph (DAG), where the text tokens are terminals.
-Structural properties:
-\begin{enumerate}
-\item<1-> {\color{blue} Non-terminal nodes} --- hierarchy of entities and events
-\item<2-> {\color{orange} Reentrancy} --- allow argument sharing
-\item<3-> {\color{red} Discontinuity} -- conceptual units are split
-\end{enumerate}
-\centering
+UCCA generates a directed acyclic graph (DAG). \\
+The text tokens are terminals. \\
+Allows {\color{blue} non-terminal nodes}, {\color{orange} reentrancy} and {\color{red} discontinuity}.
 
-\vfill
- \newcommand*\reecol{}
- \newcommand*\reewid{}
- \only<2->{\renewcommand*\reecol{orange}}
- \only<2->{\renewcommand*\reewid{very thick}}
- \newcommand*\discol{}
- \newcommand*\diswid{}
- \only<3->{\renewcommand*\discol{red}}
- \only<3->{\renewcommand*\diswid{very thick}}
-  \begin{tikzpicture}[level distance=12mm, sibling distance=2cm, ->]
+\hspace*{1cm}
+  \begin{tikzpicture}[level distance=16mm, sibling distance=2cm, ->]
   \tikzstyle{word} = [font=\rmfamily,color=black]
     \node (ROOT) [fill=blue, circle] {}
       child {node (You) [word] {You} edge from parent node[left] {\scriptsize $A$}}
@@ -304,18 +297,30 @@ Structural properties:
         {
           child {node [word] {take} edge from parent node[right] {\scriptsize $C$}}
           child {node [word] {a} edge from parent node[right] {\scriptsize $F$}}
-          child {node [word] (long) {long} edge from parent[white]}
+          child {node [word] (long) {long} edge from parent[draw=none]}
           child {node [word] {bath} edge from parent node[right] {\scriptsize $C$}}
         } edge from parent node[right] {\scriptsize $P$} }
       } edge from parent node[left] {\scriptsize $A$} }
       ;
-    \draw[bend left,dashed,->,\reecol,\reewid] (takeabath) to node [auto] {\scriptsize $A$} (You);
-    \draw[bend left,->,\discol,\diswid] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
-  	\node at (5.6,-.3) {\small ----- primary edge};
-  	\node at (5.6,-.8) {\small - - - remote edge};
-  \end{tikzpicture}
-\vfill
-You want to take a long bath
+    \draw[bend left,dashed,->,orange,very thick] (takeabath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left,->,red,very thick] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
+    \node at (6,.1) {\Large ----- primary edge};
+    \node at (6,-.9) {\Large - - - remote edge};
+\end{tikzpicture}
+\begin{center}
+  You want to take a long bath
+\end{center}
+
+\vspace{-23mm}
+\begin{adjustbox}{margin=1mm,frame,scale=.7}
+  \begin{tabular}{c>{\small\it}l}
+	  $P$ & process \\
+	  $A$ & participant \\
+	  $C$ & center \\
+	  $D$ & adverbial \\
+	  $F$ & function
+  \end{tabular}
+\end{adjustbox}
 \end{frame}
 \note{No head selection.}
 
