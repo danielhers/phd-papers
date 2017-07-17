@@ -551,6 +551,7 @@ ordinal features (height, number of parents and children)
 \end{minipage}
 }
 }
+\onslide<2->{
 \scalebox{.7}{
 \begin{tikzpicture}[->]
 	\tiny
@@ -584,6 +585,7 @@ ordinal features (height, number of parents and children)
     \onslide<6>\node (transition) at (7,5.8) {\large\textsc{Node}$_C$};
     \onslide<6>\path (mlp) edge (transition);
 \end{tikzpicture}
+}
 }
 \end{frame}
 \note{Even though the parser is greedy and looks at specific locations in the stack and buffer for features, the BiLSTM effectively allows it to look further into the past and future in order to determine the best transition to apply.}
