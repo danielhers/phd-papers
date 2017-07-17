@@ -469,6 +469,7 @@ An \textit{oracle} provides the transition sequence given the correct graph:
 Learn to greedily predict transition based on current state.
 
 Experimenting with three classifiers:
+\vfill
 
 	\begin{tabular}{ll}
 	\textbf{Sparse} & Perceptron with sparse features. \\
@@ -487,8 +488,8 @@ Features:
 words, POS, syntactic dependencies, existing edge labels \\
 from the stack and buffer + parents, children, grandchildren;
 ordinal features (height, number of parents and children)
-\vfill
 
+\vspace{5mm}
 \begin{tikzpicture}
 	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
 	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (10,.5);
