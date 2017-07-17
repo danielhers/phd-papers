@@ -469,17 +469,17 @@ An \textit{oracle} provides the transition sequence given the correct graph:
 Learn to greedily predict transition based on current state.
 
 Experimenting with three classifiers:
-\vfill
+\vspace{5mm}
 
 	\begin{tabular}{ll}
 	\textbf{Sparse} & Perceptron with sparse features. \\
 	\textbf{MLP} & Embeddings + feedforward NN classifier. \\
 	\textbf{BiLSTM} & Embeddings + \only<2->{\textbf}{deep bidirectional LSTM} + MLP \\&
 	\cite{kiperwasser2016simple}.
-	\onslide<2->{\\ \\& Effective ``lookahead'' encoded in the representation.}
+	\onslide<2-4>{\\ \\& Effective ``lookahead'' encoded in the representation.}
 	\end{tabular}
 }
-\only<2-5>{\vspace{-5cm}}
+\only<2-5>{\vspace{-53mm}}
 
 \only<1>{
 \vfill
