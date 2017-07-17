@@ -315,7 +315,7 @@ Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color
 \begin{frame}
 \frametitle{Transition-Based UCCA Parsing}
 $\Rightarrow$\textsc{
-\only<1>{Shift}\only<2>{Right-Edge\textsubscript A}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge\textsubscript P}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node\textsubscript F}\only<10>{Reduce}\only<11>{Shift}\only<12>{Shift}\only<13>{Node\textsubscript C}\only<14>{Reduce}\only<15>{Shift}\only<16>{Right-Edge\textsubscript P}\only<17>{Shift}\only<18>{Right-Edge\textsubscript F}\only<19>{Reduce}\only<20>{Shift}\only<21>{Swap}\only<22>{Right-Edge\textsubscript D}\only<23>{Reduce}\only<24>{Swap}\only<25>{Right-Edge\textsubscript A}\only<26>{Reduce}\only<27>{Reduce}\only<28>{Shift}\only<29>{Shift}\only<30>{Left-Remote\textsubscript A}\only<31>{Shift}\only<32>{Right-Edge\textsubscript C}\only<33>{Finish}
+\only<1>{Shift}\only<2>{Right-Edge$_A$}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge$_P$}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node$_F$}\only<10>{Reduce}\only<11>{Shift}\only<12>{Shift}\only<13>{Node$_C$}\only<14>{Reduce}\only<15>{Shift}\only<16>{Right-Edge$_P$}\only<17>{Shift}\only<18>{Right-Edge$_F$}\only<19>{Reduce}\only<20>{Shift}\only<21>{Swap}\only<22>{Right-Edge$_D$}\only<23>{Reduce}\only<24>{Swap}\only<25>{Right-Edge$_A$}\only<26>{Reduce}\only<27>{Reduce}\only<28>{Shift}\only<29>{Shift}\only<30>{Left-Remote$_A$}\only<31>{Shift}\only<32>{Right-Edge$_C$}\only<33>{Finish}
 }
 \vfill
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}]
@@ -522,7 +522,7 @@ Greedy parsing, experimenting with three classifiers:
     }
     \coordinate (state) at (10.5,6.5);
     \onslide<5>\path (state) edge [bend left] (mlp);
-    \onslide<5>\node (transition) at (7,5.8) {\large\textsc{Node}\textsubscript{C}};
+    \onslide<5>\node (transition) at (7,5.8) {\large\textsc{Node}$_C$};
     \onslide<5>\path (mlp) edge (transition);
 \end{tikzpicture}
 }
@@ -561,7 +561,7 @@ An \textit{oracle} provides the transition sequence given the correct graph:
 \[\Downarrow\]
 \begin{flushleft}
 \footnotesize
-\textsc{Shift}, \textsc{Right-Edge\textsubscript A}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge\textsubscript P}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node\textsubscript F}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node\textsubscript C}, \textsc{Reduce}, \textsc{Shift}, \textsc{Right-Edge\textsubscript P}, \textsc{Shift}, \textsc{Right-Edge\textsubscript F}, \textsc{Reduce}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge\textsubscript D}, \textsc{Reduce}, \textsc{Swap}, \textsc{Right-Edge\textsubscript A}, \textsc{Reduce}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Left-Remote\textsubscript A}, \textsc{Shift}, \textsc{Right-Edge\textsubscript C}, \textsc{Finish}
+\textsc{Shift}, \textsc{Right-Edge$_A$}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge$_P$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node$_F$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node$_C$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Right-Edge$_P$}, \textsc{Shift}, \textsc{Right-Edge$_F$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge$_D$}, \textsc{Reduce}, \textsc{Swap}, \textsc{Right-Edge$_A$}, \textsc{Reduce}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Left-Remote$_A$}, \textsc{Shift}, \textsc{Right-Edge$_C$}, \textsc{Finish}
 \end{flushleft}
 \end{frame}
 
@@ -585,7 +585,7 @@ An \textit{oracle} provides the transition sequence given the correct graph:
 
 \begin{frame}
 \frametitle{Baselines}
-No existing UCCA parsers $\Rightarrow$ conversion-based approximation:
+No existing UCCA parsers $\Rightarrow$ conversion-based approximation.
 
 Bilexical DAG parsers (allow {\color{orange}reentrancy}):
 \begin{itemize}
