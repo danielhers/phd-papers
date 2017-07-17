@@ -464,6 +464,7 @@ An \textit{oracle} provides the transition sequence given the correct graph:
 \end{frame}
 
 \begin{frame}
+\only<-5>{
 \frametitle{\parser{} Model}
 Learn to greedily predict transition based on current state.
 
@@ -472,12 +473,16 @@ Experimenting with three classifiers:
 	\begin{tabular}{ll}
 	\textbf{Sparse} & Perceptron with sparse features. \\
 	\textbf{MLP} & Embeddings + feedforward NN classifier. \\
-	\textbf{BiLSTM} & Embeddings + \only<2>{\textbf}{deep bidirectional LSTM} + MLP \\&
+	\textbf{BiLSTM} & Embeddings + \only<2->{\textbf}{deep bidirectional LSTM} + MLP \\&
 	\cite{kiperwasser2016simple}.
-	\only<2>{\\& Effective ``lookahead'' encoded in the representation.}
+	\onslide<2->{\\ \\& Effective ``lookahead'' encoded in the representation.}
 	\end{tabular}
+}
+\only<2-5>{\vspace{-5cm}}
+
 \only<1>{
 	\vfill
+	
 	Features:
 	words, POS, syntactic dependencies, existing edge labels \\
 	from the stack and buffer + parents, children, grandchildren;
@@ -495,12 +500,8 @@ Experimenting with three classifiers:
 	}
 \end{tikzpicture}
 }
-\end{frame}
-
-\begin{frame}
-\only<1-4>{\frametitle{BiLSTM}\vspace{-8mm}}
 \centering
-\onslide<5>{
+\onslide<6>{
 \fbox{
 \begin{minipage}{.5\textwidth}
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}]
@@ -528,7 +529,7 @@ Experimenting with three classifiers:
     every node/.append style={font=\rmfamily}]
     \node[anchor=west,style={font=\sffamily}] at (5,0) {graph};
     \draw[color=gray] (1.2,.3) rectangle (4.9,-3.2);
-    \node(ROOT)[fill=black, circle, visible on=<1->] at (3,0) {}
+    \node(ROOT)[fill=black, circle, visible on=<2->] at (3,0) {}
       child {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
       child {node {want} edge from parent node [left] {\scriptsize $P$}}
       child {node (totakealongbath) [fill=blue, circle] {}
@@ -553,33 +554,33 @@ Experimenting with three classifiers:
 	\tiny
 	\tikzstyle{main}=[circle, minimum size=7mm, draw=black!80, node distance=12mm]
 	\foreach \i/\word in {1/{You},3/{want},5/{to},7/{take},9/{a},11/{long},13/{bath}} {
-	    \onslide<1->\node (x\i) at (\i,-1.3) {\Large\textrm\word};
-	    \onslide<1->\node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
-        \onslide<1->\path (x\i) edge (h\i);
-	    \onslide<2->\node[main, fill=white!100] (i\i) at (\i.5,.8) {LSTM};
-        \onslide<2->\path (x\i) edge [bend right] (i\i);
-	    \onslide<3->\node[main, fill=white!100] (l\i) at (\i.5,2.3) {LSTM};
-        \onslide<3->\path (h\i) edge [bend left] (l\i);
-        \onslide<3->\path (i\i) edge (l\i);
-	    \onslide<4->\node[main, fill=white!100] (k\i) at (\i,3.1) {LSTM};
-        \onslide<4->\path (i\i) edge [bend left] (k\i);
-        \onslide<4->\path (h\i) edge [bend left] (k\i);
+	    \onslide<2->\node (x\i) at (\i,-1.3) {\Large\textrm\word};
+	    \onslide<2->\node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
+        \onslide<2->\path (x\i) edge (h\i);
+	    \onslide<3->\node[main, fill=white!100] (i\i) at (\i.5,.8) {LSTM};
+        \onslide<3->\path (x\i) edge [bend right] (i\i);
+	    \onslide<4->\node[main, fill=white!100] (l\i) at (\i.5,2.3) {LSTM};
+        \onslide<4->\path (h\i) edge [bend left] (l\i);
+        \onslide<4->\path (i\i) edge (l\i);
+	    \onslide<5->\node[main, fill=white!100] (k\i) at (\i,3.1) {LSTM};
+        \onslide<5->\path (i\i) edge [bend left] (k\i);
+        \onslide<5->\path (h\i) edge [bend left] (k\i);
 	}
 	\foreach \current/\next in {1/3,3/5,5/7,7/9,9/11,11/13} {
-        \onslide<1->\path (h\current) edge (h\next);
-        \onslide<2->\path (i\next) edge (i\current);
-        \onslide<3->\path (l\current) edge (l\next);
-        \onslide<4->\path (k\next) edge (k\current);
+        \onslide<2->\path (h\current) edge (h\next);
+        \onslide<3->\path (i\next) edge (i\current);
+        \onslide<4->\path (l\current) edge (l\next);
+        \onslide<5->\path (k\next) edge (k\current);
 	}
-    \onslide<5>\node[main, fill=white!100] (mlp) at (7,4.6) {MLP};
-	\onslide<5>\foreach \i in {5,7,9} {
+    \onslide<6>\node[main, fill=white!100] (mlp) at (7,4.6) {MLP};
+	\onslide<6>\foreach \i in {5,7,9} {
         \path (l\i) edge (mlp);
         \path (k\i) edge (mlp);
     }
     \coordinate (state) at (10.5,6.5);
-    \onslide<5>\path (state) edge [bend left] (mlp);
-    \onslide<5>\node (transition) at (7,5.8) {\large\textsc{Node}$_C$};
-    \onslide<5>\path (mlp) edge (transition);
+    \onslide<6>\path (state) edge [bend left] (mlp);
+    \onslide<6>\node (transition) at (7,5.8) {\large\textsc{Node}$_C$};
+    \onslide<6>\path (mlp) edge (transition);
 \end{tikzpicture}
 }
 \end{frame}
