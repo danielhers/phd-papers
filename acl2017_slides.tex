@@ -244,8 +244,9 @@ UCCA facilitates semantics-based human evaluation of machine translation \cite{b
 \begin{frame}
 \frametitle{Graph Structure}
 UCCA generates a directed acyclic graph (DAG). \\
-The text tokens are terminals. \\
-Allows {\color{blue} non-terminal nodes}, {\color{orange} reentrancy} and {\color{red} discontinuity}.
+Text tokens are terminals, complex units are {\color{blue} non-terminal nodes}. \\
+\textit{Remote edges} enable {\color{orange} reentrancy} for argument sharing. \\
+Phrases may be {\color{red} discontinuous} (e.g., multi-word expressions).
 
 \hspace*{1cm}
   \begin{tikzpicture}[level distance=16mm, sibling distance=2cm, ->]
@@ -267,8 +268,8 @@ Allows {\color{blue} non-terminal nodes}, {\color{orange} reentrancy} and {\colo
       ;
     \draw[bend left,dashed,->,orange,very thick] (takeabath) to node [auto] {\scriptsize $A$} (You);
     \draw[bend left,->,red,very thick] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
-    \node at (6,.1) {\Large ----- primary edge};
-    \node at (6,-.9) {\Large - - - remote edge};
+    \node at (6,-0.4) {\Large ----- primary edge};
+    \node at (6,-1.4) {\Large - - - remote edge};
 \end{tikzpicture}
 \begin{center}
   You want to take a long bath
