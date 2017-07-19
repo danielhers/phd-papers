@@ -94,7 +94,7 @@ Today I'll tell you about a semantic parser called TUPA.}
 
 \begin{frame}
 \frametitle{\parser{} --- Transition-based UCCA Parser}
-The first parser to support the combination of three properties:
+The \textbf{first parser} to support the combination of three properties:
 \begin{enumerate}
 \item<1-> {\color{blue} Non-terminal nodes} --- entities and events over the text
 \item<2-> {\color{orange} Reentrancy} --- allow argument sharing
@@ -320,9 +320,10 @@ A parallel English-French corpus has been annotated, and a German corpus is almo
 
 \begin{frame}
 \frametitle{Graph Structure}
-UCCA generates a directed acyclic graph (DAG). \\
-The text tokens are terminals. \\
-Allows {\color{blue} non-terminal nodes}, {\color{orange} reentrancy} and {\color{red} discontinuity}.
+UCCA generates a directed acyclic graph (DAG): \textbf{no parser yet}. \\
+Text tokens are terminals, complex units are {\color{blue} non-terminal nodes}. \\
+\textit{Remote edges} enable {\color{orange} reentrancy} for argument sharing. \\
+Phrases may be {\color{red} discontinuous} (e.g., multi-word expressions).
 
 \hspace*{1cm}
   \begin{tikzpicture}[level distance=16mm, sibling distance=2cm, ->]
@@ -344,14 +345,14 @@ Allows {\color{blue} non-terminal nodes}, {\color{orange} reentrancy} and {\colo
       ;
     \draw[bend left,dashed,->,orange,very thick] (takeabath) to node [auto] {\scriptsize $A$} (You);
     \draw[bend left,->,red,very thick] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
-    \node at (6,.1) {\Large ----- primary edge};
-    \node at (6,-.9) {\Large - - - remote edge};
+    \node at (6,-0.4) {\Large ----- primary edge};
+    \node at (6,-1.4) {\Large - - - remote edge};
 \end{tikzpicture}
 \begin{center}
   You want to take a long bath
 \end{center}
 
-\vspace{-25mm}
+\vspace{-26mm}
 \begin{adjustbox}{margin=1pt,frame,scale=.9}
   \begin{tabular}{c>{\small\it}l}
 	  $P$ & process \\
@@ -406,10 +407,14 @@ Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color
 
 \begin{frame}
 \frametitle{Example}
-$\Rightarrow$\textsc{
-\only<1>{Shift}\only<2>{Right-Edge$_A$}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge$_P$}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node$_F$}\only<10>{Reduce}\only<11>{Shift}\only<12>{Shift}\only<13>{Node$_C$}\only<14>{Reduce}\only<15>{Shift}\only<16>{Right-Edge$_P$}\only<17>{Shift}\only<18>{Right-Edge$_F$}\only<19>{Reduce}\only<20>{Shift}\only<21>{Swap}\only<22>{Right-Edge$_D$}\only<23>{Reduce}\only<24>{Swap}\only<25>{Right-Edge$_A$}\only<26>{Reduce}\only<27>{Reduce}\only<28>{Shift}\only<29>{Shift}\only<30>{Left-Remote$_A$}\only<31>{Shift}\only<32>{Right-Edge$_C$}\only<33>{Finish}
-}
+\begin{minipage}[t][8mm][t]{\textwidth}
+	$\Rightarrow$\textsc{
+		\only<1>{Shift}\only<2>{Right-Edge$_A$}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge$_P$}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node$_F$}\only<10>{Reduce}\only<11>{Shift}\only<12>{Shift}\only<13>{Node$_C$}\only<14>{Reduce}\only<15>{Shift}\only<16>{Right-Edge$_P$}\only<17>{Shift}\only<18>{Right-Edge$_F$}\only<19>{Reduce}\only<20>{Shift}\only<21>{Swap}\only<22>{Right-Edge$_D$}\only<23>{Reduce}\only<24>{Swap}\only<25>{Right-Edge$_A$}\only<26>{Reduce}\only<27>{Reduce}\only<28>{Shift}\only<29>{Shift}\only<30>{Left-Remote$_A$}\only<31>{Shift}\only<32>{Right-Edge$_C$}\only<33>{Finish}
+	}
+\end{minipage}
+
 \vfill
+
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}]
 	\only<28>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (1,.5);
 	\only<1,7,29>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (2,.5);
@@ -704,6 +709,7 @@ Tree parsers (all transition-based):
  \item Stack LSTM Parser \cite{dyer2015transition}: bilexical tree parser.
  \item \textsc{uparse} \cite{maier2015discontinuous}: allows {\color{blue}non-terminals}, {\color{red}discontinuity}.
 \end{itemize}
+
 \begin{center}
 	\begin{dependency}
 	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
@@ -1120,11 +1126,11 @@ By applying bilexical conversion in reverse, \parser{} can be used.
 \begin{itemize}
  \item UCCA's semantic distinctions require a graph structure including {\color{blue}non-terminals}, {\color{orange}reentrancy} and {\color{red}discontinuity}.
  \item \parser{} is an accurate transition-based UCCA parser,
- 	and the first to support any DAG over the text's tokens.
+ 	and the \textbf{first} to support UCCA and any DAG over the text tokens.
  \item Outperforms strong conversion-based baselines.
 \end{itemize}
 
-\onslide<2>{
+\onslide<2->{
 Future Work:
 
 \begin{itemize}
@@ -1141,16 +1147,13 @@ Code: \url{https://github.com/danielhers/tupa}
 Demo: \url{http://bit.ly/tupademo}
 
 Corpora: \url{http://www.cs.huji.ac.il/~oabend/ucca.html}
-\end{frame}
 
-
-
-\begin{frame}
+\onslide<3>{
 \vfill
-\begin{center}
-\LARGE
-Thank you
-\end{center}
+\begin{flushright}
+	Thank you!
+\end{flushright}
+}
 \end{frame}
 
 
