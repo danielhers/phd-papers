@@ -329,10 +329,14 @@ Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color
 
 \begin{frame}
 \frametitle{Example}
-$\Rightarrow$\textsc{
-\only<1>{Shift}\only<2>{Right-Edge$_A$}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge$_P$}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node$_F$}\only<10>{Reduce}\only<11>{Shift}\only<12>{Shift}\only<13>{Node$_C$}\only<14>{Reduce}\only<15>{Shift}\only<16>{Right-Edge$_P$}\only<17>{Shift}\only<18>{Right-Edge$_F$}\only<19>{Reduce}\only<20>{Shift}\only<21>{Swap}\only<22>{Right-Edge$_D$}\only<23>{Reduce}\only<24>{Swap}\only<25>{Right-Edge$_A$}\only<26>{Reduce}\only<27>{Reduce}\only<28>{Shift}\only<29>{Shift}\only<30>{Left-Remote$_A$}\only<31>{Shift}\only<32>{Right-Edge$_C$}\only<33>{Finish}
-}
+\begin{minipage}[t][8mm][t]{\textwidth}
+	$\Rightarrow$\textsc{
+		\only<1>{Shift}\only<2>{Right-Edge$_A$}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge$_P$}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node$_F$}\only<10>{Reduce}\only<11>{Shift}\only<12>{Shift}\only<13>{Node$_C$}\only<14>{Reduce}\only<15>{Shift}\only<16>{Right-Edge$_P$}\only<17>{Shift}\only<18>{Right-Edge$_F$}\only<19>{Reduce}\only<20>{Shift}\only<21>{Swap}\only<22>{Right-Edge$_D$}\only<23>{Reduce}\only<24>{Swap}\only<25>{Right-Edge$_A$}\only<26>{Reduce}\only<27>{Reduce}\only<28>{Shift}\only<29>{Shift}\only<30>{Left-Remote$_A$}\only<31>{Shift}\only<32>{Right-Edge$_C$}\only<33>{Finish}
+	}
+\end{minipage}
+
 \vfill
+
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}]
 	\only<28>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (1,.5);
 	\only<1,7,29>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (2,.5);
