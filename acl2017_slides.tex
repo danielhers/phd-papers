@@ -243,7 +243,7 @@ UCCA facilitates semantics-based human evaluation of machine translation \cite{b
 
 \begin{frame}
 \frametitle{Graph Structure}
-UCCA generates a directed acyclic graph (DAG). \\
+UCCA generates a directed acyclic graph (DAG): \textbf{no parser yet}. \\
 Text tokens are terminals, complex units are {\color{blue} non-terminal nodes}. \\
 \textit{Remote edges} enable {\color{orange} reentrancy} for argument sharing. \\
 Phrases may be {\color{red} discontinuous} (e.g., multi-word expressions).
@@ -275,7 +275,7 @@ Phrases may be {\color{red} discontinuous} (e.g., multi-word expressions).
   You want to take a long bath
 \end{center}
 
-\vspace{-25mm}
+\vspace{-26mm}
 \begin{adjustbox}{margin=1pt,frame,scale=.9}
   \begin{tabular}{c>{\small\it}l}
 	  $P$ & process \\
