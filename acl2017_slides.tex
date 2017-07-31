@@ -144,9 +144,10 @@ Necessary for...}
 \frametitle{Linguistic Structure Annotation Schemes}
 \begin{itemize}
 	\setlength\itemsep{1em}
-	\item Syntactic dependencies \cite{nivre2005dependency}
+	\item Syntactic dependencies
 	\item Semantic dependencies \cite{oepen2016towards}
   	\only<2>{
+  	\item Semantic role labeling (PropBank, FrameNet)
 	\item AMR \cite{banarescu2013abstract}
 	\item UCCA \cite{abend2013universal}
 	\item Other semantic representation schemes\footnote{See recent survey \cite{abend2017the}}
@@ -170,18 +171,18 @@ Necessary for...}
 		\depedge{4}{7}{dobj}
 		\depedge{7}{5}{det}
 		\depedge{7}{6}{amod}
-		\deproot[edge below,edge unit distance=1em]{2}{top}
-		\depedge[edge below]{2}{4}{ARG2}
-		\depedge[edge below,orange]{2}{1}{ARG1}
-		\depedge[edge below,orange,edge unit distance=1.6em,edge start x offset=6pt]{4}{1}{ARG1}
-		\depedge[edge below,orange]{4}{7}{ARG2}
-		\depedge[edge below,orange]{5}{7}{BV}
-		\depedge[edge below,orange]{6}{7}{ARG1}
+		\deproot[edge below,draw=red,edge unit distance=1em]{2}{top}
+		\depedge[edge below,draw=red]{2}{4}{ARG2}
+		\depedge[edge below,draw=red]{2}{1}{ARG1}
+		\depedge[edge below,draw=red,edge unit distance=1.6em,edge start x offset=6pt]{4}{1}{ARG1}
+		\depedge[edge below,draw=red]{4}{7}{ARG2}
+		\depedge[edge below,draw=red]{5}{7}{BV}
+		\depedge[edge below,draw=red]{6}{7}{ARG1}
 	\end{dependency}
 	\end{adjustbox}\\
 	\vspace{-1cm}
 	\begin{flushright}
-	Semantic (DM)
+	\color{red}Semantic (DM)
 	\end{flushright}
 	\captionof{figure}{Bilexical dependencies.}
 }
@@ -224,20 +225,14 @@ A parallel English-French corpus has been annotated, and a German corpus is almo
 \frametitle{UCCAApp}
 Rapid and intuitive annotation interface \cite{abend2017uccaapp}.
 Usable by non-experts.
-\footnotesize\url{http://ucca-demo.cs.huji.ac.il}
+{\footnotesize\url{http://ucca-demo.cs.huji.ac.il}}
+\vfill
+
+Facilitates semantics-based human evaluation of machine translation \cite{birch2016hume}.
+{\footnotesize\url{http://ucca.cs.huji.ac.il/mteval}}
 \vfill
 \begin{adjustbox}{center}
   \includegraphics[width=\pagewidth,height=\textheight,keepaspectratio]{uccaapp.png}
-\end{adjustbox}
-\end{frame}
-
-\begin{frame}
-\frametitle{HUME}
-UCCA facilitates semantics-based human evaluation of machine translation \cite{birch2016hume}.
-\footnotesize\url{http://ucca.cs.huji.ac.il/mteval}
-\vfill
-\begin{adjustbox}{center}
-  \includegraphics[width=\pagewidth,height=\textheight,keepaspectratio]{hume.png}
 \end{adjustbox}
 \end{frame}
 
@@ -477,14 +472,15 @@ Experimenting with three classifiers:
 \vspace{5mm}
 
 	\begin{tabular}{ll}
-	\textbf{Sparse} & Perceptron with sparse features. \\
-	\textbf{MLP} & Embeddings + feedforward NN classifier. \\
+	\textbf{Sparse} & Perceptron with sparse features \cite{ZhangTDP11}. \\
+	\textbf{MLP} & Embeddings + feedforward NN classifier \\&
+	\cite{chen2014fast}. \\
 	\textbf{BiLSTM} & Embeddings + \only<2->{\textbf}{deep bidirectional LSTM} + MLP \\&
 	\cite{kiperwasser2016simple}.
-	\onslide<2-4>{\\ \\& Effective ``lookahead'' encoded in the representation.}
+	\onslide<2>{\\ \\& Effective ``lookahead'' encoded in the representation.}
 	\end{tabular}
 }
-\only<2-5>{\vspace{-53mm}}
+\only<2-5>{\vspace{-60mm}}
 
 \only<1>{
 \vfill
