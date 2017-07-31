@@ -618,6 +618,8 @@ ordinal features (height, number of parents and children)
 \frametitle{Baselines}
 No existing UCCA parsers $\Rightarrow$ conversion-based approximation.
 
+\vfill
+\footnotesize
 Bilexical DAG parsers (allow {\color{orange}reentrancy}):
 \begin{itemize}
  \item DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}:
@@ -633,6 +635,7 @@ Tree parsers (all transition-based):
  \item \textsc{uparse} \cite{maier2015discontinuous}: allows {\color{blue}non-terminals}, {\color{red}discontinuity}.
 \end{itemize}
 
+\vfill
 \begin{center}
 	\begin{dependency}
 	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
@@ -650,6 +653,57 @@ Tree parsers (all transition-based):
 \end{center}
 \end{frame}
 \note{Some of the leading parsers.}
+\begin{frame}
+\frametitle{Bilexical Graph Approximation}
+\begin{enumerate}
+ \item Convert UCCA to bilexical dependencies.
+ \item Train bilexical parsers and apply to test sentences.
+ \item Reconstruct UCCA graphs and compare with gold standard.
+\end{enumerate}
+\vfill
+
+\begin{flushright}
+	\begin{tikzpicture}[level distance=13mm, sibling distance=17mm, ->,
+	    every circle node/.append style={fill=black}]
+	  \tikzstyle{word} = [font=\rmfamily,color=black]
+	  \node (ROOT) [circle] {}
+	    child {node (After) [word] {After} edge from parent node[left] {\scriptsize $L$}}
+	    child {node (graduation) [circle] {}
+	    {
+	      child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
+	    } edge from parent node[left] {\scriptsize $H$} }
+	    child {node [word] {,} edge from parent node[right] {\scriptsize $U$}}
+	    child {node (moved) [circle] {}
+	    {
+	      child {node (Joe) [word] {Joe} edge from parent node[left] {\scriptsize $A$}}
+	      child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
+	      child {node [circle] {}
+	      {
+	        child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
+	        child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
+	      } edge from parent node[right] {\scriptsize $A$} }
+	    } edge from parent node[right] {\scriptsize $H$} }
+	    ;
+	  \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (Joe);
+	\end{tikzpicture}
+\end{flushright}
+
+\vspace{-14mm}
+\begin{flushleft}
+	\begin{dependency}
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
+	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\depedge{2}{1}{$L$}
+	\depedge{2}{3}{$U$}
+	\depedge[dashed]{2}{4}{$A$}
+	\depedge{5}{4}{$A$}
+	\depedge{2}{5}{$H$}
+	\depedge{7}{6}{$R$}
+	\depedge{5}{7}{$A$}
+	\end{dependency}
+\end{flushleft}
+\end{frame}
 
 \begin{frame}
 \frametitle{Evaluation}
@@ -735,22 +789,22 @@ Comparing graphs over the same sequence of tokens,
 		\parser{BiLSTM}
 		& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4} \\
 		\hline
-		\footnotesize Bilexical DAG
-		& & & \small (91) & & & \small (58.3) \\
+		\scriptsize Bilexical DAG
+		& & & \scriptsize (91) & & & \scriptsize (58.3) \\
 		DAGParser
 		& 61.8 & 55.8 & 58.6 & 9.5 & 0.5 & 1 \\
 		TurboParser
 		& 57.7 & 46 & 51.2 & 77.8 & 1.8 & 3.7 \\
 		\hline
-		\footnotesize Bilexical tree
-		& & & \footnotesize (91) & & & \footnotesize -- \\
+		\scriptsize Bilexical tree
+		& & & \scriptsize (91) & & & \scriptsize -- \\
 		MaltParser
 		& 62.8 & 57.7 & 60.2 & -- & -- & -- \\
 		Stack LSTM
 		& 73.2 & 66.9 & 69.9 & -- & -- & -- \\
 		\hline
-		\footnotesize Tree
-		& & & \small (100) & & & \small -- \\
+		\scriptsize Tree
+		& & & \scriptsize (100) & & & \scriptsize -- \\
 		\textsc{uparse}
 		& 60.9 & 61.2 & 61.1 & -- & -- & --
 	\end{tabular}
@@ -775,22 +829,22 @@ Comparable on out-of-domain test set:
 		\parser{BiLSTM}
 		& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3} \\
 		\hline
-		\footnotesize Bilexical DAG
-		& & & \footnotesize (91.3) & & & \footnotesize (43.4) \\
+		\scriptsize Bilexical DAG
+		& & & \scriptsize (91.3) & & & \scriptsize (43.4) \\
 		DAGParser
 		& 56.4 & 50.6 & 53.4 & -- & 0 & 0 \\
 		TurboParser
 		& 50.3 & 37.7 & 43.1 & 100 & 0.4 & 0.8 \\
 		\hline
-		\footnotesize Bilexical tree
-		& & & \footnotesize (91.3) & & & \footnotesize -- \\
+		\scriptsize Bilexical tree
+		& & & \scriptsize (91.3) & & & \scriptsize -- \\
 		MaltParser
 		& 57.8 & 53 & 55.3 & -- & -- & -- \\
 		Stack LSTM
 		& 66.1 & 61.1 & 63.5 & -- & -- & -- \\
 		\hline
-		\footnotesize Tree
-		& & & \footnotesize (100) & & & \footnotesize -- \\
+		\scriptsize Tree
+		& & & \scriptsize (100) & & & \scriptsize -- \\
 		\textsc{uparse}
 		& 52.7 & 52.8 & 52.8 & -- & -- & --
 	\end{tabular}
@@ -816,6 +870,7 @@ Future Work:
 \begin{itemize}
  \item More languages (German corpus construction is underway).
  \item Parsing other schemes, such as AMR.
+ \item Compare semantic representations through conversion.
  \item Text simplification, MT evaluation and other applications.
 \end{itemize}
 }
@@ -900,55 +955,4 @@ Two variants:
 one for primary edges, and another for remote edges.
 \end{frame}
 
-\begin{frame}
-\frametitle{Bilexical Graph Approximation}
-\begin{enumerate}
- \item Convert UCCA to bilexical dependencies.
- \item Train bilexical parsers and apply to test sentences.
- \item Reconstruct UCCA graphs and compare with gold standard.
-\end{enumerate}
-\vfill
-
-\begin{flushright}
-	\begin{tikzpicture}[level distance=13mm, sibling distance=13mm, ->,
-	    every circle node/.append style={fill=black}]
-	  \tikzstyle{word} = [font=\rmfamily,color=black]
-	  \node (ROOT) [circle] {}
-	    child {node (After) [word] {After} edge from parent node[left] {\scriptsize $L$}}
-	    child {node (graduation) [circle] {}
-	    {
-	      child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
-	    } edge from parent node[left] {\scriptsize $H$} }
-	    child {node [word] {,} edge from parent node[right] {\scriptsize $U$}}
-	    child {node (moved) [circle] {}
-	    {
-	      child {node (Joe) [word] {Joe} edge from parent node[left] {\scriptsize $A$}}
-	      child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
-	      child {node [circle] {}
-	      {
-	        child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
-	        child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
-	      } edge from parent node[right] {\scriptsize $A$} }
-	    } edge from parent node[right] {\scriptsize $H$} }
-	    ;
-	  \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (Joe);
-	\end{tikzpicture}
-\end{flushright}
-
-\vspace{-14mm}
-\begin{flushleft}
-	\begin{dependency}
-	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
-	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
-	\end{deptext}
-	\depedge{2}{1}{$L$}
-	\depedge{2}{3}{$U$}
-	\depedge[dashed]{2}{4}{$A$}
-	\depedge{5}{4}{$A$}
-	\depedge{2}{5}{$H$}
-	\depedge{7}{6}{$R$}
-	\depedge{5}{7}{$A$}
-	\end{dependency}
-\end{flushleft}
-\end{frame}
 \end{document}
