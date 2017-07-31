@@ -98,7 +98,7 @@ The \textbf{first parser} to support the combination of three properties:
 \begin{enumerate}
 \item<1-> {\color{blue} Non-terminal nodes} --- entities and events over the text
 \item<2-> {\color{orange} Reentrancy} --- allow argument sharing
-\item<3-> {\color{red} Discontinuity} -- conceptual units are split
+\item<3-> {\color{red} Discontinuity} --- conceptual units are split
 \end{enumerate}
 \onslide<3->{--- needed for many semantic schemes (e.g. AMR, UCCA).}
 \begin{center}
@@ -171,7 +171,7 @@ Necessary for...}
 		\depedge{4}{7}{dobj}
 		\depedge{7}{5}{det}
 		\depedge{7}{6}{amod}
-		\deproot[edge below,draw=red,edge unit distance=1em]{2}{top}
+		\deproot[edge below,edge style={red},edge unit distance=1em]{2}{top}
 		\depedge[edge below,draw=red]{2}{4}{ARG2}
 		\depedge[edge below,draw=red]{2}{1}{ARG1}
 		\depedge[edge below,draw=red,edge unit distance=1.6em,edge start x offset=6pt]{4}{1}{ARG1}
@@ -187,7 +187,8 @@ Necessary for...}
 	\captionof{figure}{Bilexical dependencies.}
 }
 \only<2>{
-Abstract away from syntactic detail that does not affect meaning:
+Semantic representation schemes attempt to
+abstract away from syntactic detail that does not affect meaning:
 \begin{center}
 	\fbox{\textrm{\ldots bathed}} = \fbox{\textrm{\ldots took a bath}}
 \end{center}
@@ -222,7 +223,7 @@ Same guidelines across languages. \\
 A parallel English-French corpus has been annotated, and a German corpus is almost complete.}
 
 \begin{frame}
-\frametitle{UCCAApp}
+\frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
 Rapid and intuitive annotation interface \cite{abend2017uccaapp}.
 Usable by non-experts.
 {\footnotesize\url{http://ucca-demo.cs.huji.ac.il}}
@@ -238,7 +239,7 @@ Facilitates semantics-based human evaluation of machine translation \cite{birch2
 
 \begin{frame}
 \frametitle{Graph Structure}
-UCCA generates a directed acyclic graph (DAG): \textbf{no parser yet}. \\
+UCCA generates a directed acyclic graph (DAG). \\
 Text tokens are terminals, complex units are {\color{blue} non-terminal nodes}. \\
 \textit{Remote edges} enable {\color{orange} reentrancy} for argument sharing. \\
 Phrases may be {\color{red} discontinuous} (e.g., multi-word expressions).
