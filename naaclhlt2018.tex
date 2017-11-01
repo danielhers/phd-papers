@@ -17,7 +17,7 @@
 % smaller than 5cm (the original size); we will check this
 % in the camera-ready version and ask you to change it back.
 
-\title{Multitask Transition-based Parsing}
+\title{Deep Multitask Learning for Transition-Based Semantic Parsing}
 
 \author{Daniel Hershcovich$^{1,2}$ \\
   \\\And
@@ -42,10 +42,89 @@
 
 \section{Introduction}\label{sec:introduction}
 
-Recent developments in natural language processing have focused on semantic parsing
-\cite{hershcovich2017a}
+Following increased interest in semantic representation,
+recent developments in natural language processing have focused on semantic parsing,
 including frame-semantic parsing \cite{gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
-following increased interest in semantic representation \cite{abend2017the}.
+Abstract Meaning Representation parsing \cite{damonte-17,11099},
+Semantic Dependency Parsing \cite{P17-1186}, and
+Universal Conceptual Cognitive Annotation parsing \cite{hershcovich2017a}, among others.
+In parallel, Universal Dependency parsers \cite{dozat2016deep} are improving,
+learning syntactic structure in a language-universal way.
+
+While each of these representation schemes has its own set of distinctions it focuses on,
+much of the semantic content is shared between many of them \cite{abend2017the}.
+Given the success of multitask learning models in various tasks
+\cite{luong2015multi,ruder2017overview}
+including parsing specifically
+\cite{Zhang2016StackpropagationIR,P17-1186,swayamdipta2017frame,guo2016exploiting}
+and multilingual parsing \cite{TACL892},
+we propose a multitask transition-based semantic parser.
+
+
+\section{Tasks}
+
+\subsection{Universal Conceptual Cognitive Annotation}
+
+UCCA graphs are labeled, directed acyclic graphs (DAGs),
+whose leaves correspond to the tokens of
+the text. A node (or {\it unit}) corresponds to a terminal or
+to several terminals (not necessarily contiguous) viewed as a
+single entity according to semantic or cognitive considerations.
+Edges bear a category, indicating the role of the sub-unit in the parent relation.
+
+UCCA is a multi-layered representation, where each layer corresponds
+to a ``module'' of semantic distinctions.
+UCCA's \textit{foundational layer}, targeted in this paper, covers the predicate-argument
+structure evoked by predicates of all grammatical categories
+(verbal, nominal, adjectival and others), the inter-relations between them,
+and other major linguistic phenomena such as coordination and multi-word expressions.
+The layer's basic notion is the \textit{scene},
+describing a state, action, movement or some other relation that evolves in time.
+Each scene contains one main relation (marked as either a Process or a State),
+as well as one or more Participants.
+For example, the sentence ``After graduation, John moved to Paris''
+contains two scenes, whose main relations are ``graduation'' and ``moved''.
+``John'' is a Participant in both scenes, while ``Paris'' only in the latter.
+Further categories account for inter-scene relations and the internal structure of
+complex arguments and relations (e.g. coordination, multi-word expressions and modification).
+
+One incoming edge for each non-root node is marked as \textit{primary},
+and the rest (mostly used for implicit relations and arguments) as \textit{remote} edges,
+a distinction made by the annotator.
+The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
+forming a DAG.
+
+\subsection{Abstract Meaning Representation}
+
+Abstract Meaning Representation (AMR)
+is a semantic representation for natural
+language that embeds annotations related
+to traditional tasks such as named entity
+recognition, semantic role labeling, word
+sense disambiguation and co-reference
+resolution.
+
+AMRs are rooted and directed
+graphs with node and edge labels.
+For most sentences in our dataset, the
+AMR graph is a directed acyclic graph (DAG),
+with a few specific cases where cycles are permitted.
+These cases are rare, and for the purpose of
+this paper, we consider AMR as DAGs.
+
+
+
+\section{Experiments}\label{sec:experiments}
+
+We perform various experiments to evaluate which of the representation schemes benefit each other.
+As a baseline, we train the parser separately on each task.
+
+\subsection{Data}
+
+For UCCA, we use the English Wikipedia corpus \cite{abend2013universal}.
+For AMR, we use LDC2016E25 used in SemEval 2017 \cite{may2017semeval}.
+For SDP, we use SemEval 2015 \cite{oepen2015semeval}.
+For UD, we use UD v2 used in CoNLL 2017 \cite{zeman2017conll}.
 
 
 \bibliography{references}
