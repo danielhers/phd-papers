@@ -122,11 +122,10 @@ As a baseline, we train the parser separately on each task.
 \subsection{Data}
 
 For UCCA, we use the English Wikipedia corpus \cite{abend2013universal},
-and in addition, the English and German 20K corpus \cite{sulem2015conceptual}.
+and in addition, the English, French and German 20K corpus \cite{sulem2015conceptual}.
 For AMR, we use LDC2016E25 used in SemEval 2016 \cite{may2017semeval}.
 For SDP, we use SemEval 2015 \cite{oepen2015semeval}.
 For UD, we use UD v2 used in CoNLL 2017 \cite{zeman2017conll}.
-
 Table~\ref{tab:corpora} shows the size of each corpus.
 
 \begin{table}\label{tab:corpora}
@@ -145,10 +144,23 @@ German & 287110 & 15590 \\
 LDC2016E25 &  & 39260 \\
 bio &  & 6452 \\
 \textbf{SDP} \\
-SemEval 2014 & 745543 & 34003 \\
-SemEval 2015 & 802717 & 35657
+SemEval 2015 & 802717 & 35657 \\
 \end{tabular}
 \caption{Size of each corpus.}
+\end{table}
+
+\subsection{Results}
+
+
+\begin{table}\label{tab:single}
+\begin{tabular}{lccc}
+Parser \\
+\textbf{UCCA} & Labeled Precision & Recall & F1 \\
+\textbf{UD} & LAS F1 \\
+\textbf{AMR} & Smatch Precision & Recall & F1 \\
+\textbf{SDP} & Labeled Precision & Recall & F1 \\
+\end{tabular}
+\caption{Single-task results.}
 \end{table}
 
 
