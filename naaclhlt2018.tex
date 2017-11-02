@@ -84,9 +84,6 @@ The layer's basic notion is the \textit{scene},
 describing a state, action, movement or some other relation that evolves in time.
 Each scene contains one main relation (marked as either a Process or a State),
 as well as one or more Participants.
-For example, the sentence ``After graduation, John moved to Paris''
-contains two scenes, whose main relations are ``graduation'' and ``moved''.
-``John'' is a Participant in both scenes, while ``Paris'' only in the latter.
 Further categories account for inter-scene relations and the internal structure of
 complex arguments and relations (e.g. coordination, multi-word expressions and modification).
 
@@ -98,7 +95,7 @@ forming a DAG.
 
 \subsection{Abstract Meaning Representation}\label{sec:amr}
 
-Abstract Meaning Representation (AMR; \citet{banarescu2013abstract})
+Abstract Meaning Representation \cite[AMR; ][]{banarescu2013abstract}
 is a semantic representation for natural
 language that embeds annotations related
 to traditional tasks such as named entity
@@ -127,7 +124,7 @@ content-bearing words in a sentence.
 While at first glance similar to syntactic dependencies,
 semantic dependencies have distinct
 goals and characteristics, more akin to semantic
-role labeling (SRL; \citet{gildea2002automatic}) or
+role labeling \cite[SRL; ][]{gildea2002automatic} or
 AMR. They abstract over different
 syntactic realizations of the same or similar meaning
 Conversely, they attempt to distinguish
@@ -166,7 +163,7 @@ from DeepBank \cite{flickinger2012deepbank}, which
 are manually-corrected parses from the LinGO
 English Resource Grammar \cite{copestake2000open}.
 LinGO is a head-driven phrase
-structure grammar (HPSG; \citet{pollard1994head})
+structure grammar \cite[HPSG; ][]{pollard1994head}
 with minimal recursion semantics \cite{copestake2005minimal}.
 The PAS (Predicate-Argument Structures)
 representation is extracted from the Enju
