@@ -65,6 +65,8 @@ we propose a multitask transition-based semantic parser.
 
 \section{Tasks}\label{sec:tasks}
 
+We consider four target representations in this work: UCCA, AMR, SDP and UD.
+
 \subsection{Universal Conceptual Cognitive Annotation}\label{sec:ucca}
 
 UCCA graphs are labeled, directed acyclic graphs (DAGs),
@@ -126,22 +128,19 @@ semantic dependencies have distinct
 goals and characteristics, more akin to semantic
 role labeling \cite[SRL; ][]{gildea2002automatic} or
 AMR. They abstract over different
-syntactic realizations of the same or similar meaning
+syntactic realizations of the same or similar meaning.
 Conversely, they attempt to distinguish
 between different senses even when realized
 in similar syntactic forms.
 Structurally, they are labeled directed graphs
-whose vertices are tokens in the sentence. This
-is in contrast to AMR whose vertices are abstract
-concepts, with no explicit alignment to tokens,
-which makes parsing more difficult \cite{flanigan2014discriminative}.
+whose vertices are tokens in the sentence.
 Their arc labels encode broadly-applicable semantic relations rather than being tailored
 to any specific downstream application or
-ontology.1 They are not necessarily trees, because
+ontology.
+They are not necessarily trees, because
 a token may be an argument of more than one
-predicate. Their analyses may optionally leave out non–contentbearing
-tokens, such as punctuation or the in-
-finitival ``to,'' or prepositions that simply mark
+predicate. Their analyses may optionally leave out non-content-bearing
+tokens, such as punctuation or the infinitival ``to,'' or prepositions that simply mark
 the type of relation holding between other words.
 But when restricted to content-bearing tokens (including
 adjectives, adverbs, etc.), the subgraph
@@ -154,24 +153,16 @@ have higher levels of nonprojectivity than syntactic
 trees \cite{oepen2014semeval}. Sentences with
 graphs containing cycles have been removed from
 the dataset by the organizers, so all remaining
-graphs are directed acyclic graphs. Table 1 summarizes
-some of the dataset’s high-level statistics.
-Formalisms. Following the SemEval shared
-tasks, we consider three formalisms. The
-DM (DELPH-IN MRS) representation comes
-from DeepBank \cite{flickinger2012deepbank}, which
-are manually-corrected parses from the LinGO
+graphs are directed acyclic graphs.
+
+We consider one of the three formalisms used in the SemEval shared task:
+the DM (DELPH-IN MRS) representation, which comes
+from DeepBank \cite{flickinger2012deepbank},
+manually-corrected parses from the LinGO
 English Resource Grammar \cite{copestake2000open}.
 LinGO is a head-driven phrase
 structure grammar \cite[HPSG; ][]{pollard1994head}
 with minimal recursion semantics \cite{copestake2005minimal}.
-The PAS (Predicate-Argument Structures)
-representation is extracted from the Enju
-Treebank, which consists of automatic parses from
-the Enju HPSG parser \cite{ninomiya2006extremely}.
-In this work, we train and evaluate only on English annotations.
-Of the three, PAS follows syntax most closely,
-and prior work has found it the easiest to predict.
 
 \subsection{Universal Dependencies}\label{sec:ud}
 
