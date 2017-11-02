@@ -38,6 +38,8 @@
   Semantic representation schemes differ in many ways, but we show
   how they are similar and how this similarity can be exploited to
   improve parsing each of them.
+  We train a general transition-based parser in a multitask setting
+  and show improvements on multiple semantic parsing tasks.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
@@ -52,7 +54,7 @@ In parallel, Universal Dependency parsers \cite{dozat2016deep} are improving,
 learning syntactic structure in a language-universal way.
 
 While each of these representation schemes has its own set of distinctions it focuses on,
-much of the semantic content is shared between many of them \cite{abend2017the}.
+much of the semantic content is shared between many of them \cite{abend2017state}.
 Given the success of multitask learning models in various tasks
 \cite{luong2015multi,ruder2017overview}
 including parsing specifically
