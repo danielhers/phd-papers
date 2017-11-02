@@ -212,7 +212,7 @@ For SDP, we use SemEval 2015 \cite{oepen2015semeval}.
 For UD, we use UD v2 used in CoNLL 2017 \cite{silveira14gold,zeman2017conll}.
 Table~\ref{tab:corpora} shows the size of each corpus.
 
-\begin{table}\label{tab:corpora}
+\begin{table}
 \begin{tabular}{lcc}
 Corpus & \# Tokens & \# Sentences \\
 \textbf{UCCA} \\
@@ -230,13 +230,16 @@ bio &  & 6452 \\
 \textbf{SDP} \\
 SemEval 2015 & 802717 & 35657 \\
 \end{tabular}
-\caption{Size of each corpus.}
+\caption{Size of each corpus.\label{tab:corpora}}
 \end{table}
 
 \subsection{Results}\label{sec:results}
 
+\subsection{Single-task}\label{sec:results_single}
 
-\begin{table}\label{tab:single}
+The results for single-task parsing are shown in table~\ref{tab:single}.
+
+\begin{table}
 \begin{tabular}{lccc}
 Parser \\
 \textbf{UCCA} & Labeled Precision & Recall & F1 \\
@@ -244,7 +247,22 @@ Parser \\
 \textbf{AMR} & Smatch Precision & Recall & F1 \\
 \textbf{SDP} & Labeled Precision & Recall & F1 \\
 \end{tabular}
-\caption{Single-task results.}
+\caption{Single-task results.\label{tab:single}}
+\end{table}
+
+\subsection{Multi-task}\label{sec:results_multi}
+
+The results for multitask parsing are shown in table~\ref{tab:multi}.
+
+\begin{table}
+\begin{tabular}{lccc}
+Parser \\
+\textbf{UCCA} & Labeled Precision & Recall & F1 \\
+\textbf{UD} & LAS F1 \\
+\textbf{AMR} & Smatch Precision & Recall & F1 \\
+\textbf{SDP} & Labeled Precision & Recall & F1 \\
+\end{tabular}
+\caption{Multitask results.\label{tab:multi}}
 \end{table}
 
 
