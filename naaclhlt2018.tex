@@ -217,7 +217,7 @@ Table~\ref{tab:corpora} shows the size of each corpus.
 Corpus & \# Tokens & \# Sentences \\
 \textbf{UCCA} \\
 Wiki & 158433 & 5225 \\
-20K Leagues & 12339 & 506 \\
+20K Leagues en & 12339 & 506 \\
 20K Leagues fr & 12929 & 547 \\
 20K Leagues de & 113524 & 4764 \\
 \textbf{UD} \\
@@ -225,8 +225,7 @@ English & 254850 & 16622 \\
 French & 319253 & 16448 \\
 German & 287110 & 15590 \\
 \textbf{AMR} \\
-LDC2016E25 &  & 39260 \\
-bio &  & 6452 \\
+LDC2016E25 & 708701 & 39260 \\
 \textbf{SDP} \\
 SemEval 2015 & 802717 & 35657 \\
 \end{tabular}
@@ -239,16 +238,33 @@ SemEval 2015 & 802717 & 35657 \\
 
 The results for single-task parsing are shown in table~\ref{tab:single}.
 
-\begin{table}
-\begin{tabular}{lccc}
-Parser \\
-\textbf{UCCA} & Labeled Precision & Recall & F1 \\
-\textbf{UD} & LAS F1 \\
-\textbf{AMR} & Smatch Precision & Recall & F1 \\
-\textbf{SDP} & Labeled Precision & Recall & F1 \\
+
+
+\begin{table*}
+\begin{tabular}{lccc|ccc}
+\textbf{UCCA Wiki}
+& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\hline
+Sparse & 63.4 & 64.3 & 63.8 & 17 & 14.3 & 15.5 \\
+BiLSTM & 74.5 & 74.9 & 74.7 & 49.2 & 50.5 & 49.8 \\
+\hline
+\textbf{UD} & \multicolumn{3}{c|}{LAS} \\
+& & & \textbf{F1} \\
+Sparse & & & \\
+BiLSTM & 77.4 & 77.4 & 77.4 \\
+\hline
+\textbf{AMR} & \multicolumn{3}{c|}{Smatch} \\
+& \textbf{P} & \textbf{R} & \textbf{F1} \\
+Sparse & 48.4 & 44.1 & 46.1 \\
+BiLSTM & & & \\
+\hline
+\textbf{SDP} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+Sparse & & & \\
+BiLSTM & & &
 \end{tabular}
-\caption{Single-task results.\label{tab:single}}
-\end{table}
+\caption{Single-task results on each dev set.\label{tab:single}}
+\end{table*}
 
 \subsection{Multi-task}\label{sec:results_multi}
 
