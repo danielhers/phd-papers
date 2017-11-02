@@ -186,6 +186,27 @@ annotations for as many languages as possible.
 
 
 
+\section{Transition-Based Universal Parser}\label{sec:model}
+
+Similarly to \citet{hershcovich2017a}, we use a transition-based parser
+with a general transition system that allows parsing any DAG structure.
+To demonstrate its applicability, we apply the parser to the four datasets
+in a single-task setting.
+
+
+
+\section{Multitask Transition-Based Parsing}\label{sec:multitask}
+
+Since the same model can be applied to different tasks, we also train it jointly on multiple tasks.
+Rather than sharing the whole set of parameters (and getting a mix of action labels as a result),
+we share only part of the model.
+Specifically, in addition to the task-specific input-encoding bidirectional LSTM,
+we use a shared bidirectional LSTM. The outputs of both LSTMs are concatenated and
+fed into the task-specific MLP.
+This is similar to \citet{P17-1186}.
+
+
+
 
 \section{Experiments}\label{sec:experiments}
 
