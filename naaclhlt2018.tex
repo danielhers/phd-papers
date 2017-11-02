@@ -61,9 +61,9 @@ and multilingual parsing \cite{TACL892},
 we propose a multitask transition-based semantic parser.
 
 
-\section{Tasks}
+\section{Tasks}\label{sec:tasks}
 
-\subsection{Universal Conceptual Cognitive Annotation}
+\subsection{Universal Conceptual Cognitive Annotation}\label{sec:ucca}
 
 UCCA graphs are labeled, directed acyclic graphs (DAGs),
 whose leaves correspond to the tokens of
@@ -94,9 +94,9 @@ a distinction made by the annotator.
 The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
 forming a DAG.
 
-\subsection{Abstract Meaning Representation}
+\subsection{Abstract Meaning Representation}\label{sec:amr}
 
-Abstract Meaning Representation (AMR)
+Abstract Meaning Representation (AMR; \citet{banarescu2013abstract})
 is a semantic representation for natural
 language that embeds annotations related
 to traditional tasks such as named entity
@@ -112,6 +112,68 @@ with a few specific cases where cycles are permitted.
 These cases are rare, and for the purpose of
 this paper, we consider AMR as DAGs.
 
+\subsection{Semantic Dependency Parsing}\label{sec:sdp}
+
+First defined in a SemEval 2014 shared task
+\cite{oepen2014semeval}, and then extended by \citet{oepen2015semeval},
+the broad-coverage semantic dependency parsing (SDP) task is centered around three
+semantic formalisms whose annotations have been
+converted into bilexical dependencies. The formalisms come
+from varied linguistic traditions, but all three aim
+to capture predicate-argument relations between
+content-bearing words in a sentence.
+While at first glance similar to syntactic dependencies,
+semantic dependencies have distinct
+goals and characteristics, more akin to semantic
+role labeling (SRL; \citet{gildea2002automatic}) or
+AMR. They abstract over different
+syntactic realizations of the same or similar meaning
+Conversely, they attempt to distinguish
+between different senses even when realized
+in similar syntactic forms.
+Structurally, they are labeled directed graphs
+whose vertices are tokens in the sentence. This
+is in contrast to AMR whose vertices are abstract
+concepts, with no explicit alignment to tokens,
+which makes parsing more difficult \cite{flanigan2014discriminative}.
+Their arc labels encode broadly-applicable semantic relations rather than being tailored
+to any specific downstream application or
+ontology.1 They are not necessarily trees, because
+a token may be an argument of more than one
+predicate. Their analyses may optionally leave out non–contentbearing
+tokens, such as punctuation or the in-
+finitival ``to,'' or prepositions that simply mark
+the type of relation holding between other words.
+But when restricted to content-bearing tokens (including
+adjectives, adverbs, etc.), the subgraph
+is connected. In this sense, SDP provides a
+whole-sentence analysis. This is in contrast to
+PropBank-style SRL, which gives an analysis of
+only verbal and nominal predicates \cite{Palmer:05}.
+Semantic dependency graphs also tend to
+have higher levels of nonprojectivity than syntactic
+trees \cite{oepen2014semeval}. Sentences with
+graphs containing cycles have been removed from
+the dataset by the organizers, so all remaining
+graphs are directed acyclic graphs. Table 1 summarizes
+some of the dataset’s high-level statistics.
+Formalisms. Following the SemEval shared
+tasks, we consider three formalisms. The
+DM (DELPH-IN MRS) representation comes
+from DeepBank \cite{flickinger2012deepbank}, which
+are manually-corrected parses from the LinGO
+English Resource Grammar \cite{copestake2000open}.
+LinGO is a head-driven phrase
+structure grammar (HPSG; \citet{pollard1994head})
+with minimal recursion semantics \cite{copestake2005minimal}.
+The PAS (Predicate-Argument Structures)
+representation is extracted from the Enju
+Treebank, which consists of automatic parses from
+the Enju HPSG parser \cite{ninomiya2006extremely}.
+In this work, we train and evaluate only on English annotations.
+Of the three, PAS follows syntax most closely,
+and prior work has found it the easiest to predict.
+
 
 
 \section{Experiments}\label{sec:experiments}
@@ -119,13 +181,13 @@ this paper, we consider AMR as DAGs.
 We perform various experiments to evaluate which of the representation schemes benefit each other.
 As a baseline, we train the parser separately on each task.
 
-\subsection{Data}
+\subsection{Data}\label{sec:data}
 
 For UCCA, we use the English Wikipedia corpus \cite{abend2013universal},
 and in addition, the English, French and German 20K corpus \cite{sulem2015conceptual}.
 For AMR, we use LDC2016E25 used in SemEval 2016 \cite{may2017semeval}.
 For SDP, we use SemEval 2015 \cite{oepen2015semeval}.
-For UD, we use UD v2 used in CoNLL 2017 \cite{zeman2017conll}.
+For UD, we use UD v2 used in CoNLL 2017 \cite{silveira14gold,zeman2017conll}.
 Table~\ref{tab:corpora} shows the size of each corpus.
 
 \begin{table}\label{tab:corpora}
@@ -149,7 +211,7 @@ SemEval 2015 & 802717 & 35657 \\
 \caption{Size of each corpus.}
 \end{table}
 
-\subsection{Results}
+\subsection{Results}\label{sec:results}
 
 
 \begin{table}\label{tab:single}
