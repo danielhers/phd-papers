@@ -5,6 +5,7 @@
 \usepackage[hyperref]{naaclhlt2018}
 \usepackage{times}
 \usepackage{latexsym}
+\usepackage{tikz}
 
 \usepackage{url}
 
@@ -17,7 +18,7 @@
 % smaller than 5cm (the original size); we will check this
 % in the camera-ready version and ask you to change it back.
 
-\title{Deep Multitask Learning for Transition-Based Semantic Parsing}
+\title{Deep Multitask Learning for Transition-Based DAG Parsing}
 
 \author{Daniel Hershcovich$^{1,2}$ \\
   \\\And
@@ -182,6 +183,132 @@ Similarly to \citet{hershcovich2017a}, we use a transition-based parser
 with a general transition system that allows parsing any DAG structure.
 To demonstrate its applicability, we apply the parser to the four datasets
 in a single-task setting.
+The transition system supports reentrancies, discontinuities and non-terminal nodes.
+In addition, we define a transition for labeling nodes, to support AMR parsing.
+
+Transition-based parsers \cite{Nivre03anefficient} scan the text from start to end,
+and create the parse incrementally by applying a \textit{transition}
+at each step to the parser's state,
+defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
+a stack $S$ of nodes currently being processed,
+and a graph $G=(V,E,\ell)$ of constructed nodes and edges,
+where $V$ is the set of \emph{nodes}, $E$ is the set of \emph{edges},
+and $\ell : E \to L$ is the \emph{label} function, $L$ being the set of possible labels.
+Some states are marked as \textit{terminal}, meaning that $G$ is the final output.
+A classifier is used at each step to select the next transition based on features
+encoding the parser's current state.
+During training, an oracle creates training instances for the classifier,
+based on gold-standard annotations.
+
+
+\subsection{Transition Set.}
+Given a sequence of tokens $w_1, \ldots, w_n$, we predict a graph $G$ over the sequence.
+Parsing starts with a single node on the stack (an artificial root node), and the input tokens
+in the buffer.
+
+The transitions used in \citet{hershcovich2017a} are
+the standard \textsc{Shift} and \textsc{Reduce} operations,
+\textsc{Node$_X$} for creating a new non-terminal node and an $X$-labeled edge,
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} to create a new primary $X$-labeled edge,
+\textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} to create a new remote $X$-labeled edge,
+\textsc{Swap} to handle discontinuous nodes,
+and \textsc{Finish} to mark the state as terminal.
+In addition, we use a \textsc{Label$_i$} transition for $i=1,2$, adding a label for the $i$th
+node from the top of the stack.
+To keep the number of transitions manageable,
+the node label itself is not part of the transition's identity,
+instead being selected by a separate classifier.
+
+\subsection{Classifier.}
+Following \cite{hershcovich2017a}, we experiment with two different models for the parser:
+a linear classifier with sparse features, trained with the averaged structured perceptron algorithm
+\cite{Coll:04} and \textsc{MinUpdate} \cite{goldberg2011learning},
+and a bidirectional LSTM with dense embedding features,
+combined with a feedforward network.
+
+For all classifiers, inference is performed greedily,
+and training is done with an oracle that provides a set of all possible labels at a given state
+(but only valid transitions may be taken during training).
+Hyperparameters are tuned on the development set for each task.
+
+\begin{figure}[t]
+	\begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
+	\node[anchor=west] at (0,1.5) {Parser state};
+	\draw[color=gray,dashed] (0,-1.2) rectangle (7.5,1.25);
+	\draw[color=gray] (.1,0) rectangle (1.5,.5);
+	\node[anchor=west] at (.1,.8) {$S$};
+	\node[fill=black, circle] at (.4,.275) {};
+	\node[fill=blue, circle] at (.9,.275) {};
+	\node[anchor=west] at (1.15,.175) {\small ,};
+	\draw[color=gray] (1.95,0) rectangle (4.9,.5);
+	\node[anchor=west] at (1.95,.8) {$B$};
+	\node[anchor=west] at (1.95,.275) {\small John moved to Paris .};
+	\node[anchor=west] at (5.1,.8) {$G$};
+	\node[fill=black, circle] at (6.35,.75) {}
+	  child {node  {\scriptsize After} edge from parent [->] node[left] {\small L}}
+	  child {node [fill=blue, circle] {}
+	  {
+	    child {node {\scriptsize graduation} edge from parent [->] node[right] {\small P}}
+	  } edge from parent [->] node[right] {\small H} };
+	\end{tikzpicture}
+	\begin{tikzpicture}[->]
+	\node[anchor=west] at (0,6) {Transition classifier};
+	\tiny
+	\tikzstyle{main}=[circle, minimum size=7mm, draw=black!80, node distance=12mm]
+	\foreach \i/\word in {1/{After},3/{graduation},5/{to},7/{Paris}} {
+	    \node (x\i) at (\i,-1.3) {\word};
+	    \node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
+        \path (x\i) edge (h\i);
+	    \node[main, fill=white!100] (i\i) at (\i.5,.8) {LSTM};
+        \path (x\i) edge [bend right] (i\i);
+	    \node[main, fill=white!100] (l\i) at (\i.5,2.3) {LSTM};
+        \path (h\i) edge [bend left] (l\i);
+        \path (i\i) edge (l\i);
+	    \node[main, fill=white!100] (k\i) at (\i,3.1) {LSTM};
+        \path (i\i) edge [bend left] (k\i);
+        \path (h\i) edge [bend left] (k\i);
+	}
+    \node (l4) at (4.5,2.3) {\ldots};
+    \node (k4) at (4,3.1) {\ldots};
+    \node (i4) at (4.5,.8) {\ldots};
+    \node (h4) at (4,0) {\ldots};
+    \node (x4) at (4,-1.3) {\ldots};
+	\foreach \current/\next in {1/3,3/4,4/5,5/7} {
+        \path (i\next) edge (i\current);
+        \path (h\current) edge (h\next);
+        \path (k\next) edge (k\current);
+        \path (l\current) edge (l\next);
+	}
+    \node[main, fill=white!100] (mlp) at (4,4.6) {MLP};
+	\foreach \i in {1,3} {
+        \path (l\i) edge (mlp);
+        \path (k\i) edge (mlp);
+    }
+    \coordinate (state) at (6.5,6.5);
+    \path (state) edge [bend left] (mlp);
+    \node (transition) at (4,5.8) {\textsc{Node}\textsubscript{U}};
+    \path (mlp) edge (transition);
+	\end{tikzpicture}
+	\caption{Illustration of the model.
+		Top: parser state (stack, buffer and intermediate graph).
+		Bottom: BiLTSM architecture.
+		Vector representation for the input tokens is computed
+		by two layers of bidirectional LSTMs.
+		The vectors for specific tokens are concatenated with
+		embedding and numeric features from the parser state
+		(for existing edge labels, number of children, etc.),
+		and fed into the MLP for selecting the next transition.}
+	\label{fig:model}
+\end{figure}
+
+We use the same features as \cite{hershcovich2017a}, and also node label features according to
+previously predicted node labels for node in specific locations in the parser state.
+We use sparse features for the linear classifier and embedding features for the BiLSTM.
+
+POS tags and syntactic dependency labels are extracted using spaCy
+\cite{honnibal-johnson:2015:EMNLP}.\footnote{\url{https://spacy.io}}
+We use the categorical cross-entropy objective function and optimize the
+NN classifiers with the Adam optimizer \cite{kingma2014adam}.
 
 
 
@@ -266,7 +393,7 @@ BiLSTM & & &
 \caption{Single-task results on each dev set.\label{tab:single}}
 \end{table*}
 
-\subsection{Multi-task}\label{sec:results_multi}
+\subsection{Multitask}\label{sec:results_multi}
 
 The results for multitask parsing are shown in table~\ref{tab:multi}.
 
@@ -280,6 +407,16 @@ Parser \\
 \end{tabular}
 \caption{Multitask results.\label{tab:multi}}
 \end{table}
+
+
+
+\section{Related work}\label{related_work}
+
+In general, multitask learning involves optimizing more than one loss function \cite{ruder2017overview}.
+However, in our case, the loss function has the same form across all tasks.
+The same architecture and inference algorithm are applied to multiple annotation formats and datasets,
+and only some of the parameters are shared between them: this is hard parameter sharing.
+
 
 
 \bibliography{references}
