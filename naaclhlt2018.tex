@@ -225,6 +225,8 @@ a linear classifier with sparse features, trained with the averaged structured p
 \cite{Coll:04} and \textsc{MinUpdate} \cite{goldberg2011learning},
 and a bidirectional LSTM with dense embedding features,
 combined with a feedforward network.
+We experiment with the softmax loss funnction and also softmax-margin
+\cite{gimpel2010softmax}.
 
 For all classifiers, inference is performed greedily,
 and training is done with an oracle that provides a set of all possible labels at a given state
