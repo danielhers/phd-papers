@@ -201,7 +201,7 @@ During training, an oracle creates training instances for the classifier,
 based on gold-standard annotations.
 
 
-\subsection{Transition Set.}
+\subsection{Transition Set}
 Given a sequence of tokens $w_1, \ldots, w_n$, we predict a graph $G$ over the sequence.
 Parsing starts with a single node on the stack (an artificial root node), and the input tokens
 in the buffer.
@@ -219,8 +219,8 @@ To keep the number of transitions manageable,
 the node label itself is not part of the transition's identity,
 instead being selected by a separate classifier.
 
-\subsection{Classifier.}
-Following \cite{hershcovich2017a}, we experiment with two different models for the parser:
+\subsection{Classifier}
+Following \citet{hershcovich2017a}, we experiment with two different models for the parser:
 a linear classifier with sparse features, trained with the averaged structured perceptron algorithm
 \cite{Coll:04} and \textsc{MinUpdate} \cite{goldberg2011learning},
 and a bidirectional LSTM with dense embedding features,
@@ -305,7 +305,7 @@ Hyperparameters are tuned on the development set for each task.
 	\label{fig:model}
 \end{figure}
 
-We use the same features as \cite{hershcovich2017a}, and also node label features according to
+We use the same features as \citet{hershcovich2017a}, and also node label features according to
 previously predicted node labels for node in specific locations in the parser state.
 We use sparse features for the linear classifier and embedding features for the BiLSTM.
 
@@ -314,6 +314,7 @@ POS tags and syntactic dependency labels are extracted using spaCy
 We use the categorical cross-entropy objective function and optimize the
 NN classifiers with the Adam optimizer \cite{kingma2014adam}.
 We use pretrained fastText word vectors \cite{bojanowski2016enriching} trained over Wikipedia.
+The neural network is implemented using DyNet \cite{neubig2017dynet}.
 
 
 
@@ -415,12 +416,16 @@ Parser \\
 
 
 
-\section{Related work}\label{related_work}
+\section{Related work}\label{sec:related_work}
 
 In general, multitask learning involves optimizing more than one loss function \cite{ruder2017overview}.
 However, in our case, the loss function has the same form across all tasks.
 The same architecture and inference algorithm are applied to multiple annotation formats and datasets,
 and only some of the parameters are shared between them: this is hard parameter sharing.
+
+
+
+\section{Discussion}\label{sec:discussion}
 
 
 
