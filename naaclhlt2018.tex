@@ -226,9 +226,21 @@ the standard \textsc{Shift} and \textsc{Reduce} operations,
 \textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} to create a new remote $X$-labeled edge,
 \textsc{Swap} to handle discontinuous nodes,
 and \textsc{Finish} to mark the state as terminal.
-In addition, we use a \textsc{Label$_i$} transition for $i=1,2$, adding a label for the $i$th
-node from the top of the stack.
-To keep the number of transitions manageable,
+
+In addition, we add the \textsc{Implicit} transition, creating a new non-terminal
+node as a \textit{child} of the current stack top rather than as its parent.
+Although UCCA (as well as AMR) contains implicit units, that is, units without
+any terminals as descendents,
+the standard evaluation for UCCA \cite{hershcovich2017a} is span-based and
+ignores these nodes.
+For this reason we do not include this transition when parsing UCCA.
+However, for AMR we do include it, as AMRs contain unaligned concepts,
+which correspond to implicit nodes in the unified format.
+
+For parsing AMR, we also use a \textsc{Label$_i$} transition for $i=1,2$,
+adding a label for the $i$th node from the top of the stack
+(i.e., stack top or one node to its left).
+To keep the overall number of transitions manageable,
 the node label itself is not part of the transition's identity,
 instead being selected by a separate classifier.
 
@@ -330,6 +342,29 @@ We use pretrained fastText word vectors \cite{bojanowski2016enriching} trained o
 The neural network is implemented using DyNet \cite{neubig2017dynet}.
 
 
+\subsection{Constraints}
+
+As each annotation framework has different constraints on the allowed graphs,
+we declared these constraints separately for each task.
+During training and parsing, the constraint set corresponding to the task is
+selected and applied to the parser state.
+
+Some constraints are task-specific, while some are generic.
+For example, in UCCA, a terminal may only have one parent.
+In UD, any node may only have one parent.
+However, when parsing any scheme, nodes that have already been swapped
+should never be swapped again.
+Thus, we apply the generic constraints that nodes may be swapped only once.
+To implement this constraint efficiently, we define a \textit{swap index}
+for each node, which is assigned when the node is created.
+At parse start, only the root node and terminals exist.
+We assign the root a swap index of 0, and for each terminal, its swap index
+is its position in the text (starting at 1).
+Whenever a node is created as a result of a \textsc{Node} or \textsc{Implicit}
+transition, we assign its swap index to be the mean of the stack top and buffer
+head's swap indices.
+
+
 \subsection{Conversion}\label{sec:conversion}
 
 We propose a conversion algorithm for each scheme,
@@ -342,6 +377,8 @@ where the primary edges form a tree (all nodes have at most one primary parent,
 and the root has none).
 The remote edges enable reentrancy, and thus together with them the graph
 is in general a DAG and not necessarily a tree.
+Not all non-terminals must have terminal descendants.
+Non-terminals with an empty terminal yield are called \textit{implicit}.
 
 
 
