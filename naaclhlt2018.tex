@@ -9,6 +9,13 @@
 
 \usepackage{url}
 
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\@combinedblfloats{\box\@outputbox}{\unvbox\@outputbox}{}{%
+   \errmessage{\noexpand\@combinedblfloats could not be patched}%
+}%
+ \makeatother
+
 %\aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
 
@@ -179,6 +186,12 @@ annotations for as many languages as possible.
 
 \section{Transition-Based Universal Parser}\label{sec:model}
 
+To create a parser that can handle multiple tasks (annotation schemes),
+we extend TUPA \cite{hershcovich2017a}, a transition-based parser for UCCA,
+to allow training and testing it on any DAG structure.
+To that end, we propose a conversion algorithm for each scheme,
+to convert it into a unified DAG format (see Subsection~\ref{sec:conversion}).
+
 Similarly to \citet{hershcovich2017a}, we use a transition-based parser
 with a general transition system that allows parsing any DAG structure.
 To demonstrate its applicability, we apply the parser to the four datasets
@@ -201,7 +214,7 @@ During training, an oracle creates training instances for the classifier,
 based on gold-standard annotations.
 
 
-\subsection{Transition Set}
+\subsection{Transition Set}\label{sec:transition_set}
 Given a sequence of tokens $w_1, \ldots, w_n$, we predict a graph $G$ over the sequence.
 Parsing starts with a single node on the stack (an artificial root node), and the input tokens
 in the buffer.
@@ -219,7 +232,7 @@ To keep the number of transitions manageable,
 the node label itself is not part of the transition's identity,
 instead being selected by a separate classifier.
 
-\subsection{Classifier}
+\subsection{Classifier}\label{sec:classifier}
 Following \citet{hershcovich2017a}, we experiment with two different models for the parser:
 a linear classifier with sparse features, trained with the averaged structured perceptron algorithm
 \cite{Coll:04} and \textsc{MinUpdate} \cite{goldberg2011learning},
@@ -310,11 +323,25 @@ previously predicted node labels for node in specific locations in the parser st
 We use sparse features for the linear classifier and embedding features for the BiLSTM.
 
 POS tags and syntactic dependency labels are extracted using spaCy
-\cite{honnibal-johnson:2015:EMNLP}.\footnote{\url{https://spacy.io}}
+\cite{spacy2}.\footnote{\url{https://spacy.io}}
 We use the categorical cross-entropy objective function and optimize the
 NN classifiers with the Adam optimizer \cite{kingma2014adam}.
 We use pretrained fastText word vectors \cite{bojanowski2016enriching} trained over Wikipedia.
 The neural network is implemented using DyNet \cite{neubig2017dynet}.
+
+
+\subsection{Conversion}\label{sec:conversion}
+
+We propose a conversion algorithm for each scheme,
+to convert it into a unified DAG format, similar to the UCCA format.
+In this format, the graph is a rooted DAG, and the text token are terminals
+(they have no children).
+All edges entering terminals bear the `Terminal` category.
+The graph edges are divided into \textit{primary} and \textit{remote} edges,
+where the primary edges form a tree (all nodes have at most one primary parent,
+and the root has none).
+The remote edges enable reentrancy, and thus together with them the graph
+is in general a DAG and not necessarily a tree.
 
 
 
