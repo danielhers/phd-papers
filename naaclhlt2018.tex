@@ -424,10 +424,11 @@ As a baseline, we train the parser separately on each task.
 \subsection{Data}\label{sec:data}
 
 For UCCA, we use the English Wikipedia corpus \cite{abend2013universal},
-and in addition, the English, French and German 20K corpus \cite{sulem2015conceptual}.
-For AMR, we use LDC2016E25 used in SemEval 2016 \cite{may2017semeval}.
-For SDP, we use SemEval 2015 \cite{oepen2015semeval}.
-For UD, we use UD 2.1 \cite{silveira14gold,zeman2017conll,11234/1-2515}.
+and the \textit{Twenty Thousand Leagues Under the Sea} corpus \cite[20K leagues;][]{sulem2015conceptual},
+annotated in English, French and German.
+For AMR, we use LDC2016E25, used in SemEval 2017 \cite{may2017semeval}.
+For SDP, we use data for the DM target representation from SemEval 2015 \cite{oepen2015semeval}.
+For Universal Dependencies, we use UD v2.1 \cite{11234/1-2515}.
 Table~\ref{tab:corpora} shows the size of each corpus.
 
 \begin{table}
@@ -435,13 +436,14 @@ Table~\ref{tab:corpora} shows the size of each corpus.
 Corpus & \# Tokens & \# Sentences \\
 \textbf{UCCA} \\
 Wiki & 158433 & 5225 \\
-20K Leagues en & 12339 & 506 \\
-20K Leagues fr & 12929 & 547 \\
-20K Leagues de & 113524 & 4764 \\
+20K Leagues: \\
+English & 12339 & 506 \\
+French & 12929 & 547 \\
+German & 113524 & 4764 \\
 \textbf{UD} \\
-English & 254850 & 16622 \\
-French & 319253 & 16448 \\
-German & 287110 & 15590 \\
+English & 408466 & 24276 \\
+French & 1067840 & 40102 \\
+German & 308107 & 16590 \\
 \textbf{AMR} \\
 LDC2016E25 & 708701 & 39260 \\
 \textbf{SDP} \\
@@ -458,6 +460,7 @@ For UCCA, we evaluate labeled precision, recall and F1 on primary and remote edg
 For UD, we use LAS F1.
 For AMR, we use Smatch precision, recall and F1.
 For SDP, we use labeled precision, recall and F1.
+
 
 \subsection{Results}\label{sec:results}
 
