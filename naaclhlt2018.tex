@@ -330,16 +330,16 @@ Hyperparameters are tuned on the development set for each task.
 	\label{fig:model}
 \end{figure}
 
-We use the same features as \citet{hershcovich2017a}, and also node label features according to
+We use the same features as \citet{hershcovich2017a}, and for AMR, also node label features according to
 previously predicted node labels for node in specific locations in the parser state.
-We use sparse features for the linear classifier and embedding features for the BiLSTM.
+We use sparse features for the linear classifier and embedding features for the NN.
 
 POS tags and syntactic dependency labels are extracted using spaCy
 \cite{spacy2}.\footnote{\url{https://spacy.io}}
 We use the categorical cross-entropy objective function and optimize the
 NN classifiers with the Adam optimizer \cite{kingma2014adam}.
-We use pretrained fastText word vectors \cite{bojanowski2016enriching} trained over Wikipedia.
-The neural network is implemented using DyNet \cite{neubig2017dynet}.
+We use fastText word vectors \cite{bojanowski2016enriching} pretrained over Wikipedia.
+The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
 
 
 \subsection{Constraints}
@@ -352,7 +352,9 @@ selected and applied to the parser state.
 Some constraints are task-specific, while some are generic.
 For example, in UCCA, a terminal may only have one parent.
 In UD, any node may only have one parent.
-However, when parsing any scheme, nodes that have already been swapped
+In AMR, concept corresponding to PropBank frames may not have core arguments not defined in the frame.
+
+When parsing any scheme, nodes that have already been swapped
 should never be swapped again.
 Thus, we apply the generic constraints that nodes may be swapped only once.
 To implement this constraint efficiently, we define a \textit{swap index}
@@ -367,11 +369,13 @@ head's swap indices.
 
 \subsection{Conversion}\label{sec:conversion}
 
-We propose a conversion algorithm for each scheme,
+We develop a conversion algorithm for each scheme,
 to convert it into a unified DAG format, similar to the UCCA format.
 In this format, the graph is a rooted DAG, and the text token are terminals
 (they have no children).
-All edges entering terminals bear the `Terminal` category.
+Edges are labeled with \textit{categories}, and
+nodes have an optional \textit{label} too, to support AMR.
+All edges entering terminals bear the \textsc{Terminal} category.
 The graph edges are divided into \textit{primary} and \textit{remote} edges,
 where the primary edges form a tree (all nodes have at most one primary parent,
 and the root has none).
@@ -381,18 +385,35 @@ Not all non-terminals must have terminal descendants.
 Non-terminals with an empty terminal yield are called \textit{implicit}.
 
 
+\subsection{Unlabeled parsing}\label{sec:unlabeled}
+
+We extend the parser to support unlabeled parsing by simply removing all labels from
+\textsc{Edge}, \textsc{Remote}, \textsc{Node} and \textsc{Implicit} actions output by the oracle.
+This results in a much smaller output dimension, but of course only unlabeled evaluation is
+meaningful in this case.
+
+
 
 \section{Multitask Transition-Based Parsing}\label{sec:multitask}
 
 Since the same model can be applied to different tasks, we also train it jointly on multiple tasks.
+In this section we focus on the NN model.
 Rather than sharing the whole set of parameters (and getting a mix of action labels as a result),
 we share only part of the model.
 Specifically, in addition to the task-specific input-encoding bidirectional LSTM,
 we use a shared bidirectional LSTM. The outputs of both LSTMs are concatenated and
-fed into the task-specific MLP.
-This is similar to \citet{P17-1186}.
+fed into the task-specific MLP, in a manner similar to \citet{P17-1186}.
 
+Multitask learning is particularly beneficial for improving on tasks with small training data.
+As UCCA has a relatively small corpus, we focus on UCCA parsing and treat AMR, SDP and UD parsing
+as auxiliary tasks, creating a unified corpus by shuffling all sentences from all datasets together,
+but using only the score on the UCCA development set as the criterion for early stopping.
 
+Preliminary experiments showed that simply training the model in this manner yield no improvement
+on the UCCA development set, when compared to training on the UCCA corpus alone.
+We hypothesized that the auxiliary tasks were actually difficult enough on their own,
+and could not provide enough backpropagation signal to the shared parameter set.
+We thus decided to use unlabeled parsing for all auxiliary tasks, while still doing labeled UCCA parsing.
 
 
 \section{Experiments}\label{sec:experiments}
@@ -429,7 +450,17 @@ SemEval 2015 & 802717 & 35657 \\
 \caption{Size of each corpus.\label{tab:corpora}}
 \end{table}
 
+
+\subsection{Evaluation}\label{sec:evaluation}
+
+As each scheme has its own evaluation metric, we evaluate them separately.
+For UCCA, we evaluate labeled precision, recall and F1 on primary and remote edges.
+For UD, we use LAS F1.
+For AMR, we use Smatch precision, recall and F1.
+For SDP, we use labeled precision, recall and F1.
+
 \subsection{Results}\label{sec:results}
+
 
 \subsection{Single-task}\label{sec:results_single}
 
@@ -487,9 +518,12 @@ However, in our case, the loss function has the same form across all tasks.
 The same architecture and inference algorithm are applied to multiple annotation formats and datasets,
 and only some of the parameters are shared between them: this is hard parameter sharing.
 
+\cite{swayamdipta2017frame}
+\cite{P17-1186}
 
 
 \section{Discussion}\label{sec:discussion}
+
 
 
 
