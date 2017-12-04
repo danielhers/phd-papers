@@ -6,7 +6,9 @@
 \usepackage{times}
 \usepackage{latexsym}
 \usepackage{tikz}
+\usepackage{tikz-dependency}
 \usepackage[warn]{textcomp}
+\usepackage{subcaption}
 
 \usepackage{url}
 
@@ -19,7 +21,7 @@
  \makeatother
 
 
-\usetikzlibrary{shapes.misc}
+\usetikzlibrary{shapes,shapes.misc}
 
 %\aclfinalcopy % Uncomment this line for the final submission
 %\def\aclpaperid{***} %  Enter the acl Paper ID here
@@ -75,6 +77,103 @@ including parsing specifically
 and multilingual parsing \cite{TACL892},
 we propose a multitask transition-based semantic parser.
 
+
+\begin{figure*}
+\begin{subfigure}[t]{0.5\textwidth}
+  \begin{tikzpicture}[level distance=10mm, ->]
+    \node (ROOT) [fill=black, circle] {}
+      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
+      child {node (graduation) [fill=black, circle] {}
+      {
+        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
+      } edge from parent node[left] {\scriptsize $H$} }
+      child {node {,} edge from parent node[right] {\scriptsize $U$}}
+      child {node (moved) [fill=black, circle] {}
+      {
+        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
+        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
+        child {node [fill=black, circle] {}
+        {
+          child {node {to} edge from parent node[left] {\scriptsize $R$}}
+          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
+        } edge from parent node[left] {\scriptsize $A$} }
+      } edge from parent node[right] {\scriptsize $H$} }
+      ;
+    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+    \node (LKG) at (-1.8,0) [fill=black!20, circle] {};
+    \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
+    \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
+    \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
+  \end{tikzpicture}
+  \caption{UCCA with linkage.}
+  \label{fig:original_example_ucca}
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.5\textwidth}
+  \begin{tikzpicture}[level distance=15mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      level 1/.style={sibling distance=20mm}]
+    \node (ROOT) [draw=black,ellipse] {move-01}
+      child {node [draw=black,ellipse] {after}
+      {
+	        child {node (graduation) [draw=black,ellipse] {graduate-01} edge from parent node {op1} }
+      } edge from parent node {time} }
+      child {node (John) [draw=black,ellipse] {person}
+      {
+        child {node [draw=black,ellipse] {name}
+	    {
+		    child {node [draw=black,ellipse] {"John"} edge from parent node {op1} }
+	    } edge from parent node {name} }
+      } edge from parent node {ARG0} }
+      child {node [draw=black,ellipse] {city}
+      {
+        child {node [draw=black,ellipse] {name}
+	    {
+		    child {node [draw=black,ellipse] {"Paris"} edge from parent node {op1} }
+	    } edge from parent node {name} }
+      } edge from parent node {ARG2} }
+      ;
+      \draw[dashed] (graduation) to node {ARG0} (John);
+  \end{tikzpicture}
+  \captionof{figure}{AMR graph.}
+  \label{fig:original_example_amr}
+\end{subfigure}
+
+\begin{subfigure}[t]{0.5\textwidth}
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.1em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+		\depedge{1}{2}{ARG2}
+		\depedge{5}{4}{ARG1}
+		\depedge{1}{5}{ARG1}
+		\deproot{5}{top}
+		\depedge{5}{7}{ARG2}
+	\end{dependency}
+  \captionof{figure}{Semantic dependency graph (DM).}
+  \label{fig:original_example_sdp}
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.5\textwidth}
+	\begin{dependency}[theme = simple]
+	\begin{deptext}[column sep=.1em,ampersand replacement=\^]
+	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+	\end{deptext}
+		\depedge{2}{1}{case}
+		\depedge{4}{3}{punct}
+		\depedge{5}{4}{nsubj}
+		\depedge{2}{5}{obl}
+		\depedge{7}{6}{case}
+		\deproot{5}{root}
+		\depedge{5}{7}{obl}
+	\end{dependency}
+  \captionof{figure}{Universal Dependencies (UD) tree.}
+  \label{fig:original_example_ud}
+\end{subfigure}
+
+\caption{Examples.}
+\label{fig:original_examples}
+\end{figure*}
 
 \section{Tasks}\label{sec:tasks}
 
@@ -255,7 +354,7 @@ a linear classifier with sparse features, trained with the averaged structured p
 \cite{Coll:04} and \textsc{MinUpdate} \cite{goldberg2011learning},
 and a bidirectional LSTM with dense embedding features,
 combined with a feedforward network.
-We experiment with the softmax loss funnction and also max-margin.
+We experiment with the softmax loss function and also max-margin.
 For softmax, we sum over all correct actions.
 For max-margin, we subtract the highest-scoring incorrect action score
 from the highest-scoring correct action score.
@@ -388,6 +487,154 @@ head's swap indices.
 
 
 \subsection{Conversion}\label{sec:conversion}
+
+\begin{figure*}
+\begin{subfigure}[t]{0.5\textwidth}
+	\begin{tikzpicture}[level distance=13mm, sibling distance=14mm, ->,
+	    every circle node/.append style={fill=black}]
+	  \tikzstyle{word} = [font=\rmfamily,color=black]
+	  \node (ROOT) [circle] {}
+	    child {node (After) [word] {After} edge from parent node[left] {\scriptsize $L$}}
+	    child {node (graduation) [circle] {}
+	    {
+	      child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
+	    } edge from parent node[left] {\scriptsize $H$} }
+	    child {node [word] {,} edge from parent node[right] {\scriptsize $U$}}
+	    child {node (moved) [circle] {}
+	    {
+	      child {node (John) [word] {John} edge from parent node[left] {\scriptsize $A$}}
+	      child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
+	      child {node [circle] {}
+	      {
+	        child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
+	        child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
+	      } edge from parent node[right] {\scriptsize $A$} }
+	    } edge from parent node[right] {\scriptsize $H$} }
+	    ;
+	  \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+	\end{tikzpicture}
+  \caption{UCCA}
+  \label{fig:converted_example_ucca}
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.5\textwidth}
+  \begin{tikzpicture}[level distance=15mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      level 1/.style={sibling distance=28mm},
+	  level 2/.style={sibling distance=14mm},
+	  level 3/.style={sibling distance=12mm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [draw=black,ellipse] {move-01}
+      child {node [draw=black,ellipse] {after}
+      {
+	        child {node [word] {After} edge from parent}
+	        child {node (graduation) [draw=black,ellipse] {graduate-01}
+		    {
+		      child {node [word] {graduation} edge from parent}
+		    } edge from parent node {op1} }
+      } edge from parent node {time} }
+      child {node (John) [draw=black,ellipse] {person}
+      {
+      	child {node {}
+	    {
+    	  child {node [word] {,} edge from parent [draw=none]}
+    	} edge from parent [draw=none]}
+        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
+		{
+		  child {node [word] {John} edge from parent}
+	    } edge from parent node {name} }
+      } edge from parent node {ARG0} }
+      child {node [draw=black,ellipse] {city}
+      {
+        child {node {}
+	    {
+	    	child {node [word] (moved) {moved} edge from parent [draw=none]}
+	        child {node [word] {to} edge from parent [draw=none]}
+	    } edge from parent [draw=none]}
+        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
+		{
+		  child {node [word] {Paris} edge from parent}
+	    } edge from parent node {name} }
+      } edge from parent node {ARG2} }
+      ;
+      \draw[bend left] (ROOT) to node {} (moved);
+      \draw[dashed] (graduation) to node {ARG0} (John);
+  \end{tikzpicture}
+  \captionof{figure}{AMR graph in UCCA format.}
+  \label{fig:converted_example_amr}
+\end{subfigure}
+
+\begin{subfigure}[t]{0.5\textwidth}
+  \begin{tikzpicture}[level distance=15mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      level 1/.style={sibling distance=26mm},
+	  level 2/.style={sibling distance=14mm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=black,circle] {}
+      child {node (after) [fill=black,circle] {}
+	  {
+	    child {node [word] {After} edge from parent node {head}}
+	    child {node [word] {graduation ,} edge from parent node {ARG2}}
+	  } edge from parent node {head}}
+      child {node (moved) [fill=black,circle] {}
+      {
+        child {node [word] {John} edge from parent node {ARG1}}
+        child {node [word] {moved} edge from parent node {head}}
+      } edge from parent node {top} }
+      child {node (to) [fill=black,circle] {}
+      {
+      	child {node [word] {to} edge from parent node {head}}
+      	child {node [word] {Paris} edge from parent node {ARG2}}
+      } edge from parent node {head}}
+      ;
+      \draw[dashed] (after) to node {ARG1} (moved);
+      \draw[dashed] (to) to node {ARG1} (moved);
+  \end{tikzpicture}
+  \captionof{figure}{Semantic dependency graph (DM) in UCCA format.}
+  \label{fig:converted_example_sdp}
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.5\textwidth}
+  \begin{tikzpicture}[level distance=15mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      level 1/.style={sibling distance=15mm},
+	  level 2/.style={sibling distance=16mm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=black,circle] {}
+      child {node (after) [fill=black,circle] {}
+	  {
+	    child {node [word] {After} edge from parent node {case}}
+	    child {node [word] {graduation} edge from parent node {head}}
+	  } edge from parent node {obl}}
+      child {node {}
+      {
+        child {node [word] (comma) {,} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node {}
+      {
+        child {node [word] (John) {John} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node {}
+      {
+        child {node [word] (moved) {moved} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node (to) [fill=black,circle] {}
+      {
+      	child {node [word] {to} edge from parent node {case}}
+      	child {node [word] {Paris} edge from parent node {head}}
+      } edge from parent node {obl}}
+      ;
+      \draw (ROOT) to node {punct} (comma);
+      \draw (ROOT) to node {nsubj} (John);
+      \draw (ROOT) to node {head} (moved);
+  \end{tikzpicture}
+  \captionof{figure}{Universal Dependencies (UD) tree in UCCA format.}
+  \label{fig:converted_example_ud}
+\end{subfigure}
+
+\caption{Converted examples.}
+\label{fig:converted_examples}
+\end{figure*}
 
 We develop a conversion algorithm for each scheme,
 to convert it into a unified DAG format, similar to the UCCA format.
