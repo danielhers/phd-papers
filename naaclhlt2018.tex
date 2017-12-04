@@ -359,20 +359,15 @@ the node label itself is not part of the transition's identity,
 instead being selected by a separate classifier.
 
 \subsection{Classifier}\label{sec:classifier}
-Following \citet{hershcovich2017a}, we experiment with two different models for the parser:
-a linear classifier with sparse features, trained with the averaged structured perceptron algorithm
+We experiment with two different models for the parser in the single-task case:
+(1) a linear classifier with sparse features, trained with the averaged structured perceptron algorithm
 \cite{Coll:04} and \textsc{MinUpdate} \cite{goldberg2011learning},
-and a bidirectional LSTM with dense embedding features,
-combined with a feedforward network.
-We experiment with the softmax loss function and also max-margin.
-For softmax, we sum over all correct actions.
-For max-margin, we subtract the highest-scoring incorrect action score
-from the highest-scoring correct action score.
+and (2) a bidirectional LSTM feature extractor with dense embeddings as inputs,
+combined with a feedforward network and a softmax layer for classification.
 
 For all classifiers, inference is performed greedily,
 and training is done with an oracle that provides a set of all possible labels at a given state
 (but only valid transitions may be taken during training).
-Hyperparameters are tuned on the development set for each task.
 
 \begin{figure}[t]
    \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
@@ -427,15 +422,15 @@ Hyperparameters are tuned on the development set for each task.
    \label{fig:model}
 \end{figure}
 
-We use the same features as \citet{hershcovich2017a}, and for AMR, also node label features according to
+In addition to the features used by \citet{hershcovich2017a},
+for AMR we add node label features according to
 previously predicted node labels for node in specific locations in the parser state.
-We use sparse features for the linear classifier and embedding features for the NN.
 
 Lemmas, POS tags, syntactic dependency labels and named entities are extracted using spaCy
 \cite{spacy2}.\footnote{\url{https://spacy.io}}
 We use the categorical cross-entropy objective function and optimize the
 NN classifiers with stochastic gradient descent (SGD).
-We use fastText word vectors \cite{bojanowski2016enriching} pretrained over Wikipedia.
+We use 250K word vectors from fastText \cite{bojanowski2016enriching}, pretrained over Wikipedia.
 The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
 Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 
@@ -444,20 +439,20 @@ Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 & Sparse & NN \\
 \hline
 \multicolumn{3}{l}{\footnotesize Embedding dimensions} \\
-external word & & 100 \\
+external word & & 300 \\
 word & & 200 \\
 POS tag & & 20 \\
 syntactic dep. & & 10 \\
 edge label & & 20 \\
 punctuation & & 1 \\
-gap & & 3 \\
 action & & 3 \\
+node labels & & 20 \\
 \hline
 \multicolumn{3}{l}{\footnotesize Other parameters} \\
 training epochs & 19 & 59 \\
 $\textsc{MinUpdate}$ & 5 \\
 initial learning rate & 1 & 1 \\
-learning rate decay & 0.1 & 1 \\
+learning rate decay & 0.1 & 0.01 \\
 MLP \#layers & & 2 \\
 MLP layer dim. & & 50 \\
 LSTM \#layers & & 2 \\
@@ -473,19 +468,18 @@ mini-batch size & & 100
 
 \subsection{Constraints}
 
-As each annotation framework has different constraints on the allowed graphs,
+As each annotation scheme has different constraints on the allowed graphs,
 we declared these constraints separately for each task.
 During training and parsing, the constraint set corresponding to the task is
 selected and applied to the parser state.
 
 Some constraints are task-specific, while some are generic.
 For example, in UCCA, a terminal may only have one parent.
-In UD, any node may only have one parent.
-In AMR, concept corresponding to PropBank frames may not have core arguments not defined in the frame.
+In UD, every node may only have one parent.
+In AMR, a concept corresponding to a PropBank frame may only core arguments defined for the frame.
 
-When parsing any scheme, nodes that have already been swapped
+As an example for a generic constraint, nodes that have already been swapped
 should never be swapped again.
-Thus, we apply the generic constraints that nodes may be swapped only once.
 To implement this constraint efficiently, we define a \textit{swap index}
 for each node, which is assigned when the node is created.
 At parse start, only the root node and terminals exist.
