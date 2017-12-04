@@ -292,7 +292,7 @@ UD annotates syntax rather than semantics.
 We use UD as an auxiliary task,
 similar to syntactic scaffolding employed by \cite{swayamdipta2017frame}.
 Thanks to its annotation in multiple languages, we can use it as an auxiliary task
-for UCCA parsing in German and French: see \S\ref{sec:other_languages}.
+for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
 
 
 
@@ -635,7 +635,8 @@ head's swap indices.
   \label{fig:converted_example_ud}
 \end{subfigure}
 
-\caption{Converted examples. Terminal edges are omitted for brevity.}
+\caption{Converted examples.
+Pre-terminal nodes are omitted for brevity, except in AMR where their labels are meaningful.}
 \label{fig:converted_examples}
 \end{figure*}
 
@@ -659,9 +660,11 @@ Figure~\ref{fig:converted_examples} shows examples for converted graphs.
 
 To convert from dependency formats (SDP and UD), we add a pre-terminal for each terminal,
 and then simply attach the pre-terminals according to the dependency edges.
+We add an additional level with a \textit{head} edge to avoid terminal and non-terminal siblings.
 In case of reentrancy, an arbitrary parent is marked as primary, and the rest as remote.
 
-The conversion from AMR is more involved:
+In the conversion from AMR, non-terminals are already present and do not need to be introduced.
+However, alignments and node labels must be handled.
 
 \paragraph{Alignments.}
 Since alignment to the text tokens is not part of the AMR graph,
@@ -677,11 +680,16 @@ be instead labeled \textit{\textlangle l\textrangle-01},
 where \textit{\textlangle l\textrangle} is a placeholder for the token's lemma.
 In this way we reduce the number of node labels from tens of thousands to 7300,
 of which 2000 occur only once and are treated as unknown.
+We use similar placeholders for the token's text and capitalized text,
+negation, verb, noun and adjective form,
+(from a pre-defined lexicon), and Wikipedia title redirection target.
+We use DBpedia Spotlight to wikify concepts \cite{isem2013daiber}.
 In addition, we omit all variable identifiers and instead label nodes directly with their concept.
 This is similar to the delexicalization employed by \citet{buys2017oxford}.
 
 Another sparsity issue is with ordinal relations, such as \textit{op1}, \textit{op2}, etc.
-Since the order is according to the surface form, the numeric index is redundant and is thus removed.
+Since the order of relations is annotated according to the order of text tokens,
+the numeric index is redundant and is thus removed.
 We keep the numeric suffixes when they are meaningful, e.g. in \textit{ARG0}, \textit{ARG1}, etc.
 
 \paragraph{Names.}
@@ -702,7 +710,7 @@ meaningful in this case.
 
 \section{Multitask Transition-Based Parsing}\label{sec:multitask}
 
-Since the same model can be applied to different tasks, we also train it jointly on multiple tasks.
+Since the same model can be applied to different tasks, we can train it jointly on multiple tasks.
 In this section we focus on the NN model.
 Rather than sharing the whole set of parameters (and getting a mix of action labels as a result),
 we share only part of the model.
@@ -711,11 +719,12 @@ we use a shared bidirectional LSTM. The outputs of both LSTMs are concatenated a
 fed into the task-specific MLP, in a manner similar to \citet{P17-1186}.
 
 Multitask learning is particularly beneficial for improving on tasks with small training data.
-As UCCA has a relatively small corpus, we focus on UCCA parsing and treat AMR, SDP and UD parsing
+As UCCA has a relatively small corpus (see \S\ref{sec:data}),
+we focus on UCCA parsing and treat AMR, SDP and UD parsing
 as auxiliary tasks, creating a unified corpus by shuffling all sentences from all datasets together,
 but using only the score on the UCCA development set as the criterion for early stopping.
 
-\subsection{Unlabeled parsing for auxiliary tasks}\label{sec:unlabeld}
+\subsection{Unlabeled parsing for auxiliary tasks}\label{sec:unlabeled_aux}
 
 Preliminary experiments showed that simply training the model in this manner yield no improvement
 on the UCCA development set, when compared to training on the UCCA corpus alone.
@@ -726,8 +735,11 @@ We thus decided to use unlabeled parsing for all auxiliary tasks, while still do
 
 \section{Experiments}\label{sec:experiments}
 
-We perform various experiments to evaluate which of the representation schemes benefit each other.
-As a baseline, we train the parser separately on each task.
+We perform various experiments to evaluate the benefit of each auxiliary task to UCCA parsing.
+First, we train the parser separately on each task.
+Next, we train it to parser UCCA in a multitask setting, where AMR, SDP and UD are used as
+auxiliary tasks. Following previous work, we use the same hyperparameter settings
+as for the single-task case \cite{N16-1179,P16-2038,C16-1013,C16-1059,C16-1179,E17-1005}.
 
 \subsection{Data}\label{sec:data}
 
@@ -772,7 +784,7 @@ SemEval 2015 & 802717 & 35657 \\
 As each scheme has its own evaluation metric, we evaluate them separately.
 For UCCA, we evaluate labeled precision, recall and F1 on primary and remote edges.
 For UD, we use LAS F1.
-For AMR, we use Smatch precision, recall and F1.
+For AMR, we use Smatch \cite{cai2013smatch}.
 For SDP, we use labeled precision, recall and F1.
 
 
@@ -781,11 +793,13 @@ For SDP, we use labeled precision, recall and F1.
 
 
 
-\subsection{Single-task}\label{sec:results_single}
+\subsection{Single-task parsing}\label{sec:results_single}
 
 To evaluate the conversion and parsing algorithm on each task, we report the result
-of training each 
-The results for single-task parsing are shown in Table~\ref{tab:single}.
+of training the parser on each task separately.
+In this case we perform labeled parsing for all tasks, and use the whole training set.
+The results for single-task parsing, when evaluated on the development set for each task,
+are shown in Table~\ref{tab:single}.
 
 
 
@@ -809,12 +823,15 @@ NN & & 65.7 & 60.6 & 63 \\
 Sparse & & 55 & 51.2 & 53 \\
 NN & & 76 & 75.4 & 75.7
 \end{tabular}
-\caption{Single-task results on the development set for each task.\label{tab:single}}
+\caption{Single-task results on the English development set for each task.\label{tab:single}}
 \end{table}
 
 
-\subsection{Multitask}\label{sec:results_multi}
+\subsection{Multitask parsing}\label{sec:results_multi}
 
+Next, we focus on UCCA parsing, and assess the contribution of each auxiliary task
+and combinations thereof, by evaluating on the UCCA development set.
+As mentioned in \S\ref{sec:unlabeled_aux}, we train on all auxiliary tasks as unlabeled tasks.
 The results for multitask parsing are shown in Table~\ref{tab:multi}.
 
 \begin{table}
@@ -829,36 +846,43 @@ The results for multitask parsing are shown in Table~\ref{tab:multi}.
 \small AMR+SDP & 74.5 & 73.5 & 74 & 55.7 & 45.8 & 50.3 \\
 \small all & 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1
 \end{tabular}
-\caption{Multitask results on the UCCA Wiki development set.
+\caption{Multitask results on the UCCA English Wiki development set.
 The UCCA Wiki training set is used in each case, in addition to the training
 set for the specified task.\label{tab:multi}}
 \end{table}
 
 
-\subsection{Other languages}\label{sec:other_languages}
+\subsection{Multilingual parsing}\label{sec:multilingual}
 
 To investigate the contribution of multitask training on an even smaller UCCA training set,
 we experiment with the French and German \textit{20K Leagues} UCCA corpora.
-The results are given in Table~\ref{tab:other_languages}.
+The results are given in Table~\ref{tab:multilingual}.
+The contribution of multitask learning is substantial in this case:
+although the sparse classifier has an advantage on small datasets
+(the NN classifier does not get even a single edge right on the tiny French dataset),
+when coupled with UD parsing as an auxiliary task, the NN classifier surpasses it
+in both languages.
+This shows that a small UCCA training corpus may suffice, as long as it is complemented by
+a large training corpus in an auxiliary task in the same language.
 
 \begin{table}
 \begin{tabular}{lccc|ccc}
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 \textbf{German} & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-UCCA \\
+\multicolumn{3}{l}{Single-task:} \\
 \small Sparse & 67.4 & 65.5 & 66.4 & 24.1 & 2.9 & 5.1 \\
 \small NN & 54.2 & 38.4 & 45 & 35 & 17.3 & 23.1 \\
-\multicolumn{3}{l}{UCCA + UD} \\
+\multicolumn{3}{l}{Multitask (UCCA + UD):} \\
 \small NN & 74.6 & 74.1 & 74.4 & 66 & 13.6 & 22.5 \\
 \hline
 \textbf{French} \\
-UCCA \\
+\multicolumn{3}{l}{Single-task:} \\
 \small Sparse & 60.8 & 59.2 & 60 & 7.1 & 3.8 & 4.9 \\
 \small NN & 100 & 0 & 0 & 100 & 0 & 0 \\
-\multicolumn{3}{l}{UCCA + UD} \\
+\multicolumn{3}{l}{Multitask (UCCA + UD):} \\
 \small NN & 61.2 & 63 & 62.1 & 15 & 5.7 & 8.2
 \end{tabular}
-\caption{Single-task and multitask results on the UCCA Wiki development set in German and French.\label{tab:other_languages}}
+\caption{Single-task and multitask results on the UCCA Wiki development set in German and French.\label{tab:multilingual}}
 \end{table}
 
 
@@ -870,6 +894,9 @@ However, in our case, the loss function has the same form across all tasks.
 The same architecture and inference algorithm are applied to multiple annotation formats and datasets,
 and only some of the parameters are shared between them: this is hard parameter sharing.
 
+Multitask learning is often used in NLP, both as regularization when little training data is available,
+and as an alternative to the pipeline approach, to avoid error propagation
+\cite{collobert2008unified}.
 Multitask learning has been applied to semantic parsing, including
 semantic dependency parsing \cite{P17-1186} and
 frame semantic parsing \cite{swayamdipta2017frame}.
@@ -883,7 +910,8 @@ and semantic-syntactic analysis \cite{swayamdipta-EtAl:2016:CoNLL,henderson2013m
 
 \subsection{Common edges}\label{sec:common}
 
-An important factor in the success of multitask learning is the commonalities between the tasks.
+An important factor in the success of multitask learning is the commonalities between the tasks
+\cite{E17-2026,E17-1005}.
 In fact, this is why we convert the auxiliary tasks into UCCA-like format for multitask training.
 To get a sense of the similarity between the converted formats and actual UCCA graphs,
 we perform unlabeled evaluation of the conversion results and gold-standard UCCA.
