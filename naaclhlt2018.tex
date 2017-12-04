@@ -178,6 +178,7 @@ we propose a multitask transition-based semantic parser.
 \section{Tasks}\label{sec:tasks}
 
 We consider four target representations in this work: UCCA, AMR, SDP and UD.
+Figure~\ref{fig:original_examples} shows an example for each scheme.
 
 \subsection{Universal Conceptual Cognitive Annotation}\label{sec:ucca}
 
@@ -490,8 +491,6 @@ transition, we assign its swap index to be the mean of the stack top and buffer
 head's swap indices.
 
 
-\subsection{Conversion}\label{sec:conversion}
-
 \begin{figure*}
 \begin{subfigure}[t]{0.5\textwidth}
 	\begin{tikzpicture}[level distance=13mm, sibling distance=14mm, ->,
@@ -636,13 +635,15 @@ head's swap indices.
   \label{fig:converted_example_ud}
 \end{subfigure}
 
-\caption{Converted examples.}
+\caption{Converted examples. Terminal edges are omitted for brevity.}
 \label{fig:converted_examples}
 \end{figure*}
 
+\subsection{Conversion}\label{sec:conversion}
+
 We develop a conversion algorithm for each scheme,
 to convert it into a unified DAG format, similar to the UCCA format.
-In this format, the graph is a rooted DAG, and the text token are terminals
+In this format, the graph is a rooted DAG, and the text tokens are terminals
 (they have no children).
 Edges are labeled with \textit{categories}, and
 nodes have an optional \textit{label} too, to support AMR.
@@ -654,6 +655,7 @@ The remote edges enable reentrancy, and thus together with them the graph
 is in general a DAG and not necessarily a tree.
 Not all non-terminals must have terminal descendants.
 Non-terminals with an empty terminal yield are called \textit{implicit}.
+Figure~\ref{fig:converted_examples} shows examples for converted graphs.
 
 To convert from dependency formats (SDP and UD), we add a pre-terminal for each terminal,
 and then simply attach the pre-terminals according to the dependency edges.
