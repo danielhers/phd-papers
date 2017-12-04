@@ -912,13 +912,25 @@ and semantic-syntactic analysis \cite{swayamdipta-EtAl:2016:CoNLL,henderson2013m
 
 An important factor in the success of multitask learning is the commonalities between the tasks
 \cite{E17-2026,E17-1005}.
-In fact, this is why we convert the auxiliary tasks into UCCA-like format for multitask training.
+In fact, this is why we decided to convert the auxiliary tasks into UCCA-like format for
+multitask training in the first place.
 To get a sense of the similarity between the converted formats and actual UCCA graphs,
 we perform unlabeled evaluation of the conversion results and gold-standard UCCA.
 However, since we do not have a gold-standard corpus annotated for both UCCA and another scheme,
 we use leading parsers for the auxiliary formats and apply them to the text of the
-UCCA development set.
+UCCA development set. The results are listed in Table~\ref{tab:common}.
 
+\begin{table}
+\begin{tabular}{lccc|ccc}
+& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+& \textbf{UP} & \textbf{UR} & \textbf{UF} & \textbf{UP} & \textbf{UR} & \textbf{UF} \\
+AMR \\
+SDP \\
+UD \\
+\end{tabular}
+\caption{Unlabeled UCCA evaluation of each scheme after parsing the UCCA development
+set and converting to the unified DAG format.\label{tab:common}}
+\end{table}
 
 
 \bibliography{references}
