@@ -320,7 +320,7 @@ We use sparse features for the linear classifier and embedding features for the 
 Lemmas, POS tags, syntactic dependency labels and named entities are extracted using spaCy
 \cite{spacy2}.\footnote{\url{https://spacy.io}}
 We use the categorical cross-entropy objective function and optimize the
-NN classifiers with the Adam optimizer \cite{kingma2014adam}.
+NN classifiers with stochastic gradient descent (SGD).
 We use fastText word vectors \cite{bojanowski2016enriching} pretrained over Wikipedia.
 The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
 Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
