@@ -534,7 +534,7 @@ NN & & & & 80.1 \\
 \hline
 \textbf{AMR} & \small Smatch & \textbf{P} & \textbf{R} & \textbf{F1} \\
 Sparse & & 55 & 53.7 & 54.4 \\
-NN & & & & 58.2 \\
+NN & & 65.7 & 60.6 & 63 \\
 \hline
 \textbf{SDP} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 Sparse & & 55 & 51.2 & 53 \\
@@ -552,13 +552,13 @@ The results for multitask parsing are shown in Table~\ref{tab:multi}.
 \begin{tabular}{lccc|ccc}
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-\small AMR & 65.8 & 66.8 & 66.3 & 35.6 & 16.5 & 22.6 \\
-\small UD & 72.1 & 72.1 & 72.1 & 55 & 42.7 & 48.1 \\
-\small SDP & 72.1 & 71.9 & 72 & 53.5 & 48 & 50.6 \\
-\small SDP+UD & 71.9 & 71.5 & 71.7 & 46.9 & 31.2 & 37.5 \\
-\small AMR+UD & 66.8 & 64.9 & 65.8 & 31.4 & 11.5 & 16.9 \\
-\small AMR+SDP & 70.2 & 70.3 & 70.3 & 55.3 & 42.4 & 48 \\
-\small all & 71.1 & 71.4 & 71.3 & 43.5 & 38.3 & 40.7
+\small AMR & 72 & 72.9 & 72.5 & 51.6 & 49.5 & 50.6 \\
+\small UD & 73 & 73.4 & 73.2 & 48.3 & 51.7 & 49.9 \\
+\small SDP & 73.7 & 73.3 & 73.5 & 44 & 57.9 & 50 \\
+\small SDP+UD & 73.7 & 73.5 & 73.6 & 43.5 & 42.4 & 42.9 \\
+\small AMR+UD & 72.1 & 73 & 72.5 & 51 & 45.5 & 48.1 \\
+\small AMR+SDP & 74.5 & 73.5 & 74 & 55.7 & 45.8 & 50.3 \\
+\small all & 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1
 \end{tabular}
 \caption{Multitask results on the UCCA Wiki development set.
 The UCCA Wiki training set is used in each case, in addition to the training
