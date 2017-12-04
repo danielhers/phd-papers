@@ -427,7 +427,10 @@ Since the order is according to the surface form, the numeric index is redundant
 We keep the numeric suffixes when they are meaningful, e.g. in \textit{ARG0}, \textit{ARG1}, etc.
 
 \paragraph{Names.}
-
+Named entities in AMR are expressed by \textit{name} relations going to nodes with outgoing
+\textit{op1}, \textit{op2}, etc. edges for each token in the name.
+We instead collapse these subgraphs to single nodes whose label is a concatenation of the
+name parts, which is then replaced by a placeholder as this node is aligned to all tokens in the name.
 
 
 \subsection{Unlabeled parsing}\label{sec:unlabeled}
