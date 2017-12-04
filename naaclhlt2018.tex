@@ -454,6 +454,8 @@ As UCCA has a relatively small corpus, we focus on UCCA parsing and treat AMR, S
 as auxiliary tasks, creating a unified corpus by shuffling all sentences from all datasets together,
 but using only the score on the UCCA development set as the criterion for early stopping.
 
+\subsection{Unlabeled parsing for auxiliary tasks}\label{sec:unlabeld}
+
 Preliminary experiments showed that simply training the model in this manner yield no improvement
 on the UCCA development set, when compared to training on the UCCA corpus alone.
 We hypothesized that the auxiliary tasks were actually difficult enough on their own,
@@ -475,6 +477,12 @@ For AMR, we use LDC2016E25, used in SemEval 2017 \cite{may2017semeval}.
 For SDP, we use data for the DM target representation from SemEval 2015 \cite{oepen2015semeval}.
 For Universal Dependencies, we use UD v2.1 \cite{11234/1-2515}.
 Table~\ref{tab:corpora} shows the size of each corpus.
+
+Since the UCCA corpus is disproportionally small in comparison to the auxiliary task corpora,
+simply training on all training data would create a model that is geared toward the auxiliary tasks.
+To overcome this problem,
+at each training iteration we sample a subset of the training set for each auxiliary task.
+The subset size is identical to the UCCA training set size.
 
 \begin{table}
 \begin{tabular}{lcc}
