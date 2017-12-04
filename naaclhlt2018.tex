@@ -303,12 +303,10 @@ to allow training and testing it on any DAG structure.
 To that end, we propose a conversion algorithm for each scheme,
 to convert it into a unified DAG format (see \S\ref{sec:conversion}).
 
-Similarly to \citet{hershcovich2017a}, we use a transition-based parser
-with a general transition system that allows parsing any DAG structure.
-To demonstrate its applicability, we apply the parser to the four datasets
-in a single-task setting.
+TUPA has a general transition system that allows parsing any aligned DAG structure with labeled edges.
 The transition system supports reentrancies, discontinuities and non-terminal nodes.
-In addition, we define a transition for labeling nodes, to support AMR parsing.
+To support AMR parsing, we extend it with transition to create node labels and unaligned nodes
+(see \S\ref{sec:transition_set}).
 
 Transition-based parsers \cite{Nivre03anefficient} scan the text from start to end,
 and create the parse incrementally by applying a \textit{transition}
@@ -330,7 +328,7 @@ Given a sequence of tokens $w_1, \ldots, w_n$, we predict a graph $G$ over the s
 Parsing starts with a single node on the stack (an artificial root node), and the input tokens
 in the buffer.
 
-The transitions used in \citet{hershcovich2017a} are
+The original TUPA transitions \cite{hershcovich2017a} are
 the standard \textsc{Shift} and \textsc{Reduce} operations,
 \textsc{Node$_X$} for creating a new non-terminal node and an $X$-labeled edge,
 \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} to create a new primary $X$-labeled edge,
@@ -340,17 +338,22 @@ and \textsc{Finish} to mark the state as terminal.
 
 In addition, we add the \textsc{Implicit} transition, creating a new non-terminal
 node as a \textit{child} of the current stack top rather than as its parent.
-Although UCCA (as well as AMR) contains implicit units, that is, units without
+Although UCCA contains implicit units, that is, units without
 any terminals as descendents,
-the standard evaluation for UCCA \cite{hershcovich2017a} is span-based and
+the standard evaluation for UCCA \cite{abend2013universal} is span-based and
 ignores these nodes.
 For this reason we do not include this transition when parsing UCCA.
 However, for AMR we do include it, as AMRs contain unaligned concepts,
-which correspond to implicit nodes in the unified format.
+which correspond to implicit nodes in the unified format,
+and these are essential for AMR parsing, for which evaluation is done
+by graph matching, using the Smatch algorithm \cite{cai2013smatch}.
 
-For parsing AMR, we also use a \textsc{Label$_i$} transition for $i=1,2$,
-adding a label for the $i$th node from the top of the stack
-(i.e., stack top or one node to its left).
+Since AMR includes node labels, we also add transitions to
+label nodes in the stack, \textsc{Label$_1$} and \textsc{Label$_2$},
+labeling the stack top and one node to its left, respectively.
+The reason for including \textsc{Label$_2$} is that often a node's
+label can be determined more accurately only after attaching its children,
+which may require it to be the second node on the stack.
 To keep the overall number of transitions manageable,
 the node label itself is not part of the transition's identity,
 instead being selected by a separate classifier.
