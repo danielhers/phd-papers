@@ -607,6 +607,15 @@ and only some of the parameters are shared between them: this is hard parameter 
 
 \section{Discussion}\label{sec:discussion}
 
+\subsection{Common edges}\label{sec:common}
+
+An important factor in the success of multitask learning is the commonalities between the tasks.
+In fact, this is why we convert the auxiliary tasks into UCCA-like format for multitask training.
+To get a sense of the similarity between the converted formats and actual UCCA graphs,
+we perform unlabeled evaluation of the conversion results and gold-standard UCCA.
+However, since we do not have a gold-standard corpus annotated for both UCCA and another scheme,
+we use leading parsers for the auxiliary formats and apply them to the text of the
+UCCA development set.
 
 
 
