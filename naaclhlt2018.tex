@@ -50,7 +50,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-  We train a general transition-based parser on multiple semantic parsing tasks.
+  We train a transition-based DAG parser on multiple semantic parsing tasks.
   In a multitask setting, we observe improvements on a low-resource task,
   Universal Conceptual Cognitive Annotation parsing, using other schemes
   as auxiliary tasks.
@@ -69,9 +69,12 @@ including frame-semantic parsing \cite{gildea2002automatic,swayamdipta2017frame,
 Abstract Meaning Representation parsing \cite{damonte-17,11099},
 Semantic Dependency Parsing \cite{P17-1186}, and
 Universal Conceptual Cognitive Annotation parsing \cite{hershcovich2017a}, among others.
-In parallel, Universal Dependency parsers \cite{dozat2016deep} are improving,
-learning syntactic structure in a language-universal way.
+In parallel, syntactic dependency parsers are becoming more accurate.
+Specifically, parsing to Universal Dependencies \cite{dozat2016deep}
+reflects learning syntactic structure in a language-universal way.
 
+Semantic parsing often requires parsers that can handle a general directed acyclic graph (DAG)
+strucutre.
 While each of these representation schemes has its own set of distinctions it focuses on,
 much of the semantic content is shared between many of them \cite{abend2017state}.
 Given the success of multitask learning models in various tasks
