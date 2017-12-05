@@ -50,11 +50,15 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-  Semantic representation schemes differ in many ways, but we show
-  how they are similar and how this similarity can be exploited to
-  improve parsing each of them.
-  We train a general transition-based parser in a multitask setting
-  and show improvements on multiple semantic parsing tasks.
+  We train a general transition-based parser on multiple semantic parsing tasks.
+  In a multitask setting, we observe improvements on a low-resource task,
+  Universal Conceptual Cognitive Annotation parsing, using other schemes
+  as auxiliary tasks.
+  Despite various divergences between semantic representation schemes,
+  there are many commonalities both structurally and in terms of semantic content.
+  We convert these schemes into a unified format and investigate how
+  the similarity between different tasks is related to the contribution of
+  using one as an auxiliary task for another.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
