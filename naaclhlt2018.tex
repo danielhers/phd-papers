@@ -112,7 +112,10 @@ we propose a multitask transition-based semantic parser.
     \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
     \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
-  \caption{UCCA with linkage.}
+  \caption{UCCA graph.
+  The dashed edge is remote.
+  The gray node and its outgoing edges represent linkage between the two scenes.
+  Pre-terminal nodes and edges are omitted for brevity.}
   \label{fig:original_example_ucca}
 \end{subfigure}
 ~
@@ -142,7 +145,10 @@ we propose a multitask transition-based semantic parser.
       ;
       \draw (graduation) to node {ARG0} (John);
   \end{tikzpicture}
-  \captionof{figure}{AMR graph.}
+  \captionof{figure}{AMR graph.
+  The text tokens are not part of the graph, and must be matched to
+  concepts and constants by alignment.
+  Variables are represented by their concepts.}
   \label{fig:original_example_amr}
 \end{subfigure}
 
@@ -154,12 +160,15 @@ we propose a multitask transition-based semantic parser.
 		\depedge{1}{2}{ARG2}
 		\depedge{5}{4}{ARG1}
 		\depedge[edge unit distance=2ex]{1}{5}{ARG1}
-		\deproot{5}{root}
+		\deproot{5}{top}
 		\depedge[edge unit distance=4ex, edge start x offset=-1ex]{5}{7}{ARG2}
 		\depedge[edge start x offset=1ex]{6}{5}{ARG1}
 		\depedge{6}{7}{ARG2}
 	\end{dependency}
-  \captionof{figure}{Semantic dependency graph (DM).}
+  \captionof{figure}{SDP graph (in the DM formalism).
+  The graph contains multiple roots: ``After'', ``moved'' and ``to''.
+  One of the roots is marked as \textit{top}: ``moved''.
+  Punctuation is not included in the graph as it is non-content-bearing.}
   \label{fig:original_example_sdp}
 \end{subfigure}
 ~
@@ -176,11 +185,13 @@ we propose a multitask transition-based semantic parser.
 		\deproot{5}{root}
 		\depedge{5}{7}{obl}
 	\end{dependency}
-  \captionof{figure}{Universal Dependencies (UD) tree.}
+  \captionof{figure}{UD tree.
+  Each word has exactly one head, and there is a single root.
+  Edge labels correspond to syntactic relations.}
   \label{fig:original_example_ud}
 \end{subfigure}
 
-\caption{Examples.}
+\caption{Example for each representation scheme whose parsing task we handle.}
 \label{fig:original_examples}
 \end{figure*}
 
@@ -305,7 +316,8 @@ for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
 	    ;
 	  \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
 	\end{tikzpicture}
-  \caption{UCCA.}
+  \caption{Converted UCCA graph.
+  Linkage nodes and edges are removed, but otherwise the original UCCA graph is preserved.}
   \label{fig:converted_example_ucca}
 \end{subfigure}
 ~
@@ -316,20 +328,20 @@ for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
 	  level 2/.style={sibling distance=14mm},
 	  level 3/.style={sibling distance=12mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [draw=black,ellipse] {move-01}
-      child {node [draw=black,ellipse] {after}
+    \node (ROOT) [draw=black,ellipse] {$\langle \ell \rangle$-01}
+      child {node [draw=black,ellipse] {$\langle \ell \rangle$}
       {
-	        child {node [word] {After} edge from parent}
-	        child {node (graduation) [draw=black,ellipse] {graduate-01}
+	        child {node [word] {After} edge from parent node {\tiny Terminal}}
+	        child {node (graduation) [draw=black,ellipse] {$\langle v \rangle$-01}
 		    {
-		      child {node [word] {graduation \quad ,} edge from parent}
+		      child {node [word] {graduation \quad ,} edge from parent node {\tiny Terminal}}
 		    } edge from parent node {op} }
       } edge from parent node {time} }
       child {node (John) [draw=black,ellipse] {person}
       {
         child {node [draw=black,ellipse] {"$\langle T \rangle$"}
 		{
-		  child {node [word] {John} edge from parent}
+		  child {node [word] {John} edge from parent node {\tiny Terminal}}
 	    } edge from parent node {name} }
       } edge from parent node {ARG0} }
       child {node [draw=black,ellipse] {city}
@@ -341,14 +353,21 @@ for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
 	    } edge from parent [draw=none]}
         child {node [draw=black,ellipse] {"$\langle T \rangle$"}
 		{
-		  child {node [word] {Paris} edge from parent}
+		  child {node [word] {Paris} edge from parent node {\tiny Terminal}}
 	    } edge from parent node {name} }
       } edge from parent node {ARG2} }
       ;
-      \draw[bend left] (ROOT) to node {} (moved);
+      \draw[bend left] (ROOT) to node {\tiny Terminal} (moved);
       \draw[dashed] (graduation) to node {ARG0} (John);
   \end{tikzpicture}
-  \captionof{figure}{AMR.}
+  \captionof{figure}{Converted AMR graph.
+  The text tokens have been added to the graph according to the alignments.
+  Pre-terminal nodes and edges are included in order to show the node labels.
+  The placeholder $\langle \ell \rangle$ corresponds to the terminal's lemma,
+  $\langle v \rangle$ to its derivationally related verb form, and
+  $\langle T \rangle$ to the terminal children's surface form.
+  Numeric suffixes of \textit{op} relations have been removed,
+  and names have been collapsed.}
   \label{fig:converted_example_amr}
 \end{subfigure}
 
@@ -369,7 +388,7 @@ for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
         {
           child {node [word] (graduation) {graduation ,} edge from parent [draw=none]}
         } edge from parent [draw=none] }
-	  } edge from parent node {head}}
+	  } edge from parent node {root}}
       child {node [draw=none] {}
       {
         child {node (moved) [fill=black,circle] {}
@@ -388,7 +407,7 @@ for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
         {
           child {node [word] (Paris) {Paris} edge from parent [draw=none]}
         } edge from parent [draw=none] }
-      } edge from parent node {head}}
+      } edge from parent node {root}}
       ;
       \draw (ROOT) to node {top} (moved);
       \draw (after) to node {head} (after_word);
@@ -399,7 +418,9 @@ for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
       \draw (moved) to node {ARG2} (Paris);
       \draw[dashed] (to) to node {ARG2} (Paris);
   \end{tikzpicture}
-  \captionof{figure}{Semantic dependencies (DM).}
+  \captionof{figure}{Converted SDP graph (in the DM formalism).
+  Intermediate non-terminal nodes are introduced, including \textit{head} edges.
+  Reentrant edges are marked as remote (dashed).}
   \label{fig:converted_example_sdp}
 \end{subfigure}
 ~
@@ -437,12 +458,14 @@ for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
       \draw (ROOT) to node {nsubj} (John);
       \draw (ROOT) to node {head} (moved);
   \end{tikzpicture}
-  \captionof{figure}{Universal Dependencies (UD).}
+  \captionof{figure}{Converted UD graph.
+  As in SDP, intermediate non-terminals and \textit{head} edges are introduced.
+  The graph is actually a tree, as was the original bilexical graph.}
   \label{fig:converted_example_ud}
 \end{subfigure}
 
 \caption{Graphs in unified DAG format.
-Pre-terminal nodes are omitted for brevity, except in AMR where their labels are meaningful.}
+Pre-terminal nodes are omitted for brevity, except in AMR.}
 \label{fig:converted_examples}
 \end{figure*}
 
@@ -453,7 +476,7 @@ To be able to tackle the four tasks presented in \S\ref{sec:tasks} using a singl
 we develop a conversion algorithm for each scheme,
 to convert it into a unified DAG format.
 In this format, the graph is a rooted DAG, and the text tokens are terminal nodes.
-Edges are labeled, and nodes are optionally too (to support AMR parsing).
+Edges are labeled, and nodes are optionally labeled too (to support AMR parsing).
 All edges entering terminals bear the \textsc{Terminal} label.
 As in the UCCA format,
 graph edges are divided into \textit{primary} and \textit{remote} edges,
