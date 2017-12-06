@@ -199,7 +199,8 @@ annotating the sentence ``After graduation, John moved to Paris''.
 \subsection{Universal Conceptual Cognitive Annotation}\label{sec:ucca}
 
 UCCA \cite{abend2013universal} represents the semantics of natural language utterances
-as directed acyclic graphs (DAGs), where terminal nodes correspond to the text tokens and
+as directed acyclic graphs (DAGs), where terminal nodes (nodes without children)
+correspond to the text tokens and
 non-terminal nodes to semantic or cognitive entities or relations.
 Edges are labeled, indicating the role of a child in the relation the parent represents.
 Nodes and edges may belong to one of several \textit{layers}, each layer corresponding
@@ -304,7 +305,7 @@ for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
 	    ;
 	  \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
 	\end{tikzpicture}
-  \caption{UCCA}
+  \caption{UCCA.}
   \label{fig:converted_example_ucca}
 \end{subfigure}
 ~
@@ -347,7 +348,7 @@ for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
       \draw[bend left] (ROOT) to node {} (moved);
       \draw[dashed] (graduation) to node {ARG0} (John);
   \end{tikzpicture}
-  \captionof{figure}{AMR graph in UCCA format.}
+  \captionof{figure}{AMR.}
   \label{fig:converted_example_amr}
 \end{subfigure}
 
@@ -398,7 +399,7 @@ for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
       \draw (moved) to node {ARG2} (Paris);
       \draw[dashed] (to) to node {ARG2} (Paris);
   \end{tikzpicture}
-  \captionof{figure}{Semantic dependency graph (DM) in UCCA format.}
+  \captionof{figure}{Semantic dependencies (DM).}
   \label{fig:converted_example_sdp}
 \end{subfigure}
 ~
@@ -436,26 +437,26 @@ for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
       \draw (ROOT) to node {nsubj} (John);
       \draw (ROOT) to node {head} (moved);
   \end{tikzpicture}
-  \captionof{figure}{Universal Dependencies (UD) tree in UCCA format.}
+  \captionof{figure}{Universal Dependencies (UD).}
   \label{fig:converted_example_ud}
 \end{subfigure}
 
-\caption{Converted examples.
+\caption{Graphs in unified DAG format.
 Pre-terminal nodes are omitted for brevity, except in AMR where their labels are meaningful.}
 \label{fig:converted_examples}
 \end{figure*}
 
 
-\section{Conversion}\label{sec:conversion}
+\section{Unified DAG format}\label{sec:conversion}
 
-We develop a conversion algorithm for each scheme,
-to convert it into a unified DAG format, similar to the UCCA format.
-In this format, the graph is a rooted DAG, and the text tokens are terminals
-(they have no children).
-Edges are labeled with \textit{categories}, and
-nodes have an optional \textit{label} too, to support AMR.
-All edges entering terminals bear the \textsc{Terminal} category.
-The graph edges are divided into \textit{primary} and \textit{remote} edges,
+To be able to tackle the four tasks presented in \S\ref{sec:tasks} using a single model,
+we develop a conversion algorithm for each scheme,
+to convert it into a unified DAG format.
+In this format, the graph is a rooted DAG, and the text tokens are terminal nodes.
+Edges are labeled, and nodes are optionally too (to support AMR parsing).
+All edges entering terminals bear the \textsc{Terminal} label.
+As in the UCCA format,
+graph edges are divided into \textit{primary} and \textit{remote} edges,
 where the primary edges form a tree (all nodes have at most one primary parent,
 and the root has none).
 The remote edges enable reentrancy, and thus together with them the graph
@@ -464,10 +465,13 @@ Not all non-terminals must have terminal descendants.
 Non-terminals with an empty terminal yield are called \textit{implicit}.
 Figure~\ref{fig:converted_examples} shows examples for converted graphs.
 
-To convert from dependency formats (SDP and UD), we add a pre-terminal for each terminal,
-and then simply attach the pre-terminals according to the dependency edges.
-We add an additional level with a \textit{head} edge to avoid terminal and non-terminal siblings.
-In case of reentrancy, an arbitrary parent is marked as primary, and the rest as remote.
+To convert bilexical dependencies (SDP and UD) into the unified DAG format,
+we add a pre-terminal for each terminal,
+and then simply attach the pre-terminals according to the original dependency edges.
+We add an additional level with a \textit{head} edge to avoid terminal and non-terminal siblings:
+see Figure~\ref{fig:converted_example_sdp} and Figure~\ref{fig:converted_example_ud}.
+In case of reentrancy, an arbitrary parent is marked as primary, and the rest as remote
+(denoted as dashed edges in Figure~\ref{fig:converted_examples}).
 
 In the conversion from AMR, non-terminals are already present and do not need to be introduced.
 However, alignments and node labels must be handled.
@@ -506,7 +510,7 @@ name parts, which is then replaced by a placeholder as this node is aligned to a
 
 
 
-\section{Transition-Based Universal Parser}\label{sec:model}
+\section{Transition-based universal parser}\label{sec:model}
 
 To create a parser that can handle multiple tasks (annotation schemes),
 we extend TUPA \cite{hershcovich2017a}, a transition-based parser for UCCA,
@@ -534,7 +538,7 @@ During training, an oracle creates training instances for the classifier,
 based on gold-standard annotations.
 
 
-\subsection{Transition Set}\label{sec:transition_set}
+\subsection{Transition set}\label{sec:transition_set}
 Given a sequence of tokens $w_1, \ldots, w_n$, we predict a graph $G$ over the sequence.
 Parsing starts with a single node on the stack (an artificial root node), and the input tokens
 in the buffer.
@@ -710,7 +714,7 @@ meaningful in this case.
 
 
 
-\section{Multitask Transition-Based Parsing}\label{sec:multitask}
+\section{Multitask transition-based parsing}\label{sec:multitask}
 
 Since the same model can be applied to different tasks, we can train it jointly on multiple tasks.
 In this section we focus on the NN model.
