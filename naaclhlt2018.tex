@@ -541,38 +541,35 @@ name tokens, replaced by a $\langle T \rangle$ placeholder if aligned.
 
 \section{Transition-based universal parser}\label{sec:model}
 
-To create a parser that can handle multiple tasks (annotation schemes),
-we extend TUPA \cite{hershcovich2017a}, a transition-based parser for UCCA,
-to allow training and testing it on any DAG structure.
-To that end, we propose a conversion algorithm for each scheme,
-to convert it into a unified DAG format (see \S\ref{sec:conversion}).
-
-TUPA has a general transition system that allows parsing any aligned DAG structure with labeled edges.
-The transition system supports reentrancies, discontinuities and non-terminal nodes.
-To support AMR parsing, we extend it with transition to create node labels and unaligned nodes
+The unified DAG format introduced in \S\ref{sec:conversion}
+exhibits reentrancy, discontinuity and non-terminal nodes.
+To learn to parse representations in this format,
+we extend TUPA \cite{hershcovich2017a},
+a transition-based parser that supports these structural properties,
+originally developed for UCCA.
+TUPA's general transition system allows parsing any aligned DAG structure with labeled edges.
+To support AMR parsing, we add transitions to handle node labels and unaligned nodes
 (see \S\ref{sec:transition_set}).
 
-Transition-based parsers \cite{Nivre03anefficient} scan the text from start to end,
-and create the parse incrementally by applying a \textit{transition}
-at each step to the parser's state,
-defined using three data structures: a buffer $B$ of tokens and nodes to be processed,
-a stack $S$ of nodes currently being processed,
-and a graph $G=(V,E,\ell)$ of constructed nodes and edges,
-where $V$ is the set of \emph{nodes}, $E$ is the set of \emph{edges},
-and $\ell : E \to L$ is the \emph{label} function, $L$ being the set of possible labels.
-Some states are marked as \textit{terminal}, meaning that $G$ is the final output.
+Transition-based parsers \cite{Nivre03anefficient} apply \textit{transitions}
+incrementally to an internal state defined by
+a buffer $B$ of remaining tokens and nodes,
+a stack $S$ of incomplete nodes,
+and a labeled graph $G$ of constructed nodes and edges.
+When the parsing process is finished, the graph $G$ is the final output.
 A classifier is used at each step to select the next transition based on features
-encoding the parser's current state.
+encoding the current state.
 During training, an oracle creates training instances for the classifier,
 based on gold-standard annotations.
 
 
 \subsection{Transition set}\label{sec:transition_set}
-Given a sequence of tokens $w_1, \ldots, w_n$, we predict a graph $G$ over the sequence.
-Parsing starts with a single node on the stack (an artificial root node), and the input tokens
-in the buffer.
+Given a sequence of tokens $w_1, \ldots, w_n$,
+we predict a graph $G$ in the unified format over the sequence.
+Parsing starts with the root node on the stack,
+and the input tokens in the buffer.
 
-The original TUPA transitions \cite{hershcovich2017a} are
+The original TUPA transitions are
 the standard \textsc{Shift} and \textsc{Reduce} operations,
 \textsc{Node$_X$} for creating a new non-terminal node and an $X$-labeled edge,
 \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} to create a new primary $X$-labeled edge,
@@ -581,20 +578,21 @@ the standard \textsc{Shift} and \textsc{Reduce} operations,
 and \textsc{Finish} to mark the state as terminal.
 
 In addition, we add the \textsc{Implicit} transition, creating a new non-terminal
-node as a \textit{child} of the current stack top rather than as its parent.
+node as a \textit{child} of the current stack top rather than as its parent,
+and transitions to
+label nodes in the stack, \textsc{Label$_1$} and \textsc{Label$_2$},
+labeling the stack top and one node to its left, respectively.
+
 Although UCCA contains implicit units, that is, units without
 any terminals as descendents,
 the standard evaluation for UCCA \cite{abend2013universal} is span-based and
 ignores these nodes.
 For this reason we do not include this transition when parsing UCCA.
-However, for AMR we do include it, as AMRs contain unaligned concepts,
-which correspond to implicit nodes in the unified format,
-and these are essential for AMR parsing, for which evaluation is done
+However, for AMR we do include it, as AMRs may contain unaligned concepts,
+which correspond to implicit nodes in the unified format.
+These are essential for AMR parsing, for which evaluation is done
 by graph matching, using the Smatch algorithm \cite{cai2013smatch}.
 
-Since AMR includes node labels, we also add transitions to
-label nodes in the stack, \textsc{Label$_1$} and \textsc{Label$_2$},
-labeling the stack top and one node to its left, respectively.
 The reason for including \textsc{Label$_2$} is that often a node's
 label can be determined more accurately only after attaching its children,
 which may require it to be the second node on the stack.
