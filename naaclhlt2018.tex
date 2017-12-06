@@ -360,19 +360,18 @@ for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
       \draw[bend left] (ROOT) to node {\tiny Terminal} (moved);
       \draw[dashed] (graduation) to node {ARG0} (John);
   \end{tikzpicture}
-  \captionof{figure}{Converted AMR graph.
-  The text tokens have been added to the graph according to the alignments.
-  Pre-terminal nodes and edges are included in order to show the node labels.
-  The placeholder $\langle \ell \rangle$ corresponds to the terminal's lemma,
-  $\langle v \rangle$ to its derivationally related verb form, and
-  $\langle T \rangle$ to the terminal children's surface form.
-  Numeric suffixes of \textit{op} relations have been removed,
-  and names have been collapsed.}
+  \captionof{figure}{Converted AMR graph, with
+  text tokens added according to the alignments, and
+  pre-terminals included to show node labels.
+  The placeholders $\langle \ell \rangle, \langle v \rangle$ and $\langle T \rangle$
+  correspond to the lemma, related verb form and surface form, respectively.
+  Numeric suffixes of \textit{op} relations were removed,
+  and names collapsed.}
   \label{fig:converted_example_amr}
 \end{subfigure}
 
 \begin{subfigure}[t]{0.5\textwidth}
-  \begin{tikzpicture}[level distance=15mm, ->,
+  \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
       level 1/.style={sibling distance=26mm},
 	  level 2/.style={sibling distance=14mm}]
@@ -477,7 +476,7 @@ we develop a conversion algorithm for each scheme,
 to convert it into a unified DAG format.
 In this format, the graph is a rooted DAG, and the text tokens are terminal nodes.
 Edges are labeled, and nodes are optionally labeled too (to support AMR parsing).
-All edges entering terminals bear the \textsc{Terminal} label.
+All edges entering terminals bear the \textit{Terminal} label.
 As in the UCCA format,
 graph edges are divided into \textit{primary} and \textit{remote} edges,
 where the primary edges form a tree (all nodes have at most one primary parent,
@@ -488,48 +487,55 @@ Not all non-terminals must have terminal descendants.
 Non-terminals with an empty terminal yield are called \textit{implicit}.
 Figure~\ref{fig:converted_examples} shows examples for converted graphs.
 
+Converting UCCA into the unified format consists simply of removing linkage nodes
+and edges (see Figure~\ref{fig:converted_example_ucca}).
 To convert bilexical dependencies (SDP and UD) into the unified DAG format,
 we add a pre-terminal for each terminal,
-and then simply attach the pre-terminals according to the original dependency edges.
-We add an additional level with a \textit{head} edge to avoid terminal and non-terminal siblings:
-see Figure~\ref{fig:converted_example_sdp} and Figure~\ref{fig:converted_example_ud}.
+and then attach the pre-terminals according to the original dependency edges.
+We add an additional level with a \textit{head} edge to avoid terminal and non-terminal siblings
+(see Figure~\ref{fig:converted_example_sdp} and Figure~\ref{fig:converted_example_ud}).
+Since SDP allows multiple roots, we attached the corresponding non-terminals as children of
+the single converted graph root, with the \textit{root} edge label.
+Top nodes are labeled with \textit{top} instead.
 In case of reentrancy, an arbitrary parent is marked as primary, and the rest as remote
 (denoted as dashed edges in Figure~\ref{fig:converted_examples}).
 
 In the conversion from AMR, non-terminals are already present and do not need to be introduced.
-However, alignments and node labels must be handled.
+However, alignments and node labels must be handled
+(see Figure~\ref{fig:converted_example_amr}).
 
 \subsection{Alignments}
 Since alignment to the text tokens is not part of the AMR graph,
-we introduce the alignments as edges in training.
-We use automatically aligned AMR graphs provided in the dataset,
-and attach each node with a \textsc{Terminal} edge to each of the terminals it is aligned to.
+we introduce the alignments as edges in conversion.
+We use automatically aligned AMR graphs provided in the dataset (see \S\ref{sec:data}),
+and attach each node with a \textit{Terminal} edge to each of the terminals it is aligned to.
 
-\subsection{Sparsity}
+\subsection{Node label sparsity}
 To reduce the number of unique node labels, we use the alignments to introduce
 placeholders in the labels.
-For example, a node labeled \textit{want-01} aligned to the terminal \textit{wants} will
-be instead labeled \textit{\textlangle l\textrangle-01},
-where \textit{\textlangle l\textrangle} is a placeholder for the token's lemma.
-In this way we reduce the number of node labels from tens of thousands to 7300,
+For example, a node labeled \textit{move-01} aligned to the terminal \textit{moved} will
+be instead labeled $\langle \ell \rangle$\textit{-01},
+where $\langle \ell \rangle$ is a placeholder for the token's lemma.
+In this way we reduce the number of node labels in the dataset from tens of thousands to 7300,
 of which 2000 occur only once and are treated as unknown.
 We use similar placeholders for the token's text and capitalized text,
-negation, verb, noun and adjective form,
-(from a pre-defined lexicon), and Wikipedia title redirection target.
+negation, verb, noun and adjective form
+(from a pre-defined lexicon), and Wikipedia concept.
 We use DBpedia Spotlight to wikify concepts \cite{isem2013daiber}.
 In addition, we omit all variable identifiers and instead label nodes directly with their concept.
 This is similar to the delexicalization employed by \citet{buys2017oxford}.
 
+\subsection{Edge label sparsity}
 Another sparsity issue is with ordinal relations, such as \textit{op1}, \textit{op2}, etc.
 Since the order of relations is annotated according to the order of text tokens,
 the numeric index is redundant and is thus removed.
 We keep the numeric suffixes when they are meaningful, e.g. in \textit{ARG0}, \textit{ARG1}, etc.
 
 \subsection{Names}
-Named entities in AMR are expressed by \textit{name} relations going to nodes with outgoing
-\textit{op1}, \textit{op2}, etc. edges for each token in the name.
-We instead collapse these subgraphs to single nodes whose label is a concatenation of the
-name parts, which is then replaced by a placeholder as this node is aligned to all tokens in the name.
+Named entities in AMR are expressed by \textit{name} relations and nodes, with
+a child for each token in the name, with relations labeled \textit{op1}, \textit{op2}, etc.
+We instead collapse this subgraph to a single node whose label is the concatenation of the
+name tokens, replaced by a $\langle T \rangle$ placeholder if aligned.
 
 
 
