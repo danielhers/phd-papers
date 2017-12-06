@@ -64,24 +64,24 @@
 \section{Introduction}\label{sec:introduction}
 
 Following increased interest in semantic representation,
-recent developments in natural language processing have focused on semantic parsing,
-including frame-semantic parsing \cite{gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
-Abstract Meaning Representation parsing \cite{damonte-17,11099},
-Semantic Dependency Parsing \cite{P17-1186}, and
-Universal Conceptual Cognitive Annotation parsing \cite{hershcovich2017a}, among others.
+recent developments in natural language processing have focused on semantic parsing, including
+Abstract Meaning Representation parsing \cite[AMR;][]{banarescu2013abstract,damonte-17,11099},
+Semantic Dependency Parsing \cite[SDP;][]{oepen2015semeval,P17-1186},
+Universal Conceptual Cognitive Annotation parsing \cite[UCCA;][]{abend2013universal,hershcovich2017a},
+and frame-semantic parsing \cite{gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
+among others.
 In parallel, syntactic dependency parsers are becoming more accurate.
-Specifically, parsing to Universal Dependencies \cite{dozat2016deep}
+Specifically, parsing to Universal Dependencies \cite[UD;][]{nivre2016universal,dozat2016deep}
 reflects learning syntactic structure in a language-universal way.
 
 Semantic parsing often requires parsers that can handle a general directed acyclic graph (DAG)
-strucutre.
+structure.
 While each of these representation schemes has its own set of distinctions it focuses on,
 much of the semantic content is shared between many of them \cite{abend2017state}.
 Given the success of multitask learning models in various tasks
 \cite{collobert2008unified,luong2015multi,ruder2017overview}
 including parsing specifically
 \cite{Zhang2016StackpropagationIR,P17-1186,swayamdipta2017frame,guo2016exploiting}
-and multilingual parsing \cite{TACL892},
 we propose a multitask transition-based semantic parser.
 
 
@@ -119,7 +119,7 @@ we propose a multitask transition-based semantic parser.
 \begin{subfigure}[t]{0.5\textwidth}
   \begin{tikzpicture}[level distance=15mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
-      level 1/.style={sibling distance=20mm}]
+      level 1/.style={sibling distance=26mm}]
     \node (ROOT) [draw=black,ellipse] {move-01}
       child {node [draw=black,ellipse] {after}
       {
@@ -140,29 +140,31 @@ we propose a multitask transition-based semantic parser.
 	    } edge from parent node {name} }
       } edge from parent node {ARG2} }
       ;
-      \draw[dashed] (graduation) to node {ARG0} (John);
+      \draw (graduation) to node {ARG0} (John);
   \end{tikzpicture}
   \captionof{figure}{AMR graph.}
   \label{fig:original_example_amr}
 \end{subfigure}
 
 \begin{subfigure}[t]{0.5\textwidth}
-	\begin{dependency}[theme = simple]
+	\begin{dependency}[text only label, label style={above}, font=\small]
 	\begin{deptext}[column sep=.1em,ampersand replacement=\^]
 	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 	\end{deptext}
 		\depedge{1}{2}{ARG2}
 		\depedge{5}{4}{ARG1}
-		\depedge{1}{5}{ARG1}
-		\deproot{5}{top}
-		\depedge{5}{7}{ARG2}
+		\depedge[edge unit distance=2ex]{1}{5}{ARG1}
+		\deproot{5}{root}
+		\depedge[edge unit distance=4ex, edge start x offset=-1ex]{5}{7}{ARG2}
+		\depedge[edge start x offset=1ex]{6}{5}{ARG1}
+		\depedge{6}{7}{ARG2}
 	\end{dependency}
   \captionof{figure}{Semantic dependency graph (DM).}
   \label{fig:original_example_sdp}
 \end{subfigure}
 ~
 \begin{subfigure}[t]{0.5\textwidth}
-	\begin{dependency}[theme = simple]
+	\begin{dependency}[text only label, label style={above}, font=\small]
 	\begin{deptext}[column sep=.1em,ampersand replacement=\^]
 	After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
 	\end{deptext}
@@ -184,96 +186,71 @@ we propose a multitask transition-based semantic parser.
 
 \section{Tasks}\label{sec:tasks}
 
-We consider four target representations in this work: UCCA, AMR, SDP and UD.
-Figure~\ref{fig:original_examples} shows an example for each scheme.
+In this work, we focus on representation schemes providing a \textit{whole-sentence} analysis,
+that is, annotating a graph connecting all (content) words in a sentence.
+This is in contrast to ``shallow'' semantic parsing,
+such as Semantic Role Labeling
+\cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
+or parsing to logical forms.
+We consider four target representations: UCCA, AMR, SDP and UD.
+Figure~\ref{fig:original_examples} shows an example graph for each scheme,
+annotating the sentence ``After graduation, John moved to Paris''.
 
 \subsection{Universal Conceptual Cognitive Annotation}\label{sec:ucca}
 
-UCCA graphs are labeled, directed acyclic graphs (DAGs),
-whose leaves correspond to the tokens of
-the text. A node (or {\it unit}) corresponds to a terminal or
-to several terminals (not necessarily contiguous) viewed as a
-single entity according to semantic or cognitive considerations.
-Edges bear a category, indicating the role of the sub-unit in the parent relation.
-
-UCCA is a multi-layered representation, where each layer corresponds
+UCCA \cite{abend2013universal} represents the semantics of natural language utterances
+as directed acyclic graphs (DAGs), where terminal nodes correspond to the text tokens and
+non-terminal nodes to semantic or cognitive entities or relations.
+Edges are labeled, indicating the role of a child in the relation the parent represents.
+Nodes and edges may belong to one of several \textit{layers}, each layer corresponding
 to a ``module'' of semantic distinctions.
-UCCA's \textit{foundational layer}, targeted in this paper, covers the predicate-argument
-structure evoked by predicates of all grammatical categories
-(verbal, nominal, adjectival and others), the inter-relations between them,
-and other major linguistic phenomena such as coordination and multi-word expressions.
-The layer's basic notion is the \textit{scene},
-describing a state, action, movement or some other relation that evolves in time.
-Each scene contains one main relation (marked as either a Process or a State),
-as well as one or more Participants.
-Further categories account for inter-scene relations and the internal structure of
-complex arguments and relations (e.g. coordination, multi-word expressions and modification).
+UCCA's \textit{foundational layer} mostly covers predicate-argument
+structure, coordination and multi-word expressions.
+The \textit{linkage} layer covers relations between events, including temporal and discourse relations
+(exemplified by the gray node and its outgoing edges in Figure~\ref{fig:original_example_ucca}).
 
-One incoming edge for each non-root node is marked as \textit{primary},
-and the rest (mostly used for implicit relations and arguments) as \textit{remote} edges,
-a distinction made by the annotator.
-The primary edges thus form a tree structure, whereas the remote edges enable reentrancy,
-forming a DAG.
+UCCA's guidelines distinguish between \textit{primary} edges, corresponding to the roles explicit
+in the text, and \textit{remote} edges (such as the dashes edge in
+Figure~\ref{fig:original_example_ucca}), corresponding to implicit relations.
+Primary edges form a tree structure in each layer,
+whereas the remote edges enable reentrancy (a DAG structure).
+
 
 \subsection{Abstract Meaning Representation}\label{sec:amr}
 
-Abstract Meaning Representation \cite[AMR; ][]{banarescu2013abstract}
-is a semantic representation for natural
-language that embeds annotations related
-to traditional tasks such as named entity
-recognition, semantic role labeling, word
-sense disambiguation and co-reference
-resolution.
+AMR \cite{banarescu2013abstract}
+is a semantic representation that embeds annotations related
+to named entity recognition, semantic role labeling, word
+sense disambiguation and co-reference resolution.
+AMRs are rooted and directed graphs, in which both nodes and edges are labeled.
+Most AMRs are DAGs, although cycles are permitted.
+AMR was targeted in the SemEval 2017 shared task \cite{may2017semeval}.
 
-AMRs are rooted and directed
-graphs with node and edge labels.
-For most sentences in our dataset, the
-AMR graph is a directed acyclic graph (DAG),
-with a few specific cases where cycles are permitted.
-These cases are rare, and for the purpose of
-this paper, we consider AMR as DAGs.
+As can be seen in Figure~\ref{fig:original_example_amr}, text tokens are not part
+of the AMR graph, which actually connects only concepts (from a pre-defined set)
+and constants (which may be strings or numbers).
+During the process of parsing from plain text to an AMR graph,
+the tokens are aligned to graph nodes.
+This process is referred to as concept identification, and most AMR datasets
+already contained automatically aligned graphs.
 
-\subsection{Semantic Dependency Parsing}\label{sec:sdp}
+\subsection{Broad-Coverage Semantic Dependency Parsing}\label{sec:sdp}
 
-First defined in a SemEval 2014 shared task
-\cite{oepen2014semeval}, and then extended by \citet{oepen2015semeval},
-the broad-coverage semantic dependency parsing (SDP) task is centered around three
-semantic formalisms whose annotations have been
-converted into bilexical dependencies. The formalisms come
-from varied linguistic traditions, but all three aim
-to capture predicate-argument relations between
-content-bearing words in a sentence.
-While at first glance similar to syntactic dependencies,
-semantic dependencies have distinct
-goals and characteristics, more akin to semantic
-role labeling \cite[SRL; ][]{gildea2002automatic} or
-AMR. They abstract over different
-syntactic realizations of the same or similar meaning.
-Conversely, they attempt to distinguish
-between different senses even when realized
-in similar syntactic forms.
-Structurally, they are labeled directed graphs
-whose vertices are tokens in the sentence.
-Their arc labels encode broadly-applicable semantic relations rather than being tailored
-to any specific downstream application or
-ontology.
-They are not necessarily trees, because
-a token may be an argument of more than one
-predicate. Their analyses may optionally leave out non-content-bearing
-tokens, such as punctuation or the infinitival ``to,'' or prepositions that simply mark
-the type of relation holding between other words.
-But when restricted to content-bearing tokens (including
-adjectives, adverbs, etc.), the subgraph
-is connected. In this sense, SDP provides a
-whole-sentence analysis. This is in contrast to
-PropBank-style SRL, which gives an analysis of
-only verbal and nominal predicates \cite{Palmer:05}.
-Semantic dependency graphs also tend to
-have higher levels of nonprojectivity than syntactic
-trees \cite{oepen2014semeval}. Sentences with
-graphs containing cycles have been removed from
-the dataset by the organizers, so all remaining
-graphs are directed acyclic graphs.
+SDP \cite{oepen2014semeval,oepen2015semeval,oepen2016towards}
+is a set related tasks, targeted in two SemEval shared tasks.
+They correspond to four semantic representation schemes, referred to as
+DM, PAS, PSD and CCD, representing
+predicate-argument relations between content-bearing words in a sentence.
+All are based on semantic formalisms whose annotations have been
+converted into bilexical dependencies:
+they are labeled directed graphs whose nodes are all text tokens.
+Edges are labeled, encoding semantic relations between the tokens.
+Non-content-bearing tokens, such as punctuation,
+or the role-marking ``to'' in Figure~\ref{fig:original_example_sdp},
+may be left out of the analysis,
+but the subgraph restricted to content-bearing tokens is connected.
+All graphs containing cycles have been removed from the SDP datasets,
+so only DAGs remain.
 
 We consider one of the three formalisms used in the SemEval shared task:
 the DM (DELPH-IN MRS) representation, which comes
@@ -286,20 +263,246 @@ with minimal recursion semantics \cite{copestake2005minimal}.
 
 \subsection{Universal Dependencies}\label{sec:ud}
 
-In recent years, the Universal Dependencies
-(UD) representation \cite{nivre2016universal,11234/1-2515} has become
+The fourth formalism we consider is not a semantic representation, but
+is instead acknowledged as a syntactic annotation scheme.
+UD \cite{nivre2016universal,11234/1-2515} has become
 the dominant dependency representation for
-annotating treebanks in a large variety of languages.
-The goal of the UD project is to provide
-guidelines for cross-linguistically consistent treebank
+annotating treebanks in a large variety of languages,
+aiming for cross-linguistically consistent treebank
 annotations for as many languages as possible.
+Representations are exclusively bilexical trees, with edge labels representing
+syntactic relations between the text tokens.
 
-In contrast to the previously mentioned formalisms,
-UD annotates syntax rather than semantics.
 We use UD as an auxiliary task,
 similar to syntactic scaffolding employed by \cite{swayamdipta2017frame}.
 Thanks to its annotation in multiple languages, we can use it as an auxiliary task
 for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
+
+
+\begin{figure*}
+\begin{subfigure}[t]{0.5\textwidth}
+	\begin{tikzpicture}[level distance=13mm, sibling distance=14mm, ->,
+	    every circle node/.append style={fill=black}]
+	  \tikzstyle{word} = [font=\rmfamily,color=black]
+	  \node (ROOT) [circle] {}
+	    child {node (After) [word] {After} edge from parent node[left] {\scriptsize $L$}}
+	    child {node (graduation) [circle] {}
+	    {
+	      child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
+	    } edge from parent node[left] {\scriptsize $H$} }
+	    child {node [word] {,} edge from parent node[right] {\scriptsize $U$}}
+	    child {node (moved) [circle] {}
+	    {
+	      child {node (John) [word] {John} edge from parent node[left] {\scriptsize $A$}}
+	      child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
+	      child {node [circle] {}
+	      {
+	        child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
+	        child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
+	      } edge from parent node[right] {\scriptsize $A$} }
+	    } edge from parent node[right] {\scriptsize $H$} }
+	    ;
+	  \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+	\end{tikzpicture}
+  \caption{UCCA}
+  \label{fig:converted_example_ucca}
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.5\textwidth}
+  \begin{tikzpicture}[level distance=16mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      level 1/.style={sibling distance=28mm},
+	  level 2/.style={sibling distance=14mm},
+	  level 3/.style={sibling distance=12mm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [draw=black,ellipse] {move-01}
+      child {node [draw=black,ellipse] {after}
+      {
+	        child {node [word] {After} edge from parent}
+	        child {node (graduation) [draw=black,ellipse] {graduate-01}
+		    {
+		      child {node [word] {graduation \quad ,} edge from parent}
+		    } edge from parent node {op} }
+      } edge from parent node {time} }
+      child {node (John) [draw=black,ellipse] {person}
+      {
+        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
+		{
+		  child {node [word] {John} edge from parent}
+	    } edge from parent node {name} }
+      } edge from parent node {ARG0} }
+      child {node [draw=black,ellipse] {city}
+      {
+        child {node {}
+	    {
+	    	child {node [word] (moved) {\quad moved} edge from parent [draw=none]}
+	        child {node [word] {to} edge from parent [draw=none]}
+	    } edge from parent [draw=none]}
+        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
+		{
+		  child {node [word] {Paris} edge from parent}
+	    } edge from parent node {name} }
+      } edge from parent node {ARG2} }
+      ;
+      \draw[bend left] (ROOT) to node {} (moved);
+      \draw[dashed] (graduation) to node {ARG0} (John);
+  \end{tikzpicture}
+  \captionof{figure}{AMR graph in UCCA format.}
+  \label{fig:converted_example_amr}
+\end{subfigure}
+
+\begin{subfigure}[t]{0.5\textwidth}
+  \begin{tikzpicture}[level distance=15mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      level 1/.style={sibling distance=26mm},
+	  level 2/.style={sibling distance=14mm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=black,circle] {}
+      child {node (after) [fill=black,circle] {}
+	  {
+	    child {node [draw=none] {}
+        {
+          child {node [word] (after_word) {After} edge from parent [draw=none]}
+        } edge from parent [draw=none] }
+	    child {node [draw=none] {}
+        {
+          child {node [word] (graduation) {graduation ,} edge from parent [draw=none]}
+        } edge from parent [draw=none] }
+	  } edge from parent node {head}}
+      child {node [draw=none] {}
+      {
+        child {node (moved) [fill=black,circle] {}
+        {
+          child {node [word] {\quad John} edge from parent node {ARG1}}
+          child {node [word] {moved} edge from parent node {head}}
+        } edge from parent [draw=none] }
+      } edge from parent [draw=none] }
+      child {node (to) [fill=black,circle] {}
+      {
+        child {node [draw=none] {}
+        {
+      	  child {node [word] (to_word) {to} edge from parent [draw=none]}
+      	} edge from parent [draw=none] }
+      	child {node [draw=none] {}
+        {
+          child {node [word] (Paris) {Paris} edge from parent [draw=none]}
+        } edge from parent [draw=none] }
+      } edge from parent node {head}}
+      ;
+      \draw (ROOT) to node {top} (moved);
+      \draw (after) to node {head} (after_word);
+      \draw (after) to node {ARG2} (graduation);
+      \draw[dashed] (after) to node {ARG1} (moved);
+      \draw[dashed] (to) to node {ARG1} (moved);
+      \draw (to) to node {head} (to_word);
+      \draw (moved) to node {ARG2} (Paris);
+      \draw[dashed] (to) to node {ARG2} (Paris);
+  \end{tikzpicture}
+  \captionof{figure}{Semantic dependency graph (DM) in UCCA format.}
+  \label{fig:converted_example_sdp}
+\end{subfigure}
+~
+\begin{subfigure}[t]{0.5\textwidth}
+  \begin{tikzpicture}[level distance=15mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      level 1/.style={sibling distance=15mm},
+	  level 2/.style={sibling distance=16mm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=black,circle] {}
+      child {node (after) [fill=black,circle] {}
+	  {
+	    child {node [word] {After} edge from parent node {case}}
+	    child {node [word] {graduation \quad\quad} edge from parent node {head}}
+	  } edge from parent node {obl}}
+      child {node {}
+      {
+        child {node [word] (comma) {\quad ,} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node {}
+      {
+        child {node [word] (John) {John} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node {}
+      {
+        child {node [word] (moved) {moved} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node (to) [fill=black,circle] {}
+      {
+      	child {node [word] {\quad to} edge from parent node {case}}
+      	child {node [word] {Paris} edge from parent node {head}}
+      } edge from parent node {obl}}
+      ;
+      \draw (ROOT) to node {punct} (comma);
+      \draw (ROOT) to node {nsubj} (John);
+      \draw (ROOT) to node {head} (moved);
+  \end{tikzpicture}
+  \captionof{figure}{Universal Dependencies (UD) tree in UCCA format.}
+  \label{fig:converted_example_ud}
+\end{subfigure}
+
+\caption{Converted examples.
+Pre-terminal nodes are omitted for brevity, except in AMR where their labels are meaningful.}
+\label{fig:converted_examples}
+\end{figure*}
+
+
+\section{Conversion}\label{sec:conversion}
+
+We develop a conversion algorithm for each scheme,
+to convert it into a unified DAG format, similar to the UCCA format.
+In this format, the graph is a rooted DAG, and the text tokens are terminals
+(they have no children).
+Edges are labeled with \textit{categories}, and
+nodes have an optional \textit{label} too, to support AMR.
+All edges entering terminals bear the \textsc{Terminal} category.
+The graph edges are divided into \textit{primary} and \textit{remote} edges,
+where the primary edges form a tree (all nodes have at most one primary parent,
+and the root has none).
+The remote edges enable reentrancy, and thus together with them the graph
+is in general a DAG and not necessarily a tree.
+Not all non-terminals must have terminal descendants.
+Non-terminals with an empty terminal yield are called \textit{implicit}.
+Figure~\ref{fig:converted_examples} shows examples for converted graphs.
+
+To convert from dependency formats (SDP and UD), we add a pre-terminal for each terminal,
+and then simply attach the pre-terminals according to the dependency edges.
+We add an additional level with a \textit{head} edge to avoid terminal and non-terminal siblings.
+In case of reentrancy, an arbitrary parent is marked as primary, and the rest as remote.
+
+In the conversion from AMR, non-terminals are already present and do not need to be introduced.
+However, alignments and node labels must be handled.
+
+\subsection{Alignments}
+Since alignment to the text tokens is not part of the AMR graph,
+we introduce the alignments as edges in training.
+We use automatically aligned AMR graphs provided in the dataset,
+and attach each node with a \textsc{Terminal} edge to each of the terminals it is aligned to.
+
+\subsection{Sparsity}
+To reduce the number of unique node labels, we use the alignments to introduce
+placeholders in the labels.
+For example, a node labeled \textit{want-01} aligned to the terminal \textit{wants} will
+be instead labeled \textit{\textlangle l\textrangle-01},
+where \textit{\textlangle l\textrangle} is a placeholder for the token's lemma.
+In this way we reduce the number of node labels from tens of thousands to 7300,
+of which 2000 occur only once and are treated as unknown.
+We use similar placeholders for the token's text and capitalized text,
+negation, verb, noun and adjective form,
+(from a pre-defined lexicon), and Wikipedia title redirection target.
+We use DBpedia Spotlight to wikify concepts \cite{isem2013daiber}.
+In addition, we omit all variable identifiers and instead label nodes directly with their concept.
+This is similar to the delexicalization employed by \citet{buys2017oxford}.
+
+Another sparsity issue is with ordinal relations, such as \textit{op1}, \textit{op2}, etc.
+Since the order of relations is annotated according to the order of text tokens,
+the numeric index is redundant and is thus removed.
+We keep the numeric suffixes when they are meaningful, e.g. in \textit{ARG0}, \textit{ARG1}, etc.
+
+\subsection{Names}
+Named entities in AMR are expressed by \textit{name} relations going to nodes with outgoing
+\textit{op1}, \textit{op2}, etc. edges for each token in the name.
+We instead collapse these subgraphs to single nodes whose label is a concatenation of the
+name parts, which is then replaced by a placeholder as this node is aligned to all tokens in the name.
 
 
 
@@ -496,214 +699,6 @@ is its position in the text (starting at 1).
 Whenever a node is created as a result of a \textsc{Node} or \textsc{Implicit}
 transition, we assign its swap index to be the mean of the stack top and buffer
 head's swap indices.
-
-
-\begin{figure*}
-\begin{subfigure}[t]{0.5\textwidth}
-	\begin{tikzpicture}[level distance=13mm, sibling distance=14mm, ->,
-	    every circle node/.append style={fill=black}]
-	  \tikzstyle{word} = [font=\rmfamily,color=black]
-	  \node (ROOT) [circle] {}
-	    child {node (After) [word] {After} edge from parent node[left] {\scriptsize $L$}}
-	    child {node (graduation) [circle] {}
-	    {
-	      child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
-	    } edge from parent node[left] {\scriptsize $H$} }
-	    child {node [word] {,} edge from parent node[right] {\scriptsize $U$}}
-	    child {node (moved) [circle] {}
-	    {
-	      child {node (John) [word] {John} edge from parent node[left] {\scriptsize $A$}}
-	      child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
-	      child {node [circle] {}
-	      {
-	        child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
-	        child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
-	      } edge from parent node[right] {\scriptsize $A$} }
-	    } edge from parent node[right] {\scriptsize $H$} }
-	    ;
-	  \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
-	\end{tikzpicture}
-  \caption{UCCA}
-  \label{fig:converted_example_ucca}
-\end{subfigure}
-~
-\begin{subfigure}[t]{0.5\textwidth}
-  \begin{tikzpicture}[level distance=15mm, ->,
-      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
-      level 1/.style={sibling distance=28mm},
-	  level 2/.style={sibling distance=14mm},
-	  level 3/.style={sibling distance=12mm}]
-    \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [draw=black,ellipse] {move-01}
-      child {node [draw=black,ellipse] {after}
-      {
-	        child {node [word] {After} edge from parent}
-	        child {node (graduation) [draw=black,ellipse] {graduate-01}
-		    {
-		      child {node [word] {graduation} edge from parent}
-		    } edge from parent node {op1} }
-      } edge from parent node {time} }
-      child {node (John) [draw=black,ellipse] {person}
-      {
-      	child {node {}
-	    {
-    	  child {node [word] {,} edge from parent [draw=none]}
-    	} edge from parent [draw=none]}
-        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
-		{
-		  child {node [word] {John} edge from parent}
-	    } edge from parent node {name} }
-      } edge from parent node {ARG0} }
-      child {node [draw=black,ellipse] {city}
-      {
-        child {node {}
-	    {
-	    	child {node [word] (moved) {moved} edge from parent [draw=none]}
-	        child {node [word] {to} edge from parent [draw=none]}
-	    } edge from parent [draw=none]}
-        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
-		{
-		  child {node [word] {Paris} edge from parent}
-	    } edge from parent node {name} }
-      } edge from parent node {ARG2} }
-      ;
-      \draw[bend left] (ROOT) to node {} (moved);
-      \draw[dashed] (graduation) to node {ARG0} (John);
-  \end{tikzpicture}
-  \captionof{figure}{AMR graph in UCCA format.}
-  \label{fig:converted_example_amr}
-\end{subfigure}
-
-\begin{subfigure}[t]{0.5\textwidth}
-  \begin{tikzpicture}[level distance=15mm, ->,
-      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
-      level 1/.style={sibling distance=26mm},
-	  level 2/.style={sibling distance=14mm}]
-    \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [fill=black,circle] {}
-      child {node (after) [fill=black,circle] {}
-	  {
-	    child {node [word] {After} edge from parent node {head}}
-	    child {node [word] {graduation ,} edge from parent node {ARG2}}
-	  } edge from parent node {head}}
-      child {node (moved) [fill=black,circle] {}
-      {
-        child {node [word] {John} edge from parent node {ARG1}}
-        child {node [word] {moved} edge from parent node {head}}
-      } edge from parent node {top} }
-      child {node (to) [fill=black,circle] {}
-      {
-      	child {node [word] {to} edge from parent node {head}}
-      	child {node [word] {Paris} edge from parent node {ARG2}}
-      } edge from parent node {head}}
-      ;
-      \draw[dashed] (after) to node {ARG1} (moved);
-      \draw[dashed] (to) to node {ARG1} (moved);
-  \end{tikzpicture}
-  \captionof{figure}{Semantic dependency graph (DM) in UCCA format.}
-  \label{fig:converted_example_sdp}
-\end{subfigure}
-~
-\begin{subfigure}[t]{0.5\textwidth}
-  \begin{tikzpicture}[level distance=15mm, ->,
-      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
-      level 1/.style={sibling distance=15mm},
-	  level 2/.style={sibling distance=16mm}]
-    \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [fill=black,circle] {}
-      child {node (after) [fill=black,circle] {}
-	  {
-	    child {node [word] {After} edge from parent node {case}}
-	    child {node [word] {graduation} edge from parent node {head}}
-	  } edge from parent node {obl}}
-      child {node {}
-      {
-        child {node [word] (comma) {,} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node {}
-      {
-        child {node [word] (John) {John} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node {}
-      {
-        child {node [word] (moved) {moved} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node (to) [fill=black,circle] {}
-      {
-      	child {node [word] {to} edge from parent node {case}}
-      	child {node [word] {Paris} edge from parent node {head}}
-      } edge from parent node {obl}}
-      ;
-      \draw (ROOT) to node {punct} (comma);
-      \draw (ROOT) to node {nsubj} (John);
-      \draw (ROOT) to node {head} (moved);
-  \end{tikzpicture}
-  \captionof{figure}{Universal Dependencies (UD) tree in UCCA format.}
-  \label{fig:converted_example_ud}
-\end{subfigure}
-
-\caption{Converted examples.
-Pre-terminal nodes are omitted for brevity, except in AMR where their labels are meaningful.}
-\label{fig:converted_examples}
-\end{figure*}
-
-\subsection{Conversion}\label{sec:conversion}
-
-We develop a conversion algorithm for each scheme,
-to convert it into a unified DAG format, similar to the UCCA format.
-In this format, the graph is a rooted DAG, and the text tokens are terminals
-(they have no children).
-Edges are labeled with \textit{categories}, and
-nodes have an optional \textit{label} too, to support AMR.
-All edges entering terminals bear the \textsc{Terminal} category.
-The graph edges are divided into \textit{primary} and \textit{remote} edges,
-where the primary edges form a tree (all nodes have at most one primary parent,
-and the root has none).
-The remote edges enable reentrancy, and thus together with them the graph
-is in general a DAG and not necessarily a tree.
-Not all non-terminals must have terminal descendants.
-Non-terminals with an empty terminal yield are called \textit{implicit}.
-Figure~\ref{fig:converted_examples} shows examples for converted graphs.
-
-To convert from dependency formats (SDP and UD), we add a pre-terminal for each terminal,
-and then simply attach the pre-terminals according to the dependency edges.
-We add an additional level with a \textit{head} edge to avoid terminal and non-terminal siblings.
-In case of reentrancy, an arbitrary parent is marked as primary, and the rest as remote.
-
-In the conversion from AMR, non-terminals are already present and do not need to be introduced.
-However, alignments and node labels must be handled.
-
-\paragraph{Alignments.}
-Since alignment to the text tokens is not part of the AMR graph,
-we introduce the alignments as edges in training.
-We use automatically aligned AMR graphs provided in the dataset,
-and attach each node with a \textsc{Terminal} edge to each of the terminals it is aligned to.
-
-\paragraph{Sparsity.}
-To reduce the number of unique node labels, we use the alignments to introduce
-placeholders in the labels.
-For example, a node labeled \textit{want-01} aligned to the terminal \textit{wants} will
-be instead labeled \textit{\textlangle l\textrangle-01},
-where \textit{\textlangle l\textrangle} is a placeholder for the token's lemma.
-In this way we reduce the number of node labels from tens of thousands to 7300,
-of which 2000 occur only once and are treated as unknown.
-We use similar placeholders for the token's text and capitalized text,
-negation, verb, noun and adjective form,
-(from a pre-defined lexicon), and Wikipedia title redirection target.
-We use DBpedia Spotlight to wikify concepts \cite{isem2013daiber}.
-In addition, we omit all variable identifiers and instead label nodes directly with their concept.
-This is similar to the delexicalization employed by \citet{buys2017oxford}.
-
-Another sparsity issue is with ordinal relations, such as \textit{op1}, \textit{op2}, etc.
-Since the order of relations is annotated according to the order of text tokens,
-the numeric index is redundant and is thus removed.
-We keep the numeric suffixes when they are meaningful, e.g. in \textit{ARG0}, \textit{ARG1}, etc.
-
-\paragraph{Names.}
-Named entities in AMR are expressed by \textit{name} relations going to nodes with outgoing
-\textit{op1}, \textit{op2}, etc. edges for each token in the name.
-We instead collapse these subgraphs to single nodes whose label is a concatenation of the
-name parts, which is then replaced by a placeholder as this node is aligned to all tokens in the name.
 
 
 \subsection{Unlabeled parsing}\label{sec:unlabeled}
