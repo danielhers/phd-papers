@@ -239,12 +239,12 @@ Most AMRs are DAGs, although cycles are permitted.
 AMR was targeted in the SemEval 2017 shared task \cite{may2017semeval}.
 
 As can be seen in Figure~\ref{fig:original_example_amr}, text tokens are not part
-of the AMR graph, which actually connects only concepts (from a pre-defined set)
+of the AMR graph, which connects only concepts (from a pre-defined set)
 and constants (which may be strings or numbers).
-During the process of parsing from plain text to an AMR graph,
-the tokens are aligned to graph nodes.
-This process is referred to as concept identification, and most AMR datasets
-already contained automatically aligned graphs.
+During the process of parsing from plain text to AMR,
+the tokens are aligned to graph nodes,
+a process referred to as concept identification.
+AMR datasets already contain automatically aligned graphs.
 
 \subsection{Broad-Coverage Semantic Dependency Parsing}\label{sec:sdp}
 
@@ -258,11 +258,9 @@ converted into bilexical dependencies:
 they are labeled directed graphs whose nodes are all text tokens.
 Edges are labeled, encoding semantic relations between the tokens.
 Non-content-bearing tokens, such as punctuation,
-or the role-marking ``to'' in Figure~\ref{fig:original_example_sdp},
-may be left out of the analysis,
+may be left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
 but the subgraph restricted to content-bearing tokens is connected.
-All graphs containing cycles have been removed from the SDP datasets,
-so only DAGs remain.
+Graphs containing cycles have been removed from the SDP datasets.
 
 We consider one of the three formalisms used in the SemEval shared task:
 the DM (DELPH-IN MRS) representation, which comes
@@ -282,13 +280,13 @@ the dominant dependency representation for
 annotating treebanks in a large variety of languages,
 aiming for cross-linguistically consistent treebank
 annotations for as many languages as possible.
-Representations are exclusively bilexical trees, with edge labels representing
+Representations are bilexical trees, with edge labels representing
 syntactic relations between the text tokens.
 
 We use UD as an auxiliary task,
 similar to syntactic scaffolding employed by \cite{swayamdipta2017frame}.
 Thanks to its annotation in multiple languages, we can use it as an auxiliary task
-for UCCA parsing in German and French: see \S\ref{sec:multilingual}.
+for UCCA parsing in German and French (see \S\ref{sec:multilingual}).
 
 
 \begin{figure*}
