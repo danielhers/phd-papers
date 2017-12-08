@@ -665,6 +665,8 @@ and training is done with an oracle that provides a set of all possible labels a
 In addition to the features used by \citet{hershcovich2017a},
 for AMR we add node label features according to
 previously predicted node labels for node in specific locations in the parser state.
+All features are shared among all tasks, except the node labels, which are
+AMR-specific.
 
 Lemmas, POS tags, syntactic dependency labels and named entities are extracted using spaCy
 \cite{spacy2}.\footnote{\url{https://spacy.io}}
@@ -675,27 +677,28 @@ The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\
 Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 
 \begin{table}
-\begin{tabular}{l|ccc}
-& Sparse & NN \\
+\begin{tabular}{l|ccccc}
 \hline
-\multicolumn{3}{l}{\footnotesize Embedding dimensions} \\
-external word & & 300 \\
-word & & 200 \\
-POS tag & & 20 \\
-syntactic dep. & & 10 \\
-edge label & & 20 \\
-punctuation & & 1 \\
-action & & 3 \\
-node labels & & 20 \\
+\footnotesize Dimensions &  main & aux & shared \\
 \hline
-\multicolumn{3}{l}{\footnotesize Other parameters} \\
+external word & & & 300 \\
+word & & & 200 \\
+POS tag & & & 20 \\
+syntactic dep. & & & 10 \\
+punctuation & & & 1 \\
+action & & & 3 \\
+node label & & 20 \\
+edge label & 20 \\
+MLP \#layers & 2 & 2 \\
+MLP layer dim. & 50 & 50 \\
+LSTM \#layers & 2 & 2 & 2 \\
+LSTM layer dim. & 500 & 50 & 500 \\
+\hline\hline
+\footnotesize Other parameters & Sparse & NN \\
+\hline
 $\textsc{MinUpdate}$ & 5 \\
 initial learning rate & 1 & 1 \\
 learning rate decay & 0.1 & 0.01 \\
-MLP \#layers & & 2 \\
-MLP layer dim. & & 50 \\
-LSTM \#layers & & 2 \\
-LSTM layer dim. & & 500 \\
 word dropout & & 0.2 \\
 dropout & & 0.4 \\
 weight decay & & $10^{-5}$ \\
@@ -708,14 +711,14 @@ mini-batch size & & 100
 \subsection{Constraints}
 
 As each annotation scheme has different constraints on the allowed graphs,
-we declared these constraints separately for each task.
+we defined these constraints separately for each task.
 During training and parsing, the constraint set corresponding to the task is
 selected and applied to the parser state.
 
 Some constraints are task-specific, while some are generic.
 For example, in UCCA, a terminal may only have one parent.
 In UD, every node may only have one parent.
-In AMR, a concept corresponding to a PropBank frame may only core arguments defined for the frame.
+In AMR, a concept corresponding to a PropBank frame may have only core arguments defined for the frame.
 
 As an example for a generic constraint, nodes that have already been swapped
 should never be swapped again.
@@ -746,7 +749,8 @@ Rather than sharing the whole set of parameters (and getting a mix of action lab
 we share only part of the model.
 Specifically, in addition to the task-specific input-encoding bidirectional LSTM,
 we use a shared bidirectional LSTM. The outputs of both LSTMs are concatenated and
-fed into the task-specific MLP, in a manner similar to \citet{P17-1186}.
+fed into the task-specific MLP (see Figure~\ref{fig:model}),
+in a manner similar to \citet{P17-1186}.
 
 Multitask learning is particularly beneficial for improving on tasks with small training data.
 As UCCA has a relatively small corpus (see \S\ref{sec:data}),
@@ -756,11 +760,11 @@ but using only the score on the UCCA development set as the criterion for early 
 
 \subsection{Unlabeled parsing for auxiliary tasks}\label{sec:unlabeled_aux}
 
-Preliminary experiments showed that simply training the model in this manner yield no improvement
-on the UCCA development set, when compared to training on the UCCA corpus alone.
-We hypothesized that the auxiliary tasks were actually difficult enough on their own,
-and could not provide enough backpropagation signal to the shared parameter set.
-We thus decided to use unlabeled parsing for all auxiliary tasks, while still doing labeled UCCA parsing.
+The auxiliary tasks are quite difficult enough on their own.
+Since it has been shown that easier auxiliary tasks are more beneficial
+in multitask learning \cite{E17-2026},
+we decided to use unlabeled parsing for all auxiliary tasks, while still doing
+labeled UCCA parsing.
 
 
 \section{Experiments}\label{sec:experiments}
@@ -930,7 +934,10 @@ and as an alternative to the pipeline approach, to avoid error propagation
 Multitask learning has been applied to semantic parsing, including
 semantic dependency parsing \cite{P17-1186} and
 frame semantic parsing \cite{swayamdipta2017frame}.
-In transition-based parsing, multitask learning has been applied to
+\citet{guo2016exploiting} applied multitask learning to transition-based
+syntactic parsing,
+both in a multilingual setting and with multiple formats in a single language.
+In transition-based parsing, multitask learning has also been applied to
 tagging and parsing \cite{bohnet2012transition,Zhang2016StackpropagationIR},
 lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint},
 and semantic-syntactic analysis \cite{swayamdipta-EtAl:2016:CoNLL,henderson2013multilingual}.
