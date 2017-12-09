@@ -9,6 +9,7 @@
 \usepackage{tikz-dependency}
 \usepackage[warn]{textcomp}
 \usepackage{subcaption}
+\usepackage{multirow}
 
 \usepackage{url}
 
@@ -806,7 +807,7 @@ French & 1067840 & 40102 \\
 German & 308107 & 16590 \\
 \textbf{AMR} \\
 LDC2016E25 & 708701 & 39260 \\
-\textbf{SDP} \\
+\textbf{SDP (DM)} \\
 SemEval 2015 & 802717 & 35657 \\
 \end{tabular}
 \caption{Size of each corpus.\label{tab:corpora}}
@@ -840,24 +841,31 @@ are shown in Table~\ref{tab:single}.
 \begin{table}
 \begin{tabular}{llccc}
 \textbf{UCCA} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-Sparse & \small Primary & 63.4 & 64.3 & 63.8 \\
+\multirow{2}{*}{Sparse} & \small Primary & 63.4 & 64.3 & 63.8 \\
        & \small Remote & 17 & 14.3 & 15.5 \\
-NN & \small Primary & 74.5 & 74.9 & 74.7 \\
+\multirow{2}{*}{NN} & \small Primary & 74.5 & 74.9 & 74.7 \\
+       & \small Remote & 49.2 & 50.5 & 49.8 \\
+\multirow{2}{*}{\citet{hershcovich2017a}} & \small Primary & 74.5 & 74.9 & 74.7 \\
        & \small Remote & 49.2 & 50.5 & 49.8 \\
 \hline
 \textbf{UD} & \small LAS & & & \textbf{F1} \\
 Sparse & & & & 64.8 \\
 NN & & & & 80.1 \\
+\multicolumn{4}{l}{\citet{dozat2016deep}} & 82.23 \\
 \hline
 \textbf{AMR} & \small Smatch & \textbf{P} & \textbf{R} & \textbf{F1} \\
 Sparse & & 55 & 53.7 & 54.4 \\
-NN & & 64.9 & 64.3 & 64.6 \\
+NN & & 67.1 & 63.1 & 65 \\
+\multicolumn{4}{l}{\citet{foland2017abstract}} & 70.9 \\
 \hline
-\textbf{SDP} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\textbf{SDP (DM)} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 Sparse & & 55.2 & 51.4 & 53.2 \\
-NN & & 76 & 75.4 & 75.7
+NN & & 76 & 75.4 & 75.7 \\
+\multicolumn{2}{l}{\citet{thomson-EtAl:2014:SemEval}} & & & 89.4
 \end{tabular}
-\caption{Single-task results on the English development set for each task.\label{tab:single}}
+\caption{Single-task results on the English development set for each task.
+Best reported results are given for comparison.
+\label{tab:single}}
 \end{table}
 
 
@@ -886,10 +894,11 @@ set for the specified task.\label{tab:multi}}
 \end{table}
 
 
-\subsection{Multilingual parsing}\label{sec:multilingual}
+\subsection{Other languages}\label{sec:multilingual}
 
 To investigate the contribution of multitask training on an even smaller UCCA training set,
-we experiment with the French and German \textit{20K Leagues} UCCA corpora.
+we experiment with the French and German \textit{20K Leagues} UCCA corpora
+\cite{sulem2015conceptual}.
 The results are given in Table~\ref{tab:multilingual}.
 The contribution of multitask learning is substantial in this case:
 although the sparse classifier has an advantage on small datasets
@@ -902,18 +911,19 @@ a large training corpus in an auxiliary task in the same language.
 \begin{table}
 \begin{tabular}{lccc|ccc}
 & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
-\textbf{German} & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-\multicolumn{3}{l}{Single-task:} \\
+& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\multicolumn{4}{l|}{\textbf{German}} & \\
+\multicolumn{4}{l|}{Single-task:} & \\
 \small Sparse & 67.4 & 65.5 & 66.4 & 24.1 & 2.9 & 5.1 \\
 \small NN & 54.2 & 38.4 & 45 & 35 & 17.3 & 23.1 \\
-\multicolumn{3}{l}{Multitask (UCCA + UD):} \\
+\multicolumn{4}{l|}{Multitask (UCCA + UD):} \\
 \small NN & 74.6 & 74.1 & 74.4 & 66 & 13.6 & 22.5 \\
 \hline
-\textbf{French} \\
-\multicolumn{3}{l}{Single-task:} \\
+\multicolumn{4}{l|}{\textbf{French}} & \\
+\multicolumn{4}{l|}{Single-task:} & \\
 \small Sparse & 60.8 & 59.2 & 60 & 7.1 & 3.8 & 4.9 \\
 \small NN & 100 & 0 & 0 & 100 & 0 & 0 \\
-\multicolumn{3}{l}{Multitask (UCCA + UD):} \\
+\multicolumn{4}{l|}{Multitask (UCCA + UD):} & \\
 \small NN & 64.4 & 64.4 & 64.4 & 36.4 & 7.5 & 12.5
 \end{tabular}
 \caption{Single-task and multitask results on the UCCA 20K Leagues development set in German and French.\label{tab:multilingual}}
