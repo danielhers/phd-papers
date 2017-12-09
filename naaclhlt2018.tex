@@ -848,7 +848,7 @@ are shown in Table~\ref{tab:single}.
 \multirow{2}{3cm}{\citet{hershcovich2017a}} & \small Primary & 74.5 & 74.9 & 74.7 \\
        & \small Remote & 49.2 & 50.5 & 49.8 \\
 \hline
-\textbf{UD} & \small LAS & & & \textbf{F1} \\
+\textbf{UD (English)} & \small LAS & & & \textbf{F1} \\
 Sparse & & & & 64.8 \\
 NN & & & & 80.1 \\
 \multicolumn{4}{l}{\citet{dozat2016deep}} & 82.23 \\
@@ -863,8 +863,8 @@ Sparse & & 55.2 & 51.4 & 53.2 \\
 NN & & 76 & 75.4 & 75.7 \\
 \multicolumn{2}{l}{\citet{thomson-EtAl:2014:SemEval}} & & & 89.4
 \end{tabular}
-\caption{Single-task results on the English development set for each task.
-Best reported results are given for comparison.
+\caption{Single-task results on dev set for each task.
+Best reported results given for comparison.
 \label{tab:single}}
 \end{table}
 
@@ -878,19 +878,19 @@ The results for multitask parsing are shown in Table~\ref{tab:multi}.
 
 \begin{table}
 \begin{tabular}{l|ccc|ccc}
-& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
+\multirow{2}{1cm}{Auxiliary tasks} & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\hline
 \small AMR & 73.5 & 73.5 & 73.5 & 52.6 & 43.9 & 47.9\\
 \small UD & 73.4 & 73.2 & 73.3 & 50.5 & 46.7 & 48.5 \\
 \small SDP & 74.3 & 73.2 & 73.7 & 52.9 & 51.7 & 52.3 \\
 \small SDP+UD & 73.4 & 72.7 & 73.1 & 48.5 & 51.7 & 50.1 \\
 \small AMR+UD & 73.3 & 73.6 & 73.4 & 51.2 & 45.8 & 48.4 \\
 \small AMR+SDP & 74.2 & 73.3 & 73.8 & 53 & 52.6 & 52.8 \\
-\small all & 73.7 & 73.3 & 73.5 & 50.6 & 49.2 & 49.9
+\small all three & 73.7 & 73.3 & 73.5 & 50.6 & 49.2 & 49.9
 \end{tabular}
-\caption{Multitask results on the UCCA English Wiki development set.
-The UCCA Wiki training set is used in each case, in addition to the training
-set for the specified task.\label{tab:multi}}
+\caption{Multitask results on UCCA Wiki dev set.
+\label{tab:multi}}
 \end{table}
 
 
