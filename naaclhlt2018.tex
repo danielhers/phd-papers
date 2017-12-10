@@ -807,7 +807,7 @@ French & 1067840 & 40102 \\
 German & 308107 & 16590 \\
 \textbf{AMR} \\
 LDC2016E25 & 708701 & 39260 \\
-\textbf{SDP (DM)} \\
+\textbf{SDP \small(DM)} \\
 SemEval 2015 & 802717 & 35657 \\
 \end{tabular}
 \caption{Size of each corpus.\label{tab:corpora}}
@@ -840,25 +840,29 @@ are shown in Table~\ref{tab:single}.
 
 \begin{table}
 \begin{tabular}{llccc}
-\textbf{UCCA} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-\multirow{2}{*}{Sparse} & \small Primary & 63.4 & 64.3 & 63.8 \\
-       & \small Remote & 17 & 14.3 & 15.5 \\
-\multirow{2}{*}{NN} & \small Primary & 74.5 & 74.9 & 74.7 \\
-       & \small Remote & 49.2 & 50.5 & 49.8 \\
-\multirow{2}{3cm}{\citet{hershcovich2017a}} & \small Primary & 74.5 & 74.9 & 74.7 \\
+\textbf{UCCA \small(Wiki)} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\multirow{2}{*}{Sparse} &
+         \small Primary & 61.8 & 62.1 & 62 \\
+       & \small Remote & 27.7 & 21.5 & 24.2 \\
+\multirow{2}{*}{NN} &
+         \small Primary & 72.9 & 73 & 73 \\
+       & \small Remote & 53 & 47 & 49.8 \\
+\multirow{2}{3cm}{\citet{hershcovich2017a}\footnote{Our experiments
+    reached slightly lower scores on primary edges }} &
+         \small Primary & 74.5 & 74.9 & 74.7 \\
        & \small Remote & 49.2 & 50.5 & 49.8 \\
 \hline
-\textbf{UD (English)} & \small LAS & & & \textbf{F1} \\
+\textbf{UD \small(English)} & \small LAS & & & \textbf{F1} \\
 Sparse & & & & 64.8 \\
 NN & & & & 80.1 \\
-\multicolumn{4}{l}{\citet{dozat2016deep}} & 82.23 \\
+\multicolumn{4}{l}{\citet{dozat2016deep}} & 82.2 \\
 \hline
-\textbf{AMR} & \small Smatch & \textbf{P} & \textbf{R} & \textbf{F1} \\
+\textbf{AMR \small(LDC2016E25)} & \small Smatch & \textbf{P} & \textbf{R} & \textbf{F1} \\
 Sparse & & 55 & 53.7 & 54.4 \\
-NN & & 67.1 & 63.1 & 65 \\
+NN & & 65.4 & 65.8 & 65.6 \\
 \multicolumn{4}{l}{\citet{foland2017abstract}} & 70.9 \\
 \hline
-\textbf{SDP (DM)} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\textbf{SDP \small(DM)} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 Sparse & & 55.2 & 51.4 & 53.2 \\
 NN & & 76 & 75.4 & 75.7 \\
 \multicolumn{2}{l}{\citet{thomson-EtAl:2014:SemEval}} & & & 89.4
@@ -881,13 +885,13 @@ The results for multitask parsing are shown in Table~\ref{tab:multi}.
 \multirow{2}{1cm}{Auxiliary tasks} & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\small AMR & 73.5 & 73.5 & 73.5 & 52.6 & 43.9 & 47.9\\
-\small UD & 73.4 & 73.2 & 73.3 & 50.5 & 46.7 & 48.5 \\
-\small SDP & 74.3 & 73.2 & 73.7 & 52.9 & 51.7 & 52.3 \\
-\small SDP+UD & 73.4 & 72.7 & 73.1 & 48.5 & 51.7 & 50.1 \\
-\small AMR+UD & 73.3 & 73.6 & 73.4 & 51.2 & 45.8 & 48.4 \\
-\small AMR+SDP & 74.2 & 73.3 & 73.8 & 53 & 52.6 & 52.8 \\
-\small all three & 73.7 & 73.3 & 73.5 & 50.6 & 49.2 & 49.9
+\small AMR & 73.1 & 73.4 & 73.3 & 44 & 50.5 & 47\\
+\small UD & 73 & 73.4 & 73.2 & 48.3 & 51.7 & 49.9 \\
+\small SDP & 73.7 & 73.3 & 73.5 & 44 & 57.9 & 50 \\
+\small SDP+UD & 73.7 & 73.5 & 73.6 & 43.5 & 42.4 & 42.9 \\
+\small AMR+UD & 73.5 & 73.4 & 73.4 & 51.3 & 42.4 & 46.4 \\
+\small AMR+SDP & 74.5 & 73.5 & 74 & 55.7 & 45.8 & 50.3 \\
+\small all three & 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1
 \end{tabular}
 \caption{Multitask results on UCCA Wiki dev set.
 \label{tab:multi}}
