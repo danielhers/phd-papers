@@ -1,0 +1,1224 @@
+\documentclass[t]{beamer}
+\mode<presentation>
+
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{headline}{% 
+  \hfill% 
+  \usebeamercolor[fg]{page number in head/foot}% 
+  \usebeamerfont{page number in head/foot}% 
+  \insertpagenumber% 
+  \kern1em\vskip-1em% 
+}
+\usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=right}
+\usepackage{apalike}
+\usepackage{graphicx} % Required for including images
+\graphicspath{{figures/}} % Location of the graphics files
+\usepackage{booktabs} % Top and bottom rules for table
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+\usepackage{wrapfig} % Allows wrapping text around tables and figures
+\usepackage{lipsum,adjustbox}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{url}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{color}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{tikz-dependency}
+\usetikzlibrary{arrows.meta,graphs,graphs.standard,graphdrawing,quotes,shapes}
+\usegdlibrary{layered,trees}
+\tikzset{
+  invisible/.style={opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+\captionsetup{labelformat=empty}
+\newcommand{\parser}[1]{TUPA\textsubscript{#1}}
+
+\makeatletter
+\pgfdeclareshape{vector}{
+	  \inheritsavedanchors[from={rectangle}]
+	  \inheritbackgroundpath[from={rectangle}]
+	  \inheritanchorborder[from={rectangle}]
+	  \foreach \x in {center,north east,north west,north,south,south east,south west,east,west}{
+	    \inheritanchor[from={rectangle}]{\x}
+	  }
+
+    \backgroundpath{
+      \pgftransformshift{\pgfpoint{-16pt}{-4pt}}
+		  \draw[rounded corners=2pt] (0,0) rectangle (32pt,8pt);
+    }
+
+    \beforebackgroundpath{
+      \draw[step=8pt,help lines,-] (8pt,.1pt) grid (24pt,7.9pt);
+    }
+}
+\makeatother
+
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
+
+\begin{document}
+
+
+\title[A Transition-Based DAG Parser for UCCA]{A Transition-Based Directed Acyclic Graph Parser for Universal Conceptual Cognitive Annotation}
+\author{Daniel Hershcovich, Omri Abend and Ari Rappoport}
+\institute[]{\includegraphics[width=.08\pagewidth]{huji_logo.jpg}
+\includegraphics[width=.3\pagewidth]{huji_banner.png}}
+\date{Tel Aviv University \\ January 9, 2018}
+
+\begin{frame}
+\titlepage
+\end{frame}
+\note{Hi, I'm Daniel and this is joint work with... \\
+Today I'll tell you about a semantic parser called TUPA.}
+
+
+%----------------------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{\parser{} --- Transition-based UCCA Parser}
+The \textbf{first parser} to support the combination of three properties:
+\begin{enumerate}
+\item<1-> {\color{blue} Non-terminal nodes} --- entities and events over the text
+\item<2-> {\color{orange} Reentrancy} --- allow argument sharing
+\item<3-> {\color{red} Discontinuity} -- conceptual units are split
+\end{enumerate}
+\onslide<3->{--- needed for many semantic schemes (e.g. AMR, UCCA).}
+\begin{center}
+ \newcommand*\reecol{}
+ \newcommand*\reewid{}
+ \only<2->{\renewcommand*\reecol{orange}}
+ \only<2->{\renewcommand*\reewid{very thick}}
+ \newcommand*\discol{}
+ \newcommand*\diswid{}
+ \only<3->{\renewcommand*\discol{red}}
+ \only<3->{\renewcommand*\diswid{very thick}}
+  \begin{tikzpicture}[level distance=16mm, sibling distance=2cm, ->]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=blue, circle] {}
+      child {node (You) [word] {You} edge from parent}
+      child {node [word] {want} edge from parent}
+      child {node (totakealongbath) [fill=blue, circle] {}
+      {
+        child {node [word] {to} edge from parent}
+        child {node (takeabath) [fill=blue, circle] {}
+        {
+          child {node [word] {take} edge from parent}
+          child {node [word] {a} edge from parent}
+          child {node [word] (long) {long} edge from parent[draw=none]}
+          child {node [word] {bath} edge from parent}
+        } edge from parent}
+      } edge from parent}
+      ;
+    \draw[bend left,dashed,->,\reecol,\reewid] (takeabath) to (You);
+    \draw[bend left,->,\discol,\diswid] (totakealongbath) to (long);
+  \end{tikzpicture}
+\end{center}
+\end{frame}
+\note{The first parser for UCCA (which we'll see in a minute), \\
+a parser that can generate output that support ... \\
+This combination is not supported by any other parser. \\
+Necessary for...}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+\begin{frame}
+\frametitle{Linguistic Structure Annotation Schemes}
+\begin{itemize}
+		\setlength\itemsep{1em}
+	\item Syntactic dependencies \cite{nivre2005dependency}
+		\item Semantic dependencies \cite{oepen2016towards}
+		\item AMR \cite{banarescu2013abstract}
+		\item UCCA \cite{abend2013universal}
+	\item Other semantic representation schemes\footnote{See recent survey \cite{abend2017state}}
+\end{itemize}
+\vfill
+  Abstract away from syntactic detail that does not affect meaning:
+  \begin{center}
+    \fbox{\textrm{\ldots bathed}} = \fbox{\textrm{\ldots took a bath}}
+  \end{center}
+\end{frame}
+\note{But before talking about TUPA, a brief introduction to semantic representation.}
+
+\begin{frame}
+\frametitle{Syntactic Dependencies}
+\begin{itemize}
+	\item Bilexical tree: syntactic structure representation.
+	\item Fast and accurate parsers (e.g. \textit{transition-based}).
+\end{itemize}
+\vfill
+\begin{adjustbox}{frame,center}
+	\begin{dependency}
+		\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+		You \^ want \^ to \^ take \^ a \^ long \^ bath \\
+		\end{deptext}
+		\deproot{2}{root}
+		\depedge{2}{1}{nsubj}
+		\depedge[edge start x offset=-4pt]{2}{4}{xcomp}
+		\depedge{2}{3}{mark}
+		\depedge{4}{7}{dobj}
+		\depedge{7}{5}{det}
+		\depedge{7}{6}{amod}
+	\end{dependency}
+\end{adjustbox}
+
+\vfill
+Non-projectivity (discontinuity) is a challenge \cite{nivre2009non}.
+\begin{adjustbox}{scale=.8,frame,center}
+\begin{dependency}
+	\begin{deptext}[column sep=1.2em,ampersand replacement=\^,font=\rmfamily]
+	A \^ hearing \^ is \^ scheduled \^ on \^ the \^ issue \^ today \\
+	\end{deptext}
+	\deproot{4}{root}
+	\depedge{2}{1}{det}
+	\depedge{4}{2}{nsubj:pass}
+	\depedge{4}{3}{aux:pass}
+	\depedge{7}{5}{case}
+	\depedge{7}{6}{det}
+	\depedge[edge start x offset=-6pt,red]{2}{7}{nmod}
+	\depedge[edge slant=6pt]{4}{8}{nmod:tmod}
+\end{dependency}
+\end{adjustbox}
+\end{frame}
+
+\begin{frame}
+\frametitle{Semantic Dependencies}
+\begin{itemize}
+	\item Bilexical graph: predicate-argument representation.
+	\item Derived from theories of syntax-semantics interface.
+\end{itemize}
+\vfill
+
+\begin{adjustbox}{scale=.9,frame,center}
+	\begin{dependency}
+		\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+		You \^ want \^ to \^ take \^ a \^ long \^ bath \\
+		\end{deptext}
+		\deproot[edge unit distance=1em]{2}{top}
+		\depedge{2}{4}{ARG2}
+		\depedge[orange]{2}{1}{ARG1}
+		\depedge[orange,edge unit distance=1.6em,edge start x offset=6pt]{4}{1}{ARG1}
+		\depedge[orange]{4}{7}{ARG2}
+		\depedge[orange]{5}{7}{BV}
+		\depedge[orange]{6}{7}{ARG1}
+	\end{dependency}
+\end{adjustbox}
+\captionof{figure}{DELPH-IN MRS-derived bi-lexical dependencies (DM).}
+
+\begin{adjustbox}{scale=.9,frame,center}
+\begin{dependency}
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\deproot{5}{top}
+	\depedge{5}{2}{TWHEN}
+	\depedge{5}{4}{ACT-arg}
+	\depedge{5}{7}{DIR3-arg}
+\end{dependency}
+\end{adjustbox}
+\captionof{figure}{Prague Dependency Treebank tectogrammatical layer (PSD).}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{The UCCA Semantic Representation Scheme}
+
+\begin{frame}
+\frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
+\begin{tikzpicture}[level distance=25mm, sibling distance=23mm, ->,
+    every circle node/.append style={fill=black}]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
+  \node (ROOT) [circle] {}
+    child {node (After) [word] {After} edge from parent node[left] {$L$}}
+    child {node (graduation) [circle] {}
+    {
+      child {node [word] {graduation} edge from parent node[left] {$P$}}
+    } edge from parent node[left] {$H$} }
+    child {node [word] {,} edge from parent node[right] {$U$}}
+    child {node (moved) [circle] {}
+    {
+      child {node (Joe) [word] {Joe} edge from parent node[left] {$A$}}
+      child {node [word] {moved} edge from parent node[left] {$P$}}
+      child {node [circle] {}
+      {
+        child {node [word] {to} edge from parent node[left] {$R$}}
+        child {node [word] {Paris} edge from parent node[right] {$C$}}
+      } edge from parent node[right] {$A$} }
+    } edge from parent node[right] {$H$} }
+    ;
+  \draw[dashed,->] (graduation) to node [auto] {$A$} (Joe);
+  \node at (5.6,-.3) {\Large ----- primary edge};
+  \node at (5.6,-1.3) {\Large - - - remote edge};
+\end{tikzpicture}
+\begin{wraptable}{l}{8cm}
+  \vspace{-27mm}
+  \hspace{14mm} After graduation, Joe moved to Paris
+  \begin{adjustbox}{margin=1mm,frame}
+  \scalebox{.7}{
+  \begin{tabular}{c>{\small\it}l|c>{\small\it}l|c>{\small\it}l}
+	  $P$ & process &
+	  $S$ & state &
+	  $A$ & participant \\
+	  $L$ & linker &
+	  $H$ & linked scene &
+	  $C$ & center \\
+	  $E$ & elaborator &
+	  $D$ & adverbial &
+	  $R$ & relator \\
+	  $N$ & connector &
+	  $U$ & punctuation &
+	  $F$ & function \\
+	  $G$ & ground
+  \end{tabular}
+  }
+  \end{adjustbox}
+\end{wraptable}
+\end{frame}
+\note{Some properties of UCCA that make it interesting to work on. \\
+Two main design principles - cross-linguistic applicability and support for intuitive annotation.}
+
+\begin{frame}
+\frametitle{The UCCA Semantic Representation Scheme}
+\begin{itemize}
+	\item Cross-linguistically applicable \cite{abend2013universal}.
+	\item Stable in translation \cite{sulem2015conceptual}.
+	\item Fast and intuitive to annotate \cite{abend2017uccaapp}.
+	\item Facilitates MT human evaluation \cite{birch2016hume}.
+\end{itemize}
+
+\vfill
+\small
+English\\
+\vspace{-1cm}
+\begin{adjustbox}{scale=.8,center}
+  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{crosslinguistic.png}
+\end{adjustbox}
+\\
+\vspace{-1cm}
+Hebrew
+\end{frame}
+\note{Same guidelines across languages. \\
+A parallel English-French corpus has been annotated, and a German corpus is almost complete.}
+
+\begin{frame}
+\frametitle{Graph Structure}
+UCCA generates a directed acyclic graph (DAG): \textbf{no parser yet}. \\
+Text tokens are terminals, complex units are {\color{blue} non-terminal nodes}. \\
+\textit{Remote edges} enable {\color{orange} reentrancy} for argument sharing. \\
+Phrases may be {\color{red} discontinuous} (e.g., multi-word expressions).
+
+\hspace*{1cm}
+  \begin{tikzpicture}[level distance=16mm, sibling distance=2cm, ->]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=blue, circle] {}
+      child {node (You) [word] {You} edge from parent node[left] {\scriptsize $A$}}
+      child {node [word] {want} edge from parent node[left] {\scriptsize $P$}}
+      child {node (totakealongbath) [fill=blue, circle] {}
+      {
+        child {node [word] {to} edge from parent node[left] {\scriptsize $F$}}
+        child {node (takeabath) [fill=blue, circle] {}
+        {
+          child {node [word] {take} edge from parent node[right] {\scriptsize $C$}}
+          child {node [word] {a} edge from parent node[right] {\scriptsize $F$}}
+          child {node [word] (long) {long} edge from parent[draw=none]}
+          child {node [word] {bath} edge from parent node[right] {\scriptsize $C$}}
+        } edge from parent node[right] {\scriptsize $P$} }
+      } edge from parent node[left] {\scriptsize $A$} }
+      ;
+    \draw[bend left,dashed,->,orange,very thick] (takeabath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left,->,red,very thick] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
+    \node at (6,-0.4) {\Large ----- primary edge};
+    \node at (6,-1.4) {\Large - - - remote edge};
+\end{tikzpicture}
+\begin{center}
+  You want to take a long bath
+\end{center}
+
+\vspace{-26mm}
+\begin{adjustbox}{margin=1pt,frame,scale=.9}
+  \begin{tabular}{c>{\small\it}l}
+	  $P$ & process \\
+	  $A$ & participant \\
+	  $C$ & center \\
+	  $D$ & adverbial \\
+	  $F$ & function
+  \end{tabular}
+\end{adjustbox}
+\end{frame}
+\note{No head selection.}
+
+
+
+\section{Transition-based UCCA Parsing}
+
+\begin{frame}
+\frametitle{Transition-Based Parsing}
+First used for dependency parsing \cite{nivre2004incrementality}.
+
+Parse text $w_1 \ldots w_n$ to graph $G$ incrementally by applying transitions to the parser state:
+stack, buffer and constructed graph.
+
+\pause
+\vfill
+Initial state:
+\begin{tikzpicture}[every node/.append style={font=\rmfamily}, circle]
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
+	\node[anchor=west,style={font=\sffamily}] at (-0.1,1.00)     {stack};
+	\node[fill=black] at (0.5,0.25) {};
+	\draw[xstep=1cm,ystep=5mm,color=gray] (3,0) grid (10,.5);
+	\node[anchor=west,style={font=\sffamily}] at (8.9,1.00) {buffer};
+	\node[anchor=west] at (3,0.25) {\small You};
+	\node[anchor=west] at (4,0.25) {\small want};
+	\node[anchor=west] at (5,0.25) {\small to};
+	\node[anchor=west] at (6,0.25) {\small take};
+	\node[anchor=west] at (7,0.25) {\small a};
+	\node[anchor=west] at (8,0.25) {\small long};
+	\node[anchor=west] at (9,0.25) {\small bath};
+\end{tikzpicture}
+
+\vfill
+\pause
+\parser{} transitions:
+
+\{\textsc{Shift, Reduce, Node$_X$, Left-Edge$_X$, Right-Edge$_X$,}\\
+\hspace{5mm}\textsc{Left-Remote$_X$, Right-Remote$_X$, Swap, Finish}\}
+
+\vfill
+Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color{red}discontinuity}.
+\end{frame}
+
+\begin{frame}
+\frametitle{Example}
+\begin{minipage}[t][8mm][t]{\textwidth}
+	$\Rightarrow$\textsc{
+		\only<1>{Shift}\only<2>{Right-Edge$_A$}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge$_P$}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node$_F$}\only<10>{Reduce}\only<11>{Shift}\only<12>{Shift}\only<13>{Node$_C$}\only<14>{Reduce}\only<15>{Shift}\only<16>{Right-Edge$_P$}\only<17>{Shift}\only<18>{Right-Edge$_F$}\only<19>{Reduce}\only<20>{Shift}\only<21>{Swap}\only<22>{Right-Edge$_D$}\only<23>{Reduce}\only<24>{Swap}\only<25>{Right-Edge$_A$}\only<26>{Reduce}\only<27>{Reduce}\only<28>{Shift}\only<29>{Shift}\only<30>{Left-Remote$_A$}\only<31>{Shift}\only<32>{Right-Edge$_C$}\only<33>{Finish}
+	}
+\end{minipage}
+
+\vfill
+
+\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+	\only<28>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (1,.5);
+	\only<1,7,29>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (2,.5);
+	\only<2,5,25>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (2,.5);
+	\only<3,8,11,31>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (3,.5);
+	\only<12,15>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (2.99,0) grid (4,.5);
+	\only<17,20>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (3.99,0) grid (5,.5);
+	\only<16>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (4,.5);
+	\only<18>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (2.99,0) grid (5,.5);
+	\only<4>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (4,0) grid (5,.5);
+	\only<9>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (5,0) grid (6,.5);
+	\only<13>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (6,0) grid (7,.5);
+	\only<21>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (8,0) grid (9,.5);
+	\only<24>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (7,0) grid (8,.5);
+	\only<22>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (4,.5);
+	\only<30>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (2,.5);
+	\only<32>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (3,.5);
+	\only<27>\draw[xstep=1mm,ystep=5mm,color=gray] (-0.01,0) grid (0.1,.5);
+	\only<6,26,28>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
+	\only<-2,4-5,7,10,24-25,29-30>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (2,.5);
+	\only<3,8-9,11,14,23,31->\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (3,.5);
+	\only<12-13,15-16,19,21-22>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+	\only<17-18,20>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (5,.5);
+	\node[anchor=west,style={font=\sffamily}] at (-0.1,1.00){stack};
+	\only<-26>\node[fill=black, circle] at (0.5,0.25) {};
+	\only<24-25> \node[fill=blue, circle] at (1.5,0.25) {};
+	\only<11-23> \node[fill=blue, circle] at (2.5,0.25) {};
+	\only<29-> \node[fill=red, circle] at (1.5,0.25) {};
+	\only<15-20> \node[fill=red, circle] at (3.5,0.25) {};
+	\only<28-> \node[anchor=west] at (0,0.25) {\small You};
+	\only<1-3,7-23> \node[anchor=west] at (1,0.25) {\small You};
+	\only<4-5> \node[anchor=west] at (1,0.25) {\small want};
+	\only<3>   \node[anchor=west] at (2,0.25) {\small want};
+	\only<8-9>  \node[anchor=west] at (2,0.25) {\small to};
+	\only<12-13> \node[anchor=west] at (3,0.25) {\small take};
+	\only<17-18> \node[anchor=west] at (4,0.25) {\small a};
+	\only<20> \node[anchor=west] at (4,0.25) {\small long};
+	\only<21-22> \node[anchor=west] at (3,0.25) {\small long};
+	\only<31-> \node[anchor=west] at (2,0.25) {\small bath};
+	\only<-2,4-5>\draw[xstep=1cm,ystep=5mm,color=gray] (4,0) grid (10,.5);
+	\only<3,5-7,9-10>\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (10,.5);
+	\only<8,11,13-14>\draw[xstep=1cm,ystep=5mm,color=gray] (6,0) grid (10,.5);
+	\only<12,15-16,24-27>\draw[xstep=1cm,ystep=5mm,color=gray] (7,0) grid (10,.5);
+	\only<17-19,21-23,28>\draw[xstep=1cm,ystep=5mm,color=gray] (8,0) grid (10,.5);
+	\only<20,29-30>\draw[xstep=1cm,ystep=5mm,color=gray] (9,0) grid (10,.5);
+	\only<31->\draw[xstep=1mm,ystep=5mm,color=gray] (9.89,0) grid (10,.5);
+	\node[anchor=west,style={font=\sffamily}] at (8.9,1) {buffer};
+	\only<9-10> \node[fill=blue, circle] at (5.5,0.25) {};
+	\only<13-14> \node[fill=red, circle] at (6.5,0.25) {};
+	\only<21-28> \node[fill=red, circle] at (8.5,0.25) {};
+	\only<4-5> \node[anchor=west] at (4,0.25) {\small You};
+	\only<24-27> \node[anchor=west] at (7,0.25) {\small You};
+	\only<-2>  \node[anchor=west] at (4,0.25) {\small want};
+	\only<-7> \node[anchor=west] at (5,0.25) {\small to};
+	\only<-11> \node[anchor=west] at (6,0.25) {\small take};
+	\only<-16> \node[anchor=west] at (7,0.25) {\small a};
+	\only<-19> \node[anchor=west] at (8,0.25) {\small long};
+	\only<-30> \node[anchor=west] at (9,0.25) {\small bath};
+\end{tikzpicture}
+\vfill
+\fbox{
+\begin{tikzpicture}[level distance=15mm, sibling distance=2cm, ->,
+    every node/.append style={font=\rmfamily}]
+	\node[anchor=west,style={font=\sffamily}] at (0,0) {graph};
+    \node(ROOT)[fill=black, circle, visible on=<1->] at (3,0) {}
+      child [visible on=<2->] {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
+      child [visible on=<5->] {node (want) {want} edge from parent node [left] {\scriptsize $P$}}
+      child [visible on=<9->] {node (totakealongbath) [fill=blue, circle] {}
+      {
+        child [visible on=<9->] {node (to) {to} edge from parent node [left] {\scriptsize $F$}}
+        child [visible on=<13->] {node (takeabath) [fill=red, circle] {}
+        {
+          child [visible on=<13->] {node (take) {take} edge from parent node [right] {\scriptsize $C$}}
+          child [visible on=<18->] {node (a) {a} edge from parent node [right] {\scriptsize $F$}}
+          child [visible on=<22->] {node (long) {long} edge from parent [draw=none]}
+          child [visible on=<32->] {node (bath) {bath} edge from parent node [right] {\scriptsize $C$}}
+        } edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      ;
+    \draw[visible on=<16->] (totakealongbath) to node [left] {\scriptsize $P$} (takeabath);
+    \draw[visible on=<25->] (ROOT) to node [left] {\scriptsize $A$} (totakealongbath);
+    \draw[bend left,dashed, visible on=<30->] (takeabath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left, visible on=<22->] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
+    \draw[visible on=<2>,red] (ROOT) to node {} (You);
+    \draw[visible on=<5>,red] (ROOT) to node {} (want);
+    \draw[visible on=<16>,red] (totakealongbath) to node {} (takeabath);
+    \draw[visible on=<18>,red] (takeabath) to node {} (a);
+    \draw[bend left, visible on=<22>,red] (totakealongbath) to node {} (long);
+    \draw[visible on=<25>,red] (ROOT) to node {} (totakealongbath);
+    \draw[bend left,dashed, visible on=<30>,red] (takeabath) to node {} (You);
+    \draw[visible on=<32>,red] (takeabath) to node {} (bath);
+\end{tikzpicture}}
+\end{frame}
+
+\begin{frame}
+\frametitle{Training}
+An \textit{oracle} provides the transition sequence given the correct graph:
+
+\vfill
+\centering
+\scalebox{.8}{
+\begin{tikzpicture}[level distance=15mm, sibling distance=2cm, ->,
+    every node/.append style={font=\rmfamily}]
+    \node(ROOT)[fill=black, circle] at (3,0) {}
+      child {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
+      child {node (want) {want} edge from parent node [left] {\scriptsize $P$}}
+      child {node (totakealongbath) [fill=blue, circle] {} 
+      { 
+        child {node (to) {to} edge from parent node [left] {\scriptsize $F$}}
+        child {node (takeabath) [fill=red, circle] {}
+        {
+          child {node (take) {take} edge from parent node [right] {\scriptsize $C$}}      
+          child {node (a) {a} edge from parent node [right] {\scriptsize $F$}} 
+          child {node (long) {long} edge from parent [draw=none]}
+          child {node (bath) {bath} edge from parent node [right] {\scriptsize $C$}}  
+        } edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      ;
+    \draw(totakealongbath) to node [left] {\scriptsize $P$} (takeabath); 
+    \draw(ROOT) to node [left] {\scriptsize $A$} (totakealongbath);
+    \draw[bend left,dashed] (takeabath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
+\end{tikzpicture}}
+\[\Downarrow\]
+\begin{flushleft}
+\footnotesize
+\textsc{Shift}, \textsc{Right-Edge$_A$}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge$_P$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node$_F$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node$_C$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Right-Edge$_P$}, \textsc{Shift}, \textsc{Right-Edge$_F$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge$_D$}, \textsc{Reduce}, \textsc{Swap}, \textsc{Right-Edge$_A$}, \textsc{Reduce}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Left-Remote$_A$}, \textsc{Shift}, \textsc{Right-Edge$_C$}, \textsc{Finish}
+\end{flushleft}
+\end{frame}
+
+\begin{frame}
+\only<-5>{
+\frametitle{\parser{} Model}
+Learn to greedily predict transition based on current state.
+
+Experimenting with three classifiers:
+\vspace{5mm}
+
+	\begin{tabular}{ll}
+	\textbf{Sparse} & Perceptron with sparse features. \\
+	\textbf{MLP} & Embeddings + feedforward NN classifier. \\
+	\textbf{BiLSTM} & Embeddings + \only<2->{\textbf}{deep bidirectional LSTM} + MLP \\&
+	\cite{kiperwasser2016simple}.
+	\onslide<2-4>{\\ \\& Effective ``lookahead'' encoded in the representation.}
+	\end{tabular}
+}
+\only<2-5>{\vspace{-53mm}}
+
+\only<1>{
+\vfill
+
+Features:
+words, POS, syntactic dependencies, existing edge labels \\
+from the stack and buffer + parents, children, grandchildren;
+ordinal features (height, number of parents and children)
+
+\vspace{5mm}
+\begin{tikzpicture}
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (10,.5);
+	\node[anchor=west] at (-0.1,1.00) {stack};
+	\node[anchor=west] at (8.9,1.00) {buffer};
+	\foreach \i in {0.5,8.5,9.5} {
+		\node[fill=gray, circle] at (\i,0.25) {};
+	}
+	\foreach \i in {1.5,2.5,3.5,5.5,6.5,7.5} {
+		\node[fill=black, circle] at (\i,0.25) {};
+	}
+\end{tikzpicture}
+}
+\centering
+\onslide<6>{
+\fbox{
+\begin{minipage}{.5\textwidth}
+\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+	\node[anchor=west,style={font=\sffamily}] at (-1.2,0.25){stack};
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+	\node[fill=black, circle] at (0.5,0.25) {};
+	\node[fill=blue, circle] at (2.5,0.25) {};
+	\node[anchor=west] at (1,0.25) {\small You};
+	\node[anchor=west] at (3,0.25) {\small take};
+\end{tikzpicture}
+
+\vspace{1cm}
+\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+	\node[anchor=west,style={font=\sffamily}] at (3.8,0.25){buffer};
+	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (9,.5);
+	\node[fill=red, circle] at (5.5,0.25) {};
+	\node[anchor=west] at (6,0.25) {\small a};
+	\node[anchor=west] at (7,0.25) {\small long};
+	\node[anchor=west] at (8,0.25) {\small bath};
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{.4\textwidth}
+\scalebox{.8}{
+\begin{tikzpicture}[level distance=1cm, sibling distance=1cm, ->,
+    every node/.append style={font=\rmfamily}]
+    \node[anchor=west,style={font=\sffamily}] at (5,0) {graph};
+    \draw[color=gray] (1.2,.3) rectangle (4.9,-3.2);
+    \node(ROOT)[fill=black, circle, visible on=<2->] at (3,0) {}
+      child {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
+      child {node {want} edge from parent node [left] {\scriptsize $P$}}
+      child {node (totakealongbath) [fill=blue, circle] {}
+      {
+        child {node {to} edge from parent node [left] {\scriptsize $F$}}
+        child {node (takeabath) [fill=red, circle] {}
+        {
+          child {node {take} edge from parent node [right] {\scriptsize $C$}}
+          child [opacity=0] {node {a} edge from parent node [right] {\scriptsize $F$}}
+          child [opacity=0] {node (long) {long} edge from parent [draw=none]}
+          child [opacity=0] {node {bath} edge from parent node [right] {\scriptsize $C$}}
+        } edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      ;
+\end{tikzpicture}
+}
+\end{minipage}
+}
+}
+\onslide<2->{
+\scalebox{.7}{
+\begin{tikzpicture}[->]
+	\tiny
+	\tikzstyle{main}=[circle, minimum size=7mm, draw=black!80, node distance=12mm]
+	\foreach \i/\word in {1/{You},3/{want},5/{to},7/{take},9/{a},11/{long},13/{bath}} {
+	    \onslide<2->\node (x\i) at (\i,-1.3) {\Large\textrm\word};
+	    \onslide<2->\node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
+        \onslide<2->\path (x\i) edge (h\i);
+	    \onslide<3->\node[main, fill=white!100] (i\i) at (\i.5,.8) {LSTM};
+        \onslide<3->\path (x\i) edge [bend right] (i\i);
+	    \onslide<4->\node[main, fill=white!100] (l\i) at (\i.5,2.3) {LSTM};
+        \onslide<4->\path (h\i) edge [bend left] (l\i);
+        \onslide<4->\path (i\i) edge (l\i);
+	    \onslide<5->\node[main, fill=white!100] (k\i) at (\i,3.1) {LSTM};
+        \onslide<5->\path (i\i) edge [bend left] (k\i);
+        \onslide<5->\path (h\i) edge [bend left] (k\i);
+	}
+	\foreach \current/\next in {1/3,3/5,5/7,7/9,9/11,11/13} {
+        \onslide<2->\path (h\current) edge (h\next);
+        \onslide<3->\path (i\next) edge (i\current);
+        \onslide<4->\path (l\current) edge (l\next);
+        \onslide<5->\path (k\next) edge (k\current);
+	}
+    \onslide<6>\node[main, fill=white!100] (mlp) at (7,4.6) {MLP};
+	\onslide<6>\foreach \i in {5,7,9} {
+        \path (l\i) edge (mlp);
+        \path (k\i) edge (mlp);
+    }
+    \coordinate (state) at (10.5,6.5);
+    \onslide<6>\path (state) edge [bend left] (mlp);
+    \onslide<6>\node (transition) at (7,5.8) {\large\textsc{Node}$_C$};
+    \onslide<6>\path (mlp) edge (transition);
+\end{tikzpicture}
+}
+}
+\end{frame}
+\note{Even though the parser is greedy and looks at specific locations in the stack and buffer for features, the BiLSTM effectively allows it to look further into the past and future in order to determine the best transition to apply.}
+
+
+\section{Experiments}
+
+\begin{frame}
+\frametitle{Experimental Setup}
+\begin{itemize}
+ \item UCCA Wikipedia corpus ($\stackrel{\text{train}}{4268}+\stackrel{\text{dev}}{454}+\stackrel{\text{test}}{503}$ sentences).
+ \item Out-of-domain: English part of English-French parallel corpus,
+ 	\textit{Twenty Thousand Leagues Under the Sea} (506 sentences).
+\end{itemize}
+
+\vfill
+\begin{center}
+  \includegraphics[width=.5\linewidth]{wikipedia.png}
+  \includegraphics[width=.5\linewidth]{squid.jpg}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Baselines}
+No existing UCCA parsers $\Rightarrow$ conversion-based approximation.
+
+Bilexical DAG parsers (allow {\color{orange}reentrancy}):
+\begin{itemize}
+ \item DAGParser \cite{ribeyre-villemontedelaclergerie-seddah:2014:SemEval}:
+ transition-based.
+ \item TurboParser \cite{almeida-martins:2015:SemEval}:
+ graph-based.
+\end{itemize}
+
+Tree parsers (all transition-based):
+\begin{itemize}
+ \item MaltParser \cite{nivre2007maltparser}: bilexical tree parser.
+ \item Stack LSTM Parser \cite{dyer2015transition}: bilexical tree parser.
+ \item \textsc{uparse} \cite{maier2015discontinuous}: allows {\color{blue}non-terminals}, {\color{red}discontinuity}.
+\end{itemize}
+
+\begin{center}
+	\begin{dependency}
+	\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
+	You \^ want \^ to \^ take \^ a \^ long \^ bath \\
+	\end{deptext}
+	\depedge{2}{1}{$A$}
+	\depedge{2}{4}{$A$}
+	\depedge[dashed,edge start x offset=6pt]{4}{1}{$A$}
+	\depedge{4}{3}{$F$}
+	\depedge{4}{5}{$F$}
+	\depedge{4}{6}{$D$}
+	\depedge{4}{7}{$C$}
+	\end{dependency}
+	\captionof{figure}{UCCA bilexical DAG approximation (for tree, delete remote edges).}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Bilexical Graph Approximation}
+\begin{enumerate}
+ \item Convert UCCA to bilexical dependencies.
+ \item Train bilexical parsers and apply to test sentences.
+ \item Reconstruct UCCA graphs and compare with gold standard.
+\end{enumerate}
+\vfill
+
+\begin{flushright}
+	\begin{tikzpicture}[level distance=13mm, sibling distance=17mm, ->,
+	    every circle node/.append style={fill=black}]
+	  \tikzstyle{word} = [font=\rmfamily,color=black]
+	  \node (ROOT) [circle] {}
+	    child {node (After) [word] {After} edge from parent node[left] {\scriptsize $L$}}
+	    child {node (graduation) [circle] {}
+	    {
+	      child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
+	    } edge from parent node[left] {\scriptsize $H$} }
+	    child {node [word] {,} edge from parent node[right] {\scriptsize $U$}}
+	    child {node (moved) [circle] {}
+	    {
+	      child {node (Joe) [word] {Joe} edge from parent node[left] {\scriptsize $A$}}
+	      child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
+	      child {node [circle] {}
+	      {
+	        child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
+	        child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
+	      } edge from parent node[right] {\scriptsize $A$} }
+	    } edge from parent node[right] {\scriptsize $H$} }
+	    ;
+	  \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (Joe);
+	\end{tikzpicture}
+\end{flushright}
+
+\vspace{-14mm}
+\begin{flushleft}
+	\begin{dependency}
+	\begin{deptext}[column sep=.7em,ampersand replacement=\^,font=\rmfamily]
+	After \^ graduation \^ , \^ Joe \^ moved \^ to \^ Paris \\
+	\end{deptext}
+	\depedge{2}{1}{$L$}
+	\depedge{2}{3}{$U$}
+	\depedge[dashed]{2}{4}{$A$}
+	\depedge{5}{4}{$A$}
+	\depedge{2}{5}{$H$}
+	\depedge{7}{6}{$R$}
+	\depedge{5}{7}{$A$}
+	\end{dependency}
+\end{flushleft}
+\end{frame}
+\note{Some of the leading parsers. Don't say "the state-of-the-art".}
+
+\begin{frame}
+\frametitle{Evaluation}
+Comparing graphs over the same sequence of tokens,
+\begin{itemize}
+\item Match edges by their terminal yield and label.
+\item Calculate \textbf{labeled precision, recall and F1} scores.
+\item Separate primary and remote edges.
+\end{itemize}
+\vfill
+\begin{adjustbox}{frame,scale=.75,center}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=15mm, ->,
+	    every circle node/.append style={fill=black}]
+	  \tikzstyle{word} = [font=\rmfamily,color=black]
+	  \node at (-1,.7) {gold};
+	  \node (ROOT) at (0,0) [circle] {}
+	    child {node (After) [word] {After} edge from parent node[left] {$L$}}
+	    child {node (graduation) [circle] {}
+	    {
+	      child {node [word] {graduation} edge from parent node[left] {$P$}}
+	    } edge from parent node[left] {$H$} }
+	    child {node [word] {,} edge from parent node[right] {$U$}}
+	    child {node (moved) [circle] {}
+	    {
+	      child {node (Joe) [word] {Joe} edge from parent node[left] {$A$}}
+	      child {node [word] {moved} edge from parent node[left] {$P$}}
+	      child {node [circle] {}
+	      {
+	        child {node [word] {to} edge from parent node[left] {$R$}}
+	        child {node [word] {Paris} edge from parent node[right] {$C$}}
+	      } edge from parent node[right] {$A$} }
+	    } edge from parent node[right] {$H$} }
+	    ;
+	  \draw[dashed,->] (graduation) to node [auto] {$A$} (Joe);
+	  \node at (6,.7) {predicted};
+	  \node (ROOT_) at (7,0) [circle] {}
+	    child {node (After_) [word] {After} edge from parent node[left] {$L$}}
+	    child {node (graduation_) [circle] {}
+	    {
+	      child[red] {node [word] {graduation} edge from parent node[left] {$S$}}
+	    } edge from parent node[left] {$H$} }
+	    child {node [word] {,} edge from parent node[right] {$U$}}
+	    child {node (moved) [circle,xshift=3mm,yshift=-7mm] {}
+	    {
+	      child {node (Joe_) [word] {Joe} edge from parent node[left] {$A$}}
+	      child {node [word] {moved} edge from parent node[left] {$P$}}
+	      child[red] {node [word] {to} edge from parent node[left] {$F$}}
+	      child[red] {node (Paris_) [word] {Paris} edge from parent node[right] {$A$}}
+	    } edge from parent node[right] {$H$} }
+	    ;
+	  \draw[bend left,dashed,->] (graduation_) to node [auto] {$A$} (Joe_);
+	  \draw[bend left,dashed,->,red] (graduation_) to node [auto] {$A$} (Paris_);
+	\end{tikzpicture}
+\end{adjustbox}
+\vfill
+\begin{adjustbox}{scale=.75,center}
+	Primary:
+	\begin{tabular}{ccc}
+		\textbf{LP} & \textbf{LR} & \textbf{LF} \\ \hline
+		$\frac69=67\%$ & $\frac6{10}=60\%$ & 64\%
+	\end{tabular}
+	\hspace{1cm}
+	Remote:
+	\begin{tabular}{ccc}
+		\textbf{LP} & \textbf{LR} & \textbf{LF} \\ \hline
+		$\frac12=50\%$ & $\frac11=100\%$ & 67\%
+	\end{tabular}
+\end{adjustbox}
+\end{frame}
+
+\begin{frame}
+\frametitle{Results}
+\parser{BiLSTM} obtains the highest F-scores in all metrics:
+\begin{center}
+	\begin{tabular}{l|ccc|ccc}
+		& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
+		& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+		\hline
+		\parser{Sparse}
+		& 64.5 & 63.7 & 64.1 & 19.8 & 13.4 & 16 \\
+		\parser{MLP}
+		& 65.2 & 64.6 & 64.9 & 23.7 & 13.2 & 16.9 \\
+		\parser{BiLSTM}
+		& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4} \\
+		\hline
+		\footnotesize Bilexical DAG
+		& & & \small (91) & & & \small (58.3) \\
+		DAGParser
+		& 61.8 & 55.8 & 58.6 & 9.5 & 0.5 & 1 \\
+		TurboParser
+		& 57.7 & 46 & 51.2 & 77.8 & 1.8 & 3.7 \\
+		\hline
+		\footnotesize Bilexical tree
+		& & & \footnotesize (91) & & & \footnotesize -- \\
+		MaltParser
+		& 62.8 & 57.7 & 60.2 & -- & -- & -- \\
+		Stack LSTM
+		& 73.2 & 66.9 & 69.9 & -- & -- & -- \\
+		\hline
+		\footnotesize Tree
+		& & & \small (100) & & & \small -- \\
+		\textsc{uparse}
+		& 60.9 & 61.2 & 61.1 & -- & -- & --
+	\end{tabular}
+	\captionof{table}{Results on the Wiki test set.}
+\end{center}
+\end{frame}
+\note{The experiments show \parser{} outperforms a large variety of baseline parsers. \\
+Remote edges are challenging -- they incorporate the REENTRANCY in the graph, and \parser{} parses them quite effectively.}
+
+\begin{frame}
+\frametitle{Results}
+Comparable on out-of-domain test set:
+\begin{center}
+	\begin{tabular}{l|ccc|ccc}
+		& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
+		& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+		\hline
+		\parser{Sparse}
+		& 59.6 & 59.9 & 59.8 & 22.2 & 7.7 & 11.5 \\
+		\parser{MLP}
+		& 62.3 & 62.6 & 62.5 & 20.9 & 6.3 & 9.7 \\
+		\parser{BiLSTM}
+		& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3} \\
+		\hline
+		\footnotesize Bilexical DAG
+		& & & \footnotesize (91.3) & & & \footnotesize (43.4) \\
+		DAGParser
+		& 56.4 & 50.6 & 53.4 & -- & 0 & 0 \\
+		TurboParser
+		& 50.3 & 37.7 & 43.1 & 100 & 0.4 & 0.8 \\
+		\hline
+		\footnotesize Bilexical tree
+		& & & \footnotesize (91.3) & & & \footnotesize -- \\
+		MaltParser
+		& 57.8 & 53 & 55.3 & -- & -- & -- \\
+		Stack LSTM
+		& 66.1 & 61.1 & 63.5 & -- & -- & -- \\
+		\hline
+		\footnotesize Tree
+		& & & \footnotesize (100) & & & \footnotesize -- \\
+		\textsc{uparse}
+		& 52.7 & 52.8 & 52.8 & -- & -- & --
+	\end{tabular}
+	\captionof{table}{Results on the 20K Leagues out-of-domain set.}
+\end{center}
+\end{frame}
+\note{We also evaluated all parsers on the out-of-domain set, to test their domain adaptation ability. The results are quite good, despite the different genre.}
+
+\section{Discussion}
+
+\begin{frame}
+\frametitle{Fine-Grained Analysis}
+Evaluation of \parser{BiLSTM} per edge type:
+
+\begin{adjustbox}{center}
+\includegraphics[width=\pagewidth]{peredge1.png}
+\end{adjustbox}
+
+\vspace{-4mm}
+
+\begin{adjustbox}{center}
+\includegraphics[width=\pagewidth]{peredge2.png}
+\end{adjustbox}
+\end{frame}
+
+\begin{frame}
+\frametitle{Online Demo}
+\url{http://bit.ly/tupademo} \\
+\vspace{-5mm}
+\begin{adjustbox}{center}
+  \includegraphics[width=\pagewidth]{demo.png}
+\end{adjustbox}
+\end{frame}
+
+\begin{frame}
+\frametitle{Error Analysis}
+Copular clauses tend to be parsed as identity.
+\begin{adjustbox}{center}
+  \includegraphics[width=.7\textwidth]{sixyearsold.png}
+\end{adjustbox}
+But, from the guidelines\footnote{\url{http://www.cs.huji.ac.il/~oabend/ucca/guidelines.pdf}}:
+\[
+\textrm{John}_A \Big[\textrm{is}_F \big[[\textrm{six}_E \textrm{years}_C]_E \textrm{old}_C\big]_C \Big]_S
+\]
+\end{frame}
+
+
+\section{Future Work}
+
+\begin{frame}
+\frametitle{Future Work: UCCA}
+Already annotated in UCCA, but not yet handled by TUPA:
+\begin{itemize}
+	\item Linkage: inter-scene relations (see example).
+	\item Implicit units: units not mentioned at all in the text.
+	\item Inter-sentence relations: discourse structure.
+\end{itemize}
+\begin{flushright}
+  \begin{adjustbox}{scale=.7,margin=1mm,frame}
+	  \begin{tabular}{c>{\small\it}l}
+		  $LR$ & link relation \\
+		  $LA$ & link argument
+	  \end{tabular}
+  \end{adjustbox}
+\end{flushright}
+\vspace{-2cm}
+\begin{center}
+  \begin{tikzpicture}[level distance=14mm, sibling distance=22mm, ->,
+      every node/.append style={font=\small}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=black, circle] {}
+      child {node (After) [word] {After} edge from parent node[pos=.8,above] {\scriptsize $L$}}
+      child {node (graduation) [fill=black, circle] {}
+      {
+        child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
+      } edge from parent node[left] {\scriptsize $H$} }
+      child {node [word] {,} edge from parent node[right] {\scriptsize $U$}}
+      child {node (moved) [fill=black, circle] {}
+      {
+        child {node (Joe) [word] {Joe} edge from parent node[left] {\scriptsize $A$}}
+        child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
+        child {node [fill=black, circle] {}
+        {
+          child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
+          child {node [word] {Paris} edge from parent node[left] {\scriptsize $C$}}
+        } edge from parent node[left] {\scriptsize $A$} }
+      } edge from parent node[right] {\scriptsize $H$} }
+      ;
+    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (Joe);
+    \node (LKG) at (-1.8,0) [fill=black!20, circle] {};
+          \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
+          \draw (LKG) to[out=-60, in=90] node [below] {\scriptsize $LA\quad$} (graduation);
+          \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
+  \end{tikzpicture}
+  \captionof{figure}{UCCA graph with a Linkage relation.}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Future Work: AMR}
+Similar in structure and content, but poses several challenges:
+\begin{itemize}
+	\item Node labels: not just edges, not also nodes are labeled.
+	\item Partial alignment: orphan tokens, implicit concepts.
+\end{itemize}
+\vspace{-5mm}
+\begin{center}
+  \begin{tikzpicture}[level distance=15mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      level 1/.style={sibling distance=36mm},
+	  level 2/.style={sibling distance=16mm},
+	  level 3/.style={sibling distance=12mm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [draw=black,ellipse] {move-01}
+      child {node [draw=black,ellipse] {after}
+      {
+	        child {node [word] {After} edge from parent}
+	        child {node (graduation) [draw=black,ellipse] {graduate-01}
+		    {
+		      child {node [word] {graduation} edge from parent}
+		    } edge from parent node {op1} }
+      } edge from parent node {time} }
+      child {node (Joe) [draw=black,ellipse] {person}
+      {
+      	child {node {}
+	    {
+    	  child {node [word] {,} edge from parent [draw=none]}
+    	} edge from parent [draw=none]}
+        child {node [draw=black,ellipse] {name}
+	    {
+		    child {node [draw=black,ellipse] {"Joe"}
+		    {
+		      child {node [word] {Joe} edge from parent}
+		    } edge from parent node {op1} }
+	    } edge from parent node {name} }
+      } edge from parent node {ARG0} }
+      child {node [draw=black,ellipse] {city}
+      {
+        child {node {}
+	    {
+	    	child {node [word] (moved) {moved} edge from parent [draw=none]}
+	        child {node [word] {to} edge from parent [draw=none]}
+	    } edge from parent [draw=none]}
+        child {node [draw=black,ellipse] {name}
+	    {
+		    child {node [draw=black,ellipse] {"Paris"}
+		    {
+		      child {node [word] {Paris} edge from parent}
+		    } edge from parent node {op1} }
+	    } edge from parent node {name} }
+      } edge from parent node {ARG2} }
+      ;
+      \draw[bend left] (ROOT) to node {} (moved);
+      \draw[dashed] (graduation) to node {ARG0} (Joe);
+  \end{tikzpicture}
+  \captionof{figure}{AMR graph in UCCA format.}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Future Work: SDP}
+Similar structure, but without non-terminal nodes.
+
+By applying bilexical conversion in reverse, \parser{} can be used.
+
+\vfill
+\begin{center}
+  \begin{tikzpicture}[level distance=3cm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      level 1/.style={sibling distance=36mm},
+	  level 2/.style={sibling distance=16mm},
+	  level 3/.style={sibling distance=12mm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=black,circle] {}
+      child {node (after) [fill=black,circle] {}
+	  {
+	    child {node [word] {After} edge from parent}
+	    child {node [word] {graduation} edge from parent node {ARG2}}
+	    child {node [word] {,} edge from parent [draw=none]}
+	  } edge from parent }
+      child {node (moved) [fill=black,circle] {}
+      {
+        child {node [word] {Joe} edge from parent node {ARG1}}
+        child {node [word] {moved} edge from parent}
+      } edge from parent node {top} }
+      child {node (to) [fill=black,circle] {}
+      {
+      	child {node [word] {to} edge from parent}
+      	child {node [word] {Paris} edge from parent node {ARG2}}
+      } edge from parent }
+      ;
+      \draw[dashed] (after) to node {ARG1} (moved);
+      \draw[dashed] (to) to node {ARG1} (moved);
+  \end{tikzpicture}
+  \captionof{figure}{Semantic dependency graph (DM) in UCCA format.}
+\end{center}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Conclusion}
+\begin{itemize}
+ \item UCCA's semantic distinctions require a graph structure including {\color{blue}non-terminals}, {\color{orange}reentrancy} and {\color{red}discontinuity}.
+ \item \parser{} is an accurate transition-based UCCA parser,
+ 	and the \textbf{first} to support UCCA and any DAG over the text tokens.
+ \item Outperforms strong conversion-based baselines.
+\end{itemize}
+
+\onslide<2->{
+Future Work:
+
+\begin{itemize}
+ \item More languages (German corpus construction is underway).
+ \item Broad coverage UCCA parsing.
+ \item Parsing other schemes, such as AMR.
+ \item Text simplification, MT evaluation and other applications.
+\end{itemize}
+}
+
+\vfill
+Code: \url{https://github.com/danielhers/tupa}
+
+Demo: \url{http://bit.ly/tupademo}
+
+Corpora: \url{http://www.cs.huji.ac.il/~oabend/ucca.html}
+
+\onslide<3>{
+\vfill
+\begin{flushright}
+	Thank you!
+\end{flushright}
+}
+\end{frame}
+
+
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apalike}
+\tiny\bibliography{references}
+\end{frame}
+
+
+\section{Backup}
+
+
+\begin{frame}
+\frametitle{UCCA Corpora}
+\centering
+\begin{tabular}{l|ccc|c}
+	& \multicolumn{3}{c|}{Wiki} & 20K \\
+	& \small Train & \small Dev & \small Test & Leagues \\
+	\hline
+	\# passages & 300 & 34 & 33 & 154 \\
+	\# sentences & 4268 & 454 & 503 & 506 \\
+	\hline
+	\# nodes & 298,993 & 33,704 & 35,718 & 29,315 \\
+	\% terminal & 42.96 & 43.54 & 42.87 & 42.09 \\
+	\% non-term. & 58.33 & 57.60 & 58.35 & 60.01 \\
+	\% \textbf{discont.} & \textbf{0.54} & \textbf{0.53} & \textbf{0.44} & \textbf{0.81} \\
+	\% \textbf{reentrant} & \textbf{2.38} & \textbf{1.88} & \textbf{2.15} & \textbf{2.03} \\
+	\hline
+	\# edges & 287,914 & 32,460 & 34,336 & 27,749 \\
+	\% primary & 98.25 & 98.75 & 98.74 & 97.73 \\
+	\% remote & 1.75 & 1.25 & 1.26 & 2.27 \\
+	\hline
+	\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
+	\# children & 1.67 & 1.68 & 1.66 & 1.61 
+\end{tabular}
+\captionof{table}{Corpus statistics.}
+\end{frame}
+
+\begin{frame}
+\frametitle{Evaluation}
+\textit{Mutual edges} between predicted graph $G_p=(V_p,E_p,\ell_p)$
+and gold graph $G_g=(V_g,E_g,\ell_g)$,
+both over terminals $W = \{w_1,\ldots,w_n\}$:
+\[
+M(G_p,G_g) =
+    \Bigl\{(e_1,e_2) \in E_p \times E_g \;\Big|\;
+    y(e_1) = y(e_2) \wedge \ell_p(e_1)=\ell_g(e_2)\Bigr\}
+\]
+The yield $y(e) \subseteq W$ of an edge $e=(u,v)$ in either graph
+is the set of terminals in $W$ that are descendants of $v$. \hfill
+$\ell$ is the edge label.
+
+\vfill
+Labeled precision, recall and F-score are then defined as:
+\[
+\text{LP} = \frac{|M(G_p,G_g)|}{|E_p|},\quad
+\text{LR} = \frac{|M(G_p,G_g)|}{|E_g|},
+\]
+\[
+\text{LF} = \frac{2 \cdot \text{LP} \cdot \text{LR}}{\text{LP} + \text{LR}}.
+\]
+Two variants:
+one for primary edges, and another for remote edges.
+\end{frame}
+
+\end{document}
