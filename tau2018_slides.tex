@@ -955,6 +955,7 @@ Evaluation of \parser{BiLSTM} per edge type:
 
 \begin{frame}
 \frametitle{Error Analysis}
+\only<1>{
 Copular clauses tend to be parsed as identity.
 \begin{adjustbox}{center}
   \includegraphics[width=.7\textwidth]{sixyearsold.png}
@@ -963,6 +964,13 @@ But, from the guidelines\footnote{\url{http://www.cs.huji.ac.il/~oabend/ucca/gui
 \[
 \textrm{John}_A \Big[\textrm{is}_F \big[[\textrm{six}_E \textrm{years}_C]_E \textrm{old}_C\big]_C \Big]_S
 \]
+}
+\only<2>{
+The \textit{participant} category is used when \textit{adverbial} should be.
+\begin{adjustbox}{center}
+  \includegraphics[width=\textwidth]{likethewind.png}
+\end{adjustbox}
+}
 \end{frame}
 
 
@@ -1191,7 +1199,7 @@ Future Work:
 \begin{itemize}
  \item More languages (German corpus construction is underway).
  \item Broad coverage UCCA parsing.
- \item Parsing other schemes, such as AMR.
+ \item Parsing other schemes, such as AMR and SDP.
  \item Text simplification, MT evaluation and other applications.
 \end{itemize}
 }
