@@ -98,7 +98,7 @@ The \textbf{first parser} to support the combination of three properties:
 \begin{enumerate}
 \item<1-> {\color{blue} Non-terminal nodes} --- entities and events over the text
 \item<2-> {\color{orange} Reentrancy} --- allow argument sharing
-\item<3-> {\color{red} Discontinuity} -- conceptual units are split
+\item<3-> {\color{red} Discontinuity} --- conceptual units are split
 \end{enumerate}
 \onslide<3->{--- needed for many semantic schemes (e.g. AMR, UCCA).}
 \begin{center}
@@ -144,7 +144,7 @@ Necessary for...}
 \frametitle{Linguistic Structure Annotation Schemes}
 \begin{itemize}
 		\setlength\itemsep{1em}
-	\item Syntactic dependencies \cite{nivre2005dependency}
+	\item Syntactic dependencies
 		\item Semantic dependencies \cite{oepen2016towards}
 		\item AMR \cite{banarescu2013abstract}
 		\item UCCA \cite{abend2013universal}
@@ -320,7 +320,7 @@ A parallel English-French corpus has been annotated, and a German corpus is almo
 
 \begin{frame}
 \frametitle{Graph Structure}
-UCCA generates a directed acyclic graph (DAG): \textbf{no parser yet}. \\
+UCCA generates a directed acyclic graph (DAG). \\
 Text tokens are terminals, complex units are {\color{blue} non-terminal nodes}. \\
 \textit{Remote edges} enable {\color{orange} reentrancy} for argument sharing. \\
 Phrases may be {\color{red} discontinuous} (e.g., multi-word expressions).
@@ -554,8 +554,8 @@ Experimenting with three classifiers:
 \vspace{5mm}
 
 	\begin{tabular}{ll}
-	\textbf{Sparse} & Perceptron with sparse features. \\
-	\textbf{MLP} & Embeddings + feedforward NN classifier. \\
+	\textbf{Sparse} & Perceptron with sparse features \cite{ZhangTDP11}. \\
+	\textbf{MLP} & Embeddings + feedforward NN \cite{chen2014fast}. \\
 	\textbf{BiLSTM} & Embeddings + \only<2->{\textbf}{deep bidirectional LSTM} + MLP \\&
 	\cite{kiperwasser2016simple}.
 	\onslide<2-4>{\\ \\& Effective ``lookahead'' encoded in the representation.}
@@ -864,22 +864,22 @@ Comparing graphs over the same sequence of tokens,
 		\parser{BiLSTM}
 		& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4} \\
 		\hline
-		\footnotesize Bilexical DAG
-		& & & \small (91) & & & \small (58.3) \\
+		\scriptsize Bilexical DAG
+		& & & \scriptsize (91) & & & \scriptsize (58.3) \\
 		DAGParser
 		& 61.8 & 55.8 & 58.6 & 9.5 & 0.5 & 1 \\
 		TurboParser
 		& 57.7 & 46 & 51.2 & 77.8 & 1.8 & 3.7 \\
 		\hline
-		\footnotesize Bilexical tree
-		& & & \footnotesize (91) & & & \footnotesize -- \\
+		\scriptsize Bilexical tree
+		& & & \scriptsize (91) & & & \scriptsize -- \\
 		MaltParser
 		& 62.8 & 57.7 & 60.2 & -- & -- & -- \\
 		Stack LSTM
 		& 73.2 & 66.9 & 69.9 & -- & -- & -- \\
 		\hline
-		\footnotesize Tree
-		& & & \small (100) & & & \small -- \\
+		\scriptsize Tree
+		& & & \scriptsize (100) & & & \scriptsize -- \\
 		\textsc{uparse}
 		& 60.9 & 61.2 & 61.1 & -- & -- & --
 	\end{tabular}
@@ -904,22 +904,22 @@ Comparable on out-of-domain test set:
 		\parser{BiLSTM}
 		& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3} \\
 		\hline
-		\footnotesize Bilexical DAG
-		& & & \footnotesize (91.3) & & & \footnotesize (43.4) \\
+		\scriptsize Bilexical DAG
+		& & & \scriptsize (91.3) & & & \scriptsize (43.4) \\
 		DAGParser
 		& 56.4 & 50.6 & 53.4 & -- & 0 & 0 \\
 		TurboParser
 		& 50.3 & 37.7 & 43.1 & 100 & 0.4 & 0.8 \\
 		\hline
-		\footnotesize Bilexical tree
-		& & & \footnotesize (91.3) & & & \footnotesize -- \\
+		\scriptsize Bilexical tree
+		& & & \scriptsize (91.3) & & & \scriptsize -- \\
 		MaltParser
 		& 57.8 & 53 & 55.3 & -- & -- & -- \\
 		Stack LSTM
 		& 66.1 & 61.1 & 63.5 & -- & -- & -- \\
 		\hline
-		\footnotesize Tree
-		& & & \footnotesize (100) & & & \footnotesize -- \\
+		\scriptsize Tree
+		& & & \scriptsize (100) & & & \scriptsize -- \\
 		\textsc{uparse}
 		& 52.7 & 52.8 & 52.8 & -- & -- & --
 	\end{tabular}
@@ -1205,11 +1205,11 @@ Future Work:
 }
 
 \vfill
-Code: \url{https://github.com/danielhers/tupa}
+Code: \url{github.com/danielhers/tupa}
 
-Demo: \url{http://bit.ly/tupademo}
+Demo: \url{bit.ly/tupademo}
 
-Corpora: \url{http://www.cs.huji.ac.il/~oabend/ucca.html}
+Corpora: \url{cs.huji.ac.il/~oabend/ucca.html}
 
 \onslide<3>{
 \vfill
