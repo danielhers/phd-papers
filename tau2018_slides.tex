@@ -1,5 +1,5 @@
 \documentclass[t]{beamer}
-\mode<presentation>
+%\mode<presentation>
 
 \setbeamertemplate{itemize items}[circle]
 \setbeamertemplate{headline}{% 
@@ -969,7 +969,7 @@ But, from the guidelines\footnote{\url{http://www.cs.huji.ac.il/~oabend/ucca/gui
 \section{Future Work}
 
 \begin{frame}
-\frametitle{Future Work: UCCA}
+\frametitle{Broad-Coverage UCCA Parsing}
 Already annotated in UCCA, but not yet handled by TUPA:
 \begin{itemize}
 	\item Linkage: inter-scene relations (see example).
@@ -1018,102 +1018,158 @@ Already annotated in UCCA, but not yet handled by TUPA:
 \end{frame}
 
 \begin{frame}
-\frametitle{Future Work: AMR}
+\frametitle{AMR Parsing}
 Similar in structure and content, but poses several challenges:
 \begin{itemize}
 	\item Node labels: not just edges, not also nodes are labeled.
 	\item Partial alignment: orphan tokens, implicit concepts.
 \end{itemize}
-\vspace{-5mm}
+\vfill
 \begin{center}
-  \begin{tikzpicture}[level distance=15mm, ->,
+\only<1>{
+  \begin{tikzpicture}[level distance=18mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
-      level 1/.style={sibling distance=36mm},
-	  level 2/.style={sibling distance=16mm},
-	  level 3/.style={sibling distance=12mm}]
-    \tikzstyle{word} = [font=\rmfamily,color=black]
+      level 1/.style={sibling distance=26mm}]
     \node (ROOT) [draw=black,ellipse] {move-01}
       child {node [draw=black,ellipse] {after}
       {
-	        child {node [word] {After} edge from parent}
-	        child {node (graduation) [draw=black,ellipse] {graduate-01}
-		    {
-		      child {node [word] {graduation} edge from parent}
-		    } edge from parent node {op1} }
+            child {node (graduation) [draw=black,ellipse] {graduate-01} edge from parent node {op1} }
       } edge from parent node {time} }
-      child {node (Joe) [draw=black,ellipse] {person}
+      child {node (John) [draw=black,ellipse] {person}
       {
-      	child {node {}
-	    {
-    	  child {node [word] {,} edge from parent [draw=none]}
-    	} edge from parent [draw=none]}
         child {node [draw=black,ellipse] {name}
-	    {
-		    child {node [draw=black,ellipse] {"Joe"}
-		    {
-		      child {node [word] {Joe} edge from parent}
-		    } edge from parent node {op1} }
-	    } edge from parent node {name} }
+        {
+            child {node [draw=black,ellipse] {"John"} edge from parent node {op1} }
+        } edge from parent node {name} }
+      } edge from parent node {ARG0} }
+      child {node [draw=black,ellipse] {city}
+      {
+        child {node [draw=black,ellipse] {name}
+        {
+            child {node [draw=black,ellipse] {"Paris"} edge from parent node {op1} }
+        } edge from parent node {name} }
+      } edge from parent node {ARG2} }
+      ;
+      \draw (graduation) to node {ARG0} (John);
+  \end{tikzpicture}
+  \captionof{figure}{AMR graph.}
+  }
+\only<2>{
+  \begin{tikzpicture}[level distance=18mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      level 1/.style={sibling distance=28mm},
+      level 2/.style={sibling distance=14mm},
+      level 3/.style={sibling distance=12mm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [draw=black,ellipse] {$\langle \ell \rangle$-01}
+      child {node [draw=black,ellipse] {$\langle \ell \rangle$}
+      {
+            child {node [word] {After} edge from parent node {\tiny Terminal}}
+            child {node (graduation) [draw=black,ellipse] {$\langle v \rangle$-01}
+            {
+              child {node [word] {graduation \quad ,} edge from parent node {\tiny Terminal}}
+            } edge from parent node {op} }
+      } edge from parent node {time} }
+      child {node (John) [draw=black,ellipse] {person}
+      {
+        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
+        {
+          child {node [word] {John} edge from parent node {\tiny Terminal}}
+        } edge from parent node {name} }
       } edge from parent node {ARG0} }
       child {node [draw=black,ellipse] {city}
       {
         child {node {}
-	    {
-	    	child {node [word] (moved) {moved} edge from parent [draw=none]}
-	        child {node [word] {to} edge from parent [draw=none]}
-	    } edge from parent [draw=none]}
-        child {node [draw=black,ellipse] {name}
-	    {
-		    child {node [draw=black,ellipse] {"Paris"}
-		    {
-		      child {node [word] {Paris} edge from parent}
-		    } edge from parent node {op1} }
-	    } edge from parent node {name} }
+        {
+            child {node [word] (moved) {\quad moved} edge from parent [draw=none]}
+            child {node [word] {to} edge from parent [draw=none]}
+        } edge from parent [draw=none]}
+        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
+        {
+          child {node [word] {Paris} edge from parent node {\tiny Terminal}}
+        } edge from parent node {name} }
       } edge from parent node {ARG2} }
       ;
-      \draw[bend left] (ROOT) to node {} (moved);
-      \draw[dashed] (graduation) to node {ARG0} (Joe);
+      \draw[bend left] (ROOT) to node {\tiny Terminal} (moved);
+      \draw[dashed] (graduation) to node {ARG0} (John);
   \end{tikzpicture}
-  \captionof{figure}{AMR graph in UCCA format.}
+  \captionof{figure}{AMR graph in UCCA++ format.}
+}
 \end{center}
 \end{frame}
 
 \begin{frame}
-\frametitle{Future Work: SDP}
+\frametitle{Semantic Dependency Parsing}
 Similar structure, but without non-terminal nodes.
 
 By applying bilexical conversion in reverse, \parser{} can be used.
 
 \vfill
 \begin{center}
-  \begin{tikzpicture}[level distance=3cm, ->,
+\only<1>{
+    \begin{dependency}[text only label, label style={above}, font=\small]
+    \begin{deptext}[column sep=1.4em,ampersand replacement=\^]
+    After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+    \end{deptext}
+        \depedge{1}{2}{ARG2}
+        \depedge{5}{4}{ARG1}
+        \depedge[edge unit distance=2ex]{1}{5}{ARG1}
+        \deproot{5}{top}
+        \depedge[edge unit distance=4ex, edge start x offset=-1ex]{5}{7}{ARG2}
+        \depedge[edge start x offset=1ex]{6}{5}{ARG1}
+        \depedge{6}{7}{ARG2}
+    \end{dependency}
+  \captionof{figure}{SDP graph (in the DM formalism).}
+  }
+\only<2>{
+  \begin{tikzpicture}[level distance=18mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
       level 1/.style={sibling distance=36mm},
-	  level 2/.style={sibling distance=16mm},
-	  level 3/.style={sibling distance=12mm}]
+      level 2/.style={sibling distance=24mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
     \node (ROOT) [fill=black,circle] {}
       child {node (after) [fill=black,circle] {}
-	  {
-	    child {node [word] {After} edge from parent}
-	    child {node [word] {graduation} edge from parent node {ARG2}}
-	    child {node [word] {,} edge from parent [draw=none]}
-	  } edge from parent }
-      child {node (moved) [fill=black,circle] {}
       {
-        child {node [word] {Joe} edge from parent node {ARG1}}
-        child {node [word] {moved} edge from parent}
-      } edge from parent node {top} }
+        child {node [draw=none] {}
+        {
+          child {node [word] (after_word) {After} edge from parent [draw=none]}
+        } edge from parent [draw=none] }
+        child {node [draw=none] {}
+        {
+          child {node [word] (graduation) {graduation ,} edge from parent [draw=none]}
+        } edge from parent [draw=none] }
+      } edge from parent node {root}}
+      child {node [draw=none] {}
+      {
+        child {node (moved) [fill=black,circle] {}
+        {
+          child {node [word] {\quad \quad John} edge from parent node {ARG1}}
+          child {node [word] {moved} edge from parent node {head}}
+        } edge from parent [draw=none] }
+      } edge from parent [draw=none] }
       child {node (to) [fill=black,circle] {}
       {
-      	child {node [word] {to} edge from parent}
-      	child {node [word] {Paris} edge from parent node {ARG2}}
-      } edge from parent }
+        child {node [draw=none] {}
+        {
+            child {node [word] (to_word) {to} edge from parent [draw=none]}
+          } edge from parent [draw=none] }
+          child {node [draw=none] {}
+        {
+          child {node [word] (Paris) {Paris} edge from parent [draw=none]}
+        } edge from parent [draw=none] }
+      } edge from parent node {root}}
       ;
+      \draw (ROOT) to node {top} (moved);
+      \draw (after) to node {head} (after_word);
+      \draw (after) to node {ARG2} (graduation);
       \draw[dashed] (after) to node {ARG1} (moved);
       \draw[dashed] (to) to node {ARG1} (moved);
+      \draw (to) to node {head} (to_word);
+      \draw (moved) to node {ARG2} (Paris);
+      \draw[dashed] (to) to node {ARG2} (Paris);
   \end{tikzpicture}
-  \captionof{figure}{Semantic dependency graph (DM) in UCCA format.}
+  \captionof{figure}{SDP graph in UCCA++ format.}
+}
 \end{center}
 \end{frame}
 
