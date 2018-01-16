@@ -127,7 +127,7 @@ The \textbf{first parser} to support the combination of three properties:
         } edge from parent}
       } edge from parent}
       ;
-    \draw[bend left,dashed,->,\reecol,\reewid] (takeabath) to (You);
+    \draw[bend left,dashed,->,\reecol,\reewid] (totakealongbath) to (You);
     \draw[bend left,->,\discol,\diswid] (totakealongbath) to (long);
   \end{tikzpicture}
 \end{center}
@@ -229,7 +229,7 @@ Usable by non-experts.
 \hfill\url{ucca-demo.cs.huji.ac.il}
 \vfill
 
-Facilitates semantics-based human evaluation of machine translation \cite{birch2016hume}.
+Facilitates semantics-based human machine translation evaluation \cite{birch2016hume}.
 \hfill\url{ucca.cs.huji.ac.il/mteval}
 \vfill
 \begin{adjustbox}{center}
@@ -262,7 +262,7 @@ Phrases may be {\color{red} discontinuous} (e.g., multi-word expressions).
         } edge from parent node[right] {\scriptsize $P$} }
       } edge from parent node[left] {\scriptsize $A$} }
       ;
-    \draw[bend left,dashed,->,orange,very thick] (takeabath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left,dashed,->,orange,very thick] (totakealongbath) to node [auto] {\scriptsize $A$} (You);
     \draw[bend left,->,red,very thick] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
     \node at (6,-0.4) {\Large ----- primary edge};
     \node at (6,-1.4) {\Large - - - remote edge};
@@ -373,7 +373,7 @@ Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color
 	\only<20> \node[anchor=west] at (4,0.25) {\small long};
 	\only<21-22> \node[anchor=west] at (3,0.25) {\small long};
 	\only<31-> \node[anchor=west] at (2,0.25) {\small bath};
-	\only<-2,4-5>\draw[xstep=1cm,ystep=5mm,color=gray] (4,0) grid (10,.5);
+	\only<-2,4-6>\draw[xstep=1cm,ystep=5mm,color=gray] (4,0) grid (10,.5);
 	\only<3,5-7,9-10>\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (10,.5);
 	\only<8,11,13-14>\draw[xstep=1cm,ystep=5mm,color=gray] (6,0) grid (10,.5);
 	\only<12,15-16,24-27>\draw[xstep=1cm,ystep=5mm,color=gray] (7,0) grid (10,.5);
@@ -384,7 +384,7 @@ Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color
 	\only<9-10> \node[fill=blue, circle] at (5.5,0.25) {};
 	\only<13-14> \node[fill=red, circle] at (6.5,0.25) {};
 	\only<21-28> \node[fill=red, circle] at (8.5,0.25) {};
-	\only<4-5> \node[anchor=west] at (4,0.25) {\small You};
+	\only<4-6> \node[anchor=west] at (4,0.25) {\small You};
 	\only<24-27> \node[anchor=west] at (7,0.25) {\small You};
 	\only<-2>  \node[anchor=west] at (4,0.25) {\small want};
 	\only<-7> \node[anchor=west] at (5,0.25) {\small to};
