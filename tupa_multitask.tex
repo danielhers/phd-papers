@@ -966,10 +966,11 @@ An important factor in the success of multitask learning is the commonalities be
 In fact, this is why we decided to convert the auxiliary tasks into UCCA-like format for
 multitask training in the first place.
 To get a sense of the similarity between the converted formats and actual UCCA graphs,
-we perform unlabeled evaluation of the a sample annotated in each format, and gold-standard UCCA,
+we perform unlabeled evaluation of a sample annotated in each format, and gold-standard UCCA,
 after conversion to the unified format.
-The comparison is performed on 23 sentences from the development set of the Wall Street Journal
-corpus, which were manually annotated in all four formats.
+The comparison is performed on 100 sentences from Section 00 of the Wall Street Journal
+corpus, which were manually annotated in all four formats.\footnote{For UD, we converted the
+data from Stanford Dependencies using Stanford CoreNLP \cite{SCHUSTER16.779}}.
 The results are listed in Table~\ref{tab:common}.
 
 \begin{table}
