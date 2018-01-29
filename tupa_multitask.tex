@@ -973,7 +973,8 @@ we perform unlabeled evaluation of a sample annotated in each format, and gold-s
 after conversion to the unified format.
 The comparison is performed on 100 sentences from Section 00 of the Wall Street Journal
 corpus, which were manually annotated in all four formats.\footnote{For UD, we converted the
-data from Stanford Dependencies using Stanford CoreNLP \cite{SCHUSTER16.779}}.
+data from Stanford Dependencies using Stanford CoreNLP, including enhanced and enhanced++
+dependencies\cite{SCHUSTER16.779}}.
 The results are listed in Table~\ref{tab:common}.
 
 \begin{table}
@@ -982,9 +983,13 @@ The results are listed in Table~\ref{tab:common}.
 & \textbf{UP} & \textbf{UR} & \textbf{UF} & \textbf{UP} & \textbf{UR} & \textbf{UF} \\
 AMR & 52.2 & 15.5 & 23.9 & 7.3 & 5.5 & 6.3 \\
 DM & 63.6 & 49.8 & 55.9 & 6.9 & 63.8 & 12.4 \\
-UD & 75.3 & 82.9 & 78.9 & -- & 0 & --
+UD & 75.3 & 82.9 & 78.9 & -- & 0 & -- \\
+UD$^+$ & 75.1 & 82.4 & 78.5 & 11.5 & 12.8 & 12.1 \\
+UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 \end{tabular}
-\caption{Unlabeled UCCA evaluation of each scheme after conversion to the unified format.\label{tab:common}}
+\caption{Unlabeled UCCA evaluation of each scheme after conversion to the unified format.
+UD$^+$ and UD$^{++}$ refer to the Enhanced and Enhanced++ Universal Dependencies,
+respectively \cite{SCHUSTER16.779}.\label{tab:common}}
 \end{table}
 
 
