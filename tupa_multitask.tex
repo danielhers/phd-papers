@@ -60,7 +60,7 @@
   We convert these schemes into a unified format and investigate how
   the similarity between different tasks is related to the contribution of
   using one as an auxiliary task for another.
-  Given similar tasks, an LSTM-based neural network is able to generalize
+  Given similar tasks, a BiLSTM-based neural network is able to generalize
   using a shared representation, and effectively gains more training data
   for the low-resource task.
 \end{abstract}
@@ -330,33 +330,22 @@ for UCCA parsing in German and French (see \S\ref{sec:multilingual}).
       level 2/.style={sibling distance=14mm},
       level 3/.style={sibling distance=12mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [draw=black,ellipse] {$\langle \ell \rangle$-01}
-      child {node [draw=black,ellipse] {$\langle \ell \rangle$}
+    \node (ROOT) [word] {moved}
+      child {node [word] {After}
       {
-            child {node [word] {After} edge from parent node {\tiny Terminal}}
-            child {node (graduation) [draw=black,ellipse] {$\langle v \rangle$-01}
-            {
-              child {node [word] {graduation \quad ,} edge from parent node {\tiny Terminal}}
-            } edge from parent node {op} }
+            child {node (graduation) [word] {graduation} edge from parent node {op} }
       } edge from parent node {time} }
-      child {node (John) [draw=black,ellipse] {person}
+      child {node (John) [fill=black,circle] {}
       {
-        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
-        {
-          child {node [word] {John} edge from parent node {\tiny Terminal}}
-        } edge from parent node {name} }
+        child {node [word] {John} edge from parent node {name} }
       } edge from parent node {ARG0} }
-      child {node [draw=black,ellipse] {city}
+      child {node [fill=black,circle] {}
       {
         child {node {}
         {
-            child {node [word] (moved) {\quad moved} edge from parent [draw=none]}
             child {node [word] {to} edge from parent [draw=none]}
         } edge from parent [draw=none]}
-        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
-        {
-          child {node [word] {Paris} edge from parent node {\tiny Terminal}}
-        } edge from parent node {name} }
+        child {node [word] {Paris} edge from parent node {name} }
       } edge from parent node {ARG2} }
       ;
       \draw[bend left] (ROOT) to node {\tiny Terminal} (moved);
@@ -473,20 +462,15 @@ Pre-terminal nodes are omitted for brevity, except in AMR.}
 
 \section{Unified DAG format}\label{sec:conversion}
 
-To be able to tackle the four tasks presented in \S\ref{sec:tasks} using a single model,
-we develop a conversion algorithm for each scheme,
-to convert it into a unified DAG format.
+To be able to train a single model on the four tasks presented in \S\ref{sec:tasks},
+we propose an algorithm to convert them all into a unified DAG format.
 In this format, the graph is a rooted DAG, and the text tokens are terminal nodes.
-Edges are labeled, and nodes are optionally labeled too (to support AMR parsing).
-All edges entering terminals bear the \textit{Terminal} label.
-As in the UCCA format,
-graph edges are divided into \textit{primary} and \textit{remote} edges,
+As in the UCCA format, the graph edges are labeled.
+and are divided into \textit{primary} and \textit{remote} edges,
 where the primary edges form a tree (all nodes have at most one primary parent,
 and the root has none).
 The remote edges enable reentrancy, and thus together with them the graph
 is in general a DAG and not necessarily a tree.
-Not all non-terminals must have terminal descendants.
-Non-terminals with an empty terminal yield are called \textit{implicit}.
 Figure~\ref{fig:converted_examples} shows examples for converted graphs.
 
 Converting UCCA into the unified format consists simply of removing linkage nodes
