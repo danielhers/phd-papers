@@ -797,22 +797,26 @@ are shown in Table~\ref{tab:single}.
 
 
 \begin{table}
-\begin{tabular}{ll|ccc}
-\textbf{UD English} & \small LAS & & & \textbf{F1} \\
-Ours & & & & 80.1 \\
-\multicolumn{2}{l|}{\citet{dozat2016deep}} &&& 82.2 \\
+\begin{tabular}{l|ccc}
+\textbf{UD English} && \multicolumn{2}{r}{\textbf{LAS F1}} \\
+Ours &&& 80.1 \\
+D\&M &&& 82.2 \\
 \hline
-\textbf{AMR} & \small Smatch & \textbf{P} & \textbf{R} & \textbf{F1} \\
-Ours & & 66.7 & 64.7 & 65.7 \\
-\multicolumn{2}{l|}{\citet{foland2017abstract}} &&& 70.9 \\
+\textbf{AMR} & \textbf{P} & \textbf{R} & \textbf{F1} \\
+Ours & 66.7 & 64.7 & 65.7 \\
+F\&M &&& 70.9 \\
 \hline
-\textbf{DM} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-Ours & & 76 & 75.4 & 75.7 \\
-\multicolumn{2}{l|}{\citet{thomson-EtAl:2014:SemEval}} &&& 89.4
+\textbf{DM} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+Ours & 76 & 75.4 & 75.7 \\
+CMU &&& 89.4
 \end{tabular}
 \caption{Single-task results on dev set for each auxiliary task,
 when trained only on that task.
-Best reported results given for comparison.
+Best reported results given for comparison:
+D\&M is \citet{dozat2016deep},
+F\&M is \citet{foland2017abstract},
+and CMU is \citet{thomson-EtAl:2014:SemEval}.
+AMR is evaluated by Smatch \cite{cai2013smatch}.
 \label{tab:single}}
 \end{table}
 
