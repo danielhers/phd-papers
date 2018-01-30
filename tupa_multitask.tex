@@ -705,7 +705,6 @@ meaningful in this case.
 \section{Multitask transition-based parsing}\label{sec:multitask}
 
 Since the same model can be applied to different tasks, we can train it jointly on multiple tasks.
-In this section we focus on the NN model.
 Rather than sharing the whole set of parameters (and getting a mix of action labels as a result),
 we share only part of the model.
 Specifically, in addition to the task-specific input-encoding bidirectional LSTM,
@@ -800,10 +799,7 @@ are shown in Table~\ref{tab:single}.
 \begin{table}
 \begin{tabular}{llccc}
 \textbf{UCCA \small(Wiki)} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-\multirow{2}{*}{Sparse} &
-         \small Primary & 61.8 & 62.1 & 62 \\
-       & \small Remote & 27.7 & 21.5 & 24.2 \\
-\multirow{2}{*}{NN} &
+\multirow{2}{*}{Ours} &
          \small Primary & 72.9 & 73 & 73 \\
        & \small Remote & 53 & 47 & 49.8 \\
 \multirow{2}{3cm}{\citet{hershcovich2017a}\footnote{Our experiments
@@ -812,18 +808,15 @@ are shown in Table~\ref{tab:single}.
        & \small Remote & 49.2 & 50.5 & 49.8 \\
 \hline
 \textbf{UD \small(English)} & \small LAS & & & \textbf{F1} \\
-Sparse & & & & 64.8 \\
-NN & & & & 80.1 \\
+Ours & & & & 80.1 \\
 \multicolumn{4}{l}{\citet{dozat2016deep}} & 82.2 \\
 \hline
 \textbf{AMR \small(LDC2016E25)} & \small Smatch & \textbf{P} & \textbf{R} & \textbf{F1} \\
-Sparse & & 55 & 53.7 & 54.4 \\
-NN & & 66.7 & 64.7 & 65.7 \\
+Ours & & 66.7 & 64.7 & 65.7 \\
 \multicolumn{4}{l}{\citet{foland2017abstract}} & 70.9 \\
 \hline
 \textbf{SDP \small(DM)} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-Sparse & & 55.2 & 51.4 & 53.2 \\
-NN & & 76 & 75.4 & 75.7 \\
+Ours & & 76 & 75.4 & 75.7 \\
 \multicolumn{2}{l}{\citet{thomson-EtAl:2014:SemEval}} & & & 89.4
 \end{tabular}
 \caption{Single-task results on dev set for each task.
@@ -865,8 +858,8 @@ we experiment with the French and German \textit{20K Leagues} UCCA corpora
 The results are given in Table~\ref{tab:multilingual}.
 The contribution of multitask learning is substantial in this case:
 although the sparse classifier has an advantage on small datasets
-(the NN classifier does not get even a single edge right on the tiny French dataset),
-when coupled with UD parsing as an auxiliary task, the NN classifier surpasses it
+(the classifier does not get even a single edge right on the tiny French dataset),
+when coupled with UD parsing as an auxiliary task, the classifier surpasses it
 in both languages.
 This shows that a small UCCA training corpus may suffice, as long as it is complemented by
 a large training corpus in an auxiliary task in the same language.
@@ -877,17 +870,16 @@ a large training corpus in an auxiliary task in the same language.
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \multicolumn{4}{l|}{\textbf{German}} & \\
 \multicolumn{4}{l|}{Single-task:} & \\
-\small Sparse & 67.4 & 65.5 & 66.4 & 24.1 & 2.9 & 5.1 \\
-\small NN & 54.2 & 38.4 & 45 & 35 & 17.3 & 23.1 \\
+\small Ours & 54.2 & 38.4 & 45 & 35 & 17.3 & 23.1 \\
 \multicolumn{4}{l|}{Multitask (UCCA + UD):} \\
-\small NN & 74.6 & 74.1 & 74.4 & 66 & 13.6 & 22.5 \\
+\small Ours & 74.6 & 74.1 & 74.4 & 66 & 13.6 & 22.5 \\
 \hline
 \multicolumn{4}{l|}{\textbf{French}} & \\
 \multicolumn{4}{l|}{Single-task:} & \\
 \small Sparse & 60.8 & 59.2 & 60 & 7.1 & 3.8 & 4.9 \\
-\small NN & -- & 0 & -- & -- & 0 & -- \\
+\small Ours & -- & 0 & -- & -- & 0 & -- \\
 \multicolumn{4}{l|}{Multitask (UCCA + UD):} & \\
-\small NN & 64.4 & 64.4 & 64.4 & 36.4 & 7.5 & 12.5
+\small Ours & 64.4 & 64.4 & 64.4 & 36.4 & 7.5 & 12.5
 \end{tabular}
 \caption{Single-task and multitask results on the UCCA 20K Leagues development set in German and French.\label{tab:multilingual}}
 \end{table}
