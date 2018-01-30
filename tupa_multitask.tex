@@ -558,15 +558,15 @@ part of the unified DAG format. Any AMR created by this system will thus have un
 nodes, but we can use gold node labels in training.
 
 \subsection{Classifier}\label{sec:classifier}
-We experiment with two different models for the parser in the single-task case:
-(1) a linear classifier with sparse features, trained with the averaged structured perceptron algorithm
-\cite{Coll:04} and \textsc{MinUpdate} \cite{goldberg2011learning},
-and (2) a bidirectional LSTM feature extractor with dense embeddings as inputs,
+To select the next transition at each time step,
+we use a bidirectional LSTM feature extractor with dense embeddings as inputs,
 combined with a feedforward network and a softmax layer for classification.
-
-For all classifiers, inference is performed greedily,
+Inference is performed greedily,
 and training is done with an oracle that provides a set of all possible labels at a given state
 (but only valid transitions may be taken during training).
+The network is trained to maximize the log-likelihood of all correct actions at
+each step, and the actual transition taken in training is the correct transition
+with the highest score given by the classifier.
 
 \begin{figure}[t]
    \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
@@ -632,9 +632,9 @@ AMR-specific.
 
 Lemmas, POS tags, syntactic dependency labels and named entities are extracted using spaCy
 \cite{spacy2}.\footnote{\url{https://spacy.io}}
-We use the categorical cross-entropy objective function and optimize the
-NN classifiers with stochastic gradient descent (SGD).
-We use 250K word vectors from fastText \cite{bojanowski2016enriching}, pretrained over Wikipedia.
+We use stochastic gradient descent (SGD) for optimization,
+and initialize the external word embeddings with 250K word vectors from fastText
+\cite{bojanowski2016enriching}, pretrained over Wikipedia and updated during training.
 The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
 Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 
