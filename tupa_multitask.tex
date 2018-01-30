@@ -207,7 +207,7 @@ This is in contrast to ``shallow'' semantic parsing,
 such as Semantic Role Labeling
 \cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
 or parsing to logical forms.
-We consider four target representations: UCCA, AMR, SDP and UD.
+We consider four target representations: UCCA, AMR, DM and UD.
 Figure~\ref{fig:original_examples} shows an example graph for each scheme,
 annotating the sentence ``After graduation, John moved to Paris''.
 
@@ -467,12 +467,12 @@ Figure~\ref{fig:converted_examples} shows examples for converted graphs.
 
 Converting UCCA into the unified format consists simply of removing linkage nodes
 and edges (see Figure~\ref{fig:converted_example_ucca}).
-To convert bilexical dependencies (SDP and UD) into the unified DAG format,
+To convert bilexical dependencies (DM and UD) into the unified DAG format,
 we add a pre-terminal for each terminal,
 and then attach the pre-terminals according to the original dependency edges.
 We add an additional level with a \textit{head} edge to avoid terminal and non-terminal siblings
 (see Figure~\ref{fig:converted_example_sdp} and Figure~\ref{fig:converted_example_ud}).
-Since SDP allows multiple roots, we attached the corresponding non-terminals as children of
+Since DM allows multiple roots, we attached the corresponding non-terminals as children of
 the single converted graph root, with the \textit{root} edge label.
 Top nodes are labeled with \textit{top} instead.
 In case of reentrancy, an arbitrary parent is marked as primary, and the rest as remote
@@ -714,7 +714,7 @@ in a manner similar to \citet{P17-1186}.
 
 Multitask learning is particularly beneficial for improving on tasks with small training data.
 As UCCA has a relatively small corpus (see \S\ref{sec:data}),
-we focus on UCCA parsing and treat AMR, SDP and UD parsing
+we focus on UCCA parsing and treat AMR, DM and UD parsing
 as auxiliary tasks, creating a unified corpus by shuffling all sentences from all datasets together,
 but using only the score on the UCCA development set as the criterion for early stopping.
 
@@ -731,7 +731,7 @@ labeled UCCA parsing.
 
 We perform various experiments to evaluate the benefit of each auxiliary task to UCCA parsing.
 First, we train the parser separately on each task.
-Next, we train it to parser UCCA in a multitask setting, where AMR, SDP and UD are used as
+Next, we train it to parser UCCA in a multitask setting, where AMR, DM and UD are used as
 auxiliary tasks. Following previous work, we use the same hyperparameter settings
 as for the single-task case \cite{N16-1179,P16-2038,C16-1013,C16-1059,C16-1179,E17-1005}.
 
@@ -749,7 +749,7 @@ as for the single-task case \cite{N16-1179,P16-2038,C16-1013,C16-1059,C16-1179,E
 \hline
 \textbf{AMR} & LDC2016E25 & 708701 & 39260 \\
 \hline
-\textbf{SDP} & SemEval 2015 \small(DM) & 802717 & 35657 \\
+\textbf{DM} & SemEval 2015 & 802717 & 35657 \\
 \end{tabular}
 \caption{Size of each corpus: total number of tokens ({\#}tok) and sentences
 ({\#}sent).\label{tab:corpora}}
@@ -778,7 +778,7 @@ As each scheme has its own evaluation metric, we evaluate them separately.
 For UCCA, we evaluate labeled precision, recall and F1 on primary and remote edges.
 For UD, we use LAS F1.
 For AMR, we use Smatch \cite{cai2013smatch}.
-For SDP, we use labeled precision, recall and F1.
+For DM, we use labeled precision, recall and F1.
 
 
 \subsection{Results}\label{sec:results}
@@ -798,15 +798,6 @@ are shown in Table~\ref{tab:single}.
 
 \begin{table}
 \begin{tabular}{ll|ccc}
-\textbf{UCCA Wiki} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-\multirow{2}{*}{Ours} &
-         \small Primary & 72.9 & 73 & 73 \\
-       & \small Remote & 53 & 47 & 49.8 \\
-\multirow{2}{3cm}{\citet{hershcovich2017a}\footnote{Our experiments
-    reached slightly lower scores on primary edges }} &
-         \small Primary & 74.5 & 74.9 & 74.7 \\
-       & \small Remote & 49.2 & 50.5 & 49.8 \\
-\hline
 \textbf{UD English} & \small LAS & & & \textbf{F1} \\
 Ours & & & & 80.1 \\
 \multicolumn{2}{l|}{\citet{dozat2016deep}} &&& 82.2 \\
@@ -815,11 +806,12 @@ Ours & & & & 80.1 \\
 Ours & & 66.7 & 64.7 & 65.7 \\
 \multicolumn{2}{l|}{\citet{foland2017abstract}} &&& 70.9 \\
 \hline
-\textbf{SDP (DM)} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\textbf{DM} & & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 Ours & & 76 & 75.4 & 75.7 \\
 \multicolumn{2}{l|}{\citet{thomson-EtAl:2014:SemEval}} &&& 89.4
 \end{tabular}
-\caption{Single-task results on dev set for each task.
+\caption{Single-task results on dev set for each auxiliary task,
+when trained only on that task.
 Best reported results given for comparison.
 \label{tab:single}}
 \end{table}
@@ -837,16 +829,20 @@ The results for multitask parsing are shown in Table~\ref{tab:multi}.
 \multirow{2}{1cm}{Aux. tasks} & \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
 & \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\small AMR & 73.1 & 73.4 & 73.3 & 44 & 50.5 & 47\\
-\small UD & 73 & 73.4 & 73.2 & 48.3 & 51.7 & 49.9 \\
-\small SDP & 73.7 & 73.3 & 73.5 & 44 & 57.9 & 50 \\
-\small SDP+UD & 73.7 & 73.5 & 73.6 & 43.5 & 42.4 & 42.9 \\
-\small AMR+UD & 73.5 & 73.4 & 73.4 & 51.3 & 42.4 & 46.4 \\
-\small AMR+SDP & 74.1 & 74.2 & 74.1 & 49.4 & 50.5 & 49.9 \\
-\small all three & 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1
+TUPA & 74.5 & 74.9 & 74.7 & 49.2 & 50.5 & 49.8 \\
+\hline
+Single & 72.9 & 73 & 73 &53 & 47 & 49.8 \\
+AMR & 73.1 & 73.4 & 73.3 & 44 & 50.5 & 47\\
+UD & 73 & 73.4 & 73.2 & 48.3 & 51.7 & 49.9 \\
+DM & 73.7 & 73.3 & 73.5 & 44 & 57.9 & 50 \\
+\tiny DM+UD & 73.7 & 73.5 & 73.6 & 43.5 & 42.4 & 42.9 \\
+\tiny AMR+UD & 73.5 & 73.4 & 73.4 & 51.3 & 42.4 & 46.4 \\
+\tiny AMR+DM & 74.1 & 74.2 & 74.1 & 49.4 & 50.5 & 49.9 \\
+All & 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1
 \end{tabular}
-\caption{Multitask results on UCCA Wiki dev set.
-\label{tab:multi}}
+\caption{Results on UCCA Wiki dev set.
+TUPA is from \citet{hershcovich2017a}\footnote{Our experiments
+    reached slightly lower scores on primary edges}\label{tab:multi}}
 \end{table}
 
 
