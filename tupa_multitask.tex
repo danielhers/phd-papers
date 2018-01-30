@@ -488,32 +488,17 @@ we introduce the alignments as edges in conversion.
 We use automatically aligned AMR graphs provided in the dataset (see \S\ref{sec:data}),
 and attach each node with a \textit{Terminal} edge to each of the terminals it is aligned to.
 
-\subsection{Node label sparsity}
-To reduce the number of unique node labels, we use the alignments to introduce
-placeholders in the labels.
-For example, a node labeled \textit{move-01} aligned to the terminal \textit{moved} will
-be instead labeled $\langle \ell \rangle$\textit{-01},
-where $\langle \ell \rangle$ is a placeholder for the token's lemma.
-In this way we reduce the number of node labels in the dataset from tens of thousands to 7300,
-of which 2000 occur only once and are treated as unknown.
-We use similar placeholders for the token's text and capitalized text,
-negation, verb, noun and adjective form
-(from a pre-defined lexicon), and Wikipedia concept.
-We use DBpedia Spotlight to wikify concepts \cite{isem2013daiber}.
-In addition, we omit all variable identifiers and instead label nodes directly with their concept.
-This is similar to the delexicalization employed by \citet{buys2017oxford}.
-
 \subsection{Edge label sparsity}
-Another sparsity issue is with ordinal relations, such as \textit{op1}, \textit{op2}, etc.
-Since the order of relations is annotated according to the order of text tokens,
+Since the order of ordinal relations, such as \textit{op1}, \textit{op2},
+is annotated according to the order of text tokens,
 the numeric index is redundant and is thus removed.
 We keep the numeric suffixes when they are meaningful, e.g. in \textit{ARG0}, \textit{ARG1}, etc.
 
 \subsection{Names}
 Named entities in AMR are expressed by \textit{name} relations and nodes, with
 a child for each token in the name, with relations labeled \textit{op1}, \textit{op2}, etc.
-We instead collapse this subgraph to a single node whose label is the concatenation of the
-name tokens, replaced by a $\langle T \rangle$ placeholder if aligned.
+We instead collapse this subgraph to a single node whose children are the terminals
+corresponding to the name tokens.
 
 
 
