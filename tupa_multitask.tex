@@ -341,21 +341,13 @@ for UCCA parsing in German and French (see \S\ref{sec:multilingual}).
       } edge from parent node {ARG0} }
       child {node [fill=black,circle] {}
       {
-        child {node {}
-        {
-            child {node [word] {to} edge from parent [draw=none]}
-        } edge from parent [draw=none]}
         child {node [word] {Paris} edge from parent node {name} }
       } edge from parent node {ARG2} }
       ;
-      \draw[bend left] (ROOT) to node {\tiny Terminal} (moved);
       \draw[dashed] (graduation) to node {ARG0} (John);
   \end{tikzpicture}
   \captionof{figure}{Converted AMR graph, with
-  text tokens added according to the alignments, and
-  pre-terminals included to show node labels.
-  The placeholders $\langle \ell \rangle, \langle v \rangle$ and $\langle T \rangle$
-  correspond to the lemma, related verb form and surface form, respectively.
+  text tokens added according to the alignments.
   Numeric suffixes of \textit{op} relations were removed,
   and names collapsed.}
   \label{fig:converted_example_amr}
@@ -455,7 +447,7 @@ for UCCA parsing in German and French (see \S\ref{sec:multilingual}).
 \end{subfigure}
 
 \caption{Graphs in unified DAG format.
-Pre-terminal nodes are omitted for brevity, except in AMR.}
+Pre-terminal nodes are omitted for brevity, i.e., each terminal is drawn in place of its parent.}
 \label{fig:converted_examples}
 \end{figure*}
 
