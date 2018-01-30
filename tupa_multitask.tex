@@ -540,28 +540,22 @@ the standard \textsc{Shift} and \textsc{Reduce} operations,
 \textsc{Swap} to handle discontinuous nodes,
 and \textsc{Finish} to mark the state as terminal.
 
-In addition, we add the \textsc{Implicit} transition, creating a new non-terminal
-node as a \textit{child} of the current stack top rather than as its parent,
-and transitions to
-label nodes in the stack, \textsc{Label$_1$} and \textsc{Label$_2$},
-labeling the stack top and one node to its left, respectively.
-
 Although UCCA contains implicit units, that is, units without
-any terminals as descendents,
+any terminals as descendants,
 the standard evaluation for UCCA \cite{abend2013universal} is span-based and
 ignores these nodes.
-For this reason we do not include this transition when parsing UCCA.
-However, for AMR we do include it, as AMRs may contain unaligned concepts,
+For this reason we follow \cite{hershcovich2017a} and do not include
+a transition to create these edges when parsing UCCA.
+The situation for AMR is even worse, as AMRs often contain unaligned concepts,
 which correspond to implicit nodes in the unified format.
-These are essential for AMR parsing, for which evaluation is done
-by graph matching, using the Smatch algorithm \cite{cai2013smatch}.
+These may result from alignment errors,
+and is not the same as abstract concepts,
+which really have no explicit grounding in the text \cite{buys2017oxford},
+but may still have terminal descendants in the converted graph.
 
-The reason for including \textsc{Label$_2$} is that often a node's
-label can be determined more accurately only after attaching its children,
-which may require it to be the second node on the stack.
-To keep the overall number of transitions manageable,
-the node label itself is not part of the transition's identity,
-instead being selected by a separate classifier.
+Note that our transition set also does not support node labels, as these are not
+part of the unified DAG format. Any AMR created by this system will thus have unlabeled
+nodes, but we can use gold node labels in training.
 
 \subsection{Classifier}\label{sec:classifier}
 We experiment with two different models for the parser in the single-task case:
