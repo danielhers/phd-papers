@@ -10,9 +10,7 @@
 \usepackage[warn]{textcomp}
 \usepackage{subcaption}
 \usepackage{multirow}
-
 \usepackage{url}
-
 \usepackage{etoolbox}
 
 \makeatletter
@@ -67,19 +65,25 @@
 
 \section{Introduction}\label{sec:introduction}
 
-Following increased interest in semantic representation,
-recent developments in natural language processing have focused on semantic parsing, including
-Abstract Meaning Representation parsing \cite[AMR;][]{banarescu2013abstract,damonte-17,11099},
-Semantic Dependency Parsing \cite[SDP;][]{oepen2015semeval,P17-1186},
-Universal Conceptual Cognitive Annotation parsing \cite[UCCA;][]{abend2013universal,hershcovich2017a},
-and frame-semantic parsing \cite{gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
-among others.
-In parallel, syntactic dependency parsers are becoming more accurate.
-Specifically, parsing to Universal Dependencies \cite[UD;][]{nivre2016universal,dozat2016deep}
-reflects learning syntactic structure in a language-universal way.
+While the development of syntactic treebanks has had a tremendous impact on natural language processing,
+semantic representation has arguably yet to reach its full potential in terms of its contribution
+to downstream linguistic tasks.
+As an example for syntactic annotation, the Universal Dependencies (UD) project provides
+cross-linguistically consistent treebanks in many languages \cite{nivre2016universal},
+and accurate parsers based upon it and other datasets have been extremely useful in natural
+language understanding tasks \cite{P16-1139,dozat2016deep,E17-1117}.
+Semantic representation, while increasingly adopting whole-text annotation rather than more specific
+shallow schemes, faces several challenges: semantic distinctions, besides requiring deeper understanding
+and being harder to learn, are not always well-defined, and progress is hindered by fragmentation.
+Semantic schemes diverge the content they choose to annotate, their coupling with syntax,
+and their degree of cross-linguistic applicability and consistency \cite{abend2017state}.
 
-Semantic parsing often requires parsers that can handle a general directed acyclic graph (DAG)
-structure.
+Recent developments in semantic parsing have targeted, among others,
+Abstract Meaning Representation \cite[AMR;][]{banarescu2013abstract,damonte-17,11099},
+Semantic Dependencies \cite[SDP;][]{oepen2014semeval,oepen2015semeval,oepen2016towards,P17-1186}, and
+Universal Conceptual Cognitive Annotation \cite[UCCA;][]{abend2013universal,hershcovich2017a}.
+
+These tasks require parsers that can handle a general directed acyclic graph (DAG) structure.
 While each of these representation schemes has its own set of distinctions it focuses on,
 much of the semantic content is shared between many of them \cite{abend2017state}.
 Given the success of multitask learning models in various tasks
