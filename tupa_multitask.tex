@@ -316,6 +316,52 @@ These include additional and augmented relations between content words,
 partially overlapping with the notion of remote edges in UCCA.
 We use the enhanced++ UD representation in our English experiments.
 
+\begin{figure}[t]
+   \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
+   \node[anchor=west] at (0,1.5) {Parser state};
+   \draw[color=gray,dashed] (0,-1.2) rectangle (7.5,1.25);
+   \draw[color=gray] (.1,0) rectangle (1.5,.5);
+   \node[anchor=west] at (.1,.8) {$S$};
+   \node[fill=black, circle] at (.4,.275) {};
+   \node[fill=blue, circle] at (.9,.275) {};
+   \node[anchor=west] at (1.15,.175) {\small ,};
+   \draw[color=gray] (1.95,0) rectangle (4.9,.5);
+   \node[anchor=west] at (1.95,.8) {$B$};
+   \node[anchor=west] at (1.95,.275) {\small John moved to Paris .};
+   \node[anchor=west] at (5.1,.8) {$G$};
+   \node[fill=black, circle] at (6.35,.75) {}
+     child {node  {\tiny After} edge from parent [->] node[left] {\small L}}
+     child {node [fill=blue, circle] {}
+     {
+       child {node {\tiny graduation} edge from parent [->] node[right] {\small P}}
+     } edge from parent [->] node[right] {\small H} };
+   \end{tikzpicture}
+   \begin{tikzpicture}[->]
+   \node[anchor=west] at (0,6) {Classifier};
+   \tiny
+   \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
+   \node[main] (specific) at (3.5,3.5) {\small BiLSTM};
+   \node (embeddings) at (3.5,1.7) {\small Embeddings};
+   \foreach \i/\word in {0/{After},2/{graduation},5/{to},7/{Paris}} {
+       \node (x\i) at (\i,1) {\scriptsize \word};
+       \node[main] (e\i) at (\i,2.2) {};
+       \path (x\i) edge (e\i);
+       \path (e\i) edge (specific);
+   }
+    \node (x4) at (3.5,1) {\ldots};
+    \node[main] (mlp) at (3.5,4.6) {\small MLP};
+    \path (specific) edge (mlp);
+    \coordinate (state) at (6.5,6.5);
+    \path (state) edge [bend left] (mlp);
+    \node (transition) at (3.5,5.8) {transition};
+    \path (mlp) edge node[right] {softmax} (transition);
+   \end{tikzpicture}
+	\caption{Illustration of the TUPA model, adapted (with permission) from \citet{hershcovich2017a}.
+		Top: parser state.
+		Bottom: BiLTSM architecture.}
+	\label{fig:single_model}
+\end{figure}
+
 
 
 \section{Transition-based universal parser}\label{sec:model}
@@ -386,82 +432,6 @@ The network is trained to maximize the log-likelihood of all correct transitions
 each step, and the actual transition taken in training is the correct transition
 with the highest score given by the classifier.
 
-\begin{figure}[t]
-   \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
-   \node[anchor=west] at (0,1.5) {Parser state};
-   \draw[color=gray,dashed] (0,-1.2) rectangle (7.5,1.25);
-   \draw[color=gray] (.1,0) rectangle (1.5,.5);
-   \node[anchor=west] at (.1,.8) {$S$};
-   \node[fill=black, circle] at (.4,.275) {};
-   \node[fill=blue, circle] at (.9,.275) {};
-   \node[anchor=west] at (1.15,.175) {\small ,};
-   \draw[color=gray] (1.95,0) rectangle (4.9,.5);
-   \node[anchor=west] at (1.95,.8) {$B$};
-   \node[anchor=west] at (1.95,.275) {\small John moved to Paris .};
-   \node[anchor=west] at (5.1,.8) {$G$};
-   \node[fill=black, circle] at (6.35,.75) {}
-     child {node  {\tiny After} edge from parent [->] node[left] {\small L}}
-     child {node [fill=blue, circle] {}
-     {
-       child {node {\tiny graduation} edge from parent [->] node[right] {\small P}}
-     } edge from parent [->] node[right] {\small H} };
-   \end{tikzpicture}
-   \begin{tikzpicture}[->]
-   \node[anchor=west] at (0,6) {Classifier};
-   \tiny
-   \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
-   \node[main] (specific) at (3.5,3.5) {\small BiLSTM};
-   \node (embeddings) at (3.5,1.7) {\small Embeddings};
-   \foreach \i/\word in {0/{After},2/{graduation},5/{to},7/{Paris}} {
-       \node (x\i) at (\i,1) {\scriptsize \word};
-       \node[main] (e\i) at (\i,2.2) {};
-       \path (x\i) edge (e\i);
-       \path (e\i) edge (specific);
-   }
-    \node (x4) at (3.5,1) {\ldots};
-    \node[main] (mlp) at (3.5,4.6) {\small MLP};
-    \path (specific) edge (mlp);
-    \coordinate (state) at (6.5,6.5);
-    \path (state) edge [bend left] (mlp);
-    \node (transition) at (3.5,5.8) {transition};
-    \path (mlp) edge node[right] {softmax} (transition);
-   \end{tikzpicture}
-	\caption{Illustration of the TUPA model, adapted (with permission) from \citet{hershcovich2017a}.
-		Top: parser state.
-		Bottom: BiLTSM architecture.}
-	\label{fig:single_model}
-\end{figure}
-
-\paragraph{Features.}
-In addition to the features used by \citet{hershcovich2017a},
-representing the words, POS tags, syntactic dependency relations, and previously predicted edge labels
-for nodes in specific locations in the parser state,
-we use feature embeddings representing lemmas, word prefixes, suffixes and shapes, and named entities.
-For AMR we add node label features according to gold node labels.
-
-\paragraph{Training.}
-Features are extracted using spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
-All embeddings are initialized randomly.
-For words, we additionally use external word embeddings containing 250K word vectors from fastText
-\cite{bojanowski2016enriching}, pre-trained over Wikipedia and updated during training.
-We use dropout \cite{srivastava2014dropout} between MLP layers and recurrent dropout
-\cite{NIPS2016_6241} between BiLSTM layers, both with a probability of 0.4.
-In addition, we use word, tag and dependency relation dropout:
-with a probability of $\frac{0.2}{\#(w)+0.2}$, the embedding is replaced with a zero vector.
-For optimization we a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
-and train with stochastic gradient descent (SGD) for 40 epochs with a learning
-rate of 0.1, followed by AMSGrad \cite{j.2018on} for 60 epochs with
-$\alpha=0.001,\beta_1=0.9,\beta_2=0.999$.
-We select the epoch with the best labeled F1 score on the development set.
-The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
-Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
-
-\paragraph{Ensembling.}
-During inference, we use three models trained with different random seeds, and use
-Product of Experts \cite[PoE; ][]{hinton2002training} to combine their predictions:
-score vectors after $\log(\mathrm{softmax})$) are added, and the highest-scoring transition
-according to the result is selected.
-
 \begin{table}
 \begin{tabular}{l|ccccc}
 \hline
@@ -483,30 +453,6 @@ BiLSTM layer dim. & 250 & 50 & 250
 \end{tabular}
 \caption{Hyperparameter settings.\label{tab:hyperparams}}
 \end{table}
-
-
-\subsection{Constraints}
-
-As each annotation scheme has different constraints on the allowed graphs,
-we defined these constraints separately for each task.
-During training and parsing, the constraint set corresponding to the task is
-selected and applied to the parser state.
-
-Some constraints are task-specific, while some are generic.
-For example, in UCCA, a terminal may only have one parent.
-In AMR, a concept corresponding to a PropBank frame may have only core arguments defined for the frame.
-
-As an example for a generic constraint, nodes that have already been swapped
-should never be swapped again.
-To implement this constraint efficiently, we define a \textit{swap index}
-for each node, which is assigned when the node is created.
-At parse start, only the root node and terminals exist.
-We assign the root a swap index of 0, and for each terminal, its swap index
-is its position in the text (starting at 1).
-Whenever a node is created as a result of a \textsc{Node}
-transition, we assign its swap index to be the arithmetic mean of the stack top and buffer
-head's swap indices.
-
 
 \begin{figure*}[t]
 \begin{subfigure}{0.5\textwidth}
@@ -667,6 +613,60 @@ head's swap indices.
 \end{figure*}
 
 
+\paragraph{Features.}
+In addition to the features used by \citet{hershcovich2017a},
+representing the words, POS tags, syntactic dependency relations, and previously predicted edge labels
+for nodes in specific locations in the parser state,
+we use feature embeddings representing lemmas, word prefixes, suffixes and shapes, and named entities.
+For AMR we add node label features according to gold node labels.
+
+\paragraph{Training.}
+Features are extracted using spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
+All embeddings are initialized randomly.
+For words, we additionally use external word embeddings containing 250K word vectors from fastText
+\cite{bojanowski2016enriching}, pre-trained over Wikipedia and updated during training.
+We use dropout \cite{srivastava2014dropout} between MLP layers and recurrent dropout
+\cite{NIPS2016_6241} between BiLSTM layers, both with a probability of 0.4.
+In addition, we use word, tag and dependency relation dropout:
+with a probability of $\frac{0.2}{\#(w)+0.2}$, the embedding is replaced with a zero vector.
+For optimization we a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
+and train with stochastic gradient descent (SGD) for 40 epochs with a learning
+rate of 0.1, followed by AMSGrad \cite{j.2018on} for 60 epochs with
+$\alpha=0.001,\beta_1=0.9,\beta_2=0.999$.
+We select the epoch with the best labeled F1 score on the development set.
+The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
+Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
+
+\paragraph{Ensembling.}
+During inference, we use three models trained with different random seeds, and use
+Product of Experts \cite[PoE; ][]{hinton2002training} to combine their predictions:
+score vectors after $\log(\mathrm{softmax})$) are added, and the highest-scoring transition
+according to the result is selected.
+
+
+\subsection{Constraints}
+
+As each annotation scheme has different constraints on the allowed graphs,
+we defined these constraints separately for each task.
+During training and parsing, the constraint set corresponding to the task is
+selected and applied to the parser state.
+
+Some constraints are task-specific, while some are generic.
+For example, in UCCA, a terminal may only have one parent.
+In AMR, a concept corresponding to a PropBank frame may have only core arguments defined for the frame.
+
+As an example for a generic constraint, nodes that have already been swapped
+should never be swapped again.
+To implement this constraint efficiently, we define a \textit{swap index}
+for each node, which is assigned when the node is created.
+At parse start, only the root node and terminals exist.
+We assign the root a swap index of 0, and for each terminal, its swap index
+is its position in the text (starting at 1).
+Whenever a node is created as a result of a \textsc{Node}
+transition, we assign its swap index to be the arithmetic mean of the stack top and buffer
+head's swap indices.
+
+
 \section{Unified DAG format}\label{sec:conversion}
 
 To be able to use TUPA for the four tasks presented in \S\ref{sec:tasks},
@@ -725,8 +725,8 @@ corresponding to the name tokens.
    \tiny
    \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
    \node[main] (specific) at (1,3.5) {\small Task-specific BiLSTM};
-   \node[main] (shared) at (6,3.5) {\small Shared BiLSTM};
-   \node (embeddings) at (3.5,1.5) {\small Shared embeddings};
+   \node[main,color=blue] (shared) at (6,3.5) {\small Shared BiLSTM};
+   \node[color=blue] (embeddings) at (3.5,1.5) {\small Shared embeddings};
    \foreach \i/\word in {0/{After},2/{graduation},5/{to},7/{Paris}} {
        \node (x\i) at (\i,1) {\scriptsize \word};
        \node[main] (e\i) at (\i,2.2) {};
@@ -749,6 +749,27 @@ corresponding to the name tokens.
       features from the parser state and fed into the MLP for selecting the next transition.}
    \label{fig:multi_model}
 \end{figure}
+
+\begin{table*}[ht]
+\centering
+\begin{tabular}{ll|rr|rr|rr}
+\hline
+& & \multicolumn{2}{c|}{English} & \multicolumn{2}{c|}{French} & \multicolumn{2}{c}{German} \\
+\multicolumn{2}{c|}{Corpus} & {\#}tok & {\#}sent & {\#}tok & {\#}sent & {\#}tok & {\#}sent \\
+\hline
+\textbf{UCCA}
+& Wiki & 158433 & 5225 &&&& \\
+& 20K Leagues & 12339 & 506 & 12929 & 547 & 113524 & 4764 \\
+\hline
+\textbf{UD} & v2.1 & 568560 & 24276 & 540942 & 21567 & 318847 & 16590 \\
+\hline
+\textbf{AMR} & LDC2016E25 & 708701 & 39260 \\
+\hline
+\textbf{DM} & SemEval 2015 & 802717 & 35657 \\
+\end{tabular}
+\caption{Size of each corpus: total number of tokens ({\#}tok) and sentences
+({\#}sent).\label{tab:corpora}}
+\end{table*}
 
 \section{Multitask transition-based parsing}\label{sec:multitask}
 
@@ -785,26 +806,6 @@ First, we train the parser separately on each task.
 Next, we train it to parse UCCA in a multitask setting, where AMR, DM and UD are used as
 auxiliary tasks. Following previous work, we use the same hyperparameter settings
 as for the single-task case \cite{N16-1179,P16-2038,C16-1013,C16-1059,C16-1179,E17-1005}.
-
-\begin{table*}[ht]
-\begin{tabular}{ll|rr|rr|rr}
-\hline
-& & \multicolumn{2}{c|}{English} & \multicolumn{2}{c|}{French} & \multicolumn{2}{c}{German} \\
-\multicolumn{2}{c|}{Corpus} & {\#}tok & {\#}sent & {\#}tok & {\#}sent & {\#}tok & {\#}sent \\
-\hline
-\textbf{UCCA}
-& Wiki & 158433 & 5225 &&&& \\
-& 20K Leagues & 12339 & 506 & 12929 & 547 & 113524 & 4764 \\
-\hline
-\textbf{UD} & v2.1 & 568560 & 24276 & 540942 & 21567 & 318847 & 16590 \\
-\hline
-\textbf{AMR} & LDC2016E25 & 708701 & 39260 \\
-\hline
-\textbf{DM} & SemEval 2015 & 802717 & 35657 \\
-\end{tabular}
-\caption{Size of each corpus: total number of tokens ({\#}tok) and sentences
-({\#}sent).\label{tab:corpora}}
-\end{table*}
 
 \subsection{Data}\label{sec:data}
 
