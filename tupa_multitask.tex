@@ -23,7 +23,7 @@
 \usetikzlibrary{shapes,shapes.misc}
 
 %\aclfinalcopy % Uncomment this line for the final submission
-%\def\aclpaperid{***} %  Enter the acl Paper ID here
+%\def\aclpaperid{***} %  Entr the acl Paper ID here
 
 %\setlength\titlebox{5cm}
 % You can expand the titlebox if you need extra space
@@ -75,12 +75,13 @@ language understanding tasks \cite{P16-1139,E17-1117,K17-3002}.
 Semantic representation, while increasingly adopting whole-text annotation rather than more specific
 shallow schemes, faces several challenges: semantic distinctions, besides requiring deeper understanding
 and being harder to learn, are not always well-defined, and progress is hindered by fragmentation.
-Semantic schemes diverge the content they choose to annotate, their coupling with syntax,
+Semantic schemes diverge in the content they choose to annotate, their coupling with syntax,
 and their degree of cross-linguistic applicability and consistency \cite{abend2017state}.
 
 Recent developments in semantic parsing have targeted, among others,
 Abstract Meaning Representation \cite[AMR;][]{banarescu2013abstract,damonte-17,11099},
-bilexical Semantic Dependencies \cite[SDP;][]{oepen2014semeval,oepen2015semeval,oepen2016towards,P17-1186},
+bilexical Semantic Dependencies \cite[SDP;][]{oepen2014semeval,oepen2015semeval,oepen2016towards,P17-1186}
+with target representations such as DELPH-IN MRS \cite[DM;][]{flickinger2012deepbank},
 and Universal Conceptual Cognitive Annotation \cite[UCCA;][]{abend2013universal,hershcovich2017a}.
 Although each of these tasks has a different graph structure in general,
 they are all concerned with whole-sentence (or whole-paragraph) semantic analysis,
@@ -166,7 +167,7 @@ trained in a multitask setting to obtain state-of-the-art results.\footnote{Our 
 
 \begin{subfigure}[t]{0.5\textwidth}
     \begin{dependency}[text only label, label style={above}, font=\small]
-    \begin{deptext}[column sep=.1em,ampersand replacement=\^]
+    \begin{deptext}[column sep=1em,ampersand replacement=\^]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
         \depedge{1}{2}{ARG2}
@@ -186,7 +187,7 @@ trained in a multitask setting to obtain state-of-the-art results.\footnote{Our 
 ~
 \begin{subfigure}[t]{0.5\textwidth}
     \begin{dependency}[text only label, label style={above}, font=\small]
-    \begin{deptext}[column sep=.1em,ampersand replacement=\^]
+    \begin{deptext}[column sep=1em,ampersand replacement=\^]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
         \depedge{2}{1}{case}
@@ -203,107 +204,14 @@ trained in a multitask setting to obtain state-of-the-art results.\footnote{Our 
   \label{fig:original_example_ud}
 \end{subfigure}
 
-\caption{Example for each representation scheme whose parsing task we handle.}
+\caption{Example graph in each target representation.}
 \label{fig:original_examples}
 \end{figure*}
 
-\section{Tasks}\label{sec:tasks}
 
-In this work, we focus on representation schemes providing a \textit{whole-sentence} analysis,
-that is, annotating a graph connecting all (content) words in a sentence.
-This is in contrast to ``shallow'' semantic parsing,
-such as Semantic Role Labeling
-\cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
-or parsing to logical forms.
-We consider four target representations: UCCA, AMR, DM and UD.
-Figure~\ref{fig:original_examples} shows an example graph for each scheme,
-annotating the sentence ``After graduation, John moved to Paris''.
-
-\subsection{Universal Conceptual Cognitive Annotation}\label{sec:ucca}
-
-UCCA \cite{abend2013universal} represents the semantics of natural language utterances
-as directed acyclic graphs (DAGs), where terminal nodes (nodes without children)
-correspond to the text tokens and
-non-terminal nodes to semantic or cognitive entities or relations.
-Edges are labeled, indicating the role of a child in the relation the parent represents.
-Nodes and edges may belong to one of several \textit{layers}, each layer corresponding
-to a ``module'' of semantic distinctions.
-UCCA's \textit{foundational layer} mostly covers predicate-argument
-structure, coordination and multi-word expressions.
-The \textit{linkage} layer covers relations between events, including temporal and discourse relations
-(exemplified by the gray node and its outgoing edges in Figure~\ref{fig:original_example_ucca}).
-
-UCCA's guidelines distinguish between \textit{primary} edges, corresponding to the roles explicit
-in the text, and \textit{remote} edges (such as the dashes edge in
-Figure~\ref{fig:original_example_ucca}), corresponding to implicit relations.
-Primary edges form a tree structure in each layer,
-whereas the remote edges enable reentrancy (a DAG structure).
-
-
-\subsection{Abstract Meaning Representation}\label{sec:amr}
-
-AMR \cite{banarescu2013abstract}
-is a semantic representation that embeds annotations related
-to named entity recognition, semantic role labeling, word
-sense disambiguation and co-reference resolution.
-AMRs are rooted and directed graphs, in which both nodes and edges are labeled.
-Most AMRs are DAGs, although cycles are permitted.
-AMR was targeted in the SemEval 2017 shared task \cite{may2017semeval}.
-
-As can be seen in Figure~\ref{fig:original_example_amr}, text tokens are not part
-of the AMR graph, which connects only concepts (from a pre-defined set)
-and constants (which may be strings or numbers).
-During the process of parsing from plain text to AMR,
-the tokens are aligned to graph nodes,
-a process referred to as concept identification.
-AMR datasets already contain automatically aligned graphs.
-
-\subsection{Broad-Coverage Semantic Dependency Parsing}\label{sec:sdp}
-
-SDP \cite{oepen2014semeval,oepen2015semeval,oepen2016towards}
-is a set related tasks, targeted in two SemEval shared tasks.
-They correspond to four semantic representation schemes, referred to as
-DM, PAS, PSD and CCD, representing
-predicate-argument relations between content-bearing words in a sentence.
-All are based on semantic formalisms whose annotations have been
-converted into bilexical dependencies:
-they are labeled directed graphs whose nodes are all text tokens.
-Edges are labeled, encoding semantic relations between the tokens.
-Non-content-bearing tokens, such as punctuation,
-may be left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
-but the subgraph restricted to content-bearing tokens is connected.
-Graphs containing cycles have been removed from the SDP datasets.
-
-We consider one of the three formalisms used in the SemEval shared task:
-the DM (DELPH-IN MRS) representation, which comes
-from DeepBank \cite{flickinger2012deepbank},
-manually-corrected parses from the LinGO
-English Resource Grammar \cite{copestake2000open}.
-LinGO is a head-driven phrase
-structure grammar \cite[HPSG; ][]{pollard1994head}
-with minimal recursion semantics \cite{copestake2005minimal}.
-
-\subsection{Universal Dependencies}\label{sec:ud}
-
-The fourth formalism we consider is not a semantic representation, but
-is instead acknowledged as a syntactic annotation scheme.
-UD \cite{nivre2016universal,11234/1-2515} has become
-the dominant dependency representation for
-annotating treebanks in a large variety of languages,
-aiming for cross-linguistically consistent treebank
-annotations for as many languages as possible.
-Representations are bilexical trees, with edge labels representing
-syntactic relations between the text tokens.
-
-We use UD as an auxiliary task,
-similar to syntactic scaffolding employed by \cite{swayamdipta2017frame}.
-Thanks to its annotation in multiple languages, we can use it as an auxiliary task
-for UCCA parsing in German and French (see \S\ref{sec:multilingual}).
-
-
-\begin{figure*}
-\begin{subfigure}[t]{0.5\textwidth}
-    \begin{tikzpicture}[level distance=13mm, sibling distance=14mm, ->,
+\begin{figure*}[t]
+\begin{subfigure}{0.5\textwidth}
+    \begin{tikzpicture}[level distance=10mm, sibling distance=14mm, ->,
         every circle node/.append style={fill=black}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
@@ -327,11 +235,11 @@ for UCCA parsing in German and French (see \S\ref{sec:multilingual}).
       \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
     \end{tikzpicture}
   \caption{Converted UCCA graph.
-  Linkage nodes and edges are removed, but otherwise the original UCCA graph is preserved.}
+  Linkage nodes and edges are removed, but the original graph is otherwise preserved.}
   \label{fig:converted_example_ucca}
 \end{subfigure}
 ~
-\begin{subfigure}[t]{0.5\textwidth}
+\begin{subfigure}{0.5\textwidth}
   \begin{tikzpicture}[level distance=16mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
       level 1/.style={sibling distance=28mm},
@@ -361,18 +269,18 @@ for UCCA parsing in German and French (see \S\ref{sec:multilingual}).
   \label{fig:converted_example_amr}
 \end{subfigure}
 
-\begin{subfigure}[t]{0.5\textwidth}
+\begin{subfigure}{0.5\textwidth}
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
-      level 1/.style={sibling distance=26mm},
-      level 2/.style={sibling distance=14mm}]
+      level 1/.style={sibling distance=26mm,level distance=6mm},
+      level 2/.style={sibling distance=14mm,level distance=14mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
     \node (ROOT) [fill=black,circle] {}
       child {node (after) [fill=black,circle] {}
       {
         child {node [draw=none] {}
         {
-          child {node [word] (after_word) {After} edge from parent [draw=none]}
+          child {node [word] (after_word) {After{\color{white}g}} edge from parent [draw=none]}
         } edge from parent [draw=none] }
         child {node [draw=none] {}
         {
@@ -383,19 +291,19 @@ for UCCA parsing in German and French (see \S\ref{sec:multilingual}).
       {
         child {node (moved) [fill=black,circle] {}
         {
-          child {node [word] {\quad John} edge from parent node {ARG1}}
-          child {node [word] {moved} edge from parent node {head}}
+          child {node [word] {\quad{\color{white}g} John} edge from parent node {ARG1}}
+          child {node [word] {moved{\color{white}g}} edge from parent node {head}}
         } edge from parent [draw=none] }
       } edge from parent [draw=none] }
       child {node (to) [fill=black,circle] {}
       {
         child {node [draw=none] {}
         {
-            child {node [word] (to_word) {to} edge from parent [draw=none]}
+            child {node [word] (to_word) {to{\color{white}g}} edge from parent [draw=none]}
           } edge from parent [draw=none] }
           child {node [draw=none] {}
         {
-          child {node [word] (Paris) {Paris} edge from parent [draw=none]}
+          child {node [word] (Paris) {Paris{\color{white}g}} edge from parent [draw=none]}
         } edge from parent [draw=none] }
       } edge from parent node {root}}
       ;
@@ -408,13 +316,13 @@ for UCCA parsing in German and French (see \S\ref{sec:multilingual}).
       \draw (moved) to node {ARG2} (Paris);
       \draw[dashed] (to) to node {ARG2} (Paris);
   \end{tikzpicture}
-  \captionof{figure}{Converted SDP graph (in the DM formalism).
-  Intermediate non-terminal nodes are introduced, including \textit{head} edges.
-  Reentrant edges are marked as remote (dashed).}
+  \captionof{figure}{Converted SDP graph (in the DM formalism), with
+  intermediate non-terminal nodes introduced as \textit{head} units.
+  In case of reentrancy, an arbitrary reentrant edge is marked as remote.}
   \label{fig:converted_example_sdp}
 \end{subfigure}
 ~
-\begin{subfigure}[t]{0.5\textwidth}
+\begin{subfigure}{0.5\textwidth}
   \begin{tikzpicture}[level distance=15mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
       level 1/.style={sibling distance=15mm},
@@ -423,25 +331,25 @@ for UCCA parsing in German and French (see \S\ref{sec:multilingual}).
     \node (ROOT) [fill=black,circle] {}
       child {node (after) [fill=black,circle] {}
       {
-        child {node [word] {After} edge from parent node {case}}
-        child {node [word] {graduation \quad\quad} edge from parent node {head}}
+        child {node [word] {After{\color{white}g}} edge from parent node {case}}
+        child {node [word] {graduation {\color{white}g}\quad\quad} edge from parent node {head}}
       } edge from parent node {obl}}
       child {node {}
       {
-        child {node [word] (comma) {\quad ,} edge from parent [draw=none]}
+        child {node [word] (comma) {{\color{white}g} ,} edge from parent [draw=none]}
       } edge from parent [draw=none]}
       child {node {}
       {
-        child {node [word] (John) {John} edge from parent [draw=none]}
+        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
       } edge from parent [draw=none]}
       child {node {}
       {
-        child {node [word] (moved) {moved} edge from parent [draw=none]}
+        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
       } edge from parent [draw=none]}
       child {node (to) [fill=black,circle] {}
       {
-          child {node [word] {\quad to} edge from parent node {case}}
-          child {node [word] {Paris} edge from parent node {head}}
+          child {node [word] {\quad{\color{white}g}to} edge from parent node {case}}
+          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
       } edge from parent node {obl}}
       ;
       \draw (ROOT) to node {punct} (comma);
@@ -454,10 +362,111 @@ for UCCA parsing in German and French (see \S\ref{sec:multilingual}).
   \label{fig:converted_example_ud}
 \end{subfigure}
 
-\caption{Graphs in unified DAG format.
-Pre-terminal nodes are omitted for brevity, i.e., each terminal is drawn in place of its parent.}
+\caption{Unified DAG format
+(pre-terminals omitted: each terminal drawn in place of its parent).}
 \label{fig:converted_examples}
 \end{figure*}
+
+\section{Tasks}\label{sec:tasks}
+
+In this work, we focus on representation schemes providing a \textit{whole-sentence} analysis,
+that is, annotating a graph connecting all (content) words in a sentence (or a piece of text in general).
+This is in contrast to ``shallow'' semantic parsing,
+such as Semantic Role Labeling
+\cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
+or parsing to logical forms.
+We consider four target representations: UCCA, AMR, DM and UD.
+Figure~\ref{fig:original_examples} shows an example graph for each scheme,
+annotating the sentence ``After graduation, John moved to Paris''.
+
+\subsection{Universal Conceptual Cognitive Annotation}\label{sec:ucca}
+
+UCCA \cite{abend2013universal} is a semantic representation scheme whose main principles
+are ease of annotation and cross-linguistic applicability and stability.
+
+UCCA represents the semantics of natural language utterances
+as directed acyclic graphs (DAGs), where terminal nodes (nodes without children)
+correspond to the text tokens, and
+non-terminal nodes to semantic or cognitive entities or relations.
+Edges are labeled, indicating the role of a child in the relation the parent represents.
+Nodes and edges may belong to one of several \textit{layers}, each corresponding
+to a ``module'' of semantic distinctions.
+UCCA's \textit{foundational layer} mostly covers predicate-argument
+structure, coordination and multi-word expressions.
+The \textit{linkage} layer covers relations between events, including temporal and discourse relations
+(exemplified by the gray node and its outgoing edges in Figure~\ref{fig:original_example_ucca}).
+
+UCCA's guidelines distinguish between \textit{primary} edges, corresponding to the roles explicit
+in the text, and \textit{remote} edges (such as the dashed edge in
+Figure~\ref{fig:original_example_ucca}), corresponding to implicit relations.
+Primary edges form a tree structure in each layer,
+whereas the remote edges enable reentrancy (a DAG structure).
+
+Given UCCA's currently small corpus size (see \S\ref{sec:data}), we hypothesize it will benefit
+from multitask learning. We therefore focus on UCCA parsing evaluation---specifically, on the
+foundational layer.
+
+
+\subsection{Abstract Meaning Representation}\label{sec:amr}
+
+AMR \cite{banarescu2013abstract}
+is a semantic representation that embeds annotations related
+to named entity recognition, semantic role labeling, word
+sense disambiguation and co-reference resolution.
+AMRs are rooted and directed graphs, in which both nodes and edges are labeled.
+Most AMRs are DAGs, although cycles are permitted.
+AMR was targeted in the SemEval 2017 shared task \cite{may2017semeval}.
+
+As can be seen in Figure~\ref{fig:original_example_amr}, text tokens are not part
+of the AMR graph, which connects only variables, concepts (from a pre-defined set)
+and constants (which may be strings or numbers).
+During the process of parsing from plain text to AMR,
+the tokens are aligned to graph nodes,
+a process referred to as \textit{concept identification}.
+We use AMR datasets containing already automatically aligned graphs.
+
+\subsection{Semantic Dependency Parsing}\label{sec:sdp}
+
+SDP \cite{oepen2014semeval,oepen2015semeval,oepen2016towards}
+is a set related tasks, targeted in two SemEval shared tasks.
+They correspond to four semantic representation schemes, referred to as
+DM, PAS, PSD and CCD, representing
+predicate-argument relations between content-bearing words in a sentence.
+All are based on semantic formalisms whose annotations have been
+converted into bilexical dependencies, that is,
+labeled directed graphs whose nodes are all text tokens and each edge connects two of them.
+Edges are labeled, encoding semantic relations between the tokens.
+Non-content-bearing tokens, such as punctuation,
+may be left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
+but the subgraph restricted to content-bearing tokens is connected.
+Graphs containing cycles have been removed from the SDP datasets.
+
+We consider one of the three formalisms used in the SemEval shared task:
+the DM (DELPH-IN MRS) representation, which comes
+from DeepBank \cite{flickinger2012deepbank},
+manually-corrected parses from the LinGO
+English Resource Grammar \cite{copestake2000open}.
+LinGO is a head-driven phrase
+structure grammar \cite[HPSG; ][]{pollard1994head}
+with minimal recursion semantics \cite{copestake2005minimal}.
+
+\subsection{Universal Dependencies}\label{sec:ud}
+
+UD \cite{nivre2016universal,11234/1-2515} has become
+the dominant dependency representation for
+annotating treebanks in a large variety of languages,
+aiming for cross-linguistically consistent treebank
+annotations for as many languages as possible.
+Representations are bilexical trees, with edge labels representing
+syntactic relations between the text tokens.
+
+Although not a semantic representation scheme,
+we use UD as an auxiliary task,
+inspired by recent work showing benefit from using syntax as an auxiliary task for semantic role labeling
+\cite[syntactic scaffolding; ][]{swayamdipta2017frame}.
+Although are main experiments are on English,
+thanks to UD's annotation in multiple languages, we can use it as an auxiliary task
+for UCCA parsing in German and French, too (see \S\ref{sec:multilingual}).
 
 
 \section{Unified DAG format}\label{sec:conversion}
