@@ -208,6 +208,322 @@ trained in a multitask setting to obtain state-of-the-art results.\footnote{Our 
 \label{fig:original_examples}
 \end{figure*}
 
+\section{Tasks}\label{sec:tasks}
+
+In this work, we focus on representation schemes providing a \textit{whole-sentence} analysis,
+that is, annotating a graph connecting all (content) words in a sentence (or a piece of text in general).
+This is in contrast to ``shallow'' semantic parsing,
+such as Semantic Role Labeling
+\cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
+or parsing to logical forms.
+We consider four target representations: UCCA, AMR, DM and UD.
+Figure~\ref{fig:original_examples} shows an example graph for each scheme,
+annotating the sentence ``After graduation, John moved to Paris''.
+
+\subsection{Universal Conceptual Cognitive Annotation}\label{sec:ucca}
+
+UCCA \cite{abend2013universal} is a semantic representation scheme whose main principles
+are ease of annotation and cross-linguistic applicability and stability.
+
+UCCA represents the semantics of natural language utterances
+as directed acyclic graphs (DAGs), where terminal nodes (nodes without children)
+correspond to the text tokens, and
+non-terminal nodes to semantic or cognitive entities or relations.
+Edges are labeled, indicating the role of a child in the relation the parent represents.
+Nodes and edges may belong to one of several \textit{layers}, each corresponding
+to a ``module'' of semantic distinctions.
+UCCA's \textit{foundational layer} mostly covers predicate-argument
+structure, coordination and multi-word expressions.
+The \textit{linkage} layer covers relations between events, including temporal and discourse relations
+(exemplified by the gray node and its outgoing edges in Figure~\ref{fig:original_example_ucca}).
+
+UCCA's guidelines distinguish between \textit{primary} edges, corresponding to the roles explicit
+in the text, and \textit{remote} edges (such as the dashed edge in
+Figure~\ref{fig:original_example_ucca}), corresponding to implicit relations.
+Primary edges form a tree structure in each layer,
+whereas the remote edges enable reentrancy (a DAG structure).
+
+Given UCCA's currently small corpus size (see \S\ref{sec:data}), we hypothesize it will benefit
+from multitask learning. We therefore focus on UCCA parsing evaluation---specifically, on the
+foundational layer.
+
+
+\subsection{Abstract Meaning Representation}\label{sec:amr}
+
+AMR \cite{banarescu2013abstract}
+is a semantic representation that embeds annotations related
+to named entity recognition, semantic role labeling, word
+sense disambiguation and co-reference resolution.
+AMRs are rooted and directed graphs, in which both nodes and edges are labeled.
+Most AMRs are DAGs, although cycles are permitted.
+AMR was targeted in the SemEval 2017 shared task \cite{may2017semeval}.
+
+As can be seen in Figure~\ref{fig:original_example_amr}, text tokens are not part
+of the AMR graph, which connects only variables, concepts (from a pre-defined set)
+and constants (which may be strings or numbers).
+During the process of parsing from plain text to AMR,
+the tokens are aligned to graph nodes,
+a process referred to as \textit{concept identification}.
+We use AMR datasets containing already automatically aligned graphs.
+
+\subsection{Semantic Dependency Parsing}\label{sec:sdp}
+
+SDP \cite{oepen2014semeval,oepen2015semeval,oepen2016towards}
+is a set of related tasks, targeted in two SemEval shared tasks.
+They correspond to four semantic representation schemes, referred to as
+DM, PAS, PSD and CCD, representing
+predicate-argument relations between content-bearing words in a sentence.
+All are based on semantic formalisms whose annotations have been
+converted into bilexical dependencies, that is,
+labeled directed graphs whose nodes are all text tokens and each edge connects two of them.
+Edges are labeled, encoding semantic relations between the tokens.
+Non-content-bearing tokens, such as punctuation,
+may be left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
+but the subgraph restricted to content-bearing tokens is connected.
+Graphs containing cycles have been removed from the SDP datasets.
+
+We consider one of the three formalisms used in the SemEval shared task:
+the DM (DELPH-IN MRS) representation, which comes
+from DeepBank \cite{flickinger2012deepbank},
+manually-corrected parses from the LinGO
+English Resource Grammar \cite{copestake2000open}.
+LinGO is a head-driven phrase
+structure grammar \cite[HPSG; ][]{pollard1994head}
+with minimal recursion semantics \cite{copestake2005minimal}.
+
+\subsection{Universal Dependencies}\label{sec:ud}
+
+UD \cite{nivre2016universal,11234/1-2515} has become
+the dominant dependency representation for
+annotating treebanks in a large variety of languages,
+aiming for cross-linguistically consistent treebank
+annotations for as many languages as possible.
+Representations are bilexical trees, with edge labels representing
+syntactic relations between the text tokens.
+
+Although not a semantic representation scheme,
+we use UD as an auxiliary task,
+inspired by recent work showing benefit from using syntax as an auxiliary task for semantic role labeling
+\cite[syntactic scaffolding; ][]{swayamdipta2017frame}.
+While our main experiments are on English,
+thanks to UD's annotation in multiple languages, we can use it as an auxiliary task
+for UCCA parsing in German and French, too (see \S\ref{sec:multilingual}).
+
+In addition the basic UD trees (such as in Figure~\ref{fig:original_example_ud}),
+\textit{enhanced} and \textit{enhanced++} UD graphs are available for English,
+using automatic converters included in Stanford CoreNLP \cite{SCHUSTER16.779}.
+These include additional and augmented relations between content words,
+partially overlapping with the notion of remote edges in UCCA.
+We use the enhanced++ UD representation in our English experiments.
+
+
+
+\section{Transition-based universal parser}\label{sec:model}
+
+All target representations introduced in \S\ref{sec:tasks} exhibit
+reentrancy and discontinuity (non-projectivity), to varying degrees.
+In addition, UCCA and AMR contain non-terminal nodes.
+To parse graphs with these structural properties,
+we extend TUPA \cite{hershcovich2017a},
+a transition-based parser that supports them,
+originally developed for UCCA parsing.
+TUPA's general transition system allows parsing any DAG structure with labeled edges,
+whose terminals are aligned to text tokens.
+To support AMR parsing, we take advantage of automatic alignments during training
+(\S\ref{sec:conversion}).
+
+Transition-based parsers \cite{Nivre03anefficient} apply \textit{transitions}
+incrementally to an internal state defined by
+a buffer $B$ of remaining tokens and nodes,
+a stack $S$ of incomplete nodes,
+and a labeled graph $G$ of constructed nodes and edges.
+When the parsing process is finished, the graph $G$ is the final output.
+A classifier is used at each step to select the next transition based on features
+encoding the current state.
+During training, an oracle creates training instances for the classifier,
+based on gold-standard annotations.
+
+
+\subsection{Transition set}\label{sec:transition_set}
+Given a sequence of tokens $w_1, \ldots, w_n$,
+we predict a rooted graph $G$ whose terminals are the tokens.
+Parsing starts with the root node on the stack,
+and the input tokens in the buffer.
+
+The TUPA transition set includes
+the standard \textsc{Shift} and \textsc{Reduce} operations,
+\textsc{Node$_X$} for creating a new non-terminal node and an $X$-labeled edge,
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} to create a new primary $X$-labeled edge,
+\textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} to create a new remote $X$-labeled edge,
+\textsc{Swap} to handle discontinuous nodes,
+and \textsc{Finish} to mark the state as terminal.
+
+Although UCCA contains nodes without any text tokens as descendants
+(these nodes are referred to as \textit{implicit units}),
+the standard evaluation for UCCA \cite{abend2013universal} is span-based and
+ignores these nodes.
+For this reason we follow \citet{hershcovich2017a} and do not include
+any transition to create these when parsing UCCA,
+thus ignoring them in both training and evaluation.
+This phenomenon is even more common in AMR, as any unaligned concept
+will correspond to implicit nodes.
+These may result from alignment errors,
+or from abstract concepts,
+which have no explicit grounding in the text \cite{buys2017oxford}.
+The TUPA transition set does not support node labels either, as only edges are labeled in UCCA.
+In AMR, however, node labels correspond to concepts and constants.
+When training on AMR, we will ignore any implicit nodes, and produce graphs with only edge labels.
+In training, though, we can still use gold node labels for feature extraction.
+
+\subsection{Classifier}\label{sec:classifier}
+To select the next transition at each time step,
+we use a bidirectional LSTM with embeddings as inputs,
+followed by a feedforward network and a softmax layer for classification (see Figure~\ref{fig:model}).
+Inference is performed greedily,
+and training is done with an oracle that provides the set of all correct transitions at a given state.
+The network is trained to maximize the log-likelihood of all correct transitions at
+each step, and the actual transition taken in training is the correct transition
+with the highest score given by the classifier.
+
+\begin{figure}[t]
+   \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
+   \node[anchor=west] at (0,1.5) {Parser state};
+   \draw[color=gray,dashed] (0,-1.2) rectangle (7.5,1.25);
+   \draw[color=gray] (.1,0) rectangle (1.5,.5);
+   \node[anchor=west] at (.1,.8) {$S$};
+   \node[fill=black, circle] at (.4,.275) {};
+   \node[fill=blue, circle] at (.9,.275) {};
+   \node[anchor=west] at (1.15,.175) {\small ,};
+   \draw[color=gray] (1.95,0) rectangle (4.9,.5);
+   \node[anchor=west] at (1.95,.8) {$B$};
+   \node[anchor=west] at (1.95,.275) {\small John moved to Paris .};
+   \node[anchor=west] at (5.1,.8) {$G$};
+   \node[fill=black, circle] at (6.35,.75) {}
+     child {node  {\tiny After} edge from parent [->] node[left] {\small L}}
+     child {node [fill=blue, circle] {}
+     {
+       child {node {\tiny graduation} edge from parent [->] node[right] {\small P}}
+     } edge from parent [->] node[right] {\small H} };
+   \end{tikzpicture}
+   \begin{tikzpicture}[->]
+   \node[anchor=west] at (0,6) {Classifier};
+   \tiny
+   \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
+   \node[main] (specific) at (1,3) {\small Task-specific BiLSTM};
+   \node[main] (shared) at (6,3) {\small Shared BiLSTM};
+   \node (embeddings) at (3.5,0.7) {\small Shared embeddings};
+   \foreach \i/\word in {0/{After},2/{graduation},5/{to},7/{Paris}} {
+       \node (x\i) at (\i,0) {\scriptsize \word};
+       \node[main] (e\i) at (\i,1.2) {};
+       \path (x\i) edge (e\i);
+       \path (e\i) edge (specific);
+       \path (e\i) edge (shared);
+   }
+    \node (x4) at (3.5,0) {\ldots};
+    \node[main] (mlp) at (3.5,4.6) {\small Task-specific MLP};
+    \path (specific) edge (mlp);
+    \path (shared) edge (mlp);
+    \coordinate (state) at (6.5,6.5);
+    \path (state) edge [bend left] (mlp);
+    \node (transition) at (3.5,5.8) {\textsc{Node}\textsubscript{U}};
+    \path (mlp) edge node[right] {softmax} (transition);
+   \end{tikzpicture}
+   \caption{Illustration of the model.
+      Top: parser state (stack, buffer and intermediate graph).
+      Bottom: NN architecture.
+      Vector representations for the input tokens are computed
+      by two multilayer BiLSTMs:
+      one specific to the current task, and one shared among all tasks.
+      The resulting vectors for specific tokens are concatenated with
+      embedding and numeric features from the parser state
+      (for existing edge labels, number of children, etc.),
+      and fed into the MLP for selecting the next transition.}
+   \label{fig:model}
+\end{figure}
+
+In addition to the features used by \citet{hershcovich2017a},
+representing the words, POS tags, syntactic dependency relations, and previously predicted edge labels
+for nodes in specific locations in the parser state,
+we use feature embeddings representing lemmas, word prefixes, suffixes and shapes, and named entities.
+For AMR we add node label features according to gold node labels.
+
+Features are extracted using spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
+All embeddings are initialized randomly.
+For words, we additionally use external word embeddings containing 250K word vectors from fastText
+\cite{bojanowski2016enriching}, pre-trained over Wikipedia and updated during training.
+We use dropout \cite{srivastava2014dropout} between MLP layers and recurrent dropout
+\cite{NIPS2016_6241} between BiLSTM layers.
+In addition, we use word, tag and dependency relation dropout:
+with a certain probability, the embedding is replaced with a zero vector.
+For optimization we use stochastic gradient descent (SGD) for 40 epochs, followed by
+AMSGrad \cite{j.2018on} for 60 epochs, and select the epoch with the best labeled F1 score on the
+development set.
+The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
+Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
+
+\begin{table}
+\begin{tabular}{l|ccccc}
+\hline
+\footnotesize Dimensions &  main & aux & shared \\
+\hline
+external word &&& 300 \\
+word &&& 200 \\
+POS tag &&& 20 \\
+syntactic dep. &&& 10 \\
+named entity &&& 3 \\
+punctuation & & & 1 \\
+action & & & 3 \\
+node label (AMR) & & 20 \\
+edge label & 20 & 20 \\
+MLP \#layers & 2 & 1 \\
+MLP layer dim. & 50 & 50 \\
+BiLSTM \#layers & 2 & 1 & 2 \\
+BiLSTM layer dim. & 250 & 50 & 250 \\
+\hline\hline
+\footnotesize Other parameters \\
+\hline
+word, tag, dep. dropout &&& 0.2 \\
+dropout &&& 0.4 \\
+weight decay $\lambda$ &&& $10^{-5}$ \\
+SGD learning rate &&& 0.1 \\
+AMSGrad $\alpha,\beta_1,\beta_2$ & \multicolumn{3}{r}{0.001, 0.9, 0.999} \\
+mini-batch size &&& 100
+\end{tabular}
+\caption{Hyperparameter settings.\label{tab:hyperparams}}
+\end{table}
+
+
+\subsection{Constraints}
+
+As each annotation scheme has different constraints on the allowed graphs,
+we defined these constraints separately for each task.
+During training and parsing, the constraint set corresponding to the task is
+selected and applied to the parser state.
+
+Some constraints are task-specific, while some are generic.
+For example, in UCCA, a terminal may only have one parent.
+In UD, every node may only have one parent.
+In AMR, a concept corresponding to a PropBank frame may have only core arguments defined for the frame.
+
+As an example for a generic constraint, nodes that have already been swapped
+should never be swapped again.
+To implement this constraint efficiently, we define a \textit{swap index}
+for each node, which is assigned when the node is created.
+At parse start, only the root node and terminals exist.
+We assign the root a swap index of 0, and for each terminal, its swap index
+is its position in the text (starting at 1).
+Whenever a node is created as a result of a \textsc{Node} or \textsc{Implicit}
+transition, we assign its swap index to be the mean of the stack top and buffer
+head's swap indices.
+
+
+\subsection{Unlabeled parsing}\label{sec:unlabeled}
+
+We extend the parser to support unlabeled parsing by simply removing all labels from
+\textsc{Edge}, \textsc{Remote}, \textsc{Node} and \textsc{Implicit} actions output by the oracle.
+This results in a much smaller output dimension, but of course only unlabeled evaluation is
+meaningful in this case.
+
 
 \begin{figure*}[t]
 \begin{subfigure}{0.5\textwidth}
@@ -367,107 +683,6 @@ trained in a multitask setting to obtain state-of-the-art results.\footnote{Our 
 \label{fig:converted_examples}
 \end{figure*}
 
-\section{Tasks}\label{sec:tasks}
-
-In this work, we focus on representation schemes providing a \textit{whole-sentence} analysis,
-that is, annotating a graph connecting all (content) words in a sentence (or a piece of text in general).
-This is in contrast to ``shallow'' semantic parsing,
-such as Semantic Role Labeling
-\cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
-or parsing to logical forms.
-We consider four target representations: UCCA, AMR, DM and UD.
-Figure~\ref{fig:original_examples} shows an example graph for each scheme,
-annotating the sentence ``After graduation, John moved to Paris''.
-
-\subsection{Universal Conceptual Cognitive Annotation}\label{sec:ucca}
-
-UCCA \cite{abend2013universal} is a semantic representation scheme whose main principles
-are ease of annotation and cross-linguistic applicability and stability.
-
-UCCA represents the semantics of natural language utterances
-as directed acyclic graphs (DAGs), where terminal nodes (nodes without children)
-correspond to the text tokens, and
-non-terminal nodes to semantic or cognitive entities or relations.
-Edges are labeled, indicating the role of a child in the relation the parent represents.
-Nodes and edges may belong to one of several \textit{layers}, each corresponding
-to a ``module'' of semantic distinctions.
-UCCA's \textit{foundational layer} mostly covers predicate-argument
-structure, coordination and multi-word expressions.
-The \textit{linkage} layer covers relations between events, including temporal and discourse relations
-(exemplified by the gray node and its outgoing edges in Figure~\ref{fig:original_example_ucca}).
-
-UCCA's guidelines distinguish between \textit{primary} edges, corresponding to the roles explicit
-in the text, and \textit{remote} edges (such as the dashed edge in
-Figure~\ref{fig:original_example_ucca}), corresponding to implicit relations.
-Primary edges form a tree structure in each layer,
-whereas the remote edges enable reentrancy (a DAG structure).
-
-Given UCCA's currently small corpus size (see \S\ref{sec:data}), we hypothesize it will benefit
-from multitask learning. We therefore focus on UCCA parsing evaluation---specifically, on the
-foundational layer.
-
-
-\subsection{Abstract Meaning Representation}\label{sec:amr}
-
-AMR \cite{banarescu2013abstract}
-is a semantic representation that embeds annotations related
-to named entity recognition, semantic role labeling, word
-sense disambiguation and co-reference resolution.
-AMRs are rooted and directed graphs, in which both nodes and edges are labeled.
-Most AMRs are DAGs, although cycles are permitted.
-AMR was targeted in the SemEval 2017 shared task \cite{may2017semeval}.
-
-As can be seen in Figure~\ref{fig:original_example_amr}, text tokens are not part
-of the AMR graph, which connects only variables, concepts (from a pre-defined set)
-and constants (which may be strings or numbers).
-During the process of parsing from plain text to AMR,
-the tokens are aligned to graph nodes,
-a process referred to as \textit{concept identification}.
-We use AMR datasets containing already automatically aligned graphs.
-
-\subsection{Semantic Dependency Parsing}\label{sec:sdp}
-
-SDP \cite{oepen2014semeval,oepen2015semeval,oepen2016towards}
-is a set related tasks, targeted in two SemEval shared tasks.
-They correspond to four semantic representation schemes, referred to as
-DM, PAS, PSD and CCD, representing
-predicate-argument relations between content-bearing words in a sentence.
-All are based on semantic formalisms whose annotations have been
-converted into bilexical dependencies, that is,
-labeled directed graphs whose nodes are all text tokens and each edge connects two of them.
-Edges are labeled, encoding semantic relations between the tokens.
-Non-content-bearing tokens, such as punctuation,
-may be left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
-but the subgraph restricted to content-bearing tokens is connected.
-Graphs containing cycles have been removed from the SDP datasets.
-
-We consider one of the three formalisms used in the SemEval shared task:
-the DM (DELPH-IN MRS) representation, which comes
-from DeepBank \cite{flickinger2012deepbank},
-manually-corrected parses from the LinGO
-English Resource Grammar \cite{copestake2000open}.
-LinGO is a head-driven phrase
-structure grammar \cite[HPSG; ][]{pollard1994head}
-with minimal recursion semantics \cite{copestake2005minimal}.
-
-\subsection{Universal Dependencies}\label{sec:ud}
-
-UD \cite{nivre2016universal,11234/1-2515} has become
-the dominant dependency representation for
-annotating treebanks in a large variety of languages,
-aiming for cross-linguistically consistent treebank
-annotations for as many languages as possible.
-Representations are bilexical trees, with edge labels representing
-syntactic relations between the text tokens.
-
-Although not a semantic representation scheme,
-we use UD as an auxiliary task,
-inspired by recent work showing benefit from using syntax as an auxiliary task for semantic role labeling
-\cite[syntactic scaffolding; ][]{swayamdipta2017frame}.
-Although are main experiments are on English,
-thanks to UD's annotation in multiple languages, we can use it as an auxiliary task
-for UCCA parsing in German and French, too (see \S\ref{sec:multilingual}).
-
 
 \section{Unified DAG format}\label{sec:conversion}
 
@@ -519,206 +734,6 @@ corresponding to the name tokens.
 
 
 
-\section{Transition-based universal parser}\label{sec:model}
-
-The unified DAG format introduced in \S\ref{sec:conversion}
-exhibits reentrancy, discontinuity and non-terminal nodes.
-To learn to parse representations in this format,
-we extend TUPA \cite{hershcovich2017a},
-a transition-based parser that supports these structural properties,
-originally developed for UCCA.
-TUPA's general transition system allows parsing any aligned DAG structure with labeled edges.
-To support AMR parsing, we add transitions to handle node labels and unaligned nodes
-(see \S\ref{sec:transition_set}).
-
-Transition-based parsers \cite{Nivre03anefficient} apply \textit{transitions}
-incrementally to an internal state defined by
-a buffer $B$ of remaining tokens and nodes,
-a stack $S$ of incomplete nodes,
-and a labeled graph $G$ of constructed nodes and edges.
-When the parsing process is finished, the graph $G$ is the final output.
-A classifier is used at each step to select the next transition based on features
-encoding the current state.
-During training, an oracle creates training instances for the classifier,
-based on gold-standard annotations.
-
-
-\subsection{Transition set}\label{sec:transition_set}
-Given a sequence of tokens $w_1, \ldots, w_n$,
-we predict a graph $G$ in the unified format over the sequence.
-Parsing starts with the root node on the stack,
-and the input tokens in the buffer.
-
-The original TUPA transitions are
-the standard \textsc{Shift} and \textsc{Reduce} operations,
-\textsc{Node$_X$} for creating a new non-terminal node and an $X$-labeled edge,
-\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} to create a new primary $X$-labeled edge,
-\textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} to create a new remote $X$-labeled edge,
-\textsc{Swap} to handle discontinuous nodes,
-and \textsc{Finish} to mark the state as terminal.
-
-Although UCCA contains implicit units, that is, units without
-any terminals as descendants,
-the standard evaluation for UCCA \cite{abend2013universal} is span-based and
-ignores these nodes.
-For this reason we follow \cite{hershcovich2017a} and do not include
-a transition to create these edges when parsing UCCA.
-The situation for AMR is even worse, as AMRs often contain unaligned concepts,
-which correspond to implicit nodes in the unified format.
-These may result from alignment errors,
-and is not the same as abstract concepts,
-which really have no explicit grounding in the text \cite{buys2017oxford},
-but may still have terminal descendants in the converted graph.
-
-Note that our transition set also does not support node labels, as these are not
-part of the unified DAG format. Any AMR created by this system will thus have unlabeled
-nodes, but we can use gold node labels in training.
-
-\subsection{Classifier}\label{sec:classifier}
-To select the next transition at each time step,
-we use a bidirectional LSTM feature extractor with dense embeddings as inputs,
-combined with a feedforward network and a softmax layer for classification.
-Inference is performed greedily,
-and training is done with an oracle that provides a set of all possible labels at a given state
-(but only valid transitions may be taken during training).
-The network is trained to maximize the log-likelihood of all correct actions at
-each step, and the actual transition taken in training is the correct transition
-with the highest score given by the classifier.
-
-\begin{figure}[t]
-   \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
-   \node[anchor=west] at (0,1.5) {Parser state};
-   \draw[color=gray,dashed] (0,-1.2) rectangle (7.5,1.25);
-   \draw[color=gray] (.1,0) rectangle (1.5,.5);
-   \node[anchor=west] at (.1,.8) {$S$};
-   \node[fill=black, circle] at (.4,.275) {};
-   \node[fill=blue, circle] at (.9,.275) {};
-   \node[anchor=west] at (1.15,.175) {\small ,};
-   \draw[color=gray] (1.95,0) rectangle (4.9,.5);
-   \node[anchor=west] at (1.95,.8) {$B$};
-   \node[anchor=west] at (1.95,.275) {\small John moved to Paris .};
-   \node[anchor=west] at (5.1,.8) {$G$};
-   \node[fill=black, circle] at (6.35,.75) {}
-     child {node  {\tiny After} edge from parent [->] node[left] {\small L}}
-     child {node [fill=blue, circle] {}
-     {
-       child {node {\tiny graduation} edge from parent [->] node[right] {\small P}}
-     } edge from parent [->] node[right] {\small H} };
-   \end{tikzpicture}
-   \begin{tikzpicture}[->]
-   \node[anchor=west] at (0,6) {Classifier};
-   \tiny
-   \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
-   \node[main] (specific) at (1,3) {\small Task-specific BiLSTM};
-   \node[main] (shared) at (6,3) {\small Shared BiLSTM};
-   \node (embeddings) at (3.5,0.7) {\small Shared embeddings};
-   \foreach \i/\word in {0/{After},2/{graduation},5/{to},7/{Paris}} {
-       \node (x\i) at (\i,0) {\scriptsize \word};
-       \node[main] (e\i) at (\i,1.2) {};
-       \path (x\i) edge (e\i);
-       \path (e\i) edge (specific);
-       \path (e\i) edge (shared);
-   }
-    \node (x4) at (3.5,0) {\ldots};
-    \node[main] (mlp) at (3.5,4.6) {\small Task-specific MLP};
-    \path (specific) edge (mlp);
-    \path (shared) edge (mlp);
-    \coordinate (state) at (6.5,6.5);
-    \path (state) edge [bend left] (mlp);
-    \node (transition) at (3.5,5.8) {\textsc{Node}\textsubscript{U}};
-    \path (mlp) edge (transition);
-   \end{tikzpicture}
-   \caption{Illustration of the model.
-      Top: parser state (stack, buffer and intermediate graph).
-      Bottom: NN architecture.
-      Vector representations for the input tokens are computed
-      by two multilayer BiLSTMs:
-      one specific to the current task, and one shared among all tasks.
-      The resulting vectors for specific tokens are concatenated with
-      embedding and numeric features from the parser state
-      (for existing edge labels, number of children, etc.),
-      and fed into the MLP for selecting the next transition.}
-   \label{fig:model}
-\end{figure}
-
-In addition to the features used by \citet{hershcovich2017a},
-for AMR we add node label features according to
-previously predicted node labels for node in specific locations in the parser state.
-All features are shared among all tasks, except the node labels, which are
-AMR-specific.
-
-Lemmas, POS tags, syntactic dependency labels and named entities are extracted using spaCy
-\cite{spacy2}.\footnote{\url{https://spacy.io}}
-We use stochastic gradient descent (SGD) for optimization,
-and initialize the external word embeddings with 250K word vectors from fastText
-\cite{bojanowski2016enriching}, pretrained over Wikipedia and updated during training.
-The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
-Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
-
-\begin{table}
-\begin{tabular}{l|ccccc}
-\hline
-\footnotesize Dimensions &  main & aux & shared \\
-\hline
-external word & & & 300 \\
-word & & & 200 \\
-POS tag & & & 20 \\
-syntactic dep. & & & 10 \\
-punctuation & & & 1 \\
-action & & & 3 \\
-node label & & 20 \\
-edge label & 20 \\
-MLP \#layers & 2 & 2 \\
-MLP layer dim. & 50 & 50 \\
-LSTM \#layers & 2 & 2 & 2 \\
-LSTM layer dim. & 500 & 50 & 500 \\
-\hline\hline
-\footnotesize Other parameters \\
-\hline
-initial learning rate & 1 \\
-learning rate decay & 0.01 \\
-word dropout & 0.2 \\
-dropout & 0.4 \\
-weight decay $\lambda$ & $10^{-5}$ \\
-mini-batch size & 100
-\end{tabular}
-\caption{Hyperparameter settings.\label{tab:hyperparams}}
-\end{table}
-
-
-\subsection{Constraints}
-
-As each annotation scheme has different constraints on the allowed graphs,
-we defined these constraints separately for each task.
-During training and parsing, the constraint set corresponding to the task is
-selected and applied to the parser state.
-
-Some constraints are task-specific, while some are generic.
-For example, in UCCA, a terminal may only have one parent.
-In UD, every node may only have one parent.
-In AMR, a concept corresponding to a PropBank frame may have only core arguments defined for the frame.
-
-As an example for a generic constraint, nodes that have already been swapped
-should never be swapped again.
-To implement this constraint efficiently, we define a \textit{swap index}
-for each node, which is assigned when the node is created.
-At parse start, only the root node and terminals exist.
-We assign the root a swap index of 0, and for each terminal, its swap index
-is its position in the text (starting at 1).
-Whenever a node is created as a result of a \textsc{Node} or \textsc{Implicit}
-transition, we assign its swap index to be the mean of the stack top and buffer
-head's swap indices.
-
-
-\subsection{Unlabeled parsing}\label{sec:unlabeled}
-
-We extend the parser to support unlabeled parsing by simply removing all labels from
-\textsc{Edge}, \textsc{Remote}, \textsc{Node} and \textsc{Implicit} actions output by the oracle.
-This results in a much smaller output dimension, but of course only unlabeled evaluation is
-meaningful in this case.
-
-
-
 \section{Multitask transition-based parsing}\label{sec:multitask}
 
 Since the same model can be applied to different tasks, we can train it jointly on multiple tasks.
@@ -728,6 +743,8 @@ Specifically, in addition to the task-specific input-encoding bidirectional LSTM
 we use a shared bidirectional LSTM. The outputs of both LSTMs are concatenated and
 fed into the task-specific MLP (see Figure~\ref{fig:model}),
 in a manner similar to \citet{P17-1186}.
+All features embeddings are shared among all tasks, except the node labels, which are
+AMR-specific.
 
 Multitask learning is particularly beneficial for improving on tasks with small training data.
 As UCCA has a relatively small corpus (see \S\ref{sec:data}),
