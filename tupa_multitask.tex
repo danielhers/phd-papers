@@ -502,7 +502,6 @@ selected and applied to the parser state.
 
 Some constraints are task-specific, while some are generic.
 For example, in UCCA, a terminal may only have one parent.
-In UD, every node may only have one parent.
 In AMR, a concept corresponding to a PropBank frame may have only core arguments defined for the frame.
 
 As an example for a generic constraint, nodes that have already been swapped
@@ -512,15 +511,15 @@ for each node, which is assigned when the node is created.
 At parse start, only the root node and terminals exist.
 We assign the root a swap index of 0, and for each terminal, its swap index
 is its position in the text (starting at 1).
-Whenever a node is created as a result of a \textsc{Node} or \textsc{Implicit}
-transition, we assign its swap index to be the mean of the stack top and buffer
+Whenever a node is created as a result of a \textsc{Node}
+transition, we assign its swap index to be the arithmetic mean of the stack top and buffer
 head's swap indices.
 
 
 \subsection{Unlabeled parsing}\label{sec:unlabeled}
 
 We extend the parser to support unlabeled parsing by simply removing all labels from
-\textsc{Edge}, \textsc{Remote}, \textsc{Node} and \textsc{Implicit} actions output by the oracle.
+\textsc{Edge}, \textsc{Remote} and \textsc{Node} transitions output by the oracle.
 This results in a much smaller output dimension, but of course only unlabeled evaluation is
 meaningful in this case.
 
@@ -687,9 +686,9 @@ meaningful in this case.
 \section{Unified DAG format}\label{sec:conversion}
 
 To be able to train a single model on the four tasks presented in \S\ref{sec:tasks},
-we propose an algorithm to convert them all into a unified DAG format.
+we convert them all into a unified DAG format.
 In this format, the graph is a rooted DAG, and the text tokens are terminal nodes.
-As in the UCCA format, the graph edges are labeled.
+As in the UCCA format, the graph edges are labeled,
 and are divided into \textit{primary} and \textit{remote} edges,
 where the primary edges form a tree (all nodes have at most one primary parent,
 and the root has none).
@@ -713,22 +712,18 @@ In case of reentrancy, an arbitrary parent is marked as primary, and the rest as
 In the conversion from AMR, non-terminals are already present and do not need to be introduced.
 However, alignments and node labels must be handled
 (see Figure~\ref{fig:converted_example_amr}).
-
-\subsection{Alignments}
 Since alignment to the text tokens is not part of the AMR graph,
 we introduce the alignments as edges in conversion.
 We use automatically aligned AMR graphs provided in the dataset (see \S\ref{sec:data}),
 and attach each node with a \textit{Terminal} edge to each of the terminals it is aligned to.
 
-\subsection{Edge label sparsity}
-Since the order of ordinal relations, such as \textit{op1}, \textit{op2},
+Since the order of AMR ordinal relations, such as \textit{op1}, \textit{op2},
 is annotated according to the order of text tokens,
 the numeric index is redundant and is thus removed.
 We keep the numeric suffixes when they are meaningful, e.g. in \textit{ARG0}, \textit{ARG1}, etc.
 
-\subsection{Names}
 Named entities in AMR are expressed by \textit{name} relations and nodes, with
-a child for each token in the name, with relations labeled \textit{op1}, \textit{op2}, etc.
+a child for each token in the name, and relations labeled \textit{op1}, \textit{op2}, etc.
 We instead collapse this subgraph to a single node whose children are the terminals
 corresponding to the name tokens.
 
