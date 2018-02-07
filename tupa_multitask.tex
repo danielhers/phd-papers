@@ -508,14 +508,6 @@ transition, we assign its swap index to be the arithmetic mean of the stack top 
 head's swap indices.
 
 
-\subsection{Unlabeled parsing}\label{sec:unlabeled}
-
-We extend the parser to support unlabeled parsing by simply removing all labels from
-\textsc{Edge}, \textsc{Remote} and \textsc{Node} transitions output by the oracle.
-This results in a much smaller output dimension, but of course only unlabeled evaluation is
-meaningful in this case.
-
-
 \begin{figure*}[t]
 \begin{subfigure}{0.5\textwidth}
     \begin{tikzpicture}[level distance=10mm, sibling distance=14mm, ->,
@@ -771,14 +763,19 @@ As UCCA has a relatively small corpus (see \S\ref{sec:data}),
 we focus on UCCA parsing and treat AMR, DM and UD parsing
 as auxiliary tasks, creating a unified corpus by shuffling all sentences from all datasets together,
 but using only the score on the UCCA development set as the criterion for early stopping.
+In each training epoch, we use the same number of examples from each task.
+Since the UCCA training set is the smallest, we sample the same number of sentences from
+the training set of each of the other tasks.
 
 \subsection{Unlabeled parsing for auxiliary tasks}\label{sec:unlabeled_aux}
 
-The auxiliary tasks are quite difficult enough on their own.
-Since it has been shown that easier auxiliary tasks are more beneficial
-in multitask learning \cite{E17-2026},
-we decided to use unlabeled parsing for all auxiliary tasks, while still doing
-labeled UCCA parsing.
+To simplify the auxiliary tasks and facilitate generalization \cite{E17-2026},
+we perform unlabeled parsing for AMR, DM and UD,
+while still predicting edge labels in UCCA parsing.
+We extend TUPA to support unlabeled parsing by simply removing all labels from
+\textsc{Edge}, \textsc{Remote} and \textsc{Node} transitions output by the oracle.
+This results in a much smaller output dimension, but of course only unlabeled evaluation is
+meaningful on these tasks.
 
 
 \section{Experiments}\label{sec:experiments}
