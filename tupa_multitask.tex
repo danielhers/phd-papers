@@ -875,14 +875,15 @@ Table~\ref{tab:corpora} shows the size of each corpus.
 		& 75.9 & 74.1 & 75 & 50.7 & 46.8 & 48.7 
 		& 69.7 & 69.5 & 69.6 & 50.5 & 19.4 & 28 \\
 		\hline
-		\small Ours (multitask) \\
+		\multicolumn{2}{l}{\small Ours (multitask)} \\
 		AMR & 73.1 & 73.4 & 73.3 & 44 & 50.5 & 47\\
 		DM & 73.7 & 73.3 & 73.5 & 44 & 57.9 & 50 \\
 		UD & 73 & 73.4 & 73.2 & 48.3 & 51.7 & 49.9 \\
 		AMR+DM & 74.1 & 74.2 & 74.1 & 49.4 & 50.5 & 49.9 \\
 		AMR+UD & 73.5 & 73.4 & 73.4 & 51.3 & 42.4 & 46.4 \\
 		DM+UD & 73.7 & 73.5 & 73.6 & 43.5 & 42.4 & 42.9 \\
-		AMR+DM+UD & 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1
+		AMR+DM+UD & 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1 \\
+		\multicolumn{2}{l}{\small Ours (multitask ensemble)} \\
 	\end{tabular}
 	\caption{
 	  Experimental results, in percents, on the \textit{Wiki} test set (left)
@@ -944,10 +945,9 @@ Edges in predicted and gold graphs are matched by terminal yield and label.
 
 %\subsection{Multitask parsing}\label{sec:results_multi}
 
-Next, we focus on UCCA parsing, and assess the contribution of each auxiliary task
-and combinations thereof, by evaluating on the UCCA development set.
-As mentioned in \S\ref{sec:unlabeled_aux}, we train on all auxiliary tasks as unlabeled tasks.
-The results for multitask parsing are shown in Table~\ref{tab:results}.
+Table~\ref{tab:results} shows our main experimental results.
+Our basic single-task model already outperforms the previous state of the art on
+UCCA parsing \cite{hershcovich2017a}, gaining a 2\% error reduction on primary labeled F1.
 
 
 \subsection{Other languages}\label{sec:multilingual}
