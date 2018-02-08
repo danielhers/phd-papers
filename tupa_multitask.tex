@@ -886,8 +886,8 @@ Table~\ref{tab:corpora} shows the size of each corpus.
 		\multicolumn{2}{l}{\small Ours (multitask ensemble)} \\
 	\end{tabular}
 	\caption{
-	  Experimental results, in percents, on the \textit{Wiki} test set (left)
-	  and the \textit{20K Leagues} set (right).
+	  Experimental results, in percents, on the English \textit{Wiki} test set (left)
+	  and \textit{20K Leagues} set (right).
 	  Columns correspond to labeled precision, recall and F-score,
 	  for both primary and remote edges.
 	}
@@ -955,16 +955,15 @@ UCCA parsing \cite{hershcovich2017a}, gaining a 2\% error reduction on primary l
 To investigate the contribution of multitask training on an even smaller UCCA training set,
 we experiment with the French and German \textit{20K Leagues} UCCA corpora
 \cite{sulem2015conceptual}
-in a single-task and multitask setting, where as an auxiliary task we use the UD treebanks
-in the respective languages.\footnote{We did not use AMR, DM or enhanced UD in French and German,
-as these are only available in English.}
+in a single-task and multitask setting, where as an auxiliary task we use unlabeled parsing on
+UD treebanks in the respective languages.\footnote{We did not use AMR, DM or enhanced UD in French
+and German, as these are only available in English.}
 The results are given in Table~\ref{tab:multilingual}.
 The contribution of multitask learning is substantial in this case:
-although the classifier does not get even a single edge right on the tiny French dataset,
-when coupled with UD parsing as an auxiliary task, it achieves high scores
-in both languages.
-This shows that a small UCCA training corpus may suffice, as long as it is complemented by
-a large training corpus in an auxiliary task in the same language.
+11\% error reduction on the French dataset, and 1.5\% on the larger German dataset
+(see Table~\ref{tab:corpora}).
+This result demonstrates that even a small training set in the main task may produce good results,
+given a sufficiently large training set for an auxiliary task.
 
 \begin{table}
 \begin{tabular}{l|ccc|ccc}
