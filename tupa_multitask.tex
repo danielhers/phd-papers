@@ -439,25 +439,27 @@ each step, and the actual transition taken in training is the correct transition
 with the highest score given by the classifier.
 
 \begin{table}
-\begin{tabular}{l|ccccc}
+\begin{tabular}{l|c|ccccc}
 \hline
-\footnotesize Dimensions &  main & aux & shared \\
+\footnotesize Dimensions &  \footnotesize single & \footnotesize main & \footnotesize aux & \footnotesize shared \\
 \hline
-external word &&& 300 \\
-word &&& 200 \\
-POS tag &&& 20 \\
-syntactic dep. &&& 10 \\
-named entity &&& 3 \\
-punctuation & & & 1 \\
-action & & & 3 \\
-node label (AMR) & & 20 \\
-edge label & 20 & 20 \\
-MLP \#layers & 2 & 1 \\
-MLP layer dim. & 50 & 50 \\
-BiLSTM \#layers & 2 & 1 & 2 \\
-BiLSTM layer dim. & 250 & 50 & 250
+external word & 300 &&& 300 \\
+word & 200 &&& 200 \\
+POS tag & 20 &&& 20 \\
+syntactic dep. & 10 &&& 10 \\
+named entity & 3 &&& 3 \\
+punctuation & 1 &&& 1 \\
+action & 3 &&& 3 \\
+node label (AMR) & 20 && 20 \\
+edge label & 20 & 20 & 20 \\
+MLP \#layers & 2 & 2 & 1 \\
+\quad layer dim. & 50 & 50 & 50 \\
+BiLSTM \#layers & 2 & 2 & 1 & 2 \\
+\quad layer dim. & 500 & 250 & 50 & 250
 \end{tabular}
-\caption{Hyperparameter settings.\label{tab:hyperparams}}
+\caption{Hyperparameter settings.\label{tab:hyperparams}
+Middle column: single-task.
+Right column: multitask settings for main task (UCCA), auxiliary tasks, and shared parameters.}
 \end{table}
 
 \begin{figure*}[t]
@@ -644,7 +646,7 @@ rate of 0.1, followed by AMSGrad \cite{j.2018on} for 60 epochs with
 $\alpha=0.001,\beta_1=0.9,\beta_2=0.999$.
 We select the epoch with the best labeled F1 score on the development set.
 The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
-Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
+Hyperparameter settings are listed in Table~\ref{tab:hyperparams} (middle column).
 
 \paragraph{Ensembling.}
 During inference we use Product of Experts \cite[PoE; ][]{hinton2002training} to combine the predictions
@@ -786,9 +788,13 @@ corresponding to the name tokens.
 \section{Multitask transition-based parsing}\label{sec:multitask}
 
 Since the same TUPA model can be applied to different tasks, we can train it on multiple tasks together.
-Rather than sharing all model parameters, we share only part of the model \cite{P17-1186}.
+Following previous work, we use the same hyperparameter settings as for the single-task case
+(see Table~\ref{tab:hyperparams}, right column),
+and rather than sharing all model parameters, share only part of the model
+\cite{P17-1186,N16-1179,P16-2038,C16-1013,C16-1059,C16-1179,E17-1005}.
 Feature embeddings are shared, and in addition to the task-specific BiLSTM,
-we use a shared BiLSTM. The outputs of both BiLSTMs are concatenated and
+we use a shared BiLSTM, whose number of layers and dimensions are the same as .
+The outputs of both BiLSTMs are concatenated and
 fed into the task-specific MLP (see Figure~\ref{fig:multi_model}).
 
 Multitask learning is particularly beneficial for improving on tasks with small training data.
@@ -799,6 +805,7 @@ but using only the score on the UCCA development set as the criterion for early 
 In each training epoch, we use the same number of examples from each task.
 Since the UCCA training set is the smallest, we sample the same number of sentences from
 the training set of each of the other tasks.
+
 
 \subsection{Unlabeled parsing for auxiliary tasks}\label{sec:unlabeled_aux}
 
@@ -816,8 +823,7 @@ meaningful on these tasks.
 We perform various experiments to evaluate the benefit of each auxiliary task to UCCA parsing.
 First, we train the parser only on UCCA, and evaluate its performance.
 Next, we train it in a multitask setting, where AMR, DM and UD are used as
-auxiliary tasks. Following previous work, we use the same hyperparameter settings
-as for the single-task case \cite{N16-1179,P16-2038,C16-1013,C16-1059,C16-1179,E17-1005}.
+auxiliary tasks.
 
 \subsection{Data}\label{sec:data}
 
