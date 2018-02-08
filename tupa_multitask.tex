@@ -317,10 +317,9 @@ for UCCA parsing in German and French, too (see \S\ref{sec:multilingual}).
 
 In addition the basic UD trees (such as in Figure~\ref{fig:original_example_ud}),
 \textit{enhanced} and \textit{enhanced++} UD graphs are available for English,
-using automatic converters included in Stanford CoreNLP \cite{SCHUSTER16.779}.
+using automatic converters included in Stanford CoreNLP.
 These include additional and augmented relations between content words,
 partially overlapping with the notion of remote edges in UCCA.
-We use the enhanced++ UD representation in our English experiments.
 
 \begin{figure}[t]
    \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
@@ -852,6 +851,8 @@ For SDP, we use the DM target representation from the SDP 2016 dataset
 \cite{oepen2016towards}.\footnote{\url{http://sdp.delph-in.net/osdp-12.tgz}}
 For Universal Dependencies, we use all English, French and German treebanks from UD v2.1
 \cite{11234/1-2515}.\footnote{\url{http://hdl.handle.net/11234/1-2515}}
+We use the enhanced++ UD representation \cite{SCHUSTER16.779} in our English experiments,
+henceforth referred to as UD$^{++}$.
 Table~\ref{tab:corpora} shows the size of each corpus.
 
 
@@ -878,11 +879,11 @@ Table~\ref{tab:corpora} shows the size of each corpus.
 		\multicolumn{2}{l}{\small Ours (multitask)} \\
 		AMR & 73.1 & 73.4 & 73.3 & 44 & 50.5 & 47\\
 		DM & 73.7 & 73.3 & 73.5 & 44 & 57.9 & 50 \\
-		UD & 73 & 73.4 & 73.2 & 48.3 & 51.7 & 49.9 \\
-		AMR+DM & 74.1 & 74.2 & 74.1 & 49.4 & 50.5 & 49.9 \\
-		AMR+UD & 73.5 & 73.4 & 73.4 & 51.3 & 42.4 & 46.4 \\
-		DM+UD & 73.7 & 73.5 & 73.6 & 43.5 & 42.4 & 42.9 \\
-		AMR+DM+UD & 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1 \\
+		UD$^{++}$ & 73 & 73.4 & 73.2 & 48.3 & 51.7 & 49.9 \\
+		AMR + DM & 74.1 & 74.2 & 74.1 & 49.4 & 50.5 & 49.9 \\
+		AMR + UD$^{++}$ & 73.5 & 73.4 & 73.4 & 51.3 & 42.4 & 46.4 \\
+		DM + UD$^{++}$ & 73.7 & 73.5 & 73.6 & 43.5 & 42.4 & 42.9 \\
+		AMR + DM + UD$^{++}$ & 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1 \\
 		\multicolumn{2}{l}{\small Ours (multitask ensemble)} \\
 	\end{tabular}
 	\caption{
@@ -985,14 +986,29 @@ while \textit{Multi} uses unlabeled UD parsing in the same language as an auxili
 \label{tab:multilingual}}
 \end{table}
 
+\begin{table}
+\begin{tabular}{lccc|ccc}
+& \multicolumn{3}{c|}{\footnotesize Primary} & \multicolumn{3}{c}{\footnotesize Remote} \\
+& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
+& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
+AMR & 52.2 & 15.5 & 23.9 & 7.3 & 5.5 & 6.3 \\
+DM & 63.6 & 49.8 & 55.9 & 6.9 & 63.8 & 12.4 \\
+%UD & 75.3 & 82.9 & 78.9 & -- & 0 & -- \\
+%UD$^+$ & 75.1 & 82.4 & 78.5 & 11.5 & 12.8 & 12.1 \\
+UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
+\end{tabular}
+\caption{Unlabeled UCCA evaluation of 100 sentences converted to the unified DAG format.
+\label{tab:common}}
+\end{table}
+
 
 
 \section{Related work}\label{sec:related_work}
 
-In general, multitask learning involves optimizing more than one loss function \cite{ruder2017overview}.
-However, in our case, the loss function has the same form across all tasks.
-The same architecture and inference algorithm are applied to multiple annotation formats and datasets,
-and only some of the parameters are shared between them: this is hard parameter sharing.
+%In general, multitask learning involves optimizing more than one loss function \cite{ruder2017overview}.
+%However, in our case, the loss function has the same form across all tasks.
+%The same architecture and inference algorithm are applied to multiple annotation formats and datasets,
+%and only some of the parameters are shared between them: this is hard parameter sharing.
 
 Multitask learning is often used in NLP, both as regularization when little training data is available,
 and as an alternative to the pipeline approach, to avoid error propagation
@@ -1011,35 +1027,23 @@ and semantic-syntactic analysis \cite{swayamdipta-EtAl:2016:CoNLL,henderson2013m
 
 \section{Discussion}\label{sec:discussion}
 
-\subsection{Common edges}\label{sec:common}
-
 An important factor in the success of multitask learning is the commonalities between the tasks
 \cite{E17-2026,E17-1005}.
-In fact, this is why we decided to convert the auxiliary tasks into UCCA-like format for
-multitask training in the first place.
-To get a sense of the similarity between the converted formats and actual UCCA graphs,
-we perform unlabeled evaluation of a sample annotated in each format, and gold-standard UCCA,
-after conversion to the unified format.
-The comparison is performed on 100 sentences from Section 00 of the Wall Street Journal
-corpus, which were manually annotated in all four formats.\footnote{For UD, we converted the
-data from Stanford Dependencies using Stanford CoreNLP, including enhanced and enhanced++
-dependencies\cite{SCHUSTER16.779}}.
-The results are listed in Table~\ref{tab:common}.
+%In fact, this is why we decided to convert the auxiliary tasks into UCCA-like format for
+%multitask training in the first place.
+To evaluate the similarity between the unlabeled auxiliary tasks and UCCA parsing,
+we perform unlabeled evaluation of a manually annotated sample of 100 sentences from the
+Wall Street Journal, after conversion to the unified DAG format.
+As can be seen in Table~\ref{tab:common}, there is a high unlabeled overlap between
+UCCA and UD$^{++}$ after conversion to the unified DAG format,
+while AMR is much less similar.
+DM contains a fair amount of information about primary UCCA edges, and even more about remote edges.
 
-\begin{table}
-\begin{tabular}{lccc|ccc}
-& \multicolumn{3}{c|}{Primary} & \multicolumn{3}{c}{Remote} \\
-& \textbf{UP} & \textbf{UR} & \textbf{UF} & \textbf{UP} & \textbf{UR} & \textbf{UF} \\
-AMR & 52.2 & 15.5 & 23.9 & 7.3 & 5.5 & 6.3 \\
-DM & 63.6 & 49.8 & 55.9 & 6.9 & 63.8 & 12.4 \\
-UD & 75.3 & 82.9 & 78.9 & -- & 0 & -- \\
-UD$^+$ & 75.1 & 82.4 & 78.5 & 11.5 & 12.8 & 12.1 \\
-UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
-\end{tabular}
-\caption{Unlabeled UCCA evaluation of each scheme after conversion to the unified format.
-UD$^+$ and UD$^{++}$ refer to the Enhanced and Enhanced++ Universal Dependencies,
-respectively \cite{SCHUSTER16.779}.\label{tab:common}}
-\end{table}
+These findings correlate with our multitask experimental results:
+while using AMR as an auxiliary task did not contribute much, DM and UD$^{++}$ did benefit UCCA
+parsing, and their combination yielded an even greater improvement.
+
+\section{Conclusion}
 
 
 \bibliography{references}
