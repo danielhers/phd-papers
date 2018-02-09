@@ -14,6 +14,9 @@
 \usepackage{url}
 \usepackage{etoolbox}
 
+\newcommand{\com}[1]{}
+\newcommand{\oa}[1]{\footnote{\color{red}OA: #1}}
+
 \hyphenation{SemEval}
 
 \DeclareMathOperator*{\argmin}{argmin}
@@ -37,7 +40,7 @@
 % smaller than 5cm (the original size); we will check this
 % in the camera-ready version and ask you to change it back.
 
-\title{Deep Multitask Learning for Transition-Based DAG Parsing}
+\title{Multitask Parsing across Semantic Representation Schemes}
 
 \author{Daniel Hershcovich$^{1,2}$ \\
   \\\And
@@ -53,58 +56,69 @@
 \date{}
 
 \begin{document}
+
 \maketitle
+
 \begin{abstract}
-  We train a transition-based DAG parser on multiple semantic parsing tasks.
-  In a multitask setting, we observe improvements on a low-resource task,
-  Universal Conceptual Cognitive Annotation parsing, using other schemes
-  as auxiliary tasks.
-  Despite various divergences between semantic representation schemes,
-  there are many commonalities both structurally and in terms of semantic content.
-  We convert these schemes into a unified format and investigate how
-  the similarity between different tasks is related to the contribution of
-  using one as an auxiliary task for another.
-  Given similar tasks, a BiLSTM-based neural network is able to generalize
-  using a shared representation, and effectively gains more training data
-  for the low-resource task.
+		The ability to leverage and consolidate information of different types
+		is at the core of semantic learning, and is also practically appealing
+		in that it effectively extends the training data. In this paper we
+		tackle the challenging setting of improving semantic parsing
+		performance, taking other parsing tasks as auxiliaries. We take UCCA
+		parsing as a test case, and take AMR, SDP and Universal Dependencies
+		parsing as auxiliaries. We show that despite the notable conceptual
+		and formal differences between these schemes, they can all be
+		leveraged to improve UCCA parsing, using a flexible and uniform
+		parsing and learning architecture. We report substantial improvements
+		to UCCA parsing in both in-domain and out-domain settings, and across
+		three languages.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
 
-While the development of syntactic treebanks has had a tremendous impact on natural language processing,
-semantic representation has arguably yet to reach its full potential in terms of its contribution
-to downstream linguistic tasks.
-As an example for syntactic annotation, the Universal Dependencies (UD) project provides
-cross-linguistically consistent treebanks in many languages \cite{nivre2016universal},
-and accurate parsers based upon it and other datasets have been extremely useful in natural
-language understanding tasks \cite{P16-1139,E17-1117,K17-3002}.
-Semantic representation, while increasingly adopting whole-text annotation rather than more specific
-shallow schemes, faces several challenges: semantic distinctions, besides requiring deeper understanding
-and being harder to learn, are not always well-defined, and progress is hindered by fragmentation.
-Semantic schemes diverge in the content they choose to annotate, their coupling with syntax,
-and their degree of cross-linguistic applicability and consistency \cite{abend2017state}.
+The multitude of semantic representations put forth in recent years offers
+somewhat different on the nature of semantics,
+but imposes difficulties on semantic parsing, which still lacks large semantically annotated
+corpora to train on. This shortage is even more pronounced in languages other than English, and
+less researched domains. 
 
-Recent developments in semantic parsing have targeted, among others,
+%While the development of syntactic treebanks has had a tremendous impact on natural 
+%language processing, semantic representation has arguably yet to reach its full 
+%potential in terms of its contribution to downstream linguistic tasks.
+%As an example for syntactic annotation, the Universal Dependencies (UD) project provides
+%cross-linguistically consistent treebanks in many languages \cite{nivre2016universal},
+%and accurate parsers based upon it and other datasets have been extremely useful in natural
+%language understanding tasks \cite{P16-1139,E17-1117,K17-3002}.
+%Semantic representation, while increasingly adopting whole-text annotation rather than more specific
+%shallow schemes, faces several challenges: semantic distinctions, besides requiring deeper understanding
+%and being harder to learn, are not always well-defined, and progress is hindered by fragmentation.
+%Semantic schemes diverge in the content they choose to annotate, their coupling with syntax,
+%and their degree of cross-linguistic applicability and consistency \cite{abend2017state}.
+
+Indeed, recent work in semantic parsing has targeted, among others,
 Abstract Meaning Representation \cite[AMR;][]{banarescu2013abstract,damonte-17,11099},
 bilexical Semantic Dependencies \cite[SDP;][]{oepen2014semeval,oepen2015semeval,oepen2016towards,P17-1186}
 with target representations such as DELPH-IN MRS \cite[DM;][]{flickinger2012deepbank},
 and Universal Conceptual Cognitive Annotation \cite[UCCA;][]{abend2013universal,hershcovich2017a}.
-Although each of these tasks has a different graph structure in general,
+Although each of these formalisms uses a different graph structure,
 they are all concerned with whole-sentence (or whole-paragraph) semantic analysis,
 and due to the structure of phenomena such as predicate-argument relations,
 require parsers that can handle non-projectivity (or discontinuity) and reentrancy, resulting in
 directed acyclic graphs (DAGs).
 While each of these schemes also focuses on a different set of distinctions,
-much of the semantic content is shared.
+much of the semantic content is shared \cite{abend2017state}.
 
 In cases where related tasks can be learned jointly,
 deep multitask learning models have been shown to be successful in various fields of NLP
-\cite{collobert2008unified,Zhang2016StackpropagationIR,P17-1186,swayamdipta2017frame,guo2016exploiting}.
-We build on these ideas and propose a transition-based semantic DAG parser for UCCA,
-trained in a multitask setting to obtain state-of-the-art results.\footnote{Our code is publicly available at ***}
+\cite{collobert2008unified,Zhang2016StackpropagationIR,P17-1186,swayamdipta2017frame,guo2016exploiting}.\oa{replace this with a brief
+related work}
 
+We build on these ideas and propose a transition-based semantic DAG parser for UCCA,
+trained in a multitask setting to obtain state-of-the-art 
+results.\footnote{Our code is publicly available at $<$hidden to protect anonymity$>$.}
 
 \begin{figure*}
+
 \begin{subfigure}[t]{0.5\textwidth}
   \begin{tikzpicture}[level distance=10mm, ->]
     \node (ROOT) [fill=black, circle] {}
@@ -131,11 +145,7 @@ trained in a multitask setting to obtain state-of-the-art results.\footnote{Our 
     \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
     \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
-  \caption{UCCA graph.
-  The dashed edge is remote.
-  The gray node and its outgoing edges represent linkage between the two scenes.
-  Pre-terminal nodes and edges are omitted for brevity.}
-  \label{fig:original_example_ucca}
+  \caption{UCCA \label{fig:original_example_ucca}}
 \end{subfigure}
 ~
 \begin{subfigure}[t]{0.5\textwidth}
@@ -164,11 +174,7 @@ trained in a multitask setting to obtain state-of-the-art results.\footnote{Our 
       ;
       \draw (graduation) to node {ARG0} (John);
   \end{tikzpicture}
-  \captionof{figure}{AMR graph.
-  The text tokens are not part of the graph, and must be matched to
-  concepts and constants by alignment.
-  Variables are represented by their concepts.}
-  \label{fig:original_example_amr}
+  \caption{AMR \label{fig:original_example_amr}}
 \end{subfigure}
 
 \begin{subfigure}[t]{0.5\textwidth}
@@ -184,11 +190,7 @@ trained in a multitask setting to obtain state-of-the-art results.\footnote{Our 
         \depedge[edge start x offset=1ex]{6}{5}{ARG1}
         \depedge{6}{7}{ARG2}
     \end{dependency}
-  \captionof{figure}{SDP graph (in the DM formalism).
-  The graph contains multiple roots: ``After'', ``moved'' and ``to''.
-  One of the roots is marked as \textit{top}: ``moved''.
-  Punctuation is not included in the graph as it is non-content-bearing.}
-  \label{fig:original_example_sdp}
+  \caption{SDP \label{fig:original_example_sdp}}
 \end{subfigure}
 ~
 \begin{subfigure}[t]{0.5\textwidth}
@@ -204,78 +206,95 @@ trained in a multitask setting to obtain state-of-the-art results.\footnote{Our 
         \deproot{5}{root}
         \depedge{5}{7}{obl}
     \end{dependency}
-  \captionof{figure}{UD tree.
-  Each word has exactly one head, and there is a single root.
-  Edge labels correspond to syntactic relations.}
-  \label{fig:original_example_ud}
+  \caption{UD \label{fig:original_example_ud}}
 \end{subfigure}
 
-\caption{Example graph in each target representation.}
-\label{fig:original_examples}
+
+\caption{\label{fig:original_examples}
+ Example graph for each representation scheme we use.
+ Figure \ref{fig:original_example_ucca} presents a UCCA graph. The dashed edge is remote,
+  while the gray node and its outgoing edges represent inter-Scene linkage.
+	Pre-terminal nodes and edges are omitted for brevity. 
+ Figure \ref{fig:original_example_amr} presents an AMR graph.
+  The text tokens are not part of the graph, and must be matched to
+  concepts and constants by alignment. Variables are represented by their concepts.
+ Figure \ref{fig:original_example_sdp} presents an SDP graph (in the DM formalism).
+  The graph contains multiple roots: ``After'', ``moved'' and ``to''.
+  One of the roots is marked as \textit{top}: ``moved''.
+  Punctuation is not included in the graph as it is non-content-bearing.
+ Figure \ref{fig:original_example_ud} presents a UD tree.
+  Each word has exactly one head, and there is a single root.
+  Edge labels correspond to syntactic relations.
+}
+
 \end{figure*}
 
-\section{Tasks}\label{sec:tasks}
 
-In this work, we focus on representation schemes providing a \textit{whole-sentence} analysis,
-that is, annotating a graph connecting all (content) words in a sentence (or a piece of text in general).
-This is in contrast to ``shallow'' semantic parsing,
-such as Semantic Role Labeling
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\section{Tackled Tasks}\label{sec:tasks}
+
+In this section, we outline the semantic parsing tasks we are addressing.
+We focus on representation schemes that provide a \textit{full-sentence} analysis,
+that is, schemes that produce a graph covering all (content) words in the text, or the
+lexical concepts they evoke.
+Full-sentence analysis contrasts with ``shallow'' semantic parsing,
+primarily Semantic Role Labeling
 \cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
-or parsing to logical forms.
+which target argument structure phenomena and uses flat structures.
 We consider four target representations: UCCA, AMR, DM and UD.
 Figure~\ref{fig:original_examples} shows an example graph for each scheme,
 annotating the sentence ``After graduation, John moved to Paris''.
 
-\subsection{Universal Conceptual Cognitive Annotation}\label{sec:ucca}
-
+\paragraph{Universal Conceptual Cognitive Annotation.}\label{sec:ucca}
 UCCA \cite{abend2013universal} is a semantic representation scheme whose main principles
 are ease of annotation and cross-linguistic applicability and stability.
 
 UCCA represents the semantics of natural language utterances
 as directed acyclic graphs (DAGs), where terminal nodes (nodes without children)
-correspond to the text tokens, and
-non-terminal nodes to semantic or cognitive entities or relations.
+correspond to the text tokens, and non-terminal nodes to semantic units that participate
+in some super-ordinate relation.
 Edges are labeled, indicating the role of a child in the relation the parent represents.
 Nodes and edges may belong to one of several \textit{layers}, each corresponding
 to a ``module'' of semantic distinctions.
-UCCA's \textit{foundational layer} mostly covers predicate-argument
-structure, coordination and multi-word expressions.
-The \textit{linkage} layer covers relations between events, including temporal and discourse relations
-(exemplified by the gray node and its outgoing edges in Figure~\ref{fig:original_example_ucca}).
+UCCA's \textit{foundational layer} (the only layer for which annotated data exists) 
+mostly covers predicate-argument structure, semantic heads and inter-Scene relations.
+%The \textit{linkage} layer covers relations between events, including temporal and discourse relations
+%(exemplified by the gray node and its outgoing edges in Figure~\ref{fig:original_example_ucca}).
 
-UCCA's guidelines distinguish between \textit{primary} edges, corresponding to the roles explicit
-in the text, and \textit{remote} edges (such as the dashed edge in
+UCCA's guidelines distinguish between \textit{primary} edges, corresponding 
+to the roles explicit in the text, and \textit{remote} edges (such as the dashed edge in
 Figure~\ref{fig:original_example_ucca}), corresponding to implicit relations.
 Primary edges form a tree structure in each layer,
-whereas the remote edges enable reentrancy (a DAG structure).
+whereas remote edges enable reentrancy (a DAG structure).
 
-Given UCCA's currently small corpus size (see \S\ref{sec:data}), we hypothesize it will benefit
-from multitask learning. We therefore focus on UCCA parsing evaluation---specifically, on the
-foundational layer.
+As UCCA annotated data is currently quite scarce (see \S\ref{sec:data}), 
+we hypothesize it will benefit from multitask learning, and consider it as our
+main task.
 
-
-\subsection{Abstract Meaning Representation}\label{sec:amr}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\paragraph{Abstract Meaning Representation.}\label{sec:amr}
 
 AMR \cite{banarescu2013abstract}
-is a semantic representation that embeds annotations related
-to named entity recognition, semantic role labeling, word
-sense disambiguation and co-reference resolution.
-AMRs are rooted and directed graphs, in which both nodes and edges are labeled.
+is a semantic representation that encodes information about named entities, 
+argument structure, semantic roles, word sense disambiguation and co-reference resolution.
+AMRs are rooted directed graphs, in which both nodes and edges are labeled.
 Most AMRs are DAGs, although cycles are permitted.
-AMR was targeted in the SemEval 2017 shared task \cite{may2017semeval}.
+Despite the short time since its inception, AMR was already targeted but a number of works,
+notably in the SemEval 2017 shared task \cite{may2017semeval}.
 
-As can be seen in Figure~\ref{fig:original_example_amr}, text tokens are not part
-of the AMR graph, which connects only variables, concepts (from a pre-defined set)
-and constants (which may be strings or numbers).
-During the process of parsing from plain text to AMR,
-the tokens are aligned to graph nodes,
-a process referred to as \textit{concept identification}.
-We use AMR datasets containing already automatically aligned graphs.
+AMR differs from the other schemes considered here in that it does not anchor its graphs
+in the words of the sentence (Figure~\ref{fig:original_example_amr}). Instead, AMR graphs
+connect variables, concepts (from a pre-defined set) and constants (which may be strings or numbers).
+Still, most AMR nodes are alignable to text tokens, a tendency used by AMR parsers,
+which automatically align the graph nodes to the text in a process called \textit{concept identification}.
+In this work, we use pre-aligned AMR graphs, which renders them (partially) anchored.
 
-\subsection{Semantic Dependency Parsing}\label{sec:sdp}
 
-SDP \cite{oepen2014semeval,oepen2015semeval,oepen2016towards}
-is a set of related tasks, targeted in two SemEval shared tasks.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+\paragraph{Semantic Dependency Parsing.}\label{sec:sdp}
+
+SDP is a set of related tasks, targeted in three recent SemEval shared tasks 
+\cite{oepen2014semeval,oepen2015semeval,oepen2016towards}.
 They correspond to four semantic representation schemes, referred to as
 DM, PAS, PSD and CCD, representing
 predicate-argument relations between content-bearing words in a sentence.
@@ -283,21 +302,22 @@ All are based on semantic formalisms whose annotations have been
 converted into bilexical dependencies, that is,
 labeled directed graphs whose nodes are all text tokens and each edge connects two of them.
 Edges are labeled, encoding semantic relations between the tokens.
-Non-content-bearing tokens, such as punctuation,
-may be left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
-but the subgraph restricted to content-bearing tokens is connected.
-Graphs containing cycles have been removed from the SDP datasets.
+Non-content tokens, such as punctuation,
+are often left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
+but the sub-graph restricted to content-bearing tokens is connected.
+Graphs that contain cycles have been removed from the SDP datasets.
 
 We consider one of the three formalisms used in the SemEval shared task:
 the DM (DELPH-IN MRS) representation, which comes
 from DeepBank \cite{flickinger2012deepbank},
 manually-corrected parses from the LinGO
 English Resource Grammar \cite{copestake2000open}.
-LinGO is a head-driven phrase
-structure grammar \cite[HPSG; ][]{pollard1994head}
-with minimal recursion semantics \cite{copestake2005minimal}.
+LinGO is a Head-driven Phrase
+Structure Grammar \cite[HPSG; ][]{pollard1994head}
+which uses Minimal Recursion Semantics \cite{copestake2005minimal}.
 
-\subsection{Universal Dependencies}\label{sec:ud}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Universal Dependencies.}\label{sec:ud}
 
 UD \cite{nivre2016universal,11234/1-2515} has become
 the dominant dependency representation for
@@ -310,10 +330,9 @@ syntactic relations between the text tokens.
 Although not a semantic representation scheme,
 we use UD as an auxiliary task,
 inspired by recent work showing benefit from using syntax as an auxiliary task for semantic role labeling
-\cite[syntactic scaffolding; ][]{swayamdipta2017frame}.
-While our main experiments are on English,
-thanks to UD's annotation in multiple languages, we can use it as an auxiliary task
-for UCCA parsing in German and French, too (see \S\ref{sec:multilingual}).
+\cite[][]{swayamdipta2017frame}.
+Using UD also allows us to conduct experiments on French and German, for which SDP and AMR
+annotated data is not available (\S\ref{sec:multilingual}).
 
 In addition the basic UD trees (such as in Figure~\ref{fig:original_example_ud}),
 \textit{enhanced} and \textit{enhanced++} UD graphs are available for English,
@@ -368,7 +387,7 @@ partially overlapping with the notion of remote edges in UCCA.
 \end{figure}
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Transition-based universal parser}\label{sec:model}
 
 All target representations introduced in \S\ref{sec:tasks} exhibit
