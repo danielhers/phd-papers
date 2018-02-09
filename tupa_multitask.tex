@@ -230,7 +230,31 @@ results.\footnote{Our code is publicly available at $<$hidden to protect anonymi
 \end{figure*}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related work}\label{sec:related_work}
+
+%In general, multitask learning involves optimizing more than one loss function \cite{ruder2017overview}.
+%However, in our case, the loss function has the same form across all tasks.
+%The same architecture and inference algorithm are applied to multiple annotation formats and datasets,
+%and only some of the parameters are shared between them: this is hard parameter sharing.
+
+Multitask learning is often used in NLP, both as regularization when little training data is available,
+and as an alternative to the pipeline approach, to avoid error propagation
+\cite{collobert2008unified}.
+Multitask learning has been applied to semantic parsing, including
+semantic dependency parsing \cite{P17-1186} and
+frame semantic parsing \cite{swayamdipta2017frame}.
+\citet{guo2016exploiting} applied multitask learning to transition-based
+syntactic parsing,
+both in a multilingual setting and with multiple formats in a single language.
+In transition-based parsing, multitask learning has also been applied to
+tagging and parsing \cite{bohnet2012transition,Zhang2016StackpropagationIR},
+lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint},
+and semantic-syntactic analysis \cite{swayamdipta-EtAl:2016:CoNLL,henderson2013multilingual}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Tackled Tasks}\label{sec:tasks}
 
 In this section, we outline the semantic parsing tasks we are addressing.
@@ -1023,29 +1047,6 @@ UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 \caption{Unlabeled UCCA evaluation of 100 sentences converted to the unified DAG format.
 \label{tab:common}}
 \end{table}
-
-
-
-\section{Related work}\label{sec:related_work}
-
-%In general, multitask learning involves optimizing more than one loss function \cite{ruder2017overview}.
-%However, in our case, the loss function has the same form across all tasks.
-%The same architecture and inference algorithm are applied to multiple annotation formats and datasets,
-%and only some of the parameters are shared between them: this is hard parameter sharing.
-
-Multitask learning is often used in NLP, both as regularization when little training data is available,
-and as an alternative to the pipeline approach, to avoid error propagation
-\cite{collobert2008unified}.
-Multitask learning has been applied to semantic parsing, including
-semantic dependency parsing \cite{P17-1186} and
-frame semantic parsing \cite{swayamdipta2017frame}.
-\citet{guo2016exploiting} applied multitask learning to transition-based
-syntactic parsing,
-both in a multilingual setting and with multiple formats in a single language.
-In transition-based parsing, multitask learning has also been applied to
-tagging and parsing \cite{bohnet2012transition,Zhang2016StackpropagationIR},
-lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint},
-and semantic-syntactic analysis \cite{swayamdipta-EtAl:2016:CoNLL,henderson2013multilingual}.
 
 
 \section{Discussion}\label{sec:discussion}
