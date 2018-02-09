@@ -239,9 +239,17 @@ results.\footnote{Our code is publicly available at $<$hidden to protect anonymi
 %The same architecture and inference algorithm are applied to multiple annotation formats and datasets,
 %and only some of the parameters are shared between them: this is hard parameter sharing.
 
-Multitask learning is often used in NLP, both as regularization when little training data is available,
-and as an alternative to the pipeline approach, to avoid error propagation
+Joint and multitask learning are often used
+when two or more tasks share common information.
+They are used as regularization, to enlarge the training data,
+and as an alternative to the pipeline approach, alleviating error propagation
 \cite{collobert2008unified}.
+In NLP, joint and multitask learning have been used with tasks of varying
+similarity.
+In semantic role labeling, \citet{toutanova2005joint}
+learn a joint re-reranking log-linear model across arguments of the same predicate.
+Two CoNLL shared tasks were dedicated to joint syntactic and semantic
+dependency parsing \cite{surdeanu2008conll,hajivc2009conll}.
 Multitask learning has been applied to semantic parsing, including
 semantic dependency parsing \cite{P17-1186} and
 frame semantic parsing \cite{swayamdipta2017frame}.
@@ -251,7 +259,7 @@ both in a multilingual setting and with multiple formats in a single language.
 In transition-based parsing, multitask learning has also been applied to
 tagging and parsing \cite{bohnet2012transition,Zhang2016StackpropagationIR},
 lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint},
-and semantic-syntactic analysis \cite{swayamdipta-EtAl:2016:CoNLL,henderson2013multilingual,surdeanu2008conll,hajivc2009conll}.
+and semantic-syntactic analysis \cite{swayamdipta-EtAl:2016:CoNLL,henderson2013multilingual}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
