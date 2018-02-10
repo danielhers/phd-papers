@@ -76,11 +76,13 @@
 
 \section{Introduction}\label{sec:introduction}
 
-The multitude of semantic representations put forth in recent years offers
-somewhat different on the nature of semantics,
-but imposes difficulties on semantic parsing, which still lacks large semantically annotated
-corpora to train on. This shortage is even more pronounced in languages other than English, and
-less researched domains. 
+The multitude of semantic representations put forth in recent years greatly enrich
+the discussion in NLP on the nature of semantic structure.
+Still, semantic representation has arguably yet to reach its full 
+potential in terms of its contribution to downstream linguistic tasks,
+partially due to the limited amounts of semantically annotated
+corpora to train on. This shortage is even more pronounced in 
+languages other than English, and less researched domains. 
 
 %While the development of syntactic treebanks has had a tremendous impact on natural 
 %language processing, semantic representation has arguably yet to reach its full 
@@ -100,18 +102,13 @@ Abstract Meaning Representation \cite[AMR;][]{banarescu2013abstract,damonte-17,1
 bilexical Semantic Dependencies \cite[SDP;][]{oepen2014semeval,oepen2015semeval,oepen2016towards,P17-1186}
 with target representations such as DELPH-IN MRS \cite[DM;][]{flickinger2012deepbank},
 and Universal Conceptual Cognitive Annotation \cite[UCCA;][]{abend2013universal,hershcovich2017a}.
-Although each of these formalisms uses a different graph structure,
-they are all concerned with whole-sentence (or whole-paragraph) semantic analysis,
-and due to the structure of phenomena such as predicate-argument relations,
-require parsers that can handle non-projectivity (or discontinuity) and reentrancy, resulting in
-directed acyclic graphs (DAGs).
 While each of these schemes also focuses on a different set of distinctions,
 much of the semantic content is shared \cite{abend2017state}.
 
-In cases where related tasks can be learned jointly,
-deep multitask learning models have been shown to be successful in various fields of NLP
-\cite{collobert2008unified,Zhang2016StackpropagationIR,P17-1186,swayamdipta2017frame,guo2016exploiting}.\oa{replace this with a brief
-related work}
+
+%In cases where related tasks can be learned jointly,
+%deep multitask learning models have been shown to be successful in various fields of NLP
+%\cite{collobert2008unified,Zhang2016StackpropagationIR,P17-1186,swayamdipta2017frame,guo2016exploiting}.
 
 We build on these ideas and propose a transition-based semantic DAG parser for UCCA,
 trained in a multitask setting to obtain state-of-the-art 
@@ -277,6 +274,13 @@ We consider four target representations: UCCA, AMR, DM and UD.
 Figure~\ref{fig:original_examples} shows an example graph for each scheme,
 annotating the sentence ``After graduation, John moved to Paris''.
 
+Although each of these tasks use different graph structures,
+they all involve whole-sentence (or whole-paragraph) semantic analysis,
+and due to the structure of phenomena such as predicate-argument relations,
+require parsers that can handle non-projectivity (or discontinuity) and reentrancy, resulting in
+directed acyclic graphs (DAGs).\oa{maybe add a diagram or at least elaborate more on these like we
+did in the TUPA paper, with examples etc.}
+
 \paragraph{Universal Conceptual Cognitive Annotation.}\label{sec:ucca}
 UCCA \cite{abend2013universal} is a semantic representation scheme whose main principles
 are ease of annotation and cross-linguistic applicability and stability.
@@ -350,27 +354,28 @@ which uses Minimal Recursion Semantics \cite{copestake2005minimal}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Universal Dependencies.}\label{sec:ud}
-
 UD \cite{nivre2016universal,11234/1-2515} has become
 the dominant dependency representation for
 annotating treebanks in a large variety of languages,
-aiming for cross-linguistically consistent treebank
-annotations for as many languages as possible.
-Representations are bilexical trees, with edge labels representing
-syntactic relations between the text tokens.
+aiming for cross-linguistically consistent and coarse-grained treebank
+annotation. Formally, UD uses bilexical trees, with edge labels 
+representing syntactic relations between the text tokens.
 
-Although not a semantic representation scheme,
+While not a semantic representation scheme,
 we use UD as an auxiliary task,
-inspired by recent work showing benefit from using syntax as an auxiliary task for semantic role labeling
-\cite[][]{swayamdipta2017frame}.
-Using UD also allows us to conduct experiments on French and German, for which SDP and AMR
-annotated data is not available (\S\ref{sec:multilingual}).
+inspired by previous work showing benefit from using syntax as an auxiliary 
+task for semantic role labeling \cite[][]{swayamdipta2017frame}.\oa{i think there's also older work on this}
+In order to obtain cross-linguistc applicability, 
+UD often makes design decision that are similar to the common practice
+in semantic treebanks, such as linking content words to content words wherever possible.
+Moreovver, using UD also allows us to conduct experiments on French and German, 
+for which SDP and AMR annotated data is not available (\S\ref{sec:multilingual}).
 
 In addition the basic UD trees (such as in Figure~\ref{fig:original_example_ud}),
 \textit{enhanced} and \textit{enhanced++} UD graphs are available for English,
 using automatic converters included in Stanford CoreNLP.
 These include additional and augmented relations between content words,
-partially overlapping with the notion of remote edges in UCCA.
+partially overlapping with the notion of remote edges in UCCA.\oa{give an example}
 
 \begin{figure}[t]
    \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
@@ -420,33 +425,34 @@ partially overlapping with the notion of remote edges in UCCA.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Transition-based universal parser}\label{sec:model}
+\section{General Transition-based DAG Parser}\label{sec:model}
 
-All target representations introduced in \S\ref{sec:tasks} exhibit
+All representations we parse in \S\ref{sec:tasks} exhibit
 reentrancy and discontinuity (non-projectivity), to varying degrees.
-In addition, UCCA and AMR contain non-terminal nodes.
-To parse graphs with these structural properties,
-we extend TUPA \cite{hershcovich2017a},
-a transition-based parser that supports them,
-originally developed for UCCA parsing.
-TUPA's general transition system allows parsing any DAG structure with labeled edges,
-whose terminals are aligned to text tokens.
-To support AMR parsing, we take advantage of automatic alignments during training
-(\S\ref{sec:conversion}).
+In addition, UCCA and AMR contain non-terminal nodes.\oa{what about empty nodes?}
+
+In order to parse graphs with these structural properties,
+we extend TUPA \cite{hershcovich2017a}, originally developed for UCCA parsing,
+as it is the only parser to our knowledge that supports 
+all these structural properties.
+TUPA's transition system can yield any labeled DAG structure
+whose terminals are (partially) aligned to text tokens.
+To support AMR parsing, we take advantage of existing alignments of the graphs with the text
+tokens during training (\S\ref{sec:conversion}).
 
 Transition-based parsers \cite{Nivre03anefficient} apply \textit{transitions}
-incrementally to an internal state defined by
-a buffer $B$ of remaining tokens and nodes,
-a stack $S$ of incomplete nodes,
-and a labeled graph $G$ of constructed nodes and edges.
+incrementally to an internal state defined by a buffer $B$ of remaining tokens 
+and nodes, a stack $S$ of incomplete nodes, and a labeled graph $G$ of 
+constructed nodes and edges.
 When the parsing process is finished, the graph $G$ is the final output.
 A classifier is used at each step to select the next transition based on features
-encoding the current state.
+that encode the current state.
 During training, an oracle creates training instances for the classifier,
 based on gold-standard annotations.
 
 
-\subsection{Transition set}\label{sec:transition_set}
+\subsection{The Transition Set}\label{sec:transition_set}
+
 Given a sequence of tokens $w_1, \ldots, w_n$,
 we predict a rooted graph $G$ whose terminals are the tokens.
 Parsing starts with the root node on the stack,
@@ -468,16 +474,18 @@ For this reason we follow \citet{hershcovich2017a} and do not include
 any transition to create these when parsing UCCA,
 thus ignoring them in both training and evaluation.
 This phenomenon is even more common in AMR, as any unaligned concept
-will correspond to implicit nodes.
-These may result from alignment errors,
-or from abstract concepts,
+will correspond to an implicit node.\oa{how frequent is this in our settings?}
+These result from alignment errors, or from abstract concepts,
 which have no explicit grounding in the text \cite{buys2017oxford}.
 The TUPA transition set does not support node labels either, as only edges are labeled in UCCA.
 In AMR, however, node labels correspond to concepts and constants.
 When training on AMR, we will ignore any implicit nodes, and produce graphs with only edge labels.
-In training, though, we can still use gold node labels for feature extraction.
+In training, though, we can still use gold node labels for feature extraction.\oa{i don't understand: we extract
+features from info that is not available during test? does that make sense?}
 
-\subsection{Classifier}\label{sec:classifier}
+%%%%%%%%%%%Omri: until here
+\subsection{Transition Classifier}\label{sec:classifier}
+
 To select the next transition at each time step,
 we use a bidirectional LSTM with embeddings as inputs,
 followed by a feedforward network and a softmax layer for classification (see
