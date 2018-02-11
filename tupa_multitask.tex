@@ -432,15 +432,17 @@ partially overlapping with the notion of remote edges in UCCA.\oa{give an exampl
 
 All representations we parse in \S\ref{sec:tasks} exhibit
 reentrancy and discontinuity (non-projectivity), to varying degrees.
-In addition, UCCA and AMR contain non-terminal nodes.\oa{what about empty nodes?}
+In addition, UCCA and AMR contain non-terminal nodes.
 
 In order to parse graphs with these structural properties,
-we extend TUPA \cite{hershcovich2017a}, originally developed for UCCA parsing,
+we extend the TUPA parser \cite[][henceforth HAR17]{hershcovich2017a}, 
+originally developed for UCCA parsing,
 as it is the only parser to our knowledge that supports 
 all these structural properties.
 TUPA's transition system can yield any labeled DAG structure
-whose terminals are (partially) aligned to text tokens.
-To support AMR parsing, we take advantage of existing alignments of the graphs with the text
+whose leaves are aligned to text tokens.
+To support parsing into AMR, which uses graphs that are not anchored in the tokens,
+ we take advantage of existing alignments of the graphs with the text
 tokens during training (\S\ref{sec:conversion}).
 
 Transition-based parsers \cite{Nivre03anefficient} apply \textit{transitions}
@@ -470,34 +472,39 @@ the standard \textsc{Shift} and \textsc{Reduce} operations,
 and \textsc{Finish} to mark the state as terminal.
 
 Although UCCA contains nodes without any text tokens as descendants
-(these nodes are referred to as \textit{implicit units}),
-the standard evaluation for UCCA \cite{abend2013universal} is span-based and
+(named \textit{implicit units}),
+the standard evaluation for UCCA parsing is span-based and
 ignores these nodes.
 For this reason we follow \citet{hershcovich2017a} and do not include
 any transition to create these when parsing UCCA,
 thus ignoring them in both training and evaluation.
 This phenomenon is even more common in AMR, as any unaligned concept
-will correspond to an implicit node.\oa{how frequent is this in our settings?}
+will correspond to an implicit node.\oa{how frequent is this in AMR?}
 These result from alignment errors, or from abstract concepts,
 which have no explicit grounding in the text \cite{buys2017oxford}.
-The TUPA transition set does not support node labels either, as only edges are labeled in UCCA.
-In AMR, however, node labels correspond to concepts and constants.
-When training on AMR, we will ignore any implicit nodes, and produce graphs with only edge labels.
-In training, though, we can still use gold node labels for feature extraction.\oa{i don't understand: we extract
-features from info that is not available during test? does that make sense?}
+We ignore implicit nodes when training on AMR as well.
 
-%%%%%%%%%%%Omri: until here
+Another property of AMR not covered by TUPA is support for node labels, 
+as only edges are labeled in UCCA. In AMR, however, node labels correspond 
+to concepts and constants, and are ubiquitous.
+When training on AMR, we produce graphs only with edge labels (relations) 
+and without node labels.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Transition Classifier}\label{sec:classifier}
 
 To select the next transition at each time step,
 we use a bidirectional LSTM with embeddings as inputs,
-followed by a feedforward network and a softmax layer for classification (see
-Figure~\ref{fig:single_model}).
+followed by a feedforward network and a softmax layer for classification 
+(see Figure~\ref{fig:single_model}).
 Inference is performed greedily,
-and training is done with an oracle that provides the set of all correct transitions at a given state.
+and training is done with an oracle that yields the set of all correct 
+transitions at a given state.
 The network is trained to maximize the log-likelihood of all correct transitions at
 each step, and the actual transition taken in training is the correct transition
 with the highest score given by the classifier.
+
 
 \begin{table}
 \centering
@@ -688,108 +695,84 @@ In addition to the features used by \citet{hershcovich2017a},
 representing the words, POS tags, syntactic dependency relations, and previously predicted edge labels
 for nodes in specific locations in the parser state,
 we use feature embeddings representing lemmas, word prefixes, suffixes and shapes, and named entities.
-For AMR we add node label features according to gold node labels.
-
-\paragraph{Training.}
-Features are extracted using spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
-All embeddings are initialized randomly.
-For words, we additionally use external word embeddings containing 250K word vectors from fastText
-\cite{bojanowski2016enriching},\footnote{\url{https://github.com/facebookresearch/fastText}}
-pre-trained over Wikipedia and updated during training.
-We use dropout \cite{srivastava2014dropout} between MLP layers and recurrent dropout
-\cite{NIPS2016_6241} between BiLSTM layers, both with a probability of 0.4.
-In addition, we use word, tag and dependency relation dropout \cite{kiperwasser2016simple}:
-in training, the embedding for a feature value $w$ is replaced with a zero vector
-with a probability of $\frac{0.2}{\#(w)+0.2}$, where $\#(w)$ is the number of occurrences of the
-$w$ observed so far.
-For optimization we a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
-and train with stochastic gradient descent (SGD) for 40 epochs with a learning
-rate of 0.1, followed by AMSGrad \cite{j.2018on} for 60 epochs with
-$\alpha=0.001,\beta_1=0.9,\beta_2=0.999$.
-We found this training strategy to work better than using only one of the optimization methods,
-similar to findings by \citet{keskar2017improving}.
-We select the epoch with the best labeled F1 score on the development set.
-The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
-Hyperparameter settings are listed in Table~\ref{tab:hyperparams} (middle column).
-
-\paragraph{Ensembling.}
-During inference, we use Product of Experts \cite[PoE; ][]{hinton2002training} to combine the predictions
-of three models trained in the same setting, but with different random seeds. The transition selected is
-\[
-\argmax_{t\in T}\sum_{i=1}^3\big[\log(\mathrm{softmax}(m_i(s)))\big]_t
-\]
-where $T$ is the set of possible transitions, $m_i$ are the combined models, and $s$ is the current state.
+For AMR we add node label features according to gold node labels.\oa{what do you mean prefixes, suffixes and shapes?
+how do you encode named entities? you need to write it so it can be replicated, either here or in
+the supp material.}
 
 
-
-\subsection{Constraints}
-
+\paragraph{Constraints.}
 As each annotation scheme has different constraints on the allowed graphs,
 we defined these constraints separately for each task.
 During training and parsing, the constraint set corresponding to the task is
-selected and applied to the parser state.
+selected and applied to the parser state, to rule out some of the transitions.
 
 Some constraints are task-specific, while some are generic.
 For example, in UCCA, a terminal may only have one parent.
-In AMR, a concept corresponding to a PropBank frame may have only core arguments defined for the frame.
+In AMR, a concept corresponding to a PropBank frame may only have 
+core arguments defined for the frame.
+An example of a generic constraint is that nodes on the stack 
+that have already been swapped
+should never be swapped again.\footnote{
+	To implement this constraint, we define a \textit{swap index}
+	for each node, which is assigned when the node is created.
+	At parse start, only the root node and terminals exist.
+	We assign the root a swap index of 0, and for each terminal, its swap index
+	is its position in the text (starting at 1).
+	Whenever a node is created as a result of a \textsc{Node}
+	transition, we assign its swap index to be the arithmetic 
+	mean of the stack top and buffer head's swap indices.}
 
-As an example for a generic constraint, nodes that have already been swapped
-should never be swapped again.
-To implement this constraint efficiently, we define a \textit{swap index}
-for each node, which is assigned when the node is created.
-At parse start, only the root node and terminals exist.
-We assign the root a swap index of 0, and for each terminal, its swap index
-is its position in the text (starting at 1).
-Whenever a node is created as a result of a \textsc{Node}
-transition, we assign its swap index to be the arithmetic mean of the stack top and buffer
-head's swap indices.
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Unified DAG format}\label{sec:conversion}
 
 To be able to use TUPA for the four tasks presented in \S\ref{sec:tasks},
-we convert them all into a unified DAG format.
-In this format, the graph is a rooted DAG, and the text tokens are terminal nodes.
-As in the UCCA format, the graph edges are labeled,
+we convert them all into a unified DAG format, which is inclusive enough to
+allow representing any of the schemes without very little loss of information.
+
+The format consists of a rooted DAG, where the tokens are the terminal nodes.
+As in the UCCA format, the edges (but not the nodes) are labeled,
 and are divided into \textit{primary} and \textit{remote} edges,
 where the primary edges form a tree (all nodes have at most one primary parent,
 and the root has none).
 The remote edges enable reentrancy, and thus together with them the graph
-is in general a DAG and not necessarily a tree.
+is generally a DAG, and not necessarily a tree.
 Figure~\ref{fig:converted_examples} shows examples for converted graphs.
-Converting UCCA into the unified format consists simply of removing linkage nodes
-and edges (see Figure~\ref{fig:converted_example_ucca}).
+Converting UCCA into the unified format consists simply of removing linkage 
+nodes and edges (see Figure~\ref{fig:converted_example_ucca}, which were
+also discarded by HAR17.
 
-\subsection{Converting bilexical dependencies}
-To convert DM and UD into the unified DAG format,
+\paragraph{Converting Bilexical Dependencies.}
+In order to convert DM and UD into the unified DAG format,
 we add a pre-terminal for each terminal,
 and then attach the pre-terminals according to the original dependency edges.
-We add an additional level with a \textit{head} edge to avoid terminal and non-terminal siblings
-(see Figure~\ref{fig:converted_example_sdp} and Figure~\ref{fig:converted_example_ud}).
-Since DM allows multiple roots, we attached the corresponding non-terminals as children of
-the single converted graph root, with the \textit{root} edge label.
-Top nodes are labeled with \textit{top} instead.
+Formally, we traverse the tree from the root down. For each node token we create a non-terminal
+parent, with the label {\it head}, and add the node's dependents as children of the created non-terminal node.\oa{is this clear and 
+accurate enough?}
+See Figure~\ref{fig:converted_example_sdp} and Figure~\ref{fig:converted_example_ud}.
+Since DM allows multiple roots, we form a single root node, whose children
+are the previous root nodes. The added edges are labeled as \textit{root}, where
+top nodes are labeled with \textit{top} instead.
 In case of reentrancy, an arbitrary parent is marked as primary, and the rest as remote
 (denoted as dashed edges in Figure~\ref{fig:converted_examples}).
 
-\subsection{Converting AMR}
+\paragraph{Converting AMR.}
 In the conversion from AMR, non-terminals are already present and do not need to be introduced.
-However, alignments and node labels must be handled
-(see Figure~\ref{fig:converted_example_amr}).
-Since alignment to the text tokens is not part of the AMR graph,
-we introduce the alignments as edges in conversion.
-We use automatically aligned AMR graphs provided in the dataset (see \S\ref{sec:data}),
+However, alignments and node labels must be handled (see Figure~\ref{fig:converted_example_amr}).
+Since alignment between AMR nodes and text tokens are not part of the AMR graph,
+we insert the alignments into the graph as edges in the conversion.
+Specifically, we use automatically aligned AMR graphs provided in the AMR treebank (see \S\ref{sec:data}),
 and attach each node with a \textit{Terminal} edge to each of the terminals it is aligned to.
 
 Since the order of AMR ordinal relations, such as \textit{op1}, \textit{op2},
 is annotated according to the order of text tokens,
 the numeric index is redundant and is thus removed.
-We keep the numeric suffixes when they are meaningful, e.g. in \textit{ARG0}, \textit{ARG1}, etc.
+Numeric suffixes are kept when they are meaningful, e.g. in distinguishing between PropBank semantic
+roles (\textit{ARG[0-5]}).
 
-Named entities in AMR are expressed by \textit{name} relations and nodes, with
-a child for each token in the name, and relations labeled \textit{op1}, \textit{op2}, etc.
-We instead collapse this subgraph to a single node whose children are the terminals
-corresponding to the name tokens.
+Named entities in AMR are represented as a sub-tree ....\oa{I don't understand what
+are the op1 and op2 relations. fill in how the sub-tree looks like}
+We collapse this sub-graph into a single node whose children are its tokens.
 
 
 \begin{figure}[t]
@@ -848,27 +831,24 @@ corresponding to the name tokens.
 ({\#}sent).\label{tab:corpora}}
 \end{table*}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Multitask transition-based parsing}\label{sec:multitask}
 
-Since the same TUPA model can be applied to different tasks, we can train it on multiple tasks together.
-Following previous work, we use similar hyperparameter settings as for the single-task case
-(see Table~\ref{tab:hyperparams}, right column),
+Since the same TUPA model can be applied to different tasks, 
+we can train it on multiple tasks together.
+Following previous work, we use similar hyper-parameter settings as for the single-task 
+case (see Table~\ref{tab:hyperparams}, right column),
 and rather than sharing all model parameters, share only part of the model
 \cite{P17-1186,N16-1179,P16-2038,C16-1013,C16-1059,C16-1179,E17-1005}.
 Feature embeddings are shared, and in addition to the task-specific BiLSTM,
-we use a shared BiLSTM.
-The outputs of both BiLSTMs are concatenated and
+we use a shared BiLSTM. The outputs of both BiLSTMs are concatenated and
 fed into the task-specific MLP (see Figure~\ref{fig:multi_model}).
 
-
-Multitask learning is particularly beneficial for improving on tasks with small training data.
-As UCCA has a relatively small corpus (see \S\ref{sec:data}),
-we focus on UCCA parsing and treat AMR, DM and UD parsing
-as auxiliary tasks, creating a unified corpus by shuffling all sentences from all datasets together,
-but using only the score on the UCCA development set as the criterion for early stopping.
-In each training epoch, we use the same number of examples from each task.
-Since the UCCA training set is the smallest, we sample the same number of sentences from
-the training set of each of the other tasks.
+We focus in this paper on UCCA parsing, and treat 
+AMR, DM and UD parsing as auxiliary tasks,
+due to the fairly small training set available for UCCA (see \S\ref{sec:data}),
+which makes it particularly appealing for multi-task learning.
 
 
 \subsection{Unlabeled parsing for auxiliary tasks}\label{sec:unlabeled_aux}
@@ -876,18 +856,13 @@ the training set of each of the other tasks.
 To simplify the auxiliary tasks and facilitate generalization \cite{E17-2026},
 we perform unlabeled parsing for AMR, DM and UD in the multitask setting,
 while still predicting edge labels in UCCA parsing.
-We extend TUPA to support unlabeled parsing by simply removing all labels from
-\textsc{Edge}, \textsc{Remote} and \textsc{Node} transitions output by the oracle.
+We extend TUPA to support unlabeled parsing by simply removing all labels from the
+\textsc{Edge}, \textsc{Remote} and \textsc{Node} transitions outputted by the oracle.
 This results in a much smaller output dimension,
-and we use a smaller task-specific BiLSTM for the auxiliary tasks.
+and we use a smaller task-specific BiLSTM for the auxiliary tasks.\oa{what do you mean?
+		that because there are less transitions you need less states in the BiLSTM? if so, write
+		it this way}
 
-\subsection{Ensemble of multitask models}\label{sec:ensemble_multitask}
-
-As mentioned in \S\ref{sec:classifier}, during inference we combine the predictions
-of three models trained in the same setting, but with different random seeds.
-To ensemble multitask models, this means we combine models trained with the same auxiliary task.
-Another alternative is to combine models trained with different auxiliary tasks.
-This provides greater variability between the combined models.
 
 
 \section{Experiments}\label{sec:experiments}
@@ -920,6 +895,12 @@ We use the enhanced++ UD representation \cite{SCHUSTER16.779} in our English exp
 henceforth referred to as UD$^{++}$.
 Table~\ref{tab:corpora} shows the size of each corpus.
 
+Training proceeds by creating a unified corpus by shuffling all sentences from relevant
+datasets together (according to the setting),
+but using only the score on the UCCA development set as the criterion for early stopping.
+In each training epoch, we use the same number of examples from each task.
+Since the training sets are different in size, we sample the same number of sentences from
+the training set of each of the other tasks.\oa{how many in each iteration?}
 
 \begin{table*}
 \centering
@@ -980,6 +961,46 @@ Edges in predicted and gold graphs are matched by terminal yield and label.
 %For UD, we use LAS F1.
 %For AMR, we use Smatch \cite{cai2013smatch}.
 %For DM, we use labeled precision, recall and F1.
+
+
+
+\subsection{Training}
+
+Features are extracted using spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
+All embeddings are initialized randomly.
+For words, we additionally use external word embeddings containing 250K word vectors from fastText
+\cite{bojanowski2016enriching},\footnote{\url{https://github.com/facebookresearch/fastText}}
+pre-trained over Wikipedia and updated during training.
+We use dropout \cite{srivastava2014dropout} between MLP layers and recurrent dropout
+\cite{NIPS2016_6241} between BiLSTM layers, both with a probability of 0.4.
+In addition, we use word, tag and dependency relation dropout \cite{kiperwasser2016simple}:
+in training, the embedding for a feature value $w$ is replaced with a zero vector
+with a probability of $\frac{0.2}{\#(w)+0.2}$, where $\#(w)$ is the number of occurrences of the
+$w$ observed so far.
+For optimization we a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
+and train with stochastic gradient descent (SGD) for 40 epochs with a learning
+rate of 0.1, followed by AMSGrad \cite{j.2018on} for 60 epochs with
+$\alpha=0.001,\beta_1=0.9,\beta_2=0.999$.
+We found this training strategy to work better than using only one of the optimization methods,
+similar to findings by \citet{keskar2017improving}.
+We select the epoch with the best labeled F1 score on the development set.
+The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
+Hyperparameter settings are listed in Table~\ref{tab:hyperparams} (middle column).
+
+\subsection{Ensembling}
+
+During inference, we use Product of Experts \cite[PoE; ][]{hinton2002training} to combine the predictions
+of three models trained in the same setting, but with different random seeds. The transition selected is
+\[
+\argmax_{t\in T}\sum_{i=1}^3\big[\log(\mathrm{softmax}(m_i(s)))\big]_t
+\]
+where $T$ is the set of possible transitions, $m_i$ are the combined models, and $s$ is the current state.
+
+In order to ensemble multitask models, we combine models trained with the same auxiliary task.
+Another alternative is to combine models trained with different auxiliary tasks.\oa{don't write about alternatives,
+but rather on what we actually do}
+This provides greater variability between the combined models.
+
 
 
 \subsection{Results}\label{sec:results}
