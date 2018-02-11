@@ -60,18 +60,18 @@
 \maketitle
 
 \begin{abstract}
-		The ability to leverage and consolidate information of different types
-		is at the core of semantic learning, and is also practically appealing
-		in that it effectively extends the training data. In this paper we
-		tackle the challenging setting of improving semantic parsing
-		performance, taking other parsing tasks as auxiliaries. We take UCCA
-		parsing as a test case, and take AMR, SDP and Universal Dependencies
-		parsing as auxiliaries. We show that despite the notable conceptual
-		and formal differences between these schemes, they can all be
-		leveraged to improve UCCA parsing, using a flexible and uniform
-		parsing and learning architecture. We report substantial improvements
-		to UCCA parsing in both in-domain and out-domain settings, and across
-		three languages.
+The ability to leverage and consolidate information of different types
+is at the core of semantic learning, and is also practically appealing
+in that it effectively extends the training data. In this paper we
+tackle the challenging setting of improving semantic parsing
+performance, taking other parsing tasks as auxiliaries. We take UCCA
+parsing as a test case, and take AMR, SDP and Universal Dependencies
+parsing as auxiliaries. We show that despite the notable conceptual
+and formal differences between these schemes, they can all be
+leveraged to improve UCCA parsing, using a flexible and uniform
+parsing and learning architecture. We report substantial improvements
+to UCCA parsing in both in-domain and out-domain settings, and across
+three languages.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
@@ -211,7 +211,7 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
  Example graph for each representation scheme we use.
  Figure \ref{fig:original_example_ucca} presents a UCCA graph. The dashed edge is remote,
   while the gray node and its outgoing edges represent inter-Scene linkage.
-	Pre-terminal nodes and edges are omitted for brevity. 
+  Pre-terminal nodes and edges are omitted for brevity. 
  Figure \ref{fig:original_example_amr} presents an AMR graph.
   The text tokens are not part of the graph, and must be matched to
   concepts and constants by alignment. Variables are represented by their concepts.
@@ -241,10 +241,22 @@ when two or more tasks share common information.
 These techniques have been used in NLP with tasks of varying degrees of similarity---as
 regularization, or to enlarge the effective training data.
 
+\cite{ando2005framework,W06-1615,P07-1033}
+
 In semantic role labeling, \citet{toutanova2005joint}
 learn a joint re-reranking log-linear model across arguments of the same predicate.
+\citet{Q16-1031}, 
+\citet{guo2016exploiting} applied multitask learning to transition-based
+syntactic parsing,
+both in a multilingual setting and with multiple formats in a single language.
+
+Two CoNLL shared tasks were dedicated to joint syntactic and semantic
+dependency parsing \cite{surdeanu2008conll,hajivc2009conll}.
+Frame semantic parsing \cite{swayamdipta2017frame}.
+
 In semantic dependency parsing, \citet{P17-1186} 
 
+\cite{K17-1040}
 Joint learning is also often used
 as an alternative to the pipeline approach, alleviating error propagation:
 In transition-based parsing, multitask learning has also been applied to
@@ -254,16 +266,10 @@ and semantic-syntactic analysis \cite{swayamdipta-EtAl:2016:CoNLL,henderson2013m
 Some models even replace the whole NLP pipeline with a joint many-task model
 \cite[JMT; ][]{collobert2011natural,D17-1206}.
 
-Two CoNLL shared tasks were dedicated to joint syntactic and semantic
-dependency parsing \cite{surdeanu2008conll,hajivc2009conll}.
-Frame semantic parsing \cite{swayamdipta2017frame}.
-\citet{guo2016exploiting} applied multitask learning to transition-based
-syntactic parsing,
-both in a multilingual setting and with multiple formats in a single language.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Formalisms}\label{sec:tasks}
+\section{Tackled Tasks}\label{sec:tasks}
 
 In this section, we outline the semantic parsing tasks we are addressing.
 We focus on representation schemes that provide a \textit{full-sentence} analysis,
@@ -420,10 +426,10 @@ partially overlapping with the notion of remote edges in UCCA.\oa{give an exampl
     \node (transition) at (3.5,5.8) {transition};
     \path (mlp) edge node[right] {softmax} (transition);
    \end{tikzpicture}
-	\caption{Illustration of the TUPA model, adapted (with permission) from \citet{hershcovich2017a}.
-		Top: parser state.
-		Bottom: BiLTSM architecture.}
-	\label{fig:single_model}
+\caption{Illustration of the TUPA model, adapted (with permission) from \citet{hershcovich2017a}.
+Top: parser state.
+Bottom: BiLTSM architecture.}
+\label{fig:single_model}
 \end{figure}
 
 
@@ -923,51 +929,47 @@ Table~\ref{tab:corpora} shows the size of each corpus.
 
 \begin{table*}
 \centering
-	\begin{tabular}{l|ccc|ccc||ccc|ccc}
-		& \multicolumn{6}{c||}{\footnotesize \bf Wiki (in-domain)}
-		& \multicolumn{6}{c}{\footnotesize \bf 20K Leagues (out-of-domain)} \\
-		& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c||}{\footnotesize \bf Remote}
-		& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
-		& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
-		& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
-		& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
-		& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
-		\hline
-		\multirow{2}{2cm}{\citet{hershcovich2017a}} &&&&&&&&& \\
-		& 74.4 & 72.7 & 73.5 & 47.4 & 51.6 & 49.4
-		& 68.7 & 68.5 & 68.6 & 38.6 & 18.8 & 25.3 \\
-		Ours (single)
-		& 75.9 & 74.1 & 75 & 50.7 & 46.8 & 48.7 
-		& 69.7 & 69.5 & 69.6 & 50.5 & 19.4 & 28 \\
-		\hline
-		\multicolumn{6}{l}{\small Ours (multitask) [{\bf currently dev scores, and without ensemble}]} &&&& \\
-		AMR
-		& 73.7 & 73.1 & 73.4 & 46.2 & 49.8 & 48 &&&& \\
-		DM
-		& 73.7 & 73.3 & 73.5 & 44 & 57.9 & 50 &&&& \\
-		UD$^{++}$
-		& 74.6 & 73.7 & 74.2 & 61.7 & 20.6 & 30.9 &&&& \\
-		AMR + DM
-		& 74.1 & 74.2 & 74.1 & 49.4 & 50.5 & 49.9 &&&& \\
-		AMR + UD$^{++}$
-		& 73.5 & 73.4 & 73.4 & 51.3 & 42.4 & 46.4 &&&& \\
-		DM + UD$^{++}$
-		& 74.5 & 74.4 & 74.4 & 51.4 & 46.7 & 48.9 &&&& \\
-		AMR + DM + UD$^{++}$
-		& 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1 &&&& \\
-		\multicolumn{6}{l}{\small Ours (ensemble of models trained with different auxiliary tasks)} &&&& \\
-		AMR + DM & \\
-		AMR + UD$^{++}$ & \\
-		DM + UD$^{++}$ & \\
-		AMR + DM + UD$^{++}$ &
-	\end{tabular}
-	\caption{
-	  Experimental results, in percents, on the English \textit{Wiki} test set (left)
-	  and \textit{20K Leagues} set (right).
-	  Columns correspond to labeled precision, recall and F-score,
-	  for both primary and remote edges.
-	}
-	\label{tab:results}
+\begin{tabular}{l|ccc|ccc||ccc|ccc}
+& \multicolumn{6}{c||}{\footnotesize \bf Wiki (in-domain)}
+& \multicolumn{6}{c}{\footnotesize \bf 20K Leagues (out-of-domain)} \\
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c||}{\footnotesize \bf Remote}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+\hline
+Single-task
+& 74.3 & 72.8 & 73.5 & 53 & 50 & 51.5 & 68.9 & 68.9 & 68.9 & 40.7 & 19.6 & 26.5 \\
+\hline
+\small \bf Multitask &&&&&&&&& \\
+AMR
+& 73.7 & 73.1 & 73.4 & 46.2 & 49.8 & 48 &&&& \\
+DM
+& 73.7 & 73.3 & 73.5 & 44 & 57.9 & 50 &&&& \\
+UD$^{++}$
+& 74.6 & 73.7 & 74.2 & 61.7 & 20.6 & 30.9 &&&& \\
+AMR + DM
+& 74.1 & 74.2 & 74.1 & 49.4 & 50.5 & 49.9 &&&& \\
+AMR + UD$^{++}$
+& 73.5 & 73.4 & 73.4 & 51.3 & 42.4 & 46.4 &&&& \\
+DM + UD$^{++}$
+& 74.5 & 74.4 & 74.4 & 51.4 & 46.7 & 48.9 &&&& \\
+AMR + DM + UD$^{++}$
+& 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1 &&&& \\
+%\multicolumn{6}{l}{\small Ours (ensemble of models trained with different auxiliary tasks)} &&&& \\
+%AMR + DM & \\
+%AMR + UD$^{++}$ & \\
+%DM + UD$^{++}$ & \\
+%AMR + DM + UD$^{++}$ &
+\end{tabular}
+\caption{
+Experimental results, in percents, on the English \textit{Wiki} test set (left)
+and \textit{20K Leagues} set (right).
+Columns correspond to labeled precision, recall and F-score,
+for both primary and remote edges.
+}
+\label{tab:results}
 \end{table*}
 
 
@@ -1022,11 +1024,12 @@ Edges in predicted and gold graphs are matched by terminal yield and label.
 %\subsection{Multitask parsing}\label{sec:results_multi}
 
 Table~\ref{tab:results} shows our main experimental results.
-Our basic single-task model already outperforms the previous state of the art on
-UCCA parsing \cite{hershcovich2017a}, gaining a 2\% error reduction on in-domain primary labeled F1,
-and comparable results on remote edges.
-This improvement can be attributed to ensembling,
-as our model is otherwise similar to the one of \citet{hershcovich2017a}.
+Our basic single-task model is comparable to \citet{hershcovich2017a}, as it is using a similar model.
+%Our basic single-task model already outperforms the previous state of the art on
+%UCCA parsing \cite{hershcovich2017a}, gaining a 2\% error reduction on in-domain primary labeled F1,
+%and comparable results on remote edges.
+%This improvement can be attributed to ensembling,
+%as our model is otherwise similar to the one of \citet{hershcovich2017a}.
 
 
 \subsection{Other languages}\label{sec:multilingual}
@@ -1050,11 +1053,11 @@ given a sufficiently large training set for an auxiliary task.
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
 \hline
-\multicolumn{4}{l|}{\textbf{French}} & \\
+\multicolumn{4}{l|}{\small \bf French} & \\
 \small Single & 59.4 & 59.8 & 59.6 & 5.9 & 1.9 & 2.9 \\
 \small Multi & 66.1 & 66.2 & 66.2 & 33.3 & 9.4 & 14.7 \\
 \hline
-\multicolumn{4}{l|}{\textbf{German}} & \\
+\multicolumn{4}{l|}{\small \bf German} & \\
 \small Single & 73.7 & 72.4 & 73.1 & 49.2 & 12.3 & 19.7 \\
 \small Multi & 74.6 & 73.7 & 74.2 & 61.7 & 20.6 & 30.9
 \end{tabular}
