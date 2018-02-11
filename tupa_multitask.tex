@@ -702,6 +702,8 @@ For optimization we a minibatch size of 100, decaying all weights by $10^{-5}$ a
 and train with stochastic gradient descent (SGD) for 40 epochs with a learning
 rate of 0.1, followed by AMSGrad \cite{j.2018on} for 60 epochs with
 $\alpha=0.001,\beta_1=0.9,\beta_2=0.999$.
+We found this training strategy to work better than using only one of the optimization methods,
+similar to findings by \citet{keskar2017improving}.
 We select the epoch with the best labeled F1 score on the development set.
 The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
 Hyperparameter settings are listed in Table~\ref{tab:hyperparams} (middle column).
