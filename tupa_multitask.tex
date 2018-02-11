@@ -1017,7 +1017,10 @@ Edges in predicted and gold graphs are matched by terminal yield and label.
 
 Table~\ref{tab:results} shows our main experimental results.
 Our basic single-task model already outperforms the previous state of the art on
-UCCA parsing \cite{hershcovich2017a}, gaining a 2\% error reduction on primary labeled F1.
+UCCA parsing \cite{hershcovich2017a}, gaining a 2\% error reduction on in-domain primary labeled F1,
+and comparable results on remote edges.
+This improvement can be attributed to ensembling,
+as our model is otherwise similar to the one of \citet{hershcovich2017a}.
 
 
 \subsection{Other languages}\label{sec:multilingual}
