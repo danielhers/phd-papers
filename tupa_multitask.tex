@@ -1092,6 +1092,20 @@ These findings correlate with our multitask experimental results:
 while using AMR as an auxiliary task did not contribute much, DM and UD$^{++}$ did benefit UCCA
 parsing, and their combination yielded an even greater improvement.
 
+While we focus on UCCA parsing in this work, our parser is capable of parsing any
+scheme that can be represented in the unified DAG format.
+This is a step towards general AI: a single model that can handle many different tasks.
+Preliminary experiments using a similar architecture to the one presented in this paper have produced
+promising results on each of the tasks' respective development sets:
+67.1\% Smatch F1 \cite{cai2013smatch} on AMR
+(using additional transitions and classifier for node labels and implicit nodes),
+76.5\% labeled F1 on SDP (DM),
+and 80.1\% LAS F1 on UD (English).
+For AMR and UD, these are not far from the state-of-the-art results on these datasets
+\cite{foland2017abstract,dozat2016deep}.
+In future work, we plan to pursue this direction further and investigate whether a single
+algorithm and architecture can be competitive on all of these parsing tasks.
+
 \section{Conclusion}
 
 
