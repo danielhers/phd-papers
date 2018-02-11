@@ -238,10 +238,12 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 Joint and multitask learning are often used
 when two or more tasks share common information.
-They have been used in NLP with tasks of varying degrees of similarity,
-as regularization, or to enlarge the training data:
-in semantic role labeling, \citet{toutanova2005joint}
+These techniques have been used in NLP with tasks of varying degrees of similarity---as
+regularization, or to enlarge the effective training data.
+
+In semantic role labeling, \citet{toutanova2005joint}
 learn a joint re-reranking log-linear model across arguments of the same predicate.
+In semantic dependency parsing, \citet{P17-1186} 
 
 Joint learning is also often used
 as an alternative to the pipeline approach, alleviating error propagation:
@@ -254,16 +256,14 @@ Some models even replace the whole NLP pipeline with a joint many-task model
 
 Two CoNLL shared tasks were dedicated to joint syntactic and semantic
 dependency parsing \cite{surdeanu2008conll,hajivc2009conll}.
-Multitask learning has been applied to semantic parsing, including
-semantic dependency parsing \cite{P17-1186} and
-frame semantic parsing \cite{swayamdipta2017frame}.
+Frame semantic parsing \cite{swayamdipta2017frame}.
 \citet{guo2016exploiting} applied multitask learning to transition-based
 syntactic parsing,
 both in a multilingual setting and with multiple formats in a single language.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Tackled Tasks}\label{sec:tasks}
+\section{Formalisms}\label{sec:tasks}
 
 In this section, we outline the semantic parsing tasks we are addressing.
 We focus on representation schemes that provide a \textit{full-sentence} analysis,
@@ -501,22 +501,23 @@ with the highest score given by the classifier.
 
 \begin{table}
 \centering
+\footnotesize
 \begin{tabular}{l|c|ccccc}
-\footnotesize Dimensions &  \footnotesize Single & \multicolumn{3}{c}{\footnotesize Multitask} \\
-&& \footnotesize Main & \footnotesize Aux & \footnotesize Shared \\
+\bf Hyperparameter &  \bf Single & \multicolumn{3}{c}{\bf Multitask} \\ 
+&& \bf Main & \bf Aux & \bf Shared \\
 \hline
-external word & 300 &&& 300 \\
-word & 200 &&& 200 \\
-POS tag & 20 &&& 20 \\
-syntactic dep. & 10 &&& 10 \\
-named entity & 3 &&& 3 \\
-punctuation & 1 &&& 1 \\
-action & 3 &&& 3 \\
-edge label & 20 & 20 & 20 \\
-MLP \#layers & 2 & 2 & 1 \\
-\quad layer dim. & 50 & 50 & 50 \\
-BiLSTM \#layers & 2 & 2 & 1 & 2 \\
-\quad layer dim. & 500 & 250 & 50 & 250
+external word dim. & 300 &&& 300 \\
+word dim. & 200 &&& 200 \\
+POS tag dim. & 20 &&& 20 \\
+syntactic dep. dim. & 10 &&& 10 \\
+named entity dim. & 3 &&& 3 \\
+punctuation dim. & 1 &&& 1 \\
+action dim. & 3 &&& 3 \\
+edge label dim. & 20 & 20 & 20 \\
+MLP layers & 2 & 2 & 1 \\
+MLP dimensions & 50 & 50 & 50 \\
+BiLSTM layers & 2 & 2 & 1 & 2 \\
+BiLSTM dimensions & 500 & 250 & 50 & 250
 \end{tabular}
 \caption{Hyperparameter settings.\label{tab:hyperparams}
 Middle column: single-task.
