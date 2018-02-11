@@ -240,7 +240,8 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 These techniques have been used extensively in NLP,
 for tasks with varying degrees of similarity and structure:
-from joint semantic role labeling for arguments of the same predicate \cite{toutanova2005joint} to
+from joint semantic role labeling for different arguments of the same predicate
+\cite{toutanova2005joint} to
 joint syntactic and semantic parsing \cite{henderson2013multilingual}, to
 incorporation of unlabeled data for various tasks \cite{ando2005framework}.
 They are also used for domain adaptation in the same task \cite{W06-1615,P07-1033}.
@@ -249,7 +250,8 @@ Joint learning is often used as an alternative to the pipeline approach,
 alleviating cascading errors:
 in transition-based parsing, it has been used for joint POS tagging and parsing \cite{bohnet2012transition}.
 
-Representation learning has enabled much progress in multitask learning:
+Representation learning has enabled much progress in multitask learning,
+as it provides a straightforward way to share intermediate features between models:
 for frame semantic parsing \cite{swayamdipta2017frame},
 semantic dependency parsing for different target representations \citet{P17-1186} 
 and domain adaptation \cite{K17-1040}.
@@ -264,7 +266,11 @@ and multilingual parsing \citet{Q16-1031,guo2016exploiting}.
 
 \paragraph{Transition-based semantic parsing.}
 
-Previous work on transition-based Semantic Dependency Parsing and UCCA parsing
+Transition-based parsing was first used for projective syntactic dependency tree parsing
+\cite{nivre2008algorithms}.
+Subsequent works generalized the framework to non-projective and (discontinuous) constituency
+parsing \cite{nivre2009non,zhang2009transition,maier-lichte:2016:DiscoNLP}.
+Previous works on transition-based Semantic Dependency Parsing and UCCA parsing
 have introduced transitions to enable DAG parsing in general
 \cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,du-EtAl:2015:SemEval,hershcovich2017a}.
 Transition-based AMR parsers either process dependency trees into AMRs
