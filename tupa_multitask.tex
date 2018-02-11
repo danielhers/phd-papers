@@ -927,23 +927,29 @@ Table~\ref{tab:corpora} shows the size of each corpus.
 		& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
 		& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
 		\hline
-		\multirow{2}{2cm}{\citet{hershcovich2017a}}
+		\multirow{2}{2cm}{\citet{hershcovich2017a}} &&&&&&&&& \\
 		& 74.4 & 72.7 & 73.5 & 47.4 & 51.6 & 49.4
 		& 68.7 & 68.5 & 68.6 & 38.6 & 18.8 & 25.3 \\
-		&&&&&&&&&&&& \\
 		Ours (single)
 		& 75.9 & 74.1 & 75 & 50.7 & 46.8 & 48.7 
 		& 69.7 & 69.5 & 69.6 & 50.5 & 19.4 & 28 \\
 		\hline
-		\multicolumn{9}{l}{\small Ours (multitask) [{\bf currently dev scores, and without ensemble}]} \\
-		AMR & 73.7 & 73.1 & 73.4 & 46.2 & 49.8 & 48 \\
-		DM & 73.7 & 73.3 & 73.5 & 44 & 57.9 & 50 \\
-		UD$^{++}$ & 74.6 & 73.7 & 74.2 & 61.7 & 20.6 & 30.9 \\
-		AMR + DM & 74.1 & 74.2 & 74.1 & 49.4 & 50.5 & 49.9 \\
-		AMR + UD$^{++}$ & 73.5 & 73.4 & 73.4 & 51.3 & 42.4 & 46.4 \\
-		DM + UD$^{++}$ & 74.5 & 74.4 & 74.4 & 51.4 & 46.7 & 48.9 \\
-		AMR + DM + UD$^{++}$ & 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1 \\
-		\multicolumn{9}{l}{\small Ours (ensemble of models trained with different auxiliary tasks)} \\
+		\multicolumn{6}{l}{\small Ours (multitask) [{\bf currently dev scores, and without ensemble}]} &&&& \\
+		AMR
+		& 73.7 & 73.1 & 73.4 & 46.2 & 49.8 & 48 &&&& \\
+		DM
+		& 73.7 & 73.3 & 73.5 & 44 & 57.9 & 50 &&&& \\
+		UD$^{++}$
+		& 74.6 & 73.7 & 74.2 & 61.7 & 20.6 & 30.9 &&&& \\
+		AMR + DM
+		& 74.1 & 74.2 & 74.1 & 49.4 & 50.5 & 49.9 &&&& \\
+		AMR + UD$^{++}$
+		& 73.5 & 73.4 & 73.4 & 51.3 & 42.4 & 46.4 &&&& \\
+		DM + UD$^{++}$
+		& 74.5 & 74.4 & 74.4 & 51.4 & 46.7 & 48.9 &&&& \\
+		AMR + DM + UD$^{++}$
+		& 72.6 & 74.9 & 73.7 & 49.8 & 46.4 & 48.1 &&&& \\
+		\multicolumn{6}{l}{\small Ours (ensemble of models trained with different auxiliary tasks)} &&&& \\
 		AMR + DM & \\
 		AMR + UD$^{++}$ & \\
 		DM + UD$^{++}$ & \\
@@ -1034,6 +1040,7 @@ given a sufficiently large training set for an auxiliary task.
 & \multicolumn{3}{c|}{\footnotesize Primary} & \multicolumn{3}{c}{\footnotesize Remote} \\
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+\hline
 \multicolumn{4}{l|}{\textbf{French}} & \\
 \small Single & 59.4 & 59.8 & 59.6 & 5.9 & 1.9 & 2.9 \\
 \small Multi & 66.1 & 66.2 & 66.2 & 33.3 & 9.4 & 14.7 \\
@@ -1050,10 +1057,11 @@ while \textit{Multi} uses unlabeled UD parsing in the same language as an auxili
 \end{table}
 
 \begin{table}
-\begin{tabular}{lccc|ccc}
+\begin{tabular}{l|ccc|ccc}
 & \multicolumn{3}{c|}{\footnotesize Primary} & \multicolumn{3}{c}{\footnotesize Remote} \\
 & \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
 & \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
+\hline
 AMR & 52.2 & 15.5 & 23.9 & 7.3 & 5.5 & 6.3 \\
 DM & 63.6 & 49.8 & 55.9 & 6.9 & 63.8 & 12.4 \\
 %UD & 75.3 & 82.9 & 78.9 & -- & 0 & -- \\
