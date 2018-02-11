@@ -108,11 +108,11 @@ much of the semantic content is shared \cite{abend2017state}.
 
 %In cases where related tasks can be learned jointly,
 %deep multitask learning models have been shown to be successful in various fields of NLP
-%\cite{collobert2008unified,Zhang2016StackpropagationIR,P17-1186,swayamdipta2017frame,guo2016exploiting}.
+%\cite{collobert2011natural,Zhang2016StackpropagationIR,P17-1186,swayamdipta2017frame,guo2016exploiting}.
 
 We build on these ideas and propose a transition-based semantic DAG parser for UCCA,
 trained in a multitask setting to obtain state-of-the-art 
-results.\footnote{Our code is publicly available at $<$hidden to protect anonymity$>$.}
+results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 \begin{figure*}
 
@@ -240,7 +240,7 @@ Joint and multitask learning are often used
 when two or more tasks share common information.
 They are used as regularization, to enlarge the training data,
 and as an alternative to the pipeline approach, alleviating error propagation
-\cite{collobert2008unified}.
+\cite{collobert2011natural,D17-1206}.
 In NLP, joint and multitask learning have been used with tasks of varying
 similarity.
 In semantic role labeling, \citet{toutanova2005joint}
@@ -903,8 +903,8 @@ annotated in English, French and German.
 The English part is used only for testing.
 Due to their small size, and since they are still under development, we only use a train/dev split
 in the French and German datasets, of 480/67 and 4196/561 sentences, respectively.
-We report results on the development set for these datasets.\footnote{The UCCA corpora are publicly
-available at ***}
+We report results on the development set for these datasets.\footnote{UCCA corpora are publicly
+available at $<$anonymized$>$}
 
 For AMR, we use LDC2017T10, targeted in SemEval 2017
 \cite{may2017semeval}.\footnote{\url{https://catalog.ldc.upenn.edu/LDC2017T10}}
@@ -1086,8 +1086,8 @@ An important factor in the success of multitask learning is the commonalities be
 %multitask training in the first place.
 To evaluate the similarity between the unlabeled auxiliary tasks and UCCA parsing,
 we perform unlabeled evaluation of a manually annotated sample of 100 sentences from the
-Wall Street Journal, after conversion to the unified DAG format.\footnote{These annotated
-sentences are publicly available at ***}
+Wall Street Journal, after conversion to the unified DAG format.\footnote{The annotated
+sentences are available at $<$anonymized$>$}
 As can be seen in Table~\ref{tab:common}, there is a high unlabeled overlap between
 UCCA and UD$^{++}$ after conversion to the unified DAG format,
 while AMR is much less similar.
