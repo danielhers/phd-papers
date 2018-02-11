@@ -238,13 +238,20 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 Joint and multitask learning are often used
 when two or more tasks share common information.
-They are used as regularization, to enlarge the training data,
-and as an alternative to the pipeline approach, alleviating error propagation
-\cite{collobert2011natural,D17-1206}.
-In NLP, joint and multitask learning have been used with tasks of varying
-similarity.
-In semantic role labeling, \citet{toutanova2005joint}
+They have been used in NLP with tasks of varying degrees of similarity,
+as regularization, or to enlarge the training data:
+in semantic role labeling, \citet{toutanova2005joint}
 learn a joint re-reranking log-linear model across arguments of the same predicate.
+
+Joint learning is also often used
+as an alternative to the pipeline approach, alleviating error propagation:
+In transition-based parsing, multitask learning has also been applied to
+tagging and parsing \cite{bohnet2012transition,Zhang2016StackpropagationIR},
+lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint},
+and semantic-syntactic analysis \cite{swayamdipta-EtAl:2016:CoNLL,henderson2013multilingual}.
+Some models even replace the whole NLP pipeline with a joint many-task model
+\cite[JMT; ][]{collobert2011natural,D17-1206}.
+
 Two CoNLL shared tasks were dedicated to joint syntactic and semantic
 dependency parsing \cite{surdeanu2008conll,hajivc2009conll}.
 Multitask learning has been applied to semantic parsing, including
@@ -253,10 +260,6 @@ frame semantic parsing \cite{swayamdipta2017frame}.
 \citet{guo2016exploiting} applied multitask learning to transition-based
 syntactic parsing,
 both in a multilingual setting and with multiple formats in a single language.
-In transition-based parsing, multitask learning has also been applied to
-tagging and parsing \cite{bohnet2012transition,Zhang2016StackpropagationIR},
-lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint},
-and semantic-syntactic analysis \cite{swayamdipta-EtAl:2016:CoNLL,henderson2013multilingual}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
