@@ -497,7 +497,7 @@ Although UCCA contains nodes without any text tokens as descendants
 (named \textit{implicit units}),
 these nodes are infrequent (about 0.5\% of non-terminal nodes), and
 the standard evaluation for UCCA parsing is span-based and ignores them.
-For this reason we follow \citet{hershcovich2017a} and do not include
+For this reason we follow HAR17 and do not include
 any transition to create these when parsing UCCA,
 thus ignoring them in both training and evaluation.
 This phenomenon is even more common in AMR, as any unaligned concept
@@ -714,13 +714,12 @@ Right column: multitask settings for main task (UCCA), auxiliary tasks, and shar
 
 
 \paragraph{Features.}
-In addition to the features used by \citet{hershcovich2017a},
+In addition to the features used by HAR17,
 representing the words, POS tags, syntactic dependency relations, and previously predicted edge labels
-for nodes in specific locations in the parser state,
-we use feature embeddings representing lemmas, word prefixes, suffixes and shapes, and named entities.
-For AMR we add node label features according to gold node labels.\oa{what do you mean prefixes, suffixes and shapes?
-how do you encode named entities? you need to write it so it can be replicated, either here or in
-the supp material.}
+for nodes in specific locations in the parser state, for each token
+we use feature embeddings representing the lemma, prefix, suffix, shape, and named entity type,
+extracted using spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
+%For AMR we add node label features according to gold node labels.
 
 
 \paragraph{Constraints.}
@@ -973,7 +972,6 @@ Edges in predicted and gold graphs are matched by terminal yield and label.
 
 \subsection{Training}
 
-Features are extracted using spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
 All embeddings are initialized randomly.
 For words, we additionally use external word embeddings containing 250K word vectors from fastText
 \cite{bojanowski2016enriching},\footnote{\url{https://github.com/facebookresearch/fastText}}
