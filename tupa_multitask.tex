@@ -285,7 +285,7 @@ but we are not aware of a general transition-based DAG parser that handles AMR, 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Tackled Tasks}\label{sec:tasks}
 
-In this section, we outline the semantic parsing tasks we are addressing.
+In this section, we outline the parsing tasks we are addressing.
 We focus on representation schemes that provide a \textit{full-sentence} analysis,
 that is, schemes that produce a graph covering all (content) words in the text, or the
 lexical concepts they evoke.
@@ -293,21 +293,21 @@ Full-sentence analysis contrasts with ``shallow'' semantic parsing,
 primarily Semantic Role Labeling
 \cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
 which target argument structure phenomena and uses flat structures.
-We consider four target representations: UCCA, AMR, DM and UD.
+We consider four target representations: UCCA, AMR, DM and UD
+\cite[Universal Dependencies; ][]{nivre2016universal}.
 Figure~\ref{fig:original_examples} shows an example graph for each scheme,
 annotating the sentence ``After graduation, John moved to Paris''.
 
-Although each of these tasks use different graph structures,
-they all involve whole-sentence (or whole-paragraph) semantic analysis,
-and due to the structure of phenomena such as predicate-argument relations,
-require parsers that can handle non-projectivity (or discontinuity) and reentrancy, resulting in
-directed acyclic graphs (DAGs).\oa{maybe add a diagram or at least elaborate more on these like we
-did in the TUPA paper, with examples etc.}
+%Although each of these tasks uses different graph structures,
+%they all involve whole-sentence (or whole-paragraph) semantic analysis,
+%and due to the structure of phenomena such as predicate-argument relations,
+%require parsers that can handle non-projectivity (or discontinuity) and reentrancy, resulting in
+%directed acyclic graphs (DAGs).\oa{maybe add a diagram or at least elaborate more on these like we
+%did in the TUPA paper, with examples etc.}
 
 \paragraph{Universal Conceptual Cognitive Annotation.}\label{sec:ucca}
 UCCA \cite{abend2013universal} is a semantic representation scheme whose main principles
 are ease of annotation and cross-linguistic applicability and stability.
-
 UCCA represents the semantics of natural language utterances
 as directed acyclic graphs (DAGs), where terminal nodes (nodes without children)
 correspond to the text tokens, and non-terminal nodes to semantic units that participate
@@ -338,7 +338,7 @@ is a semantic representation that encodes information about named entities,
 argument structure, semantic roles, word sense disambiguation and co-reference resolution.
 AMRs are rooted directed graphs, in which both nodes and edges are labeled.
 Most AMRs are DAGs, although cycles are permitted.
-Despite the short time since its inception, AMR was already targeted but a number of works,
+Despite the short time since its inception, AMR has been targeted by a number of works,
 notably in the SemEval 2017 shared task \cite{may2017semeval}.
 
 AMR differs from the other schemes considered here in that it does not anchor its graphs
@@ -358,15 +358,15 @@ They correspond to four semantic representation schemes, referred to as
 DM, PAS, PSD and CCD, representing
 predicate-argument relations between content-bearing words in a sentence.
 All are based on semantic formalisms whose annotations have been
-converted into bilexical dependencies, that is,
-labeled directed graphs whose nodes are all text tokens and each edge connects two of them.
+converted into bilexical dependencies---labeled
+directed graphs whose nodes are all text tokens.
 Edges are labeled, encoding semantic relations between the tokens.
 Non-content tokens, such as punctuation,
 are often left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
 but the sub-graph restricted to content-bearing tokens is connected.
-Graphs that contain cycles have been removed from the SDP datasets.
+Graphs containing cycles have been removed from the SDP datasets.
 
-We consider one of the three formalisms used in the SemEval shared task:
+We consider one of the three formalisms used in the SemEval shared tasks:
 the DM (DELPH-IN MRS) representation, which comes
 from DeepBank \cite{flickinger2012deepbank},
 manually-corrected parses from the LinGO
@@ -377,28 +377,31 @@ which uses Minimal Recursion Semantics \cite{copestake2005minimal}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Universal Dependencies.}\label{sec:ud}
-UD \cite{nivre2016universal,11234/1-2515} has become
+UD \cite{nivre2016universal,11234/1-2515} is
 the dominant dependency representation for
 annotating treebanks in a large variety of languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
 annotation. Formally, UD uses bilexical trees, with edge labels 
-representing syntactic relations between the text tokens.
+representing syntactic relations between words.
 
-While not a semantic representation scheme,
+While not a semantic representation,
 we use UD as an auxiliary task,
-inspired by previous work showing benefit from using syntax as an auxiliary 
-task for semantic role labeling \cite[][]{swayamdipta2017frame}.\oa{i think there's also older work on this}
-In order to obtain cross-linguistc applicability, 
+inspired by previous work on joint syntax and semantics
+\cite{lluis2008joint,collobert2011natural,D15-1169,swayamdipta-EtAl:2016:CoNLL,swayamdipta2017frame}.
+In order to obtain cross-linguistic applicability, 
 UD often makes design decision that are similar to the common practice
 in semantic treebanks, such as linking content words to content words wherever possible.
-Moreovver, using UD also allows us to conduct experiments on French and German, 
+Moreover, using UD allows us to conduct experiments on French and German, 
 for which SDP and AMR annotated data is not available (\S\ref{sec:multilingual}).
 
-In addition the basic UD trees (such as in Figure~\ref{fig:original_example_ud}),
+In addition to basic UD trees (such as in Figure~\ref{fig:original_example_ud}),
 \textit{enhanced} and \textit{enhanced++} UD graphs are available for English,
-using automatic converters included in Stanford CoreNLP.
+using automatic converters included in Stanford CoreNLP \cite{SCHUSTER16.779}.
 These include additional and augmented relations between content words,
-partially overlapping with the notion of remote edges in UCCA.\oa{give an example}
+partially overlapping with the notion of remote edges in UCCA:
+in the case of control verbs, for example, a direct relation is added in enhanced UD
+between the controlled verb and its controller,
+which would likewise be represented by a remote edge in UCCA.
 
 \begin{figure}[t]
    \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
