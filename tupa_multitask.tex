@@ -916,13 +916,6 @@ We use the enhanced++ UD representation \cite{SCHUSTER16.779} in our English exp
 henceforth referred to as UD$^{++}$.
 Table~\ref{tab:corpora} shows the size of each corpus.
 
-Training proceeds by creating a unified corpus by shuffling all sentences from relevant
-datasets together (according to the setting),
-but using only the score on the UCCA development set as the criterion for early stopping.
-In each training epoch, we use the same number of examples from each task.
-Since the training sets are different in size, we sample the same number of sentences from
-the training set of each of the other tasks.\oa{how many in each iteration?}
-
 \begin{table*}
 \centering
 \begin{tabular}{l|ccc|ccc||ccc|ccc}
@@ -970,6 +963,13 @@ Edges in predicted and gold graphs are matched by terminal yield and label.
 
 
 \subsection{Training}
+
+Training proceeds by creating a unified corpus by shuffling all sentences from relevant
+datasets together (according to the setting),
+but using only the score on the UCCA development set as the criterion for early stopping.
+In each training epoch, we use the same number of examples from each task.
+Since the training sets differ in size, we sample the same number of sentences from
+the training set of each task---the number of sentences in the UCCA training set.
 
 All embeddings are initialized randomly.
 For words, we additionally use external word embeddings containing 250K word vectors from fastText
@@ -1115,7 +1115,8 @@ An important factor in the success of multitask learning is the commonalities be
 %In fact, this is why we decided to convert the auxiliary tasks into UCCA-like format for
 %multitask training in the first place.
 To evaluate the similarity between the unlabeled auxiliary tasks and UCCA parsing,
-we perform unlabeled evaluation of a manually annotated sample of 100 sentences from the
+we perform unlabeled evaluation (like labeled evaluation, but ignoring edge labels)
+of a manually annotated sample of 100 sentences from the
 Wall Street Journal, after conversion to the unified DAG format.\footnote{The annotated
 sentences are available at $<$anonymized$>$}
 As can be seen in Table~\ref{tab:common}, there is a high unlabeled overlap between
