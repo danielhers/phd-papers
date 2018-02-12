@@ -877,12 +877,11 @@ and we focus on it in this paper, treating AMR, DM and UD parsing as auxiliary t
 To simplify the auxiliary tasks and facilitate generalization \cite{E17-2026},
 we perform unlabeled parsing for AMR, DM and UD in the multitask setting,
 while still predicting edge labels in UCCA parsing.
-We extend TUPA to support unlabeled parsing by simply removing all labels from the
+To support unlabeled parsing, we simply remove all labels from
 \textsc{Edge}, \textsc{Remote} and \textsc{Node} transitions outputted by the oracle.
-This results in a much smaller output dimension,
-and we use a smaller task-specific BiLSTM for the auxiliary tasks.\oa{what do you mean?
-		that because there are less transitions you need less states in the BiLSTM? if so, write
-		it this way}
+This results in a much smaller number of transitions the classifier has to choose from
+(up to 10, as opposed to 45 transitions, which also contain the edge label, for UCCA parsing),
+allowing us to use smaller dimensions and less layers for auxiliary task-specific BiLSTMs and MLPs.
 
 
 
