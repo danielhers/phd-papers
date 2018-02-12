@@ -495,13 +495,14 @@ and \textsc{Finish} to mark the state as terminal.
 
 Although UCCA contains nodes without any text tokens as descendants
 (named \textit{implicit units}),
-the standard evaluation for UCCA parsing is span-based and
-ignores these nodes.
+these nodes are infrequent (about 0.5\% of non-terminal nodes), and
+the standard evaluation for UCCA parsing is span-based and ignores them.
 For this reason we follow \citet{hershcovich2017a} and do not include
 any transition to create these when parsing UCCA,
 thus ignoring them in both training and evaluation.
 This phenomenon is even more common in AMR, as any unaligned concept
-will correspond to an implicit node.\oa{how frequent is this in AMR?}
+with no aligned descendents
+will correspond to an implicit node (about 6\% of nodes).
 These result from alignment errors, or from abstract concepts,
 which have no explicit grounding in the text \cite{buys2017oxford}.
 We ignore implicit nodes when training on AMR as well.
