@@ -764,7 +764,7 @@ Converting UCCA into the unified format consists simply of removing linkage
 nodes and edges (see Figure~\ref{fig:converted_example_ucca}), which were
 also discarded by HAR17.
 
-\paragraph{Converting Bilexical Dependencies.}
+\paragraph{Converting bilexical dependencies.}
 In order to convert DM and UD into the unified DAG format,
 we add a pre-terminal for each token,
 and then attach the pre-terminals according to the original dependency edges:
@@ -779,22 +779,23 @@ In case of reentrancy, an arbitrary parent is marked as primary, and the rest as
 (denoted as dashed edges in Figure~\ref{fig:converted_examples}).
 
 \paragraph{Converting AMR.}
-In the conversion from AMR, non-terminals are already present and do not need to be introduced.
-However, alignments and node labels must be handled (see Figure~\ref{fig:converted_example_amr}).
-Since alignment between AMR nodes and text tokens are not part of the AMR graph,
+In the conversion from AMR, non-terminals are already present, and node labels are dropped.
+However, alignments must be handled (see Figure~\ref{fig:converted_example_amr}).
+Since alignment between nodes and text tokens is not part of the AMR graph,
 we insert the alignments into the graph as edges in the conversion.
-Specifically, we use automatically aligned AMR graphs provided in the AMR treebank (see \S\ref{sec:data}),
+Specifically, we use automatically aligned graphs provided in the AMR dataset (see \S\ref{sec:data}),
 and attach each node with a \textit{Terminal} edge to each of the terminals it is aligned to.
+%
+%Since the order of AMR ordinal relations, such as \textit{op1}, \textit{op2},
+%is annotated according to the order of text tokens,
+%the numeric index is redundant and is thus removed.
+%Numeric suffixes are kept when they are meaningful, e.g. in distinguishing between PropBank semantic
+%roles (\textit{ARG[0-5]}).
 
-Since the order of AMR ordinal relations, such as \textit{op1}, \textit{op2},
-is annotated according to the order of text tokens,
-the numeric index is redundant and is thus removed.
-Numeric suffixes are kept when they are meaningful, e.g. in distinguishing between PropBank semantic
-roles (\textit{ARG[0-5]}).
-
-Named entities in AMR are represented as a sub-tree ....\oa{I don't understand what
-are the op1 and op2 relations. fill in how the sub-tree looks like}
-We collapse this sub-graph into a single node whose children are its tokens.
+A named entity in AMR is represented as a sub-graph, whose \textit{name}-labeled root
+has a child for each token in the name
+(see the two \textit{name} nodes in Figure~\ref{fig:original_example_amr}).
+We collapse this sub-graph into a single node whose children are the name tokens.
 
 
 \begin{figure}[t]
