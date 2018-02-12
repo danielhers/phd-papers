@@ -1109,7 +1109,14 @@ UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 
 \section{Discussion}\label{sec:discussion}
 
-\paragraph{Common edge analysis.}
+\paragraph{Variety of domains.}
+While the UCCA corpora are encyclopedic and literary,
+the AMR, DM and UD datasets we used are annotated on blogs, news, emails, reviews, and Q\&A corpora.
+In addition to the absence of a parallel corpus,
+it follows that our model is faced with the additional challenge of domain adaptation,
+and further highlights the significance of our results.
+
+\paragraph{Structural overlap.}
 An important factor in the success of multitask learning is the commonalities between the tasks
 \cite{E17-2026,E17-1005}.
 %In fact, this is why we decided to convert the auxiliary tasks into UCCA-like format for
@@ -1141,7 +1148,12 @@ For AMR and UD, these are not far from the state-of-the-art results on these dat
 In future work, we plan to pursue this direction further and investigate whether a single
 algorithm and architecture can be competitive on all of these parsing tasks.
 
-%\section{Conclusion}
+\section{Conclusion}\label{sec:conclusion}
+
+We demonstrated that multitask learning improves UCCA parsing,
+using AMR, DM and UD parsing as auxiliaries,
+by converting these schemes into a unified format
+and generalizing a transition-based DAG parser to support unlabeled auxiliary tasks.
 
 
 \bibliography{references}
