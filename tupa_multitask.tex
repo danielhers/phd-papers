@@ -888,9 +888,10 @@ allowing us to use smaller dimensions and less layers for auxiliary task-specifi
 \section{Experiments}\label{sec:experiments}
 
 We perform various experiments to evaluate the benefit of each auxiliary task to UCCA parsing.
-First, we train the parser only on UCCA, and evaluate its performance.
-Next, we train it in a multitask setting, where AMR, DM and UD are used as
-auxiliary tasks.
+We train the parser in a single-task and multitask setting,
+and evaluate its performance on the UCCA English in-domain and out-of-domain test sets.
+Next, we repeat the experiment on French and German, investigating the impact of multitask
+training with different training set sizes.
 
 \subsection{Data}\label{sec:data}
 
