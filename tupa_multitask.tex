@@ -967,9 +967,9 @@ Edges in predicted and gold graphs are matched by terminal yield and label.
 Training proceeds by creating a unified corpus by shuffling all sentences from relevant
 datasets together (according to the setting),
 but using only the score on the UCCA development set as the criterion for early stopping.
-In each training epoch, we use the same number of examples from each task.
-Since the training sets differ in size, we sample the same number of sentences from
-the training set of each task---the number of sentences in the UCCA training set.
+In each training epoch, we use the same number of examples from each task---the
+number of sentences in the UCCA training set.
+Since the training sets differ in size, we sample this many sentences from each training set.
 
 All embeddings are initialized randomly.
 For words, we additionally use external word embeddings containing 250K word vectors from fastText
