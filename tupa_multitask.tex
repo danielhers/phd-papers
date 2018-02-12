@@ -101,15 +101,18 @@ Abstract Meaning Representation \cite[AMR;][]{banarescu2013abstract,damonte-17,1
 bilexical Semantic Dependencies \cite[SDP;][]{oepen2014semeval,oepen2015semeval,oepen2016towards,P17-1186}
 with target representations such as DELPH-IN MRS \cite[DM;][]{flickinger2012deepbank},
 and Universal Conceptual Cognitive Annotation \cite[UCCA;][]{abend2013universal,hershcovich2017a}.
-While each of these schemes also focuses on a different set of distinctions,
+While these schemes are formally different and focus on different sets of distinctions,
 much of the semantic content is shared \cite{abend2017state}.
 
 
 %In cases where related tasks can be learned jointly,
 %deep multitask learning models have been shown to be successful in various fields of NLP
 %\cite{collobert2011natural,Zhang2016StackpropagationIR,P17-1186,swayamdipta2017frame,guo2016exploiting}.
-
-We build on these ideas and propose a transition-based semantic DAG parser for UCCA,
+Multitask learning \cite{caruana1998multitask} allows exploiting the overlap between tasks
+to effectively extend the training data,
+and has greatly advanced with neural networks and representation learning
+(see \S\ref{sec:related_work}).
+We build on these ideas and propose a BiLSTM transition-based semantic DAG parser for UCCA,
 trained in a multitask setting to obtain state-of-the-art 
 results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
