@@ -890,6 +890,31 @@ We use the enhanced++ UD representation \cite{SCHUSTER16.779} in our English exp
 henceforth referred to as UD$^{++}$.
 Table~\ref{tab:corpora} shows the size of each corpus.
 
+\begin{table}
+\centering
+\footnotesize
+\begin{tabular}{l|c|ccccc}
+\bf Hyperparameter &  \bf Single & \multicolumn{3}{c}{\bf Multitask} \\ 
+&& \bf Main & \bf Aux & \bf Shared \\
+\hline
+external word dim. & 300 &&& 300 \\
+word dim. & 200 &&& 200 \\
+POS tag dim. & 20 &&& 20 \\
+syntactic dep. dim. & 10 &&& 10 \\
+named entity dim. & 3 &&& 3 \\
+punctuation dim. & 1 &&& 1 \\
+action dim. & 3 &&& 3 \\
+edge label dim. & 20 & 20 & 20 \\
+MLP layers & 2 & 2 & 1 \\
+MLP dimensions & 50 & 50 & 50 \\
+BiLSTM layers & 2 & 2 & 1 & 2 \\
+BiLSTM dimensions & 500 & 250 & 50 & 250
+\end{tabular}
+\caption{Hyperparameter settings.\label{tab:hyperparams}
+Middle column: single-task.
+Right column: multitask settings for main task (UCCA), auxiliary tasks, and shared parameters.}
+\end{table}
+
 \begin{table*}
 \centering
 \begin{tabular}{l|ccc|ccc||ccc|ccc}
@@ -933,31 +958,6 @@ Edges in predicted and gold graphs are matched by terminal yield and label.
 %For UD, we use LAS F1.
 %For AMR, we use Smatch \cite{cai2013smatch}.
 %For DM, we use labeled precision, recall and F1.
-
-\begin{table}
-\centering
-\footnotesize
-\begin{tabular}{l|c|ccccc}
-\bf Hyperparameter &  \bf Single & \multicolumn{3}{c}{\bf Multitask} \\ 
-&& \bf Main & \bf Aux & \bf Shared \\
-\hline
-external word dim. & 300 &&& 300 \\
-word dim. & 200 &&& 200 \\
-POS tag dim. & 20 &&& 20 \\
-syntactic dep. dim. & 10 &&& 10 \\
-named entity dim. & 3 &&& 3 \\
-punctuation dim. & 1 &&& 1 \\
-action dim. & 3 &&& 3 \\
-edge label dim. & 20 & 20 & 20 \\
-MLP layers & 2 & 2 & 1 \\
-MLP dimensions & 50 & 50 & 50 \\
-BiLSTM layers & 2 & 2 & 1 & 2 \\
-BiLSTM dimensions & 500 & 250 & 50 & 250
-\end{tabular}
-\caption{Hyperparameter settings.\label{tab:hyperparams}
-Middle column: single-task.
-Right column: multitask settings for main task (UCCA), auxiliary tasks, and shared parameters.}
-\end{table}
 
 
 
