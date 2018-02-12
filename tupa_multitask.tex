@@ -843,8 +843,7 @@ fed into the task-specific MLP (see Figure~\ref{fig:multi_model}).
 
 The fairly small training set available for UCCA (see \S\ref{sec:data})
 makes multitask learning particularly appealing,
-and we focus on it in this paper, treating AMR, DM and UD parsing as auxiliary tasks
-(see Table~\ref{tab:hyperparams}, right column).
+and we focus on it in this paper, treating AMR, DM and UD parsing as auxiliary tasks.
 
 \paragraph{Unlabeled parsing for auxiliary tasks.}
 
@@ -855,7 +854,8 @@ To support unlabeled parsing, we simply remove all labels from
 \textsc{Edge}, \textsc{Remote} and \textsc{Node} transitions outputted by the oracle.
 This results in a much smaller number of transitions the classifier has to choose from
 (up to 10, as opposed to 45 transitions, which also contain the edge label, for UCCA parsing),
-allowing us to use smaller dimensions and less layers for auxiliary task-specific BiLSTMs and MLPs.
+allowing us to use smaller dimensions and less layers for auxiliary task-specific BiLSTMs and MLPs
+(see Table~\ref{tab:hyperparams}, right column).
 
 
 
@@ -974,19 +974,19 @@ All embeddings are initialized randomly.
 For words, we additionally use external word embeddings containing 250K word vectors from fastText
 \cite{bojanowski2016enriching},\footnote{\url{https://github.com/facebookresearch/fastText}}
 pre-trained over Wikipedia and updated during training.
-We use dropout \cite{srivastava2014dropout} between MLP layers and recurrent dropout
+We use dropout \cite{srivastava2014dropout} between MLP layers, and recurrent dropout
 \cite{NIPS2016_6241} between BiLSTM layers, both with a probability of 0.4.
-In addition, we use word, tag and dependency relation dropout \cite{kiperwasser2016simple}:
-in training, the embedding for a feature value $w$ is replaced with a zero vector
-with a probability of $\frac{0.2}{\#(w)+0.2}$, where $\#(w)$ is the number of occurrences of the
-$w$ observed so far.
+In addition, we use word, tag and dependency relation dropout \cite{kiperwasser2016simple}.\footnote{In
+training, the embedding for a feature value $w$ is replaced with a zero vector
+with a probability of $\frac{0.2}{\#(w)+0.2}$, where $\#(w)$ is the number of occurrences of
+$w$ observed.}
 For optimization we use a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
 and train with stochastic gradient descent for 30 epochs with a learning
 rate of 0.1, followed by AMSGrad \cite{j.2018on} for 30 epochs with
-$\alpha=0.001,\beta_1=0.9,\beta_2=0.999$.
+$\alpha=0.001,\beta_1=0.9$ and $\beta_2=0.999$.
 We found this training strategy to work better than using only one of the optimization methods,
 similar to findings by \citet{keskar2017improving}.
-We select the epoch with the best average labeled F1 score on the development set.
+We select the epoch with the best average labeled F1 score on the UCCA development set.
 The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
 Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 
