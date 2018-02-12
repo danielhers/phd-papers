@@ -990,19 +990,19 @@ We select the epoch with the best labeled F1 score on the development set.
 The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
 Hyperparameter settings are listed in Table~\ref{tab:hyperparams} (middle column).
 
-\subsection{Ensembling}
-
-During inference, we use Product of Experts \cite[PoE; ][]{hinton2002training} to combine the predictions
-of three models trained in the same setting, but with different random seeds. The transition selected is
-\[
-\argmax_{t\in T}\sum_{i=1}^3\big[\log(\mathrm{softmax}(m_i(s)))\big]_t
-\]
-where $T$ is the set of possible transitions, $m_i$ are the combined models, and $s$ is the current state.
-
-In order to ensemble multitask models, we combine models trained with the same auxiliary task.
-Another alternative is to combine models trained with different auxiliary tasks.\oa{don't write about alternatives,
-but rather on what we actually do}
-This provides greater variability between the combined models.
+%\subsection{Ensembling}
+%
+%During inference, we use Product of Experts \cite[PoE; ][]{hinton2002training} to combine the predictions
+%of three models trained in the same setting, but with different random seeds. The transition selected is
+%\[
+%\argmax_{t\in T}\sum_{i=1}^3\big[\log(\mathrm{softmax}(m_i(s)))\big]_t
+%\]
+%where $T$ is the set of possible transitions, $m_i$ are the combined models, and $s$ is the current state.
+%
+%In order to ensemble multitask models, we combine models trained with the same auxiliary task.
+%Another alternative is to combine models trained with different auxiliary tasks.\oa{don't write about alternatives,
+%but rather on what we actually do}
+%This provides greater variability between the combined models.
 
 
 
