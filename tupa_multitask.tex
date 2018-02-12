@@ -229,7 +229,7 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Related work}\label{sec:related_work}
+\section{Related Work}\label{sec:related_work}
 
 %In general, multitask learning involves optimizing more than one loss function \cite{ruder2017overview}.
 %However, in our case, the loss function has the same form across all tasks.
@@ -453,10 +453,9 @@ Bottom: BiLTSM architecture.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{General Transition-based DAG Parser}\label{sec:model}
 
-All representations we parse in \S\ref{sec:tasks} exhibit
-reentrancy and discontinuity (non-projectivity), to varying degrees.
+All tasks we outlined in \S\ref{sec:tasks} exhibit
+reentrancy and discontinuity (or non-projectivity), to varying degrees.
 In addition, UCCA and AMR contain non-terminal nodes.
-
 In order to parse graphs with these structural properties,
 we extend the TUPA parser \cite[][henceforth HAR17]{hershcovich2017a}, 
 originally developed for UCCA parsing,
