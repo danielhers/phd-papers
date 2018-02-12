@@ -529,31 +529,6 @@ each step, and the actual transition taken in training is the correct transition
 with the highest score given by the classifier.
 
 
-\begin{table}
-\centering
-\footnotesize
-\begin{tabular}{l|c|ccccc}
-\bf Hyperparameter &  \bf Single & \multicolumn{3}{c}{\bf Multitask} \\ 
-&& \bf Main & \bf Aux & \bf Shared \\
-\hline
-external word dim. & 300 &&& 300 \\
-word dim. & 200 &&& 200 \\
-POS tag dim. & 20 &&& 20 \\
-syntactic dep. dim. & 10 &&& 10 \\
-named entity dim. & 3 &&& 3 \\
-punctuation dim. & 1 &&& 1 \\
-action dim. & 3 &&& 3 \\
-edge label dim. & 20 & 20 & 20 \\
-MLP layers & 2 & 2 & 1 \\
-MLP dimensions & 50 & 50 & 50 \\
-BiLSTM layers & 2 & 2 & 1 & 2 \\
-BiLSTM dimensions & 500 & 250 & 50 & 250
-\end{tabular}
-\caption{Hyperparameter settings.\label{tab:hyperparams}
-Middle column: single-task.
-Right column: multitask settings for main task (UCCA), auxiliary tasks, and shared parameters.}
-\end{table}
-
 \begin{figure*}[t]
 \begin{subfigure}{0.5\textwidth}
     \begin{tikzpicture}[level distance=10mm, sibling distance=14mm, ->,
@@ -860,9 +835,7 @@ We collapse this sub-graph into a single node whose children are the name tokens
 
 Since the same TUPA model can be applied to different tasks, 
 we can train it on multiple tasks together.
-Following previous work, we use similar hyperparameter settings as for the single-task 
-case (see Table~\ref{tab:hyperparams}, right column),
-and rather than sharing all model parameters, share only part of the model
+Following previous work, rather than sharing all model parameters, we share only part of the model
 \cite{N16-1179,P16-2038,C16-1013,C16-1059,C16-1179,E17-1005,P17-1186}:
 feature embeddings are shared, and in addition to the task-specific BiLSTM,
 we use a shared BiLSTM. The outputs of both BiLSTMs are concatenated and
@@ -870,7 +843,8 @@ fed into the task-specific MLP (see Figure~\ref{fig:multi_model}).
 
 The fairly small training set available for UCCA (see \S\ref{sec:data})
 makes multitask learning particularly appealing,
-and we focus on it in this paper, treating AMR, DM and UD parsing as auxiliary tasks.
+and we focus on it in this paper, treating AMR, DM and UD parsing as auxiliary tasks
+(see Table~\ref{tab:hyperparams}, right column).
 
 \paragraph{Unlabeled parsing for auxiliary tasks.}
 
@@ -960,6 +934,31 @@ Edges in predicted and gold graphs are matched by terminal yield and label.
 %For AMR, we use Smatch \cite{cai2013smatch}.
 %For DM, we use labeled precision, recall and F1.
 
+\begin{table}
+\centering
+\footnotesize
+\begin{tabular}{l|c|ccccc}
+\bf Hyperparameter &  \bf Single & \multicolumn{3}{c}{\bf Multitask} \\ 
+&& \bf Main & \bf Aux & \bf Shared \\
+\hline
+external word dim. & 300 &&& 300 \\
+word dim. & 200 &&& 200 \\
+POS tag dim. & 20 &&& 20 \\
+syntactic dep. dim. & 10 &&& 10 \\
+named entity dim. & 3 &&& 3 \\
+punctuation dim. & 1 &&& 1 \\
+action dim. & 3 &&& 3 \\
+edge label dim. & 20 & 20 & 20 \\
+MLP layers & 2 & 2 & 1 \\
+MLP dimensions & 50 & 50 & 50 \\
+BiLSTM layers & 2 & 2 & 1 & 2 \\
+BiLSTM dimensions & 500 & 250 & 50 & 250
+\end{tabular}
+\caption{Hyperparameter settings.\label{tab:hyperparams}
+Middle column: single-task.
+Right column: multitask settings for main task (UCCA), auxiliary tasks, and shared parameters.}
+\end{table}
+
 
 
 \subsection{Training}
@@ -981,15 +980,15 @@ In addition, we use word, tag and dependency relation dropout \cite{kiperwasser2
 in training, the embedding for a feature value $w$ is replaced with a zero vector
 with a probability of $\frac{0.2}{\#(w)+0.2}$, where $\#(w)$ is the number of occurrences of the
 $w$ observed so far.
-For optimization we a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
-and train with stochastic gradient descent (SGD) for 40 epochs with a learning
-rate of 0.1, followed by AMSGrad \cite{j.2018on} for 60 epochs with
+For optimization we use a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
+and train with stochastic gradient descent for 30 epochs with a learning
+rate of 0.1, followed by AMSGrad \cite{j.2018on} for 30 epochs with
 $\alpha=0.001,\beta_1=0.9,\beta_2=0.999$.
 We found this training strategy to work better than using only one of the optimization methods,
 similar to findings by \citet{keskar2017improving}.
-We select the epoch with the best labeled F1 score on the development set.
+We select the epoch with the best average labeled F1 score on the development set.
 The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
-Hyperparameter settings are listed in Table~\ref{tab:hyperparams} (middle column).
+Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 
 %\subsection{Ensembling}
 %
