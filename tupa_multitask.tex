@@ -1067,7 +1067,7 @@ The contribution of multitask learning is substantial in this case:
 11\% error reduction on the French dataset, and 1.5\% on the larger German dataset
 (see Table~\ref{tab:corpora}).
 This result demonstrates that even a small training set in the main task may produce good results,
-given a sufficiently large training set for an auxiliary task.
+given sufficiently large auxiliary training data.
 
 \begin{table}
 \begin{tabular}{l|ccc|ccc}
@@ -1109,27 +1109,27 @@ UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 
 \section{Discussion}\label{sec:discussion}
 
+\paragraph{Common edge analysis.}
 An important factor in the success of multitask learning is the commonalities between the tasks
 \cite{E17-2026,E17-1005}.
 %In fact, this is why we decided to convert the auxiliary tasks into UCCA-like format for
 %multitask training in the first place.
 To evaluate the similarity between the unlabeled auxiliary tasks and UCCA parsing,
-we perform unlabeled evaluation (like labeled evaluation, but ignoring edge labels)
-of a manually annotated sample of 100 sentences from the
+we perform unlabeled evaluation (ignoring edge labels)
+on 100 manually annotated sentences from the
 Wall Street Journal, after conversion to the unified DAG format.\footnote{The annotated
 sentences are available at $<$anonymized$>$}
-As can be seen in Table~\ref{tab:common}, there is a high unlabeled overlap between
-UCCA and UD$^{++}$ after conversion to the unified DAG format,
-while AMR is much less similar.
-DM contains a fair amount of information about primary UCCA edges, and even more about remote edges.
+As can be seen in Table~\ref{tab:common}, there is a high overlap between
+UCCA and UD$^{++}$, while DM is less similar, and AMR even less.
 
 These findings correlate with our multitask experimental results:
 while using AMR as an auxiliary task did not contribute much, DM and UD$^{++}$ did benefit UCCA
 parsing, and their combination yielded an even greater improvement.
 
+\paragraph{Full parsing for AMR, DM and UD.}
 While we focus on UCCA parsing in this work, our parser is capable of parsing any
 scheme that can be represented in the unified DAG format.
-This is a step towards general AI: a single model that can handle many different tasks.
+This is a step towards a joint many-task model for semantic parsing.
 Preliminary experiments using a similar architecture to the one presented in this paper have produced
 promising results on each of the tasks' respective development sets:
 67.1\% Smatch F1 \cite{cai2013smatch} on AMR
@@ -1141,7 +1141,7 @@ For AMR and UD, these are not far from the state-of-the-art results on these dat
 In future work, we plan to pursue this direction further and investigate whether a single
 algorithm and architecture can be competitive on all of these parsing tasks.
 
-\section{Conclusion}
+%\section{Conclusion}
 
 
 \bibliography{references}
