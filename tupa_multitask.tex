@@ -240,17 +240,15 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 \paragraph{Joint and multitask learning in NLP.}
 
-These techniques have been used extensively in NLP,
-for tasks with varying degrees of similarity and structure:
+These techniques have been used for tasks with varying degrees of similarity:
 from joint semantic role labeling for different arguments of the same predicate
 \cite{toutanova2005joint} to
 joint syntactic and semantic parsing \cite{henderson2013multilingual}, to
 incorporation of unlabeled data for various tasks \cite{ando2005framework}.
-They are also used for domain adaptation in the same task \cite{W06-1615,P07-1033}.
-Multitask learning can be used as regularization, or to enlarge the effective training data.
-Joint learning is often used as an alternative to the pipeline approach,
-alleviating cascading errors:
-in transition-based parsing, it has been used for joint POS tagging and parsing \cite{bohnet2012transition}.
+They are also used for domain adaptation \cite{W06-1615,P07-1033}.
+%Multitask learning can be used as regularization, or to enlarge the effective training data.
+Joint learning often replaces pipelines to alleviate cascading errors---for example,
+joint tagging and parsing in transition-based systems \cite{bohnet2012transition}.
 
 Representation learning has enabled much progress in multitask learning,
 as it provides a straightforward way to share intermediate features between models:
