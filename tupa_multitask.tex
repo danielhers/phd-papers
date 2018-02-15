@@ -265,6 +265,14 @@ tagging and parsing \cite{Zhang2016StackpropagationIR},
 lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint},
 syntactic and semantic parsing \cite{swayamdipta-EtAl:2016:CoNLL},
 and multilingual parsing \cite{Q16-1031,guo2016exploiting}.
+\oa{Mention shared task, mention that results using joint learning is not as good as pipeline
+for parsing. Highlight practical aspect and difficulty thereof:
+"The strength of newly developed neural methods has recently shown one of the first benefits
+even from joint parsing over single-task parsing."
+Even more general and challenging than multitask SDP, it is not clear that they will benefit each other.
+SRL was built on top of syntax (args are mostly constituents), so it is clear that they will help.
+For parsing - conducted in a restricted setting, fairly small gains.
+Success of joint many-task in other fields.}
 
 \paragraph{Transition-based semantic parsing.}
 
