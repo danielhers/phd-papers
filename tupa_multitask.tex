@@ -16,6 +16,7 @@
 
 \newcommand{\com}[1]{}
 \newcommand{\oa}[1]{\footnote{\color{red}OA: #1}}
+\newcommand{\daniel}[1]{\footnote{\color{blue}Daniel: #1}}
 
 \hyphenation{SemEval}
 
@@ -265,7 +266,7 @@ tagging and parsing \cite{Zhang2016StackpropagationIR},
 lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint},
 syntactic and semantic parsing \cite{swayamdipta-EtAl:2016:CoNLL},
 and multilingual parsing \cite{Q16-1031,guo2016exploiting}.
-\oa{Mention shared task, mention that results using joint learning is not as good as pipeline
+\daniel{Mention shared task, mention that results using joint learning is not as good as pipeline
 for parsing. Highlight practical aspect and difficulty thereof:
 "The strength of newly developed neural methods has recently shown one of the first benefits
 even from joint parsing over single-task parsing."
@@ -354,8 +355,11 @@ which automatically aligns a sub-set of the graph nodes to a sub-set of the text
 called \textit{concept identification}. In this work, we use pre-aligned AMR graphs.
 
 Despite the short time since its inception, AMR has been targeted by a number of works,
-notably in the SemEval 2017 shared task \cite{may2017semeval}.\oa{say more about AMR parsing,
-e.g., what apperoaches people have taken, and that parsers are taylored for it and why}
+notably in the SemEval 2017 shared task \cite{may2017semeval}.\daniel{Omri, you said
+"say more about AMR parsing,
+e.g., what apperoaches people have taken, and that parsers are taylored for it and why" -
+I definitely should, but I mentioned some of it in Related Work. Let's discuss what goes here
+and what there.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \paragraph{Semantic Dependency Parsing.}\label{sec:sdp}
@@ -374,7 +378,7 @@ are often left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
 but the sub-graph restricted to content-bearing tokens is connected.
 Graphs containing cycles have been removed from the SDP datasets.
 
-We consider one of the three formalisms used\oa{DM, PAS, PSD and CCD: aren't there four?} 
+We consider one of the four formalisms used
 in the SemEval shared tasks: DM (DELPH-IN MRS) representation, which was converted from 
 DeepBank \cite{flickinger2012deepbank}, a corpus of hand-corrected parses from the LinGO
 English Resource Grammar \cite{copestake2000open}.
@@ -508,7 +512,7 @@ these nodes are infrequent and only cover 0.5\% of the non-terminal nodes.
 For this reason we follow HAR17 and do not include
 transitions for creating them when parsing UCCA,
 thus ignoring them in both training and evaluation.
-We also adopt the the standard evaluation for UCCA parsing is span-based,
+We also adopt the standard evaluation for UCCA parsing, which is span-based,
 and ignores implicit units as well. 
 
 This phenomenon is considerably more common in AMR, as any unaligned concept
@@ -532,9 +536,9 @@ followed by a feedforward network and a softmax layer for classification
 Inference is performed greedily,
 and training is done with an oracle that yields the set of all correct 
 transitions at a given state.
-The network is trained to maximize the log-likelihood of all correct transitions at
-each step, and the actual transition taken in training is the correct transition
-with the highest score given by the classifier.\oa{I don't understand what you wrote after the comma. You mean it's greedy?}
+Out of this set, the actual transition taken in training is the one
+with the highest score given by the classifier,
+which is trained to maximize the log-likelihood of all correct transitions at each step.
 
 
 \begin{figure*}[t]
@@ -697,11 +701,19 @@ with the highest score given by the classifier.\oa{I don't understand what you w
 
 
 \paragraph{Features.}
-In addition to the features used by HAR17,
+We use all features from HAR17,
 representing the words, POS tags, syntactic dependency relations, and previously predicted edge labels
-for nodes in specific locations in the parser state, for each token
-we use feature embeddings representing the lemma, prefix, suffix, shape, and named entity type,\oa{what is prefix/suffix/shape? please write down the added feature templates}
-all extracted using spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
+for nodes in specific locations in the parser state.
+In addition, for each token
+we use embeddings representing the lemma, one-character prefix, three-character suffix,
+shape (capturing orthographic features, e.g. "Xxxx" or "dd"),
+and named entity type,\daniel{Omri, what do you mean by "please write down the added feature templates"?}
+all provided by spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
+As an additional feature, we use the first 250K word vectors from fastText
+\cite{bojanowski2016enriching},\footnote{\url{https://github.com/facebookresearch/fastText}}
+pre-trained over Wikipedia and updated during training.\daniel{Omri: you asked
+"what do you mean ``additionally''? the word embeddings are much larger for English then?"
+- is it clear now?}
 %For AMR we add node label features according to gold node labels.
 
 
@@ -877,7 +889,8 @@ training, where only a small or noisy training set for the main task is availabl
 \subsection{Data}\label{sec:data}
 
 For UCCA, we use the English Wikipedia corpus \cite{abend2013universal},
-with the standard train/dev/test split of 4254/453/518 sentences.
+with the standard train/dev/test split of 4254/453/518 sentences,
+tuning on the development set without cross-validation.
 In addition, we use
 the \textit{Twenty Thousand Leagues Under the Sea} corpus \cite[20K leagues;][]{sulem2015conceptual},
 annotated in English, French and German.
@@ -885,7 +898,7 @@ The English part is used only for testing.
 Due to their small size, and since they are still under development, we only use a train/dev split
 in the French and German datasets, of 480/67 and 4196/561 sentences, respectively.
 We report results on the development set for these datasets.\footnote{UCCA corpora are publicly
-available at $<$anonymized$>$ {\bf it shouldn't be anonymized. we should put them on the HUJI NLP github and put a link here}}
+available at \url{https://github.com/huji-nlp/ucca-corpus}}
 
 For AMR, we use LDC2017T10, targeted in SemEval 2017
 \cite{may2017semeval}.\footnote{\url{https://catalog.ldc.upenn.edu/LDC2017T10}}
@@ -895,7 +908,8 @@ For Universal Dependencies, we use all English, French and German treebanks from
 \cite{11234/1-2515}.\footnote{\url{http://hdl.handle.net/11234/1-2515}}
 We use the enhanced++ UD representation \cite{SCHUSTER16.779} in our English experiments,
 henceforth referred to as UD$^{++}$.
-Table~\ref{tab:corpora} shows the size of each corpus.\oa{do these corpora have standard splits? if so, say that. say you tune on dev w/o cross-validation}
+Table~\ref{tab:corpora} shows the size of each corpus.
+For AMR, DM and UD, we use the training sets from standard train/dev/test splits.
 
 \begin{table}
 \centering
@@ -961,7 +975,9 @@ for both primary and remote edges.
 %As each scheme has its own evaluation metric, we evaluate them separately.
 We evaluate on UCCA using labeled precision, recall and F1 on primary and remote edges,
 following previous work on UCCA parsing \cite{hershcovich2017a}.
-Edges in predicted and gold graphs are matched by terminal yield and label.\oa{I think it's worth repeating in brief how these are defined}
+Edges in predicted and gold graphs are matched by terminal yield and label.\daniel{Omri:
+what do you mean by "it's worth repeating in brief how these are defined"?
+Are you referring to the terminal yield and label or to primary and remote edges?}
 %For UD, we use LAS F1.
 %For AMR, we use Smatch \cite{cai2013smatch}.
 %For DM, we use labeled precision, recall and F1.
@@ -975,12 +991,9 @@ datasets together (according to the setting),
 but using only the score on the UCCA development set as the criterion for early stopping.
 In each training epoch, we use the same number of examples from each task---the
 number of sentences in the UCCA training set.
-WeSince training sets differ in size, we sample this many sentences from each training set.
+Since training sets differ in size, we sample this many sentences from each training set.
 
 All embeddings are initialized randomly.
-For words, we additionally use external word embeddings containing 250K word vectors\footnote{you mean 250K dimensions?} from fastText
-\cite{bojanowski2016enriching},\footnote{\url{https://github.com/facebookresearch/fastText}}
-pre-trained over Wikipedia and updated during training.\oa{what do you mean ``additionally''? the word embeddings are much larger for English then?}
 We use Dropout \cite{srivastava2014dropout} between MLP layers, and Recurrent Dropout
 \cite{NIPS2016_6241} between BiLSTM layers, both with a probability of 0.4.
 In addition, we use word, tag and dependency relation dropout \cite{kiperwasser2016simple}.\footnote{In
