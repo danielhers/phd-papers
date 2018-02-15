@@ -363,17 +363,19 @@ called \textit{concept identification}. In this work, we use pre-aligned AMR gra
 Despite the short time since its inception, AMR has been targeted by a number of works,
 notably in two SemEval shared task \cite{may2016semeval,may2017semeval}.
 Given its multiplicity of sub-tasks and unrestricted graph structure, parsing AMR is a complex problem.
-Existing AMR parsers are mostly graph-based or transition-based.
+Existing AMR parsers take one of several approaches.
 Graph-based AMR parsers construct AMR graphs
 by identifying concepts and scoring edges between them, either in a pipeline
 \cite{flanigan2014discriminative,artzi2015broad,pust2015parsing,foland2017abstract},
 or jointly \cite{zhou2016amr}.
+A recent approach is based on the sequence-to-sequence model \cite{sutskever2014sequence},
+treating AMR parsing as a machine translation model and linearizing the graph structure
+\cite{barzdins2016riga,Gildea2017AddressingTD,Konstas2017NeuralAS,Buys2017RobustIN}.
 Transition-based AMR parsers either process dependency trees into AMRs
 \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,goodman2016noise},
 or use a transition system tailored to AMR parsing \citet{damonte-17,D17-1130}.
-A third approach is based on the sequence-to-sequence model \cite{sutskever2014sequence},
-treating AMR parsing as a machine translation model and linearizing the graph structure
-\cite{barzdins2016riga,Gildea2017AddressingTD,Konstas2017NeuralAS,Buys2017RobustIN}.
+Our transition-based approach, on the other hand,
+handles AMR using the same general DAG parser used for other schemes.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
