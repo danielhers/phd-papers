@@ -248,22 +248,23 @@ enabling, for example, multilingual syntactic parsing
 and semantic parsing across domains and languages
 \cite{herzig-berant:2017:Short,W17-2607,duong2017multilingual}.
 
-In parsing, sharing parameters with a low-level task
-has demonstrated substantial gains in transition-based systems:
+Sharing parameters with a low-level task
+has shown great benefit in transition-based parsing, demonstrated in
 joint POS tagging and syntactic parsing
-\cite{bohnet2012transition,Zhang2016StackpropagationIR},
+\cite{bohnet2012transition,Zhang2016StackpropagationIR}, and
 lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint}.
-As for sharing parameters across high-level tasks---many
-efforts have been dedicated to joint syntactic and semantic dependency parsing,
-including two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll}.
+
+Many efforts have been dedicated to sharing parameters across higher-level tasks, such as
+joint syntactic and semantic dependency parsing---including
+two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll}.
 These approaches are promising, but still have not outperformed pipeline models
 \cite{lluis2008joint,henderson2013multilingual,D15-1169,swayamdipta-EtAl:2016:CoNLL}.
 Recently, however, the strength of newly developed neural methods has shown one of the
 first benefits ever from joint parsing over single-task parsing:
-using "syntactic scaffolding" as an auxiliary task for frame-semantic parsing,
+using ``syntactic scaffolding'' as an auxiliary task for frame-semantic parsing,
 where arguments are almost always syntactic constituents \cite{swayamdipta2017frame},
 and multitask learning for semantic dependency parsing of different target representations,
-showing clear but modest gains from sharing parameters across highly overlapping, parallel-annotated
+showing some improvement by sharing parameters across highly overlapping, parallel-annotated
 schemes \cite{P17-1186}.
 
 Even before the rise of representation learning,
@@ -272,9 +273,9 @@ from joint semantic role labeling for different arguments of the same predicate
 \cite{toutanova2005joint},
 to incorporation of unlabeled data for various tasks \cite{ando2005framework}.
 
-Related to multitask learning, is generalization across domains for the same task---domain
-adaptation, which is also enabled by parameter sharing \cite{W06-1615,P07-1033,K17-1040}.
-for parsing in particular, domain adaptation has been applied successfully by
+Domain adaptation, concerned with generalization across domains for the same task,
+is also enabled by parameter sharing \cite{W06-1615,P07-1033,K17-1040}.
+For parsing, it has been applied successfully by
 parser combination and co-training \cite{mcclosky2010automatic,baucom2013domain}.
 
 In contrast to the approaches listed above, we are faced with the challenge
