@@ -292,9 +292,9 @@ lexical concepts they evoke.
 Full-sentence analysis contrasts with ``shallow'' semantic parsing,
 primarily Semantic Role Labeling
 \cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
-which target argument structure phenomena and uses flat structures.
-We consider four target representations: UCCA, AMR, DM and UD
-\cite[Universal Dependencies; ][]{nivre2016universal}.
+which specifically target argument structure phenomena using flat structures.
+We consider four target representations: UCCA, DM and UD
+\cite[Universal Dependencies; ][]{nivre2016universal}, AMR.
 Figure~\ref{fig:original_examples} shows an example graph for each scheme,
 annotating the sentence ``After graduation, John moved to Paris''.
 
@@ -306,8 +306,8 @@ annotating the sentence ``After graduation, John moved to Paris''.
 %did in the TUPA paper, with examples etc.}
 
 \paragraph{Universal Conceptual Cognitive Annotation.}\label{sec:ucca}
-UCCA \cite{abend2013universal} is a semantic representation scheme whose main principles
-are ease of annotation and cross-linguistic applicability and stability.
+UCCA \cite{abend2013universal} is a semantic representation scheme whose main design principles
+are ease of annotation, cross-linguistic applicability and stability, and a modular architecture of semantic distinctions.
 UCCA represents the semantics of natural language utterances
 as directed acyclic graphs (DAGs), where terminal nodes (nodes without children)
 correspond to the text tokens, and non-terminal nodes to semantic units that participate
@@ -320,34 +320,34 @@ mostly covers predicate-argument structure, semantic heads and inter-Scene relat
 %The \textit{linkage} layer covers relations between events, including temporal and discourse relations
 %(exemplified by the gray node and its outgoing edges in Figure~\ref{fig:original_example_ucca}).
 
-UCCA's guidelines distinguish between \textit{primary} edges, corresponding 
-to the roles explicit in the text, and \textit{remote} edges (such as the dashed edge in
-Figure~\ref{fig:original_example_ucca}), corresponding to implicit relations.
-Primary edges form a tree structure in each layer,
+UCCA's guidelines distinguish \textit{primary} edges, corresponding 
+to the roles explicit in the text, from \textit{remote} edges (e.g., dashed edge in
+Figure~\ref{fig:original_example_ucca}), in order to allow for a unit to participate
+in several super-ordinate relations.
+Primary edges form a tree structure,
 whereas remote edges enable reentrancy (a DAG structure).
-
-As UCCA annotated data is currently quite scarce (see \S\ref{sec:data}), 
+As UCCA annotated data is currently fairly scarce (see \S\ref{sec:data}), 
 we hypothesize it will benefit from multitask learning, and consider it as our
 main task.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \paragraph{Abstract Meaning Representation.}\label{sec:amr}
 
-AMR \cite{banarescu2013abstract}
-is a semantic representation that encodes information about named entities, 
+AMR \cite{banarescu2013abstract} is a semantic representation that encodes information about named entities, 
 argument structure, semantic roles, word sense disambiguation and co-reference resolution.
 AMRs are rooted directed graphs, in which both nodes and edges are labeled.
 Most AMRs are DAGs, although cycles are permitted.
-Despite the short time since its inception, AMR has been targeted by a number of works,
-notably in the SemEval 2017 shared task \cite{may2017semeval}.
 
 AMR differs from the other schemes considered here in that it does not anchor its graphs
 in the words of the sentence (Figure~\ref{fig:original_example_amr}). Instead, AMR graphs
 connect variables, concepts (from a pre-defined set) and constants (which may be strings or numbers).
 Still, most AMR nodes are alignable to text tokens, a tendency used by AMR parsers,
-which automatically align the graph nodes to the text in a process called \textit{concept identification}.
-In this work, we use pre-aligned AMR graphs, which renders them (partially) anchored.
+which automatically aligns a sub-set of the graph nodes to a sub-set of the text tokens in a process
+called \textit{concept identification}. In this work, we use pre-aligned AMR graphs.
 
+Despite the short time since its inception, AMR has been targeted by a number of works,
+notably in the SemEval 2017 shared task \cite{may2017semeval}.\oa{say more about AMR parsing,
+e.g., what apperoaches people have taken, and that parsers are taylored for it and why}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \paragraph{Semantic Dependency Parsing.}\label{sec:sdp}
@@ -357,7 +357,7 @@ SDP is a set of related tasks, targeted in three recent SemEval shared tasks
 They correspond to four semantic representation schemes, referred to as
 DM, PAS, PSD and CCD, representing
 predicate-argument relations between content-bearing words in a sentence.
-All are based on semantic formalisms whose annotations have been
+All are based on semantic formalisms whose annotation has been
 converted into bilexical dependencies---labeled
 directed graphs whose nodes are all text tokens.
 Edges are labeled, encoding semantic relations between the tokens.
@@ -366,32 +366,33 @@ are often left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
 but the sub-graph restricted to content-bearing tokens is connected.
 Graphs containing cycles have been removed from the SDP datasets.
 
-We consider one of the three formalisms used in the SemEval shared tasks:
-the DM (DELPH-IN MRS) representation, which comes
-from DeepBank \cite{flickinger2012deepbank},
-manually-corrected parses from the LinGO
+We consider one of the three formalisms used\oa{DM, PAS, PSD and CCD: aren't there four?} 
+in the SemEval shared tasks: DM (DELPH-IN MRS) representation, which was converted from 
+DeepBank \cite{flickinger2012deepbank}, a corpus of hand-corrected parses from the LinGO
 English Resource Grammar \cite{copestake2000open}.
 LinGO is a Head-driven Phrase
 Structure Grammar \cite[HPSG; ][]{pollard1994head}
 which uses Minimal Recursion Semantics \cite{copestake2005minimal}.
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Universal Dependencies.}\label{sec:ud}
-UD \cite{nivre2016universal,11234/1-2515} is
+UD \cite{nivre2016universal,11234/1-2515} has quickly become
 the dominant dependency representation for
-annotating treebanks in a large variety of languages,
+syntactic treebank annotation in a large variety of languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
 annotation. Formally, UD uses bilexical trees, with edge labels 
 representing syntactic relations between words.
 
 While not a semantic representation,
 we use UD as an auxiliary task,
-inspired by previous work on joint syntax and semantics
-\cite{lluis2008joint,collobert2011natural,D15-1169,swayamdipta-EtAl:2016:CoNLL,swayamdipta2017frame}.
-In order to obtain cross-linguistic applicability, 
-UD often makes design decision that are similar to the common practice
+inspired by previous work on joint syntactic and semantic parsing
+(see Section \ref{sec:related_work}).
+%\cite{lluis2008joint,collobert2011natural,D15-1169,swayamdipta-EtAl:2016:CoNLL,swayamdipta2017frame}.
+In order to reach comparable analyses cross-linguistically,
+UD often ends up in annotation that is similar to the common practice
 in semantic treebanks, such as linking content words to content words wherever possible.
-Moreover, using UD allows us to conduct experiments on French and German, 
+Using UD further allows conducting experiments on French and German, 
 for which SDP and AMR annotated data is not available (\S\ref{sec:multilingual}).
 
 In addition to basic UD trees (such as in Figure~\ref{fig:original_example_ud}),
@@ -400,8 +401,8 @@ using automatic converters included in Stanford CoreNLP \cite{SCHUSTER16.779}.
 These include additional and augmented relations between content words,
 partially overlapping with the notion of remote edges in UCCA:
 in the case of control verbs, for example, a direct relation is added in enhanced UD
-between the controlled verb and its controller,
-which would likewise be represented by a remote edge in UCCA.
+between the subordinated verb and its controller,
+which is similar to the semantic schemes' treatment of this construction.
 
 \begin{figure}[t]
    \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
@@ -494,24 +495,23 @@ the standard \textsc{Shift} and \textsc{Reduce} operations,
 and \textsc{Finish} to mark the state as terminal.
 
 Although UCCA contains nodes without any text tokens as descendants
-(named \textit{implicit units}),
-these nodes are infrequent (about 0.5\% of non-terminal nodes), and
-the standard evaluation for UCCA parsing is span-based and ignores them.
+(called \textit{implicit units}),
+these nodes are infrequent and only cover 0.5\% of the non-terminal nodes.
 For this reason we follow HAR17 and do not include
-any transition to create these when parsing UCCA,
+transitions for creating them when parsing UCCA,
 thus ignoring them in both training and evaluation.
-This phenomenon is even more common in AMR, as any unaligned concept
-with no aligned descendents
-will correspond to an implicit node (about 6\% of nodes).
-These result from alignment errors, or from abstract concepts,
-which have no explicit grounding in the text \cite{buys2017oxford}.
-We ignore implicit nodes when training on AMR as well.
+We also adopt the the standard evaluation for UCCA parsing is span-based,
+and ignores implicit units as well. 
+
+This phenomenon is considerably more common in AMR, as any unaligned concept
+with no aligned descendents corresponds to an empty node (about 6\% of the nodes).
+Empty AMR nodes usually result from alignment errors, or from abstract concepts
+which have no explicit realization in the text \cite{buys2017oxford}.
+We ignore empty nodes when training on AMR as well.
 
 Another property of AMR not covered by TUPA is support for node labels, 
-as only edges are labeled in UCCA. In AMR, however, node labels correspond 
-to concepts and constants, and are ubiquitous.
-When training on AMR, we produce graphs only with edge labels (relations) 
-and without node labels.
+which are ubiquitous in AMR, but absent in UCCA structures (only edges are labeled in UCCA). 
+We therefore only produce edge labels and not node labels, when training on AMR.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -526,7 +526,7 @@ and training is done with an oracle that yields the set of all correct
 transitions at a given state.
 The network is trained to maximize the log-likelihood of all correct transitions at
 each step, and the actual transition taken in training is the correct transition
-with the highest score given by the classifier.
+with the highest score given by the classifier.\oa{I don't understand what you wrote after the comma. You mean it's greedy?}
 
 
 \begin{figure*}[t]
@@ -692,13 +692,13 @@ with the highest score given by the classifier.
 In addition to the features used by HAR17,
 representing the words, POS tags, syntactic dependency relations, and previously predicted edge labels
 for nodes in specific locations in the parser state, for each token
-we use feature embeddings representing the lemma, prefix, suffix, shape, and named entity type,
-extracted using spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
+we use feature embeddings representing the lemma, prefix, suffix, shape, and named entity type,\oa{what is prefix/suffix/shape? please write down the added feature templates}
+all extracted using spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
 %For AMR we add node label features according to gold node labels.
 
 
 \paragraph{Constraints.}
-As each annotation scheme has different constraints on the allowed graphs,
+As each annotation scheme has different constraints on the allowed graph structures,
 we defined these constraints separately for each task.
 During training and parsing, the constraint set corresponding to the task is
 selected and applied to the parser state, to rule out some of the transitions.
@@ -706,18 +706,18 @@ selected and applied to the parser state, to rule out some of the transitions.
 Some constraints are task-specific, while some are generic.
 For example, in UCCA, a terminal may only have one parent.
 In AMR, a concept corresponding to a PropBank frame may only have 
-core arguments defined for the frame.
+the core arguments defined for the frame.
 An example of a generic constraint is that nodes on the stack 
 that have already been swapped
 should never be swapped again.\footnote{
 	To implement this constraint, we define a \textit{swap index}
 	for each node, which is assigned when the node is created.
-	At parse start, only the root node and terminals exist.
+	At initialization, only the root node and terminals exist.
 	We assign the root a swap index of 0, and for each terminal, its swap index
 	is its position in the text (starting at 1).
 	Whenever a node is created as a result of a \textsc{Node}
 	transition, we assign its swap index to be the arithmetic 
-	mean of the stack top and buffer head's swap indices.}
+	mean of the swap indices of the stack top and buffer head.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -759,17 +759,15 @@ However, alignments must be handled (see Figure~\ref{fig:converted_example_amr})
 Since alignment between nodes and text tokens is not part of the AMR graph,
 we insert the alignments into the graph as edges in the conversion.
 Specifically, we use automatically aligned graphs provided in the AMR dataset (see \S\ref{sec:data}),
-and attach each node with a \textit{Terminal} edge to each of the terminals it is aligned to.
+and attach each node with an edge labeled \textit{Terminal} to each of the terminals it is aligned to.
 %
 %Since the order of AMR ordinal relations, such as \textit{op1}, \textit{op2},
 %is annotated according to the order of text tokens,
 %the numeric index is redundant and is thus removed.
 %Numeric suffixes are kept when they are meaningful, e.g. in distinguishing between PropBank semantic
 %roles (\textit{ARG[0-5]}).
-
-A named entity in AMR is represented as a sub-graph, whose \textit{name}-labeled root
-has a child for each token in the name
-(see the two \textit{name} nodes in Figure~\ref{fig:original_example_amr}).
+Named entities in AMR are represented as a sub-graph, whose \textit{name}-labeled root
+has a child for each token in the name (see the two \textit{name} nodes in Figure~\ref{fig:original_example_amr}).
 We collapse this sub-graph into a single node whose children are the name tokens.
 
 
@@ -802,10 +800,9 @@ We collapse this sub-graph into a single node whose children are the name tokens
     \node (transition) at (3.5,5.8) {transition};
     \path (mlp) edge node[right] {softmax} (transition);
    \end{tikzpicture}
-   \caption{Multitask model.
-      Representations for input tokens are computed by two BiLSTMs:
-      a task-specific one and a share one. The result is concatenated with
-      features from the parser state and fed into the MLP for selecting the next transition.}
+   \caption{Multitask learning model.
+      Representations for input tokens are computed both by a task-specific and a shared BiLSTM.
+      Their outputs are concatenated with the embedding of the parser state and fed into the task-specific MLP for selecting the next transition.}
    \label{fig:multi_model}
 \end{figure}
 
@@ -834,38 +831,40 @@ We collapse this sub-graph into a single node whose children are the name tokens
 \section{Multitask Transition-based Parsing}\label{sec:multitask}
 
 Since the same TUPA model can be applied to different tasks, 
-we can train it on multiple tasks together.
+we can train it in a multi-task setting.
 Following previous work, rather than sharing all model parameters, we share only part of the model
-\cite{N16-1179,P16-2038,C16-1013,C16-1059,C16-1179,E17-1005,P17-1186}:
-feature embeddings are shared, and in addition to the task-specific BiLSTM,
-we use a shared BiLSTM. The outputs of both BiLSTMs are concatenated and
-fed into the task-specific MLP (see Figure~\ref{fig:multi_model}).
+\cite{N16-1179,P16-2038,C16-1013,C16-1059,C16-1179,E17-1005,P17-1186}, leaving task-specific
+sub-networks as well.
+Concretely, we replicate the BiLSTM used by TUPA for each of the tasks, and additionally add
+a BiLSTM which is shared across all tasks. 
+For each task, the outputs of the task-specific and shared BiLSTMs are concatenated and
+fed into a task-specific MLP (see Figure~\ref{fig:multi_model}).
+Feature embeddings are shared across tasks.
 
 The fairly small training set available for UCCA (see \S\ref{sec:data})
 makes multitask learning particularly appealing,
 and we focus on it in this paper, treating AMR, DM and UD parsing as auxiliary tasks.
 
 \paragraph{Unlabeled parsing for auxiliary tasks.}
-
-To simplify the auxiliary tasks and facilitate generalization \cite{E17-2026},
+In order to simplify the auxiliary tasks and facilitate generalization \cite{E17-2026},
 we perform unlabeled parsing for AMR, DM and UD in the multitask setting,
 while still predicting edge labels in UCCA parsing.
-To support unlabeled parsing, we simply remove all labels from
+To support unlabeled parsing, we simply remove all labels from the
 \textsc{Edge}, \textsc{Remote} and \textsc{Node} transitions outputted by the oracle.
-This results in a much smaller number of transitions the classifier has to choose from
-(up to 10, as opposed to 45 transitions, which also contain the edge label, for UCCA parsing),
-allowing us to use smaller dimensions and less layers for auxiliary task-specific BiLSTMs and MLPs
-(see Table~\ref{tab:hyperparams}, right column).
+This results in a much smaller number of transitions the classifier has to select from
+(no more than 10, as opposed to 45 transitions in labeled UCCA parsing),
+allowing us to use smaller dimensions and less layers for the task-specific BiLSTMs and MLPs
+of the auxiliary tasks (see Table~\ref{tab:hyperparams}, right column).
 
 
 
 \section{Experiments}\label{sec:experiments}
 
-We perform various experiments to evaluate the benefit of each auxiliary task to UCCA parsing.
+We perform various experiments to assess the value of each auxiliary task to UCCA parsing.
 We train the parser in a single-task and multitask setting,
 and evaluate its performance on the UCCA English in-domain and out-of-domain test sets.
 Next, we repeat the experiment on French and German, investigating the impact of multitask
-training with different training set sizes.
+training, where only a small or noisy training set for the main task is available.
 
 \subsection{Data}\label{sec:data}
 
@@ -878,7 +877,7 @@ The English part is used only for testing.
 Due to their small size, and since they are still under development, we only use a train/dev split
 in the French and German datasets, of 480/67 and 4196/561 sentences, respectively.
 We report results on the development set for these datasets.\footnote{UCCA corpora are publicly
-available at $<$anonymized$>$}
+available at $<$anonymized$>$ {\bf it shouldn't be anonymized. we should put them on the HUJI NLP github and put a link here}}
 
 For AMR, we use LDC2017T10, targeted in SemEval 2017
 \cite{may2017semeval}.\footnote{\url{https://catalog.ldc.upenn.edu/LDC2017T10}}
@@ -888,7 +887,7 @@ For Universal Dependencies, we use all English, French and German treebanks from
 \cite{11234/1-2515}.\footnote{\url{http://hdl.handle.net/11234/1-2515}}
 We use the enhanced++ UD representation \cite{SCHUSTER16.779} in our English experiments,
 henceforth referred to as UD$^{++}$.
-Table~\ref{tab:corpora} shows the size of each corpus.
+Table~\ref{tab:corpora} shows the size of each corpus.\oa{do these corpora have standard splits? if so, say that. say you tune on dev w/o cross-validation}
 
 \begin{table}
 \centering
@@ -954,7 +953,7 @@ for both primary and remote edges.
 %As each scheme has its own evaluation metric, we evaluate them separately.
 We evaluate on UCCA using labeled precision, recall and F1 on primary and remote edges,
 following previous work on UCCA parsing \cite{hershcovich2017a}.
-Edges in predicted and gold graphs are matched by terminal yield and label.
+Edges in predicted and gold graphs are matched by terminal yield and label.\oa{I think it's worth repeating in brief how these are defined}
 %For UD, we use LAS F1.
 %For AMR, we use Smatch \cite{cai2013smatch}.
 %For DM, we use labeled precision, recall and F1.
@@ -968,13 +967,13 @@ datasets together (according to the setting),
 but using only the score on the UCCA development set as the criterion for early stopping.
 In each training epoch, we use the same number of examples from each task---the
 number of sentences in the UCCA training set.
-Since the training sets differ in size, we sample this many sentences from each training set.
+WeSince training sets differ in size, we sample this many sentences from each training set.
 
 All embeddings are initialized randomly.
-For words, we additionally use external word embeddings containing 250K word vectors from fastText
+For words, we additionally use external word embeddings containing 250K word vectors\footnote{you mean 250K dimensions?} from fastText
 \cite{bojanowski2016enriching},\footnote{\url{https://github.com/facebookresearch/fastText}}
-pre-trained over Wikipedia and updated during training.
-We use dropout \cite{srivastava2014dropout} between MLP layers, and recurrent dropout
+pre-trained over Wikipedia and updated during training.\oa{what do you mean ``additionally''? the word embeddings are much larger for English then?}
+We use Dropout \cite{srivastava2014dropout} between MLP layers, and Recurrent Dropout
 \cite{NIPS2016_6241} between BiLSTM layers, both with a probability of 0.4.
 In addition, we use word, tag and dependency relation dropout \cite{kiperwasser2016simple}.\footnote{In
 training, the embedding for a feature value $w$ is replaced with a zero vector
@@ -988,7 +987,7 @@ We found this training strategy to work better than using only one of the optimi
 similar to findings by \citet{keskar2017improving}.
 We select the epoch with the best average labeled F1 score on the UCCA development set.
 The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
-Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
+Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.\oa{if needed, we can move this to the supp material}
 
 %\subsection{Ensembling}
 %
