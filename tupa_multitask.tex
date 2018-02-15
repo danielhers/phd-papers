@@ -98,7 +98,7 @@ languages other than English, and less researched domains.
 %and their degree of cross-linguistic applicability and consistency \cite{abend2017state}.
 
 Indeed, recent work in semantic parsing has targeted, among others,
-Abstract Meaning Representation \cite[AMR;][]{banarescu2013abstract,damonte-17,11099},
+Abstract Meaning Representation \cite[AMR;][]{banarescu2013abstract,damonte-17,Buys2017RobustIN},
 bilexical Semantic Dependencies \cite[SDP;][]{oepen2014semeval,oepen2015semeval,oepen2016towards,P17-1186}
 with target representations such as DELPH-IN MRS \cite[DM;][]{flickinger2012deepbank},
 and Universal Conceptual Cognitive Annotation \cite[UCCA;][]{abend2013universal,hershcovich2017a}.
@@ -289,13 +289,11 @@ First used for projective syntactic dependency tree parsing
 \cite{nivre2008algorithms},
 subsequent work generalized transition-based parsing to non-projective and (discontinuous) constituency
 parsing \cite{nivre2009non,zhang2009transition,maier-lichte:2016:DiscoNLP}.
-Research on transition-based semantic dependency parsing and UCCA parsing
+Research on transition-based semantic dependency parsing
 has introduced transitions to enable DAG parsing in general
-\cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,du-EtAl:2015:SemEval,hershcovich2017a}.
-Transition-based AMR parsers either process dependency trees into AMRs
-\cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,goodman2016noise},
-or have a transition system tailored to AMR parsing \citet{zhou2016amr,damonte-17,D17-1130},
-but we are not aware of a general transition-based DAG parser that handles AMR.
+\cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,du-EtAl:2015:SemEval},
+whereas UCCA parsing required a mode general system to also support non-terminal nodes
+\cite{hershcovich2017a}.
 
 
 
@@ -363,11 +361,20 @@ which automatically aligns a sub-set of the graph nodes to a sub-set of the text
 called \textit{concept identification}. In this work, we use pre-aligned AMR graphs.
 
 Despite the short time since its inception, AMR has been targeted by a number of works,
-notably in the SemEval 2017 shared task \cite{may2017semeval}.\daniel{Omri, you said
-"say more about AMR parsing,
-e.g., what apperoaches people have taken, and that parsers are taylored for it and why" -
-I definitely should, but I mentioned some of it in Related Work. Let's discuss what goes here
-and what there.}
+notably in two SemEval shared task \cite{may2016semeval,may2017semeval}.
+Given its multiplicity of sub-tasks and unrestricted graph structure, parsing AMR is a complex problem.
+Existing AMR parsers are mostly graph-based or transition-based.
+Graph-based AMR parsers construct AMR graphs
+by identifying concepts and scoring edges between them, either in a pipeline
+\cite{flanigan2014discriminative,artzi2015broad,pust2015parsing,foland2017abstract},
+or jointly \cite{zhou2016amr}.
+Transition-based AMR parsers either process dependency trees into AMRs
+\cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,goodman2016noise},
+or use a transition system tailored to AMR parsing \citet{damonte-17,D17-1130}.
+A third approach is based on the sequence-to-sequence model \cite{sutskever2014sequence},
+treating AMR parsing as a machine translation model and linearizing the graph structure
+\cite{barzdins2016riga,Gildea2017AddressingTD,Konstas2017NeuralAS,Buys2017RobustIN}.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \paragraph{Semantic Dependency Parsing.}\label{sec:sdp}
