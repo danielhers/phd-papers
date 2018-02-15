@@ -234,46 +234,54 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
 
-%In general, multitask learning involves optimizing more than one loss function \cite{ruder2017overview}.
-%However, in our case, the loss function has the same form across all tasks.
-%The same architecture and inference algorithm are applied to multiple annotation formats and datasets,
-%and only some of the parameters are shared between them: this is hard parameter sharing.
-
 \paragraph{Joint and multitask learning in NLP.}
 
-These techniques have been used for tasks with varying degrees of similarity:
+Recent work has achieved state-of-the-art results in multiple NLP tasks
+by using a single neural network model learning many tasks jointly
+\cite{collobert2011natural,D17-1206},
+extending the training data by exploiting incidental supervision \cite{DBLP:conf/aaai/Roth17}
+and replacing the common pipeline approach to avoid cascading errors.
+Deep multitask learning has shown benefit particularly when the tasks are similar
+\cite{P15-1166,P16-2038,D17-1134},
+enabling, for example, multilingual syntactic parsing
+\cite{Q16-1031,guo2016exploiting}
+and sequence-to-sequence semantic parsing across domains and languages
+\cite{herzig-berant:2017:Short,W17-2607,duong2017multilingual}.
+
+In parsing, sharing parameters with a low-level task
+has demonstrated substantial gains in transition-based systems:
+joint POS tagging and syntactic parsing
+\cite{bohnet2012transition,Zhang2016StackpropagationIR},
+lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint}.
+As for sharing parameters across high-level tasks---many
+efforts have been dedicated to joint syntactic and semantic dependency parsing,
+including two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll}.
+These approaches are promising, but still have not outperformed pipeline models
+\cite{lluis2008joint,henderson2013multilingual,D15-1169,swayamdipta-EtAl:2016:CoNLL}.
+Recently, however, the strength of newly developed neural methods has shown one of the
+first benefits ever from joint parsing over single-task parsing:
+using "syntactic scaffolding" as an auxiliary task for frame-semantic parsing,
+where arguments are almost always syntactic constituents \cite{swayamdipta2017frame},
+and multitask learning for semantic dependency parsing of different target representations,
+showing clear but modest gains from sharing parameters across highly overlapping, parallel-annotated
+schemes \cite{P17-1186}.
+
+Even before the rise of representation learning,
+parameter sharing has been used for tasks with varying degrees of similarity:
 from joint semantic role labeling for different arguments of the same predicate
-\cite{toutanova2005joint} to
-joint syntactic and semantic parsing \cite{henderson2013multilingual}, to
-incorporation of unlabeled data for various tasks \cite{ando2005framework}.
-They are also used for domain adaptation \cite{W06-1615,P07-1033}.
-%Multitask learning can be used as regularization, or to enlarge the effective training data.
-Joint learning often replaces pipelines to alleviate cascading errors---for example,
-joint tagging and parsing in transition-based systems \cite{bohnet2012transition}.
+\cite{toutanova2005joint},
+to incorporation of unlabeled data for various tasks \cite{ando2005framework}.
 
-Representation learning has enabled much progress in multitask learning,
-facilitating parameter sharing:
-For frame semantic parsing \cite{swayamdipta2017frame},
-semantic dependency parsing for different target representations \citet{P17-1186} 
-and domain adaptation \cite{K17-1040}, to name a few.
-The whole NLP pipeline can even be replaced with a joint many-task model
-\cite[JMT; ][]{collobert2011natural,D17-1206}.
-However, we are not aware of a semantic parser using a single model for
-widely different representation schemes.
+Related to multitask learning, is generalization across domains for the same task---domain
+adaptation, which is also enabled by parameter sharing \cite{W06-1615,P07-1033,K17-1040}.
+for parsing in particular, domain adaptation has been applied successfully by
+parser combination and co-training \cite{mcclosky2010automatic,baucom2013domain}.
 
-In transition-based parsing, joint learning has also been applied to
-tagging and parsing \cite{Zhang2016StackpropagationIR},
-lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint},
-syntactic and semantic parsing \cite{swayamdipta-EtAl:2016:CoNLL},
-and multilingual parsing \cite{Q16-1031,guo2016exploiting}.
-\daniel{Mention shared task, mention that results using joint learning is not as good as pipeline
-for parsing. Highlight practical aspect and difficulty thereof:
-"The strength of newly developed neural methods has recently shown one of the first benefits
-even from joint parsing over single-task parsing."
-Even more general and challenging than multitask SDP, it is not clear that they will benefit each other.
-SRL was built on top of syntax (args are mostly constituents), so it is clear that they will help.
-For parsing - conducted in a restricted setting, fairly small gains.
-Success of joint many-task in other fields.}
+In contrast to the approaches listed above, we are faced with the challenge
+of parsing multiple schemes diverging both structurally and content-wise,
+designed separately and annotated over non-parallel corpora, in different domains.
+We are not aware of a semantic parser using a single model for
+such widely different tasks.
 
 \paragraph{Transition-based semantic parsing.}
 
