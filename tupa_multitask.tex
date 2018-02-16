@@ -191,7 +191,7 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
         \depedge[edge start x offset=1ex]{6}{5}{ARG1}
         \depedge{6}{7}{ARG2}
     \end{dependency}
-  \caption{SDP \label{fig:original_example_sdp}}
+  \caption{DM \label{fig:original_example_sdp}}
 \end{subfigure}
 ~
 \begin{subfigure}[t]{0.5\textwidth}
@@ -285,8 +285,8 @@ constituent.
 %where arguments are almost always syntactic constituents ,
 
 Another work which is closely related to ours is \citet{P17-1186},
-which reported benefits from multitask learning over three broad-coverage semantic dependency (SDP)
-parsing tasks that use three different annotation schemes, albeit on the same text and using a uniform formalism with 
+which reported benefits from multitask learning over three broad-coverage semantic dependency parsing (SDP)
+tasks that use three different annotation schemes, albeit on the same text and using a uniform formalism with 
 considerable overlap in their edges.
 They report improvement to all tasks, of 0.5\% to 1\% increase in labeled $F_1$ over a single-task model.
 
@@ -423,7 +423,7 @@ representing syntactic relations between words.
 While not a semantic representation,
 we use UD as an auxiliary task,
 inspired by previous work on joint syntactic and semantic parsing
-(see Section \ref{sec:related_work}).
+(see \S\ref{sec:related_work}).
 %\cite{lluis2008joint,collobert2011natural,D15-1169,swayamdipta-EtAl:2016:CoNLL,swayamdipta2017frame}.
 In order to reach comparable analyses cross-linguistically,
 UD often ends up in annotation that is similar to the common practice
@@ -598,8 +598,7 @@ which is trained to maximize the log-likelihood of all correct transitions at ea
         ;
       \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
     \end{tikzpicture}
-  \caption{Converted UCCA graph.
-  Linkage nodes and edges are removed, but the original graph is otherwise preserved.}
+  \caption{UCCA}
   \label{fig:converted_example_ucca}
 \end{subfigure}
 ~
@@ -626,10 +625,7 @@ which is trained to maximize the log-likelihood of all correct transitions at ea
       ;
       \draw[dashed] (graduation) to node {ARG0} (John);
   \end{tikzpicture}
-  \captionof{figure}{Converted AMR graph, with
-  text tokens added according to the alignments.
-  Numeric suffixes of \textit{op} relations were removed,
-  and names collapsed.}
+  \captionof{figure}{AMR}
   \label{fig:converted_example_amr}
 \end{subfigure}
 
@@ -680,9 +676,7 @@ which is trained to maximize the log-likelihood of all correct transitions at ea
       \draw (moved) to node {ARG2} (Paris);
       \draw[dashed] (to) to node {ARG2} (Paris);
   \end{tikzpicture}
-  \captionof{figure}{Converted SDP graph (in the DM formalism), with
-  intermediate non-terminal nodes introduced as \textit{head} units.
-  In case of reentrancy, an arbitrary reentrant edge is marked as remote.}
+  \captionof{figure}{DM}
   \label{fig:converted_example_sdp}
 \end{subfigure}
 ~
@@ -720,14 +714,25 @@ which is trained to maximize the log-likelihood of all correct transitions at ea
       \draw (ROOT) to node {nsubj} (John);
       \draw (ROOT) to node {head} (moved);
   \end{tikzpicture}
-  \captionof{figure}{Converted UD graph.
-  As in SDP, intermediate non-terminals and \textit{head} edges are introduced.
-  The graph is actually a tree, as was the original bilexical graph.}
+  \captionof{figure}{UD}
   \label{fig:converted_example_ud}
 \end{subfigure}
 
-\caption{Unified DAG format
-(pre-terminals omitted: each terminal drawn in place of its parent).}
+\caption{Graphs from Figure~\ref{fig:original_examples}, after conversion to the the unified DAG format
+(pre-terminals omitted: each terminal drawn in place of its parent).
+Figure~\ref{fig:converted_example_ucca} presents a converted UCCA graph.
+Linkage nodes and edges are removed, but the original graph is otherwise preserved.
+Figure~\ref{fig:converted_example_amr} presents a converted AMR graph, with
+text tokens added according to the alignments.
+Numeric suffixes of \textit{op} relations were removed,
+and names collapsed.
+Figure~\ref{fig:converted_example_sdp} presents a converted SDP graph (in the DM formalism), with
+intermediate non-terminal nodes introduced as \textit{head} units.
+In case of reentrancy, an arbitrary reentrant edge is marked as remote.
+Figure~\ref{fig:converted_example_ud} presents a converted UD graph.
+As in SDP, intermediate non-terminals and \textit{head} edges are introduced.
+The graph is actually a tree, as was the original bilexical graph.
+}
 \label{fig:converted_examples}
 \end{figure*}
 
