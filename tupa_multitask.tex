@@ -69,8 +69,9 @@ performance, taking UCCA
 parsing as a test case, and AMR, SDP and Universal Dependencies
 as auxiliaries. We show that despite notable conceptual,
 formal and domain differences, they can all be
-leveraged to improve UCCA parsing, using a flexible and uniform
-transition-based architecture. We report substantial improvements
+leveraged to improve transition-based UCCA parsing, 
+using a uniform transition system and learning architecture. 
+We report improvements
 in both in-domain and out-of-domain settings, and across three languages.
 \end{abstract}
 
@@ -234,68 +235,74 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
 
-\paragraph{Joint and multitask learning in NLP.}
+Even before the rise of neural learning methods,
+joint and multi-task learning\oa{we need to explain what the difference between them is or say we use one or ther other;
+to me it seems that joint means any training of several tasks that informs one another, while
+multi-task learning is mostly used for neural approaches that share some of the networks across tasks. is 
+that right?} has been used for tasks with varying degrees of similarity:
+from joint classification of the roles of different arguments in semantic role labeling \cite{toutanova2005joint}, 
+to the incorporation of unlabeled data for various tasks \cite{ando2005framework}\oa{do people call this joint?
+I think this is just a type of semi-supervised learning.. are there two separate predictions here?}.
+For parsing, it has been applied successfully by
+parser combination and co-training \cite{mcclosky2010automatic,baucom2013domain}.
+Similar ideas, of parameter sharing across models trained with different data,
+can also be found in studies of domain adaptation \cite{W06-1615,P07-1033,K17-1040}.
 
 Recent work has achieved state-of-the-art results in multiple NLP tasks
-by using a single neural network model learning many tasks jointly
-\cite{collobert2011natural,D17-1206},
-extending the training data by exploiting incidental supervision \cite{DBLP:conf/aaai/Roth17}
-and replacing the common pipeline approach to avoid cascading errors.
-Deep multitask learning has shown benefit particularly when the tasks are similar
-\cite{P15-1166,P16-2038,D17-1134},
-enabling, for example, multilingual syntactic parsing
-\cite{Q16-1031,guo2016exploiting}
-and semantic parsing across domains and languages
-\cite{herzig-berant:2017:Short,W17-2607,duong2017multilingual}.
+by jointly learning the tasks forming the NLP standard pipeline using 
+a single neural network model \cite{collobert2011natural,D17-1206}.
+Such techniques effectively increase the amount of training data (exploiting 
+incidental\oa{what is incidental supervision?} supervision \cite{DBLP:conf/aaai/Roth17}),
+and replace the common pipeline approach, thereby avoiding error propagation.
 
-Sharing parameters with a low-level task
+Deep multitask learning has hitherto mostly shown benefits where the tasks
+are formally similar \cite{P15-1166,P16-2038,D17-1134},
+or where the joint learning was carried out between a pre-processing task and tasks that use it
+as scaffolding.
+Examples of deep multi-task learning across similar tasks include 
+multilingual syntactic \cite{Q16-1031,guo2016exploiting}\oa{is this dep parsing? if so, say that}
+and semantic parsing \cite{}, as well as domain adaptation in semantic parsing
+\cite{herzig-berant:2017:Short,W17-2607,duong2017multilingual}.\oa{split the references between the two cites}
+Sharing parameters with a pre-processing task
 has shown great benefit in transition-based parsing, demonstrated in
 joint POS tagging and syntactic parsing
 \cite{bohnet2012transition,Zhang2016StackpropagationIR}, and
 lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint}.
 
-Many efforts have been dedicated to sharing parameters across higher-level tasks, such as
-joint syntactic and semantic dependency parsing---including
-two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll}.
-These approaches are promising, but still have not outperformed pipeline models
+Much effort over the years has been devoted to joint learning of syntactic
+and semantic parsing tasks---including
+two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll} on joint syntactic
+parsing and semantic role labeling.
+Despite their conceptual and practical appeal, such joint models rarely outperform
+the pipeline approach of basing semantic parsing on the output of syntactic parsers
 \cite{lluis2008joint,henderson2013multilingual,D15-1169,swayamdipta-EtAl:2016:CoNLL}.
-Recently, however, the strength of newly developed neural methods has shown one of the
-first benefits ever from joint parsing over single-task parsing:
-using ``syntactic scaffolding'' as an auxiliary task for frame-semantic parsing,
-where arguments are almost always syntactic constituents \cite{swayamdipta2017frame},
-and multitask learning for semantic dependency parsing of different target representations,
-showing some improvement by sharing parameters across highly overlapping, parallel-annotated
-schemes \cite{P17-1186}.
 
-Even before the rise of representation learning,
-parameter sharing has been used for tasks with varying degrees of similarity:
-from joint semantic role labeling for different arguments of the same predicate
-\cite{toutanova2005joint},
-to incorporation of unlabeled data for various tasks \cite{ando2005framework}.
+Indeed, the strength of state-of-the-art neural methods has recently led to 
+one of the first works ever to report benefits from 
+applying joint syntactic-semantic parsing (over the pipeline model) \citep{swayamdipta2017frame}.
+Their model tackled frame-semantic parsing with ``syntactic scaffolding'',
+which jointly trains the parser with a constituency identification task, 
+namely the prediction of the boundaries of a syntactic
+constituent. 
+%This approach leverages 
+%where arguments are almost always syntactic constituents ,
 
-Domain adaptation, concerned with generalization across domains for the same task,
-is also enabled by parameter sharing \cite{W06-1615,P07-1033,K17-1040}.
-For parsing, it has been applied successfully by
-parser combination and co-training \cite{mcclosky2010automatic,baucom2013domain}.
+Another work which is closely related to ours is \citep{P17-1186},
+which reported benefits from multi-task learning over three\oa{is that right?} broad-coverage semantic dependency (SDP)
+parsing tasks that use three different annotation schemes, albeit on the same text and using a uniform formalism with 
+considerable overlap in their edges.
+They report improvement to all tasks, of ...\% to ...\% increase in attachment accuracy.\oa{is that right?}
 
-In contrast to the approaches listed above, we are faced with the challenge
-of parsing multiple schemes diverging both structurally and content-wise,
-designed separately and annotated over non-parallel corpora, in different domains.
+In this work we take the challenge of multi-task learning of semantics a step further and 
+show benefit to UCCA parsing from multi-task 
+training with conceptually and formally different formalisms (AMR and SDP; see Section \ref{}).
 We are not aware of a semantic parser using a single model for
 such widely different tasks.
 
-\paragraph{Transition-based semantic parsing.}
 
-First used for projective syntactic dependency tree parsing
-\cite{nivre2008algorithms},
-subsequent work generalized transition-based parsing to non-projective and (discontinuous) constituency
-parsing \cite{nivre2009non,zhang2009transition,maier-lichte:2016:DiscoNLP}.
-Research on transition-based semantic dependency parsing
-has introduced transitions to enable DAG parsing in general
-\cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,du-EtAl:2015:SemEval},
-whereas UCCA parsing required a mode general system to also support non-terminal nodes
-\cite{hershcovich2017a}.
-
+%In contrast to the approaches listed above, we are faced with the challenge
+%of parsing multiple schemes diverging both structurally and content-wise,
+%designed separately and annotated over non-parallel corpora, in different domains.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -354,29 +361,31 @@ argument structure, semantic roles, word sense disambiguation and co-reference r
 AMRs are rooted directed graphs, in which both nodes and edges are labeled.
 Most AMRs are DAGs, although cycles are permitted.
 
-AMR differs from the other schemes considered here in that it does not anchor its graphs
+AMR differs from the other schemes we consider in that it does not anchor its graphs
 in the words of the sentence (Figure~\ref{fig:original_example_amr}). Instead, AMR graphs
 connect variables, concepts (from a pre-defined set) and constants (which may be strings or numbers).
 Still, most AMR nodes are alignable to text tokens, a tendency used by AMR parsers,
-which automatically aligns a sub-set of the graph nodes to a sub-set of the text tokens in a process
+which automatically align a sub-set of the graph nodes to a sub-set of the text tokens in a process
 called \textit{concept identification}. In this work, we use pre-aligned AMR graphs.
 
 Despite the short time since its inception, AMR has been targeted by a number of works,
-notably in two SemEval shared task \cite{may2016semeval,may2017semeval}.
-Given its multiplicity of sub-tasks and unrestricted graph structure, parsing AMR is a complex problem.
-Existing AMR parsers take one of several approaches.
-Graph-based AMR parsers construct AMR graphs
-by identifying concepts and scoring edges between them, either in a pipeline
+notably in two SemEval shared tasks \cite{may2016semeval,may2017semeval}.
+In order to tackle the variety of distinctions it encodes and the unrestricted graph structure
+it uses, AMR parsers take one of several approaches.
+Graph-based parsers construct AMRs
+by identifying concepts and scoring edges between them, either in a pipeline fashion
 \cite{flanigan2014discriminative,artzi2015broad,pust2015parsing,foland2017abstract},
 or jointly \cite{zhou2016amr}.
-A recent approach is based on the sequence-to-sequence model \cite{sutskever2014sequence},
-treating AMR parsing as a machine translation model and linearizing the graph structure
+Another line of work uses sequence-to-sequence models \cite{sutskever2014sequence},
+training machine translation models to convert strings into linearized AMRs
+%treating AMR parsing as a machine translation model and linearizing the graph structure
 \cite{barzdins2016riga,Gildea2017AddressingTD,Konstas2017NeuralAS,Buys2017RobustIN}.
-Transition-based AMR parsers either process dependency trees into AMRs
+Transition-based AMR parsers either 
+use dependency trees as pre-processing, then mapping them into AMRs
 \cite{wang-xue-pradhan:2015:ACL-IJCNLP,wang2015transition,wang-EtAl:2016:SemEval,goodman2016noise},
 or use a transition system tailored to AMR parsing \citet{damonte-17,D17-1130}.
-Our transition-based approach, on the other hand,
-handles AMR using the same general DAG parser used for other schemes.
+We differ from the above approaches in addressing AMR parsing 
+using the same general DAG parser used for other schemes.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
@@ -488,7 +497,8 @@ All tasks we outlined in \S\ref{sec:tasks} exhibit
 reentrancy and discontinuity (or non-projectivity), to varying degrees.
 In addition, UCCA and AMR contain non-terminal nodes.
 In order to parse graphs with these structural properties,
-we extend the TUPA parser \cite[][henceforth HAR17]{hershcovich2017a}, 
+we extend TUPA\cite[][henceforth HAR17]{hershcovich2017a}, 
+a transition-based parser 
 originally developed for UCCA parsing,
 as it is the only parser to our knowledge that supports 
 all these structural properties.
@@ -498,7 +508,12 @@ To support parsing into AMR, which uses graphs that are not anchored in the toke
  we take advantage of existing alignments of the graphs with the text
 tokens during training (\S\ref{sec:conversion}).
 
-Transition-based parsers \cite{Nivre03anefficient} apply \textit{transitions}
+First used for projective syntactic dependency tree parsing \cite{Nivre03anefficient},
+transition-based parsers have since been generalized to parse into many other graph
+families of graphs, such as (discontinuous) constituency trees\cite[e.g.,][]{zhang2009transition,maier-lichte:2016:DiscoNLP},
+and DAGs \cite{sagae2008shift,ribeyre-villemontedelaclergerie-seddah:2014:SemEval,du-EtAl:2015:SemEval}.
+
+Transition-based parsers apply \textit{transitions}
 incrementally to an internal state defined by a buffer $B$ of remaining tokens 
 and nodes, a stack $S$ of incomplete nodes, and a labeled graph $G$ of 
 constructed nodes and edges.
@@ -507,6 +522,8 @@ A classifier is used at each step to select the next transition based on feature
 that encode the current state.
 During training, an oracle creates training instances for the classifier,
 based on gold-standard annotations.
+
+
 
 
 \subsection{The Transition Set}\label{sec:transition_set}
@@ -725,13 +742,15 @@ for nodes in specific locations in the parser state.
 In addition, for each token
 we use embeddings representing the lemma, one-character prefix, three-character suffix,
 shape (capturing orthographic features, e.g. "Xxxx" or "dd"),
-and named entity type,\daniel{Omri, what do you mean by "please write down the added feature templates"?}
+and named entity type,\daniel{Omri, what do you mean by "please write down the added feature templates"? Omri: put in
+the feature templates you added in a format similar to what you did in the TUPA paper.}
 all provided by spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
 As an additional feature, we use the first 250K word vectors from fastText
 \cite{bojanowski2016enriching},\footnote{\url{https://github.com/facebookresearch/fastText}}
 pre-trained over Wikipedia and updated during training.\daniel{Omri: you asked
 "what do you mean ``additionally''? the word embeddings are much larger for English then?"
-- is it clear now?}
+- is it clear now? Omri: you mean you take the 250K most frequent ones? do you concatenate them with the 
+randomly-initialized word embeddings?}
 %For AMR we add node label features according to gold node labels.
 
 
@@ -995,7 +1014,9 @@ We evaluate on UCCA using labeled precision, recall and F1 on primary and remote
 following previous work on UCCA parsing \cite{hershcovich2017a}.
 Edges in predicted and gold graphs are matched by terminal yield and label.\daniel{Omri:
 what do you mean by "it's worth repeating in brief how these are defined"?
-Are you referring to the terminal yield and label or to primary and remote edges?}
+Are you referring to the terminal yield and label or to primary and remote edges?
+Omri: I mean saying how the F-score measure is defined more explicitly.
+}
 %For UD, we use LAS F1.
 %For AMR, we use Smatch \cite{cai2013smatch}.
 %For DM, we use labeled precision, recall and F1.
