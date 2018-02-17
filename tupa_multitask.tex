@@ -748,9 +748,9 @@ we use embeddings representing the lemma, one-character prefix, three-character 
 shape (capturing orthographic features, e.g. "Xxxx" or "dd"),
 and named entity type,\daniel{Omri, what do you mean by "please write down the added feature templates"? Omri: put in
 the feature templates you added in a format similar to what you did in the TUPA paper.}
-all provided by spaCy \cite{spacy2}.\footnote{\url{https://spacy.io}}
+all provided by spaCy \cite{spacy2}.\footnote{\url{http://spacy.io}}
 To the learned word vectors, we also concatenate the 250K most frequent word vectors from fastText
-\cite{bojanowski2016enriching},\footnote{\url{https://github.com/facebookresearch/fastText}}
+\cite{bojanowski2016enriching},\footnote{\url{http://github.com/facebookresearch/fastText}}
 pre-trained over Wikipedia and updated during training.
 %For AMR we add node label features according to gold node labels.
 
@@ -913,7 +913,7 @@ To support unlabeled parsing, we simply remove all labels from the
 This results in a much smaller number of transitions the classifier has to select from
 (no more than 10, as opposed to 45 transitions in labeled UCCA parsing),
 allowing us to use smaller dimensions and less layers for the task-specific BiLSTMs and MLPs
-of the auxiliary tasks (see Table~\ref{tab:hyperparams}, right column).
+of the auxiliary tasks (see Appendix~\ref{sec:hyperparams}).
 
 
 
@@ -937,10 +937,10 @@ The English part is used only for testing.
 Due to their small size, and since they are still under development, we only use a train/dev split
 in the French and German datasets, of 480/67 and 4196/561 sentences, respectively.
 We report results on the development set for these
-datasets.\footnote{\url{https://github.com/huji-nlp/ucca-corpus}}
+datasets.\footnote{\url{http://github.com/huji-nlp/ucca-corpus}}
 
 For AMR, we use LDC2017T10, targeted in SemEval 2017
-\cite{may2017semeval}.\footnote{\url{https://catalog.ldc.upenn.edu/LDC2017T10}}
+\cite{may2017semeval}.\footnote{\url{http://catalog.ldc.upenn.edu/LDC2017T10}}
 For SDP, we use the DM target representation from the SDP 2016 dataset
 \cite{oepen2016towards}.\footnote{\url{http://sdp.delph-in.net/osdp-12.tgz}}
 For Universal Dependencies, we use all English, French and German treebanks from UD v2.1
@@ -949,31 +949,6 @@ We use the enhanced++ UD representation \cite{SCHUSTER16.779} in our English exp
 henceforth referred to as UD$^{++}$.
 Table~\ref{tab:corpora} shows the size of each corpus.
 For AMR, DM and UD, we use the training sets from standard train/dev/test splits.
-
-\begin{table}
-\centering
-\footnotesize
-\begin{tabular}{l|c|ccccc}
-\bf Hyperparameter &  \bf Single & \multicolumn{3}{c}{\bf Multitask} \\ 
-&& \bf Main & \bf Aux & \bf Shared \\
-\hline
-external word dim. & 300 &&& 300 \\
-word dim. & 200 &&& 200 \\
-POS tag dim. & 20 &&& 20 \\
-syntactic dep. dim. & 10 &&& 10 \\
-named entity dim. & 3 &&& 3 \\
-punctuation dim. & 1 &&& 1 \\
-action dim. & 3 &&& 3 \\
-edge label dim. & 20 & 20 \\
-MLP layers & 2 & 2 & 1 \\
-MLP dimensions & 50 & 50 & 50 \\
-BiLSTM layers & 2 & 2 & 1 & 2 \\
-BiLSTM dimensions & 500 & 250 & 50 & 250
-\end{tabular}
-\caption{Hyperparameter settings.\label{tab:hyperparams}
-Middle column: single-task.
-Right column: multitask settings for main task (UCCA), auxiliary tasks, and shared parameters.}
-\end{table}
 
 \begin{table*}
 \centering
@@ -1022,7 +997,7 @@ Edges in predicted and gold graphs are matched by terminal yield and label.
 
 
 
-\subsection{Training}
+\subsection{Training}\label{sec:training}
 
 Training proceeds by creating a unified corpus by shuffling all sentences from relevant
 datasets together (according to the setting),
@@ -1032,7 +1007,7 @@ number of sentences in the UCCA training set.
 Since training sets differ in size, we sample this many sentences from each training set.
 
 All embeddings are initialized randomly.
-We use Dropout \cite{srivastava2014dropout} between MLP layers, and Recurrent Dropout
+We use dropout \cite{srivastava2014dropout} between MLP layers, and recurrent dropout
 \cite{NIPS2016_6241} between BiLSTM layers, both with a probability of 0.4.
 In addition, we use word, tag and dependency relation dropout \cite{kiperwasser2016simple}.\footnote{In
 training, the embedding for a feature value $w$ is replaced with a zero vector
@@ -1045,8 +1020,8 @@ $\alpha=0.001,\beta_1=0.9$ and $\beta_2=0.999$.
 We found this training strategy to work better than using only one of the optimization methods,
 similar to findings by \citet{keskar2017improving}.
 We select the epoch with the best average labeled $F_1$ score on the UCCA development set.
-The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{https://dynet.io}}
-Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.\oa{if needed, we can move this to the supp material}
+The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{http://dynet.io}}
+See Appendix~\ref{sec:hyperparams} for a listing of hyperparameter settings.
 
 %\subsection{Ensembling}
 %
