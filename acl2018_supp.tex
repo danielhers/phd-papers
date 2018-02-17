@@ -1,0 +1,197 @@
+%
+% File acl2018_supp.tex
+%
+
+\documentclass[11pt,a4paper]{article}
+\usepackage{acl-onecolumn}
+\usepackage{times}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{breqn}
+\usepackage{pgfplotstable}
+%\usepackage{algorithm2e}
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage[font=small]{caption}
+\usepackage{subcaption}
+\usepackage{color}
+\usepackage{float}
+\usepackage{lipsum,adjustbox}
+\usepackage{tikz}
+\usepackage{tikz-dependency}
+\usepackage{enumitem}
+\usepackage{xr}
+\externaldocument{tupa_multitask}
+\usetikzlibrary{shapes,fit,calc,er,positioning,intersections,decorations.shapes,mindmap,trees}
+\tikzset{decorate sep/.style 2 args={decorate,decoration={shape backgrounds,shape=circle,
+      shape size=#1,shape sep=#2}}}
+\newcommand{\oa}[1]{\footnote{\color{red} #1}}
+\newcommand{\daniel}[1]{\footnote{\color{blue} #1}}
+\newcommand{\com}[1]{}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+%\SetKwRepeat{Do}{do}{while}
+
+\hyphenation{SemEval}
+\hyphenation{PARSEVAL}
+
+\title{Multitask Parsing across Semantic Representation Schemes \\ Supplementary Notes}
+
+\begin{document}
+\maketitle
+
+\appendix
+
+\section{Conversion to and from Unified DAG Format}\label{sec:convert}
+
+Although all experiments reported in the main paper on the auxiliary tasks
+(AMR, DM and UD) are using unlabeled parsing for these schemes,
+our conversion code,
+which is attached as supplementary material and is also publicly available at $<$anonymized$>$,
+supports full conversion to and from these formats (see \texttt{scheme/conversion} in the code).
+
+Conversion from AMR to the unifid DAG format and back
+results in 95\% Smatch $F_1$ \cite{cai2013smatch} when averaged over the
+LDC2017T10 test set.
+On SDP, the conversion is lossless and results in identical graphs
+when converted to UCCA and back.
+For UD, and conversion results in 98.5\% LAS $F_1$, due to multi-word tokens,
+which are lost as they are not supported in the unified DAG format.
+
+%\section{Hyperparameter Values}
+%\label{appendix:hyperparameters}
+%
+%\tabref{table:hyperparameters} lists the hyperparameter values we found
+%for the different classifiers by tuning on the development set.
+%Note that learning rate decay is multiplicative and is applied at each epoch.
+%Mini-batch size is in number of transitions,
+%but a mini-batch must contain only whole sentences.
+%
+%\section{Bilexical Graph Conversion}
+%\label{appendix:conversion}
+%
+%Here we describe the algorithms used in the conversion referred to in \secref{sec:exp_setup}.
+%
+%\paragraph{Notation.}
+%Let $L$ be the set of possible edge labels.
+%A UCCA graph over a sequence of tokens $w_1, \ldots, w_n$ is a directed acyclic graph
+%$G=(V,E, \ell)$, where $\ell:E\to L$ maps edges to labels.
+%For each token $w_i$ there exists a leaf (\emph{terminal}) $t_i \in V$.
+%A bilexical (dependency) graph over the same text consists of a set $A$ of
+%labeled dependency arcs $(t^\prime,l,t)$
+%between the terminals of $G$, where $t^\prime$ is the head, $t$ is the dependent and $l$ is
+%the edge label.
+%
+%\paragraph{Conversion to bilexical graphs.}
+%Let $G=(V,E,\ell)$ be a UCCA graph with labels $\ell:E\rightarrow L$.
+%The conversion to a bilexical graph requires calculating the set $A$.
+%All non-terminals in $G$ are removed.
+%
+%We define a linear order over possible edge labels $L$ (see \figref{fig:priority}).
+%The priority order generally places core-like categories before adjunct-like ones, and was decided heuristically.
+%For each node $u \in V$, denote by $h(u)$ its child with the highest-priority edge label.
+%The leftmost edge is chosen in case of a tie.
+%Let $h^*(u)$ be the terminal reached by recursively applying $h(\cdot)$ over $u$.
+%For each terminal $t$, we define
+%\[
+%N(t) = \{(u,v)\in E \;|\; t=h^*(v) \wedge t \neq h^*(u) \}
+%\]
+%For each edge $(u,v)\in N(t)$, we add $h^*(u)$ as a head of $t$ in $A$,
+%with the label $\ell(u,v)$.
+%This procedure is given in Algorithm~\ref{alg:to_bilexical}.
+%
+%\begin{algorithm}[ht]
+% \KwData{UCCA graph ${G}=(V,E,\ell)$}
+% \KwResult{set $A$ of labeled bilexical arcs}
+% $A \leftarrow \emptyset$\;
+% \ForEach{$t \in \mathrm{Terminals}(V)$} {
+%  \ForEach{$(u,v)\in N(t)$} {
+%   $A \leftarrow A \cup \{(h^*(u), \ell(u, v), t)\}$\;
+%  }
+% }
+% \caption{Conversion to bilexical graphs.}
+% \label{alg:to_bilexical}
+%\end{algorithm}
+%
+%Note that this conversion procedure
+%is simpler than the head percolation procedure used for converting syntactic constituency
+%trees to dependency trees \cite{Coll:97},
+%since $h(u)$ (similar to $u$'s head-containing child)
+%depends only on $\ell(u,h(u))$ and not on the sub-tree spanned by $u$,
+%because edge labels in UCCA directly express the role of the child in the parent unit, and
+%are thus sufficient for determining which of $u$'s children contains the head node.
+%
+%\paragraph{Conversion from bilexical graphs.}
+%The inverse conversion introduces non-terminal nodes back into the graph.
+%As the distinction between low- and high-attaching nodes is lost in the
+%conversion, we assume that attachments are always
+%low-attaching.
+%Let $A$ be a the labeled arc set of a bilexical graph.
+%Iterating over the terminals in topological order according to $A$,
+%we add its members as terminals to graph
+%and create a pre-terminal parent $u_t$ for each terminal $t$,
+%with an edge labeled as \textit{Terminal} between them.
+%The parents of the pre-terminals are determined by the terminal's parent in the bilexical
+%graph: if $t^\prime$ is a head of $t$ in $A$, then $u_{t^\prime}$ will be a parent of $u_t$.
+%We add an intermediate node in between if $t$ has any dependents in $A$,
+%to allow adding their pre-terminals as children later.
+%Edge labels for the intermediate edges are determined by a rule-based function, denoted by
+%$\mathrm{Label}(t)$.
+%This procedure is given in Algorithm~\ref{alg:from_bilexical}.
+%
+%\begin{algorithm}[ht]
+% \KwData{list $T$ of terminals, set $A$ of labeled bilexical arcs}
+% \KwResult{UCCA graph $G=(V,E,\ell)$}
+% \SetKwFunction{Label}{Label}{}{}
+% $V \leftarrow \emptyset$,
+% $E \leftarrow \emptyset$\;
+% \ForEach{$t \in \mathrm{TopologicalSort}(T, A)$} {
+%  $u_t \leftarrow \mathrm{Node()}$\;
+%  $V \leftarrow V \cup \{u_t, t\}$,
+%  $E \leftarrow E \cup \{(u_t, t)\}$\;
+%  $\ell(u_t,t)\leftarrow\mathit{Terminal}$\;
+%  \ForEach{$t^\prime\in T,l\in L$} {
+%   \If{$(t^\prime,l,t)\in A$} {
+%    \eIf{$\exists t^{\prime\prime}\in T,l^\prime\in L : (t,l^\prime,t^{\prime\prime}) \in A$} {
+%     $u \leftarrow \mathrm{Node()}$\;
+%     $V \leftarrow V \cup \{u\}$,
+%     $E \leftarrow E \cup \{(u, u_t)\}$\;
+%     $\ell(u, u_t) \leftarrow \Label(t)$\;
+%    } {
+%     $u \leftarrow u_t$\;
+%    }
+%    $E \leftarrow E \cup \{(u_{t^\prime}, u)\}$\;
+%    $\ell(u_{t^\prime}, u) \leftarrow l$\;
+%    }
+%  }
+% }
+% 
+%  \SetKwProg{func}{Function}{}{}
+%  
+%  \func{\Label}{
+%  \KwData{node $t \in T$}
+%  \KwResult{label $l\in L$}
+%
+%   \uIf{$\mathrm{IsPunctuation}(t)$}{
+%    \Return \textit{Punctuation}\;
+%   }
+%   \uElseIf{$\exists t^\prime \in T : (t,\textit{ParallelScene},t^\prime)\in A$}{
+%    \Return \textit{ParallelScene}\;
+%   }
+%   \uElseIf{$\exists t^\prime \in T : (t,\textit{Participant},t^\prime)\in A$}{
+%    \Return \textit{Process}\;
+%   }
+%   \uElse{
+%    \Return \textit{Center}\;
+%   }
+%  }
+% \caption{Conversion from bilexical graphs.}
+% \label{alg:from_bilexical}
+%\end{algorithm}
+
+\bibliography{references}
+\bibliographystyle{acl_natbib}
+
+\end{document}

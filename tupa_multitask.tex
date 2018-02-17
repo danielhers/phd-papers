@@ -13,6 +13,8 @@
 \usepackage{multirow}
 \usepackage{url}
 \usepackage{etoolbox}
+\usepackage{xr}
+\externaldocument{acl2018_supp}
 
 \newcommand{\com}[1]{}
 \newcommand{\oa}[1]{\footnote{\color{red}OA: #1}}
@@ -503,7 +505,7 @@ TUPA's transition system can yield any labeled DAG structure
 whose leaves are aligned to text tokens.
 To support parsing into AMR, which uses graphs that are not anchored in the tokens,
  we take advantage of existing alignments of the graphs with the text
-tokens during training (\S\ref{sec:conversion}).
+tokens during training (\S\ref{sec:format}).
 
 First used for projective syntactic dependency tree parsing \cite{Nivre03anefficient},
 transition-based parsers have since been generalized to parse into many other
@@ -777,12 +779,12 @@ should never be swapped again.\footnote{
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Unified DAG Format}\label{sec:conversion}
+\section{Unified DAG Format}\label{sec:format}
 
 To be able to use TUPA for the four tasks presented in \S\ref{sec:tasks},
 we convert them all into a unified DAG format, which is inclusive enough to
-allow representing any of the schemes with very little loss of information.
-%(see Appendix~\ref{sec:supplemental}).
+allow representing any of the schemes with very little loss of information\footnote{See
+Appendix~\ref{sec:convert} for more details about the conversion.}.
 
 The format consists of a rooted DAG, where the tokens are the terminal nodes.
 As in the UCCA format, the edges (but not the nodes) are labeled,
@@ -1214,17 +1216,5 @@ and generalizing a transition-based DAG parser to support unlabeled auxiliary ta
 
 \bibliography{references}
 \bibliographystyle{acl_natbib}
-%
-%\appendix
-%
-%\section{Supplemental Material}\label{sec:supplemental}
-%
-%\paragraph{Information loss from conversion to unified DAG format.}
-%Conversion from AMR to the unifid DAG format and back
-%results in 95\% Smatch $F_1$ \cite{cai2013smatch} when averaged over the
-%LDC2017T10 test set.
-%On SDP, the conversion is lossless and results in identical graphs
-%when converted to UCCA and back.
-%For UD, and conversion results in 98.5\% LAS $F_1$, due to multi-word tokens.
 
 \end{document}
