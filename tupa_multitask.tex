@@ -13,8 +13,8 @@
 \usepackage{multirow}
 \usepackage{url}
 \usepackage{etoolbox}
-\usepackage{xr}
-\externaldocument{acl2018_supp}
+%\usepackage{xr}
+%\externaldocument{acl2018_supp}
 
 \newcommand{\com}[1]{}
 \newcommand{\oa}[1]{\footnote{\color{red}OA: #1}}
@@ -1190,5 +1190,111 @@ and generalizing a transition-based DAG parser to support unlabeled auxiliary ta
 
 \bibliography{references}
 \bibliographystyle{acl_natbib}
+
+
+\appendix
+
+\section*{Supplementary Notes}
+
+\section{Feature Templates}\label{sec:features}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{c|ccccccccccccccccccccc}
+\bf Node/Edge/Action & \bf w & \bf t & \bf d & \bf e & \bf n & \bf c & \bf p & \bf T & \bf \# & \bf \^ & \bf \$ & \bf x & \bf h & \bf q & \bf y & \bf P & \bf C & \bf I & \bf E & \bf M & \bf N \\ 
+\hline
+%       w   t   d   e   n   c   p   T   #   ^   $   x   h   q   y   P   C   I   E   M   N
+$s_0$ & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + & + \\
+$s_1$ & + & + & + & + & + & + &   & + & + & + & + & + & + & + & + & + & + & + & + & + & +
+%s1wtdenc T#^$xh y     N
+%s2wtdencT#^$xhy
+%s3wtdencT#^$xhyN
+%b0wtdncT#^$hPCIEMN
+%b1wtdncT#^$
+%b2wtdncT#^$
+%b3wtdncT#^$
+%s0lwenc#^$
+%s0rwenc#^$
+%s1lwenc#^$
+%s1rwenc#^$
+%s0llwen#^$
+%s0lrwen#^$
+%s0rlwen#^$
+%s0rrwen#^$
+%s1llwen#^$
+%s1lrwen#^$
+%s1rlwen#^$
+%s1rrwen#^$
+%s0Lwen#^$
+%s0Rwen#^$
+%s1Lwen#^$
+%s1Rwen#^$
+%b0Lwen#^$
+%b0Rwen#^$
+%s0s1xds1s0xs0b0xdb0s0x
+%s0b0eb0s0e
+%a0eAa1eA
+\end{tabular}
+\caption{Features.\label{tab:features}}
+\end{table}
+
+\section{Conversion to and from Unified DAG Format}\label{sec:convert}
+
+Although all experiments reported in the main paper on the auxiliary tasks
+(AMR, DM and UD) are using unlabeled parsing for these schemes,
+our conversion code,
+which is attached as supplementary material and is also publicly available at $<$anonymized$>$,
+supports full conversion to and from these formats (see \texttt{scheme/conversion} in the code).
+
+Conversion from AMR to the unifid DAG format and back
+results in 95\% Smatch $F_1$ \cite{cai2013smatch} when averaged over the
+LDC2017T10 test set.
+On SDP, the conversion is lossless and results in identical graphs
+when converted to UCCA and back.
+For UD, and conversion results in 98.5\% LAS $F_1$, due to multi-word tokens,
+which are lost as they are not supported in the unified DAG format.
+
+\section{Hyperparameter Settings}\label{sec:hyperparams}
+Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
+The middle column shows the hyperparameters used for the single-task architecture,
+described in \S\ref{sec:classifier}.
+The right column shows the hyperparameters used for the multitask architecture,
+described in \S\ref{sec:multitask}.
+
+\textit{Main} refers to parameters specific to the main task---UCCA parsing
+(task-specific MLP and BiLSTM, and edge label embedding),
+\textit{Aux} to parameters specific to each auxiliary task
+(task-specific MLP and BiLSTM, but no edge label embedding since the tasks are unlabeled),
+and \textit{Shared} to parameters shared among all tasks
+(shared BiLSTM and embeddings).
+
+\textit{External word embeddings} are pre-trained word embeddings (see \S\ref{sec:training}),
+and \textit{word embeddings} are randomly initialized.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{l|c|ccccc}
+\bf Hyperparameter &  \bf Single & \multicolumn{3}{c}{\bf Multitask} \\ 
+&& \bf Main & \bf Aux & \bf Shared \\
+\hline
+external word dim. & 300 &&& 300 \\
+word dim. & 200 &&& 200 \\
+POS tag dim. & 20 &&& 20 \\
+syntactic dep. dim. & 10 &&& 10 \\
+named entity dim. & 3 &&& 3 \\
+punctuation dim. & 1 &&& 1 \\
+action dim. & 3 &&& 3 \\
+edge label dim. & 20 & 20 \\
+MLP layers & 2 & 2 & 1 \\
+MLP dimensions & 50 & 50 & 50 \\
+BiLSTM layers & 2 & 2 & 1 & 2 \\
+BiLSTM dimensions & 500 & 250 & 50 & 250
+\end{tabular}
+\caption{Hyperparameter settings.\label{tab:hyperparams}
+Middle column: single-task.
+Right column: multitask settings for main task (UCCA), auxiliary tasks, and shared parameters.}
+\end{table}
 
 \end{document}
