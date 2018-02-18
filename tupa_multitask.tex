@@ -238,10 +238,9 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 \section{Related Work}\label{sec:related_work}
 
 Even before the rise of neural learning methods,
-multitask learning\daniel{I think \textit{joint} is more specific, and implies that the tasks are actually performed together} has been used for tasks with varying degrees of similarity:
+multitask learning has been used for tasks with varying degrees of similarity:
 from joint classification of the roles of different arguments in semantic role labeling \cite{toutanova2005joint}, 
-to the incorporation of unlabeled data for various tasks \cite{ando2005framework}\oa{do people call this joint?
-I think this is just a type of semi-supervised learning.. are there two separate predictions here?}\daniel{I think so, because the semi-supervised training is for a different task (e.g. language modeling). Do you think we need a clearer example?}.
+to the incorporation of unlabeled data for various tasks \cite{ando2005framework}.
 For parsing, it has been applied successfully by
 parser combination and co-training \cite{mcclosky2010automatic,baucom2013domain}.
 Similar ideas, of parameter sharing across models trained with different data,
