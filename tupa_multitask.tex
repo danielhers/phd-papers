@@ -951,7 +951,7 @@ For AMR, DM and UD, we use the training sets from standard train/dev/test splits
 \begin{table*}
 \centering
 \small
-\begin{tabular}{l|ccc|ccc||ccc|ccc}
+\begin{tabular}{l|lll|lll||lll|lll}
 & \multicolumn{6}{c||}{\footnotesize \bf Wiki (in-domain)}
 & \multicolumn{6}{c}{\footnotesize \bf 20K Leagues (out-of-domain)} \\
 & \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c||}{\footnotesize \bf Remote}
@@ -967,13 +967,27 @@ For AMR, DM and UD, we use the training sets from standard train/dev/test splits
 %& 75.9 & 74.1 & 75 & 50.7 & 46.8 & 48.7 & 69.7 & 69.5 & 69.6 & 50.5 & 19.4 & 28 \\
 \hline
 \small \bf Multitask &&&&&&&&& \\
-\small AMR & 74.4 & 73.2 & 73.8 & 49.1$\star$ & 52.2 & 50.6 & 69.4 & 69.6 & 69.5 & 44.3 & 21.4 & 28.8 \\
-\small DM & 74.6 & 71.7$\star$ & 73.1 & 48.2$\star$ & 51.3 & 49.7 & 70.1 & 69.5 & 69.8 & 40 & 18.6 & 25.4 \\
-\small UD$^{++}$ & 74.1 & 72.7 & 73.4 & 52.9 & 41.9$\star$ & 46.8$\star$ & 69.8$\star$ & 69.9$\star$ & 69.9$\star$ & 39.1 & 14.3$\star$ & 20.9$\star$ \\
-\small AMR + DM & 74.9 & 72.2 & 73.6 & 51.7 & 52.4 & 52.1 & 70.8$\star$ & 70$\star$ & 70.4$\star$ & 49.5$\star$ & 21 & 29.5 \\
-\small AMR + UD$^{++}$ & 73.9 & 72.4 & 73.1 & 46.8 & 56.2$\star$ & 51$\star$ & 69.7$\star$ & 70$\star$ & 69.8$\star$ & 39 & 21.4 & 27.6 \\
-\small DM + UD$^{++}$ & 74.4 & 72.1$\star$ & 73.2 & 49.5 & 53.2$\star$ & 51.3 & 70$\star$ & 68.9 & 69.4 & 47.4$\star$ & 22 & 30$\star$ \\
-\small AMR + DM + UD$^{++}$ & 75 & 72.9 & 73.9 & 48.3$\star$ & 48.7 & 48.5 & 71.2$\star$ & 70.5$\star$ & 70.8$\star$ & 42.8 & 17.6 & 25
+\small AMR
+& 74.4 & 73.2 & 73.8 & 49.1$\star$ & 52.2 & 50.6
+& 69.4 & 69.6 & 69.5 & 44.3 & 21.4 & 28.8 \\
+\small DM
+& 74.6 & 71.7$\star$ & 73.1 & 48.2$\star$ & 51.3 & 49.7
+& 70.1$\star$ & 69.5 & 69.8$\star$ & 40 & 18.6 & 25.4 \\
+\small UD$^{++}$
+& 74.1 & 72.7 & 73.4 & 52.9 & 41.9$\star$ & 46.8$\star$
+& 69.8$\star$ & 69.9$\star$ & 69.9$\star$ & 39.1 & 14.3$\star$ & 20.9$\star$ \\
+\small AMR + DM
+& 74.9 & 72.2 & 73.6 & 51.7 & 52.4 & 52.1 & 70.8$\star$
+& 70$\star$ & 70.4$\star$ & 49.5$\star$ & 21 & 29.5 \\
+\small AMR + UD$^{++}$
+& 73.9 & 72.4 & 73.1 & 46.8$\star$ & 56.2$\star$ & 51
+& 69.7$\star$ & 70$\star$ & 69.8$\star$ & 39 & 21.4 & 27.6 \\
+\small DM + UD$^{++}$
+& 74.4 & 72.1$\star$ & 73.2 & 49.5 & 53.2 & 51.3
+& 70$\star$ & 68.9 & 69.4 & 47.4$\star$ & 22 & 30$\star$ \\
+\small AMR + DM + UD$^{++}$
+& 75 & 72.9 & 73.9 & 48.3$\star$ & 48.7 & 48.5
+& 71.2$\star$ & 70.5$\star$ & 70.8$\star$ & 42.8 & 17.6 & 25
 \end{tabular}
 \caption{
 Experimental results, in percents, on the English \textit{Wiki} test set (left)
@@ -1107,14 +1121,14 @@ This result demonstrates that even a small training set in the main task may pro
 given sufficiently large auxiliary training data.
 
 \begin{table}
-\begin{tabular}{l|ccc|ccc}
+\begin{tabular}{l|lll|lll}
 & \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
 \hline
 \multicolumn{4}{l|}{\small \bf French} & \\
-\small Single & 59.4 & 59.8 & 59.6 & 5.9 & 1.9 & 2.9 \\
-\small Multi & 66.1 & 66.2 & 66.2 & 33.3 & 9.4 & 14.7 \\
+\small Single & 59.4 & 59.8 & 59.6 & \enskip 5.9 & \enskip 1.9 & \enskip 2.9 \\
+\small Multi & 66.1 & 66.2 & 66.2 & 33.3 & \enskip 9.4 & 14.7 \\
 \hline
 \multicolumn{4}{l|}{\small \bf German} & \\
 \small Single & 73.7 & 72.4 & 73.1 & 49.2 & 12.3 & 19.7 \\
@@ -1128,13 +1142,13 @@ while \textit{Multi} uses unlabeled UD parsing in the same language as an auxili
 \end{table}
 
 \begin{table}
-\begin{tabular}{l|ccc|ccc}
+\begin{tabular}{l|lll|lll}
 & \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
 & \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
 & \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
 \hline
-AMR & 52.2 & 15.5 & 23.9 & 7.3 & 5.5 & 6.3 \\
-DM & 63.6 & 49.8 & 55.9 & 6.9 & 63.8 & 12.4 \\
+AMR & 52.2 & 15.5 & 23.9 & \enskip 7.3 & \enskip 5.5 & \enskip 6.3 \\
+DM & 63.6 & 49.8 & 55.9 & \enskip 6.9 & 63.8 & 12.4 \\
 %UD & 75.3 & 82.9 & 78.9 & -- & 0 & -- \\
 %UD$^+$ & 75.1 & 82.4 & 78.5 & 11.5 & 12.8 & 12.1 \\
 UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
