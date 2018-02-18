@@ -767,14 +767,14 @@ the core arguments defined for the frame.
 An example of a generic constraint is that nodes on the stack 
 that have already been swapped
 should never be swapped again.\footnote{
-	To implement this constraint, we define a \textit{swap index}
-	for each node, which is assigned when the node is created.
-	At initialization, only the root node and terminals exist.
-	We assign the root a swap index of 0, and for each terminal, its swap index
-	is its position in the text (starting at 1).
-	Whenever a node is created as a result of a \textsc{Node}
-	transition, we assign its swap index to be the arithmetic 
-	mean of the swap indices of the stack top and buffer head.}
+ To implement this constraint, we define a \textit{swap index}
+ for each node, which is assigned when the node is created.
+ At initialization, only the root node and terminals exist.
+ We assign the root a swap index of 0, and for each terminal, its swap index
+ is its position in the text (starting at 1).
+ Whenever a node is created as a result of a \textsc{Node}
+ transition, we assign its swap index to be the arithmetic 
+ mean of the swap indices of the stack top and buffer head.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -963,6 +963,8 @@ For AMR, DM and UD, we use the training sets from standard train/dev/test splits
 \hline
 Single-task
 & 74.3 & 72.8 & 73.5 & 53 & 50 & 51.5 & 68.9 & 68.9 & 68.9 & 40.7 & 19.6 & 26.5 \\
+%Single-task (PoE)
+%& 75.9 & 74.1 & 75 & 50.7 & 46.8 & 48.7 & 69.7 & 69.5 & 69.6 & 50.5 & 19.4 & 28 \\
 \hline
 \small \bf Multitask &&&&&&&&& \\
 AMR & 74.3 & 72.1 & 73.2 & 46.3 & 52.7 & 49.3 & 69.8 & 68.4 & 69.1 & 43.4 & 21 & 28.3 \\
