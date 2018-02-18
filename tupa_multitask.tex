@@ -746,8 +746,7 @@ for nodes in specific locations in the parser state.
 In addition, for each token
 we use embeddings representing the lemma, one-character prefix, three-character suffix,
 shape (capturing orthographic features, e.g. "Xxxx" or "dd"),
-and named entity type,\daniel{Omri, what do you mean by "please write down the added feature templates"? Omri: put in
-the feature templates you added in a format similar to what you did in the TUPA paper.}
+and named entity type,\footnote{See Appendix~\ref{sec:features} for a full listing of features.}
 all provided by spaCy \cite{spacy2}.\footnote{\url{http://spacy.io}}
 To the learned word vectors, we also concatenate the 250K most frequent word vectors from fastText
 \cite{bojanowski2016enriching},\footnote{\mbox{\url{http://github.com/facebookresearch/fastText}}}
