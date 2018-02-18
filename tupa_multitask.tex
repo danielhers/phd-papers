@@ -236,7 +236,7 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
-\cite{Rush2012ImprovedPA,Finkel2009JointPA,Plank2011EffectiveMO,Plank2017WhenIM}
+\cite{Rush2012ImprovedPA,Finkel2009JointPA,Plank2011EffectiveMO,E17-1005}
 Even before the rise of neural learning methods,
 multitask learning has been used for tasks with varying degrees of similarity:
 from joint classification of the roles of different arguments in semantic role labeling \cite{toutanova2005joint}, 
@@ -863,25 +863,30 @@ We collapse this sub-graph into a single node whose children are the name tokens
    \label{fig:multi_model}
 \end{figure}
 
-\begin{table*}[ht]
+\begin{table}[ht]
 \centering
-\begin{tabular}{ll|rr|rr|rr}
-& & \multicolumn{2}{c|}{\footnotesize \bf English} & \multicolumn{2}{c|}{\footnotesize \bf French} & \multicolumn{2}{c}{\footnotesize \bf German} \\
-\multicolumn{2}{c|}{\footnotesize \bf Corpus} & \footnotesize \bf {\#}tok & \footnotesize \bf {\#}sent & \footnotesize \bf {\#}tok & \footnotesize \bf {\#}sent & \footnotesize \bf {\#}tok & \footnotesize \bf {\#}sent \\
+\small
+\setlength\tabcolsep{3pt}
+\begin{tabular}{l|rr|rr|rr}
+& \multicolumn{2}{c|}{\footnotesize \bf English} & \multicolumn{2}{c|}{\footnotesize \bf French} & \multicolumn{2}{c}{\footnotesize \bf German} \\
+\footnotesize \bf Corpus & \footnotesize \bf {\#}tok & \footnotesize \bf {\#}sent & \footnotesize \bf {\#}tok & \footnotesize \bf {\#}sent & \footnotesize \bf {\#}tok & \footnotesize \bf {\#}sent \\
 \hline
-\textbf{UCCA}
-& Wiki & 158433 & 5225 &&&& \\
-& 20K Leagues & 12339 & 506 & 12929 & 547 & 113524 & 4764 \\
+\textbf{UCCA} &&&& \\
+Wiki & 158433 & 5225 &&&& \\
+20K & 12339 & 506 & 12929 & 547 & 113524 & 4764 \\
 \hline
-\textbf{UD} & v2.1 & 568560 & 24276 & 540942 & 21567 & 318847 & 16590 \\
+\textbf{UD} & 568560 & 24276 & 540942 & 21567 & 318847 & 16590 \\
 \hline
-\textbf{AMR} & LDC2017T10 & 708701 & 39260 \\
+\textbf{AMR} & 708701 & 39260 \\
 \hline
-\textbf{DM} & SDP 2016 & 802717 & 35657 \\
+\textbf{DM} & 802717 & 35657 \\
 \end{tabular}
-\caption{Size of each corpus: total number of tokens ({\#}tok) and sentences
-({\#}sent).\label{tab:corpora}}
-\end{table*}
+\caption{Size of each corpus: total number of tokens ({\#}tok) and sentences ({\#}sent).
+%\textit{Wiki} is the UCCA English Wikipedia corpus, and
+%\textit{20K} is the UCCA English \textit{Twenty Thousand Leagues Under the Sea} corpus.
+%We use UD v2.1, AMR release LDC2017T10 and SDP 2016 data for DM.
+\label{tab:corpora}}
+\end{table}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1121,6 +1126,8 @@ This result demonstrates that even a small training set in the main task may pro
 given sufficiently large auxiliary training data.
 
 \begin{table}
+\centering
+\small
 \begin{tabular}{l|lll|lll}
 & \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
@@ -1128,20 +1135,25 @@ given sufficiently large auxiliary training data.
 \hline
 \multicolumn{4}{l|}{\small \bf French} & \\
 \small Single & 59.4 & 59.8 & 59.6 & \enskip 5.9 & \enskip 1.9 & \enskip 2.9 \\
-\small Multi & 66.1 & 66.2 & 66.2 & 33.3 & \enskip 9.4 & 14.7 \\
+\small Multi & 66.1$\star$ & 66.2$\star$ & 66.2$\star$ & 33.3$\star$ & \enskip 9.4$\star$ & 14.7$\star$ \\
 \hline
 \multicolumn{4}{l|}{\small \bf German} & \\
 \small Single & 73.7 & 72.4 & 73.1 & 49.2 & 12.3 & 19.7 \\
-\small Multi & 74.6 & 73.7 & 74.2 & 61.7 & 20.6 & 30.9
+\small Multi & 74.6$\star$ & 73.7$\star$ & 74.2$\star$ & 61.7$\star$ & 20.6$\star$ & 30.9$\star$
 \end{tabular}
 \caption{Results on the UCCA \textit{20K Leagues}
 development set in French and German.
 \textit{Single} is trained only on the corresponding UCCA training set,
 while \textit{Multi} uses unlabeled UD parsing in the same language as an auxiliary task.
+All multitask results are significantly ($p<0.05$)
+better than single-task results,
+by the bootstrap test \cite{berg2012empirical}.
 \label{tab:multilingual}}
 \end{table}
 
 \begin{table}
+\centering
+\small
 \begin{tabular}{l|lll|lll}
 & \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
 & \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
