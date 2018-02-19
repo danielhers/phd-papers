@@ -1107,43 +1107,6 @@ and $\dagger$ indicates significantly worse.
 
 \section{Results}\label{sec:results}
 
-%\subsection{Single-task parsing}\label{sec:results_single}
-%
-%To evaluate the conversion and parsing algorithm on each task, we report the result
-%of training the parser on each task separately.
-%In this case we perform labeled parsing for all tasks, and use the whole training set.
-%The results for single-task parsing, when evaluated on the development set for each task,
-%are shown in Table~\ref{tab:single}.
-%
-%
-%
-%\begin{table}
-%\centering
-%\begin{tabular}{l|ccc}
-%\textbf{UD English} && \multicolumn{2}{r}{\textbf{LAS $F_1$}} \\
-%Ours &&& 80.1 \\
-%D\&M &&& 82.2 \\
-%\hline
-%\textbf{AMR} & \textbf{P} & \textbf{R} & \textbf{$F_1$} \\
-%Ours & 66.7 & 64.7 & 65.7 \\
-%F\&M &&& 70.9 \\
-%\hline
-%\textbf{DM} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-%Ours & 76 & 75.4 & 75.7 \\
-%CMU &&& 89.4
-%\end{tabular}
-%\caption{Single-task results on dev set for each auxiliary task,
-%when trained only on that task.
-%Best reported results given for comparison:
-%D\&M is \citet{dozat2016deep},
-%F\&M is \citet{foland2017abstract},
-%and CMU is \citet{thomson-EtAl:2014:SemEval}.
-%AMR is evaluated by Smatch \cite{cai2013smatch}.
-%\label{tab:single}}
-%\end{table}
-
-%\subsection{Multitask parsing}\label{sec:results_multi}
-
 Table~\ref{tab:ood_results} shows our experimental results.
 Our basic single-task model is comparable to \citet{hershcovich2017a}, as it is using a similar model.
 
@@ -1167,10 +1130,9 @@ given sufficiently large auxiliary training data.
 AMR & 52.2 & 15.5 & 23.9 & \enskip 7.3 & \enskip 5.5 & \enskip 6.3 \\
 DM & 63.6 & 49.8 & 55.9 & \enskip 6.9 & 63.8 & 12.4 \\
 %UD & 75.3 & 82.9 & 78.9 & -- & 0 & -- \\
-%UD$^+$ & 75.1 & 82.4 & 78.5 & 11.5 & 12.8 & 12.1 \\
 UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 \end{tabular}
-\caption{Unlabeled UCCA evaluation of 100 sentences converted to the unified DAG format.
+\caption{Unlabeled UCCA evaluation of parallel sentences converted to the unified DAG format.
 \label{tab:common}}
 \end{table}
 
@@ -1178,33 +1140,34 @@ UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 
 \section{Discussion}\label{sec:discussion}
 
-\citet{Finkel2009JointPA} showed that the combination of many different domains helps with domain
-adaptation without having to identify the target domain.
-
-Previous work has shown that MTL works best when auxiliary tasks are annotated
-on the same corpus as the main task \cite{E17-1005}.
-In our case, not only are the corpora different, but while the UCCA corpora are encyclopedic and literary,
-the AMR, DM and UD datasets we used are annotated on blogs, news, emails, reviews, and Q\&A corpora.
-In addition to the absence of a parallel corpus,
-it follows that our model is faced with the additional challenge of domain adaptation,
-and further highlights the significance of our results.
-
 An important factor in the success of MTL is the commonalities between the tasks
 \cite{E17-2026,E17-1005}.
-%In fact, this is why we decided to convert the auxiliary tasks into UCCA-like format for
-%multitask training in the first place.
-To evaluate the similarity between the unlabeled auxiliary tasks and UCCA parsing,
+In our case, none of the auxiliary tasks are annotated on the same corpus as our main task.
+Furthermore, while UCCA is annotated over Wikipedia and a literary corpus,
+the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
+In accordance with previous work \cite{Finkel2009JointPA},
+we therefore found that the combination of many different domains benefits domain
+adaptation even without training on the target domain.
+%In addition to the absence of a parallel corpus,
+%it follows that our model is faced with the additional challenge of domain adaptation,
+%and further highlights the significance of our results.
+
+In addition, the representations themselves vary both formally and content-wise.
+To quantify the similarity between the unlabeled auxiliary tasks and UCCA parsing,
 we perform unlabeled evaluation (ignoring edge labels)
-on 100 manually annotated sentences from the
+on 100 manually annotated English sentences from the
 Wall Street Journal, after conversion to the unified DAG format.\footnote{The annotated
 sentences are available at $<$anonymized$>$}
 As can be seen in Table~\ref{tab:common}, there is a high overlap between
 UCCA and UD$^{++}$, while DM is less similar, and AMR even less.
+These findings, which agree with the impression given by Figure~\ref{fig:converted_examples},
+correlate with our multitask experimental results:
+while using just AMR as an auxiliary task did not significantly improve any of the metrics,
+using each of DM and UD$^{++}$ did significantly improve the $F_1$ score on primary edges in the
+out-of-domain setting, and their combination significantly improved the $F_1$ score on remote edges.
 
-These findings correlate with our multitask experimental results:
-while using AMR as an auxiliary task did not contribute much, DM and UD$^{++}$ did benefit UCCA
-parsing, and their combination yielded an even greater improvement.
-
+A natural question is whether our parser can be used to parse AMR, DM or UD,
+and whether MTL would benefit any of these parsing tasks.
 While we focus on UCCA parsing in this work, our parser is capable of parsing any
 scheme that can be represented in the unified DAG format.
 This is a step towards a joint many-task model for semantic parsing.
