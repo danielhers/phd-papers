@@ -898,11 +898,19 @@ increasing generalization \cite{E17-1005}.
 
 \section{Experimental Setup}\label{sec:experiments}
 
-We perform various experiments to assess the value of each auxiliary task to UCCA parsing.
-We train the parser in a single-task and multitask setting,
-and evaluate its performance on the UCCA English in-domain and out-of-domain test sets.
+We perform various experiments to assess the value of each auxiliary task to UCCA parsing,
+training the parser in a single-task and multitask setting
+and evaluating its performance on the UCCA test sets, in both in-domain and out-of-domain settings.
+
 Next, we repeat the experiment on French and German, investigating the impact of multitask
 training, where only a small or noisy training set for the main task is available.
+
+To investigate the contribution of multitask training on an even smaller UCCA training set,
+we experiment with the French and German \textit{20K Leagues} UCCA corpora
+\cite{sulem2015conceptual}
+in a single-task and multitask setting, where as an auxiliary task we use unlabeled parsing on
+UD treebanks in the respective languages.\footnote{We did not use AMR, DM or enhanced UD in French
+and German, as these are only available in English.}
 
 \begin{table}[t]
 \centering
@@ -922,7 +930,7 @@ Wiki & 158433 & 5225 &&&& \\
 \hline
 \textbf{DM} & 802717 & 35657 \\
 \end{tabular}
-\caption{Size of each corpus: total number of tokens ({\#}tok) and sentences ({\#}sent).
+\caption{Overall size of each corpus: total number of tokens ({\#}tok) and sentences ({\#}sent).
 %\textit{Wiki} is the UCCA English Wikipedia corpus, and
 %\textit{20K} is the UCCA English \textit{Twenty Thousand Leagues Under the Sea} corpus.
 %We use UD v2.1, AMR release LDC2017T10 and SDP 2016 data for DM.
@@ -955,14 +963,10 @@ For AMR, DM and UD, we use the training sets from standard train/dev/test splits
 
 \paragraph{Evaluation.}
 
-%As each scheme has its own evaluation metric, we evaluate them separately.
 We evaluate on UCCA using labeled precision, recall and $F_1$ (harmonic mean of precision and recall)
 on primary and remote edges,
 following previous work on UCCA parsing \cite{hershcovich2017a}.
 Edges in predicted and gold graphs are matched by terminal yield and label.
-%For UD, we use LAS $F_1$.
-%For AMR, we use Smatch \cite{cai2013smatch}.
-%For DM, we use labeled precision, recall and $F_1$.
 
 
 
@@ -1007,16 +1011,6 @@ See Supplementary Material for a listing of hyperparameter settings.
 %This provides greater variability between the combined models.
 
 
-\paragraph{Other languages.}
-
-To investigate the contribution of multitask training on an even smaller UCCA training set,
-we experiment with the French and German \textit{20K Leagues} UCCA corpora
-\cite{sulem2015conceptual}
-in a single-task and multitask setting, where as an auxiliary task we use unlabeled parsing on
-UD treebanks in the respective languages.\footnote{We did not use AMR, DM or enhanced UD in French
-and German, as these are only available in English.}
-
-
 \begin{table}[t]
 \centering
 \small
@@ -1027,8 +1021,11 @@ and German, as these are only available in English.}
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
 \hline
 \multicolumn{4}{l|}{\small \bf English (out-of-domain)} & \\
+\footnotesize HAR17
+& 68.7 & 68.5 & 68.6 & 38.6 & 18.8 & 25.3 \\
 \footnotesize Single
 & 68.9 & 68.9 & 68.9 & 40.7 & 19.6 & 26.5 \\
+\cline{1-1}
 %Single-task (PoE) & 69.7 & 69.5 & 69.6 & 50.5 & 19.4 & 28 \\
 %\small \bf Multitask &&& \\
 \footnotesize AMR
@@ -1077,10 +1074,12 @@ Other settings use unlabeled auxiliary tasks in the same language.
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
 \hline
 \multicolumn{4}{l|}{\small \bf English (in-domain)} & \\
+\footnotesize HAR17
+& 74.4 & 72.7 & 73.5 & 47.4 & 51.6 & 49.4 \\
 \footnotesize Single
 & 74.3 & 72.8 & 73.5 & 53 & 50 & 51.5 \\
 %Single-task (PoE) & 75.9 & 74.1 & 75 & 50.7 & 46.8 & 48.7 \\
-%\hline
+\cline{1-1}
 %\small \bf Multitask &&& \\
 \footnotesize AMR
 & 74.4 & 73.2 & 73.8 & 49.1$\dagger$ & 52.2 & 50.6 \\
