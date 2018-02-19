@@ -896,21 +896,11 @@ increasing generalization \cite{E17-1005}.
 
 
 
-\section{Experimental Setup}\label{sec:experiments}
+\section{Experimentals}\label{sec:experiments}
 
-We perform various experiments to assess the value of each auxiliary task to UCCA parsing,
+We perform various experiments to assess the value of MTL to UCCA parsing,
 training the parser in a single-task and multitask setting
 and evaluating its performance on the UCCA test sets, in both in-domain and out-of-domain settings.
-
-Next, we repeat the experiment on French and German, investigating the impact of multitask
-training, where only a small or noisy training set for the main task is available.
-
-To investigate the contribution of multitask training on an even smaller UCCA training set,
-we experiment with the French and German \textit{20K Leagues} UCCA corpora
-\cite{sulem2015conceptual}
-in a single-task and multitask setting, where as an auxiliary task we use unlabeled parsing on
-UD treebanks in the respective languages.\footnote{We did not use AMR, DM or enhanced UD in French
-and German, as these are only available in English.}
 
 \begin{table}[t]
 \centering
@@ -941,13 +931,13 @@ Wiki & 158433 & 5225 &&&& \\
 
 For UCCA, we use the English Wikipedia corpus \cite{abend2013universal},
 with the standard train/dev/test split of 4254/453/518 sentences,
-tuning on the development set without cross-validation.
-In addition, we use
-the \textit{Twenty Thousand Leagues Under the Sea} corpus \cite[20K leagues;][]{sulem2015conceptual},
+and the \textit{Twenty Thousand Leagues Under the Sea} corpus
+\cite[\textit{20K Leagues};][]{sulem2015conceptual},
 annotated in English, French and German.
-The English part is used only as an out-of-domain test set.
-For the French and German datasets we use a train/dev/test split of 413/67/67 and 4196/561/2174 sentences,
+The English part of \textit{20K Leagues} is used only as an out-of-domain test set, as in HAR17.
+For the French and German parts we use train/dev/test splits of 413/67/67 and 4196/561/2174 sentences,
 respectively.\footnote{\mbox{\url{http://github.com/huji-nlp/ucca-corpus}}}
+For each language, we tune on the development set without cross-validation.
 
 For AMR, we use LDC2017T10, targeted in SemEval 2017
 \cite{may2017semeval}.\footnote{\mbox{\url{http://catalog.ldc.upenn.edu/LDC2017T10}}}
@@ -959,6 +949,20 @@ We use the enhanced++ UD representation \cite{SCHUSTER16.779} in our English exp
 henceforth referred to as UD$^{++}$.
 Table~\ref{tab:corpora} shows the size of each corpus.
 For AMR, DM and UD, we use the training sets from standard train/dev/test splits.
+While UCCA is annotated over Wikipedia and a literary corpus,
+the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
+
+\paragraph{Experimental setup.}
+
+As our main experiment, we evaluate our method in settings where MTL tends to be the most effective:
+in an out-of-domain setting (on English),
+training on \textit{Wiki} and evaluating on \textit{20K Leagues},
+and where the only available training data is very small (French)
+or noise (German), training on the \textit{20K Leagues} training set and evaluating on the test set.
+We use unlabeled AMR, DM and UD$^{++}$ parsing as auxiliary tasks in English,
+and unlabeled UD parsing in French and German.\footnote{We did not use AMR, DM or UD$^{++}$ in French
+and German, as these are only available in English.}
+Fur completeness, we also evaluate the English models on the \textit{Wiki} test set.
 
 
 \paragraph{Evaluation.}
@@ -1141,12 +1145,11 @@ UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 
 An important factor in the success of MTL is the commonalities between the tasks
 \cite{E17-2026,E17-1005}.
-In our case, none of the auxiliary tasks are annotated on the same corpus as our main task.
-Furthermore, while UCCA is annotated over Wikipedia and a literary corpus,
-the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
-In accordance with previous work \cite{Finkel2009JointPA},
-we therefore found that the combination of many different domains benefits domain
-adaptation even without training on the target domain.
+In our case, the auxiliary tasks are all annotated on different corpora from our main task.
+Furthermore, these corpora are all from different domains than in the UCCA datasets.
+We found that the combination of many different domains therefore benefits domain
+adaptation even without auxiliary data from the target domain,
+in accordance with previous work \cite{Finkel2009JointPA}.
 %In addition to the absence of a parallel corpus,
 %it follows that our model is faced with the additional challenge of domain adaptation,
 %and further highlights the significance of our results.
