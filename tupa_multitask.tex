@@ -1191,7 +1191,6 @@ UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 
 \section{Discussion}\label{sec:discussion}
 
-\paragraph{Variety of domains.}
 Previous work has shown that MTL works best when auxiliary tasks are annotated
 on the same corpus as the main task \cite{E17-1005}.
 In our case, not only are the corpora different, but while the UCCA corpora are encyclopedic and literary,
@@ -1200,7 +1199,6 @@ In addition to the absence of a parallel corpus,
 it follows that our model is faced with the additional challenge of domain adaptation,
 and further highlights the significance of our results.
 
-\paragraph{Structural overlap.}
 An important factor in the success of MTL is the commonalities between the tasks
 \cite{E17-2026,E17-1005}.
 %In fact, this is why we decided to convert the auxiliary tasks into UCCA-like format for
@@ -1217,7 +1215,6 @@ These findings correlate with our multitask experimental results:
 while using AMR as an auxiliary task did not contribute much, DM and UD$^{++}$ did benefit UCCA
 parsing, and their combination yielded an even greater improvement.
 
-\paragraph{Full parsing for AMR, DM and UD.}
 While we focus on UCCA parsing in this work, our parser is capable of parsing any
 scheme that can be represented in the unified DAG format.
 This is a step towards a joint many-task model for semantic parsing.
