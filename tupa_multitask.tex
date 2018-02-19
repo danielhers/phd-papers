@@ -112,12 +112,12 @@ much of the semantic content is shared \cite{abend2017state}.
 %In cases where related tasks can be learned jointly,
 %deep multitask learning models have been shown to be successful in various fields of NLP
 %\cite{collobert2011natural,Zhang2016StackpropagationIR,P17-1186,swayamdipta2017frame,guo2016exploiting}.
-Multitask learning \cite{caruana1998multitask} allows exploiting the overlap between tasks
+Multitask learning \cite[MTL; ][]{caruana1998multitask} allows exploiting the overlap between tasks
 to effectively extend the training data,
 and has greatly advanced with neural networks and representation learning
 (see \S\ref{sec:related_work}).
 We build on these ideas and propose a BiLSTM transition-based semantic DAG parser for UCCA,
-trained in a multitask setting to obtain state-of-the-art 
+trained in a MTL setting to obtain state-of-the-art 
 results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 \begin{figure*}
@@ -236,10 +236,10 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
-%multitask is good for small data and cross-domain \cite{Rush2012ImprovedPA,Finkel2009JointPA}
+%MTL is good for small data and cross-domain \cite{Rush2012ImprovedPA,Finkel2009JointPA}
 %difference between domains \cite{Plank2011EffectiveMO,E17-1005}
 Even before the rise of neural learning methods,
-multitask learning has been used for tasks with varying degrees of similarity:
+MTL has been used for tasks with varying degrees of similarity:
 from joint classification of the roles of different arguments in semantic role labeling \cite{toutanova2005joint}, 
 to the incorporation of unlabeled data for various tasks \cite{ando2005framework}.
 For parsing, it has been applied successfully by
@@ -254,13 +254,13 @@ Such techniques effectively increase the amount of training data,
 %(exploiting incidental\oa{what is incidental supervision?} supervision \cite{DBLP:conf/aaai/Roth17})
 and replace the common pipeline approach, thereby avoiding error propagation.
 
-Deep multitask learning has hitherto mostly shown benefits where the tasks
+Deep MTL has hitherto mostly shown benefits where the tasks
 are formally similar \cite{P15-1166,P16-2038,D17-1134},
 or where the joint learning was carried out between a pre-processing task and tasks that use it
 as scaffolding.
-\citet{E17-1005} showed that multitask learning works best when auxiliary tasks have few labels
+\citet{E17-1005} showed that MTL works best when auxiliary tasks have few labels
 and are annotated on the same corpus as the main task.
-Examples of deep multitask learning across similar tasks include 
+Examples of deep MTL across similar tasks include 
 multilingual syntactic dependency \cite{Q16-1031,guo2016exploiting}
 and semantic parsing \cite{duong2017multilingual},
 as well as domain adaptation in semantic parsing \cite{herzig-berant:2017:Short,W17-2607}.
@@ -289,12 +289,12 @@ constituent.
 %where arguments are almost always syntactic constituents ,
 
 Another work which is closely related to ours is \citet{P17-1186},
-which reported benefits from multitask learning over three broad-coverage semantic dependency parsing (SDP)
+which reported benefits from MTL over three broad-coverage semantic dependency parsing (SDP)
 tasks that use three different annotation schemes, albeit on the same text and using a uniform formalism with 
 considerable overlap in their edges.
 They report improvement to all tasks, of 0.5\% to 1\% increase in labeled $F_1$ over a single-task model.
 
-In this work we take the challenge of multitask learning of semantics a step further and 
+In this work we take the challenge of MTL of semantics a step further and 
 show benefit to UCCA parsing from multitask 
 training with conceptually and formally different formalisms (AMR and SDP; see \S\ref{sec:tasks}).
 We are not aware of a semantic parser using a single model for
@@ -351,7 +351,7 @@ in several super-ordinate relations.
 Primary edges form a tree structure,
 whereas remote edges enable reentrancy (a DAG structure).
 As UCCA annotated data is currently fairly scarce (see \S\ref{sec:data}), 
-we hypothesize it will benefit from multitask learning, and consider it as our
+we hypothesize it will benefit from MTL, and consider it as our
 main task.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
@@ -860,7 +860,7 @@ We collapse this sub-graph into a single node whose children are the name tokens
     \node (transition) at (3.5,5.8) {transition};
     \path (mlp) edge node[right] {softmax} (transition);
    \end{tikzpicture}
-   \caption{Multitask learning model.
+   \caption{MTL model.
       Representations for input tokens are computed both by a task-specific and a shared BiLSTM.
       Their outputs are concatenated with the embedding of the parser state and fed into the task-specific MLP for selecting the next transition.}
    \label{fig:multi_model}
@@ -907,7 +907,7 @@ fed into a task-specific MLP (see Figure~\ref{fig:multi_model}).
 Feature embeddings are shared across tasks.
 
 The fairly small training set available for UCCA (see \S\ref{sec:data})
-makes multitask learning particularly appealing,
+makes MTL particularly appealing,
 and we focus on it in this paper, treating AMR, DM and UD parsing as auxiliary tasks.
 
 \paragraph{Unlabeled parsing for auxiliary tasks.}
@@ -1124,7 +1124,7 @@ in a single-task and multitask setting, where as an auxiliary task we use unlabe
 UD treebanks in the respective languages.\footnote{We did not use AMR, DM or enhanced UD in French
 and German, as these are only available in English.}
 The results are given in Table~\ref{tab:multilingual}.
-The contribution of multitask learning is substantial in this case:
+The contribution of MTL is substantial in this case:
 11\% error reduction on the French dataset, and 1.5\% on the larger German dataset
 (see Table~\ref{tab:corpora}).
 This result demonstrates that even a small training set in the main task may produce good results,
@@ -1177,7 +1177,7 @@ UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 \section{Discussion}\label{sec:discussion}
 
 \paragraph{Variety of domains.}
-Previous work has shown that multitask learning works best when auxiliary tasks are annotated
+Previous work has shown that MTL works best when auxiliary tasks are annotated
 on the same corpus as the main task \cite{E17-1005}.
 In our case, not only are the corpora different, but while the UCCA corpora are encyclopedic and literary,
 the AMR, DM and UD datasets we used are annotated on blogs, news, emails, reviews, and Q\&A corpora.
@@ -1186,7 +1186,7 @@ it follows that our model is faced with the additional challenge of domain adapt
 and further highlights the significance of our results.
 
 \paragraph{Structural overlap.}
-An important factor in the success of multitask learning is the commonalities between the tasks
+An important factor in the success of MTL is the commonalities between the tasks
 \cite{E17-2026,E17-1005}.
 %In fact, this is why we decided to convert the auxiliary tasks into UCCA-like format for
 %multitask training in the first place.
@@ -1219,7 +1219,7 @@ algorithm and architecture can be competitive on all of these parsing tasks.
 
 \section{Conclusion}\label{sec:conclusion}
 
-We demonstrated that multitask learning improves UCCA parsing,
+We demonstrated that MTL improves UCCA parsing,
 using AMR, DM and UD parsing as auxiliaries,
 by converting these schemes into a unified format
 and generalizing a transition-based DAG parser to support unlabeled auxiliary tasks.
