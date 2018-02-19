@@ -875,7 +875,7 @@ We collapse this sub-graph into a single node whose children are the name tokens
 \hline
 \textbf{UCCA} &&&& \\
 Wiki & 158433 & 5225 &&&& \\
-20K & 12339 & 506 & 12929 & 547 & 113524 & 4764 \\
+20K & 12339 & 506 & 12929 & 547 & 153581 & 6935 \\
 \hline
 \textbf{UD} & 568560 & 24276 & 1114312 & 40102 & 318847 & 16590 \\
 \hline
@@ -941,11 +941,9 @@ tuning on the development set without cross-validation.
 In addition, we use
 the \textit{Twenty Thousand Leagues Under the Sea} corpus \cite[20K leagues;][]{sulem2015conceptual},
 annotated in English, French and German.
-The English part is used only for testing.
-Due to their small size, and since they are still under development, we only use a train/dev split
-in the French and German datasets, of 480/67 and 4196/561 sentences, respectively.
-We report results on the development set for these
-datasets.\footnote{\mbox{\url{http://github.com/huji-nlp/ucca-corpus}}}
+The English part is used only as an out-of-domain test set.
+For the French and German datasets we use a train/dev/test split of 413/67/67 and 4196/561/2174 sentences,
+respectively.\footnote{\mbox{\url{http://github.com/huji-nlp/ucca-corpus}}}
 
 For AMR, we use LDC2017T10, targeted in SemEval 2017
 \cite{may2017semeval}.\footnote{\mbox{\url{http://catalog.ldc.upenn.edu/LDC2017T10}}}
