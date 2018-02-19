@@ -540,7 +540,7 @@ We therefore only produce edge labels and not node labels when training on AMR.
     \node (x4) at (3.5,1) {\ldots};
     \node[main] (mlp) at (3.5,4.6) {\small MLP};
     \path (specific) edge (mlp);
-    \coordinate (state) at (6.5,6.5);
+    \coordinate (state) at (6.5,6.3);
     \path (state) edge [bend left] (mlp);
     \node (transition) at (3.5,5.8) {transition};
     \path (mlp) edge node[right] {softmax} (transition);
@@ -851,7 +851,7 @@ We collapse this sub-graph into a single node whose children are the name tokens
     \node[main] (mlp) at (3.5,4.6) {\small Task-specific MLP};
     \path (specific) edge (mlp);
     \path (shared) edge (mlp);
-    \coordinate (state) at (6.5,6.5);
+    \coordinate (state) at (6.5,6.3);
     \path (state) edge [bend left] (mlp);
     \node (transition) at (3.5,5.8) {transition};
     \path (mlp) edge node[right] {softmax} (transition);
