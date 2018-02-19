@@ -258,6 +258,8 @@ Deep multitask learning has hitherto mostly shown benefits where the tasks
 are formally similar \cite{P15-1166,P16-2038,D17-1134},
 or where the joint learning was carried out between a pre-processing task and tasks that use it
 as scaffolding.
+\citet{E17-1005} showed that multitask learning works best when auxiliary tasks have few labels
+and are annotated on the same corpus as the main task.
 Examples of deep multitask learning across similar tasks include 
 multilingual syntactic dependency \cite{Q16-1031,guo2016exploiting}
 and semantic parsing \cite{duong2017multilingual},
@@ -909,7 +911,7 @@ makes multitask learning particularly appealing,
 and we focus on it in this paper, treating AMR, DM and UD parsing as auxiliary tasks.
 
 \paragraph{Unlabeled parsing for auxiliary tasks.}
-In order to simplify the auxiliary tasks and facilitate generalization \cite{E17-2026},
+In order to simplify the auxiliary tasks and facilitate generalization \cite{E17-2026,E17-1005},
 we perform unlabeled parsing for AMR, DM and UD in the multitask setting,
 while still predicting edge labels in UCCA parsing.
 To support unlabeled parsing, we simply remove all labels from the
@@ -918,6 +920,8 @@ This results in a much smaller number of transitions the classifier has to selec
 (no more than 10, as opposed to 45 transitions in labeled UCCA parsing),
 allowing us to use smaller dimensions and less layers for the task-specific BiLSTMs and MLPs
 of the auxiliary tasks (see Appendix~\ref{sec:features}).
+The limited capacity forces the network to utilize the shared parameters for all tasks,
+increasing generalization \cite{E17-1005}.
 
 
 
@@ -1173,7 +1177,9 @@ UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 \section{Discussion}\label{sec:discussion}
 
 \paragraph{Variety of domains.}
-While the UCCA corpora are encyclopedic and literary,
+Previous work has shown that multitask learning works best when auxiliary tasks are annotated
+on the same corpus as the main task \cite{E17-1005}.
+In our case, not only are the corpora different, but while the UCCA corpora are encyclopedic and literary,
 the AMR, DM and UD datasets we used are annotated on blogs, news, emails, reviews, and Q\&A corpora.
 In addition to the absence of a parallel corpus,
 it follows that our model is faced with the additional challenge of domain adaptation,
