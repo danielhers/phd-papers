@@ -13,8 +13,8 @@
 \usepackage{multirow}
 \usepackage{url}
 \usepackage{etoolbox}
-%\usepackage{xr}
-%\externaldocument{acl2018_supp}
+\usepackage{xr}
+\externaldocument{acl2018_supp}
 
 \newcommand{\com}[1]{}
 \newcommand{\oa}[1]{\footnote{\color{red}OA: #1}}
@@ -748,7 +748,7 @@ for nodes in specific locations in the parser state.
 In addition, for each token
 we use embeddings representing the one-character prefix, three-character suffix,
 shape (capturing orthographic features, e.g. "Xxxx" or "dd"),
-and named entity type,\footnote{See Appendix~\ref{sec:features} for a full listing of features.}
+and named entity type,\footnote{See Supplementary Material for a full listing of features.}
 all provided by spaCy \cite{spacy2}.\footnote{\url{http://spacy.io}}
 To the learned word vectors, we also concatenate the 250K most frequent word vectors from fastText
 \cite{bojanowski2016enriching},\footnote{\mbox{\url{http://github.com/facebookresearch/fastText}}}
@@ -785,7 +785,7 @@ should never be swapped again.\footnote{
 To be able to use TUPA for the four tasks presented in \S\ref{sec:tasks},
 we convert them all into a unified DAG format, which is inclusive enough to
 allow representing any of the schemes with very little loss of information\footnote{See
-Appendix~\ref{sec:convert} for more details about the conversion.}.
+Supplementary Material for more details about the conversion.}.
 
 The format consists of a rooted DAG, where the tokens are the terminal nodes.
 As in the UCCA format, the edges (but not the nodes) are labeled,
@@ -919,7 +919,7 @@ To support unlabeled parsing, we simply remove all labels from the
 This results in a much smaller number of transitions the classifier has to select from
 (no more than 10, as opposed to 45 transitions in labeled UCCA parsing),
 allowing us to use smaller dimensions and less layers for the task-specific BiLSTMs and MLPs
-of the auxiliary tasks (see Appendix~\ref{sec:features}).
+of the auxiliary tasks (see Supplementary Material).
 The limited capacity forces the network to utilize the shared parameters for all tasks,
 increasing generalization \cite{E17-1005}.
 
@@ -1049,7 +1049,7 @@ We found this training strategy to work better than using only one of the optimi
 similar to findings by \citet{keskar2017improving}.
 We select the epoch with the best average labeled $F_1$ score on the UCCA development set.
 The neural network is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{http://dynet.io}}
-See Appendix~\ref{sec:features} for a listing of hyperparameter settings.
+See Supplementary Material for a listing of hyperparameter settings.
 
 %\subsection{Ensembling}
 %
@@ -1227,142 +1227,5 @@ and generalizing a transition-based DAG parser to support unlabeled auxiliary ta
 
 \bibliography{references}
 \bibliographystyle{acl_natbib}
-
-
-\appendix
-
-\section*{Supplementary Notes}
-
-\section{Feature Templates}\label{sec:features}
-
-Table~\ref{tab:features} lists all feature used for the classifier (see \S\ref{sec:classifier}).
-Numeric features are taken as they are, whereas categorical features are mapped to real-valued embedding
-vectors.
-For \texttt{w} features,
-we use both randomly-initialized and pre-trained word embeddings, concatenating them.
-For each node, we select a \textit{head terminal} by traversing down the graph according to
-a heuristically determined priority order, taken from \citet{hershcovich2017a}.
-
-\begin{table}[h]
-\centering
-\footnotesize
-\begin{tabular}{l|l}
-\bf Nodes & \bf Features \\ 
-\hline
-%       w   t   d   e   n   c   p   T   #   ^   $   x   h   q   y   P   C   I   E   M   N
-$s_0$ & \texttt{wtdencpT\#\^{}\$xhqyPCIEMN} \\
-$s_1$ & \texttt{wtdencT\#\^{}\$xhyN} \\
-$s_2$ & \texttt{wtdencT\#\^{}\$xhy} \\
-$s_3$ & \texttt{wtdencT\#\^{}\$xhyN} \\
-$b_0$ & \texttt{wtdncT\#\^{}\$hPCIEMN} \\
-$b_1, b_2, b_3$ & \texttt{wtdncT\#\^{}\$} \\
-\multirow{3}{3cm}{$s_0l, s_0r, s_1l, s_1r$, $s_0ll, s_0lr, s_0rl, s_0rr$, $s_1ll, s_1lr, s_1rl, s_1rr$} &
-    \texttt{wenc\#\^{}\$} \\ \\ \\
-\multirow{2}{3cm}{$s_0L, s_0R, s_1L, s_1R$, $b_0L, b_0R$} & \texttt{wen\#\^{}\$} \\ \\
-\hline
-\bf Edges & \\
-$s_0 \to s_1, s_0 \to b_0$ & \texttt{xd} \\
-$s_1 \to s_0, b_0 \to s_0$ & \texttt{x} \\
-$s_0 \to b_0, b_0 \to s_0$ & \texttt{e} \\
-\hline
-\bf Past actions \\
-$a_0, a_1$ & \texttt{eA} \\
-\hline
-\bf Misc. & \texttt{node ratio}
-\end{tabular}
-\caption{Transition classifier features.\label{tab:features}
-\\ \footnotesize
-$s_i$ refers to stack node $i$ from the top, and
-$b_i$ to buffer node $i$.
-$xl$ and $xr$ refer to a $x$'s leftmost and rightmost children, and
-$xL$ and $xR$ to its leftmost and rightmost parents.
-\\
-\texttt{w} refers to the node's head terminal text,
-\texttt{t} to its POS tag, and
-\texttt{d} to its dependency relation.
-\texttt{h} refers to the node's height,
-\texttt{e} to the tag of its first incoming edge,
-\texttt{n} and \texttt{c} to the node label and category (used only for AMR),
-\texttt{p} to any separator punctuation between $s_0$ and $s_1$,
-\texttt{q} to the count of any separator punctuation between $s_0$ and $s_1$,
-\texttt{x} to the numeric value of gap type \cite{maier-lichte:2016:DiscoNLP},
-\texttt{y} to the sum of gap lengths,
-\texttt{P}, \texttt{C}, \texttt{I}, \texttt{E}, and \texttt{M} to the number of
-parents, children, implicit children, remote children, and remote parents,
-\texttt{N} to the numeric value of the head terminal's named entity IOB indicator,
-\texttt{T} to its named entity type,
-\texttt{\#} to its word shape (capturing orthographic features, e.g. "Xxxx" or "dd"),
-\texttt{\^{}} to its one-character prefix, and
-\texttt{\$} to its three-character suffix.
-\\
-$x \to y$ refers to the existing edge from $x$ to $y$.
-\texttt{x} is an indicator feature, taking the value of 1 if the edge exists or 0 otherwise,
-\texttt{e} refers to the edge label, and
-\texttt{d} to the dependency distance between the head terminals of the nodes.
-\\
-$a_i$ to the transition taken $i+1$ steps ago.
-\texttt{A} refers to the action type label (e.g. \textsc{shift}/\textsc{right-edge}/\textsc{node}), and
-\texttt{e} to the edge label created by the action (e.g. $C$/$E$/$P$).
-\\
-\texttt{node ratio} is the ratio between non-terminals and terminals, taken from \citet{hershcovich2017a}.
-}
-\end{table}
-
-Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
-The middle column shows the hyperparameters used for the single-task architecture,
-described in \S\ref{sec:classifier}, and
-the right column for the multitask architecture,
-described in \S\ref{sec:multitask}.
-\textbf{Main} refers to parameters specific to the main task---UCCA parsing
-(task-specific MLP and BiLSTM, and edge label embedding),
-\textbf{Aux} to parameters specific to each auxiliary task
-(task-specific MLP and BiLSTM, but no edge label embedding since the tasks are unlabeled),
-and \textbf{Shared} to parameters shared among all tasks
-(shared BiLSTM and embeddings).
-
-External word embeddings are pre-trained word embeddings (see \S\ref{sec:training}),
-and word embeddings are randomly initialized.
-
-\begin{table}[h]
-\centering
-\footnotesize
-\begin{tabular}{l|c|ccccc}
-\bf Hyperparameter &  \bf Single & \multicolumn{3}{c}{\bf Multitask} \\ 
-&& \bf Main & \bf Aux & \bf Shared \\
-\hline
-external word dim. & 300 &&& 300 \\
-word dim. & 200 &&& 200 \\
-POS tag dim. & 20 &&& 20 \\
-syntactic dep. dim. & 10 &&& 10 \\
-named entity dim. & 3 &&& 3 \\
-punctuation dim. & 1 &&& 1 \\
-action dim. & 3 &&& 3 \\
-edge label dim. & 20 & 20 \\
-MLP layers & 2 & 2 & 1 \\
-MLP dimensions & 50 & 50 & 50 \\
-BiLSTM layers & 2 & 2 & 1 & 2 \\
-BiLSTM dimensions & 500 & 250 & 50 & 250
-\end{tabular}
-\caption{Hyperparameter settings.\label{tab:hyperparams}
-Middle column: single-task.
-Right column: multitask settings for main task (UCCA), auxiliary tasks, and shared parameters.}
-\end{table}
-
-\section{Conversion to and from Unified DAG Format}\label{sec:convert}
-
-Although all experiments reported in the main paper on the auxiliary tasks
-(AMR, DM and UD) are using unlabeled parsing for these schemes,
-our conversion code,
-which is attached as supplementary material and is also publicly available at $<$anonymized$>$,
-supports full conversion to and from these formats
-(see \texttt{scheme/conversion} in the supplementary software).
-
-Conversion from AMR to the unifid DAG format and back
-results in 95\% Smatch $F_1$ \cite{cai2013smatch} when averaged over the
-LDC2017T10 test set.
-On SDP, the conversion is lossless and results in identical graphs
-when converted to UCCA and back.
-For UD, and conversion results in 98.5\% LAS $F_1$ on the UD{\_}English test set,
-due to multi-word tokens, not supported in the unified DAG format.
 
 \end{document}
