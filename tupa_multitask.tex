@@ -183,7 +183,7 @@ such widely different tasks.
 
 
 \begin{figure}
-\begin{subfigure}{0.47\textwidth}
+\fbox{\begin{subfigure}{0.47\textwidth}
   \centering
   \scalebox{.95}{
   \begin{tikzpicture}[level distance=10mm, ->]
@@ -212,9 +212,9 @@ such widely different tasks.
     \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
   }\caption{UCCA \label{fig:original_example_ucca}}
-\end{subfigure}
+\end{subfigure}}
 
-\begin{subfigure}{0.47\textwidth}
+\fbox{\begin{subfigure}{0.47\textwidth}
   \centering
   \begin{tikzpicture}[level distance=15mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
@@ -242,9 +242,9 @@ such widely different tasks.
       \draw (graduation) to node {ARG0} (John);
   \end{tikzpicture}
   \caption{AMR \label{fig:original_example_amr}}
-\end{subfigure}
+\end{subfigure}}
 
-\begin{subfigure}{0.47\textwidth}
+\fbox{\begin{subfigure}{0.47\textwidth}
   \centering
     \begin{dependency}[text only label, label style={above}, font=\small]
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
@@ -259,9 +259,9 @@ such widely different tasks.
         \depedge{6}{7}{ARG2}
     \end{dependency}
   \caption{DM \label{fig:original_example_sdp}}
-\end{subfigure}
+\end{subfigure}}
 
-\begin{subfigure}{0.47\textwidth}
+\fbox{\begin{subfigure}{0.47\textwidth}
   \centering
     \begin{dependency}[text only label, label style={above}, font=\small]
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
@@ -276,7 +276,7 @@ such widely different tasks.
         \depedge{5}{7}{obl}
     \end{dependency}
   \caption{UD \label{fig:original_example_ud}}
-\end{subfigure}
+\end{subfigure}}
 
 
 \caption{\label{fig:original_examples}
@@ -569,7 +569,7 @@ optimal transitions at each step.
 
 
 \begin{figure}
-\begin{subfigure}{0.47\textwidth}
+\fbox{\begin{subfigure}{0.47\textwidth}
     \centering
     \begin{tikzpicture}[level distance=10mm, sibling distance=14mm, ->,
         every circle node/.append style={fill=black}]
@@ -596,9 +596,9 @@ optimal transitions at each step.
     \end{tikzpicture}
   \caption{UCCA}
   \label{fig:converted_example_ucca}
-\end{subfigure}
+\end{subfigure}}
 
-\begin{subfigure}{0.47\textwidth}
+\fbox{\begin{subfigure}{0.47\textwidth}
   \centering
   \begin{tikzpicture}[level distance=16mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
@@ -624,9 +624,9 @@ optimal transitions at each step.
   \end{tikzpicture}
   \captionof{figure}{AMR}
   \label{fig:converted_example_amr}
-\end{subfigure}
+\end{subfigure}}
 
-\begin{subfigure}{0.47\textwidth}
+\fbox{\begin{subfigure}{0.47\textwidth}
   \centering
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
@@ -676,24 +676,24 @@ optimal transitions at each step.
   \end{tikzpicture}
   \captionof{figure}{DM}
   \label{fig:converted_example_sdp}
-\end{subfigure}
+\end{subfigure}}
 
-\begin{subfigure}{0.47\textwidth}
+\fbox{\begin{subfigure}{0.47\textwidth}
   \centering
   \begin{tikzpicture}[level distance=15mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
-      level 1/.style={sibling distance=14mm},
-      level 2/.style={sibling distance=10mm}]
+      level 1/.style={sibling distance=13mm},
+      level 2/.style={sibling distance=1cm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
     \node (ROOT) [fill=black,circle] {}
       child {node (after) [fill=black,circle] {}
       {
         child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
-        child {node [word] {\quad graduation} edge from parent node {head}}
+        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
       } edge from parent node {obl}}
       child {node {}
       {
-        child {node [word] (comma) {\quad\quad,{\color{white}g}} edge from parent [draw=none]}
+        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
       } edge from parent [draw=none]}
       child {node {}
       {
@@ -715,7 +715,7 @@ optimal transitions at each step.
   \end{tikzpicture}
   \captionof{figure}{UD}
   \label{fig:converted_example_ud}
-\end{subfigure}
+\end{subfigure}}
 
 \caption{Graphs from Figure~\ref{fig:original_examples}, after conversion to the the unified DAG format
 (pre-terminals omitted: each terminal drawn in place of its parent).
