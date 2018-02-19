@@ -108,10 +108,6 @@ and Universal Conceptual Cognitive Annotation \cite[UCCA;][]{abend2013universal,
 While these schemes are formally different and focus on different sets of distinctions,
 much of the semantic content is shared \cite{abend2017state}.
 
-
-%In cases where related tasks can be learned jointly,
-%deep multitask learning models have been shown to be successful in various fields of NLP
-%\cite{collobert2011natural,Zhang2016StackpropagationIR,P17-1186,swayamdipta2017frame,guo2016exploiting}.
 Multitask learning \cite[MTL; ][]{caruana1998multitask} allows exploiting the overlap between tasks
 to effectively extend the training data,
 and has greatly advanced with neural networks and representation learning
@@ -124,23 +120,21 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
-%MTL is good for small data and cross-domain \cite{Rush2012ImprovedPA}
-%difference between domains \cite{Plank2011EffectiveMO,E17-1005}
+%difference between domains \cite{Plank2011EffectiveMO}
 Even before the rise of neural learning methods,
 MTL has been used for tasks with varying degrees of similarity:
 from joint classification of the roles of different arguments in semantic role labeling \cite{toutanova2005joint},
 to joint parsing and named entity recognition \cite{Finkel2009JointPA},
 to the incorporation of unlabeled data for various tasks \cite{ando2005framework}.
-For parsing, it has been applied successfully by
-parser combination and co-training \cite{mcclosky2010automatic,baucom2013domain}.
 Similar ideas, of parameter sharing across models trained with different data,
 can also be found in studies of domain adaptation \cite{W06-1615,P07-1033,K17-1040}.
+For parsing, domain adaptation has been applied successfully by
+parser combination and co-training \cite{mcclosky2010automatic,baucom2013domain}.
 
 Recent work has achieved state-of-the-art results in multiple NLP tasks
 by jointly learning the tasks forming the NLP standard pipeline using 
 a single neural network model \cite{collobert2011natural,D17-1206}.
 Such techniques effectively increase the amount of training data,
-%(exploiting incidental\oa{what is incidental supervision?} supervision \cite{DBLP:conf/aaai/Roth17})
 and replace the common pipeline approach, thereby avoiding error propagation.
 
 Deep MTL has hitherto mostly shown benefits where the tasks
@@ -174,8 +168,6 @@ Their model tackled frame-semantic parsing with ``syntactic scaffolding'',
 which jointly trains the parser with a constituency identification task, 
 namely the prediction of the boundaries of a syntactic
 constituent. 
-%This approach leverages 
-%where arguments are almost always syntactic constituents ,
 
 Another work which is closely related to ours is \citet{P17-1186},
 which reported benefits from MTL over three broad-coverage semantic dependency parsing (SDP)
@@ -189,10 +181,6 @@ training with conceptually and formally different formalisms (AMR and SDP; see \
 We are not aware of a semantic parser using a single model for
 such widely different tasks.
 
-
-%In contrast to the approaches listed above, we are faced with the challenge
-%of parsing multiple schemes diverging both structurally and content-wise,
-%designed separately and annotated over non-parallel corpora, in different domains.
 
 \begin{figure}
 \begin{subfigure}{0.5\textwidth}
