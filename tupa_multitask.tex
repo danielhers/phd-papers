@@ -193,8 +193,10 @@ such widely different tasks.
 %of parsing multiple schemes diverging both structurally and content-wise,
 %designed separately and annotated over non-parallel corpora, in different domains.
 
-\begin{figure*}[th]
-\begin{subfigure}[t]{0.5\textwidth}
+\begin{figure}
+\begin{subfigure}{0.5\textwidth}
+  \centering
+  \scalebox{.95}{
   \begin{tikzpicture}[level distance=10mm, ->]
     \node (ROOT) [fill=black, circle] {}
       child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
@@ -220,10 +222,12 @@ such widely different tasks.
     \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
     \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
+  }
   \caption{UCCA \label{fig:original_example_ucca}}
 \end{subfigure}
-~
-\begin{subfigure}[t]{0.5\textwidth}
+
+\begin{subfigure}{0.5\textwidth}
+  \centering
   \begin{tikzpicture}[level distance=15mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
       level 1/.style={sibling distance=26mm}]
@@ -252,9 +256,10 @@ such widely different tasks.
   \caption{AMR \label{fig:original_example_amr}}
 \end{subfigure}
 
-\begin{subfigure}[t]{0.5\textwidth}
+\begin{subfigure}{0.5\textwidth}
+  \centering
     \begin{dependency}[text only label, label style={above}, font=\small]
-    \begin{deptext}[column sep=1em,ampersand replacement=\^]
+    \begin{deptext}[column sep=.8em,ampersand replacement=\^]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
         \depedge{1}{2}{ARG2}
@@ -267,10 +272,11 @@ such widely different tasks.
     \end{dependency}
   \caption{DM \label{fig:original_example_sdp}}
 \end{subfigure}
-~
-\begin{subfigure}[t]{0.5\textwidth}
+
+\begin{subfigure}{0.5\textwidth}
+  \centering
     \begin{dependency}[text only label, label style={above}, font=\small]
-    \begin{deptext}[column sep=1em,ampersand replacement=\^]
+    \begin{deptext}[column sep=.8em,ampersand replacement=\^]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
         \depedge{2}{1}{case}
@@ -302,7 +308,7 @@ such widely different tasks.
   Edge labels correspond to syntactic relations.
 }
 
-\end{figure*}
+\end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -511,7 +517,7 @@ TUPA also does not support node labels,
 which are ubiquitous in AMR but absent in UCCA structures (only edges are labeled in UCCA). 
 We therefore only produce edge labels and not node labels when training on AMR.
 
-\begin{figure}[th]
+\begin{figure}[t]
    \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
    \node[anchor=west] at (0,1.5) {Parser state};
    \draw[color=gray,dashed] (0,-1.2) rectangle (7.5,1.25);
@@ -574,8 +580,9 @@ which is trained to maximize the sum of log-likelihoods of all
 optimal transitions at each step.
 
 
-\begin{figure*}[th]
+\begin{figure}
 \begin{subfigure}{0.5\textwidth}
+    \centering
     \begin{tikzpicture}[level distance=10mm, sibling distance=14mm, ->,
         every circle node/.append style={fill=black}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
@@ -602,8 +609,9 @@ optimal transitions at each step.
   \caption{UCCA}
   \label{fig:converted_example_ucca}
 \end{subfigure}
-~
+
 \begin{subfigure}{0.5\textwidth}
+  \centering
   \begin{tikzpicture}[level distance=16mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
       level 1/.style={sibling distance=28mm},
@@ -631,6 +639,7 @@ optimal transitions at each step.
 \end{subfigure}
 
 \begin{subfigure}{0.5\textwidth}
+  \centering
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
       level 1/.style={sibling distance=26mm,level distance=6mm},
@@ -680,22 +689,23 @@ optimal transitions at each step.
   \captionof{figure}{DM}
   \label{fig:converted_example_sdp}
 \end{subfigure}
-~
+
 \begin{subfigure}{0.5\textwidth}
+  \centering
   \begin{tikzpicture}[level distance=15mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
-      level 1/.style={sibling distance=15mm},
-      level 2/.style={sibling distance=16mm}]
+      level 1/.style={sibling distance=14mm},
+      level 2/.style={sibling distance=10mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
     \node (ROOT) [fill=black,circle] {}
       child {node (after) [fill=black,circle] {}
       {
-        child {node [word] {After{\color{white}g}} edge from parent node {case}}
-        child {node [word] {graduation {\color{white}g}\quad\quad} edge from parent node {head}}
+        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
+        child {node [word] {\quad graduation} edge from parent node {head}}
       } edge from parent node {obl}}
       child {node {}
       {
-        child {node [word] (comma) {{\color{white}g} ,} edge from parent [draw=none]}
+        child {node [word] (comma) {\quad\quad,{\color{white}g}} edge from parent [draw=none]}
       } edge from parent [draw=none]}
       child {node {}
       {
@@ -707,7 +717,7 @@ optimal transitions at each step.
       } edge from parent [draw=none]}
       child {node (to) [fill=black,circle] {}
       {
-          child {node [word] {\quad{\color{white}g}to} edge from parent node {case}}
+          child {node [word] {to{\color{white}g}} edge from parent node {case}}
           child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
       } edge from parent node {obl}}
       ;
@@ -735,7 +745,7 @@ As in SDP, intermediate non-terminals and \textit{head} edges are introduced.
 The graph is actually a tree, as was the original bilexical graph.
 }
 \label{fig:converted_examples}
-\end{figure*}
+\end{figure}
 
 
 \paragraph{Features.}
@@ -768,12 +778,12 @@ An example generic constraint is that stack nodes
 that have been swapped
 should not be swapped again.\footnote{
  To implement this constraint, we define a \textit{swap index}
- for each node, which is assigned when the node is created.
+ for each node, assigned when the node is created.
  At initialization, only the root node and terminals exist.
- We assign the root a swap index of 0, and for each terminal, its swap index
- is its position in the text (starting at 1).
+ We assign the root a swap index of 0, and for each terminal, its
+ position in the text (starting at 1).
  Whenever a node is created as a result of a \textsc{Node}
- transition, we assign its swap index to be the arithmetic 
+ transition, its swap index is the arithmetic
  mean of the swap indices of the stack top and buffer head.}
 
 
@@ -783,7 +793,7 @@ should not be swapped again.\footnote{
 To be able to use TUPA for the four tasks presented in \S\ref{sec:tasks},
 we convert them all into a unified DAG format, which is inclusive enough to
 allow representing any of the schemes with very little loss of information\footnote{See
-Supplementary Material for more details about the conversion.}.
+Supplementary Material for conversion details.}.
 
 The format consists of a rooted DAG, where the tokens are the terminal nodes.
 As in the UCCA format, the edges (but not the nodes) are labeled,
@@ -829,7 +839,7 @@ has a child for each token in the name (see the two \textit{name} nodes in Figur
 We collapse this sub-graph into a single node whose children are the name tokens.
 
 
-\begin{figure}[th]
+\begin{figure}[t]
    \begin{tikzpicture}
    \node[anchor=west] at (0,1) {Parser state};
    \draw[color=gray,dashed] (0,0) rectangle (7.5,.75);
@@ -859,7 +869,7 @@ We collapse this sub-graph into a single node whose children are the name tokens
     \path (mlp) edge node[right] {softmax} (transition);
    \end{tikzpicture}
    \caption{MTL model.
-      Representations for input tokens are computed both by a task-specific and a shared BiLSTM.
+      Input token representations are computed both by a task-specific and a shared BiLSTM.
       Their outputs are concatenated with the embedding of the parser state and fed into the task-specific MLP for selecting the next transition.}
    \label{fig:multi_model}
 \end{figure}
@@ -907,7 +917,7 @@ and evaluate its performance on the UCCA English in-domain and out-of-domain tes
 Next, we repeat the experiment on French and German, investigating the impact of multitask
 training, where only a small or noisy training set for the main task is available.
 
-\begin{table}[th]
+\begin{table}[t]
 \centering
 \small
 \setlength\tabcolsep{3pt}
@@ -1020,7 +1030,7 @@ UD treebanks in the respective languages.\footnote{We did not use AMR, DM or enh
 and German, as these are only available in English.}
 
 
-\begin{table}[th]
+\begin{table}[t]
 \centering
 \small
 \setlength\tabcolsep{3pt}
@@ -1070,7 +1080,7 @@ Other settings use unlabeled auxiliary tasks in the same language.
 \label{tab:ood_results}
 \end{table}
 
-\begin{table}[th]
+\begin{table}[t]
 \centering
 \small
 \setlength\tabcolsep{3pt}
