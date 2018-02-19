@@ -567,12 +567,12 @@ we use a BiLSTM with embeddings as inputs,
 followed by an MLP and a softmax layer for classification 
 (see Figure~\ref{fig:single_model}).
 Inference is performed greedily,
-and training is done with an oracle that yields the set of all correct 
-transitions at a given state.\oa{what do you mean correct?}
-Out of this set, the actual transition taken in training\oa{what do you mean ``taken''?} is the one
+and training is done with an oracle that yields the set of all optimal 
+transitions at a given state (those from which the gold graph is still reachable).
+Out of this set, the actual transition performed in training is the one
 with the highest score given by the classifier,
-which is trained to maximize the log-likelihood of all 
-correct transitions at each step.\oa{sum of log-likelihoods?}
+which is trained to maximize the sum of log-likelihoods of all 
+optimal transitions at each step.
 
 
 \begin{figure*}[t]
