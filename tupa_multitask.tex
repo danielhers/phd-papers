@@ -183,7 +183,7 @@ such widely different tasks.
 
 
 \begin{figure}
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.47\textwidth}
   \centering
   \scalebox{.95}{
   \begin{tikzpicture}[level distance=10mm, ->]
@@ -211,11 +211,10 @@ such widely different tasks.
     \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
     \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
-  }
-  \caption{UCCA \label{fig:original_example_ucca}}
+  }\caption{UCCA \label{fig:original_example_ucca}}
 \end{subfigure}
 
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.47\textwidth}
   \centering
   \begin{tikzpicture}[level distance=15mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
@@ -245,7 +244,7 @@ such widely different tasks.
   \caption{AMR \label{fig:original_example_amr}}
 \end{subfigure}
 
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.47\textwidth}
   \centering
     \begin{dependency}[text only label, label style={above}, font=\small]
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
@@ -262,7 +261,7 @@ such widely different tasks.
   \caption{DM \label{fig:original_example_sdp}}
 \end{subfigure}
 
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.47\textwidth}
   \centering
     \begin{dependency}[text only label, label style={above}, font=\small]
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
@@ -570,7 +569,7 @@ optimal transitions at each step.
 
 
 \begin{figure}
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.47\textwidth}
     \centering
     \begin{tikzpicture}[level distance=10mm, sibling distance=14mm, ->,
         every circle node/.append style={fill=black}]
@@ -599,7 +598,7 @@ optimal transitions at each step.
   \label{fig:converted_example_ucca}
 \end{subfigure}
 
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.47\textwidth}
   \centering
   \begin{tikzpicture}[level distance=16mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
@@ -627,7 +626,7 @@ optimal transitions at each step.
   \label{fig:converted_example_amr}
 \end{subfigure}
 
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.47\textwidth}
   \centering
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
@@ -679,7 +678,7 @@ optimal transitions at each step.
   \label{fig:converted_example_sdp}
 \end{subfigure}
 
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.47\textwidth}
   \centering
   \begin{tikzpicture}[level distance=15mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
@@ -1178,6 +1177,9 @@ UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 
 
 \section{Discussion}\label{sec:discussion}
+
+\citet{Finkel2009JointPA} showed that the combination of many different domains helps with domain
+adaptation without having to identify the target domain.
 
 Previous work has shown that MTL works best when auxiliary tasks are annotated
 on the same corpus as the main task \cite{E17-1005}.
