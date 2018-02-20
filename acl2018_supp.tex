@@ -42,53 +42,21 @@
 \begin{document}
 \maketitle
 
-
-\section*{Supplementary Notes}
-
-\paragraph{Feature Templates.}
+\paragraph{Features.}
 
 Table~\ref{tab:features} lists all feature used for the classifier (see \S\ref{sec:classifier}).
 Numeric features are taken as they are, whereas categorical features are mapped to real-valued embedding
 vectors.
 For \texttt{w} features,
-we use both randomly-initialized and pre-trained word embeddings, concatenating them.
-For each node, we select a \textit{head terminal} by traversing down the graph according to
-a heuristically determined priority order, taken from \citet{hershcovich2017a}.
+we concatenate randomly-initialized and pre-trained word embeddings.
+For each node, we select a \textit{head terminal} by traversing the graph according to
+a priority order on edge labels, taken from \citet{hershcovich2017a}.
 
-\begin{table}[h]
-\centering
-\footnotesize
-\begin{tabular}{l|l}
-\bf Nodes & \bf Features \\ 
-\hline
-%       w   t   d   e   n   c   p   T   #   ^   $   x   h   q   y   P   C   I   E   M   N
-$s_0$ & \texttt{wtdencpT\#\^{}\$xhqyPCIEMN} \\
-$s_1$ & \texttt{wtdencT\#\^{}\$xhyN} \\
-$s_2$ & \texttt{wtdencT\#\^{}\$xhy} \\
-$s_3$ & \texttt{wtdencT\#\^{}\$xhyN} \\
-$b_0$ & \texttt{wtdncT\#\^{}\$hPCIEMN} \\
-$b_1, b_2, b_3$ & \texttt{wtdncT\#\^{}\$} \\
-\multirow{3}{3cm}{$s_0l, s_0r, s_1l, s_1r$, $s_0ll, s_0lr, s_0rl, s_0rr$, $s_1ll, s_1lr, s_1rl, s_1rr$} &
-    \texttt{wenc\#\^{}\$} \\ \\ \\
-\multirow{2}{3cm}{$s_0L, s_0R, s_1L, s_1R$, $b_0L, b_0R$} & \texttt{wen\#\^{}\$} \\ \\
-\hline
-\bf Edges & \\
-$s_0 \to s_1, s_0 \to b_0$ & \texttt{xd} \\
-$s_1 \to s_0, b_0 \to s_0$ & \texttt{x} \\
-$s_0 \to b_0, b_0 \to s_0$ & \texttt{e} \\
-\hline
-\bf Past actions \\
-$a_0, a_1$ & \texttt{eA} \\
-\hline
-\bf Misc. & \texttt{node ratio}
-\end{tabular}
-\caption{Transition classifier features.\label{tab:features}
-\\ \footnotesize
 $s_i$ refers to stack node $i$ from the top, and
 $b_i$ to buffer node $i$.
 $xl$ and $xr$ refer to a $x$'s leftmost and rightmost children, and
 $xL$ and $xR$ to its leftmost and rightmost parents.
-\\
+
 \texttt{w} refers to the node's head terminal text,
 \texttt{t} to its POS tag, and
 \texttt{d} to its dependency relation.
@@ -106,18 +74,45 @@ parents, children, implicit children, remote children, and remote parents,
 \texttt{\#} to its word shape (capturing orthographic features, e.g. "Xxxx" or "dd"),
 \texttt{\^{}} to its one-character prefix, and
 \texttt{\$} to its three-character suffix.
-\\
+
 $x \to y$ refers to the existing edge from $x$ to $y$.
 \texttt{x} is an indicator feature, taking the value of 1 if the edge exists or 0 otherwise,
 \texttt{e} refers to the edge label, and
 \texttt{d} to the dependency distance between the head terminals of the nodes.
-\\
+
 $a_i$ to the transition taken $i+1$ steps ago.
 \texttt{A} refers to the action type label (e.g. \textsc{shift}/\textsc{right-edge}/\textsc{node}), and
 \texttt{e} to the edge label created by the action (e.g. $C$/$E$/$P$).
-\\
+
 \texttt{node ratio} is the ratio between non-terminals and terminals, taken from \citet{hershcovich2017a}.
-}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l|l}
+\bf Nodes & \bf Features \\ 
+\hline
+%       w   t   d   e   n   c   p   T   #   ^   $   x   h   q   y   P   C   I   E   M   N
+$s_0$ & \texttt{wtdencpT\#\^{}\$xhqyPCIEMN} \\
+$s_1$ & \texttt{wtdencT\#\^{}\$xhyN} \\
+$s_2$ & \texttt{wtdencT\#\^{}\$xhy} \\
+$s_3$ & \texttt{wtdencT\#\^{}\$xhyN} \\
+$b_0$ & \texttt{wtdncT\#\^{}\$hPCIEMN} \\
+$b_1, b_2, b_3$ & \texttt{wtdncT\#\^{}\$} \\
+$s_0l, s_0r, s_1l, s_1r, s_0ll, s_0lr, s_0rl, s_0rr, s_1ll, s_1lr, s_1rl, s_1rr$ &
+    \texttt{wenc\#\^{}\$} \\
+$s_0L, s_0R, s_1L, s_1R, b_0L, b_0R$ & \texttt{wen\#\^{}\$} \\
+\hline
+\bf Edges & \\
+$s_0 \to s_1, s_0 \to b_0$ & \texttt{xd} \\
+$s_1 \to s_0, b_0 \to s_0$ & \texttt{x} \\
+$s_0 \to b_0, b_0 \to s_0$ & \texttt{e} \\
+\hline
+\bf Past actions \\
+$a_0, a_1$ & \texttt{eA} \\
+\hline
+\bf Misc. & \texttt{node ratio}
+\end{tabular}
+\caption{Transition classifier features.\label{tab:features}}
 \end{table}
 
 Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
@@ -132,49 +127,44 @@ described in \S\ref{sec:multitask}.
 and \textbf{Shared} to parameters shared among all tasks
 (shared BiLSTM and embeddings).
 
-External word embeddings are pre-trained word embeddings (see \S\ref{sec:training}),
-and word embeddings are randomly initialized.
-
 \begin{table}[h]
 \centering
-\footnotesize
 \begin{tabular}{l|c|ccccc}
-\bf Hyperparameter &  \bf Single & \multicolumn{3}{c}{\bf Multitask} \\ 
-&& \bf Main & \bf Aux & \bf Shared \\
+&& \multicolumn{3}{c}{\bf Multitask} \\ 
+\bf Hyperparameter &  \bf Single & \bf Main & \bf Aux & \bf Shared \\
 \hline
-external word dim. & 300 &&& 300 \\
-word dim. & 200 &&& 200 \\
-POS tag dim. & 20 &&& 20 \\
-syntactic dep. dim. & 10 &&& 10 \\
-named entity dim. & 3 &&& 3 \\
-punctuation dim. & 1 &&& 1 \\
-action dim. & 3 &&& 3 \\
-edge label dim. & 20 & 20 \\
+Pre-trained word embedding dimensions & 300 &&& 300 \\
+Randomly initialized word embedding dimensions & 200 &&& 200 \\
+POS tag embedding dimensions & 20 &&& 20 \\
+Syntactic dependency embedding dimensions & 10 &&& 10 \\
+Named entity type embedding dimensions & 3 &&& 3 \\
+Punctuation embedding dimensions & 1 &&& 1 \\
+Action embedding dimensions & 3 &&& 3 \\
+Edge label embedding dimensions & 20 & 20 \\
+\hline
 MLP layers & 2 & 2 & 1 \\
 MLP dimensions & 50 & 50 & 50 \\
 BiLSTM layers & 2 & 2 & 1 & 2 \\
 BiLSTM dimensions & 500 & 250 & 50 & 250
 \end{tabular}
-\caption{Hyperparameter settings.\label{tab:hyperparams}
-Middle column: single-task.
-Right column: multitask settings for main task (UCCA), auxiliary tasks, and shared parameters.}
+\caption{Hyperparameter settings.\label{tab:hyperparams}}
 \end{table}
 
 \paragraph{Conversion to and from Unified DAG Format.}
 
-Although all experiments reported in the main paper on the auxiliary tasks
+Although all experiments reported in the paper with the auxiliary tasks
 (AMR, DM and UD) are using unlabeled parsing for these schemes,
 our conversion code,
 which is attached as supplementary material and is also publicly available at $<$anonymized$>$,
 supports full conversion to and from these formats
-(see \texttt{scheme/conversion} in the supplementary software).
+(see \texttt{scheme/conversion} there).
 
 Conversion from AMR to the unifid DAG format and back
 results in 95\% Smatch $F_1$ \cite{cai2013smatch} when averaged over the
 LDC2017T10 test set.
 On SDP, the conversion is lossless and results in identical graphs
 when converted to UCCA and back.
-For UD, and conversion results in 98.5\% LAS $F_1$ on the UD{\_}English test set,
+For UD, and conversion results in 98.5\% LAS $F_1$ on the UD English test set,
 due to multi-word tokens, not supported in the unified DAG format.
 
 \bibliography{references}
