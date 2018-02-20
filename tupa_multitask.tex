@@ -1144,15 +1144,16 @@ all $F_1$ scores are not statistically different from the current state-of-the-a
 \begin{table}
 \centering
 \small
-\begin{tabular}{l|llll}
-& \footnotesize \textbf{20K} & \footnotesize \textbf{AMR} & \footnotesize \textbf{DM} & \footnotesize \textbf{UD} \\
+\begin{tabular}{l|cccc}
+& \footnotesize 20K & \footnotesize AMR & \footnotesize DM & \footnotesize UD \\
 \hline
-\footnotesize \textbf{Wiki} & 1.047 & 0.895 & 0.913 & 0.843 \\
-\footnotesize \textbf{20K} && 0.949 & 0.971 & 0.904 \\
-\footnotesize \textbf{AMR} &&& 0.757 & 0.469 \\
-\footnotesize \textbf{DM} &&&& 0.754
+\footnotesize Wiki & 1.047 & 0.895 & 0.913 & 0.843 \\
+\footnotesize 20K && 0.949 & 0.971 & 0.904 \\
+\footnotesize AMR &&& 0.757 & 0.469 \\
+\footnotesize DM &&&& 0.754
 \end{tabular}
-\caption{Distance between domains.
+\caption{L1 distance between word distributions,
+quantifying domain differences (low is similar).
 \label{tab:domain_sim}}
 \end{table}
 
@@ -1189,8 +1190,11 @@ in accordance with previous work \cite{Finkel2009JointPA}.
 %it follows that our model is faced with the additional challenge of domain adaptation,
 %and further highlights the significance of our results.
 To quantify the difference between the domains, we measure the L1 distance between word unigram
-distributions in each training set used to train our models \cite{Plank2011EffectiveMO}.
+distributions in each training set used to train our models \cite{Plank2011EffectiveMO}
+and between the out-of-domain test set (\textit{20K}).
 These distances are given in Table~\ref{tab:domain_sim}.
+All auxiliary training sets are more similar to the \textit{20K Leagues} set than the \textit{Wiki}
+is, which could explain some of the contribution to the out-of-domain results.
 
 In addition, the representations themselves vary both formally and content-wise.
 To quantify the similarity between the unlabeled auxiliary tasks and UCCA parsing,
