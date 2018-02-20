@@ -120,7 +120,6 @@ results.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
-%difference between domains \cite{Plank2011EffectiveMO}
 Even before the rise of neural learning methods,
 MTL has been used for tasks with varying degrees of similarity:
 from joint classification of the roles of different arguments in semantic role labeling \cite{toutanova2005joint},
@@ -1056,7 +1055,7 @@ See Supplementary Material for a listing of hyperparameter settings.
 \small UD & 73.7$\star$ & 72.6$\star$ & \textbf{73.2}$\star$ & 61.8 & 24.9$\star$ & \textbf{35.5}$\star$
 \end{tabular}
 \caption{
-Experimental results, in percents, on the \textit{20K Leagues} set.
+Experimental results (in \%) on the \textit{20K Leagues} set.
 Columns correspond to labeled precision, recall and F-score,
 for both primary and remote edges.
 $\star$~indicates significantly better ($p<0.05$)
@@ -1101,7 +1100,7 @@ Other settings use unlabeled auxiliary tasks in the same language.
 & 75 & 72.9 & 73.9 & 48.3$\dagger$ & 48.7 & 48.5
 \end{tabular}
 \caption{
-Experimental results, in percents, on the English \textit{Wiki} test set.
+Experimental results (in \%) on the English \textit{Wiki} test set.
 $\star$~indicates significantly better ($p<0.05$) than single-task (bootstrap test),
 and $\dagger$ indicates significantly worse.
 }
@@ -1120,6 +1119,22 @@ All multitask results are significantly ($p<0.05$)
 better than single-task results (bootstrap test).
 This result demonstrates that even a small training set in the main task may produce good results,
 given sufficiently large auxiliary training data.
+
+
+\begin{table}
+\centering
+\small
+\begin{tabular}{l|llll}
+& \footnotesize \textbf{20K} & \footnotesize \textbf{AMR} & \footnotesize \textbf{DM} & \footnotesize \textbf{UD} \\
+\hline
+\footnotesize \textbf{Wiki} & 1.047 & 0.895 & 0.913 & 0.843 \\
+\footnotesize \textbf{20K} && 0.949 & 0.971 & 0.904 \\
+\footnotesize \textbf{AMR} &&& 0.757 & 0.469 \\
+\footnotesize \textbf{DM} &&&& 0.754
+\end{tabular}
+\caption{Distance between domains.
+\label{tab:domain_sim}}
+\end{table}
 
 
 \begin{table}
@@ -1153,12 +1168,16 @@ in accordance with previous work \cite{Finkel2009JointPA}.
 %In addition to the absence of a parallel corpus,
 %it follows that our model is faced with the additional challenge of domain adaptation,
 %and further highlights the significance of our results.
+To quantify the difference between the domains, we measure the L1 distance between word unigram
+distributions in each training set used to train our models \cite{Plank2011EffectiveMO}.
+These distances are given in Table~\ref{tab:domain_sim}.
 
 In addition, the representations themselves vary both formally and content-wise.
 To quantify the similarity between the unlabeled auxiliary tasks and UCCA parsing,
 we perform unlabeled evaluation (ignoring edge labels)
-on 100 manually annotated English sentences from the
-Wall Street Journal, after conversion to the unified DAG format.\footnote{The annotated
+on 100 manually annotated English sentences from
+Section 02 of the Penn Treebank Wall Street Journal (WSJ),
+after conversion to the unified DAG format.\footnote{The annotated
 sentences are available at $<$anonymized$>$}
 As can be seen in Table~\ref{tab:common}, there is a high overlap between
 UCCA and UD$^{++}$, while DM is less similar, and AMR even less.
