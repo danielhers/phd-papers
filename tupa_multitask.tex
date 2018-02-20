@@ -124,10 +124,10 @@ English.\footnote{Our code is publicly available at $<$anonymized$>$.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
 Even before the rise of neural learning methods,
-MTL has been used for tasks with varying degrees of similarity:
-from joint classification of the roles of different arguments in semantic role labeling \cite{toutanova2005joint},
-to joint parsing and named entity recognition \cite{Finkel2009JointPA},
-to the incorporation of unlabeled data for various tasks \cite{ando2005framework}.
+MTL has been used for tasks with varying degrees of similarity,
+e.g., joint classification for different arguments in semantic role labeling \cite{toutanova2005joint},
+%to joint parsing and named entity recognition \cite{Finkel2009JointPA},
+and incorporation of unlabeled data for various tasks \cite{ando2005framework}.
 Similar ideas, of parameter sharing across models trained with different data,
 can also be found in studies of domain adaptation \cite{W06-1615,P07-1033,K17-1040}.
 For parsing, domain adaptation has been applied successfully by
@@ -139,20 +139,18 @@ a single neural network model \cite{collobert2011natural,D17-1206}.
 Such techniques effectively increase the amount of training data,
 and replace the common pipeline approach, thereby avoiding error propagation.
 
-Deep MTL has hitherto mostly shown benefits where the tasks
-are formally similar \cite{P15-1166,P16-2038,D17-1134},
-or where one task comprises the underlying structure for another task.
-\citet{E17-1005} showed that MTL works best when auxiliary tasks have few labels
-and are annotated on the same corpus as the main task.
-Examples of deep MTL across similar tasks include 
+Deep MTL has been mostly effective with formally similar
+tasks \cite{P15-1166,P16-2038,D17-1134}.
+%or where one task tends to be used as pre-processing for another.
+Examples include 
 multilingual syntactic dependency \cite{Q16-1031,guo2016exploiting}
 and semantic parsing \cite{duong2017multilingual},
 as well as domain adaptation in semantic parsing \cite{herzig-berant:2017:Short,W17-2607}.
-Sharing parameters with a pre-processing task
-has shown great benefit in transition-based parsing, demonstrated in
-joint POS tagging and syntactic parsing
+Sharing parameters with a low-level task
+has shown great benefit in transition-based syntactic parsing,
+when jointly training with POS tagging
 \cite{bohnet2012transition,Zhang2016StackpropagationIR}, and
-lexical and syntactic analysis \cite{constant-nivre:2016:P16-1,more2016joint}.
+with lexical analysis \cite{constant-nivre:2016:P16-1,more2016joint}.
 
 Much effort over the years has been devoted to joint learning of syntactic
 and semantic parsing, including
@@ -170,14 +168,14 @@ which jointly trains the parser with a constituency identification task,
 namely the prediction of the boundaries of a syntactic
 constituent. 
 
-Another work which is closely related to ours is \citet{P17-1186},
-which reported benefits from MTL over three broad-coverage semantic dependency parsing (SDP)
-tasks that use three different annotation schemes, albeit on the same text and using a uniform formalism with 
+Another work closely related to ours is by \citet{P17-1186},
+reporting benefits from MTL over three broad-coverage semantic dependency parsing (SDP)
+tasks using different representations, albeit on the same text and using a uniform formalism with 
 considerable overlap in their edges.
 They report improvement to all tasks, of 0.5\% to 1\% increase in labeled $F_1$ over a single-task model.
 
-In this work we take the challenge of MTL of semantics a step further and 
-show benefit to UCCA parsing from multitask 
+In this work, we take the challenge of MTL of semantics a step further,
+improving UCCA parsing using multitask 
 training with conceptually and formally different formalisms (AMR and SDP; see \S\ref{sec:tasks}).
 %Further, we show additional benefit from using a syntactic task parsing as auxiliary (UD).
 We are not aware of a semantic parser using a single model for
@@ -282,15 +280,15 @@ such widely different tasks.
 
 
 \caption{\label{fig:original_examples}
- Example graph for each representation scheme we use.
+ Example graph for each tackled task.
  Figure \ref{fig:original_example_ucca} presents a UCCA graph. The dashed edge is remote,
   while the gray node and its outgoing edges represent inter-Scene linkage.
   Pre-terminal nodes and edges are omitted for brevity. 
  Figure \ref{fig:original_example_amr} presents an AMR graph.
-  The text tokens are not part of the graph, and must be matched to
+  Text tokens are not part of the graph, and must be matched to
   concepts and constants by alignment. Variables are represented by their concepts.
- Figure \ref{fig:original_example_sdp} presents an SDP graph (in the DM formalism).
-  The graph contains multiple roots: ``After'', ``moved'' and ``to''.
+ Figure \ref{fig:original_example_sdp} presents a DM semantic dependency graph,
+  containing multiple roots: ``After'', ``moved'' and ``to''.
   One of the roots is marked as \textit{top}: ``moved''.
   Punctuation is not included in the graph as it is non-content-bearing.
  Figure \ref{fig:original_example_ud} presents a UD tree.
@@ -309,7 +307,7 @@ We focus on representation schemes that provide a full-sentence analysis,
 i.e., schemes that produce a graph covering all (content) words in the text, 
 or the lexical concepts they evoke.
 Full-sentence analysis contrasts with ``shallow'' semantic parsing,
-primarily Semantic Role Labeling
+primarily semantic role labeling
 \cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
 which specifically targets argument structure phenomena using flat structures.
 We consider four target representations: UCCA, AMR, DM and UD
@@ -326,10 +324,10 @@ using each of the schemes.
 %did in the TUPA paper, with examples etc.}
 
 \paragraph{Universal Conceptual Cognitive Annotation.}\label{sec:ucca}
-UCCA \cite{abend2013universal} is a semantic representation scheme whose main design principles
+UCCA \cite{abend2013universal} is a semantic representation whose main design principles
 are ease of annotation, cross-linguistic applicability and stability, and a modular architecture of semantic distinctions.
-UCCA represents the semantics of natural language utterances
-as directed acyclic graphs (DAGs), where terminal nodes (nodes without children)
+UCCA represents the semantics of linguistic utterances
+as directed acyclic graphs (DAGs), where terminal (childless) nodes
 correspond to the text tokens, and non-terminal nodes to semantic units that participate
 in some super-ordinate relation.
 Edges are labeled, indicating the role of a child in the relation the parent represents.
