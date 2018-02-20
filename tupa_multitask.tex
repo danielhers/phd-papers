@@ -112,9 +112,12 @@ Multitask learning \cite[MTL; ][]{caruana1998multitask} allows exploiting the ov
 to effectively extend the training data,
 and has greatly advanced with neural networks and representation learning
 (see \S\ref{sec:related_work}).
-We build on these ideas and propose a BiLSTM transition-based semantic DAG parser for UCCA,
-trained in a MTL setting to obtain state-of-the-art 
-results.\footnote{Our code is publicly available at $<$anonymized$>$.}
+We build on these ideas and propose a BiLSTM transition-based semantic DAG parser,
+trained in a MTL setting to obtain an error reduction of 13.8\% in UCCA parsing
+in French, where the available training data is small;
+of 1\% in German, where only noise training data exists;
+and of 2.8\% in an out-of-domain setting in
+English.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 
 
