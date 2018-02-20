@@ -931,15 +931,17 @@ Wiki & 158433 & 5225 &&&& \\
 
 \paragraph{Data.}
 
-For UCCA, we use the English Wikipedia corpus \cite{abend2013universal},
+For UCCA, we use the English Wikipedia corpus \cite[v1.0; ][]{abend2013universal},
 with the standard train/dev/test split of 4254/453/518 sentences,
 and the \textit{Twenty Thousand Leagues Under the Sea} corpus
 \cite[\textit{20K Leagues};][]{sulem2015conceptual},
-annotated in English, French and German.
-The English part of \textit{20K Leagues} is used only as an out-of-domain test set, as in HAR17.
-For the French and German parts we use train/dev/test splits of 413/67/67 and 4196/561/2174 sentences,
-respectively.\footnote{\mbox{\url{http://github.com/huji-nlp/ucca-corpus}}}
-For each language, we tune on the development set without cross-validation.
+annotated in English, French and German.\footnote{\mbox{\url{http://github.com/huji-nlp/ucca-corpus}}}
+The English part (v1.0) of \textit{20K Leagues} is used only as an out-of-domain test set, as in HAR17.
+For the fairly small French part (v1.0; see Table~\ref{tab:corpora})
+we use a train/dev/test split of 413/67/67 sentences.
+For the German part (v0.9), which is noisy as it is still being developed,
+we use a split of 4196/561/2174 sentences.
+We tune on the respective development sets without cross-validation.
 
 For AMR, we use LDC2017T10, targeted in SemEval 2017
 \cite{may2017semeval}.\footnote{\mbox{\url{http://catalog.ldc.upenn.edu/LDC2017T10}}}
@@ -949,7 +951,6 @@ For Universal Dependencies, we use all English, French and German treebanks from
 \cite{11234/1-2515}.\footnote{\url{http://hdl.handle.net/11234/1-2515}}
 We use the enhanced++ UD representation \cite{SCHUSTER16.779} in our English experiments,
 henceforth referred to as UD$^{++}$.
-Table~\ref{tab:corpora} shows the size of each corpus.
 For AMR, DM and UD, we use the training sets from standard train/dev/test splits.
 While UCCA is annotated over Wikipedia and a literary corpus,
 the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
