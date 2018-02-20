@@ -943,7 +943,7 @@ For the German part (v0.9), which is noisy as it is still being developed,
 we use a split of 4196/561/2174 sentences.
 We tune on the respective development sets without cross-validation.
 
-For AMR, we use LDC2017T10, targeted in SemEval 2017
+For AMR, we use LDC2017T10, identical to the dataset targeted in SemEval 2017
 \cite{may2017semeval}.\footnote{\mbox{\url{http://catalog.ldc.upenn.edu/LDC2017T10}}}
 For SDP, we use the DM target representation from the SDP 2016 dataset
 \cite{oepen2016towards}.\footnote{\url{http://sdp.delph-in.net/osdp-12.tgz}}
@@ -952,8 +952,10 @@ For Universal Dependencies, we use all English, French and German treebanks from
 We use the enhanced++ UD representation \cite{SCHUSTER16.779} in our English experiments,
 henceforth referred to as UD$^{++}$.
 For AMR, DM and UD, we use the training sets from standard train/dev/test splits.
-While UCCA is annotated over Wikipedia and a literary corpus,
+
+While UCCA is annotated over Wikipedia and over a literary corpus,
 the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
+This domain difference between training and test is particularly challenging (see \S\ref{sec:discussion}).
 
 \paragraph{Experimental setup.}
 
@@ -961,7 +963,7 @@ As our main experiment, we evaluate our method in settings where MTL tends to be
 in an out-of-domain setting (on English),
 training on \textit{Wiki} and evaluating on \textit{20K Leagues},
 and where the only available training data is very small (French)
-or noise (German), training on the \textit{20K Leagues} training set and evaluating on the test set.
+or noisy (German), training on the \textit{20K Leagues} training set and evaluating on the test set.
 We use unlabeled AMR, DM and UD$^{++}$ parsing as auxiliary tasks in English,
 and unlabeled UD parsing in French and German.\footnote{We did not use AMR, DM or UD$^{++}$ in French
 and German, as these are only available in English.}
