@@ -1065,7 +1065,7 @@ Experimental results (in \%) on the \textit{20K Leagues} set.
 Columns correspond to labeled precision, recall and F-score,
 for both primary and remote edges.
 $\star$~indicates significantly better ($p<0.05$)
-than single-task \cite[bootstrap test; ][]{berg2012empirical},
+than \textit{Single} \cite[bootstrap test; ][]{berg2012empirical},
 and $\dagger$ indicates significantly worse.
 \textit{Single} is trained only on the corresponding UCCA training set.
 Other settings use unlabeled auxiliary tasks in the same language.
@@ -1107,7 +1107,7 @@ Other settings use unlabeled auxiliary tasks in the same language.
 \end{tabular}
 \caption{
 Experimental results (in \%) on the English \textit{Wiki} test set.
-$\star$~indicates significantly better ($p<0.05$) than single-task (bootstrap test),
+$\star$~indicates significantly better ($p<0.05$) than \textit{Single} (bootstrap test),
 and $\dagger$ indicates significantly worse.
 }
 \label{tab:id_results}
@@ -1116,16 +1116,24 @@ and $\dagger$ indicates significantly worse.
 \section{Results}\label{sec:results}
 
 Table~\ref{tab:ood_results} shows our experimental results.
-Our basic single-task model (Single)
-is similar to the best model by \citet[shown as HAR17]{hershcovich2017a},
+Our basic single-task model (\textit{Single})
+is slightly better than the current state-of-the-art
+\citet[shown as \textit{HAR17}]{hershcovich2017a},
 only using additional features (see \S\ref{sec:classifier}).
+On the English out-of-domain test set,
+it is outperformed by all MTL models.
+This improvement is largely additive: the best model uses all three auxiliary tasks,
+yielding an error reduction of 2.8\%.
+%Although UD$^{++}$ seems to hurt performance on remote edges,
+%its improvement on primary edges is the largest among the three auxiliary tasks.
+
 
 The contribution of MTL is substantial in the case of French and German:
-11\% error reduction on the French dataset, and 1.5\% on the larger German dataset
+13.8\% error reduction on French, and 1\% on German, where the training set is larger
 (see Table~\ref{tab:corpora}).
 All multitask results are significantly ($p<0.05$)
 better than single-task results (bootstrap test).
-This result demonstrates that even a small training set in the main task may produce good results,
+This demonstrates that even a small training set in the main task may produce good results,
 given sufficiently large auxiliary training data.
 
 
