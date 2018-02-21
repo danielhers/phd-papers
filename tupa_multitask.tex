@@ -1119,17 +1119,24 @@ yields an error reduction of  3.9\%.
 %its improvement on primary edges is the largest among the three auxiliary tasks.
 
 
-The contribution of MTL is apparent in the case of French and German, too:
-13.8\% error reduction on French, and 1\% on German, where the training set is larger
-(see Table~\ref{tab:corpora}).
-All multitask results are significantly ($p<0.05$)
-better than single-task results \cite[bootstrap test; ][]{berg2012empirical}.
-This demonstrates that even a small training set in the main task may produce good results,
-given sufficiently large auxiliary training data.
+The contribution of MTL is apparent in the case of French and German
+for in-domain parsing (both training and test sets are from \textit{20 Leagues}):
+13.8\% error reduction in French, having less than 10\% the amount of training data as English,
+and 1\% in German, where the training set size is similar to the English \textit{Wiki} one,
+but is noisier (see~\S\ref{sec:experiments}).
+The best MTL models are significantly
+better than single-task (bootstrap test, $p<0.05$),
+demonstrating that even a small training set for the main task may suffice,
+given enough auxiliary training data.
 
-Finally, Table~\ref{tab:id_results} shows our results on the English in-domain \textit{Wiki} test set.
-While there are slight improvements again from using all three auxiliary tasks,
-all $F_1$ scores are not statistically different from the current state-of-the-art.
+Finally, Table~\ref{tab:id_results} shows our results on the English in-domain \textit{Wiki} test set:
+MTL $F_1$ scores are comparable to single-task,
+except for remote edges with only UD$^{++}$ as an auxiliary, where they are worse
+(observed on the out-of-domain English set too):
+despite the \textit{enhanced++} graphs,
+this syntactic auxiliary only worsens the parser's remote edge performance.
+However, this adverse effect is countered when adding either semantic tasks, AMR or DM, or both,
+as auxiliaries.
 
 
 \begin{table}
