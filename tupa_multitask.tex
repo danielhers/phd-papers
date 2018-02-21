@@ -85,7 +85,7 @@ Still, semantic representation has arguably yet to reach its full
 potential in terms of its contribution to downstream linguistic tasks,
 partially due to the limited amounts of semantically annotated
 corpora to train on. This shortage is even more pronounced in 
-languages other than English, and less researched domains. 
+languages other than English, and less researched domains.
 
 %While the development of syntactic treebanks has had a tremendous impact on natural 
 %language processing, semantic representation has arguably yet to reach its full 
@@ -101,10 +101,10 @@ languages other than English, and less researched domains.
 %and their degree of cross-linguistic applicability and consistency \cite{abend2017state}.
 
 Indeed, recent work in semantic parsing has targeted, among others,
-Abstract Meaning Representation \cite[AMR;][]{banarescu2013abstract,damonte-17,Buys2017RobustIN},
-bilexical Semantic Dependencies \cite[SDP;][]{oepen2014semeval,oepen2015semeval,oepen2016towards,P17-1186}
+Abstract Meaning Representation \cite[AMR;][]{banarescu2013abstract},
+bilexical Semantic Dependencies \cite[SDP;][]{oepen2016towards}
 %with target representations such as DELPH-IN MRS \cite[DM;][]{flickinger2012deepbank},
-and Universal Conceptual Cognitive Annotation \cite[UCCA;][]{abend2013universal,hershcovich2017a}.
+and Universal Conceptual Cognitive Annotation \cite[UCCA;][]{abend2013universal}.
 While these schemes are formally different and focus on different sets of distinctions,
 much of the semantic content is shared \cite{abend2017state}.
 
@@ -129,17 +129,16 @@ e.g., joint classification for different arguments in semantic role labeling \ci
 %to joint parsing and named entity recognition \cite{Finkel2009JointPA},
 and incorporation of unlabeled data for various tasks \cite{ando2005framework}.
 Similar ideas, of parameter sharing across models trained with different data,
-can also be found in studies of domain adaptation \cite{W06-1615,P07-1033,K17-1040}.
+can be found in studies of domain adaptation \cite{W06-1615,P07-1033,K17-1040}.
 For parsing, domain adaptation has been applied successfully by
 parser combination and co-training \cite{mcclosky2010automatic,baucom2013domain}.
 
 Recent work has achieved state-of-the-art results in multiple NLP tasks
 by jointly learning the tasks forming the NLP standard pipeline using 
-a single neural network model \cite{collobert2011natural,D17-1206}.
-Such techniques effectively increase the amount of training data,
-and replace the common pipeline approach, thereby avoiding error propagation.
+a single neural network model \cite{collobert2011natural,D17-1206},
+thereby avoiding cascading errors, which are common in pipelines.
 
-Deep MTL has been mostly effective with formally similar
+Neural MTL has been mostly effective with formally similar
 tasks \cite{P15-1166,P16-2038,D17-1134}.
 %or where one task tends to be used as pre-processing for another.
 Examples include 
@@ -154,8 +153,8 @@ with lexical analysis \cite{constant-nivre:2016:P16-1,more2016joint}.
 
 Much effort over the years has been devoted to joint learning of syntactic
 and semantic parsing, including
-two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll} on joint syntactic
-parsing and semantic role labeling.
+two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll}.
+%on joint syntactic parsing and semantic role labeling.
 Despite their conceptual and practical appeal, such joint models rarely outperform
 the pipeline approach of basing semantic parsing on the output of syntactic parsers
 \cite{lluis2008joint,henderson2013multilingual,D15-1169,swayamdipta-EtAl:2016:CoNLL}.
@@ -302,18 +301,17 @@ such widely different tasks.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Tackled Tasks}\label{sec:tasks}
 
-In this section, we outline the parsing tasks we are addressing.
-We focus on representation schemes that provide a full-sentence analysis,
-i.e., schemes that produce a graph covering all (content) words in the text, 
+In this section, we outline the parsing tasks we address.
+We focus on representations providing full-sentence analyses,
+i.e., produce a graph covering all (content) words in the text, 
 or the lexical concepts they evoke.
-Full-sentence analysis contrasts with ``shallow'' semantic parsing,
+This contrasts with ``shallow'' semantic parsing,
 primarily semantic role labeling
 \cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
-which specifically targets argument structure phenomena using flat structures.
-We consider four target representations: UCCA, AMR, DM and UD
-\cite[Universal Dependencies; ][]{nivre2016universal}.
-Figure~\ref{fig:original_examples} presents the representations of the same sentence 
-using each of the schemes.
+which targets argument structure phenomena using flat structures.
+We consider four formalisms: UCCA, AMR, SDP and Universal Dependencies
+\cite[UD; ][]{nivre2016universal}.
+Figure~\ref{fig:original_examples} presents one sentence annotated in all schemes.
 %annotating the sentence ``After graduation, John moved to Paris''.
 
 %Although each of these tasks uses different graph structures,
