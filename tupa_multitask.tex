@@ -66,7 +66,7 @@
 \begin{abstract}
   The ability to consolidate information of different types
   is at the core of intelligence, and has tremendous practical value
-  in allowing models for one task to benefit from generalizations learned for others.
+  in allowing learning for one task to benefit from generalizations learned for others.
   In this paper we
   tackle the challenging task of improving semantic parsing
   performance, taking UCCA
@@ -108,18 +108,18 @@ Abstract Meaning Representation \cite[AMR;][]{banarescu2013abstract},
 bilexical Semantic Dependencies \cite[SDP;][]{oepen2016towards}
 %with target representations such as DELPH-IN MRS \cite[DM;][]{flickinger2012deepbank},
 and Universal Conceptual Cognitive Annotation \cite[UCCA;][]{abend2013universal}.
-While these schemes are formally different and focus on different sets of distinctions,
-much of the semantic content is shared \cite{abend2017state}.
+While these schemes are formally different and focus on different distinctions,
+much of their semantic content is shared \cite{abend2017state}.
 
 Multitask learning \cite[MTL; ][]{caruana1998multitask} allows exploiting the overlap between tasks
 to effectively extend the training data, 
 and has greatly advanced with neural networks and representation learning
 (see \S\ref{sec:related_work}).
 We build on these ideas and propose a general transition-based DAG parsing approach,
-able to parse UCCA, AMR, SDP and UD \cite{nivre2016universal},
-trained in an MTL setting to obtain significant improvements over single-task training,
-on UCCA parsing in (1) an out-of-domain setting in English; 
-(2) in German; and (3) in French, where training data is scarce.\footnote{Our code is publicly available at $<$anonymized$>$.}
+able to parse UCCA, AMR, SDP and UD \cite{nivre2016universal}.
+We train the parser using MTL to obtain significant improvements
+on UCCA parsing over single-task training in (1) an out-of-domain setting in English; 
+(2) an in-domain setting in German; and (3) a setting in French, where training data is scarce.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 No previous work, to our knowledge, has shown benefits 
 from applying MTL to such widely different parsing tasks.
