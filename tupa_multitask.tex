@@ -919,7 +919,7 @@ and evaluating its performance on the UCCA test sets, in both in-domain and out-
 \hline
 \textbf{UCCA} &&&& \\
 Wiki & 158433 & 5225 &&&& \\
-20K & 12339 & 506 & 12929 & 547 & 153581 & 6935 \\
+20K & 12339 & 506 & 12929 & 547 & 136805 & 6154 \\
 \hline
 \textbf{UD} & 568560 & 24276 & 1114312 & 40102 & 318847 & 16590 \\
 \hline
@@ -936,7 +936,7 @@ Wiki & 158433 & 5225 &&&& \\
 
 \paragraph{Data.}
 
-For UCCA, we use the English Wikipedia corpus \cite[v1.0; ][]{abend2013universal},
+For UCCA, we use the English Wikipedia corpus \cite[v1.2; ][]{abend2013universal},
 with the standard train/dev/test split of 4254/453/518 sentences,
 and the \textit{Twenty Thousand Leagues Under the Sea} corpus
 \cite[\textit{20K Leagues};][]{sulem2015conceptual},
@@ -946,7 +946,7 @@ For the fairly small French part (v1.0; see Table~\ref{tab:corpora})
 we use a train/dev/test split of 413/67/67 sentences.
 For the German part (v0.9), which is a pre-release and still contains a considerable amount of noisy
 annotation,
-we use a split of 4196/561/2174 sentences.
+we use a split of 3429/561/2164 sentences.
 Tuning is performed on the respective development sets.
 
 For AMR, we use LDC2017T10, identical to the dataset targeted in SemEval 2017
