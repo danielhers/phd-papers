@@ -161,16 +161,7 @@ two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll}.
 %on joint syntactic parsing and semantic role labeling.
 Despite their conceptual and practical appeal, such joint models rarely outperform
 the pipeline approach of basing semantic parsing on the output of syntactic parsers
-\cite{lluis2008joint,henderson2013multilingual,D15-1169,swayamdipta-EtAl:2016:CoNLL}.
-
-{\color{red}
-Indeed, the strength of state-of-the-art neural methods has recently led to 
-one of the first works ever to report benefits (over the pipeline model) from 
-applying joint syntactic-semantic parsing \cite{swayamdipta2017frame}.
-Their model tackled frame-semantic parsing with ``syntactic scaffolding'',
-which jointly trains the parser with a constituency identification task, 
-namely the prediction of the boundaries of a syntactic
-constituent.} 
+\cite{lluis2008joint,henderson2013multilingual,D15-1169,swayamdipta-EtAl:2016:CoNLL,swayamdipta2017frame}.
 
 \citet{P17-1186} tackled a closely related setting to ours,
 reporting benefits from performing MTL for SDP.
@@ -983,8 +974,8 @@ We evaluate on UCCA using labeled precision, recall and $F_1$ (harmonic mean of 
 on primary and remote edges,
 following previous work on UCCA parsing \cite{hershcovich2017a}.
 Edges in predicted and gold graphs are matched by terminal yield and label.
-Significance testing of improvements over the single-task model are performed using ... test \cite{},
-with $p<0.05$.\oa{fill in}
+Significance testing of improvements over the single-task model are performed using the bootstrap test \cite{berg2012empirical},
+with $p<0.05$.
 
 
 \paragraph{Training.}
