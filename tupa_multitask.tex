@@ -855,7 +855,9 @@ We collapse this sub-graph into a single node whose children are the name tokens
    \end{tikzpicture}
    \caption{MTL model.
       Input token representations are computed both by a task-specific and a shared BiLSTM.
-      Their outputs are concatenated with the embedding of the parser state and fed into the task-specific MLP for selecting the next transition.
+      Their outputs are concatenated with the embedding of the parser state,
+      which is identical to Figure~\ref{fig:single_model},
+      and fed into the task-specific MLP for selecting the next transition.
       }
    \label{fig:multi_model}
 \end{figure}
