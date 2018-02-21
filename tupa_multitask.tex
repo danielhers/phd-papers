@@ -974,27 +974,11 @@ Edges in predicted and gold graphs are matched by terminal yield and label.
 
 \paragraph{Training.}
 
-Training proceeds by creating a unified corpus, shuffling all sentences from relevant
-datasets together (according to the setting),
-but using only the average $F_1$ score on the UCCA development set as the criterion for early stopping.
+We create a unified corpus for each setting, shuffling all sentences from relevant datasets together,
+but using only the $F_1$ score on the UCCA development set as the criterion for early stopping.
 In each training epoch, we use the same number of examples from each task---the
 UCCA training set size.
 Since training sets differ in size, we sample this many sentences from each training set.
-
-We initialize embeddings randomly.
-We use dropout \cite{srivastava2014dropout} between MLP layers, and recurrent dropout
-\cite{NIPS2016_6241} between BiLSTM layers, both with $p=0.4$.
-We also use word, tag and dependency relation dropout \cite{kiperwasser2016simple}.\footnote{In
-training, the embedding for a feature value $w$ is replaced with a zero vector
-with a probability of $\frac{0.2}{\#(w)+0.2}$, where $\#(w)$ is the number of occurrences of
-$w$ observed.}
-For optimization we use a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
-and train with stochastic gradient descent for 30 epochs with a learning
-rate of 0.1, followed by AMSGrad \cite{j.2018on} for 30 epochs with
-$\alpha=0.001,\beta_1=0.9$ and $\beta_2=0.999$.
-We found this training strategy better than using only one of the optimization methods,
-similar to findings by \citet{keskar2017improving}.
-%We select the epoch with the best average labeled $F_1$ score on the UCCA development set.
 The model is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{http://dynet.io}}
 Hyperparameter settings are listed in the Supplementary Material.
 

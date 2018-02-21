@@ -115,7 +115,26 @@ $a_0, a_1$ & \texttt{eA} \\
 \caption{Transition classifier features.\label{tab:features}}
 \end{table}
 
-Hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
+\paragraph{Hyperparameters.}
+
+We initialize embeddings randomly.
+We use dropout \cite{srivastava2014dropout} between MLP layers, and recurrent dropout
+\cite{NIPS2016_6241} between BiLSTM layers, both with $p=0.4$.
+We also use word, tag and dependency relation dropout \cite{kiperwasser2016simple}:
+in training, the embedding for a feature value $w$ is replaced with a zero vector
+with a probability of $\frac{0.2}{\#(w)+0.2}$, where $\#(w)$ is the number of occurrences of
+$w$ observed.
+For optimization we use a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
+and train with stochastic gradient descent for $N$ epochs with a learning
+rate of 0.1, followed by AMSGrad \cite{j.2018on} for $N$ epochs with
+$\alpha=0.001,\beta_1=0.9$ and $\beta_2=0.999$,
+using $N=30$ for English, $N=200$ for French and $N=50$ for German.
+We found this training strategy better than using only one of the optimization methods,
+similar to findings by \citet{keskar2017improving}.
+We select the epoch with the best average labeled $F_1$ score on the UCCA development set
+in the respective language.
+
+Other hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 The middle column shows the hyperparameters used for the single-task architecture,
 described in \S\ref{sec:classifier}, and
 the right column for the multitask architecture,
