@@ -181,18 +181,18 @@ We are not aware of a semantic parser using a single model for
 such widely different tasks.
 
 
-\begin{figure}
+\begin{figure}[!ht]
 \fbox{\begin{subfigure}{0.47\textwidth}
   \centering
   \scalebox{.95}{
-  \begin{tikzpicture}[level distance=10mm, ->]
+  \begin{tikzpicture}[level distance=8mm, ->]
     \node (ROOT) [fill=black, circle] {}
-      child {node (After) {After} edge from parent node[left] {\scriptsize $L$}}
+      child {node (After) {After} edge from parent node[above] {\scriptsize $L$}}
       child {node (graduation) [fill=black, circle] {}
       {
         child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
       } edge from parent node[left] {\scriptsize $H$} }
-      child {node {,} edge from parent node[right] {\scriptsize $U$}}
+      child {node {,} edge from parent node[below] {\scriptsize $U$}}
       child {node (moved) [fill=black, circle] {}
       {
         child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
@@ -200,11 +200,11 @@ such widely different tasks.
         child {node [fill=black, circle] {}
         {
           child {node {to} edge from parent node[left] {\scriptsize $R$}}
-          child {node {Paris} edge from parent node[left] {\scriptsize $C$}}
-        } edge from parent node[left] {\scriptsize $A$} }
-      } edge from parent node[right] {\scriptsize $H$} }
+          child {node {Paris} edge from parent node[right] {\scriptsize $C$}}
+        } edge from parent node[right] {\scriptsize $A$} }
+      } edge from parent node[above] {\scriptsize $H$} }
       ;
-    \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+    \draw[dashed,->] (graduation) to node [right] {\scriptsize $A$} (John);
     \node (LKG) at (-1.8,0) [fill=black!20, circle] {};
     \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
     \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
@@ -215,9 +215,11 @@ such widely different tasks.
 
 \fbox{\begin{subfigure}{0.47\textwidth}
   \centering
-  \begin{tikzpicture}[level distance=15mm, ->,
+  \begin{tikzpicture}[->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
-      level 1/.style={sibling distance=26mm}]
+      level 1/.style={level distance=14mm,sibling distance=26mm},
+      level 2/.style={level distance=13mm},
+      level 3/.style={level distance=12mm}]
     \node (ROOT) [draw=black,ellipse] {move-01}
       child {node [draw=black,ellipse] {after}
       {
@@ -249,13 +251,13 @@ such widely different tasks.
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
-        \depedge{1}{2}{ARG2}
-        \depedge{5}{4}{ARG1}
-        \depedge[edge unit distance=2ex]{1}{5}{ARG1}
-        \deproot{5}{top}
-        \depedge[edge unit distance=4ex, edge start x offset=-1ex]{5}{7}{ARG2}
-        \depedge[edge start x offset=1ex]{6}{5}{ARG1}
-        \depedge{6}{7}{ARG2}
+        \depedge[edge unit distance=1ex]{1}{2}{ARG2}
+        \depedge[edge unit distance=1ex]{5}{4}{ARG1}
+        \depedge[edge unit distance=1ex]{1}{5}{ARG1}
+        \deproot[edge unit distance=1.5ex]{5}{top}
+        \depedge[edge unit distance=2ex, edge start x offset=-1ex]{5}{7}{ARG2}
+        \depedge[edge unit distance=1ex, edge start x offset=1ex]{6}{5}{ARG1}
+        \depedge[edge unit distance=1ex]{6}{7}{ARG2}
     \end{dependency}
   \caption{DM \label{fig:original_example_sdp}}
 \end{subfigure}}
@@ -266,33 +268,34 @@ such widely different tasks.
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
-        \depedge{2}{1}{case}
-        \depedge{4}{3}{punct}
-        \depedge{5}{4}{nsubj}
-        \depedge{2}{5}{obl}
-        \depedge{7}{6}{case}
-        \deproot{5}{root}
-        \depedge{5}{7}{obl}
+        \depedge[edge unit distance=1ex]{2}{1}{case}
+        \depedge[edge unit distance=1ex]{4}{3}{punct}
+        \depedge[edge unit distance=1ex]{5}{4}{nsubj}
+        \depedge[edge unit distance=1ex]{2}{5}{obl}
+        \depedge[edge unit distance=1ex]{7}{6}{case}
+        \deproot[edge unit distance=1.5ex]{5}{root}
+        \depedge[edge unit distance=1ex]{5}{7}{obl}
     \end{dependency}
   \caption{UD \label{fig:original_example_ud}}
 \end{subfigure}}
 
 
 \caption{\label{fig:original_examples}
- Example graph for each tackled task.
+ Example graph for each task.
  Figure \ref{fig:original_example_ucca} presents a UCCA graph. The dashed edge is remote,
   while the gray node and its outgoing edges represent inter-Scene linkage.
   Pre-terminal nodes and edges are omitted for brevity. 
  Figure \ref{fig:original_example_amr} presents an AMR graph.
   Text tokens are not part of the graph, and must be matched to
-  concepts and constants by alignment. Variables are represented by their concepts.
+  concepts and constants by alignment.
+  Variables are represented by their concepts.
  Figure \ref{fig:original_example_sdp} presents a DM semantic dependency graph,
-  containing multiple roots: ``After'', ``moved'' and ``to''.
-  One of the roots is marked as \textit{top}: ``moved''.
-  Punctuation is not included in the graph as it is non-content-bearing.
+  containing multiple roots: ``After'', ``moved'' and ``to'',
+  of which ``moved'' is marked as \textit{top}.
+  Punctuation is excluded as it is non-content-bearing.
  Figure \ref{fig:original_example_ud} presents a UD tree.
-  Each word has exactly one head, and there is a single root.
-  Edge labels correspond to syntactic relations.
+  %Each word has exactly one head, and there is a single root.
+  Edge labels express syntactic relations.
 }
 
 \end{figure}
@@ -568,16 +571,17 @@ optimal transitions at each step.
 \begin{figure}
 \fbox{\begin{subfigure}{0.47\textwidth}
     \centering
-    \begin{tikzpicture}[level distance=10mm, sibling distance=14mm, ->,
+    \scalebox{.95}{
+    \begin{tikzpicture}[level distance=8mm, sibling distance=14mm, ->,
         every circle node/.append style={fill=black}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
-        child {node (After) [word] {After} edge from parent node[left] {\scriptsize $L$}}
+        child {node (After) [word] {After} edge from parent node[above] {\scriptsize $L$}}
         child {node (graduation) [circle] {}
         {
           child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
-        } edge from parent node[left] {\scriptsize $H$} }
-        child {node [word] {,} edge from parent node[right] {\scriptsize $U$}}
+        } edge from parent node[right] {\scriptsize $H$} }
+        child {node [word] {,} edge from parent node[below] {\scriptsize $U$}}
         child {node (moved) [circle] {}
         {
           child {node (John) [word] {John} edge from parent node[left] {\scriptsize $A$}}
@@ -590,13 +594,14 @@ optimal transitions at each step.
         } edge from parent node[right] {\scriptsize $H$} }
         ;
       \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
-    \end{tikzpicture}
+    \end{tikzpicture}}
   \caption{UCCA}
   \label{fig:converted_example_ucca}
 \end{subfigure}}
 
 \fbox{\begin{subfigure}{0.47\textwidth}
   \centering
+  \scalebox{.95}{
   \begin{tikzpicture}[level distance=16mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
       level 1/.style={sibling distance=28mm},
@@ -618,13 +623,14 @@ optimal transitions at each step.
       } edge from parent node {ARG2} }
       ;
       \draw[dashed] (graduation) to node {ARG0} (John);
-  \end{tikzpicture}
+  \end{tikzpicture}}
   \captionof{figure}{AMR}
   \label{fig:converted_example_amr}
 \end{subfigure}}
 
 \fbox{\begin{subfigure}{0.47\textwidth}
   \centering
+  \scalebox{.95}{
   \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
       level 1/.style={sibling distance=26mm,level distance=6mm},
@@ -670,13 +676,14 @@ optimal transitions at each step.
       \draw (to) to node {head} (to_word);
       \draw (moved) to node {ARG2} (Paris);
       \draw[dashed] (to) to node {ARG2} (Paris);
-  \end{tikzpicture}
+  \end{tikzpicture}}
   \captionof{figure}{DM}
   \label{fig:converted_example_sdp}
 \end{subfigure}}
 
 \fbox{\begin{subfigure}{0.47\textwidth}
   \centering
+  \scalebox{.95}{
   \begin{tikzpicture}[level distance=15mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
       level 1/.style={sibling distance=13mm},
@@ -709,7 +716,7 @@ optimal transitions at each step.
       \draw (ROOT) to node {punct} (comma);
       \draw (ROOT) to node {nsubj} (John);
       \draw (ROOT) to node {head} (moved);
-  \end{tikzpicture}
+  \end{tikzpicture}}
   \captionof{figure}{UD}
   \label{fig:converted_example_ud}
 \end{subfigure}}
