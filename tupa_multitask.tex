@@ -1136,6 +1136,8 @@ as auxiliaries.
 \end{tabular}
 \caption{L1 distance between word distributions,
 quantifying domain differences (low is similar).
+All auxiliary training sets are more similar to \textit{20K} than \textit{Wiki}
+is, contributing to domain adaptation.
 \label{tab:domain_sim}}
 \end{table}
 
@@ -1154,6 +1156,8 @@ DM & 63.6 & 49.8 & 55.9 & \enskip 6.9 & 63.8 & 12.4 \\
 UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 \end{tabular}
 \caption{Unlabeled UCCA evaluation of parallel sentences converted to the unified DAG format.
+UD$^{++}$ is highly overlapping with UCCA, while DM less so, and AMR even less
+(cf. Figure~\ref{fig:converted_examples}).
 \label{tab:common}}
 \end{table}
 
@@ -1161,38 +1165,34 @@ UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 
 \section{Discussion}\label{sec:discussion}
 
-An important factor in the success of MTL is the commonalities between the tasks
+Task overlap is an important factor in MTL success
 \cite{E17-2026,E17-1005}.
-In our case, the auxiliary tasks are all annotated on different corpora from our main task,
-even coming from different domains.
+In our case, the main and auxiliary tasks are annotated on corpora
+from different domains (\S\ref{sec:experiments}), and
+of course, representations themselves also vary both formally and content-wise.
 %We found that the combination of many different domains therefore benefits domain
 %adaptation even without auxiliary data from the target domain,
 %in accordance with previous work \cite{Finkel2009JointPA}.
 %In addition to the absence of a parallel corpus,
 %it follows that our model is faced with the additional challenge of domain adaptation,
 %and further highlights the significance of our results.
-To quantify the domain differences between the English training sets we used
-and the out-of-domain test set (\textit{20K}),
-we measure the L1 distance between the word unigram distributions in these corpora
-\cite{Plank2011EffectiveMO},
-given in Table~\ref{tab:domain_sim}.
-All auxiliary training sets are more similar to the \textit{20K Leagues} set than \textit{Wiki}
-is, contributing to domain adaptation.
-
-In addition, the representations themselves vary both formally and content-wise.
-To quantify the similarity between the unlabeled auxiliary tasks and UCCA parsing,
-we perform unlabeled evaluation (ignoring edge labels)
-on 100 manually annotated English sentences from
+To quantify the domain differences,
+we measure the L1 distance between word distributions
+\cite{Plank2011EffectiveMO}
+in the English training sets and \textit{20K} test set
+(Table~\ref{tab:domain_sim}).
+For similarity between schemes,
+we use unlabeled UCCA evaluation (ignoring edge labels)
+on 100 English sentences from
 Section 02 of the Penn Treebank Wall Street Journal (WSJ),
-after conversion to the unified DAG format.\footnote{The annotated
-sentences are available at $<$anonymized$>$}
-As can be seen in Table~\ref{tab:common}, there is a high overlap between
-UCCA and UD$^{++}$, while DM is less similar, and AMR even less.
-These findings, which agree with the impression given by Figure~\ref{fig:converted_examples},
-correlate with our multitask experimental results:
-while using just AMR as an auxiliary task did not significantly improve any of the metrics,
-using each of DM and UD$^{++}$ did significantly improve the $F_1$ score on primary edges in the
-out-of-domain setting, and their combination did on remote edges.
+after conversion to the unified DAG format
+(Table~\ref{tab:common})\footnote{The annotated
+sentences are available at $<$anonymized$>$}.
+While the benefit we showed for MTL is likely partly due to the variety of training domains,
+the interaction with graph structure is less clear.
+Due to the deep model architecture (\S\ref{sec:multitask}),
+important information (e.g. lexical) common to all tasks may be shared,
+even if not expressed directly in nodes and edges.
 
 A natural question is whether our method can benefit AMR, DM or UD parsing.
 While we focus on UCCA in this work, our parser is capable of parsing any
