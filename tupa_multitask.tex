@@ -1194,27 +1194,27 @@ Due to the deep model architecture (\S\ref{sec:multitask}),
 important information (e.g. lexical) common to all tasks may be shared,
 even if not expressed directly in nodes and edges.
 
-A natural question is whether our method can benefit AMR, DM or UD parsing.
-While we focus on UCCA in this work, our parser is capable of parsing any
-scheme that can be represented in the unified DAG format---a
-step towards a joint many-task model for semantic parsing.
-Preliminary experiments using a similar architecture to the one presented in this paper have produced
-promising results on each of the tasks' respective development sets:
-67.1\% Smatch $F_1$ \cite{cai2013smatch} on AMR
-(using additional transitions and classifier for node labels and implicit nodes),
-76.5\% labeled $F_1$ on SDP (DM),
-and 80.1\% LAS $F_1$ on UD (English).
-For AMR and UD, these are not far from the state-of-the-art results on these datasets
-\cite{foland2017abstract,dozat2016deep}.
-In future work, we plan to pursue this direction further and investigate whether a single
-algorithm and architecture can be competitive on all of these parsing tasks.
-
 \section{Conclusion}\label{sec:conclusion}
 
 We demonstrated that MTL improves UCCA parsing in out-of-domain settings or when training data is scarce,
 using AMR, DM and UD parsing as auxiliaries,
 by converting these schemes into a unified format
 and generalizing a transition-based DAG parser to support unlabeled auxiliary tasks.
+
+A natural question is whether our method can benefit AMR, DM or UD parsing.
+While we focus on UCCA in this work, our parser is capable of parsing any
+scheme that can be represented in the unified DAG format---a
+step towards a joint many-task model for semantic parsing.
+%Preliminary experiments using a similar architecture to the one presented in this paper have produced
+%promising results on each of the tasks' respective development sets:
+%67.1\% Smatch $F_1$ \cite{cai2013smatch} on AMR
+%(using additional transitions and classifier for node labels and implicit nodes),
+%76.5\% labeled $F_1$ on SDP (DM),
+%and 80.1\% LAS $F_1$ on UD (English).
+%For AMR and UD, these are not far from the state-of-the-art results on these datasets
+%\cite{foland2017abstract,dozat2016deep}.
+In future work, we plan to pursue this direction further and investigate whether a single
+algorithm and architecture can be competitive on all of these parsing tasks.
 
 
 \bibliography{references}
