@@ -9,6 +9,7 @@
 \usepackage{tikz}
 \usepackage{tikz-dependency}
 \usepackage[warn]{textcomp}
+\usepackage[font=small]{caption}
 \usepackage{subcaption}
 \usepackage{multirow}
 \usepackage{url}
@@ -43,7 +44,7 @@
 % smaller than 5cm (the original size); we will check this
 % in the camera-ready version and ask you to change it back.
 
-\title{Multitask Parsing across Semantic Representations}
+\title{Multitask Parsing Across Semantic Representations}
 
 \author{Daniel Hershcovich$^{1,2}$ \\
   \\\And
@@ -63,28 +64,30 @@
 \maketitle
 
 \begin{abstract}
-The ability to leverage and consolidate information of different types
-is at the core of semantic learning, and is also practically appealing
-in that it effectively extends the training data. In this paper we
-tackle the challenging task of improving semantic parsing
-performance, taking UCCA
-parsing as a test case, and AMR, SDP and Universal Dependencies
-as auxiliaries.
-We experiment on three languages,
-using a uniform transition-based system and learning architecture.
-Despite notable conceptual, formal and domain differences,
-we show that in out-of-domain settings, or when training data is small or noisy,
-multitask learning significantly improves UCCA parsing.
+  The ability to consolidate information of different types
+  is at the core of intelligence, and has tremendous practical value
+  in allowing models for one task to benefit from generalizations learned for others.
+  In this paper we
+  tackle the challenging task of improving semantic parsing
+  performance, taking UCCA
+  parsing as a test case, 
+  and AMR, SDP and Universal Dependencies (UD) parsing as auxiliary tasks.
+  We experiment on three languages,
+  using a uniform transition-based system and learning 
+  architecture for all parsing tasks.
+  Despite notable conceptual, formal and domain differences,
+  we show that in out-of-domain settings, or when training data is scarce,
+  multitask learning significantly improves UCCA parsing.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
 
-The multitude of semantic representations put forth in recent years greatly enrich
+The multitude of semantic representations put forth in recent years greatly enriches
 the discussion in NLP on the nature of semantic structure.
-Still, semantic representation has arguably yet to reach its full 
+Still, semantic parsing has arguably yet to reach its full 
 potential in terms of its contribution to downstream linguistic tasks,
-partially due to the limited amounts of semantically annotated
-corpora to train on. This shortage is even more pronounced in 
+partially due to the limited amount of semantically annotated training data.
+This shortage is more pronounced in 
 languages other than English, and less researched domains.
 
 %While the development of syntactic treebanks has had a tremendous impact on natural 
@@ -109,49 +112,50 @@ While these schemes are formally different and focus on different sets of distin
 much of the semantic content is shared \cite{abend2017state}.
 
 Multitask learning \cite[MTL; ][]{caruana1998multitask} allows exploiting the overlap between tasks
-to effectively extend the training data,
+to effectively extend the training data, 
 and has greatly advanced with neural networks and representation learning
 (see \S\ref{sec:related_work}).
-We build on these ideas and propose a BiLSTM transition-based semantic DAG parser,
-trained in a MTL setting to obtain an error reduction of 13.8\% in UCCA parsing
-in French, where the available training data is small;
-of 1\% in German, where only noise training data exists;
-and of  3.9\% in an out-of-domain setting in
-English.\footnote{Our code is publicly available at $<$anonymized$>$.}
+We build on these ideas and propose a general transition-based DAG parsing approach,
+able to parse UCCA, AMR, SDP and UD \cite{nivre2016universal},
+trained in an MTL setting to obtain significant improvements over single-task training,
+on UCCA parsing in (1) an out-of-domain setting in English; 
+(2) in German; and (3) in French, where training data is scarce.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
-
+No previous work, to our knowledge, has shown benefits 
+from applying MTL to such widely different parsing tasks.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
-Even before the rise of neural learning methods,
-MTL has been used for tasks with varying degrees of similarity,
-e.g., joint classification for different arguments in semantic role labeling \cite{toutanova2005joint},
-%to joint parsing and named entity recognition \cite{Finkel2009JointPA},
-and incorporation of unlabeled data for various tasks \cite{ando2005framework}.
-Similar ideas, of parameter sharing across models trained with different data,
+
+MTL has been used over the years for NLP tasks with varying degrees of similarity,
+examples including joint classification of different arguments in 
+semantic role labeling \cite{toutanova2005joint},
+and joint parsing and named entity recognition \cite{Finkel2009JointPA}.
+%and  of unlabeled data for various tasks \cite{ando2005framework}.
+Similar ideas, of parameter sharing across models trained with different datasets,
 can be found in studies of domain adaptation \cite{W06-1615,P07-1033,K17-1040}.
-For parsing, domain adaptation has been applied successfully by
+For parsing, domain adaptation has been applied successfully in
 parser combination and co-training \cite{mcclosky2010automatic,baucom2013domain}.
 
-Recent work has achieved state-of-the-art results in multiple NLP tasks
-by jointly learning the tasks forming the NLP standard pipeline using 
-a single neural network model \cite{collobert2011natural,D17-1206},
-thereby avoiding cascading errors, which are common in pipelines.
-
-Neural MTL has been mostly effective with formally similar
+Neural MTL has mostly been effective in tackling formally similar
 tasks \cite{P15-1166,P16-2038,D17-1134}.
 %or where one task tends to be used as pre-processing for another.
 Examples include 
 multilingual syntactic dependency \cite{Q16-1031,guo2016exploiting}
 and semantic parsing \cite{duong2017multilingual},
 as well as domain adaptation in semantic parsing \cite{herzig-berant:2017:Short,W17-2607}.
+
 Sharing parameters with a low-level task
 has shown great benefit in transition-based syntactic parsing,
 when jointly training with POS tagging
 \cite{bohnet2012transition,Zhang2016StackpropagationIR}, and
 with lexical analysis \cite{constant-nivre:2016:P16-1,more2016joint}.
+Recent work has achieved state-of-the-art results in multiple NLP tasks
+by jointly learning the tasks forming the NLP standard pipeline using 
+a single neural network model \cite{collobert2011natural,D17-1206},
+thereby avoiding cascading errors, which are common in pipelines.
 
-Much effort over the years has been devoted to joint learning of syntactic
+Much effort has been devoted to joint learning of syntactic
 and semantic parsing, including
 two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll}.
 %on joint syntactic parsing and semantic role labeling.
@@ -159,26 +163,26 @@ Despite their conceptual and practical appeal, such joint models rarely outperfo
 the pipeline approach of basing semantic parsing on the output of syntactic parsers
 \cite{lluis2008joint,henderson2013multilingual,D15-1169,swayamdipta-EtAl:2016:CoNLL}.
 
+{\color{red}
 Indeed, the strength of state-of-the-art neural methods has recently led to 
 one of the first works ever to report benefits (over the pipeline model) from 
-applying joint syntactic-semantic parsing, by \citet{swayamdipta2017frame}.
+applying joint syntactic-semantic parsing \cite{swayamdipta2017frame}.
 Their model tackled frame-semantic parsing with ``syntactic scaffolding'',
 which jointly trains the parser with a constituency identification task, 
 namely the prediction of the boundaries of a syntactic
-constituent. 
+constituent.} 
 
-Another work closely related to ours is by \citet{P17-1186},
-reporting benefits from MTL over three broad-coverage semantic dependency parsing (SDP)
-tasks using different representations, albeit on the same text and using a uniform formalism with 
-considerable overlap in their edges.
-They report improvement to all tasks, of 0.5\% to 1\% increase in labeled $F_1$ over a single-task model.
+\citet{P17-1186} tackled a closely related setting to ours,
+reporting benefits from performing MTL for SDP.
+They tackled three SDP tasks, all sharing the same formal structures (bilexical DAGs) with a considerable overlap in their edges,
+but differing in their target representations  (see \S\ref{sec:tasks}).
+Training sets for SDP are annotated over the same text.
+Improvements are reported for all tasks, with an increase of 0.5-1 labeled $F_1$ points.
 
-In this work, we take the challenge of MTL of semantics a step further,
-improving UCCA parsing using multitask 
-training with conceptually and formally different formalisms (AMR and SDP; see \S\ref{sec:tasks}).
+
+In this work, we take the challenge of MTL for semantic parsing a step further,
+improving UCCA parsing using MTL with conceptually and formally different tasks (AMR, SDP and UD; see \S\ref{sec:tasks}), whose training sets are taken from different domains.
 %Further, we show additional benefit from using a syntactic task parsing as auxiliary (UD).
-We are not aware of a semantic parser using a single model for
-such widely different tasks.
 
 
 \begin{figure}[!ht]
@@ -305,16 +309,15 @@ such widely different tasks.
 \section{Tackled Tasks}\label{sec:tasks}
 
 In this section, we outline the parsing tasks we address.
-We focus on representations providing full-sentence analyses,
+We focus on representations that produce full-sentence analyses,
 i.e., produce a graph covering all (content) words in the text, 
 or the lexical concepts they evoke.
 This contrasts with ``shallow'' semantic parsing,
 primarily semantic role labeling
 \cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
 which targets argument structure phenomena using flat structures.
-We consider four formalisms: UCCA, AMR, SDP and Universal Dependencies
-\cite[UD; ][]{nivre2016universal}.
-Figure~\ref{fig:original_examples} presents one sentence annotated in all schemes.
+We consider four formalisms: UCCA, AMR, SDP and Universal Dependencies.
+Figure~\ref{fig:original_examples} presents one sentence annotated in each scheme.
 %annotating the sentence ``After graduation, John moved to Paris''.
 
 %Although each of these tasks uses different graph structures,
@@ -326,7 +329,7 @@ Figure~\ref{fig:original_examples} presents one sentence annotated in all scheme
 
 \paragraph{Universal Conceptual Cognitive Annotation.}\label{sec:ucca}
 UCCA \cite{abend2013universal} is a semantic representation whose main design principles
-are ease of annotation, cross-linguistic applicability and stability, and a modular architecture of semantic distinctions.
+are ease of annotation, cross-linguistic applicability, and a modular architecture of semantic distinctions.
 UCCA represents the semantics of linguistic utterances
 as directed acyclic graphs (DAGs), where terminal (childless) nodes
 correspond to the text tokens, and non-terminal nodes to semantic units that participate
@@ -432,17 +435,17 @@ which are generated by the Stanford CoreNLP converters \cite{SCHUSTER16.779}.
 These include additional and augmented relations between content words,
 partially overlapping with the notion of remote edges in UCCA:
 in the case of control verbs, for example, a direct relation is added in 
-enhanced UD between the subordinated verb and its controller,
+enhanced++ UD between the subordinated verb and its controller,
 which is similar to the semantic schemes' treatment of this construction.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{General Transition-based DAG Parser}\label{sec:model}
 
-All schemes we outlined in \S\ref{sec:tasks} exhibit
+All schemes we consider in this work exhibit
 reentrancy and discontinuity (or non-projectivity), to varying degrees.
 In addition, UCCA and AMR contain non-terminal nodes.
-In order to parse graphs with these structural properties,
+To parse graphs with these structural properties,
 we extend TUPA \cite[henceforth HAR17]{hershcovich2017a}, 
 a transition-based parser 
 originally developed for UCCA,
@@ -721,20 +724,21 @@ optimal transitions at each step.
   \label{fig:converted_example_ud}
 \end{subfigure}}
 
-\caption{Graphs from Figure~\ref{fig:original_examples}, after conversion to the the unified DAG format
+\caption{Graphs from Figure~\ref{fig:original_examples}, after conversion to  the unified DAG format
 (pre-terminals omitted: each terminal drawn in place of its parent).
 Figure~\ref{fig:converted_example_ucca} presents a converted UCCA graph.
 Linkage nodes and edges are removed, but the original graph is otherwise preserved.
 Figure~\ref{fig:converted_example_amr} presents a converted AMR graph, with
 text tokens added according to the alignments.
-Numeric suffixes of \textit{op} relations were removed,
+Numeric suffixes of \textit{op} relations are removed,
 and names collapsed.
 Figure~\ref{fig:converted_example_sdp} presents a converted SDP graph (in the DM formalism), with
 intermediate non-terminal nodes introduced as \textit{head} units.
 In case of reentrancy, an arbitrary reentrant edge is marked as remote.
 Figure~\ref{fig:converted_example_ud} presents a converted UD graph.
 As in SDP, intermediate non-terminals and \textit{head} edges are introduced.
-The graph is actually a tree, as was the original bilexical graph.
+The converted graph is actually a tree, as was the original bilexical graph.
+%{\color{red} In UD enchanced++, the converted graphs need not form a tree.}
 }
 \label{fig:converted_examples}
 \end{figure}
@@ -860,7 +864,8 @@ We collapse this sub-graph into a single node whose children are the name tokens
    \end{tikzpicture}
    \caption{MTL model.
       Input token representations are computed both by a task-specific and a shared BiLSTM.
-      Their outputs are concatenated with the embedding of the parser state and fed into the task-specific MLP for selecting the next transition.}
+      Their outputs are concatenated with the embedding of the parser state and fed into the task-specific MLP for selecting the next transition.
+      }
    \label{fig:multi_model}
 \end{figure}
 
@@ -939,9 +944,10 @@ annotated in English, French and German.\footnote{\mbox{\url{http://github.com/h
 The English part (v1.0) of \textit{20K Leagues} is used only as an out-of-domain test set, as in HAR17.
 For the fairly small French part (v1.0; see Table~\ref{tab:corpora})
 we use a train/dev/test split of 413/67/67 sentences.
-For the German part (v0.9), which is noisy as it is still being developed,
+For the German part (v0.9), which is a pre-release and still contains a considerable amount of noisy
+annotation,
 we use a split of 4196/561/2174 sentences.
-We tune on the respective development sets without cross-validation.
+Tuning is performed on the respective development sets.
 
 For AMR, we use LDC2017T10, identical to the dataset targeted in SemEval 2017
 \cite{may2017semeval}.\footnote{\mbox{\url{http://catalog.ldc.upenn.edu/LDC2017T10}}}
@@ -956,6 +962,7 @@ For AMR, DM and UD, we use the training sets from standard train/dev/test splits
 While UCCA is annotated over Wikipedia and over a literary corpus,
 the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
 This domain difference between training and test is particularly challenging (see \S\ref{sec:discussion}).
+Unfortunately, none of the other schemes have available annotation over Wikipedia text.
 
 \paragraph{Experimental setup.}
 
@@ -976,7 +983,8 @@ We evaluate on UCCA using labeled precision, recall and $F_1$ (harmonic mean of 
 on primary and remote edges,
 following previous work on UCCA parsing \cite{hershcovich2017a}.
 Edges in predicted and gold graphs are matched by terminal yield and label.
-
+Significance testing of improvements over the single-task model are performed using ... test \cite{},
+with $p<0.05$.\oa{fill in}
 
 
 \paragraph{Training.}
@@ -1097,7 +1105,7 @@ Results on the English \textit{Wiki} test set.
 
 \section{Results}\label{sec:results}
 
-Table~\ref{tab:ood_results} shows main our experimental results.
+Table~\ref{tab:ood_results} presents our experimental results.
 Our basic single-task model (\textit{Single})
 is slightly better than the current state-of-the-art
 \cite[shown as \textit{HAR17}]{hershcovich2017a},
@@ -1115,17 +1123,15 @@ for in-domain parsing (both training and test sets are from \textit{20 Leagues})
 13.8\% error reduction in French, having less than 10\% the amount of training data as English,
 and 1\% in German, where the training set size is similar to the English \textit{Wiki} one,
 but is noisier (see~\S\ref{sec:experiments}).
-The best MTL models are significantly
-better than single-task (bootstrap test, $p<0.05$),
-demonstrating that even a small training set for the main task may suffice,
-given enough auxiliary training data.
+The best MTL models are significantly better than single-task,
+demonstrating that even a small training set for the main task  may suffice,
+given enough auxiliary training data (as in French).
 
 Finally, Table~\ref{tab:id_results} shows our results on the English in-domain \textit{Wiki} test set:
 MTL $F_1$ scores are comparable to single-task,
 except for remote edges with only UD$^{++}$ as an auxiliary, where they are worse
-(observed on the out-of-domain English set too):
-despite the \textit{enhanced++} graphs,
-this syntactic auxiliary only worsens the parser's remote edge performance.
+(observed on the out-of-domain English set too), despite the $UD^{++}$ use of graphs (rather than trees).
+%this syntactic auxiliary only worsens the parser's remote edge performance.
 However, this adverse effect is countered when adding either semantic tasks, AMR or DM, or both,
 as auxiliaries.
 
@@ -1141,10 +1147,9 @@ as auxiliaries.
 \footnotesize AMR &&& 0.757 & 0.469 \\
 \footnotesize DM &&&& 0.754
 \end{tabular}
-\caption{L1 distance between word distributions,
-quantifying domain differences (low is similar).
-All auxiliary training sets are more similar to \textit{20K} than \textit{Wiki}
-is, contributing to domain adaptation.
+\caption{L1 distance between word distributions, quantifying domain differences in English (low is similar).
+%All auxiliary training sets are more similar to \textit{20K} than \textit{Wiki}
+%is, contributing to domain adaptation.
 \label{tab:domain_sim}}
 \end{table}
 
@@ -1162,9 +1167,7 @@ DM & 63.6 & 49.8 & 55.9 & \enskip 6.9 & 63.8 & 12.4 \\
 %UD & 75.3 & 82.9 & 78.9 & -- & 0 & -- \\
 UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 \end{tabular}
-\caption{Unlabeled UCCA evaluation of parallel sentences converted to the unified DAG format.
-UD$^{++}$ is highly overlapping with UCCA, while DM less so, and AMR even less
-(cf. Figure~\ref{fig:converted_examples}).
+\caption{Unlabeled UCCA evaluation of parallel English  sentences from the PTB WSJ, converted to the unified DAG format.
 \label{tab:common}}
 \end{table}
 
@@ -1183,29 +1186,37 @@ of course, representations themselves also vary both formally and content-wise.
 %In addition to the absence of a parallel corpus,
 %it follows that our model is faced with the additional challenge of domain adaptation,
 %and further highlights the significance of our results.
-To quantify the domain differences,
-we measure the L1 distance between word distributions
-\cite{Plank2011EffectiveMO}
-in the English training sets and \textit{20K} test set
+
+To quantify the domain differences, we follow \citet{Plank2011EffectiveMO} and measure the L1 distance 
+between word distributions in the English training sets and \textit{20K} test set
 (Table~\ref{tab:domain_sim}).
-For similarity between schemes,
-we use unlabeled UCCA evaluation (ignoring edge labels)
-on 100 English sentences from
-Section 02 of the Penn Treebank Wall Street Journal (WSJ),
-after conversion to the unified DAG format
-(Table~\ref{tab:common})\footnote{The annotated
-sentences are available at $<$anonymized$>$}.
-While the benefit we showed for MTL is likely partly due to the variety of training domains,
-the interaction with graph structure is less clear.
-Due to the deep model architecture (\S\ref{sec:multitask}),
+All auxiliary training sets are more similar to 20K than Wiki is, which may have
+contributed to the benefits obtained on the English 20K test set.
+%While the variety of training domains has probably been a limiting factor to the success
+%of our methods, the interaction between the structural differences between schemes and 
+%the ability to use them for MTL is less clear.
+
+As a measure of the similarity of the different schemes to UCCA,
+we use unlabeled F-score evaluation on both primary and remote edges (ignoring edge labels).
+To this end, we annotated 100 English sentences from Section 02 of the Penn Treebank Wall Street Journal (WSJ).
+Annotation was carried out by a single expert UCCA annotator.\footnote{The annotated sentences are 
+available at $<$anonymized$>$}
+These sentences have already been annotated by AMR, DM and UD$^{++}$.
+We convert them to the unified DAG format.
+
+Results are presented in Table~\ref{tab:common}.
+UD$^{++}$ is highly overlapping with UCCA, while DM less so, and AMR even less
+(cf. Figure~\ref{fig:converted_examples}).
+However, due to the deep model architecture (\S\ref{sec:multitask}),
 important information (e.g. lexical) common to all tasks may be shared,
 even if not expressed directly in nodes and edges.
 
+
 \section{Conclusion}\label{sec:conclusion}
 
-We demonstrated that MTL improves UCCA parsing in out-of-domain settings or when training data is scarce,
-using AMR, DM and UD parsing as auxiliaries,
-by converting these schemes into a unified format
+We demonstrated that MTL improves UCCA parsing in out-of-domain settings or when training data is scarce or noisy,
+using AMR, DM and UD parsing as auxiliaries.
+We do so by proposing a unified DAG representation, constructing protocols for converting these schemes into the unified format,
 and generalizing a transition-based DAG parser to support unlabeled auxiliary tasks.
 
 A natural question is whether our method can benefit AMR, DM or UD parsing.
