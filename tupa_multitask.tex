@@ -116,7 +116,7 @@ We build on these ideas and propose a BiLSTM transition-based semantic DAG parse
 trained in a MTL setting to obtain an error reduction of 13.8\% in UCCA parsing
 in French, where the available training data is small;
 of 1\% in German, where only noise training data exists;
-and of 2.8\% in an out-of-domain setting in
+and of  3.9\% in an out-of-domain setting in
 English.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 
@@ -1035,15 +1035,15 @@ Hyperparameter settings are listed in the Supplementary Material.
 \footnotesize DM
 & 70.1$\star$ & 69.5 & 69.8$\star$ & 40 & 18.6 & 25.4 \\
 \footnotesize UD$^{++}$
-& 69.8$\star$ & 69.9$\star$ & 69.9$\star$ & 39.1 & 14.3$\dagger$ & 20.9$\dagger$ \\
+& 69.8$\star$ & 69.4 & 69.6 & 39.8 & 14.7$\dagger$ & 21.4$\dagger$ \\
 \footnotesize AMR + DM
-& 70.8$\star$ & 70$\star$ & 70.4$\star$ & 49.5$\star$ & 21 & 29.5 \\
+& 69.8$\star$ & 69.5 & 69.7$\star$ & 48.8$\star$ & 19.6 & 28 \\
 \footnotesize AMR + UD$^{++}$
 & 69.7$\star$ & 70$\star$ & 69.8$\star$ & 39 & 21.4 & 27.6 \\
 \footnotesize DM + UD$^{++}$
 & 70$\star$ & 68.9 & 69.4 & 47.4$\star$ & 22 & 30$\star$ \\
 \footnotesize All
-& 71.2$\star$ & 70.5$\star$ & \textbf{70.8}$\star$ & 42.8 & 17.6 & 25 \\
+& 71$\star$ & 72.2$\star$ & \textbf{71.6}$\star$ & 43.9 & 24.8$\star$ & 31.6$\star$ \\
 \hline
 \multicolumn{4}{l|}{\small \bf French (in-domain)} & \\
 \small Single & 59.4 & 59.8 & 59.6 & \enskip 5.9 & \enskip 1.9 & \enskip 2.9 \\
@@ -1086,15 +1086,15 @@ and $\dagger$ significantly worse.
 \footnotesize DM
 & 74.6 & 71.7$\dagger$ & 73.1 & 48.2$\dagger$ & 51.3 & 49.7 \\
 \footnotesize UD$^{++}$
-& 74.1 & 72.7 & 73.4 & 52.9 & 41.9$\dagger$ & 46.8$\dagger$ \\
+& 74.6 & 72.8 & 73.7 & 51.6 & 44.1$\dagger$ & 47.5$\dagger$ \\
 \footnotesize AMR + DM
-& 74.9 & 72.2 & 73.6 & 51.7 & 52.4 & 52.1 \\
+& 74.5 & 72.3 & 73.4 & 50.6 & 47 & 48.7 \\
 \footnotesize AMR + UD$^{++}$
 & 73.9 & 72.4 & 73.1 & 46.8$\dagger$ & 56.2$\star$ & 51 \\
 \footnotesize DM + UD$^{++}$
 & 74.4 & 72.1$\dagger$ & 73.2 & 49.5 & 53.2 & 51.3 \\
 \footnotesize All
-& 75 & 72.9 & 73.9 & 48.3$\dagger$ & 48.7 & 48.5
+& 74.2 & 73.7$\star$ & 73.9 & 44.7$\dagger$ & 54.3$\star$ & 49
 \end{tabular}
 \caption{
 Results on the English \textit{Wiki} test set.
@@ -1114,7 +1114,7 @@ only using additional features (see \S\ref{sec:classifier}).
 It is further outperformed by all MTL models
 on the English out-of-domain test set.
 This improvement is largely additive: the best model, using all three auxiliary tasks (\textit{All}),
-yields an error reduction of 2.8\%.
+yields an error reduction of  3.9\%.
 %Although UD$^{++}$ seems to hurt performance on remote edges,
 %its improvement on primary edges is the largest among the three auxiliary tasks.
 
