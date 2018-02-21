@@ -22,6 +22,7 @@
 \usepackage{tikz}
 \usepackage{tikz-dependency}
 \usepackage{enumitem}
+\usepackage{rotating}
 \usepackage{xr}
 \externaldocument{tupa_multitask}
 \usetikzlibrary{shapes,fit,calc,er,positioning,intersections,decorations.shapes,mindmap,trees}
@@ -185,6 +186,126 @@ On SDP, the conversion is lossless and results in identical graphs
 when converted to UCCA and back.
 For UD, and conversion results in 98.5\% LAS $F_1$ on the UD English test set,
 due to multi-word tokens, not supported in the unified DAG format.
+
+\paragraph{Qualitative evaluation.}
+
+Figure~\ref{fig:qualitative} shows an example sentence from the English 20K test set,
+with the outputs of both our single-task model and our best MTL model (using all auxiliaries).
+While the single-task model obtains an $F_1$ score of 67.9\% on this sentence, the MTL model's output
+matches the gold-annotates graph perfectly.
+This example demonstrates how
+the parser's ability to identify syntactic constituents,
+which is important for all tasks we tackled, is improved with MTL.
+
+
+\begin{sidewaysfigure}
+    \centering
+\scalebox{.6}{
+\begin{tikzpicture}[->,level distance=26mm,
+  level 1/.style={sibling distance=16cm},
+  level 2/.style={sibling distance=7cm},
+  level 3/.style={sibling distance=2cm},
+  every circle node/.append style={fill=black}]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
+  \node (1_1) [circle] {}
+  {
+  child {node (1_2) [circle] {}
+    {
+    child {node (1_5) [circle] {}
+      {
+      child {node (1_10) [word] {No} edge from parent node[auto] {\scriptsize $E$}}
+      child {node (1_11) [word] {transoceanic} edge from parent node[auto] {\scriptsize $E$}}
+      child {node (1_12) [word] {navigational} edge from parent node[auto] {\scriptsize $E$}}
+      child {node (1_13) [word] {undertaking} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $A$}}
+    child {node (1_6) [circle] {}
+      {
+      child {node (1_14) [word] {has} edge from parent node[auto] {\scriptsize $F$}}
+      child {node (1_15) [word] {been} edge from parent node[auto] {\scriptsize $E$}}
+      child {node (1_16) [word] {conducted} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $P$}}
+    child {node (1_7) [circle] {}
+      {
+      child {node (1_17) [word] {with} edge from parent node[auto] {\scriptsize $R$}}
+      child {node (1_18) [circle] {}
+        {
+        child {node (1_25) [circle] {}
+          {
+          child {node (1_28) [word] {more} edge from parent node[auto] {\scriptsize $E$}}
+          child {node (1_29) [word] {ability} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $C$}}
+        child {node (1_26) [word] {,} edge from parent node[auto] {\scriptsize $U$}}
+        child {node (1_27) [circle] {}
+          {
+          child {node (1_30) [word] {no} edge from parent node[auto] {\scriptsize $E$}}
+          child {node (1_31) [circle] {}
+            {
+            child {node (1_32) [word] {business} edge from parent node[auto] {\scriptsize $E$}}
+            child {node (1_33) [word] {dealings} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $A$}} }edge from parent node[auto] {\scriptsize $H$}}
+  child {node (1_3) [circle] {}
+    {
+    child {node (1_8) [circle] {}
+      {
+      child {node (1_19) [word] {have} edge from parent node[auto] {\scriptsize $F$}}
+      child {node (1_20) [word] {been} edge from parent node[auto] {\scriptsize $E$}}
+      child {node (1_21) [word] {crowned} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $P$}}
+    child {node (1_9) [circle] {}
+      {
+      child {node (1_22) [word] {with} edge from parent node[auto] {\scriptsize $R$}}
+      child {node (1_23) [word] {greater} edge from parent node[auto] {\scriptsize $D$}}
+      child {node (1_24) [word] {success} edge from parent node[auto] {\scriptsize $P$}} }edge from parent node[auto] {\scriptsize $A$}} }edge from parent node[auto] {\scriptsize $H$}}
+  child {node (1_4) [word] {.} edge from parent node[auto] {\scriptsize $U$}} }
+;
+\end{tikzpicture}}
+\scalebox{.6}{
+\begin{tikzpicture}[->,level distance=26mm,
+      level 1/.style={sibling distance=10cm},
+      level 2/.style={sibling distance=7cm},
+      level 3/.style={sibling distance=2cm},
+  every circle node/.append style={fill=black}]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
+  \node (1_1) [circle] {}
+  {
+  child {node (1_2) [circle] {}
+    {
+    child {node (1_6) [circle] {}
+      {
+      child {node (1_12) [word] {No} edge from parent node[auto] {\scriptsize $E$}}
+      child {node (1_13) [word] {transoceanic} edge from parent node[auto] {\scriptsize $E$}}
+      child {node (1_14) [word] {navigational} edge from parent node[auto] {\scriptsize $E$}}
+      child {node (1_15) [word] {undertaking} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $A$}}
+    child {node (1_7) [circle] {}
+      {
+      child {node (1_16) [word] {has} edge from parent node[auto] {\scriptsize $F$}}
+      child {node (1_17) [word] {been} edge from parent node[auto] {\scriptsize $F$}}
+      child {node (1_18) [word] {conducted} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $P$}}
+    child {node (1_8) [circle] {}
+      {
+      child {node (1_19) [word] {with} edge from parent node[auto] {\scriptsize $R$}}
+      child {node (1_20) [word] {more} edge from parent node[auto] {\scriptsize $E$}}
+      child {node (1_21) [word] {ability} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $A$}} }edge from parent node[auto] {\scriptsize $H$}}
+  child {node (1_3) [word] {,} edge from parent node[auto] {\scriptsize $U$}}
+  child {node (1_4) [circle] {}
+    {
+    child {node (1_9) [circle] {}
+      {
+      child {node (1_22) [word] {no} edge from parent node[auto] {\scriptsize $E$}}
+      child {node (1_23) [word] {business} edge from parent node[auto] {\scriptsize $E$}}
+      child {node (1_24) [word] {dealings} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $A$}}
+    child {node (1_10) [circle] {}
+      {
+      child {node (1_25) [word] {have} edge from parent node[auto] {\scriptsize $F$}}
+      child {node (1_26) [word] {been} edge from parent node[auto] {\scriptsize $F$}}
+      child {node (1_27) [word] {crowned} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $P$}}
+    child {node (1_11) [circle] {}
+      {
+      child {node (1_28) [word] {with} edge from parent node[auto] {\scriptsize $R$}}
+      child {node (1_29) [word] {greater} edge from parent node[auto] {\scriptsize $E$}}
+      child {node (1_30) [word] {success} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $A$}} }edge from parent node[auto] {\scriptsize $H$}}
+  child {node (1_5) [word] {.} edge from parent node[auto] {\scriptsize $U$}} }
+;
+\end{tikzpicture}}
+\caption{Output of single-task model on sentence 53001 from the English 20K test set (top),
+and of MTL model using all of AMR, DM and UD$^{++}$ as auxiliaries on the same sentence (bottom).
+\label{fig:qualitative}}
+\end{sidewaysfigure}
 
 \bibliography{references}
 \bibliographystyle{acl_natbib}

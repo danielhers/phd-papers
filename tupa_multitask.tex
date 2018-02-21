@@ -437,7 +437,7 @@ All schemes we consider in this work exhibit
 reentrancy and discontinuity (or non-projectivity), to varying degrees.
 In addition, UCCA and AMR contain non-terminal nodes.
 To parse graphs with these structural properties,
-we extend TUPA \cite[henceforth HAR17]{hershcovich2017a}, 
+we extend TUPA \cite{hershcovich2017a}, 
 a transition-based parser 
 originally developed for UCCA,
 as it is the only parser to our knowledge that supports 
@@ -483,7 +483,8 @@ and \textsc{Finish} to mark the state as terminal.
 Although UCCA contains nodes without any text tokens as descendants
 (called \textit{implicit units}),
 these nodes are infrequent and only cover 0.5\% of the non-terminal nodes.
-For this reason we follow HAR17 and discard implicit units from the training and evaluation,
+For this reason we follow previous work \cite{hershcovich2017a} and discard implicit units from
+the training and evaluation,
 and so do not include transitions for creating them.
 % when parsing UCCA,
 %thus ignoring them in both training and evaluation.
@@ -736,7 +737,7 @@ The converted graph is actually a tree, as was the original bilexical graph.
 
 
 \paragraph{Features.}
-We use features from HAR17,
+We use the original TUPA features,
 representing the words, POS tags, syntactic dependency relations, and previously predicted edge labels
 for nodes in specific locations in the parser state.
 In addition, for each token
@@ -777,7 +778,7 @@ should not be swapped again.\footnote{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Unified DAG Format}\label{sec:format}
 
-To be able to use TUPA for the four tasks presented in \S\ref{sec:tasks},
+To apply our parser to the four tasks presented in \S\ref{sec:tasks},
 we convert them all into a unified DAG format, which is inclusive enough to
 allow representing any of the schemes with very little loss of information.\footnote{See
 Supplementary Material for more conversion details.}
@@ -792,7 +793,7 @@ form a DAG.
 Figure~\ref{fig:converted_examples} shows examples for converted graphs.
 Converting UCCA into the unified format consists simply of removing linkage 
 nodes and edges (see Figure~\ref{fig:converted_example_ucca}), which were
-also discarded by HAR17.
+also discarded by \citet{hershcovich2017a}.
 
 \paragraph{Converting bilexical dependencies.}
 To convert DM and UD into the unified DAG format,
@@ -866,7 +867,7 @@ We collapse this sub-graph into a single node whose children are the name tokens
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Multitask Transition-based Parsing}\label{sec:multitask}
 
-Now that the same TUPA model can be applied to different tasks, 
+Now that the same model can be applied to different tasks, 
 we can train it in a multitask setting.
 Following previous work, we share only some of the model parameters
 \cite{N16-1179,P16-2038,C16-1013,C16-1059,C16-1179,E17-1005,P17-1186}, leaving task-specific
@@ -902,44 +903,54 @@ We perform various experiments to assess the value of MTL to UCCA parsing,
 training the parser in a single-task and multitask setting
 and evaluating its performance on the UCCA test sets, in both in-domain and out-of-domain settings.
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \small
-\setlength\tabcolsep{3pt}
-\begin{tabular}{l|rr|rr|rr}
-& \multicolumn{2}{c|}{\footnotesize \bf English} & \multicolumn{2}{c|}{\footnotesize \bf French} & \multicolumn{2}{c}{\footnotesize \bf German} \\
-\footnotesize \bf Corpus & \footnotesize \bf {\#}tok & \footnotesize \bf {\#}sent & \footnotesize \bf {\#}tok & \footnotesize \bf {\#}sent & \footnotesize \bf {\#}tok & \footnotesize \bf {\#}sent \\
+\setlength\tabcolsep{2pt}
+\begin{tabular}{l|ccc|ccc||ccc|ccc||ccc|ccc}
+& \multicolumn{6}{c||}{\footnotesize \bf English}
+& \multicolumn{6}{c||}{\footnotesize \bf French}
+& \multicolumn{6}{c}{\footnotesize \bf German} \\
 \hline
-\textbf{UCCA} &&&& \\
-Wiki & 158433 & 5225 &&&& \\
-20K & 12339 & 506 & 12929 & 547 & 136805 & 6154 \\
+& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
+& \multicolumn{3}{c||}{\footnotesize \bf {\#} sentences}
+& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
+& \multicolumn{3}{c||}{\footnotesize \bf {\#} sentences}
+& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
+& \multicolumn{3}{c}{\footnotesize \bf {\#} sentences} \\
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test 
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
 \hline
-\textbf{UD} & 568560 & 24276 & 1114312 & 40102 & 318847 & 16590 \\
-\hline
-\textbf{AMR} & 708701 & 39260 \\
-\hline
-\textbf{DM} & 802717 & 35657 \\
+\textbf{UCCA} &&&&&&&&&&&&&&&& \\
+Wiki & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
+20K &&& 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
+\textbf{AMR} & \multicolumn{2}{l}{648950} && \multicolumn{2}{l}{36521} &&&&&&&&&&&&& \\
+\textbf{DM} & \multicolumn{2}{l}{765025} && \multicolumn{2}{l}{33964} &&&&&&&&&&&&& \\
+\textbf{UD} & \multicolumn{2}{l}{458277} && \multicolumn{2}{l}{17062} &&
+\multicolumn{2}{l}{899163} && \multicolumn{2}{l}{32347} && \multicolumn{2}{l}{268145} && 13814
 \end{tabular}
-\caption{Overall size of each corpus: total number of tokens ({\#}tok) and sentences ({\#}sent).
-%\textit{Wiki} is the UCCA English Wikipedia corpus, and
-%\textit{20K} is the UCCA English \textit{Twenty Thousand Leagues Under the Sea} corpus.
-%We use UD v2.1, AMR release LDC2017T10 and SDP 2016 data for DM.
+\caption{Number of tokens and sentences in the training, development and test sets
+we use for each corpus and language.
 \label{tab:corpora}}
-\end{table}
+\end{table*}
 
 \paragraph{Data.}
 
-For UCCA, we use the English Wikipedia corpus \cite[v1.2; ][]{abend2013universal},
-with the standard train/dev/test split of 4254/453/518 sentences,
+For UCCA, we use v1.2 of the English Wikipedia corpus \cite[\textit{Wiki};][]{abend2013universal},
+with the standard train/dev/test split (see Table~\ref{tab:corpora}),
 and the \textit{Twenty Thousand Leagues Under the Sea} corpus
-\cite[\textit{20K Leagues};][]{sulem2015conceptual},
+\cite[\textit{20K};][]{sulem2015conceptual},
 annotated in English, French and German.\footnote{\mbox{\url{http://github.com/huji-nlp/ucca-corpus}}}
-The English part (v1.0) of \textit{20K Leagues} is used only as an out-of-domain test set, as in HAR17.
-For the fairly small French part (v1.0; see Table~\ref{tab:corpora})
-we use a train/dev/test split of 413/67/67 sentences.
-For the German part (v0.9), which is a pre-release and still contains a considerable amount of noisy
-annotation,
-we use a split of 3429/561/2164 sentences.
+The English and French parts of 20K (v1.0) are a parallel corpus comprising the first five
+chapters of the book.
+As in previous work \cite{hershcovich2017a}, we use the English part only as an out-of-domain test set.
+Additionally, we train and test on the fairly small French part using the standard split,
+as well as the German part (v0.9),
+which is a pre-release and still contains a considerable amount of noisy annotation.
 Tuning is performed on the respective development sets.
 
 For AMR, we use LDC2017T10, identical to the dataset targeted in SemEval 2017
@@ -950,7 +961,7 @@ For Universal Dependencies, we use all English, French and German treebanks from
 \cite{11234/1-2515}.\footnote{\url{http://hdl.handle.net/11234/1-2515}}
 We use the enhanced++ UD representation \cite{SCHUSTER16.779} in our English experiments,
 henceforth referred to as UD$^{++}$.
-For AMR, DM and UD, we use the training sets from standard train/dev/test splits.
+For AMR, DM and UD, we use only the training sets from standard train/dev/test splits.
 
 While UCCA is annotated over Wikipedia and over a literary corpus,
 the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
@@ -961,13 +972,13 @@ Unfortunately, none of the other schemes have available annotation over Wikipedi
 
 As our main experiment, we evaluate our method in settings where MTL tends to be the most effective:
 in an out-of-domain setting (on English),
-training on \textit{Wiki} and evaluating on \textit{20K Leagues};
+training on Wiki and evaluating on 20K;
 and where the only available training data is very small (French)
-or noisy (German), training on the \textit{20K Leagues} training sets and evaluating on the test sets.
+or noisy (German), training on the 20K training sets and evaluating on the test sets.
 We use unlabeled AMR, DM and UD$^{++}$ parsing as auxiliary tasks in English,
 and unlabeled UD parsing in French and German.\footnote{We did not use AMR, DM or UD$^{++}$ in French
 and German, as these are only available in English.}
-Fur completeness, we also evaluate the English models on the \textit{Wiki} in-domain test set.
+Fur completeness, we also evaluate the English models on the Wiki in-domain test set.
 
 
 \paragraph{Evaluation.}
@@ -1015,7 +1026,7 @@ Hyperparameter settings are listed in the Supplementary Material.
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
 \hline
 \multicolumn{4}{l|}{\small \bf English (out-of-domain)} & \\
-\footnotesize HAR17
+\footnotesize TUPA
 & 68.7 & 68.5 & 68.6 & 38.6 & 18.8 & 25.3 \\
 \footnotesize Single
 & 68.9 & 68.9 & 68.9 & 40.7 & 19.6 & 26.5 \\
@@ -1047,7 +1058,7 @@ Hyperparameter settings are listed in the Supplementary Material.
 \end{tabular}
 \caption{
 Labeled precision, recall and F-score (in~\%) for both primary and remote edges,
-on the \textit{20K Leagues} test sets.
+on the 20K test sets.
 $\star$~indicates significantly better than \textit{Single},
 and $\dagger$ significantly worse.
 %\textit{Single} is trained only on the corresponding UCCA training set.
@@ -1066,7 +1077,7 @@ and $\dagger$ significantly worse.
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
 \hline
 \multicolumn{4}{l|}{\small \bf English (in-domain)} & \\
-\footnotesize HAR17
+\footnotesize TUPA
 & 74.4 & 72.7 & 73.5 & 47.4 & 51.6 & 49.4 \\
 \footnotesize Single
 & 74.3 & 72.8 & 73.5 & 53 & 50 & 51.5 \\
@@ -1089,7 +1100,7 @@ and $\dagger$ significantly worse.
 & 74.2 & 73.7$\star$ & 73.9 & 44.7$\dagger$ & 54.3$\star$ & 49
 \end{tabular}
 \caption{
-Results on the English \textit{Wiki} test set.
+Results on the English Wiki test set.
 %$\star$~indicates significantly better than \textit{Single},
 %and $\dagger$ significantly worse.
 }
@@ -1101,7 +1112,7 @@ Results on the English \textit{Wiki} test set.
 Table~\ref{tab:ood_results} presents our experimental results.
 Our basic single-task model (\textit{Single})
 is slightly better than the current state-of-the-art
-\cite[shown as \textit{HAR17}]{hershcovich2017a},
+\cite[TUPA;][]{hershcovich2017a},
 only using additional features (see \S\ref{sec:classifier}).
 It is further outperformed by all MTL models
 on the English out-of-domain test set.
@@ -1112,18 +1123,18 @@ yields an error reduction of  3.9\%.
 
 
 The contribution of MTL is apparent in the case of French and German
-for in-domain parsing (both training and test sets are from \textit{20 Leagues}):
+for in-domain parsing (both training and test sets are from 20K):
 13.8\% error reduction in French, having less than 10\% the amount of training data as English,
-and 1\% in German, where the training set size is similar to the English \textit{Wiki} one,
+and 1\% in German, where the training set size is similar to the English Wiki one,
 but is noisier (see~\S\ref{sec:experiments}).
 The best MTL models are significantly better than single-task,
 demonstrating that even a small training set for the main task  may suffice,
 given enough auxiliary training data (as in French).
 
-Finally, Table~\ref{tab:id_results} shows our results on the English in-domain \textit{Wiki} test set:
+Finally, Table~\ref{tab:id_results} shows our results on the English in-domain Wiki test set:
 MTL $F_1$ scores are comparable to single-task,
 except for remote edges with only UD$^{++}$ as an auxiliary, where they are worse
-(observed on the out-of-domain English set too), despite the $UD^{++}$ use of graphs (rather than trees).
+(observed on the out-of-domain English set too), despite the UD$^{++}$ use of graphs (rather than trees).
 %this syntactic auxiliary only worsens the parser's remote edge performance.
 However, this adverse effect is countered when adding either semantic tasks, AMR or DM, or both,
 as auxiliaries.
@@ -1141,7 +1152,7 @@ as auxiliaries.
 \footnotesize DM &&&& 0.754
 \end{tabular}
 \caption{L1 distance between word distributions, quantifying domain differences in English (low is similar).
-%All auxiliary training sets are more similar to \textit{20K} than \textit{Wiki}
+%All auxiliary training sets are more similar to 20K than Wiki
 %is, contributing to domain adaptation.
 \label{tab:domain_sim}}
 \end{table}
@@ -1181,7 +1192,7 @@ of course, representations themselves also vary both formally and content-wise.
 %and further highlights the significance of our results.
 
 To quantify the domain differences, we follow \citet{Plank2011EffectiveMO} and measure the L1 distance 
-between word distributions in the English training sets and \textit{20K} test set
+between word distributions in the English training sets and 20K test set
 (Table~\ref{tab:domain_sim}).
 All auxiliary training sets are more similar to 20K than Wiki is, which may have
 contributed to the benefits obtained on the English 20K test set.
