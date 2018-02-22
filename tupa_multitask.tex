@@ -1115,8 +1115,7 @@ Results on the English Wiki test set.
 \end{table}
 
 
-The contribution of MTL is apparent in the case of French and German
-for in-domain parsing:
+The contribution of MTL is apparent in French and German in-domain parsing:
 7\% error reduction in French, having less than 10\% the amount of training data as English,
 and 1\% in German, where the training set is comparable in size to the English Wiki training set,
 but is noisier (see~\S\ref{sec:experiments}).
@@ -1218,15 +1217,15 @@ A natural question is whether our method can benefit AMR, DM or UD parsing.
 While we focus on UCCA in this work, our parser is capable of parsing any
 scheme that can be represented in the unified DAG format, which constitutes
 an important step towards a joint many-task model for semantic parsing.
-%Preliminary experiments using a similar architecture to the one presented in this paper have produced
-%promising results on each of the tasks' respective development sets:
-%67.1\% Smatch $F_1$ \cite{cai2013smatch} on AMR
-%(using additional transitions and classifier for node labels and implicit nodes),
-%76.5\% labeled $F_1$ on SDP (DM),
-%and 80.1\% LAS $F_1$ on UD (English).
-%For AMR and UD, these are not far from the state-of-the-art results on these datasets
-%\cite{foland2017abstract,dozat2016deep}.
-In future work, we plan to pursue this direction further and investigate whether a single
+Preliminary experiments using our approach produced
+promising results on each of the tasks' respective English development sets:
+67.1\% Smatch $F_1$ \cite{cai2013smatch} on AMR
+(adding a transition for implicit nodes and classifier for node labels),
+76.5\% labeled $F_1$ on DM,
+and 80.1\% LAS $F_1$ on UD.
+For AMR and UD, these are not far from the state-of-the-art results on these datasets
+\cite{foland2017abstract,dozat2016deep}.
+Future work will investigate whether a single
 algorithm and architecture can be competitive on all of these parsing tasks.
 
 
