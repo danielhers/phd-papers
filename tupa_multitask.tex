@@ -118,8 +118,11 @@ and has greatly advanced with neural networks and representation learning
 We build on these ideas and propose a general transition-based DAG parsing approach,
 able to parse UCCA, AMR, SDP and UD \cite{nivre2016universal}.
 We train the parser using MTL to obtain significant improvements
-on UCCA parsing over single-task training in (1) an out-of-domain setting in English; 
-(2) an in-domain setting in German; and (3) a setting in French, where training data is scarce.\footnote{Our code is publicly available at $<$anonymized$>$.}
+on UCCA parsing over single-task training in
+(1) an out-of-domain setting in English; 
+(2) an in-domain setting in German; and
+(3) an in-domain setting in French, where training data is
+scarce.\footnote{Our code is publicly available at $<$anonymized$>$.}
 
 No previous work, to our knowledge, has shown benefits 
 from applying MTL to such widely different parsing tasks.
@@ -138,12 +141,12 @@ For parsing, domain adaptation has been applied successfully in
 parser combination and co-training \cite{mcclosky2010automatic,baucom2013domain}.
 
 Neural MTL has mostly been effective in tackling formally similar
-tasks \cite{P15-1166,P16-2038,D17-1134}.
+tasks \cite{P16-2038},
 %or where one task tends to be used as pre-processing for another.
-Examples include 
-multilingual syntactic dependency \cite{Q16-1031,guo2016exploiting}
-and semantic parsing \cite{duong2017multilingual},
-as well as domain adaptation in semantic parsing \cite{herzig-berant:2017:Short,W17-2607}.
+including
+multilingual syntactic dependency parsing \cite{Q16-1031,guo2016exploiting},
+as well as multilingual \cite{duong2017multilingual},
+and cross-domain semantic parsing \cite{herzig-berant:2017:Short,W17-2607}.
 
 Sharing parameters with a low-level task
 has shown great benefit for transition-based syntactic parsing,
@@ -152,23 +155,23 @@ when jointly training with POS tagging
 with lexical analysis \cite{constant-nivre:2016:P16-1,more2016joint}.
 Recent work has achieved state-of-the-art results in multiple NLP tasks
 by jointly learning the tasks forming the NLP standard pipeline using 
-a single neural network model \cite{collobert2011natural,D17-1206},
-thereby avoiding cascading errors, which are common in pipelines.
+a single neural model \cite{collobert2011natural,D17-1206},
+thereby avoiding cascading errors, common in pipelines.
 
 Much effort has been devoted to joint learning of syntactic
 and semantic parsing, including
 two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll}.
 %on joint syntactic parsing and semantic role labeling.
 Despite their conceptual and practical appeal, such joint models rarely outperform
-the pipeline approach of basing semantic parsing on the output of syntactic parsers
+the pipeline approach %of basing semantic parsing on the output of syntactic parsers
 \cite{lluis2008joint,henderson2013multilingual,D15-1169,swayamdipta-EtAl:2016:CoNLL,swayamdipta2017frame}.
 
-\citet{P17-1186} tackled a closely related setting to ours,
-reporting benefits from performing MTL for SDP.
-They tackled three SDP tasks, all sharing the same formal structures (bilexical DAGs) with a considerable overlap in their edges,
-but differing in their target representations  (see \S\ref{sec:tasks}).
-Training sets for SDP are annotated over the same text.
-Improvements are reported for all tasks, with an increase of 0.5-1 labeled $F_1$ points.
+\citet{P17-1186} performed MTL for SDP in a closely related setting to ours.
+They tackled three tasks, annotated over the same text
+and sharing the same formal structures (bilexical DAGs),
+with considerable edge overlap,
+but differing in target representations (see \S\ref{sec:tasks}).
+For all tasks, they reported an increase of 0.5-1 labeled $F_1$ points.
 
 
 In this work, we take the challenge of MTL for semantic parsing a step further,
@@ -196,14 +199,14 @@ improving UCCA parsing using MTL with conceptually and formally different tasks 
         {
           child {node {to} edge from parent node[left] {\scriptsize $R$}}
           child {node {Paris} edge from parent node[right] {\scriptsize $C$}}
-        } edge from parent node[right] {\scriptsize $A$} }
+        } edge from parent node[above] {\scriptsize $A$} }
       } edge from parent node[above] {\scriptsize $H$} }
       ;
-    \draw[dashed,->] (graduation) to node [right] {\scriptsize $A$} (John);
-    \node (LKG) at (-1.8,0) [fill=black!20, circle] {};
-    \draw[bend right] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
-    \draw (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
-    \draw (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
+    \draw[dashed,->] (graduation) to node [above] {\scriptsize $A$} (John);
+    \node (LKG) at (-1.8,0) [fill=cyan, circle] {};
+    \draw[bend right,color=cyan] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
+    \draw[color=cyan] (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
+    \draw[color=cyan] (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
   \end{tikzpicture}
   }\caption{UCCA \label{fig:original_example_ucca}}
 \end{subfigure}}
@@ -278,7 +281,7 @@ improving UCCA parsing using MTL with conceptually and formally different tasks 
 \caption{\label{fig:original_examples}
  Example graph for each task.
  Figure \ref{fig:original_example_ucca} presents a UCCA graph. The dashed edge is remote,
-  while the gray node and its outgoing edges represent inter-Scene linkage.
+  while the blue node and its outgoing edges represent inter-Scene linkage.
   Pre-terminal nodes and edges are omitted for brevity. 
  Figure \ref{fig:original_example_amr} presents an AMR graph.
   Text tokens are not part of the graph, and must be matched to
@@ -305,7 +308,7 @@ i.e., produce a graph covering all (content) words in the text,
 or the lexical concepts they evoke.
 This contrasts with ``shallow'' semantic parsing,
 primarily semantic role labeling
-\cite[SRL;][]{Palmer:05,gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
+\cite[SRL;][]{gildea2002automatic,Palmer:05,swayamdipta2017frame},
 which targets argument structure phenomena using flat structures.
 We consider four formalisms: UCCA, AMR, SDP and Universal Dependencies.
 Figure~\ref{fig:original_examples} presents one sentence annotated in each scheme.
@@ -320,15 +323,16 @@ Figure~\ref{fig:original_examples} presents one sentence annotated in each schem
 
 \paragraph{Universal Conceptual Cognitive Annotation.}\label{sec:ucca}
 UCCA \cite{abend2013universal} is a semantic representation whose main design principles
-are ease of annotation, cross-linguistic applicability, and a modular architecture of semantic distinctions.
+are ease of annotation, cross-linguistic applicability, and a modular architecture.
+%of semantic distinctions.
 UCCA represents the semantics of linguistic utterances
 as directed acyclic graphs (DAGs), where terminal (childless) nodes
 correspond to the text tokens, and non-terminal nodes to semantic units that participate
 in some super-ordinate relation.
 Edges are labeled, indicating the role of a child in the relation the parent represents.
-Nodes and edges may belong to one of several \textit{layers}, each corresponding
+Nodes and edges belong to one of several \textit{layers}, each corresponding
 to a ``module'' of semantic distinctions.
-UCCA's \textit{foundational layer} (the only layer for which annotated data exists) 
+UCCA's \textit{foundational layer} (the only layer for which annotated data exists)
 mostly covers predicate-argument structure, semantic heads and inter-Scene relations.
 %The \textit{linkage} layer covers relations between events, including temporal and discourse relations
 %(exemplified by the gray node and its outgoing edges in Figure~\ref{fig:original_example_ucca}).
@@ -337,7 +341,7 @@ UCCA distinguishes \textit{primary} edges, corresponding
 to explicit relations, from \textit{remote} edges (appear dashed in
 Figure~\ref{fig:original_example_ucca}) that allow for a unit to participate
 in several super-ordinate relations.
-Primary edges form a tree, whereas remote edges enable reentrancy, forming a DAG.
+Primary edges form a tree in each layer, whereas remote edges enable reentrancy, forming a DAG.
 %As UCCA annotated data is currently fairly scarce (see \S\ref{sec:experiments}), 
 %we hypothesize it will benefit from MTL, and consider it as our
 %main task.
@@ -346,7 +350,7 @@ Primary edges form a tree, whereas remote edges enable reentrancy, forming a DAG
 \paragraph{Abstract Meaning Representation.}\label{sec:amr}
 
 AMR \cite{banarescu2013abstract} is a semantic representation that encodes information about named entities, 
-argument structure, semantic roles, word sense disambiguation and co-reference resolution.
+argument structure, semantic roles, word sense and co-reference.
 AMRs are rooted directed graphs, in which both nodes and edges are labeled.
 Most AMRs are DAGs, although cycles are permitted.
 
@@ -358,8 +362,8 @@ that align a subset of the graph nodes to a subset of the text tokens (concept i
 
 Despite the brief period since its inception, AMR has been targeted by a number of works,
 notably in two SemEval shared tasks \cite{may2016semeval,may2017semeval}.
-In order to tackle the variety of distinctions it encodes and the unrestricted graph structure
-it uses, AMR parsers often use specialized methods.
+To tackle its variety of distinctions and unrestricted graph structure,
+AMR parsers often use specialized methods.
 Graph-based parsers construct AMRs
 by identifying concepts and scoring edges between them, either in a pipeline fashion
 \cite{flanigan2014discriminative,artzi2015broad,pust2015parsing,foland2017abstract},
@@ -383,35 +387,33 @@ SDP uses a set of related representations, targeted in two recent SemEval shared
 \cite{oepen2014semeval,oepen2015semeval}, and extended by \citet{oepen2016towards}.
 They correspond to four semantic representation schemes, referred to as
 DM, PAS, PSD and CCD, representing
-predicate-argument relations between content-bearing words in a sentence.
-All are based on semantic formalisms whose annotation has been
-converted into bilexical dependencies---labeled
-directed graphs whose nodes are all text tokens.
+predicate-argument relations between content words in a sentence.
+All are based on semantic formalisms %whose annotation has been
+converted into bilexical dependencies---directed graphs whose nodes are text tokens.
 Edges are labeled, encoding semantic relations between the tokens.
 Non-content tokens, such as punctuation,
-are often left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
+are left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
 but the sub-graph restricted to content-bearing tokens is connected.
 Graphs containing cycles have been removed from the SDP datasets.
 
-We consider one of the four formalisms used
-in the SemEval shared tasks: DM (DELPH-IN MRS) representation, which was converted from 
-DeepBank \cite{flickinger2012deepbank}, a corpus of hand-corrected parses from the LinGO
-English Resource Grammar \cite{copestake2000open}.
-LinGO is an HPSG grammar \cite{pollard1994head}
-which uses Minimal Recursion Semantics \cite{copestake2005minimal}.
+We use one of the representations
+from the SemEval shared tasks: DM (DELPH-IN MRS), converted from 
+DeepBank \cite{flickinger2012deepbank}, a corpus of hand-corrected parses from LinGO
+ERG \cite{copestake2000open},
+an HPSG \cite{pollard1994head}
+using Minimal Recursion Semantics \cite{copestake2005minimal}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Universal Dependencies.}\label{sec:ud}
 UD \cite{nivre2016universal,11234/1-2515} has quickly become
-the dominant dependency representation for
-syntactic  annotation in a large variety of languages,
+the dominant dependency scheme for
+syntactic  annotation in many languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
 annotation. Formally, UD uses bilexical trees, with edge labels 
 representing syntactic relations between words.
 
-While not a semantic representation,
-we use UD as an auxiliary task,
+We use UD as an auxiliary task,
 inspired by previous work on joint syntactic and semantic parsing
 (see \S\ref{sec:related_work}).
 %\cite{lluis2008joint,collobert2011natural,D15-1169,swayamdipta-EtAl:2016:CoNLL,swayamdipta2017frame}.
@@ -433,16 +435,16 @@ which is similar to the semantic schemes' treatment of this construction.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{General Transition-based DAG Parser}\label{sec:model}
 
-All schemes we consider in this work exhibit
+All schemes considered in this work exhibit
 reentrancy and discontinuity (or non-projectivity), to varying degrees.
 In addition, UCCA and AMR contain non-terminal nodes.
-To parse graphs with these structural properties,
+To parse these graphs,
 we extend TUPA \cite{hershcovich2017a}, 
 a transition-based parser 
-originally developed for UCCA,
-as it is the only parser to our knowledge that supports 
-all these structural properties.
-TUPA's transition system can yield any labeled DAG structure
+originally developed for UCCA,  as it
+%is the only parser to our knowledge that
+supports all these structural properties.
+TUPA's transition system can yield any labeled DAG
 whose terminals are anchored in the text tokens.
 To support parsing into AMR, which uses graphs that are not anchored in the tokens,
  we take advantage of existing alignments of the graphs with the text
@@ -482,14 +484,10 @@ and \textsc{Finish} to mark the state as terminal.
 
 Although UCCA contains nodes without any text tokens as descendants
 (called \textit{implicit units}),
-these nodes are infrequent and only cover 0.5\% of the non-terminal nodes.
+these nodes are infrequent and only cover 0.5\% of non-terminal nodes.
 For this reason we follow previous work \cite{hershcovich2017a} and discard implicit units from
 the training and evaluation,
 and so do not include transitions for creating them.
-% when parsing UCCA,
-%thus ignoring them in both training and evaluation.
-%We also adopt the standard evaluation for UCCA parsing, which is span-based,
-%and ignores implicit units as well. 
 
 In AMR, implicit units are considerably more common, as any unaligned concept
 with no aligned descendents is implicit (about 6\% of the nodes).
@@ -567,7 +565,7 @@ optimal transitions at each step.
 \fbox{\begin{subfigure}{0.47\textwidth}
     \centering
     \scalebox{.95}{
-    \begin{tikzpicture}[level distance=8mm, sibling distance=14mm, ->,
+    \begin{tikzpicture}[level distance=9mm, sibling distance=14mm, ->,
         every circle node/.append style={fill=black}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
@@ -585,10 +583,10 @@ optimal transitions at each step.
           {
             child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
             child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
-          } edge from parent node[right] {\scriptsize $A$} }
+          } edge from parent node[above] {\scriptsize $A$} }
         } edge from parent node[right] {\scriptsize $H$} }
         ;
-      \draw[dashed,->] (graduation) to node [auto] {\scriptsize $A$} (John);
+      \draw[dashed,->] (graduation) to node [above] {\scriptsize $A$} (John);
     \end{tikzpicture}}
   \caption{UCCA}
   \label{fig:converted_example_ucca}
@@ -598,7 +596,7 @@ optimal transitions at each step.
   \centering
   \scalebox{.95}{
   \begin{tikzpicture}[level distance=16mm, ->,
-      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
       level 1/.style={sibling distance=28mm},
       level 2/.style={sibling distance=14mm},
       level 3/.style={sibling distance=12mm}]
@@ -627,7 +625,7 @@ optimal transitions at each step.
   \centering
   \scalebox{.95}{
   \begin{tikzpicture}[level distance=12mm, ->,
-      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
       level 1/.style={sibling distance=26mm,level distance=6mm},
       level 2/.style={sibling distance=14mm,level distance=14mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
@@ -680,7 +678,7 @@ optimal transitions at each step.
   \centering
   \scalebox{.95}{
   \begin{tikzpicture}[level distance=15mm, ->,
-      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
       level 1/.style={sibling distance=13mm},
       level 2/.style={sibling distance=1cm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
@@ -717,20 +715,19 @@ optimal transitions at each step.
 \end{subfigure}}
 
 \caption{Graphs from Figure~\ref{fig:original_examples}, after conversion to  the unified DAG format
-(pre-terminals omitted: each terminal drawn in place of its parent).
+(with pre-terminals omitted: each terminal drawn in place of its parent).
 Figure~\ref{fig:converted_example_ucca} presents a converted UCCA graph.
 Linkage nodes and edges are removed, but the original graph is otherwise preserved.
 Figure~\ref{fig:converted_example_amr} presents a converted AMR graph, with
 text tokens added according to the alignments.
 Numeric suffixes of \textit{op} relations are removed,
 and names collapsed.
-Figure~\ref{fig:converted_example_sdp} presents a converted SDP graph (in the DM formalism), with
-intermediate non-terminal nodes introduced as \textit{head} units.
+Figure~\ref{fig:converted_example_sdp} presents a converted SDP graph (in the DM representation), with
+intermediate non-terminal \textit{head} nodes introduced.
 In case of reentrancy, an arbitrary reentrant edge is marked as remote.
 Figure~\ref{fig:converted_example_ud} presents a converted UD graph.
 As in SDP, intermediate non-terminals and \textit{head} edges are introduced.
-The converted graph is actually a tree, as 
-are all converted UD graphs. In enhanced++ UD, the converted graphs need not form a tree.
+While converted UD graphs form trees, enhanced++ UD graphs may not.
 }
 \label{fig:converted_examples}
 \end{figure}
@@ -838,25 +835,26 @@ We collapse this sub-graph into a single node whose children are the name tokens
    \node[color=blue] (embeddings) at (3.5,1.5) {\small Shared embeddings};
    \foreach \i/\word in {0/{After},2/{graduation},5/{to},7/{Paris}} {
        \node (x\i) at (\i,1) {\scriptsize \word};
-       \node[main] (e\i) at (\i,2.2) {};
-       \path (x\i) edge (e\i);
+       \node[main,color=blue] (e\i) at (\i,2.2) {};
+       \path[color=blue] (x\i) edge (e\i);
        \path (e\i) edge (specific);
-       \path (e\i) edge (shared);
+       \path[color=blue] (e\i) edge (shared);
    }
     \node (x4) at (3.5,1) {\ldots};
     \node[main] (mlp) at (3.5,4.6) {\small Task-specific MLP};
     \path (specific) edge (mlp);
-    \path (shared) edge (mlp);
+    \path[color=blue] (shared) edge (mlp);
     \coordinate (state) at (6.5,6.3);
     \path (state) edge [bend left] (mlp);
     \node (transition) at (3.5,5.8) {transition};
     \path (mlp) edge node[right] {softmax} (transition);
    \end{tikzpicture}
    \caption{MTL model.
-      Input token representations are computed both by a task-specific and a shared BiLSTM.
-      Their outputs are concatenated with the embedding of the parser state,
-      which is identical to Figure~\ref{fig:single_model},
+      Token representations are computed both by a task-specific and a shared BiLSTM.
+      Their outputs are concatenated with the parser state embedding,
+      identical to Figure~\ref{fig:single_model},
       and fed into the task-specific MLP for selecting the next transition.
+      Shared parameters are shown in blue.
       }
    \label{fig:multi_model}
 \end{figure}
@@ -898,7 +896,7 @@ increasing generalization \cite{E17-1005}.
 \section{Experiments}\label{sec:experiments}
 
 We here detail a range of experiments to assess the value of MTL to UCCA parsing,
-training the parser in a single-task and multitask settings,
+training the parser in single-task and multitask settings,
 and evaluating its performance on the UCCA test sets in both in-domain and out-of-domain settings.
 
 \begin{table*}[t]
@@ -940,26 +938,26 @@ we use for each corpus and language.
 
 For UCCA, we use v1.2 of the English Wikipedia corpus \cite[\textit{Wiki};][]{abend2013universal},
 with the standard train/dev/test split (see Table~\ref{tab:corpora}),
-and the \textit{Twenty Thousand Leagues Under the Sea} corpus
+and the \textit{Twenty Thousand Leagues Under the Sea} corpora
 \cite[\textit{20K};][]{sulem2015conceptual},
 annotated in English, French and German.\footnote{\mbox{\url{http://github.com/huji-nlp/ucca-corpus}}}
-The English and French parts of 20K (v1.0) are a parallel corpus comprising the first five
-chapters of the book.
+For English and French we use 20K v1.0,
+a small parallel corpus comprising the first five chapters of the book.
 As in previous work \cite{hershcovich2017a}, we use the English part only as an out-of-domain test set.
-Additionally, we train and test on the small French part using the standard split,
-as well as the German part (v0.9),
+We train and test on the French part using the standard split,
+as well as the German corpus (v0.9),
 which is a pre-release and still contains a considerable amount of noisy annotation.
 Tuning is performed on the respective development sets.
 
 For AMR, we use LDC2017T10, identical to the dataset targeted in SemEval 2017
 \cite{may2017semeval}.\footnote{\mbox{\url{http://catalog.ldc.upenn.edu/LDC2017T10}}}
-For SDP, we use the DM target representation from the SDP 2016 dataset
+For SDP, we use the DM representation from the SDP 2016 dataset
 \cite{oepen2016towards}.\footnote{\url{http://sdp.delph-in.net/osdp-12.tgz}}
 For Universal Dependencies, we use all English, French and German treebanks from UD v2.1
 \cite{11234/1-2515}.\footnote{\url{http://hdl.handle.net/11234/1-2515}}
 We use the enhanced++ UD representation \cite{SCHUSTER16.779} in our English experiments,
 henceforth referred to as UD$^{++}$.
-For AMR, DM and UD, we only use the training sets from standard train/dev/test splits.
+We use only the AMR, DM and UD training sets from standard splits.
 
 While UCCA is annotated over Wikipedia and over a literary corpus,
 the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
@@ -983,10 +981,10 @@ For completeness, we also evaluate the English models on the Wiki in-domain test
 
 We evaluate on UCCA using labeled precision, recall and $F_1$ 
 on primary and remote edges,
-following previous work on UCCA parsing \cite{hershcovich2017a}.
+following previous work \cite{hershcovich2017a}.
 Edges in predicted and gold graphs are matched by terminal yield and label.
-Significance testing of improvements over the single-task model are performed 
-using the bootstrap test \cite{berg2012empirical}, with $p<0.05$.
+Significance testing of improvements over the single-task model is done
+by the bootstrap test \cite{berg2012empirical}, with $p<0.05$.
 
 \paragraph{Training.}
 
@@ -1011,6 +1009,22 @@ Hyperparameter settings are listed in the Supplementary Material.
 %Another alternative is to combine models trained with different auxiliary tasks.\oa{don't write about alternatives,
 %but rather on what we actually do}
 %This provides greater variability between the combined models.
+
+
+
+\section{Results}\label{sec:results}
+
+Table~\ref{tab:ood_results} presents our experimental results.
+Our basic single-task model (\textit{Single})
+is slightly better than the current state-of-the-art
+\cite[TUPA;][]{hershcovich2017a},
+due to the incorporation of additional features (see \S\ref{sec:classifier}).
+It is further outperformed by all MTL models
+on the English out-of-domain test set.
+This improvement is largely additive: the best model, using all three auxiliary tasks (\textit{All}),
+yields an error reduction of  3.9\%.
+%Although UD$^{++}$ seems to hurt performance on remote edges,
+%its improvement on primary edges is the largest among the three auxiliary tasks.
 
 
 \begin{table}[t]
@@ -1043,7 +1057,7 @@ Hyperparameter settings are listed in the Supplementary Material.
 \footnotesize DM + UD$^{++}$
 & 70$\star$ & 68.9 & 69.4 & 47.4$\star$ & 22 & 30$\star$ \\
 \footnotesize All
-& 71$\star$ & 72.2$\star$ & \textbf{71.6}$\star$ & 43.9 & 24.8$\star$ & 31.6$\star$ \\
+& 71$\star$ & 72.2$\star$ & \textbf{71.6}$\star$ & 43.9 & 24.8$\star$ & \textbf{31.6}$\star$ \\
 \hline
 \multicolumn{4}{l|}{\small \bf French (in-domain)} & \\
 \small Single & 59.4 & 59.8 & 59.6 & \enskip 5.9 & \enskip 1.9 & \enskip 2.9 \\
@@ -1054,12 +1068,10 @@ Hyperparameter settings are listed in the Supplementary Material.
 \small UD & 73.7$\star$ & 72.6$\star$ & \textbf{73.2}$\star$ & 61.8 & 24.9$\star$ & \textbf{35.5}$\star$
 \end{tabular}
 \caption{
-Labeled precision, recall and F-score (in~\%) for both primary and remote edges,
+Labeled precision, recall and $F_1$ (in~\%) for both primary and remote edges,
 on the 20K test sets.
 $\star$~indicates significantly better than \textit{Single},
 and $\dagger$ significantly worse.
-%\textit{Single} is trained only on the corresponding UCCA training set.
-%Other settings use unlabeled auxiliary tasks in the same language.
 }
 \label{tab:ood_results}
 \end{table}
@@ -1098,25 +1110,9 @@ and $\dagger$ significantly worse.
 \end{tabular}
 \caption{
 Results on the English Wiki test set.
-%$\star$~indicates significantly better than \textit{Single},
-%and $\dagger$ significantly worse.
 }
 \label{tab:id_results}
 \end{table}
-
-\section{Results}\label{sec:results}
-
-Table~\ref{tab:ood_results} presents our experimental results.
-Our basic single-task model (\textit{Single})
-is slightly better than the current state-of-the-art
-\cite[TUPA;][]{hershcovich2017a},
-due to the incorporation of additional features (see \S\ref{sec:classifier}).
-It is further outperformed by all MTL models
-on the English out-of-domain test set.
-This improvement is largely additive: the best model, using all three auxiliary tasks (\textit{All}),
-yields an error reduction of  3.9\%.
-%Although UD$^{++}$ seems to hurt performance on remote edges,
-%its improvement on primary edges is the largest among the three auxiliary tasks.
 
 
 The contribution of MTL is apparent in the case of French and German
@@ -1132,12 +1128,10 @@ Finally, Table~\ref{tab:id_results} shows our results on the English in-domain W
 MTL $F_1$ scores are comparable to the single-task scores,
 except for remote edges with only UD$^{++}$ as an auxiliary, where they are worse
 (observed on the out-of-domain English set too), despite the UD$^{++}$ use of graphs (rather than trees).
-%this syntactic auxiliary only worsens the parser's remote edge performance.
 However, this adverse effect is countered when adding other tasks as auxiliaries.
-%: AMR or DM, or both, as auxiliaries.
 
 
-\begin{table}
+\begin{table}[t]
 \centering
 \small
 \begin{tabular}{l|cccc}
@@ -1155,7 +1149,7 @@ However, this adverse effect is countered when adding other tasks as auxiliaries
 \end{table}
 
 
-\begin{table}
+\begin{table}[t]
 \centering
 \small
 \begin{tabular}{l|lll|lll}
@@ -1168,7 +1162,7 @@ DM & 63.6 & 49.8 & 55.9 & \enskip 6.9 & 63.8 & 12.4 \\
 %UD & 75.3 & 82.9 & 78.9 & -- & 0 & -- \\
 UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 \end{tabular}
-\caption{Unlabeled F-scores between the representations of the same English sentences (from PTB WSJ), converted to the unified DAG format.
+\caption{Unlabeled $F_1$ scores between the representations of the same English sentences (from PTB WSJ), converted to the unified DAG format.
 \label{tab:common}}
 \end{table}
 
@@ -1178,7 +1172,7 @@ UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 
 Task similarity is an important factor in MTL success
 \cite{E17-2026,E17-1005}.
-In our case, the main and auxiliary tasks are annotated on corpora
+In our case, the main and auxiliary tasks are annotated on different corpora
 from different domains (\S\ref{sec:experiments}), and
 the target representations vary both in form and in content.
 %We found that the combination of many different domains therefore benefits domain
@@ -1198,11 +1192,12 @@ contribute to the benefits observed on the English 20K test set.
 %the ability to use them for MTL is less clear.
 
 As a measure of the formal similarity of the different schemes to UCCA,
-we use unlabeled F-score evaluation on both primary and remote edges (ignoring edge labels).
-To this end, we annotated 100 English sentences from Section 02 of the Penn Treebank Wall Street Journal (WSJ).
+we use unlabeled $F_1$ score evaluation on both primary and remote edges (ignoring edge labels).
+To this end, we annotated 100 English sentences from Section 02 of the Penn Treebank Wall Street Journal
+(PTB WSJ).
 Annotation was carried out by a single expert UCCA annotator.\footnote{The annotated sentences are 
 available at $<$anonymized$>$}
-These sentences have already been annotated by AMR, DM and UD$^{++}$,
+These sentences had already been annotated by AMR, DM and UD$^{++}$,
 and we convert their annotation to the unified DAG format.
 Results are presented in Table~\ref{tab:common}.
 UD$^{++}$ is highly overlapping with UCCA, while DM less so, and AMR even less
