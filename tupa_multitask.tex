@@ -122,7 +122,7 @@ on UCCA parsing over single-task training in
 (1) an out-of-domain setting in English; 
 (2) an in-domain setting in German; and
 (3) an in-domain setting in French, where training data is
-scarce.\footnote{Our code is publicly available at $<$anonymized$>$.}
+scarce.\footnote{Our code is included in the supplementary material.}
 
 No previous work, to our knowledge, has shown benefits 
 from applying MTL to such widely different parsing tasks.
@@ -293,8 +293,7 @@ improving UCCA parsing using MTL with conceptually and formally different tasks 
   Punctuation tokens are excluded from SDP graphs.
  Figure \ref{fig:original_example_ud} presents a UD tree.
   %Each word has exactly one head, and there is a single root.
-  Edge labels express syntactic relations.
-}
+  Edge labels express syntactic relations.}
 
 \end{figure}
 
@@ -358,7 +357,7 @@ AMR differs from the other schemes we consider in that it does not anchor its gr
 in the words of the sentence (Figure~\ref{fig:original_example_amr}). Instead, AMR graphs
 connect variables, concepts (from a pre-defined set) and constants (which may be strings or numbers).
 Still, most AMR nodes are alignable to text tokens, a tendency used by AMR parsers,
-that align a subset of the graph nodes to a subset of the text tokens (concept identification). In this work, we use pre-aligned AMR graphs.
+which align a subset of the graph nodes to a subset of the text tokens (concept identification). In this work, we use pre-aligned AMR graphs.
 
 Despite the brief period since its inception, AMR has been targeted by a number of works,
 notably in two SemEval shared tasks \cite{may2016semeval,may2017semeval}.
@@ -392,8 +391,8 @@ All are based on semantic formalisms %whose annotation has been
 converted into bilexical dependencies---directed graphs whose nodes are text tokens.
 Edges are labeled, encoding semantic relations between the tokens.
 Non-content tokens, such as punctuation,
-are left out of the analysis (see Figure~\ref{fig:original_example_sdp}),
-but the sub-graph restricted to content-bearing tokens is connected.
+are left out of the analysis (see Figure~\ref{fig:original_example_sdp}).
+%but the sub-graph restricted to content-bearing tokens is connected.
 Graphs containing cycles have been removed from the SDP datasets.
 
 We use one of the representations
@@ -540,8 +539,7 @@ We therefore only produce edge labels and not node labels when training on AMR.
    \end{tikzpicture}
 \caption{Illustration of the TUPA model, adapted (with permission) from \citet{hershcovich2017a}.
 Top: parser state.
-Bottom: BiLTSM architecture.}
-\label{fig:single_model}
+Bottom: BiLTSM architecture.}\label{fig:single_model}
 \end{figure}
 
 
@@ -710,8 +708,7 @@ optimal transitions at each step.
       \draw (ROOT) to node {nsubj} (John);
       \draw (ROOT) to node {head} (moved);
   \end{tikzpicture}}
-  \captionof{figure}{UD}
-  \label{fig:converted_example_ud}
+  \captionof{figure}{UD}\label{fig:converted_example_ud}
 \end{subfigure}}
 
 \caption{Graphs from Figure~\ref{fig:original_examples}, after conversion to  the unified DAG format
@@ -727,9 +724,7 @@ intermediate non-terminal \textit{head} nodes introduced.
 In case of reentrancy, an arbitrary reentrant edge is marked as remote.
 Figure~\ref{fig:converted_example_ud} presents a converted UD graph.
 As in SDP, intermediate non-terminals and \textit{head} edges are introduced.
-While converted UD graphs form trees, enhanced++ UD graphs may not.
-}
-\label{fig:converted_examples}
+While converted UD graphs form trees, enhanced++ UD graphs may not.}\label{fig:converted_examples}
 \end{figure}
 
 
@@ -809,15 +804,15 @@ In the conversion from AMR, node labels are dropped.
 Since alignments are not part of the AMR graph (see Figure~\ref{fig:converted_example_amr}),
 we use automatic alignments (see \S\ref{sec:experiments}),
 and attach each node with an edge to each of its aligned terminals.
-%
+
 %Since the order of AMR ordinal relations, such as \textit{op1}, \textit{op2},
 %is annotated according to the order of text tokens,
 %the numeric index is redundant and is thus removed.
 %Numeric suffixes are kept when they are meaningful, e.g. in distinguishing between PropBank semantic
 %roles (\textit{ARG[0-5]}).
-Named entities in AMR are represented as a sub-graph, whose \textit{name}-labeled root
+Named entities in AMR are represented as a subgraph, whose \textit{name}-labeled root
 has a child for each token in the name (see the two \textit{name} nodes in Figure~\ref{fig:original_example_amr}).
-We collapse this sub-graph into a single node whose children are the name tokens.
+We collapse this subgraph into a single node whose children are the name tokens.
 
 
 \begin{figure}[t]
@@ -854,9 +849,7 @@ We collapse this sub-graph into a single node whose children are the name tokens
       Their outputs are concatenated with the parser state embedding,
       identical to Figure~\ref{fig:single_model},
       and fed into the task-specific MLP for selecting the next transition.
-      Shared parameters are shown in blue.
-      }
-   \label{fig:multi_model}
+      Shared parameters are shown in blue.}\label{fig:multi_model}
 \end{figure}
 
 
@@ -868,7 +861,7 @@ we can train it in a multitask setting.
 Following previous work, we share only some of the parameters
 \cite{N16-1179,P16-2038,C16-1013,C16-1059,C16-1179,E17-1005,P17-1186}, leaving task-specific
 sub-networks as well.
-Concretely, we replicate the BiLSTM used by TUPA for each of the tasks, and additionally add
+Concretely, we replicate the BiLSTM used by TUPA for each of the tasks, and add
 a BiLSTM that is shared across all tasks. 
 For each task, the outputs of the BiLSTMs are concatenated and
 fed into a task-specific MLP (see Figure~\ref{fig:multi_model}).
@@ -930,8 +923,7 @@ Wiki & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
 \multicolumn{2}{l}{899163} && \multicolumn{2}{l}{32347} && \multicolumn{2}{l}{268145} && 13814
 \end{tabular}
 \caption{Number of tokens and sentences in the training, development and test sets
-we use for each corpus and language.
-\label{tab:corpora}}
+we use for each corpus and language.\label{tab:corpora}}
 \end{table*}
 
 \paragraph{Data.}
@@ -940,7 +932,7 @@ For UCCA, we use v1.2 of the English Wikipedia corpus \cite[\textit{Wiki};][]{ab
 with the standard train/dev/test split (see Table~\ref{tab:corpora}),
 and the \textit{Twenty Thousand Leagues Under the Sea} corpora
 \cite[\textit{20K};][]{sulem2015conceptual},
-annotated in English, French and German.\footnote{\mbox{\url{http://github.com/huji-nlp/ucca-corpus}}}
+annotated in English, French and German.\footnote{\mbox{\url{http://github.com/huji-nlp/ucca-corpora}}}
 For English and French we use 20K v1.0,
 a small parallel corpus comprising the first five chapters of the book.
 As in previous work \cite{hershcovich2017a}, we use the English part only as an out-of-domain test set.
@@ -1071,9 +1063,7 @@ yields an error reduction of  3.9\%.
 Labeled precision, recall and $F_1$ (in~\%) for both primary and remote edges,
 on the 20K test sets.
 $\star$~indicates significantly better than \textit{Single},
-and $\dagger$ significantly worse.
-}
-\label{tab:ood_results}
+and $\dagger$ significantly worse.}\label{tab:ood_results}
 \end{table}
 
 \begin{table}[t]
@@ -1109,9 +1099,10 @@ and $\dagger$ significantly worse.
 & 74.2 & 73.7$\star$ & 73.9 & 44.7$\dagger$ & 54.3$\star$ & 49
 \end{tabular}
 \caption{
-Results on the English Wiki test set.
-}
-\label{tab:id_results}
+Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
+on the English Wiki test set.
+$\star$~indicates significantly better than \textit{Single},
+and $\dagger$ significantly worse.}\label{tab:id_results}
 \end{table}
 
 
@@ -1141,10 +1132,8 @@ However, this adverse effect is countered when adding other tasks as auxiliaries
 \footnotesize AMR &&& 0.757 & 0.469 \\
 \footnotesize DM &&&& 0.754
 \end{tabular}
-\caption{L1 distance between word distributions, quantifying domain differences in English (low is similar).
-%All auxiliary training sets are more similar to 20K than Wiki
-%is, contributing to domain adaptation.
-\label{tab:domain_sim}}
+\caption{L1 distance between dataset word distributions,
+quantifying domain differences in English (low is similar).\label{tab:domain_sim}}
 \end{table}
 
 
@@ -1161,8 +1150,7 @@ DM & 63.6 & 49.8 & 55.9 & \enskip 6.9 & 63.8 & 12.4 \\
 %UD & 75.3 & 82.9 & 78.9 & -- & 0 & -- \\
 UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 \end{tabular}
-\caption{Unlabeled $F_1$ scores between the representations of the same English sentences (from PTB WSJ), converted to the unified DAG format.
-\label{tab:common}}
+\caption{Unlabeled $F_1$ scores between the representations of the same English sentences (from PTB WSJ), converted to the unified DAG format, and annotated UCCA graphs.\label{tab:common}}
 \end{table}
 
 
@@ -1194,8 +1182,8 @@ As a measure of the formal similarity of the different schemes to UCCA,
 we use unlabeled $F_1$ score evaluation on both primary and remote edges (ignoring edge labels).
 To this end, we annotated 100 English sentences from Section 02 of the Penn Treebank Wall Street Journal
 (PTB WSJ).
-Annotation was carried out by a single expert UCCA annotator.\footnote{The annotated sentences are 
-available at $<$anonymized$>$}
+Annotation was carried out by a single expert UCCA annotator.\footnote{Annotations are
+included in the supplementary material.}
 These sentences had already been annotated by AMR, DM and UD$^{++}$,
 and we convert their annotation to the unified DAG format.
 Results are presented in Table~\ref{tab:common}.
@@ -1208,9 +1196,11 @@ even if not expressed directly in nodes and edges.
 
 \section{Conclusion}\label{sec:conclusion}
 
-We demonstrated that MTL improves UCCA parsing in out-of-domain settings or when training data is scarce or noisy,
+We demonstrate that MTL improves UCCA parsing in out-of-domain settings
+or when training data is scarce or noisy,
 using AMR, DM and UD parsing as auxiliaries.
-We do so by proposing a unified DAG representation, constructing protocols for converting these schemes into the unified format,
+We do so by proposing a unified DAG representation,
+constructing protocols for converting these schemes into the unified format,
 and generalizing a transition-based DAG parser to support all these tasks.
 
 A natural question is whether our method can benefit AMR, DM or UD parsing.
