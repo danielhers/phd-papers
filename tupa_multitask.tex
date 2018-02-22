@@ -287,7 +287,7 @@ improving UCCA parsing using MTL with conceptually and formally different tasks 
  Figure \ref{fig:original_example_sdp} presents a DM semantic dependency graph,
   containing multiple roots: ``After'', ``moved'' and ``to'',
   of which ``moved'' is marked as \textit{top}.
-  Punctuation tokens are excluded {\color{red} from SDP graphs}.
+  Punctuation tokens are excluded from SDP graphs.
  Figure \ref{fig:original_example_ud} presents a UD tree.
   %Each word has exactly one head, and there is a single root.
   Edge labels express syntactic relations.
@@ -552,9 +552,9 @@ Bottom: BiLTSM architecture.}
 
 To predict the next transition at each step,
 we use a BiLSTM with embeddings as inputs,
-followed by an MLP and a softmax layer for classification 
-(see Figure~\ref{fig:single_model}).
-Inference is performed greedily,\oa{should we mention Kipperwasser and Goldberg here or not?}
+followed by an MLP and a softmax layer for classification \cite{kiperwasser2016simple}.
+The model is illustrated in Figure~\ref{fig:single_model}.
+Inference is performed greedily,
 and training is done with an oracle that yields the set of all optimal 
 transitions at a given state (those that lead to a state from which the gold graph is still reachable).
 Out of this set, the actual transition performed in training is the one
@@ -730,7 +730,7 @@ In case of reentrancy, an arbitrary reentrant edge is marked as remote.
 Figure~\ref{fig:converted_example_ud} presents a converted UD graph.
 As in SDP, intermediate non-terminals and \textit{head} edges are introduced.
 The converted graph is actually a tree, as 
-{\color{red} are all converted UD graphs. In UD enchanced++, the converted graphs need not form a tree.}
+are all converted UD graphs. In enchanced++ UD, the converted graphs need not form a tree.
 }
 \label{fig:converted_examples}
 \end{figure}
@@ -759,7 +759,7 @@ according to the parser state.
 Some constraints are task-specific, others are generic.
 For example, in UCCA, a terminal may only have one parent.
 In AMR, a concept corresponding to a PropBank frame may only have 
-the core arguments defined for the frame\oa{as children?}.
+the core arguments defined for the frame as children.
 An example of a generic constraint is that stack nodes 
 that have been swapped
 should not be swapped again.\footnote{
@@ -881,7 +881,7 @@ makes MTL particularly appealing,
 and we focus on it in this paper, treating AMR, DM and UD parsing as auxiliary tasks.
 
 \paragraph{Unlabeled parsing for auxiliary tasks.}
-To simplify the auxiliary tasks and facilitate generalization \cite{E17-2026,E17-1005},
+To simplify the auxiliary tasks and facilitate generalization \cite{E17-2026},
 we perform unlabeled parsing for AMR, DM and UD,
 while still predicting edge labels in UCCA parsing.
 To support unlabeled parsing, we simply remove all labels from the
@@ -891,7 +891,7 @@ This results in a much smaller number of transitions the classifier has to selec
 allowing us to use fewer dimensions and layers for task-specific BiLSTMs and MLPs
 of auxiliary tasks (see \S\ref{sec:experiments}).
 This limited capacity forces the network to use the shared parameters for all tasks,
-increasing generalization.\oa{didn't you have a citation for this?}
+increasing generalization \cite{E17-1005}.
 
 
 
@@ -1176,7 +1176,7 @@ UD$^{++}$ & 75.1 & 82.5 & 78.6 & 11.8 & 12.8 & 12.2
 
 \section{Discussion}\label{sec:discussion}
 
-Task overlap\oa{what is task overlap? addressing the same task? is that MTL then?} is an important factor in MTL success
+Task similarity is an important factor in MTL success
 \cite{E17-2026,E17-1005}.
 In our case, the main and auxiliary tasks are annotated on corpora
 from different domains (\S\ref{sec:experiments}), and
