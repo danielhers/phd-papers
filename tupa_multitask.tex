@@ -1052,7 +1052,7 @@ yields an error reduction of  3.9\%.
 & 71$\star$ & 72.2$\star$ & \textbf{71.6}$\star$ & 43.9 & 24.8$\star$ & \textbf{31.6}$\star$ \\
 \hline
 \multicolumn{4}{l|}{\small \bf French (in-domain)} & \\
-\small Single & 62.1 & 60.9 & 61.5 & 35.7 & \enskip 9.4 & 14.9 \\
+\small Single & 64.1 & 60.6 & 62.3 & 20 & \enskip 5.7 & \enskip 8.8 \\
 \small UD & 68.7$\star$ & 68.6$\star$ & \textbf{68.6}$\star$ & 15.8 & \enskip 5.7 & \enskip 8.3 \\
 \hline
 \multicolumn{4}{l|}{\small \bf German (in-domain)} & \\
@@ -1107,9 +1107,9 @@ and $\dagger$ significantly worse.}\label{tab:id_results}
 
 
 The contribution of MTL is apparent in French and German in-domain parsing:
-11.5\% error reduction in French
-(having less than 10\% as much training data as English)
-and 1\% in German, where the training set is comparable in size to the English Wiki training set,
+10.1\% error reduction in French
+(having less than 10\% as much UCCA training data as English)
+and 1\% in German, where the training set is comparable in size to the English one,
 but is noisier (see~\S\ref{sec:experiments}).
 The best MTL models are significantly better than single-task models,
 demonstrating that even a small training set for the main task may suffice,
