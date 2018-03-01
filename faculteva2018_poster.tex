@@ -19,6 +19,7 @@
 \usepackage[absolute,overlay]{textpos}
 \usepackage{multirow}
 \usepackage{titlesec}
+\usepackage{enumitem}
 \usepackage{url}
 \usepackage{tikz,pgfplots,pgfplotstable}
 \usepackage{tikz-dependency}
@@ -80,10 +81,37 @@ improving UCCA parsing in challenging settings.
 
 \section*{Introduction}
 
-
-\footnote{Parser code: \url{http://github.com/danielhers/tupa} \hfill
+Semantic parsing is important for natural language understanding.
+Many semantic representation schemes have been developed recently,
+but training data is mostly \textbf{small}, \textbf{in-domain}, and in \textbf{English}.
+We consider four representations:
+\begin{description}[nosep,labelsep=1em]
+\item[UCCA.] Intuitive, cross-lingual, and modular semantic representation.
+    Primary edges form a tree; directed acyclic graph (DAG) due to remote edges (dashed).
+    Edge labels encode predicate-argument structure, semantic heads and inter-scene relations
+    \cite{abend2013universal}.
+\item[AMR.] Abstract graph on concepts and constants, implicit alignment to text tokens.
+    Rooted DAG with node and edge labels.
+    Encodes named entities, argument structure, semantic roles, word sense and co-reference
+    \cite{banarescu2013abstract}.
+\item[SDP.] Set of related schemes (DM, PAS, PSD and CCD). We use \textbf{DM} (DELPH-IN MRS).
+    Bilexical DAG.
+    Encodes predicate-argument structure
+    \cite{oepen2016towards}.
+\item[UD.] Cross-lingual syntactic scheme.
+    Bilexical tree.
+    Encodes syntactic relations between words
+    \cite{nivre2016universal}.\\
+    UD$^{++}$ (Enhanced++ UD) adds and augments edges, creating a bilexical DAG
+    \cite{SCHUSTER16.779}.
+\end{description}
+While formally different, they share much of the semantic content \cite{abend2017state}.
+We use multitask learning (MTL) to exploit the task overlap
+and effectively extend the training data
+for a general transition-based DAG parser.\footnote{Code:
+\url{http://github.com/danielhers/tupa} \hfill
 Corpora: \url{http://github.com/huji-nlp/ucca-corpora} \hfill
-Written in Python using DyNet: \url{http://github.com/clab/dynet}}
+Implemented using DyNet: \url{http://github.com/clab/dynet}}
 
 
 \begin{minipage}{.6\columnwidth}
@@ -115,7 +143,7 @@ Written in Python using DyNet: \url{http://github.com/clab/dynet}}
   \end{center}
 \end{minipage}
 \hfill
-\begin{minipage}{.3\columnwidth}
+\begin{minipage}{.2\columnwidth}
   \begin{center}
   \vspace{-1cm}
   \begin{adjustbox}{margin=2mm,frame,scale=.8}
@@ -141,11 +169,9 @@ Written in Python using DyNet: \url{http://github.com/clab/dynet}}
 \hrule
 \begin{minipage}{.45\columnwidth}
   \begin{center}
-  \begin{tikzpicture}[-{Latex[length=5mm]},
+  \begin{tikzpicture}[-{Latex[length=5mm]}, level distance=4cm,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
-      level 1/.style={level distance=4cm,sibling distance=45mm},
-      level 2/.style={level distance=4cm},
-      level 3/.style={level distance=3cm}]
+      level 1/.style={sibling distance=45mm}]
     \node (ROOT) [draw=black,ellipse] {move-01}
       child {node [draw=black,ellipse] {after}
       {
@@ -174,32 +200,34 @@ Written in Python using DyNet: \url{http://github.com/clab/dynet}}
 \vrule
 \begin{minipage}{.55\columnwidth}
     \begin{center}
-    \begin{dependency}[text only label, label style={above}, font=\small]
+    \begin{dependency}[edge style={-{Latex[length=4mm]}},
+        text only label, label style={above}, font=\small]
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
-        \depedge[edge unit distance=1ex]{1}{2}{ARG2}
-        \depedge[edge unit distance=1ex]{5}{4}{ARG1}
-        \depedge[edge unit distance=1ex, edge end x offset=-2pt]{1}{5}{ARG1}
-        \deproot[edge unit distance=1.5ex]{5}{top}
-        \depedge[edge unit distance=2ex, edge start x offset=-1pt, edge end x offset=3pt]{5}{7}{ARG2}
-        \depedge[edge unit distance=1ex, edge end x offset=5pt]{6}{5}{ARG1}
-        \depedge[edge unit distance=1ex]{6}{7}{ARG2}
+        \depedge[edge unit distance=1em]{1}{2}{ARG2}
+        \depedge[edge unit distance=1em]{5}{4}{ARG1}
+        \depedge[edge unit distance=1em, edge end x offset=-2mm]{1}{5}{ARG1}
+        \deproot[edge unit distance=1.5em]{5}{top}
+        \depedge[edge unit distance=2em, edge start x offset=-1mm, edge end x offset=3mm]{5}{7}{ARG2}
+        \depedge[edge unit distance=1em, edge end x offset=5mm]{6}{5}{ARG1}
+        \depedge[edge unit distance=1em]{6}{7}{ARG2}
     \end{dependency}
     \captionof{figure}{Semantic Dependencies (SDP).}
     \hrule
     \vfill
-    \begin{dependency}[text only label, label style={above}, font=\small]
+    \begin{dependency}[edge style={-{Latex[length=4mm]}},
+        text only label, label style={above}, font=\small]
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
-        \depedge[edge unit distance=1ex]{2}{1}{case}
-        \depedge[edge unit distance=1ex]{4}{3}{punct}
-        \depedge[edge unit distance=1ex]{5}{4}{nsubj}
-        \depedge[edge unit distance=1ex, edge end x offset=-2pt]{2}{5}{obl}
-        \depedge[edge unit distance=1ex]{7}{6}{case}
-        \deproot[edge unit distance=1.5ex]{5}{root}
-        \depedge[edge unit distance=1.5ex]{5}{7}{obl}
+        \depedge[edge unit distance=1em]{2}{1}{case}
+        \depedge[edge unit distance=1em]{4}{3}{punct}
+        \depedge[edge unit distance=1em]{5}{4}{nsubj}
+        \depedge[edge unit distance=1em, edge end x offset=-2mm]{2}{5}{obl}
+        \depedge[edge unit distance=1em]{7}{6}{case}
+        \deproot[edge unit distance=1em]{5}{root}
+        \depedge[edge unit distance=1.5em]{5}{7}{obl}
     \end{dependency}
   \captionof{figure}{Universal Dependencies (UD).}
   \end{center}
@@ -713,6 +741,16 @@ Our single (UCCA only) & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
 
 \section*{Conclusions}
 
+We demonstrate that MTL improves UCCA parsing in out-of-domain settings
+or when training data is scarce or noisy,
+using AMR, DM and UD parsing as auxiliaries.
+We do so by proposing a unified DAG representation,
+constructing protocols for converting these schemes into the unified format,
+and generalizing a transition-based DAG parser to support all these tasks.
+
+A natural question is whether our method can benefit AMR, DM or UD parsing.
+Future work will investigate whether a single
+algorithm and architecture can be competitive on all of these parsing tasks.
 
 \color{DarkSlateGray}
 \tiny
