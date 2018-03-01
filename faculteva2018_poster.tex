@@ -106,9 +106,10 @@ We consider four representations:
     \cite{SCHUSTER16.779}.
 \end{description}
 While formally different, they share much of the semantic content \cite{abend2017state}.
-We use multitask learning (MTL) to exploit the task overlap
+We use multitask learning to exploit the task overlap
 and effectively extend the training data
-for a general transition-based DAG parser.\footnote{Code:
+for a general transition-based DAG parser,
+showing benefits for UCCA parsing.\footnote{Code:
 \url{http://github.com/danielhers/tupa} \hfill
 Corpora: \url{http://github.com/huji-nlp/ucca-corpora} \hfill
 Implemented using DyNet: \url{http://github.com/clab/dynet}}
@@ -236,7 +237,10 @@ Implemented using DyNet: \url{http://github.com/clab/dynet}}
 
 \hrule
 
-\section*{Transition-based UCCA Parsing}
+\section*{General Transition-based DAG Parser}
+
+We extend TUPA \cite{hershcovich2017a} to support
+reentrancy, discontinuity and non-terminal nodes.
 
 The parser applies a \textit{transition}
 at each step to the parser state, comprising\\
@@ -246,7 +250,7 @@ $G=(V,E,\ell)$: constructed graph.
 
 \scalebox{.9}{
 \begin{minipage}{.55\columnwidth}
-	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm, font=\small]
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small]
 	\draw[color=gray,dashed] (.2,-.2) rectangle (19.5,1.5);
 	\draw[color=gray] (.4,0) rectangle (2.6,1);
 	\node[fill=black, circle] at (1.5,.45) {};
@@ -256,7 +260,7 @@ $G=(V,E,\ell)$: constructed graph.
 	\node[anchor=west] at (10,-.8) {\bf\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
 	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm, font=\small]
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small]
 	\draw[color=gray,dashed] (.2,-.2) rectangle (19.5,1.5);
 	\draw[color=gray] (.4,0) rectangle (4.3,1);
 	\node[fill=black, circle] at (1.5,.45) {};
@@ -267,129 +271,129 @@ $G=(V,E,\ell)$: constructed graph.
 	\node[anchor=west] at (10,-.9) {\bf\small\textsc{Right-Edge\textsubscript L}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
 	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm, font=\small, -{Latex[length=5mm]}]
-	\draw[color=gray,dashed] (.2,-.6) rectangle (19.5,2.7);
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed] (.2,-.5) rectangle (19.5,1.9);
 	\draw[color=gray] (.4,0) rectangle (4.3,1);
 	\node[fill=black, circle] at (1.5,.45) {};
 	\node[anchor=west] at (2,.45) {After};
 	\draw[color=gray] (5,0) rectangle (17,1);
 	\node[anchor=west] at (5,.45) {graduation , John moved to Paris .};
-	\node[fill=black, circle] at (18.5,2.2) {}
-	  child {node[font=\scriptsize] {After} edge from parent [red] node[left] {L}};
+	\node[fill=black, circle] at (18.5,1.4) {}
+	  child {node[font=\scriptsize] {After} edge from parent [red] node[font=\scriptsize,left] {L}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm, font=\small, -{Latex[length=5mm]}]
-	\draw[color=gray,dashed] (.2,-.6) rectangle (19.5,2.7);
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed] (.2,-.5) rectangle (19.5,1.9);
 	\draw[color=gray] (.4,0) rectangle (3,1);
 	\node[fill=black, circle] at (1.5,.45) {};
 	\draw[color=gray] (5,0) rectangle (17,1);
 	\node[anchor=west] at (5,.45) {graduation , John moved to Paris .};
-	\node[fill=black, circle] at (18.5,2.2) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[left] {L}};
+	\node[fill=black, circle] at (18.5,1.4) {}
+	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm, font=\small, -{Latex[length=5mm]}]
-	\draw[color=gray,dashed] (.2,-.6) rectangle (19.5,2.7);
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed] (.2,-.5) rectangle (19.5,1.9);
 	\draw[color=gray] (.4,0) rectangle (6,1);
 	\node[fill=black, circle] at (1.5,.45) {};
 	\node[color=red,anchor=west] at (2,.45) {graduation};
 	\draw[color=gray] (8.5,0) rectangle (17,1);
 	\node[anchor=west] at (8.8,.45) {, John moved to Paris .};
-	\node[fill=black, circle] at (18.5,2.2) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[left] {L}};
+	\node[fill=black, circle] at (18.5,1.4) {}
+	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Node\textsubscript P}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=22mm, sibling distance=4cm, font=\small, -{Latex[length=5mm]}]
-	\draw[color=gray,dashed] (.2,-.6) rectangle (19.5,2.7);
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed] (.2,-.5) rectangle (19.5,1.9);
 	\draw[color=gray] (.4,0) rectangle (7,1);
 	\node[fill=black, circle] at (1.5,.45) {};
 	\node[fill=blue, draw=red, circle] at (2.5,.45) {};
 	\node[anchor=west] at (3,.45) {graduation};
 	\draw[color=gray] (7.2,0) rectangle (15,1);
 	\node[anchor=west] at (7.2,.45) {, John moved to Paris .};
-	\node[fill=black, circle] at (16.2,2.2) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[left] {L}};
-	\node[fill=blue, draw=red, circle] at (18.3,2.2) {}
-	  child {node[font=\scriptsize] {graduation} edge from parent [red] node[right] {P}};
+	\node[fill=black, circle] at (16.2,1.4) {}
+	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}};
+	\node[fill=blue, draw=red, circle] at (18.3,1.4) {}
+	  child {node[font=\scriptsize] {graduation} edge from parent [red] node[font=\scriptsize,right] {P}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
 \end{minipage}
 \hspace{1cm}
 \begin{minipage}{.4\columnwidth}
-	\begin{tikzpicture}[level distance=2cm, sibling distance=4cm, font=\small, -{Latex[length=5mm]}]
-	\draw[color=gray,dashed] (0,-.6) rectangle (18,2.7);
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed] (0,-.5) rectangle (18,1.9);
 	\draw[color=gray] (0.2,0) rectangle (3.5,1);
 	\node[fill=black, circle] at (1,.45) {};
 	\node[fill=blue, circle] at (2,.45) {};
 	\draw[color=gray] (3.8,0) rectangle (11.5,1);
 	\node[anchor=west] at (3.8,.45) {, John moved to Paris .};
-	\node[fill=black, circle] at (13.2,2.2) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[left] {L}};
-	\node[fill=blue, circle] at (16.2,2.2) {}
-	  child {node[font=\scriptsize] {graduation} edge from parent node[right] {P}};
+	\node[fill=black, circle] at (13.2,1.4) {}
+	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}};
+	\node[fill=blue, circle] at (16.2,1.4) {}
+	  child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize,right] {P}};
 	\node[anchor=west] at (6,-1.2) {\bf\small\textsc{Right-Edge\textsubscript H}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-.6) -- (5,-1.7);
 	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=2cm, sibling distance=4cm, font=\small, -{Latex[length=5mm]}]
-	\draw[color=gray,dashed] (0,-3.2) rectangle (18,2.7);
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed] (0,-1.9) rectangle (18,1.9);
 	\draw[color=gray] (0.2,0) rectangle (3.5,1);
 	\node[fill=black, circle] at (1,.45) {};
 	\node[fill=blue, circle] at (2,.45) {};
 	\draw[color=gray] (3.8,0) rectangle (11.5,1);
 	\node[anchor=west] at (3.8,.45) {, John moved to Paris .};
-	\node[fill=black, circle] at (14.7,2.2) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[left] {L}}
+	\node[fill=black, circle] at (14.7,1.4) {}
+	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}}
 	  child {node [fill=blue, circle] {}
 	  {
-	    child {node[font=\scriptsize] {graduation} edge from parent [black] node[right] {P}}
-	  } edge from parent [-{Latex[length=5mm]},red] node[right] {H} };
-	\node[anchor=west] at (6,-3.6) {\bf\small\textsc{Shift}};
-	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-3.2) -- (5,-4.3);
+	    child {node[font=\scriptsize] {graduation} edge from parent [black] node[font=\scriptsize,right] {P}}
+	  } edge from parent [red] node[font=\scriptsize,right] {H} };
+	\node[anchor=west] at (6,-2.5) {\bf\small\textsc{Shift}};
+	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
 	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=2cm, sibling distance=4cm, font=\small, -{Latex[length=4mm]}]
-	\draw[color=gray,dashed] (0,-3.2) rectangle (18,2.2);
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed] (0,-1.9) rectangle (18,1.9);
 	\draw[color=gray] (0.2,0) rectangle (3.6,1);
 	\node[fill=black, circle] at (1,.45) {};
 	\node[fill=blue, circle] at (2,.45) {};
 	\node[color=red, anchor=west] at (3,.25) {,};
 	\draw[color=gray] (3.9,0) rectangle (11.5,1);
 	\node[anchor=west] at (3.9,.45) {John moved to Paris .};
-	\node[fill=black, circle] at (14.7,1.5) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[left] {L}}
+	\node[fill=black, circle] at (14.7,1.4) {}
+	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}}
 	  child {node [fill=blue, circle] {}
 	  {
-	    child {node[font=\scriptsize] {graduation} edge from parent node[right] {P}}
-	  } edge from parent [-{Latex[length=5mm]}] node[right] {H} };
-	\node[anchor=west] at (6,-3.9) {\Large \ldots};
-	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-3.2) -- (5,-4.3);
+	    child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize,right] {P}}
+	  } edge from parent node[font=\scriptsize,right] {H} };
+	\node[anchor=west] at (6,-2.5) {\Large \ldots};
+	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
 	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=2cm, sibling distance=3cm, font=\small, -{Latex[length=5mm]}]
-	\draw[color=gray,dashed] (0,-5.5) rectangle (18,2.2);
+	\begin{tikzpicture}[level distance=15mm, sibling distance=3cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed] (0,-4) rectangle (18,2.2);
 	\draw[color=gray] (.2,0) rectangle (1,1);
 	\draw[color=gray] (1.3,0) rectangle (2,1);
     \node (ROOT) [fill=black,circle] at (8,1.5) {}
-      child {node (After) {After} edge from parent node[left] {L}}
+      child {node[font=\scriptsize] (After) {After} edge from parent node[font=\scriptsize,left] {L}}
       child {node (graduation) [fill=blue,circle] {}
       {
-        child {node {graduation} edge from parent node[left] {P}}
-      } edge from parent node[left] {H} }
-      child {node {,} edge from parent node[right] {U}}
+        child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize,left] {P}}
+      } edge from parent node[font=\scriptsize,left] {H} }
+      child {node[font=\scriptsize] {,} edge from parent node[font=\scriptsize,right] {U}}
       child {node (moved) [fill=purple,circle] {}
       {
-        child {node (John) {John} edge from parent node[left] {A}}
-        child {node {moved} edge from parent node[left] {P}}
+        child {node[font=\scriptsize] (John) {John} edge from parent node[font=\scriptsize,left] {A}}
+        child {node[font=\scriptsize] {moved} edge from parent node[font=\scriptsize,left] {P}}
         child {node [fill=orange,circle] {}
         {
-          child {node {to} edge from parent node[left] {R}}
-          child {node {Paris} edge from parent node[right] {C}}
-        } edge from parent node[right] {A} }
-      } edge from parent node[right] {H} }
+          child {node[font=\scriptsize] {to} edge from parent node[font=\scriptsize,left] {R}}
+          child {node[font=\scriptsize] {Paris} edge from parent node[font=\scriptsize,right] {C}}
+        } edge from parent node[font=\scriptsize,right] {A} }
+      } edge from parent node[font=\scriptsize,right] {H} }
       ;
-    \draw[dashed] (graduation) to node [auto] {A} (John);
+    \draw[dashed] (graduation) to node [font=\scriptsize,auto] {A} (John);
 	\end{tikzpicture}
 \end{minipage}
 }
@@ -398,13 +402,15 @@ $G=(V,E,\ell)$: constructed graph.
 
 A classifier selects the next transition based on the current state's features,
 trained by an oracle based on gold-standard annotations.
-
 Architecture: bidirectional LSTM RNN to encode features + feedforward NN for classification.
 
 
 \hrule
 
 \section*{Unified DAG Format}
+
+We convert all four representations into a format similar to UCCA,
+supported by the TUPA transition set.
 
 \begin{minipage}{.4\columnwidth}
   \begin{center}
@@ -526,12 +532,19 @@ Architecture: bidirectional LSTM RNN to encode features + feedforward NN for cla
 
 \hrule
 
-\section*{MTL Architecture}
+\section*{Multitask Architecture}
+
+We use a task-specific BiLSTM for each task, add
+a BiLSTM that is shared across all tasks,
+concatenate their outputs and choose a transition using
+a task-specific MLP.
+Feature embeddings are shared across tasks.
+
 
 \begin{center}
-   \begin{tikzpicture}[-{Latex[length=5mm]},level distance=2cm, sibling distance=3cm]
+   \begin{tikzpicture}[-{Latex[length=2mm]},level distance=15mm, sibling distance=3cm]
    \node[anchor=west] at (0,2.5) {Parser state};
-   \draw[color=gray,dashed] (0,-1.6) rectangle (22.5,3.75);
+   \draw[color=gray,dashed] (0,-.8) rectangle (22.5,3.75);
    \draw[color=gray] (.3,0) rectangle (4.5,1.5);
    \node[fill=black, circle] at (1.2,.875) {};
    \node[fill=blue, circle] at (2.7,.875) {};
@@ -539,14 +552,14 @@ Architecture: bidirectional LSTM RNN to encode features + feedforward NN for cla
    \draw[color=gray] (5.95,0) rectangle (14.9,1.5);
    \node[anchor=west] at (5.95,.875) {John moved to Paris .};
    \node[fill=black, circle] at (19,2.75) {}
-     child {node[font=\scriptsize] {After} edge from parent node[left] {L}}
+     child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}}
      child {node [fill=blue, circle] {}
      {
-       child {node[font=\scriptsize] {graduation} edge from parent node[right] {P}}
-     } edge from parent node[right] {H} };
+       child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize,right] {P}}
+     } edge from parent node[font=\scriptsize,right] {H} };
    \end{tikzpicture}
    
-   \begin{tikzpicture}[-{Latex[length=5mm]}]
+   \begin{tikzpicture}[-{Latex[length=2mm]}]
    \node[anchor=west] at (0,17) {Classifier};
    \tikzstyle{main}=[rounded rectangle, minimum size=15mm, draw=black!80, node distance=12mm]
    \node[main] (specific) at (4,9) {Task-specific BiLSTM};
@@ -568,10 +581,26 @@ Architecture: bidirectional LSTM RNN to encode features + feedforward NN for cla
     \node (transition) at (10.5,16.4) {transition};
     \path (mlp) edge node[right] {softmax} (transition);
    \end{tikzpicture}
-   \captionof{figure}{MTL model.}
+   \captionof{figure}{Multitask model.}
 \end{center}
 
-\section*{Experimental Setup}
+We focus on UCCA due to its small training set, using AMR, SDP and UD as auxiliaries,
+for which we perform unlabeled parsing,
+resulting in a set of $\leq$10 transitions (45 for labeled UCCA parsing).
+This limited capacity forces the network to use the shared parameters for all tasks,
+increasing generalization \cite{E17-1005}.
+
+\section*{Data}
+
+\textbf{UCCA}: v1.2 of English Wikipedia corpus (Wiki);
+\textit{Twenty Thousand Leagues Under the Sea} corpora (20K),
+annotated in English (v1.0, small, only test) French (v1.0, small), and German (v0.9, pre-release, noisy).
+\textbf{AMR}: LDC2017T10.
+\textbf{SDP}: DM part from SDP 2016.
+\textbf{UD}: all English, French and German treebanks, v2.1 (UD$^{++}$ for English).
+
+While UCCA is annotated over Wikipedia and over a literary corpus,
+the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
 
 Number of sentences per dataset:
 
@@ -674,29 +703,16 @@ Number of sentences per dataset:
 \end{center}
 \end{minipage}
 
-\paragraph{Corpora.}
-English Wikipedia (in-domain), English part of \textit{Twenty Thousand Leagues Under the Sea}
-English-French parallel corpus (out-of-domain).
-
-\paragraph{Evaluation.}
-Labeled precision, recall and F-score on graph edges,
-represented by their terminal yields.
-Primary and remote evaluated separately.
-
-
-\vspace{5cm}
-
 
 \hrule
 
 
 \section*{Results}
 
-Labeled precision, recall and $F_1$ (in~\%) for both primary and remote edges,
-on the 20K test sets.
-$\star$~indicates significantly better than \textit{Single},
-and $\dagger$ significantly worse.
-
+Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges
+on the 20K test sets
+($\star$~indicates significantly better than \textit{Single},
+and $\dagger$ significantly worse):
 \begin{center}
 \setlength\tabcolsep{1cm}
 \begin{tabular}{l|lll|lll}
@@ -739,18 +755,18 @@ Our single (UCCA only) & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
 \hrule
 
 
-\section*{Conclusions}
+\section*{Conclusion}
 
-We demonstrate that MTL improves UCCA parsing in out-of-domain settings
+We demonstrate that multitask learning improves UCCA parsing in out-of-domain settings
 or when training data is scarce or noisy,
-using AMR, DM and UD parsing as auxiliaries.
-We do so by proposing a unified DAG representation,
+using AMR, DM and UD parsing as auxiliaries,
+by proposing a unified DAG representation,
 constructing protocols for converting these schemes into the unified format,
-and generalizing a transition-based DAG parser to support all these tasks.
+and generalizing a transition-based DAG parser.
 
-A natural question is whether our method can benefit AMR, DM or UD parsing.
+A natural question is whether our method can benefit AMR, SDP or UD.
 Future work will investigate whether a single
-algorithm and architecture can be competitive on all of these parsing tasks.
+algorithm and architecture can be competitive on all of these.
 
 \color{DarkSlateGray}
 \tiny
