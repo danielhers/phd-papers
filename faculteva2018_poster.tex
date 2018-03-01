@@ -117,7 +117,6 @@ Written in Python using DyNet: \url{http://github.com/clab/dynet}}
 \hfill
 \begin{minipage}{.3\columnwidth}
   \begin{center}
-  \setlength{\columnsep}{1cm}
   \vspace{-1cm}
   \begin{adjustbox}{margin=2mm,frame,scale=.8}
   \begin{tabular}{cl}
@@ -665,7 +664,49 @@ Primary and remote evaluated separately.
 
 \section*{Results}
 
+Labeled precision, recall and $F_1$ (in~\%) for both primary and remote edges,
+on the 20K test sets.
+$\star$~indicates significantly better than \textit{Single},
+and $\dagger$ significantly worse.
 
+\begin{center}
+\setlength\tabcolsep{1cm}
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\bf Primary} & \multicolumn{3}{c}{\bf Remote} \\
+& \textbf{LP} & \textbf{LR} & \textbf{LF}
+& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\hline
+\bf English (out-of-domain) & \\
+TUPA \cite{hershcovich2017a}
+& 68.7 & 68.5 & 68.6 & 38.6 & 18.8 & 25.3 \\
+Our single (UCCA only)
+& 68.9 & 68.9 & 68.9 & 40.7 & 19.6 & 26.5 \\
+\cline{1-1}
++ AMR
+& 69.4 & 69.6 & 69.5 & 44.3 & 21.4 & 28.8 \\
++ DM
+& 70.1$\star$ & 69.5 & 69.8$\star$ & 40 & 18.6 & 25.4 \\
++ UD$^{++}$
+& 69.8$\star$ & 69.4 & 69.6 & 39.8 & 14.7$\dagger$ & 21.4$\dagger$ \\
++ AMR + DM
+& 69.8$\star$ & 69.5 & 69.7$\star$ & 48.8$\star$ & 19.6 & 28 \\
++ AMR + UD$^{++}$
+& 69.7$\star$ & 70$\star$ & 69.8$\star$ & 39 & 21.4 & 27.6 \\
++ DM + UD$^{++}$
+& 70$\star$ & 68.9 & 69.4 & 47.4$\star$ & 22 & 30$\star$ \\
++ AMR + DM + UD$^{++}$
+& 71$\star$ & 72.2$\star$ & \textbf{71.6}$\star$ & 43.9 & 24.8$\star$ & \textbf{31.6}$\star$ \\
+\hline
+\bf French (in-domain) & \\
+Our single (UCCA only) & 64.1 & 60.6 & 62.3 & 20 & \enskip 5.7 & \enskip 8.8 \\
++ UD & 68.7$\star$ & 68.6$\star$ & \textbf{68.6}$\star$ & 15.8 & \enskip 5.7 & \enskip 8.3 \\
+\hline
+\bf German (in-domain) & \\
+Our single (UCCA only) & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
++ UD & 73.7$\star$ & 72.6$\star$ & \textbf{73.2}$\star$ & 61.8 & 24.9$\star$ & \textbf{35.5}$\star$
+\end{tabular}
+\captionof{table}{Experimental results.}
+\end{center}
 
 \hrule
 
