@@ -82,43 +82,31 @@ improving UCCA parsing in challenging settings.
 \section*{Introduction}
 
 Semantic parsing is important for natural language understanding.
-Many semantic representation schemes have been developed recently,
-but training data is mostly \textbf{small}, \textbf{in-domain}, and in \textbf{English}.
-We consider four representations:
+Representation schemes vary,
+but data is mostly \textbf{small}, \textbf{in-domain}, and in \textbf{English}.
+We consider four schemes:
 \begin{description}[nosep,labelsep=1em]
-\item[UCCA.] Intuitive, cross-lingual, and modular semantic representation.
-    Primary edges form a tree; directed acyclic graph (DAG) due to remote edges (dashed).
+\item[\color{violet} UCCA.] Intuitive, cross-lingual, and modular semantic representation.
+    \textit{Primary edges} form a tree; directed acyclic graph (DAG) due to \textit{remote edges} (dashed).
     Edge labels encode predicate-argument structure, semantic heads and inter-scene relations
     \cite{abend2013universal}.
-\item[AMR.] Abstract graph on concepts and constants, implicit alignment to text tokens.
+\item[\color{teal} AMR.] Abstract graph on concepts and constants, implicit alignment to text tokens.
     Rooted DAG with node and edge labels.
     Encodes named entities, argument structure, semantic roles, word sense and co-reference
     \cite{banarescu2013abstract}.
-\item[SDP.] Set of related schemes (DM, PAS, PSD and CCD). We use \textbf{DM} (DELPH-IN MRS).
-    Bilexical DAG.
-    Encodes predicate-argument structure
-    \cite{oepen2016towards}.
-\item[UD.] Cross-lingual syntactic scheme.
-    Bilexical tree.
-    Encodes syntactic relations between words
-    \cite{nivre2016universal}.\\
-    UD$^{++}$ (Enhanced++ UD) adds and augments edges, creating a bilexical DAG
-    \cite{SCHUSTER16.779}.
+\item[\color{blue} SDP.] Set of related bilexical DAG schemes (DM, PAS, PSD and CCD). \\
+    We use \textbf{\color{blue} DM} (DELPH-IN MRS).
+    Encodes predicate-argument structure \cite{oepen2016towards}.
+\item[\color{purple} UD.] Cross-lingual syntactic bilexical tree.
+    Encodes syntactic relations between words \cite{nivre2016universal}. \\
+    UD$^{++}$ (Enhanced++ UD) adds and augments edges, creating a bilexical DAG \cite{SCHUSTER16.779}.
 \end{description}
-While formally different, they share much of the semantic content \cite{abend2017state}.
-We use multitask learning to exploit the task overlap
-and effectively extend the training data
-for a general transition-based DAG parser,
-showing benefits for UCCA parsing.\footnote{Code:
-\url{http://github.com/danielhers/tupa} \hfill
-Corpora: \url{http://github.com/huji-nlp/ucca-corpora} \hfill
-Implemented using DyNet: \url{http://github.com/clab/dynet}}
-
 
 \begin{minipage}{.6\columnwidth}
+  \color{violet}
   \begin{center}
     \begin{tikzpicture}[level distance=3cm, sibling distance=45mm, -{Latex[length=5mm]},
-        every circle node/.append style={fill=black}]
+        every circle node/.append style={fill=violet}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
         child {node (After) [word] {After} edge from parent node[above] {L}}
@@ -170,26 +158,26 @@ Implemented using DyNet: \url{http://github.com/clab/dynet}}
 \hrule
 \begin{minipage}{.45\columnwidth}
   \begin{center}
-  \begin{tikzpicture}[-{Latex[length=5mm]}, level distance=4cm,
+  \begin{tikzpicture}[-{Latex[length=5mm]}, color=teal, level distance=4cm,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
       level 1/.style={sibling distance=45mm}]
-    \node (ROOT) [draw=black,ellipse] {move-01}
-      child {node [draw=black,ellipse] {after}
+    \node (ROOT) [draw=teal,ellipse] {move-01}
+      child {node [draw=teal,ellipse] {after}
       {
-            child {node (graduation) [draw=black,ellipse] {graduate-01} edge from parent node {op1} }
+            child {node (graduation) [draw=teal,ellipse] {graduate-01} edge from parent node {op1} }
       } edge from parent node {time} }
-      child {node (John) [draw=black,ellipse] {person}
+      child {node (John) [draw=teal,ellipse] {person}
       {
-        child {node [draw=black,ellipse] {name}
+        child {node [draw=teal,ellipse] {name}
         {
-            child {node [draw=black,ellipse] {"John"} edge from parent node {op1} }
+            child {node [draw=teal,ellipse] {"John"} edge from parent node {op1} }
         } edge from parent node {name} }
       } edge from parent node {ARG0} }
-      child {node [draw=black,ellipse] {city}
+      child {node [draw=teal,ellipse] {city}
       {
-        child {node [draw=black,ellipse] {name}
+        child {node [draw=teal,ellipse] {name}
         {
-            child {node [draw=black,ellipse] {"Paris"} edge from parent node {op1} }
+            child {node [draw=teal,ellipse] {"Paris"} edge from parent node {op1} }
         } edge from parent node {name} }
       } edge from parent node {ARG2} }
       ;
@@ -201,8 +189,8 @@ Implemented using DyNet: \url{http://github.com/clab/dynet}}
 \vrule
 \begin{minipage}{.55\columnwidth}
     \begin{center}
-    \begin{dependency}[edge style={-{Latex[length=4mm]}},
-        text only label, label style={above}, font=\small]
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=blue},
+        text only label, label style={above, color=blue}, font=\small]
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
@@ -214,11 +202,11 @@ Implemented using DyNet: \url{http://github.com/clab/dynet}}
         \depedge[edge unit distance=1em, edge end x offset=5mm]{6}{5}{ARG1}
         \depedge[edge unit distance=1em]{6}{7}{ARG2}
     \end{dependency}
-    \captionof{figure}{Semantic Dependencies (SDP).}
+    \captionof{figure}{Semantic Dependencies (SDP): DM representation.}
     \hrule
     \vfill
-    \begin{dependency}[edge style={-{Latex[length=4mm]}},
-        text only label, label style={above}, font=\small]
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=purple},
+        text only label, label style={above, color=purple}, font=\small]
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
@@ -234,6 +222,15 @@ Implemented using DyNet: \url{http://github.com/clab/dynet}}
   \end{center}
 \end{minipage}
 
+While formally different, semantic representations
+share much of their content \cite{abend2017state}.
+We use multitask learning to exploit the task overlap
+and effectively extend the training data
+for a general transition-based DAG parser,
+showing benefits for UCCA parsing.\footnote{Code:
+\url{http://github.com/danielhers/tupa} \hfill
+Corpora: \url{http://github.com/huji-nlp/ucca-corpora} \hfill
+Implemented using DyNet: \url{http://github.com/clab/dynet}}
 
 \hrule
 
@@ -414,7 +411,7 @@ supported by the TUPA transition set.
 
 \begin{minipage}{.4\columnwidth}
   \begin{center}
-  \begin{tikzpicture}[level distance=5cm, -{Latex[length=5mm]},
+  \begin{tikzpicture}[level distance=5cm, -{Latex[length=5mm]}, color=teal,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
       level 1/.style={sibling distance=5cm},
       level 2/.style={sibling distance=3cm},
@@ -425,11 +422,11 @@ supported by the TUPA transition set.
       {
             child {node (graduation) [word] {graduation} edge from parent node {op} }
       } edge from parent node {time} }
-      child {node (John) [fill=black,circle] {}
+      child {node (John) [fill=teal,circle] {}
       {
         child {node [word] {John} edge from parent node {name} }
       } edge from parent node {ARG0} }
-      child {node [fill=black,circle] {}
+      child {node [fill=teal,circle] {}
       {
         child {node [word] {Paris} edge from parent node {name} }
       } edge from parent node {ARG2} }
@@ -443,14 +440,14 @@ supported by the TUPA transition set.
 \begin{minipage}{.6\columnwidth}
   \begin{center}
   \scalebox{.9}{
-  \begin{tikzpicture}[-{Latex[length=5mm]},
+  \begin{tikzpicture}[-{Latex[length=5mm]}, color=blue,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
       level 1/.style={sibling distance=7cm,level distance=1cm},
       level 2/.style={sibling distance=4cm,level distance=24mm},
       level 3/.style={level distance=34mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [fill=black,circle] {}
-      child {node (after) [fill=black,circle] {}
+    \node (ROOT) [fill=blue,circle] {}
+      child {node (after) [fill=blue,circle] {}
       {
         child {node [draw=none] {}
         {
@@ -463,13 +460,13 @@ supported by the TUPA transition set.
       } edge from parent node {root}}
       child {node [draw=none] {}
       {
-        child {node (moved) [fill=black,circle] {}
+        child {node (moved) [fill=blue,circle] {}
         {
           child {node [word] {\quad{\color{white}g} John} edge from parent node {ARG1}}
           child {node [word] {moved{\color{white}g}} edge from parent node {head}}
         } edge from parent [draw=none] }
       } edge from parent [draw=none] }
-      child {node (to) [fill=black,circle] {}
+      child {node (to) [fill=blue,circle] {}
       {
         child {node [draw=none] {}
         {
@@ -493,13 +490,13 @@ supported by the TUPA transition set.
   \captionof{figure}{Converted DM.}
   \hrule
   \scalebox{.9}{
-  \begin{tikzpicture}[-{Latex[length=5mm]},
+  \begin{tikzpicture}[-{Latex[length=5mm]}, color=purple,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
       level 1/.style={sibling distance=4cm,level distance=2cm},
       level 2/.style={sibling distance=3cm,level distance=3cm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [fill=black,circle] {}
-      child {node (after) [fill=black,circle] {}
+    \node (ROOT) [fill=purple,circle] {}
+      child {node (after) [fill=purple,circle] {}
       {
         child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
         child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
@@ -516,7 +513,7 @@ supported by the TUPA transition set.
       {
         child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
       } edge from parent [draw=none]}
-      child {node (to) [fill=black,circle] {}
+      child {node (to) [fill=purple,circle] {}
       {
           child {node [word] {to{\color{white}g}} edge from parent node {case}}
           child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
@@ -539,8 +536,6 @@ a BiLSTM that is shared across all tasks,
 concatenate their outputs and choose a transition using
 a task-specific MLP.
 Feature embeddings are shared across tasks.
-
-
 \begin{center}
    \begin{tikzpicture}[-{Latex[length=2mm]},level distance=15mm, sibling distance=3cm]
    \node[anchor=west] at (0,2.5) {Parser state};
@@ -592,12 +587,12 @@ increasing generalization \cite{E17-1005}.
 
 \section*{Data}
 
-\textbf{UCCA}: v1.2 of English Wikipedia corpus (Wiki);
+\textbf{\color{violet} UCCA}: v1.2 of English Wikipedia corpus (Wiki);
 \textit{Twenty Thousand Leagues Under the Sea} corpora (20K),
 annotated in English (v1.0, small, only test) French (v1.0, small), and German (v0.9, pre-release, noisy).
-\textbf{AMR}: LDC2017T10.
-\textbf{SDP}: DM part from SDP 2016.
-\textbf{UD}: all English, French and German treebanks, v2.1 (UD$^{++}$ for English).
+\textbf{\color{teal} AMR}: LDC2017T10.
+\textbf{\color{blue} SDP}: DM part from SDP 2016.
+\textbf{\color{purple} UD}: all English, French and German treebanks, v2.1 (UD$^{++}$ for English).
 
 While UCCA is annotated over Wikipedia and over a literary corpus,
 the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
