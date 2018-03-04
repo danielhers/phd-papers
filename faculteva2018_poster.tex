@@ -84,30 +84,31 @@ improving UCCA parsing in challenging settings.
 Semantic parsing is important for natural language understanding.
 Representation schemes vary,
 but data is mostly \textbf{small}, \textbf{in-domain}, and in \textbf{English}.
-We consider four schemes:
+\hfill We consider four schemes:
 \begin{itemize}[nosep,labelsep=1em]
-\item[\color{violet} \textbf{UCCA.}] Intuitive, cross-lingual, and modular semantic representation.
-    \textit{Primary edges} form a tree; directed acyclic graph (DAG) due to \textit{remote edges} (dashed).
+{\color{Indigo} \item[\textbf{UCCA}:] Intuitive, cross-lingual, and modular semantic representation.
+    \textit{Primary edges} form a tree. \textit{Remote edges} (dashed) allow reentrancy,
+    creating a directed acyclic graph (DAG).
     Edge labels encode predicate-argument structure, semantic heads and inter-scene relations
-    \cite{abend2013universal}.
-\item[\color{teal} \textbf{AMR.}] Abstract graph on concepts and constants.
-    DAG with node + edge labels.
-    Encodes named entities, argument structure, semantic roles, word sense and co-reference
-    \cite{banarescu2013abstract}.
-\item[\color{blue} \textbf{SDP.}] Set of related bilexical semantic DAG schemes (DM, PAS, PSD and CCD).
-    We use \textbf{\color{blue} DM}~(DELPH-IN~MRS).
-    Encodes argument structure for many predicate types \cite{oepen2016towards}.
-\item[\color{purple} \textbf{UD.}] Cross-lingual syntactic bilexical tree.
+    \cite{abend2013universal}.}
+{\color{DarkGreen} \item[\textbf{AMR}:] Abstract graph on concepts and constants.
+    Rooted DAG with labeled nodes and edges.
+    Encodes named entities, argument structure, semantic roles, word sense, coreference \cite{banarescu2013abstract}.}
+{\color{DarkRed} \item[\textbf{SDP}:] Set of related bilexical semantic DAG schemes (DM, PAS, PSD and CCD).
+    We use \textbf{DM}~(DELPH-IN~MRS).
+    Encodes argument structure for many predicate types \cite{oepen2016towards}.}
+{\color{DarkBlue} \item[\textbf{UD}:] Cross-lingual syntactic bilexical tree.
     Encodes syntactic relations between words \cite{nivre2016universal}. \\
-    {\color{purple} \textbf{UD$^{++}$}} (Enhanced++ UD) adds and augments edges, creating a bilexical DAG
-    \cite{SCHUSTER16.779}.
+    \textbf{UD$^{++}$} (Enhanced++ UD) adds and augments edges, creating a bilexical DAG
+    \cite{SCHUSTER16.779}.}
 \end{itemize}
 
-\begin{minipage}{.6\columnwidth}
-  \color{violet}
+\begin{minipage}{.8\columnwidth}
+  \color{Indigo}
   \begin{center}
-    \begin{tikzpicture}[level distance=3cm, sibling distance=45mm, -{Latex[length=5mm]},
-        every circle node/.append style={fill=violet}]
+    \begin{tikzpicture}[level distance=3cm, sibling distance=55mm, -{Latex[length=5mm]},
+        every node/.append style={font=\bf\ttfamily},
+        every circle node/.append style={fill=Indigo}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
         child {node (After) [word] {After} edge from parent node[above] {L}}
@@ -125,19 +126,19 @@ We consider four schemes:
             child {node [word] {to} edge from parent node[left] {R}}
             child {node [word] {Paris} edge from parent node[right] {C}}
           } edge from parent node[above] {A} }
-        } edge from parent node[right] {H} }
+        } edge from parent node[above] {H} }
         ;
-      \draw[dashed,->] (graduation) to node [above] {A} (John);
+      \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [above] {A} (John);
     \end{tikzpicture}
-  \captionof{figure}{Universal Conceptual Cognitive Annotation ({\color{violet} UCCA}).}
+  \captionof{figure}{\color{Indigo} Universal Conceptual Cognitive Annotation (UCCA).}
   \end{center}
 \end{minipage}
 \hfill
 \begin{minipage}{.2\columnwidth}
   \begin{center}
-  \begin{adjustbox}{margin=2mm,frame,scale=.7}
-  \color{violet}
-  \begin{tabular}{cl}
+  \begin{adjustbox}{margin=2mm,frame,scale=.75}
+  \color{Indigo}
+  \begin{tabular}{>{\bf\ttfamily}cl}
 	  P & process \\
 	  S & state \\
 	  A & participant \\
@@ -153,44 +154,44 @@ We consider four schemes:
 	  G & ground
   \end{tabular}
   \end{adjustbox}
-  \captionof{table}{{\color{violet} UCCA} edge labels.}
+  \captionof{table}{\color{Indigo} UCCA edge labels.}
   \end{center}
 \end{minipage}
 
 \begin{minipage}{.45\columnwidth}
   \begin{center}
-  \begin{tikzpicture}[-{Latex[length=5mm]}, color=teal, level distance=4cm,
-      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
-      level 1/.style={sibling distance=45mm}]
-    \node (ROOT) [draw=teal,ellipse] {move-01}
-      child {node [draw=teal,ellipse] {after}
+  \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkGreen, level distance=45mm,
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+      level 1/.style={sibling distance=55mm}]
+    \node (ROOT) [draw=DarkGreen,ellipse] {move-01}
+      child {node [draw=DarkGreen,ellipse] {after}
       {
-            child {node (graduation) [draw=teal,ellipse] {graduate-01} edge from parent node {op1} }
+            child {node (graduation) [draw=DarkGreen,ellipse] {graduate-01} edge from parent node {op1} }
       } edge from parent node {time} }
-      child {node (John) [draw=teal,ellipse] {person}
+      child {node (John) [draw=DarkGreen,ellipse] {person}
       {
-        child {node [draw=teal,ellipse] {name}
+        child {node [draw=DarkGreen,ellipse] {name}
         {
-            child {node [draw=teal,ellipse] {"John"} edge from parent node {op1} }
+            child {node [draw=DarkGreen,ellipse] {"John"} edge from parent node {op1} }
         } edge from parent node {name} }
       } edge from parent node {ARG0} }
-      child {node [draw=teal,ellipse] {city}
+      child {node [draw=DarkGreen,ellipse] {city}
       {
-        child {node [draw=teal,ellipse] {name}
+        child {node [draw=DarkGreen,ellipse] {name}
         {
-            child {node [draw=teal,ellipse] {"Paris"} edge from parent node {op1} }
+            child {node [draw=DarkGreen,ellipse] {"Paris"} edge from parent node {op1} }
         } edge from parent node {name} }
       } edge from parent node {ARG2} }
       ;
       \draw (graduation) to node {ARG0} (John);
   \end{tikzpicture}
-  \captionof{figure}{Abstract Meaning Representation ({\color{teal} AMR}).}
+  \captionof{figure}{\color{DarkGreen} Abstract Meaning Representation (AMR).}
   \end{center}
 \end{minipage}
 \begin{minipage}{.55\columnwidth}
     \begin{center}
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=blue},
-        text only label, label style={above, color=blue}, font=\small]
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkRed},
+        text only label, label style={above, color=DarkRed, font=\bf\ttfamily}, font=\small]
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
@@ -202,10 +203,10 @@ We consider four schemes:
         \depedge[edge unit distance=1em, edge end x offset=5mm]{6}{5}{ARG1}
         \depedge[edge unit distance=1em]{6}{7}{ARG2}
     \end{dependency}
-    \captionof{figure}{Semantic Dependencies ({\color{blue} SDP}): {\color{blue} DM} representation.}
+    \captionof{figure}{\color{DarkRed} Semantic Dependency Parsing (SDP): DM representation.}
     \vfill
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=purple},
-        text only label, label style={above, color=purple}, font=\small]
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue},
+        text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
@@ -217,7 +218,7 @@ We consider four schemes:
         \deproot[edge unit distance=1em]{5}{root}
         \depedge[edge unit distance=1.5em, edge start x offset=1mm]{5}{7}{obl}
     \end{dependency}
-  \captionof{figure}{Universal Dependencies ({\color{purple} UD}).}
+  \captionof{figure}{\color{DarkBlue} Universal Dependencies (UD).}
   \end{center}
 \end{minipage}
 
@@ -238,13 +239,13 @@ As auxiliary tasks, we use \textbf{unlabeled} AMR, SDP and UD parsing.
 \section*{Data}
 
 \begin{itemize*}
-\item [\textbf{\color{violet} UCCA}.] (1) \textbf{English} Wikipedia (\textbf{\color{violet} Wiki});
-(2) \textit{Twenty Thousand Leagues Under the Sea} (\textbf{\color{violet} 20K}),
+\item [\textbf{\color{Indigo} UCCA}:] \color{Indigo} (1) \textbf{English} Wikipedia (\textbf{Wiki});
+(2) \textit{Twenty Thousand Leagues Under the Sea} (\textbf{20K}),
 annotated in \textbf{English} (small, only test) \textbf{French} (small), and \textbf{German}
 (pre-release, noisy).
-\item [\textbf{\color{teal} AMR}.] LDC2017T10 (\textbf{English}).
-\item [\textbf{\color{blue} SDP}.] DM part from SDP 2016 (\textbf{English}).
-\item [\textbf{\color{purple} UD}.] \textbf{English}, \textbf{French} and \textbf{German} treebanks,
+\item [\textbf{\color{DarkGreen} AMR}:] \color{DarkGreen} LDC2017T10 (\textbf{English}).
+\item [\textbf{\color{DarkRed} SDP}:] \color{DarkRed} DM part from SDP 2016 (\textbf{English}).
+\item [\textbf{\color{DarkBlue} UD}:] \color{DarkBlue} \textbf{English}, \textbf{French} and \textbf{German} treebanks,
 v2.1 (UD$^{++}$ for English).
 \end{itemize*}
 \hfill Number of sentences per dataset:
@@ -253,11 +254,11 @@ v2.1 (UD$^{++}$ for English).
 \begin{minipage}{.4\columnwidth}
 \pgfplotstableread[row sep=\\,col sep=&]{
 	corpus & train & dev & test \\
-	\color{purple} \textbf{UD} & 17062 & 0 & 0 \\
-	\color{blue} \textbf{SDP} & 33964 & 0 & 0 \\
-	\color{teal} \textbf{AMR} & 36521 & 0 & 0 \\
-	\color{violet} \textbf{Wiki} & 4268 & 454 & 503 \\
-	\color{violet} \textbf{20K} & 0 & 0 & 506 \\
+	\color{DarkBlue} \textbf{UD} & 17062 & 0 & 0 \\
+	\color{DarkRed} \textbf{SDP} & 33964 & 0 & 0 \\
+	\color{DarkGreen} \textbf{AMR} & 36521 & 0 & 0 \\
+	\color{Indigo} \textbf{Wiki} & 4268 & 454 & 503 \\
+	\color{Indigo} \textbf{20K} & 0 & 0 & 506 \\
     }\english
 \begin{center}
     \begin{tikzpicture}
@@ -407,7 +408,7 @@ and \textbf{graph} of constructed nodes and edges.
 	\draw[color=gray,fill=white] (5,0) rectangle (17,1);
 	\node[anchor=west] at (5,.45) {graduation , John moved to Paris .};
 	\node[fill=cyan, circle] at (18.5,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent [red] node[font=\scriptsize,left] {L}};
+	  child {node[font=\scriptsize] {After} edge from parent [red] node[font=\scriptsize\bf\ttfamily,left] {L}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
@@ -418,7 +419,7 @@ and \textbf{graph} of constructed nodes and edges.
 	\draw[color=gray,fill=white] (5,0) rectangle (17,1);
 	\node[anchor=west] at (5,.45) {graduation , John moved to Paris .};
 	\node[fill=cyan, circle] at (18.5,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}};
+	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
@@ -430,7 +431,7 @@ and \textbf{graph} of constructed nodes and edges.
 	\draw[color=gray,fill=white] (8.5,0) rectangle (17,1);
 	\node[anchor=west] at (8.8,.45) {, John moved to Paris .};
 	\node[fill=cyan, circle] at (18.5,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}};
+	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Node\textsubscript P}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
@@ -443,9 +444,9 @@ and \textbf{graph} of constructed nodes and edges.
 	\draw[color=gray,fill=white] (7.2,0) rectangle (15,1);
 	\node[anchor=west] at (7.2,.45) {, John moved to Paris .};
 	\node[fill=cyan, circle] at (16.2,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}};
+	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}};
 	\node[fill=orange, draw=red, circle] at (18.3,1.4) {}
-	  child {node[font=\scriptsize] {graduation} edge from parent [red] node[font=\scriptsize,right] {P}};
+	  child {node[font=\scriptsize] {graduation} edge from parent [red] node[font=\scriptsize\bf\ttfamily,right] {P}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
@@ -460,9 +461,9 @@ and \textbf{graph} of constructed nodes and edges.
 	\draw[color=gray,fill=white] (3.8,0) rectangle (11.5,1);
 	\node[anchor=west] at (3.8,.45) {, John moved to Paris .};
 	\node[fill=cyan, circle] at (13.2,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}};
+	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}};
 	\node[fill=orange, circle] at (16.2,1.4) {}
-	  child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize,right] {P}};
+	  child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize\bf\ttfamily,right] {P}};
 	\node[anchor=west] at (6,-1.2) {\bf\small\textsc{Right-Edge\textsubscript H}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-.6) -- (5,-1.7);
 	\end{tikzpicture}
@@ -474,11 +475,11 @@ and \textbf{graph} of constructed nodes and edges.
 	\draw[color=gray,fill=white] (3.8,0) rectangle (11.5,1);
 	\node[anchor=west] at (3.8,.45) {, John moved to Paris .};
 	\node[fill=cyan, circle] at (14.7,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}}
+	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}}
 	  child {node [fill=orange, circle] {}
 	  {
-	    child {node[font=\scriptsize] {graduation} edge from parent [black] node[font=\scriptsize,right] {P}}
-	  } edge from parent [red] node[font=\scriptsize,right] {H} };
+	    child {node[font=\scriptsize] {graduation} edge from parent [black] node[font=\scriptsize\bf\ttfamily,right] {P}}
+	  } edge from parent [red] node[font=\scriptsize\bf\ttfamily,right] {H} };
 	\node[anchor=west] at (6,-2.5) {\bf\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
 	\end{tikzpicture}
@@ -491,11 +492,11 @@ and \textbf{graph} of constructed nodes and edges.
 	\draw[color=gray,fill=white] (3.9,0) rectangle (11.5,1);
 	\node[anchor=west] at (3.9,.45) {John moved to Paris .};
 	\node[fill=cyan, circle] at (14.7,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}}
+	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}}
 	  child {node [fill=orange, circle] {}
 	  {
-	    child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize,right] {P}}
-	  } edge from parent node[font=\scriptsize,right] {H} };
+	    child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize\bf\ttfamily,right] {P}}
+	  } edge from parent node[font=\scriptsize\bf\ttfamily,right] {H} };
 	\node[anchor=west] at (6,-2.5) {\Large \ldots};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
 	\end{tikzpicture}
@@ -504,24 +505,24 @@ and \textbf{graph} of constructed nodes and edges.
 	\draw[color=gray,fill=white] (.2,0) rectangle (1,1);
 	\draw[color=gray,fill=white] (1.3,0) rectangle (2,1);
     \node (ROOT) [fill=cyan,circle] at (8,1.5) {}
-      child {node[font=\scriptsize] (After) {After} edge from parent node[font=\scriptsize,left] {L}}
+      child {node[font=\scriptsize] (After) {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}}
       child {node (graduation) [fill=orange,circle] {}
       {
-        child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize,left] {P}}
-      } edge from parent node[font=\scriptsize,left] {H} }
-      child {node[font=\scriptsize] {,} edge from parent node[font=\scriptsize,right] {U}}
-      child {node (moved) [fill=purple,circle] {}
+        child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize\bf\ttfamily,left] {P}}
+      } edge from parent node[font=\scriptsize\bf\ttfamily,left] {H} }
+      child {node[font=\scriptsize\bf\ttfamily] {,} edge from parent node[font=\scriptsize\bf\ttfamily,right] {U}}
+      child {node (moved) [fill=DarkBlue,circle] {}
       {
-        child {node[font=\scriptsize] (John) {John} edge from parent node[font=\scriptsize,left] {A}}
-        child {node[font=\scriptsize] {moved} edge from parent node[font=\scriptsize,left] {P}}
+        child {node[font=\scriptsize] (John) {John} edge from parent node[font=\scriptsize\bf\ttfamily,left] {A}}
+        child {node[font=\scriptsize] {moved} edge from parent node[font=\scriptsize\bf\ttfamily,left] {P}}
         child {node [fill=olive,circle] {}
         {
-          child {node[font=\scriptsize] {to} edge from parent node[font=\scriptsize,left] {R}}
-          child {node[font=\scriptsize] {Paris} edge from parent node[font=\scriptsize,right] {C}}
-        } edge from parent node[font=\scriptsize,right] {A} }
-      } edge from parent node[font=\scriptsize,right] {H} }
+          child {node[font=\scriptsize] {to} edge from parent node[font=\scriptsize\bf\ttfamily,left] {R}}
+          child {node[font=\scriptsize] {Paris} edge from parent node[font=\scriptsize\bf\ttfamily,right] {C}}
+        } edge from parent node[font=\scriptsize\bf\ttfamily,right] {A} }
+      } edge from parent node[font=\scriptsize\bf\ttfamily,above] {H} }
       ;
-    \draw[dashed] (graduation) to node [font=\scriptsize,auto] {A} (John);
+    \draw[dashed] (graduation) to node [font=\scriptsize\bf\ttfamily,above] {A} (John);
 	\end{tikzpicture}
 \end{minipage}
 }
@@ -529,17 +530,18 @@ and \textbf{graph} of constructed nodes and edges.
 A \textbf{classifier} selects the next transition, given the current state's features.
 Architecture: bidirectional LSTM RNN to encode text token features +
 feedforward NN for classification.
-For training, we use an oracle, which returns correct transitions given gold-standard graphs.
+For training, TUPA uses an oracle, returning correct transitions given gold-standard graphs.
 
 \vfill
 
 \section*{Multitask Architecture}
 
 We use a \textbf{task-specific} BiLSTM for each task +
-BiLSTM \textbf{shared} across all tasks,
-concatenate their outputs and choose a transition using
-a task-specific MLP.
+BiLSTM \textbf{shared} across all tasks.
+We concatenate their outputs and select each transition using
+a task-specific feedforward NN.
 \begin{center}
+   \vspace{-1mm}
    \begin{tikzpicture}[-{Latex[length=3mm]},level distance=15mm, sibling distance=5cm]
    \draw[color=gray,dashed,fill=lightgray!20] (0,-.8) rectangle (34,3.6);
    \node[anchor=west] at (0,2.5) {\textbf{Parser state}};
@@ -553,31 +555,31 @@ a task-specific MLP.
    \node[anchor=west] at (12.5,.5) {John moved to Paris .};
    \node[anchor=west] at (23,.5) {Graph:};
    \node[fill=cyan, circle] at (30,2.75) {}
-     child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}}
+     child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}}
      child {node [fill=orange, circle] {}
      {
-       child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize,right] {P}}
-     } edge from parent node[font=\scriptsize,right] {H} };
+       child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize\bf\ttfamily,right] {P}}
+     } edge from parent node[font=\scriptsize\bf\ttfamily,right] {H} };
    \end{tikzpicture}
    
-   \begin{tikzpicture}[-{Latex[length=3mm]}]
-   \node[anchor=west] at (-7,17) {\textbf{Classifier}};
-   \tikzstyle{main}=[rounded rectangle, minimum size=15mm, draw=black!80, node distance=12mm]
+   \begin{tikzpicture}[-{Latex[length=3mm]},thick]
+   \node[anchor=west] at (-7,16) {\textbf{Classifier}};
+   \tikzstyle{main}=[rounded rectangle, minimum size=23mm, draw=black!80, node distance=12mm]
    \node[main] (specific) at (0,10) {Task-specific BiLSTM};
-   \node[main,color=Navy] (shared) at (22,10) {Shared BiLSTM};
-   \node[color=Navy] (embeddings) at (10.5,4.5) {Shared embeddings};
+   \node[main,color=DarkCyan] (shared) at (22,10) {Shared BiLSTM};
+   \node[color=DarkCyan] (embeddings) at (10.5,4.5) {Shared embeddings};
    \foreach \i/\word in {-4/{After},4/{graduation},17/{to},25/{Paris}} {
        \node (x\i) at (\i,3) {\word};
-       \node[main,color=Navy] (e\i) at (\i,6) {};
-       \path[color=Navy] (x\i) edge (e\i);
+       \node[main, minimum size=16mm, fill=DarkCyan, draw=none] (e\i) at (\i,6) {};
+       \path[color=DarkCyan] (x\i) edge (e\i);
        \path (e\i) edge (specific);
-       \path[color=Navy] (e\i) edge (shared);
+       \path[color=DarkCyan] (e\i) edge (shared);
    }
     \node (x4) at (10.5,3) {\ldots};
     \node[main] (mlp) at (10.5,12) {Task-specific MLP};
     \path (specific) edge (mlp);
-    \path[color=Navy] (shared) edge (mlp);
-    \coordinate (state) at (19,18);
+    \path[color=DarkCyan] (shared) edge (mlp);
+    \coordinate (state) at (22,17);
     \path (state) edge [bend left] (mlp);
     \node (transition) at (10.5,16.4) {transition};
     \path (mlp) edge node[right] {softmax} (transition);
@@ -596,9 +598,9 @@ supported by TUPA.
 
 \begin{minipage}{.4\columnwidth}
   \begin{center}
-  \begin{tikzpicture}[level distance=5cm, -{Latex[length=5mm]}, color=teal,
-      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
-      level 1/.style={sibling distance=5cm},
+  \begin{tikzpicture}[level distance=6cm, -{Latex[length=5mm]}, color=DarkGreen,
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+      level 1/.style={sibling distance=53mm},
       level 2/.style={sibling distance=3cm},
       level 3/.style={sibling distance=3cm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
@@ -607,31 +609,32 @@ supported by TUPA.
       {
             child {node (graduation) [word] {graduation} edge from parent node {op} }
       } edge from parent node {time} }
-      child {node (John) [fill=teal,circle] {}
+      child {node (John) [fill=DarkGreen,circle] {}
       {
         child {node [word] {John} edge from parent node {name} }
       } edge from parent node {ARG0} }
-      child {node [fill=teal,circle] {}
+      child {node [fill=DarkGreen,circle] {}
       {
         child {node [word] {Paris} edge from parent node {name} }
       } edge from parent node {ARG2} }
       ;
       \draw[dashed] (graduation) to node {ARG0} (John);
   \end{tikzpicture}
-  \captionof{figure}{Converted AMR.}
+  \captionof{figure}{\color{DarkGreen} Converted AMR.}
   \end{center}
 \end{minipage}
+\hfill
 \begin{minipage}{.6\columnwidth}
   \begin{center}
   \scalebox{.9}{
-  \begin{tikzpicture}[-{Latex[length=5mm]}, color=blue,
-      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
+  \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkRed,
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
       level 1/.style={sibling distance=7cm,level distance=1cm},
       level 2/.style={sibling distance=4cm,level distance=24mm},
       level 3/.style={level distance=34mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [fill=blue,circle] {}
-      child {node (after) [fill=blue,circle] {}
+    \node (ROOT) [fill=DarkRed,circle] {}
+      child {node (after) [fill=DarkRed,circle] {}
       {
         child {node [draw=none] {}
         {
@@ -644,13 +647,13 @@ supported by TUPA.
       } edge from parent node {root}}
       child {node [draw=none] {}
       {
-        child {node (moved) [fill=blue,circle] {}
+        child {node (moved) [fill=DarkRed,circle] {}
         {
           child {node [word] {\quad{\color{white}g} John} edge from parent node {ARG1}}
           child {node [word] {moved{\color{white}g}} edge from parent node {head}}
         } edge from parent [draw=none] }
       } edge from parent [draw=none] }
-      child {node (to) [fill=blue,circle] {}
+      child {node (to) [fill=DarkRed,circle] {}
       {
         child {node [draw=none] {}
         {
@@ -671,15 +674,15 @@ supported by TUPA.
       \draw (moved) to node {ARG2} (Paris);
       \draw[dashed] (to) to node {ARG2} (Paris);
   \end{tikzpicture}}
-  \captionof{figure}{Converted DM.}
+  \captionof{figure}{\color{DarkRed} Converted DM.}
   \scalebox{.9}{
-  \begin{tikzpicture}[-{Latex[length=5mm]}, color=purple,
-      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
-      level 1/.style={sibling distance=4cm,level distance=2cm},
-      level 2/.style={sibling distance=3cm,level distance=3cm}]
+  \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue,
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+      level 1/.style={sibling distance=4cm,level distance=1cm},
+      level 2/.style={sibling distance=3cm,level distance=4cm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [fill=purple,circle] {}
-      child {node (after) [fill=purple,circle] {}
+    \node (ROOT) [fill=DarkBlue,circle] {}
+      child {node (after) [fill=DarkBlue,circle] {}
       {
         child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
         child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
@@ -696,7 +699,7 @@ supported by TUPA.
       {
         child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
       } edge from parent [draw=none]}
-      child {node (to) [fill=purple,circle] {}
+      child {node (to) [fill=DarkBlue,circle] {}
       {
           child {node [word] {to{\color{white}g}} edge from parent node {case}}
           child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
@@ -706,7 +709,7 @@ supported by TUPA.
       \draw (ROOT) to node {nsubj} (John);
       \draw (ROOT) to node {head} (moved);
   \end{tikzpicture}}
-  \captionof{figure}{Converted UD.}
+  \captionof{figure}{\color{DarkBlue} Converted UD.}
   \end{center}
 \end{minipage}
 
@@ -714,62 +717,70 @@ supported by TUPA.
 
 
 
-\section*{Results}
+\section*{Experiments}
 
-Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges
-on the 20K test sets
-($\star$~indicates significantly better than \textit{Single},
-and $\dagger$ significantly worse):
+In \textbf{English}, we train on the {\color{Indigo} UCCA Wiki} training set
+(adding various tasks as auxiliaries), and test on the {\color{Indigo} 20K} out-of-domain test set.
+In \textbf{French} and \textbf{German}, we train on the {\color{Indigo} 20K} training set
+(using {\color{DarkBlue} UD} in the same language as auxiliary),
+and test on the {\color{Indigo} 20K} test set.
+
 \begin{center}
+\vspace{-1cm}
 \setlength\tabcolsep{1cm}
 \begin{tabular}{l|lll|lll}
-& \multicolumn{3}{c|}{\bf Primary} & \multicolumn{3}{c}{\bf Remote} \\
-& \textbf{LP} & \textbf{LR} & \textbf{LF}
-& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+& \multicolumn{3}{c|}{\bf\small Primary} & \multicolumn{3}{c}{\bf\small Remote} \\
+& \textbf{\small LP} & \textbf{\small LR} & \textbf{LF}
+& \textbf{\small LP} & \textbf{\small LR} & \textbf{LF} \\
 \hline
 \bf English (out-of-domain) & \\
 TUPA \cite{hershcovich2017a}
-& 68.7 & 68.5 & 68.6 & 38.6 & 18.8 & 25.3 \\
-Our single (UCCA only)
-& 68.9 & 68.9 & 68.9 & 40.7 & 19.6 & 26.5 \\
+& 68.7 & 68.5 & \large 68.6 & 38.6 & 18.8 & \large 25.3 \\
+Our single ({\color{Indigo} UCCA} only)
+& 68.9 & 68.9 & \large 68.9 & 40.7 & 19.6 & \large 26.5 \\
 \cline{1-1}
-+ AMR
-& 69.4 & 69.6 & 69.5 & 44.3 & 21.4 & 28.8 \\
-+ DM
-& 70.1$\star$ & 69.5 & 69.8$\star$ & 40 & 18.6 & 25.4 \\
-+ UD$^{++}$
-& 69.8$\star$ & 69.4 & 69.6 & 39.8 & 14.7$\dagger$ & 21.4$\dagger$ \\
-+ AMR + DM
-& 69.8$\star$ & 69.5 & 69.7$\star$ & 48.8$\star$ & 19.6 & 28 \\
-+ AMR + UD$^{++}$
-& 69.7$\star$ & 70$\star$ & 69.8$\star$ & 39 & 21.4 & 27.6 \\
-+ DM + UD$^{++}$
-& 70$\star$ & 68.9 & 69.4 & 47.4$\star$ & 22 & 30$\star$ \\
-+ AMR + DM + UD$^{++}$
-& 71$\star$ & 72.2$\star$ & \textbf{71.6}$\star$ & 43.9 & 24.8$\star$ & \textbf{31.6}$\star$ \\
++ \color{DarkGreen} AMR
+& 69.4 & 69.6 & \large 69.5 & 44.3 & 21.4 & \large 28.8 \\
++ \color{DarkRed} DM
+& 70.1$\star$ & 69.5 & {\large 69.8}$\star$ & 40 & 18.6 & \large 25.4 \\
++ \color{DarkBlue} UD$^{++}$
+& 69.8$\star$ & 69.4 & \large 69.6 & 39.8 & 14.7$\dagger$ & {\large 21.4}$\dagger$ \\
++ {\color{DarkGreen} AMR} + \color{DarkRed} DM
+& 69.8$\star$ & 69.5 & {\large 69.7}$\star$ & 48.8$\star$ & 19.6 & \large 28 \\
++ {\color{DarkGreen} AMR} + \color{DarkBlue} UD$^{++}$
+& 69.7$\star$ & 70$\star$ & {\large 69.8}$\star$ & 39 & 21.4 & \large 27.6 \\
++ {\color{DarkRed} DM} + \color{DarkBlue} UD$^{++}$
+& 70$\star$ & 68.9 & \large 69.4 & 47.4$\star$ & 22 & {\large 30}$\star$ \\
++ {\color{DarkGreen} AMR} + {\color{DarkRed} DM} + \color{DarkBlue} UD$^{++}$
+& 71$\star$ & 72.2$\star$ & {\large \textbf{71.6}}$\star$ & 43.9 & 24.8$\star$ & {\large \textbf{31.6}}$\star$ \\
 \hline
 \bf French (in-domain) & \\
-Our single (UCCA only) & 64.1 & 60.6 & 62.3 & 20 & \enskip 5.7 & \enskip 8.8 \\
-+ UD & 68.7$\star$ & 68.6$\star$ & \textbf{68.6}$\star$ & 15.8 & \enskip 5.7 & \enskip 8.3 \\
+Our single ({\color{Indigo} UCCA} only) & 64.1 & 60.6 & \large 62.3 & 20 & \enskip 5.7 & \enskip \large 8.8 \\
++ \color{DarkBlue} UD & 68.7$\star$ & 68.6$\star$ & {\large \textbf{68.6}}$\star$ & 15.8 & \enskip 5.7 & \enskip \large 8.3 \\
 \hline
 \bf German (in-domain) & \\
-Our single (UCCA only) & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
-+ UD & 73.7$\star$ & 72.6$\star$ & \textbf{73.2}$\star$ & 61.8 & 24.9$\star$ & \textbf{35.5}$\star$
+Our single ({\color{Indigo} UCCA} only) & 73.3 & 71.7 & \large 72.5 & 57.1 & 17.7 & \large 27.1 \\
++ \color{DarkBlue} UD & 73.7$\star$ & 72.6$\star$ & {\large \textbf{73.2}}$\star$ & 61.8 & 24.9$\star$ & {\large \textbf{35.5}}$\star$
 \end{tabular}
-\captionof{table}{Experimental results.}
+\captionof{table}{Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges
+on the UCCA 20K gold standard test sets.
+$\star$~indicates significantly better than \textit{Single},
+and $\dagger$ significantly worse.}
 \end{center}
+
+Our basic single-task model slightly outperforms the TUPA baseline, due to more features.
+All multitask models further improve UCCA parsing. The contribution is largely additive.
 
 \hrule
 
 
 \section*{Conclusion}
 
+We propose a unified DAG format for semantic representation,
+and train a transition-based semantic DAG parser in a multitask setting.
 We demonstrate that multitask learning improves UCCA parsing in out-of-domain settings
 or when training data is scarce or noisy,
-using AMR, DM and UD parsing as auxiliaries,
-by proposing a unified DAG representation,
-constructing protocols for converting these schemes into the unified format,
-and generalizing a transition-based DAG parser.\footnote{Code:
+using unlabeled AMR, SDP and UD parsing as auxiliaries.\footnote{Code:
 \url{http://github.com/danielhers/tupa} \hfill
 Corpora: \url{http://github.com/huji-nlp/ucca-corpora} \hfill
 Implemented using DyNet: \url{http://github.com/clab/dynet}}
@@ -777,11 +788,14 @@ Implemented using DyNet: \url{http://github.com/clab/dynet}}
 A natural question is whether our method can benefit AMR, SDP or UD.
 Future work will investigate whether a single
 algorithm and architecture can be competitive on all of these.
+\vspace{-5mm}
 
+\begin{multicols}{2}
 \color{DarkSlateGray}
-\tiny\titleformat*{\section}{\large}
+\tiny\titleformat*{\section}{\small}
 \bibliographystyle{plain}
 \bibliography{references}
+\end{multicols}
 
 \end{multicols}
 \end{document}
