@@ -85,22 +85,23 @@ Semantic parsing is important for natural language understanding.
 Representation schemes vary,
 but data is mostly \textbf{small}, \textbf{in-domain}, and in \textbf{English}.
 We consider four schemes:
-\begin{description}[nosep,labelsep=1em]
-\item[\color{violet} UCCA.] Intuitive, cross-lingual, and modular semantic representation.
+\begin{itemize}[nosep,labelsep=1em]
+\item[\color{violet} \textbf{UCCA.}] Intuitive, cross-lingual, and modular semantic representation.
     \textit{Primary edges} form a tree; directed acyclic graph (DAG) due to \textit{remote edges} (dashed).
     Edge labels encode predicate-argument structure, semantic heads and inter-scene relations
     \cite{abend2013universal}.
-\item[\color{teal} AMR.] Abstract graph on concepts and constants, implicit alignment to text tokens.
-    Rooted DAG with node and edge labels.
+\item[\color{teal} \textbf{AMR.}] Abstract graph on concepts and constants.
+    DAG with node + edge labels.
     Encodes named entities, argument structure, semantic roles, word sense and co-reference
     \cite{banarescu2013abstract}.
-\item[\color{blue} SDP.] Set of related bilexical DAG schemes (DM, PAS, PSD and CCD). \\
-    We use \textbf{\color{blue} DM} (DELPH-IN MRS).
-    Encodes predicate-argument structure \cite{oepen2016towards}.
-\item[\color{purple} UD.] Cross-lingual syntactic bilexical tree.
+\item[\color{blue} \textbf{SDP.}] Set of related bilexical semantic DAG schemes (DM, PAS, PSD and CCD).
+    We use \textbf{\color{blue} DM}~(DELPH-IN~MRS).
+    Encodes argument structure for many predicate types \cite{oepen2016towards}.
+\item[\color{purple} \textbf{UD.}] Cross-lingual syntactic bilexical tree.
     Encodes syntactic relations between words \cite{nivre2016universal}. \\
-    UD$^{++}$ (Enhanced++ UD) adds and augments edges, creating a bilexical DAG \cite{SCHUSTER16.779}.
-\end{description}
+    {\color{purple} \textbf{UD$^{++}$}} (Enhanced++ UD) adds and augments edges, creating a bilexical DAG
+    \cite{SCHUSTER16.779}.
+\end{itemize}
 
 \begin{minipage}{.6\columnwidth}
   \color{violet}
@@ -128,14 +129,14 @@ We consider four schemes:
         ;
       \draw[dashed,->] (graduation) to node [above] {A} (John);
     \end{tikzpicture}
-  \captionof{figure}{Universal Conceptual Cognitive Annotation (UCCA).}
+  \captionof{figure}{Universal Conceptual Cognitive Annotation ({\color{violet} UCCA}).}
   \end{center}
 \end{minipage}
 \hfill
 \begin{minipage}{.2\columnwidth}
   \begin{center}
-  \vspace{-1cm}
-  \begin{adjustbox}{margin=2mm,frame,scale=.8}
+  \begin{adjustbox}{margin=2mm,frame,scale=.7}
+  \color{violet}
   \begin{tabular}{cl}
 	  P & process \\
 	  S & state \\
@@ -152,10 +153,10 @@ We consider four schemes:
 	  G & ground
   \end{tabular}
   \end{adjustbox}
-  \captionof{table}{UCCA edge labels.}
+  \captionof{table}{{\color{violet} UCCA} edge labels.}
   \end{center}
 \end{minipage}
-\hrule
+
 \begin{minipage}{.45\columnwidth}
   \begin{center}
   \begin{tikzpicture}[-{Latex[length=5mm]}, color=teal, level distance=4cm,
@@ -183,10 +184,9 @@ We consider four schemes:
       ;
       \draw (graduation) to node {ARG0} (John);
   \end{tikzpicture}
-  \captionof{figure}{Abstract Meaning Representation (AMR).}
+  \captionof{figure}{Abstract Meaning Representation ({\color{teal} AMR}).}
   \end{center}
 \end{minipage}
-\vrule
 \begin{minipage}{.55\columnwidth}
     \begin{center}
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=blue},
@@ -195,15 +195,14 @@ We consider four schemes:
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
         \depedge[edge unit distance=1em]{1}{2}{ARG2}
-        \depedge[edge unit distance=1em]{5}{4}{ARG1}
-        \depedge[edge unit distance=1em, edge end x offset=-2mm]{1}{5}{ARG1}
-        \deproot[edge unit distance=1.5em]{5}{top}
-        \depedge[edge unit distance=2em, edge start x offset=-1mm, edge end x offset=3mm]{5}{7}{ARG2}
+        \depedge[edge unit distance=1em, edge start x offset=-4mm]{5}{4}{ARG1}
+        \depedge[edge unit distance=1em, edge end x offset=-3mm]{1}{5}{ARG1}
+        \deproot[edge unit distance=1.25em]{5}{top}
+        \depedge[edge unit distance=2em, edge start x offset=1mm, edge end x offset=3mm]{5}{7}{ARG2}
         \depedge[edge unit distance=1em, edge end x offset=5mm]{6}{5}{ARG1}
         \depedge[edge unit distance=1em]{6}{7}{ARG2}
     \end{dependency}
-    \captionof{figure}{Semantic Dependencies (SDP): DM representation.}
-    \hrule
+    \captionof{figure}{Semantic Dependencies ({\color{blue} SDP}): {\color{blue} DM} representation.}
     \vfill
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=purple},
         text only label, label style={above, color=purple}, font=\small]
@@ -212,27 +211,146 @@ We consider four schemes:
     \end{deptext}
         \depedge[edge unit distance=1em]{2}{1}{case}
         \depedge[edge unit distance=1em]{4}{3}{punct}
-        \depedge[edge unit distance=1em]{5}{4}{nsubj}
-        \depedge[edge unit distance=1em, edge end x offset=-2mm]{2}{5}{obl}
+        \depedge[edge unit distance=1em, edge start x offset=-4mm]{5}{4}{nsubj}
+        \depedge[edge unit distance=1em, edge end x offset=-3mm]{2}{5}{obl}
         \depedge[edge unit distance=1em]{7}{6}{case}
         \deproot[edge unit distance=1em]{5}{root}
-        \depedge[edge unit distance=1.5em]{5}{7}{obl}
+        \depedge[edge unit distance=1.5em, edge start x offset=1mm]{5}{7}{obl}
     \end{dependency}
-  \captionof{figure}{Universal Dependencies (UD).}
+  \captionof{figure}{Universal Dependencies ({\color{purple} UD}).}
   \end{center}
 \end{minipage}
 
 While formally different, semantic representations
 share much of their content \cite{abend2017state}.
-We use multitask learning to exploit the task overlap
+\textbf{Multitask learning} exploits the overlap between parsing tasks
 and effectively extend the training data
-for a general transition-based DAG parser,
-showing benefits for UCCA parsing.\footnote{Code:
-\url{http://github.com/danielhers/tupa} \hfill
-Corpora: \url{http://github.com/huji-nlp/ucca-corpora} \hfill
-Implemented using DyNet: \url{http://github.com/clab/dynet}}
+for our general transition-based DAG parser,
+showing benefits for UCCA parsing.
+
+
+We focus on UCCA due to its small training set,
+where multitask learning is likely to help the most.
+As auxiliary tasks, we use \textbf{unlabeled} AMR, SDP and UD parsing.
 
 \hrule
+
+\section*{Data}
+
+\textbf{\color{violet} UCCA}: v1.2 of English Wikipedia corpus (Wiki);
+\textit{Twenty Thousand Leagues Under the Sea} corpora (20K),
+annotated in English (v1.0, small, only test) French (v1.0, small), and German (v0.9, pre-release, noisy).
+\textbf{\color{teal} AMR}: LDC2017T10.
+\textbf{\color{blue} SDP}: DM part from SDP 2016.
+\textbf{\color{purple} UD}: all English, French and German treebanks, v2.1 (UD$^{++}$ for English).
+
+While UCCA is annotated over Wikipedia and over a literary corpus,
+the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
+
+Number of sentences per dataset:
+
+\begin{minipage}{.43\columnwidth}
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & train & dev & test \\
+	UD & 17062 & 0 & 0 \\
+	SDP & 33964 & 0 & 0 \\
+	AMR & 36521 & 0 & 0 \\
+	UCCA (Wiki) & 4268 & 454 & 503 \\
+	UCCA (20K) & 0 & 0 & 506 \\
+    }\english
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar stacked,
+    xmin=0,
+    xtick=\empty,
+    ytick=data,
+    yticklabels from table={\english}{corpus}
+    ]
+    \addplot [fill=green!80] table [x=train, meta=corpus,y expr=\coordindex] {\english};
+    \addplot [fill=blue!60] table [x=dev, meta=corpus,y expr=\coordindex] {\english};
+    \addplot [fill=red!60, point meta=x, nodes near coords, nodes near coords align={anchor=west},
+    every node near coord/.append style={
+        black,
+        fill=white,
+        fill opacity=0.75,
+        text opacity=1,
+        outer sep=\pgflinewidth
+    }
+    ] table [x=test, meta=corpus,y expr=\coordindex] {\english};
+    \end{axis}
+    \end{tikzpicture}
+    \captionof{figure}{English.}
+\end{center}
+\end{minipage}
+\begin{minipage}{.26\columnwidth}
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & train & dev & test \\
+	UD & 32347 & 0 & 0 \\
+	UCCA 20K & 413 & 67 & 67 \\
+    }\french
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar stacked,
+    xmin=0,
+    xtick=\empty,
+    ytick=\empty,
+    yticklabels=\empty
+    ]
+    \addplot [fill=green!80] table [x=train, meta=corpus,y expr=\coordindex] {\french};
+    \addplot [fill=blue!60] table [x=dev, meta=corpus,y expr=\coordindex] {\french};
+    \addplot [fill=red!60, point meta=x, nodes near coords, nodes near coords align={anchor=west},
+    every node near coord/.append style={
+        black,
+        fill=white,
+        fill opacity=0.75,
+        text opacity=1,
+        outer sep=\pgflinewidth
+    }
+    ] table [x=test, meta=corpus,y expr=\coordindex] {\french};
+    \end{axis}
+    \end{tikzpicture}
+    \captionof{figure}{French.}
+\end{center}
+\end{minipage}
+\begin{minipage}{.3\columnwidth}
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & train & dev & test \\
+	UD & 13814 & 0 & 0 \\
+	UCCA 20K & 3429 & 561 & 2164 \\
+    }\german
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar stacked,
+    xmin=0,
+    xtick=\empty,
+    ytick=\empty,
+    legend style={at={(axis cs:8000,.8)},anchor=north west},
+    yticklabels=\empty
+    ]
+    \addplot [fill=green!80] table [x=train, meta=corpus,y expr=\coordindex] {\german};
+    \addplot [fill=blue!60] table [x=dev, meta=corpus,y expr=\coordindex] {\german};
+    \addplot [fill=red!60, point meta=x, nodes near coords, nodes near coords align={anchor=west},
+    every node near coord/.append style={
+        black,
+        fill=white,
+        fill opacity=0.75,
+        text opacity=1,
+        outer sep=\pgflinewidth
+    }
+    ] table [x=test, meta=corpus,y expr=\coordindex] {\german};
+    \legend{train,dev,test}
+    \end{axis}
+    \end{tikzpicture}
+    \captionof{figure}{German.}
+\end{center}
+\end{minipage}
+
+
+\hrule
+
 
 \section*{General Transition-based DAG Parser}
 
@@ -240,10 +358,10 @@ We extend TUPA \cite{hershcovich2017a} to support
 reentrancy, discontinuity and non-terminal nodes.
 
 The parser applies a \textit{transition}
-at each step to the parser state, comprising\\
-$S$: working stack of nodes.
-$B$: buffer of remaining nodes.
-$G=(V,E,\ell)$: constructed graph.
+at each step to the parser state, comprising
+a working \textbf{stack} of nodes,
+\textbf{buffer} of remaining nodes and tokens,
+and \textbf{graph} of constructed nodes and edges.
 
 \scalebox{.9}{
 \begin{minipage}{.55\columnwidth}
@@ -394,13 +512,66 @@ $G=(V,E,\ell)$: constructed graph.
 	\end{tikzpicture}
 \end{minipage}
 }
-\captionof{figure}{Example for intermediate states during transition-based UCCA parsing.}
-\vspace{5mm}
 
 A classifier selects the next transition based on the current state's features,
 trained by an oracle based on gold-standard annotations.
 Architecture: bidirectional LSTM RNN to encode features + feedforward NN for classification.
 
+\vfill
+
+\section*{Multitask Architecture}
+
+We use a \textbf{task-specific} BiLSTM for each task +
+BiLSTM \textbf{shared} across all tasks,
+concatenate their outputs and choose a transition using
+a task-specific MLP.
+\begin{center}
+   \begin{tikzpicture}[-{Latex[length=3mm]},level distance=15mm, sibling distance=5cm]
+   \node[anchor=west] at (0,2.5) {\textbf{Parser state}};
+   \node[anchor=west] at (0,.5) {Stack:};
+   \draw[color=gray,dashed] (0,-.8) rectangle (34,3.6);
+   \draw[color=gray] (3,0) rectangle (8,1.5);
+   \node[fill=cyan, circle] at (4,.75) {};
+   \node[fill=orange, circle] at (5.5,.75) {};
+   \node[anchor=west] at (6.2,.5) {,};
+   \node[anchor=west] at (9,.5) {Buffer:};
+   \draw[color=gray] (12.5,0) rectangle (22,1.5);
+   \node[anchor=west] at (12.5,.5) {John moved to Paris .};
+   \node[anchor=west] at (23,.5) {Graph:};
+   \node[fill=cyan, circle] at (30,2.75) {}
+     child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}}
+     child {node [fill=orange, circle] {}
+     {
+       child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize,right] {P}}
+     } edge from parent node[font=\scriptsize,right] {H} };
+   \end{tikzpicture}
+   
+   \begin{tikzpicture}[-{Latex[length=3mm]}]
+   \node[anchor=west] at (-7,17) {\textbf{Classifier}};
+   \tikzstyle{main}=[rounded rectangle, minimum size=15mm, draw=black!80, node distance=12mm]
+   \node[main] (specific) at (0,10) {Task-specific BiLSTM};
+   \node[main,color=Navy] (shared) at (22,10) {Shared BiLSTM};
+   \node[color=Navy] (embeddings) at (10.5,4.5) {Shared embeddings};
+   \foreach \i/\word in {-4/{After},4/{graduation},17/{to},25/{Paris}} {
+       \node (x\i) at (\i,3) {\word};
+       \node[main,color=Navy] (e\i) at (\i,6) {};
+       \path[color=Navy] (x\i) edge (e\i);
+       \path (e\i) edge (specific);
+       \path[color=Navy] (e\i) edge (shared);
+   }
+    \node (x4) at (10.5,3) {\ldots};
+    \node[main] (mlp) at (10.5,12) {Task-specific MLP};
+    \path (specific) edge (mlp);
+    \path[color=Navy] (shared) edge (mlp);
+    \coordinate (state) at (19,18);
+    \path (state) edge [bend left] (mlp);
+    \node (transition) at (10.5,16.4) {transition};
+    \path (mlp) edge node[right] {softmax} (transition);
+   \end{tikzpicture}
+\end{center}
+
+This limited capacity forces the network to use the shared parameters for all tasks,
+increasing generalization \cite{E17-1005}.
 
 \hrule
 
@@ -529,177 +700,6 @@ supported by the TUPA transition set.
 
 \hrule
 
-\section*{Multitask Architecture}
-
-We use a task-specific BiLSTM for each task, add
-a BiLSTM that is shared across all tasks,
-concatenate their outputs and choose a transition using
-a task-specific MLP.
-Feature embeddings are shared across tasks.
-\begin{center}
-   \begin{tikzpicture}[-{Latex[length=2mm]},level distance=15mm, sibling distance=3cm]
-   \node[anchor=west] at (0,2.5) {Parser state};
-   \draw[color=gray,dashed] (0,-.8) rectangle (22.5,3.75);
-   \draw[color=gray] (.3,0) rectangle (4.5,1.5);
-   \node[fill=black, circle] at (1.2,.875) {};
-   \node[fill=blue, circle] at (2.7,.875) {};
-   \node[anchor=west] at (3.75,.575) {,};
-   \draw[color=gray] (5.95,0) rectangle (14.9,1.5);
-   \node[anchor=west] at (5.95,.875) {John moved to Paris .};
-   \node[fill=black, circle] at (19,2.75) {}
-     child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize,left] {L}}
-     child {node [fill=blue, circle] {}
-     {
-       child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize,right] {P}}
-     } edge from parent node[font=\scriptsize,right] {H} };
-   \end{tikzpicture}
-   
-   \begin{tikzpicture}[-{Latex[length=2mm]}]
-   \node[anchor=west] at (0,17) {Classifier};
-   \tikzstyle{main}=[rounded rectangle, minimum size=15mm, draw=black!80, node distance=12mm]
-   \node[main] (specific) at (4,9) {Task-specific BiLSTM};
-   \node[main,color=blue] (shared) at (18,9) {Shared BiLSTM};
-   \node[color=blue] (embeddings) at (10.5,3) {Shared embeddings};
-   \foreach \i/\word in {0/{After},6/{graduation},15/{to},21/{Paris}} {
-       \node (x\i) at (\i,1) {\word};
-       \node[main,color=blue] (e\i) at (\i,5) {};
-       \path[color=blue] (x\i) edge (e\i);
-       \path (e\i) edge (specific);
-       \path[color=blue] (e\i) edge (shared);
-   }
-    \node (x4) at (10.5,2) {\ldots};
-    \node[main] (mlp) at (10.5,12) {Task-specific MLP};
-    \path (specific) edge (mlp);
-    \path[color=blue] (shared) edge (mlp);
-    \coordinate (state) at (19,18);
-    \path (state) edge [bend left] (mlp);
-    \node (transition) at (10.5,16.4) {transition};
-    \path (mlp) edge node[right] {softmax} (transition);
-   \end{tikzpicture}
-   \captionof{figure}{Multitask model.}
-\end{center}
-
-We focus on UCCA due to its small training set, using AMR, SDP and UD as auxiliaries,
-for which we perform unlabeled parsing,
-resulting in a set of $\leq$10 transitions (45 for labeled UCCA parsing).
-This limited capacity forces the network to use the shared parameters for all tasks,
-increasing generalization \cite{E17-1005}.
-
-\section*{Data}
-
-\textbf{\color{violet} UCCA}: v1.2 of English Wikipedia corpus (Wiki);
-\textit{Twenty Thousand Leagues Under the Sea} corpora (20K),
-annotated in English (v1.0, small, only test) French (v1.0, small), and German (v0.9, pre-release, noisy).
-\textbf{\color{teal} AMR}: LDC2017T10.
-\textbf{\color{blue} SDP}: DM part from SDP 2016.
-\textbf{\color{purple} UD}: all English, French and German treebanks, v2.1 (UD$^{++}$ for English).
-
-While UCCA is annotated over Wikipedia and over a literary corpus,
-the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
-
-Number of sentences per dataset:
-
-\begin{minipage}{.43\columnwidth}
-\pgfplotstableread[row sep=\\,col sep=&]{
-	corpus & train & dev & test \\
-	UD & 17062 & 0 & 0 \\
-	SDP & 33964 & 0 & 0 \\
-	AMR & 36521 & 0 & 0 \\
-	UCCA (Wiki) & 4268 & 454 & 503 \\
-	UCCA (20K) & 0 & 0 & 506 \\
-    }\english
-\begin{center}
-    \begin{tikzpicture}
-    \begin{axis}[
-    xbar stacked,
-    xmin=0,
-    xtick=\empty,
-    ytick=data,
-    yticklabels from table={\english}{corpus}
-    ]
-    \addplot [fill=green!80] table [x=train, meta=corpus,y expr=\coordindex] {\english};
-    \addplot [fill=blue!60] table [x=dev, meta=corpus,y expr=\coordindex] {\english};
-    \addplot [fill=red!60, point meta=x, nodes near coords, nodes near coords align={anchor=west},
-    every node near coord/.append style={
-        black,
-        fill=white,
-        fill opacity=0.75,
-        text opacity=1,
-        outer sep=\pgflinewidth
-    }
-    ] table [x=test, meta=corpus,y expr=\coordindex] {\english};
-    \end{axis}
-    \end{tikzpicture}
-    \captionof{figure}{English.}
-\end{center}
-\end{minipage}
-\begin{minipage}{.26\columnwidth}
-\pgfplotstableread[row sep=\\,col sep=&]{
-	corpus & train & dev & test \\
-	UD & 32347 & 0 & 0 \\
-	UCCA 20K & 413 & 67 & 67 \\
-    }\french
-\begin{center}
-    \begin{tikzpicture}
-    \begin{axis}[
-    xbar stacked,
-    xmin=0,
-    xtick=\empty,
-    ytick=\empty,
-    yticklabels=\empty
-    ]
-    \addplot [fill=green!80] table [x=train, meta=corpus,y expr=\coordindex] {\french};
-    \addplot [fill=blue!60] table [x=dev, meta=corpus,y expr=\coordindex] {\french};
-    \addplot [fill=red!60, point meta=x, nodes near coords, nodes near coords align={anchor=west},
-    every node near coord/.append style={
-        black,
-        fill=white,
-        fill opacity=0.75,
-        text opacity=1,
-        outer sep=\pgflinewidth
-    }
-    ] table [x=test, meta=corpus,y expr=\coordindex] {\french};
-    \end{axis}
-    \end{tikzpicture}
-    \captionof{figure}{French.}
-\end{center}
-\end{minipage}
-\begin{minipage}{.3\columnwidth}
-\pgfplotstableread[row sep=\\,col sep=&]{
-	corpus & train & dev & test \\
-	UD & 13814 & 0 & 0 \\
-	UCCA 20K & 3429 & 561 & 2164 \\
-    }\german
-\begin{center}
-    \begin{tikzpicture}
-    \begin{axis}[
-    xbar stacked,
-    xmin=0,
-    xtick=\empty,
-    ytick=\empty,
-    legend style={at={(axis cs:8000,.8)},anchor=north west},
-    yticklabels=\empty
-    ]
-    \addplot [fill=green!80] table [x=train, meta=corpus,y expr=\coordindex] {\german};
-    \addplot [fill=blue!60] table [x=dev, meta=corpus,y expr=\coordindex] {\german};
-    \addplot [fill=red!60, point meta=x, nodes near coords, nodes near coords align={anchor=west},
-    every node near coord/.append style={
-        black,
-        fill=white,
-        fill opacity=0.75,
-        text opacity=1,
-        outer sep=\pgflinewidth
-    }
-    ] table [x=test, meta=corpus,y expr=\coordindex] {\german};
-    \legend{train,dev,test}
-    \end{axis}
-    \end{tikzpicture}
-    \captionof{figure}{German.}
-\end{center}
-\end{minipage}
-
-
-\hrule
 
 
 \section*{Results}
@@ -757,14 +757,17 @@ or when training data is scarce or noisy,
 using AMR, DM and UD parsing as auxiliaries,
 by proposing a unified DAG representation,
 constructing protocols for converting these schemes into the unified format,
-and generalizing a transition-based DAG parser.
+and generalizing a transition-based DAG parser.\footnote{Code:
+\url{http://github.com/danielhers/tupa} \hfill
+Corpora: \url{http://github.com/huji-nlp/ucca-corpora} \hfill
+Implemented using DyNet: \url{http://github.com/clab/dynet} \vspace{-1cm}}
 
 A natural question is whether our method can benefit AMR, SDP or UD.
 Future work will investigate whether a single
 algorithm and architecture can be competitive on all of these.
 
 \color{DarkSlateGray}
-\tiny
+\tiny\titleformat*{\section}{\large}
 \bibliographystyle{plain}
 \bibliography{references}
 
