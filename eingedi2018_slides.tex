@@ -20,7 +20,7 @@
 \usepackage{multirow}
 \usepackage{multicol}
 \usepackage{rotating}
-\usepackage{tikz}
+\usepackage{tikz,pgfplots,pgfplotstable}
 \usepackage{tikz-dependency}
 \usetikzlibrary{arrows.meta,graphs,graphs.standard,graphdrawing,quotes,shapes}
 \usegdlibrary{layered,trees}
@@ -101,20 +101,38 @@
     \end{tikzpicture}
   \end{center}
 }
+
+\vspace{-3cm}
+
+\fbox{
+\begin{minipage}{.6\textwidth}
+    Natural language understanding requires meaning representation.
+\end{minipage}
+}
+
+\pause
+
+\fbox{
+\begin{minipage}{.6\textwidth}
+    \textbf{Semantic parsing}: learning to construct this representation from labeled data.
+\end{minipage}
+}
 \end{frame}
 
 
 \begin{frame}
+
 {
   \color{Indigo}
   \begin{center}
-    \scalebox{.7}{
+    \scalebox{.6}{
     \begin{tikzpicture}[level distance=15mm, -{Latex[length=2mm]},
         every node/.append style={font=\bf\ttfamily},
         every circle node/.append style={fill=Indigo},
-      level 1/.style={sibling distance=21mm},
-      level 2/.style={sibling distance=13mm}]
+      level 1/.style={sibling distance=29mm},
+      level 2/.style={sibling distance=18mm}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node[font=\bf\sffamily\Large] at (-4,0) {UCCA:};
       \node (ROOT) [circle] {}
         child {node (After) [word] {After} edge from parent node[above] {L}}
         child {node (hearing) [circle] {}
@@ -145,12 +163,13 @@
   \end{center}
 }
 
-\vspace{-33mm}
+\vspace{-21mm}
 
-\scalebox{.7}{
+\scalebox{.9}{
   \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkGreen, level distance=16mm,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
       level 1/.style={sibling distance=24mm}]
+    \node[font=\bf\sffamily\small] at (-2.6,0) {AMR:};
     \node (ROOT) [draw=DarkGreen,ellipse] {come-01}
       child {node [draw=DarkGreen,ellipse] {after}
       {
@@ -171,6 +190,10 @@
 \vspace{-15mm}
 
 \begin{flushright}
+\begin{minipage}{.06\textwidth}
+{\color{DarkRed}\bf\sffamily\scriptsize SDP:}
+\end{minipage}
+\begin{minipage}{.7\textwidth}
 \scalebox{.7}{
     \begin{dependency}[edge style={-{Latex[length=2mm]}, color=DarkRed},
         text only label, label style={above, color=DarkRed, font=\bf\ttfamily}, font=\small]
@@ -181,7 +204,7 @@
         \depedge{2}{3}{ARG1}
         \depedge{2}{5}{ARG0}
         \depedge[edge start x offset=-4mm]{7}{5}{ARG1}
-        \depedge[edge end x offset=-3mm]{1}{7}{ARG1}
+        \depedge[edge unit distance=1em,edge end x offset=-3mm]{1}{7}{ARG1}
         \deproot{7}{top}
         \depedge[edge start x offset=1mm, edge end x offset=3mm]{7}{10}{ARG2}
         \depedge[edge end x offset=5mm]{8}{7}{ARG1}
@@ -189,12 +212,46 @@
         \depedge{9}{10}{poss}
     \end{dependency}
 }
+\end{minipage}
 \end{flushright}
+
+\vspace{-3mm}
+
+\fbox{
+Many different semantic representation schemes.
+}
 \end{frame}
+
+%\begin{frame}
+%Amount of labeled data
+%\begin{center}
+%\pgfplotstableread[row sep=\\,col sep=&]{
+%	corpus & total \\
+%	\color{DarkRed} \textbf{SDP} & 33964 \\
+%	\color{DarkGreen} \textbf{AMR} & 36521 \\
+%	\color{Indigo} \textbf{UCCA} & 5225 \\
+%    }\english
+%    \begin{tikzpicture}
+%    \begin{axis}[
+%    xbar stacked,
+%    width=8cm,
+%    height=5cm,
+%    xmin=0,
+%    xmax=50000,
+%    xtick=\empty,
+%    ytick=data,
+%    yticklabels from table={\english}{corpus}
+%    ]
+%    \addplot [fill=Navy, point meta=explicit symbolic] table [x=total,y expr=\coordindex] {\english};
+%    \end{axis}
+%    \end{tikzpicture}
+%\end{center}
+%Domains: Wikipedia, books, blogs, news, emails, reviews
+%\end{frame}
 
 \begin{frame}
 \begin{itemize}
-\item Semantic representation reflects cognitive processing and is important for text understanding
+\item Semantic representation is important for text understanding
 \item Parsing to semantic representations is best done by supervised learning
 \item Supervised learning requires enough training data in the right domain
 \item But training data for semantic representation is small and in specific domains
