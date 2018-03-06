@@ -714,9 +714,7 @@ and test on the {\color{Indigo} 20K} test set.
 & \textbf{\small LP} & \textbf{\small LR} & \textbf{LF} \\
 \hline
 \bf English (out-of-domain) & \\
-TUPA \cite{hershcovich2017a}
-& 68.7 & 68.5 & \large 68.6 & 38.6 & 18.8 & \large 25.3 \\
-Our single ({\color{Indigo} UCCA} only)
+Single ({\color{Indigo} UCCA} only)
 & 68.9 & 68.9 & \large 68.9 & 40.7 & 19.6 & \large 26.5 \\
 \cline{1-1}
 + \color{DarkGreen} AMR
@@ -735,11 +733,11 @@ Our single ({\color{Indigo} UCCA} only)
 & 71$\star$ & 72.2$\star$ & {\large \textbf{71.6}}$\star$ & 43.9 & 24.8$\star$ & {\large \textbf{31.6}}$\star$ \\
 \hline
 \bf French (in-domain) & \\
-Our single ({\color{Indigo} UCCA} only) & 64.1 & 60.6 & \large 62.3 & 20 & \enskip 5.7 & \enskip \large 8.8 \\
-+ \color{DarkBlue} UD & 68.7$\star$ & 68.6$\star$ & {\large \textbf{68.6}}$\star$ & 15.8 & \enskip 5.7 & \enskip \large 8.3 \\
+Single ({\color{Indigo} UCCA} only) & 68 & 66.8 & \large 67.4 & 26.3 & \enskip 9.4 & \large 13.9 \\
++ \color{DarkBlue} UD & 70.2 & 69.9$\star$ & {\large \textbf{70}}$\star$ & 43.8 & 13.2 & \large 20.3 \\
 \hline
 \bf German (in-domain) & \\
-Our single ({\color{Indigo} UCCA} only) & 73.3 & 71.7 & \large 72.5 & 57.1 & 17.7 & \large 27.1 \\
+Single ({\color{Indigo} UCCA} only) & 73.3 & 71.7 & \large 72.5 & 57.1 & 17.7 & \large 27.1 \\
 + \color{DarkBlue} UD & 73.7$\star$ & 72.6$\star$ & {\large \textbf{73.2}}$\star$ & 61.8 & 24.9$\star$ & {\large \textbf{35.5}}$\star$
 \end{tabular}
 \captionof{table}{Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges
@@ -748,8 +746,8 @@ $\star$~indicates significantly better than \textit{Single},
 and $\dagger$ significantly worse.}
 \end{center}
 
-Our basic single-task model slightly outperforms the TUPA baseline, due to more features.
-All multitask models further improve UCCA parsing. The contribution is largely additive.
+Multitask learning consistently improve UCCA parsing when compared to single-task.
+The contribution is largely additive: using all three auxiliary tasks gives the best model.
 
 \hrule
 
@@ -757,10 +755,10 @@ All multitask models further improve UCCA parsing. The contribution is largely a
 \section*{Conclusion}
 
 We propose a unified DAG format for semantic representation,
-and train a transition-based semantic DAG parser in a multitask setting.
-We demonstrate that multitask learning improves UCCA parsing in out-of-domain settings
-or when training data is scarce or noisy,
-using unlabeled AMR, SDP and UD parsing as auxiliaries.\footnote{Code:
+and train a transition-based BiLSTM semantic DAG parser on UCCA parsing,
+using unlabeled AMR, SDP and UD parsing as auxiliary tasks.
+We demonstrate that multitask learning significantly improves UCCA parsing in out-of-domain settings
+or when training data is scarce or noisy.\footnote{Code:
 \url{http://github.com/danielhers/tupa} \hfill
 Corpora: \url{http://github.com/huji-nlp/ucca-corpora} \hfill
 Implemented using DyNet: \url{http://github.com/clab/dynet}}
@@ -768,7 +766,6 @@ Implemented using DyNet: \url{http://github.com/clab/dynet}}
 A natural question is whether our method can benefit AMR, SDP or UD.
 Future work will investigate whether a single
 algorithm and architecture can be competitive on all of these.
-\vspace{-5mm}
 
 \begin{multicols}{2}
 \color{DarkSlateGray}
