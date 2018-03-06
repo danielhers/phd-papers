@@ -29,7 +29,7 @@
 \begin{document}
 
 \begin{center}
-	\veryHuge \color{NavyBlue} \textbf{Multitask Parsing Across Semantic Representations}
+	\veryHuge \color{NavyBlue} \textbf{Deep Multitask Learning for Transition-Based DAG Parsing}
 \end{center}
 \vspace{-1cm}
 \begin{minipage}[b]{.07\linewidth}
@@ -94,7 +94,7 @@ but data is mostly \textbf{small}, \textbf{in-domain}, and in \textbf{English}.
 {\color{DarkGreen} \item[\textbf{AMR}:] Abstract graph on concepts and constants.
     Rooted DAG with labeled nodes and edges.
     Encodes named entities, argument structure, semantic roles, word sense, coreference \cite{banarescu2013abstract}.}
-{\color{DarkRed} \item[\textbf{SDP}:] Set of related bilexical semantic DAG schemes (DM, PAS, PSD and CCD).
+{\color{DarkRed} \item[\textbf{SDP}:] Set of related bilexical semantic DAG schemes: DM, PAS, PSD and CCD.
     We use \textbf{DM}~(DELPH-IN~MRS).
     Encodes argument structure for many predicate types \cite{oepen2016towards}.}
 {\color{DarkBlue} \item[\textbf{UD}:] Cross-lingual syntactic bilexical tree.
@@ -224,10 +224,10 @@ but data is mostly \textbf{small}, \textbf{in-domain}, and in \textbf{English}.
 
 While formally different, semantic representations
 share much of their content \cite{abend2017state}.
-\textbf{Multitask learning} exploits the overlap between parsing tasks
-and effectively extend the training data
-for our transition-based DAG parser,
-showing benefits for UCCA parsing.
+\textbf{Multitask learning} exploits task overlap,
+effectively extending the training data:
+training our transition-based DAG parser with \textbf{auxiliary tasks}
+shows benefit for UCCA parsing.
 
 
 We focus on UCCA due to its small training set,
@@ -239,26 +239,27 @@ As auxiliary tasks, we use \textbf{unlabeled} AMR, SDP and UD parsing.
 \section*{Data}
 
 \begin{itemize*}
-\item [\textbf{\color{Indigo} UCCA}:] \color{Indigo} (1) \textbf{English} Wikipedia (\textbf{Wiki});
+\item [\textbf{\color{Indigo} UCCA}:] \color{Indigo} (1) English Wikipedia (\textbf{Wiki});
 (2) \textit{Twenty Thousand Leagues Under the Sea} (\textbf{20K}),
-annotated in \textbf{English} (small, only test) \textbf{French} (small), and \textbf{German}
+annotated in English (small, only test) French (small), and German
 (pre-release, noisy).
-\item [\textbf{\color{DarkGreen} AMR}:] \color{DarkGreen} LDC2017T10 (\textbf{English}).
-\item [\textbf{\color{DarkRed} SDP}:] \color{DarkRed} DM part from SDP 2016 (\textbf{English}).
-\item [\textbf{\color{DarkBlue} UD}:] \color{DarkBlue} \textbf{English}, \textbf{French} and \textbf{German} treebanks,
-v2.1 (UD$^{++}$ for English).
+\item [\{\textbf{\color{DarkGreen} AMR}:] \color{DarkGreen} LDC2017T10 (English).
+\item [\textbf{\color{DarkRed} SDP}:] \color{DarkRed} DM part from SDP 2016 (English).
+\item [\textbf{\color{DarkBlue} UD}:] {\color{DarkBlue} v2.1 treebanks:
+English (UD$^{++}$), French and German.}\}:
 \end{itemize*}
+Only for training.
 \hfill Number of sentences per dataset:
 
 \hspace{-35mm}
 \begin{minipage}{.4\columnwidth}
 \pgfplotstableread[row sep=\\,col sep=&]{
-	corpus & train & dev & test \\
-	\color{DarkBlue} \textbf{UD} & 17062 & 0 & 0 \\
-	\color{DarkRed} \textbf{SDP} & 33964 & 0 & 0 \\
-	\color{DarkGreen} \textbf{AMR} & 36521 & 0 & 0 \\
-	\color{Indigo} \textbf{Wiki} & 4268 & 454 & 503 \\
-	\color{Indigo} \textbf{20K} & 0 & 0 & 506 \\
+	corpus & total & train & dev & test \\
+	\color{DarkBlue} \textbf{UD} & 17062 & 9062 & 0 & 0 \\
+	\color{DarkRed} \textbf{SDP} & 33964 & 10964 & 0 & 0 \\
+	\color{DarkGreen} \textbf{AMR} & 36521 & 11521 & 0 & 0 \\
+	\color{Indigo} \textbf{Wiki} & 5225 & 4268 & 454 & 503 \\
+	\color{Indigo} \textbf{20K} & 506 & 0 & 0 & 506 \\
     }\english
 \begin{center}
     \begin{tikzpicture}
@@ -267,22 +268,15 @@ v2.1 (UD$^{++}$ for English).
     width=13cm,
     height=9cm,
     xmin=0,
-    xmax=70000,
+    xmax=15000,
     xtick=\empty,
     ytick=data,
     yticklabels from table={\english}{corpus}
     ]
-    \addplot [fill=green!80] table [x=train, meta=corpus,y expr=\coordindex] {\english};
-    \addplot [fill=blue!60] table [x=dev, meta=corpus,y expr=\coordindex] {\english};
-    \addplot [fill=red!60, point meta=x, nodes near coords, nodes near coords align={anchor=west},
-    every node near coord/.append style={
-        black,
-        fill=white,
-        fill opacity=0.75,
-        text opacity=1,
-        outer sep=\pgflinewidth
-    }
-    ] table [x=test, meta=corpus,y expr=\coordindex] {\english};
+    \draw[black] decorate [decoration={zigzag}] {(axis cs:8600,-4) -- (axis cs:8600,5)};
+    \addplot [fill=green!80] table [x=train,meta=corpus,y expr=\coordindex] {\english};
+    \addplot [fill=blue!60] table [x=dev,y expr=\coordindex] {\english};
+    \addplot [fill=red!60, point meta=explicit symbolic,nodes near coords, nodes near coords align={anchor=west}] table [x=test,y expr=\coordindex,meta=total] {\english};
     \end{axis}
     \end{tikzpicture}
     \captionof{figure}{\hspace{35mm} \textbf{English} corpora.}
@@ -291,9 +285,9 @@ v2.1 (UD$^{++}$ for English).
 \hspace{1mm}
 \begin{minipage}{.34\columnwidth}
 \pgfplotstableread[row sep=\\,col sep=&]{
-	corpus & train & dev & test \\
-	UD & 32347 & 0 & 0 \\
-	UCCA 20K & 413 & 67 & 67 \\
+	corpus & total & train & dev & test \\
+	UD & 32347 & 11347 & 0 & 0 \\
+	UCCA 20K & 547 & 413 & 67 & 67 \\
     }\french
 \begin{center}
     \begin{tikzpicture}
@@ -302,22 +296,15 @@ v2.1 (UD$^{++}$ for English).
     width=13cm,
     height=9cm,
     xmin=0,
-    xmax=70000,
+    xmax=15000,
     xtick=\empty,
     ytick=\empty,
     yticklabels=\empty
     ]
-    \addplot [fill=green!80] table [x=train, meta=corpus,y expr=\coordindex] {\french};
-    \addplot [fill=blue!60] table [x=dev, meta=corpus,y expr=\coordindex] {\french};
-    \addplot [fill=red!60, point meta=x, nodes near coords, nodes near coords align={anchor=west},
-    every node near coord/.append style={
-        black,
-        fill=white,
-        fill opacity=0.75,
-        text opacity=1,
-        outer sep=\pgflinewidth
-    }
-    ] table [x=test, meta=corpus,y expr=\coordindex] {\french};
+    \draw[black] decorate [decoration={zigzag}] {(axis cs:8600,-4) -- (axis cs:8600,5)};
+    \addplot [fill=green!80] table [x=train,y expr=\coordindex] {\french};
+    \addplot [fill=blue!60] table [x=dev,y expr=\coordindex] {\french};
+    \addplot [fill=red!60, point meta=explicit symbolic, nodes near coords, nodes near coords align={anchor=west}] table [x=test,y expr=\coordindex,meta=total] {\french};
     \end{axis}
     \end{tikzpicture}
     \captionof{figure}{\textbf{French} corpora.}
@@ -325,9 +312,9 @@ v2.1 (UD$^{++}$ for English).
 \end{minipage}
 \begin{minipage}{.34\columnwidth}
 \pgfplotstableread[row sep=\\,col sep=&]{
-	corpus & train & dev & test \\
-	UD & 13814 & 0 & 0 \\
-	UCCA 20K & 3429 & 561 & 2164 \\
+	corpus & total & train & dev & test \\
+	UD & 13814 & 9814 & 0 & 0 \\
+	UCCA 20K & 6154 & 3429 & 561 & 2164 \\
     }\german
 \begin{center}
     \begin{tikzpicture}
@@ -336,23 +323,16 @@ v2.1 (UD$^{++}$ for English).
     width=13cm,
     height=9cm,
     xmin=0,
-    xmax=70000,
+    xmax=15000,
     xtick=\empty,
     ytick=\empty,
-    legend style={at={(axis cs:50000,.8)},anchor=north west},
+    legend style={at={(axis cs:10000,.8)},anchor=north west},
     yticklabels=\empty
     ]
-    \addplot [fill=green!80] table [x=train, meta=corpus,y expr=\coordindex] {\german};
-    \addplot [fill=blue!60] table [x=dev, meta=corpus,y expr=\coordindex] {\german};
-    \addplot [fill=red!60, point meta=x, nodes near coords, nodes near coords align={anchor=west},
-    every node near coord/.append style={
-        black,
-        fill=white,
-        fill opacity=0.75,
-        text opacity=1,
-        outer sep=\pgflinewidth
-    }
-    ] table [x=test, meta=corpus,y expr=\coordindex] {\german};
+    \draw[black] decorate [decoration={zigzag}] {(axis cs:9200,-4) -- (axis cs:9200,5)};
+    \addplot [fill=green!80] table [x=train,y expr=\coordindex] {\german};
+    \addplot [fill=blue!60] table [x=dev,y expr=\coordindex] {\german};
+    \addplot [fill=red!60, point meta=explicit symbolic, nodes near coords, nodes near coords align={anchor=west}] table [x=test, meta=corpus,y expr=\coordindex,meta=total] {\german};
     \legend{train,dev,test}
     \end{axis}
     \end{tikzpicture}
