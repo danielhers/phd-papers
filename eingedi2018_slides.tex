@@ -1,0 +1,121 @@
+\documentclass[t,xcolor={svgnames}]{beamer}
+%\mode<presentation>
+
+\setbeamertemplate{itemize items}[circle]
+\usepackage{pgfpages}
+\usepackage{apalike}
+\usepackage{graphicx} % Required for including images
+\graphicspath{{figures/}} % Location of the graphics files
+\usepackage{booktabs} % Top and bottom rules for table
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+\usepackage{wrapfig} % Allows wrapping text around tables and figures
+\usepackage{lipsum,adjustbox}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{url}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{color}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{tikz-dependency}
+\usetikzlibrary{arrows.meta,graphs,graphs.standard,graphdrawing,quotes,shapes}
+\usegdlibrary{layered,trees}
+\tikzset{
+  invisible/.style={opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+\captionsetup{labelformat=empty}
+
+\makeatletter
+\pgfdeclareshape{vector}{
+	  \inheritsavedanchors[from={rectangle}]
+	  \inheritbackgroundpath[from={rectangle}]
+	  \inheritanchorborder[from={rectangle}]
+	  \foreach \x in {center,north east,north west,north,south,south east,south west,east,west}{
+	    \inheritanchor[from={rectangle}]{\x}
+	  }
+
+    \backgroundpath{
+      \pgftransformshift{\pgfpoint{-16pt}{-4pt}}
+		  \draw[rounded corners=2pt] (0,0) rectangle (32pt,8pt);
+    }
+
+    \beforebackgroundpath{
+      \draw[step=8pt,help lines,-] (8pt,.1pt) grid (24pt,7.9pt);
+    }
+}
+\makeatother
+
+
+
+\begin{document}
+
+\begin{frame}
+\frametitle{Deep Multitask Learning for Transition-Based DAG Parsing}
+\vspace{-5mm}
+\begin{center}
+    Daniel Hershcovich, Omri Abend and Ari Rappoport
+\end{center}
+
+\begin{minipage}{.8\columnwidth}
+  \color{Indigo}
+  \begin{center}
+    \begin{tikzpicture}[level distance=15mm, -{Latex[length=2mm]},
+        every node/.append style={font=\bf\ttfamily},
+        every circle node/.append style={fill=Indigo},
+      level 1/.style={sibling distance=21mm},
+      level 2/.style={sibling distance=13mm}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node (After) [word] {After} edge from parent node[above] {L}}
+        child {node (hearing) [circle] {}
+        {
+          child {node [word] {hearing} edge from parent node[left] {P}}
+          child {node [word] {this} edge from parent node[left] {A}}
+        } edge from parent node[right] {H} }
+        child {node [word] {,} edge from parent node[below] {U}}
+        child {node (moved) [circle] {}
+        {
+          child {node (you) [word] {you} edge from parent node[left] {A}}
+          child {node [word] {will} edge from parent node[left] {F}}
+          child {node [word] {come} edge from parent node[left] {P}}
+          child {node [circle] {}
+          {
+            child {node [word] {to} edge from parent node[left] {R}}
+            child {node [circle] {}
+            {
+              child {node [word] {my} edge from parent node[left] {E}}
+              child {node [word] {poster} edge from parent node[right] {C}}
+            } edge from parent node[above] {C} }
+          } edge from parent node[above] {A} }
+        } edge from parent node[above] {H} }
+        ;
+      \draw[dashed,-{Latex[length=2mm]}] (hearing) to node [above] {A} (you);
+    \end{tikzpicture}
+  \end{center}
+\end{minipage}
+\end{frame}
+
+\begin{frame}
+\frametitle{Deep Multitask Learning for Transition-Based DAG Parsing}
+\vspace{-5mm}
+\begin{center}
+    Daniel Hershcovich, Omri Abend and Ari Rappoport
+\end{center}
+\begin{itemize}
+\item Semantic representation reflects cognitive processing and is important for text understanding
+\item Parsing to semantic representations is best done by supervised learning
+\item Supervised learning requires enough training data in the right domain
+\item But training data for semantic representation is small and in specific domains
+\item Different semantic representations focus on different aspects, but much is common
+\item Can we bring them together and generalize to improve on each of them?
+\end{itemize}
+\end{frame}
+
+\end{document}
