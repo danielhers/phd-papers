@@ -58,206 +58,401 @@
 
 
 \begin{frame}
-\frametitle{Deep Multitask Learning for Transition-Based DAG Parsing}
-\vspace{-5mm}
-\begin{center}
-    Daniel Hershcovich, Omri Abend and Ari Rappoport
-\end{center}
-
-{
-  \color{Indigo}
-  \begin{center}
-    \begin{tikzpicture}[level distance=15mm, -{Latex[length=2mm]},
-        every node/.append style={font=\bf\ttfamily},
-        every circle node/.append style={fill=Indigo},
-      level 1/.style={sibling distance=21mm},
-      level 2/.style={sibling distance=13mm}]
-      \tikzstyle{word} = [font=\rmfamily,color=black]
-      \node (ROOT) [circle] {}
-        child {node (After) [word] {After} edge from parent node[above] {L}}
-        child {node (hearing) [circle] {}
-        {
-          child {node [word] {hearing} edge from parent node[left] {P}}
-          child {node [word] {this} edge from parent node[left] {A}}
-        } edge from parent node[right] {H} }
-        child {node [word] {,} edge from parent node[below] {U}}
-        child {node (moved) [circle] {}
-        {
-          child {node (you) [word] {you} edge from parent node[left] {A}}
-          child {node [word] {will} edge from parent node[left] {F}}
-          child {node [word] {come} edge from parent node[left] {P}}
-          child {node [circle] {}
-          {
-            child {node [word] {to} edge from parent node[left] {R}}
-            child {node [circle] {}
-            {
-              child {node [word] {my} edge from parent node[left] {E}}
-              child {node [word] {poster} edge from parent node[right] {C}}
-            } edge from parent node[above] {C} }
-          } edge from parent node[above] {A} }
-        } edge from parent node[above] {H} }
-        ;
-      \draw[dashed,-{Latex[length=2mm]}] (hearing) to node [above] {A} (you);
-    \end{tikzpicture}
-  \end{center}
-}
-
-\vspace{-3cm}
-
-\fbox{
-\begin{minipage}{.6\textwidth}
-    Natural language understanding requires meaning representation.
-\end{minipage}
-}
-
-\pause
-
-\fbox{
-\begin{minipage}{.6\textwidth}
-    \textbf{Semantic parsing}: learning to construct this representation from labeled data.
-\end{minipage}
-}
+	\frametitle{Deep Multitask Learning for Transition-Based DAG Parsing}
+	\vspace{-5mm}
+	\begin{center}
+	    Daniel Hershcovich, Omri Abend and Ari Rappoport
+	\end{center}
+	
+	{
+	  \color{Indigo}
+	  \begin{center}
+	    \begin{tikzpicture}[level distance=15mm, -{Latex[length=2mm]},
+	        every node/.append style={font=\bf\ttfamily},
+	        every circle node/.append style={fill=Indigo},
+	      level 1/.style={sibling distance=21mm},
+	      level 2/.style={sibling distance=13mm}]
+	      \tikzstyle{word} = [font=\rmfamily,color=black]
+	      \node (ROOT) [circle] {}
+	        child {node (After) [word] {After} edge from parent node[above] {L}}
+	        child {node (hearing) [circle] {}
+	        {
+	          child {node [word] {hearing} edge from parent node[left] {P}}
+	          child {node [word] {this} edge from parent node[left] {A}}
+	        } edge from parent node[right] {H} }
+	        child {node [word] {,} edge from parent node[below] {U}}
+	        child {node (moved) [circle] {}
+	        {
+	          child {node (you) [word] {you} edge from parent node[left] {A}}
+	          child {node [word] {will} edge from parent node[left] {F}}
+	          child {node [word] {come} edge from parent node[left] {P}}
+	          child {node [circle] {}
+	          {
+	            child {node [word] {to} edge from parent node[left] {R}}
+	            child {node [circle] {}
+	            {
+	              child {node [word] {my} edge from parent node[left] {E}}
+	              child {node [word] {poster} edge from parent node[right] {C}}
+	            } edge from parent node[above] {C} }
+	          } edge from parent node[above] {A} }
+	        } edge from parent node[above] {H} }
+	        ;
+	      \draw[dashed,-{Latex[length=2mm]}] (hearing) to node [above] {A} (you);
+	    \end{tikzpicture}
+	  \end{center}
+	}
+	
+	\vspace{-3cm}
+	
+	\fbox{\begin{minipage}{.6\textwidth}
+	    Natural language understanding requires meaning representation.
+	\end{minipage}}
+	
+	\pause
+	
+	\fbox{\begin{minipage}{.6\textwidth}
+	    \textbf{Semantic parsing}: learning to construct this representation from labeled data.
+	\end{minipage}}
 \end{frame}
+
 
 
 \begin{frame}
 
-{
-  \color{Indigo}
-  \begin{center}
-    \scalebox{.6}{
-    \begin{tikzpicture}[level distance=15mm, -{Latex[length=2mm]},
-        every node/.append style={font=\bf\ttfamily},
-        every circle node/.append style={fill=Indigo},
-      level 1/.style={sibling distance=29mm},
-      level 2/.style={sibling distance=18mm}]
-      \tikzstyle{word} = [font=\rmfamily,color=black]
-      \node[font=\bf\sffamily\Large] at (-4,0) {UCCA:};
-      \node (ROOT) [circle] {}
-        child {node (After) [word] {After} edge from parent node[above] {L}}
-        child {node (hearing) [circle] {}
-        {
-          child {node [word] {hearing} edge from parent node[left] {P}}
-          child {node [word] {this} edge from parent node[left] {A}}
-        } edge from parent node[right] {H} }
-        child {node [word] {,} edge from parent node[below] {U}}
-        child {node (moved) [circle] {}
-        {
-          child {node (you) [word] {you} edge from parent node[left] {A}}
-          child {node [word] {will} edge from parent node[left] {F}}
-          child {node [word] {come} edge from parent node[left] {P}}
-          child {node [circle] {}
-          {
-            child {node [word] {to} edge from parent node[left] {R}}
-            child {node [circle] {}
-            {
-              child {node [word] {my} edge from parent node[left] {E}}
-              child {node [word] {poster} edge from parent node[right] {C}}
-            } edge from parent node[above] {C} }
-          } edge from parent node[above] {A} }
-        } edge from parent node[above] {H} }
-        ;
-      \draw[dashed,-{Latex[length=2mm]}] (hearing) to node [above] {A} (you);
-    \end{tikzpicture}
-    }
-  \end{center}
-}
-
-\vspace{-21mm}
-
-\scalebox{.9}{
-  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkGreen, level distance=16mm,
-      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
-      level 1/.style={sibling distance=24mm}]
-    \node[font=\bf\sffamily\small] at (-2.6,0) {AMR:};
-    \node (ROOT) [draw=DarkGreen,ellipse] {come-01}
-      child {node [draw=DarkGreen,ellipse] {after}
-      {
-        child {node (hear) [draw=DarkGreen,ellipse] {hear-01}
-        {
-              child {node (thid) [draw=DarkGreen,ellipse] {this} edge from parent node {ARG1} }
-        } edge from parent node {op1} }
-      } edge from parent node {time} }
-      child {node (you) [draw=DarkGreen,ellipse] {you} edge from parent node {ARG1} }
-      child {node [draw=DarkGreen,ellipse] {poster}
-      {
-        child {node (thid) [draw=DarkGreen,ellipse] {i} edge from parent node {poss} }
-      } edge from parent node {ARG2} }
-      ;
-      \draw (hear) to node {ARG0} (you);
-  \end{tikzpicture}
-  }
-\vspace{-15mm}
-
-\begin{flushright}
-\begin{minipage}{.06\textwidth}
-{\color{DarkRed}\bf\sffamily\scriptsize SDP:}
-\end{minipage}
-\begin{minipage}{.7\textwidth}
-\scalebox{.7}{
-    \begin{dependency}[edge style={-{Latex[length=2mm]}, color=DarkRed},
-        text only label, label style={above, color=DarkRed, font=\bf\ttfamily}, font=\small]
-    \begin{deptext}[column sep=.8em,ampersand replacement=\^]
-    After \^ hearing \^ this \^ , \^ you \^ will \^ come \^ to \^ my \^ poster \\
-    \end{deptext}
-        \depedge{1}{2}{ARG2}
-        \depedge{2}{3}{ARG1}
-        \depedge{2}{5}{ARG0}
-        \depedge[edge start x offset=-4mm]{7}{5}{ARG1}
-        \depedge[edge unit distance=1em,edge end x offset=-3mm]{1}{7}{ARG1}
-        \deproot{7}{top}
-        \depedge[edge start x offset=1mm, edge end x offset=3mm]{7}{10}{ARG2}
-        \depedge[edge end x offset=5mm]{8}{7}{ARG1}
-        \depedge{8}{10}{ARG2}
-        \depedge{9}{10}{poss}
-    \end{dependency}
-}
-\end{minipage}
-\end{flushright}
-
-\vspace{-3mm}
-
-\fbox{
-Many different semantic representation schemes.
-}
+	{
+	  \color{Indigo}
+	  \begin{center}
+	    \scalebox{.6}{
+	    \begin{tikzpicture}[level distance=15mm, -{Latex[length=2mm]},
+	        every node/.append style={font=\bf\ttfamily},
+	        every circle node/.append style={fill=Indigo},
+	      level 1/.style={sibling distance=29mm},
+	      level 2/.style={sibling distance=18mm}]
+	      \tikzstyle{word} = [font=\rmfamily,color=black]
+	      \node[font=\bf\sffamily\Large] at (-4,0) {UCCA:};
+	      \node (ROOT) [circle] {}
+	        child {node (After) [word] {After} edge from parent node[above] {L}}
+	        child {node (hearing) [circle] {}
+	        {
+	          child {node [word] {hearing} edge from parent node[left] {P}}
+	          child {node [word] {this} edge from parent node[left] {A}}
+	        } edge from parent node[right] {H} }
+	        child {node [word] {,} edge from parent node[below] {U}}
+	        child {node (moved) [circle] {}
+	        {
+	          child {node (you) [word] {you} edge from parent node[left] {A}}
+	          child {node [word] {will} edge from parent node[left] {F}}
+	          child {node [word] {come} edge from parent node[left] {P}}
+	          child {node [circle] {}
+	          {
+	            child {node [word] {to} edge from parent node[left] {R}}
+	            child {node [circle] {}
+	            {
+	              child {node [word] {my} edge from parent node[left] {E}}
+	              child {node [word] {poster} edge from parent node[right] {C}}
+	            } edge from parent node[above] {C} }
+	          } edge from parent node[above] {A} }
+	        } edge from parent node[above] {H} }
+	        ;
+	      \draw[dashed,-{Latex[length=2mm]}] (hearing) to node [above] {A} (you);
+	    \end{tikzpicture}
+	    }
+	  \end{center}
+	}
+	
+	\vspace{-21mm}
+	
+	\scalebox{.9}{
+	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkGreen, level distance=16mm,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=24mm}]
+	    \node[font=\bf\sffamily\small] at (-2.6,0) {AMR:};
+	    \node (ROOT) [draw=DarkGreen,ellipse] {come-01}
+	      child {node [draw=DarkGreen,ellipse] {after}
+	      {
+	        child {node (hear) [draw=DarkGreen,ellipse] {hear-01}
+	        {
+	              child {node (thid) [draw=DarkGreen,ellipse] {this} edge from parent node {ARG1} }
+	        } edge from parent node {op1} }
+	      } edge from parent node {time} }
+	      child {node (you) [draw=DarkGreen,ellipse] {you} edge from parent node {ARG1} }
+	      child {node [draw=DarkGreen,ellipse] {poster}
+	      {
+	        child {node (thid) [draw=DarkGreen,ellipse] {i} edge from parent node {poss} }
+	      } edge from parent node {ARG2} }
+	      ;
+	      \draw (hear) to node {ARG0} (you);
+	  \end{tikzpicture}
+	  }
+	\vspace{-15mm}
+	
+	\begin{flushright}
+	\begin{minipage}{.06\textwidth}
+	{\color{DarkRed}\bf\sffamily\scriptsize SDP:}
+	\end{minipage}
+	\begin{minipage}{.7\textwidth}
+	    \rmfamily
+	    \scalebox{.7}{
+	    \begin{dependency}[edge style={-{Latex[length=2mm]}, color=DarkRed},
+	        text only label, label style={above, color=DarkRed, font=\bf\ttfamily}, font=\small]
+	    \begin{deptext}[column sep=.8em,ampersand replacement=\^]
+	    After \^ hearing \^ this \^ , \^ you \^ will \^ come \^ to \^ my \^ poster \\
+	    \end{deptext}
+	        \depedge{1}{2}{ARG2}
+	        \depedge{2}{3}{ARG1}
+	        \depedge{2}{5}{ARG0}
+	        \depedge[edge start x offset=-4mm]{7}{5}{ARG1}
+	        \depedge[edge unit distance=1em,edge end x offset=-3mm]{1}{7}{ARG1}
+	        \deproot{7}{top}
+	        \depedge[edge start x offset=1mm, edge end x offset=3mm]{7}{10}{ARG2}
+	        \depedge[edge end x offset=5mm]{8}{7}{ARG1}
+	        \depedge{8}{10}{ARG2}
+	        \depedge{9}{10}{poss}
+	    \end{dependency}
+	}
+	\end{minipage}
+	\end{flushright}
+	
+	\vspace{-3mm}
+	
+	\fbox{Many different semantic representation schemes exist.}
 \end{frame}
 
-%\begin{frame}
-%Amount of labeled data
-%\begin{center}
-%\pgfplotstableread[row sep=\\,col sep=&]{
-%	corpus & total \\
-%	\color{DarkRed} \textbf{SDP} & 33964 \\
-%	\color{DarkGreen} \textbf{AMR} & 36521 \\
-%	\color{Indigo} \textbf{UCCA} & 5225 \\
-%    }\english
-%    \begin{tikzpicture}
-%    \begin{axis}[
-%    xbar stacked,
-%    width=8cm,
-%    height=5cm,
-%    xmin=0,
-%    xmax=50000,
-%    xtick=\empty,
-%    ytick=data,
-%    yticklabels from table={\english}{corpus}
-%    ]
-%    \addplot [fill=Navy, point meta=explicit symbolic] table [x=total,y expr=\coordindex] {\english};
-%    \end{axis}
-%    \end{tikzpicture}
-%\end{center}
-%Domains: Wikipedia, books, blogs, news, emails, reviews
-%\end{frame}
+
 
 \begin{frame}
-\begin{itemize}
-\item Semantic representation is important for text understanding
-\item Parsing to semantic representations is best done by supervised learning
-\item Supervised learning requires enough training data in the right domain
-\item But training data for semantic representation is small and in specific domains
-\item Different semantic representations focus on different aspects, but much is common
-\item Can we bring them together and generalize to improve on each of them?
-\end{itemize}
+	\fbox{For some, labeled data is scarce...}
+	\begin{center}
+	\pgfplotstableread[row sep=\\,col sep=&]{
+		corpus & total \\
+		\color{DarkRed} \textbf{SDP} & 33964 \\
+		\color{DarkGreen} \textbf{AMR} & 36521 \\
+		\color{Indigo} \textbf{UCCA} & 5225 \\
+	    }\english
+	    \begin{tikzpicture}
+	    \begin{axis}[
+	    xbar stacked,
+	    width=10cm,
+	    height=39mm,
+	    xmin=0,
+	    xmax=60000,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\english}{corpus},
+	    axis x line=none,
+	    ]
+	    \addplot [fill=Navy, point meta=explicit symbolic,
+	    nodes near coords={\pgfmathprintnumber\pgfplotspointmeta~sentences},
+	    nodes near coords align={anchor=west}] table [x=total,y expr=\coordindex,meta=total] {\english};
+	    \end{axis}
+	    \end{tikzpicture}
+	\end{center}
+	
+	\pause
+	\vfill
+	
+	\begin{flushright}
+	    \fbox{... and domains are limited.}
+	\end{flushright}
+	\begin{center}
+		\begin{tabular}{lll}
+			\color{Indigo} \textbf{UCCA}  & \color{DarkGreen} \textbf{AMR}  & \color{DarkRed} \textbf{SDP}  \\
+			Wikipedia & blogs & news \\ books & news \\ & emails \\ & reviews
+		\end{tabular}
+	\end{center}
+\end{frame}
+
+
+
+\begin{frame}
+	\fbox{How can we bring them together?}
+	
+	\vfill
+
+    \begin{minipage}{.05\pagewidth}
+    \scalebox{6}{\{}
+    \end{minipage}
+	\begin{minipage}{.27\pagewidth}
+	    \color{Indigo}
+	    \scalebox{.35}{
+	    \begin{tikzpicture}[level distance=12mm, -{Latex[length=2mm]},
+	        every node/.append style={font=\bf\ttfamily},
+	        every circle node/.append style={fill=Indigo},
+	      level 1/.style={sibling distance=19mm},
+	      level 2/.style={sibling distance=15mm}]
+	      \tikzstyle{word} = [font=\rmfamily,color=black]
+	      \node (ROOT) [circle] {}
+	        child {node (After) [word] {After} edge from parent node[above] {L}}
+	        child {node (hearing) [circle] {}
+	        {
+	          child {node [word] {hearing} edge from parent node[left] {P}}
+	          child {node [word] {this} edge from parent node[left] {A}}
+	        } edge from parent node[right] {H} }
+	        child {node [word] {,} edge from parent node[below] {U}}
+	        child {node (moved) [circle] {}
+	        {
+	          child {node (you) [word] {you} edge from parent node[left] {A}}
+	          child {node [word] {will} edge from parent node[left] {F}}
+	          child {node [word] {come} edge from parent node[left] {P}}
+	          child {node [circle] {}
+	          {
+	            child {node [word] {to} edge from parent node[left] {R}}
+	            child {node [circle] {}
+	            {
+	              child {node [word] {my} edge from parent node[left] {E}}
+	              child {node [word] {poster} edge from parent node[right] {C}}
+	            } edge from parent node[above] {C} }
+	          } edge from parent node[above] {A} }
+	        } edge from parent node[above] {H} }
+	        ;
+	      \draw[dashed,-{Latex[length=2mm]}] (hearing) to node [above] {A} (you);
+	    \end{tikzpicture}
+	    }
+	\end{minipage}
+	\begin{minipage}{.14\pagewidth}
+	  \scalebox{.41}{
+	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkGreen, level distance=16mm,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=18mm}]
+	    \node (ROOT) [draw=DarkGreen,ellipse] {come-01}
+	      child {node [draw=DarkGreen,ellipse] {after}
+	      {
+	        child {node (hear) [draw=DarkGreen,ellipse] {hear-01}
+	        {
+	              child {node (thid) [draw=DarkGreen,ellipse] {this} edge from parent node {ARG1} }
+	        } edge from parent node {op1} }
+	      } edge from parent node {time} }
+	      child {node (you) [draw=DarkGreen,ellipse] {you} edge from parent node {ARG1} }
+	      child {node [draw=DarkGreen,ellipse] {poster}
+	      {
+	        child {node (thid) [draw=DarkGreen,ellipse] {i} edge from parent node {poss} }
+	      } edge from parent node {ARG2} }
+	      ;
+	      \draw (hear) to node {ARG0} (you);
+	  \end{tikzpicture}
+	  }
+	\end{minipage}
+	\begin{minipage}{.26\pagewidth}
+	    \rmfamily
+	    \scalebox{.45}{
+	    \begin{dependency}[edge style={-{Latex[length=2mm]}, color=DarkRed},
+	        text only label, label style={above, color=DarkRed, font=\bf\ttfamily}, font=\small]
+	    \begin{deptext}[column sep=.1em,ampersand replacement=\^]
+	    After \^ hearing \^ this \^ , \^ you \^ will \^ come \^ to \^ my \^ poster \\
+	    \end{deptext}
+	        \depedge{1}{2}{ARG2}
+	        \depedge{2}{3}{ARG1}
+	        \depedge{2}{5}{ARG0}
+	        \depedge[edge start x offset=-2mm]{7}{5}{ARG1}
+	        \depedge[edge end x offset=-2mm]{1}{7}{ARG1}
+	        \deproot{7}{top}
+	        \depedge[edge end x offset=2mm]{7}{10}{ARG2}
+	        \depedge[edge end x offset=3mm]{8}{7}{ARG1}
+	        \depedge{8}{10}{ARG2}
+	        \depedge[edge end x offset=-2mm]{9}{10}{poss}
+	    \end{dependency}
+	}
+	\end{minipage}
+    \begin{minipage}{.05\pagewidth}
+    \scalebox{6}{\}}
+    \end{minipage}
+	
+	\pause
+	\vspace{-5mm}
+	
+	\begin{center}\scalebox{.3}{\Huge
+	   \begin{tikzpicture}[-{Latex[length=3mm]},thick]
+	   \tikzstyle{main}=[rounded rectangle, minimum size=35mm, draw=black!80, node distance=12mm]
+	   \node[main] (specific) at (0,12) {Task-specific parameters};
+	   \node[main,color=DarkCyan] (shared) at (22,12) {Shared parameters};
+	   \foreach \i/\word in {-4/{After},4/{hearing},17/{my},25/{poster}} {
+	       \node (x\i) at (\i,3) {\word};
+	       \node[main, minimum size=16mm, fill=DarkCyan, draw=none] (e\i) at (\i,6) {};
+	       \path[color=DarkCyan] (x\i) edge (e\i);
+	       \path (e\i) edge (specific);
+	       \path[color=DarkCyan] (e\i) edge (shared);
+	   }
+	    \node (x4) at (10.5,3) {\ldots};
+	    \node[main] (mlp) at (10.5,15) {Classifier};
+	    \path (specific) edge (mlp);
+	    \path[color=DarkCyan] (shared) edge (mlp);
+	    \node (transition) at (10.5,17.8) {};
+	    \path (mlp) edge node[right] {} (transition);
+	   \end{tikzpicture}}
+	\end{center}
+	
+	\vfill
+	
+	\fbox{Multitask parsing generalizes across representations!}
+\end{frame}
+
+
+
+\begin{frame}
+	\frametitle{Deep Multitask Learning for Transition-Based DAG Parsing}
+	\vspace{-5mm}
+	\begin{center}
+	    Daniel Hershcovich, Omri Abend and Ari Rappoport
+	\end{center}
+	{
+	  \color{Indigo}
+	  \begin{center}
+	    \begin{tikzpicture}[level distance=15mm, -{Latex[length=2mm]},
+	        every node/.append style={font=\bf\ttfamily},
+	        every circle node/.append style={fill=Indigo},
+	      level 1/.style={sibling distance=21mm},
+	      level 2/.style={sibling distance=13mm}]
+	      \tikzstyle{word} = [font=\rmfamily,color=black]
+	      \node (ROOT) [circle] {}
+	        child {node (After) [word] {After} edge from parent node[above] {L}}
+	        child {node (hearing) [circle] {}
+	        {
+	          child {node [word] {hearing} edge from parent node[left] {P}}
+	          child {node [word] {this} edge from parent node[left] {A}}
+	        } edge from parent node[right] {H} }
+	        child {node [word] {,} edge from parent node[below] {U}}
+	        child {node (moved) [circle] {}
+	        {
+	          child {node (you) [word] {you} edge from parent node[left] {A}}
+	          child {node [word] {will} edge from parent node[left] {F}}
+	          child {node [word] {come} edge from parent node[left] {P}}
+	          child {node [circle] {}
+	          {
+	            child {node [word] {to} edge from parent node[left] {R}}
+	            child {node [circle] {}
+	            {
+	              child {node [word] {my} edge from parent node[left] {E}}
+	              child {node [word] {poster} edge from parent node[right] {C}}
+	            } edge from parent node[above] {C} }
+	          } edge from parent node[above] {A} }
+	        } edge from parent node[above] {H} }
+	        ;
+	      \draw[dashed,-{Latex[length=2mm]}] (hearing) to node [above] {A} (you);
+	    \end{tikzpicture}
+	  \end{center}
+	}
+	
+	\vspace{-33mm}
+	
+	\scalebox{.2}{\Huge
+	   \begin{tikzpicture}[-{Latex[length=3mm]},thick]
+	   \tikzstyle{main}=[rounded rectangle, minimum size=35mm, draw=black!80, node distance=12mm]
+	   \node[main] (specific) at (0,12) {Task-specific parameters};
+	   \node[main,color=DarkCyan] (shared) at (22,12) {Shared parameters};
+	   \foreach \i/\word in {-4/{After},4/{hearing},17/{my},25/{poster}} {
+	       \node (x\i) at (\i,3) {\word};
+	       \node[main, minimum size=16mm, fill=DarkCyan, draw=none] (e\i) at (\i,6) {};
+	       \path[color=DarkCyan] (x\i) edge (e\i);
+	       \path (e\i) edge (specific);
+	       \path[color=DarkCyan] (e\i) edge (shared);
+	   }
+	    \node (x4) at (10.5,3) {\ldots};
+	    \node[main] (mlp) at (10.5,15) {Classifier};
+	    \path (specific) edge (mlp);
+	    \path[color=DarkCyan] (shared) edge (mlp);
+	    \node (transition) at (10.5,17.8) {};
+	    \path (mlp) edge node[right] {} (transition);
+	   \end{tikzpicture}}
 \end{frame}
 
 \end{document}
