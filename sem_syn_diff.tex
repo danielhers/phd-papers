@@ -69,6 +69,25 @@
 
 \section{Introduction}\label{sec:introduction}
 
+Semantic representation schemes have seen major progress in recent years.
+In parallel, syntactic representation is becoming more semantic.
+However, looking at the absolute scores achieved in semantic parsing tasks
+as opposed to syntactic parsing,
+there is still a gap:
+UCCA parsers get just about 75\% F-score, whereas UD parsers get more than 85\% LAS F1. Why?
+UD has much more training data (UCCA: 5K, UD: about17K for English).
+But inter-annotator agreement is also lower: about 85\% for UCCA, and more than 95\% for UD.
+
+Several questions naturally manifest themselves:
+how much of the difference is explained by the differences in---
+\begin{itemize}
+\item Evaluation metric,
+\item Amount of training data,
+\item Content.
+\end{itemize}
+
+The gap can be explained by adposition and case supersenses
+\cite{schneider2017adposition,blodgett2018semantic}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
