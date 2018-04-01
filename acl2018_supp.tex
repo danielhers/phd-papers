@@ -125,6 +125,9 @@ We also use word, tag and dependency relation dropout \cite{kiperwasser2016simpl
 in training, the embedding for a feature value $w$ is replaced with a zero vector
 with a probability of $\frac{0.2}{\#(w)+0.2}$, where $\#(w)$ is the number of occurrences of
 $w$ observed.
+In addition, we use a novel form of dropout, \textit{node dropout}:
+with a probability of 0.1 at each step, all features associated with a single
+node in the parser state are replaced with zero vectors.
 For optimization we use a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
 and train with stochastic gradient descent for $N$ epochs with a learning
 rate of 0.1, followed by AMSGrad \cite{j.2018on} for $N$ epochs with
