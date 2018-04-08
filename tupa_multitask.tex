@@ -78,6 +78,7 @@
   Despite notable conceptual, formal and domain differences,
   we show that in out-of-domain settings, or when training data is scarce,
   multitask learning significantly improves UCCA parsing.
+  Our code is publicly available.\footnote{\url{https://github.com/danielhers/tupa}}
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
@@ -122,7 +123,7 @@ on UCCA parsing over single-task training in
 (1) an out-of-domain setting in English; 
 (2) an in-domain setting in German; and
 (3) an in-domain setting in French, where training data is
-scarce.\footnote{Our code is available at \url{https://github.com/danielhers/tupa}.}
+scarce.
 
 No previous work, to our knowledge, has shown benefits 
 from applying MTL to such widely different parsing tasks.
@@ -1177,8 +1178,8 @@ As a measure of the formal similarity of the different schemes to UCCA,
 we use unlabeled $F_1$ score evaluation on both primary and remote edges (ignoring edge labels).
 To this end, we annotated 100 English sentences from Section 02 of the Penn Treebank Wall Street Journal
 (PTB WSJ).
-Annotation was carried out by a single expert UCCA annotator.\footnote{Annotations are
-available at \url{https://github.com/danielhers/wsj}.}
+Annotation was carried out by a single expert UCCA annotator,
+and is publicly available.\footnote{\url{https://github.com/danielhers/wsj}}
 These sentences had already been annotated by AMR, DM and UD$^{++}$,
 and we convert their annotation to the unified DAG format.
 Results are presented in Table~\ref{tab:common}.
