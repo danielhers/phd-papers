@@ -171,13 +171,90 @@ Primary edges form a tree in each layer, whereas remote edges enable reentrancy,
 %main task.
 
 
-\section{Amount of training data}
+\section{Amount of training data}\label{sec:data_size}
 
 Syntactic dependency parsers require many training examples to achieve
 state-of-the-art results.
 Even after around 500K tokens, the learning curves do not seem to saturate
 \cite{de2017old,velldal2017joint}.
 
+
+\section{Deterministic UD-to-UCCA conversion}\label{sec:}
+
+
+Using the standard UCCA evaluation
+script,\footnote{\mbox{\url{http://github.com/danielhers/ucca/blob/master/scripts/evaluate_standard.py}}}
+we created a confusion matrix between the edge tags in converted UD$^{++}$ graphs
+\cite{SCHUSTER16.779}
+and the annotated UCCA graphs (see Table~\ref{tab:confusion_matrix}).
+Edges are matched by terminal yield.
+In this confusion matrix, we can see what is the most common UCCA edge label corresponding
+to each UD relation.
+To convert the UD$^{++}$ graphs into fully labeled UCCA graphs,
+we replace each UD edge label with its most common UCCA counterpart.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{ll|r}
+UD & UCCA & count \\
+\hline
+head & C & 508 \\
+case & R & 231 \\
+det & E & 196 \\ 
+amod & E & 129 \\
+compound & E & 113 \\
+head & P & 109 \\
+nsubj & A & 106 \\
+dobj & A & 51 \\
+nummod & E & 33 \\
+cc & N & 32 \\
+advmod & D & 31 \\
+conj:and & C & 26
+\end{tabular}
+\caption{Excerpt from UD-UCCA confusion matrix calculated from the WSJ dataset.
+Each row shows the number of times an edge was labeled with a specific label in UD
+and another specific label in UCCA.\label{tab:confusion_matrix}}
+\end{table}
+
+\paragraph{Conversion of gold UD annotations.}
+
+We performed this conversion on the 100 human-annotated UD sentences
+and evaluated on the human-annotated UCCA graphs on the same sentences.
+The results appear in Table~\ref{tab:conversion_results_labeled}.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+\hline
+\multicolumn{4}{l|}{\small \bf WSJ (manually annotated)} & \\
+\footnotesize UD$^{++}$
+& 68 & 68.8 & 68.4 & 12.5 & 12.7 & 12.6 \\
+\end{tabular}
+\caption{
+Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges.}\label{tab:conversion_results_labeled}
+\end{table}
+
+For comparison, we also show the unlabeled evaluation (Table~\ref{tab:conversion_results_unlabeled}).
+This servers as an oracle experiment for the labeled conversion,
+and is an upper bound given a fixed structural conversion.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
+& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
+\hline
+\multicolumn{4}{l|}{\small \bf WSJ (manually annotated)} & \\
+\footnotesize UD$^{++}$
+& 84.6 & 85.6 & 85.1 & 12.5 & 12.7 & 12.6 \\
+\end{tabular}
+\caption{
+Unlabeled precision, recall and $F_1$ (in~\%) for primary and remote edges.}\label{tab:conversion_results_unlabeled}
+\end{table}
 
 
 \section{Experiments}\label{sec:experiments}
