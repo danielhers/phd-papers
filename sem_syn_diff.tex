@@ -85,7 +85,7 @@ how much of the difference is explained by the differences in---
 \item Content.
 \end{itemize}
 
-The gap can be explained by adposition and case supersenses
+The gap can be explained by fine-grained semantic annotation such as adposition and case supersenses
 \cite{schneider2017adposition,blodgett2018semantic}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -125,6 +125,10 @@ The gap can be explained by adposition and case supersenses
 
 \caption{\label{fig:original_examples}}
 
+\end{figure}
+
+\paragraph{AMR parsing.}
+
 \citet{wang2015transition,wang-xue-pradhan:2015:ACL-IJCNLP,wang-EtAl:2016:SemEval,goodman2016noise,wang2017getting}
 presented a transition-based AMR parser, CAMR, which requires a
 syntactic dependency tree as input.
@@ -136,10 +140,10 @@ who achieved the best results using the Charniak parser trained on a
 much larger and more diverse dataset---the full OntoNotes corpus,
 rather than the Stanford parser trained on the Penn TreeBank.
 
-\end{figure}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Representations}\label{sec:representations}
 
 \paragraph{Universal Conceptual Cognitive Annotation.}\label{sec:ucca}
 UCCA \cite{abend2013universal} is a semantic representation whose main design principles
@@ -220,7 +224,13 @@ As in previous work \cite{hershcovich2017a}, we use the English part only as an 
 We train and test on the French part using the standard split,
 as well as the German corpus (v0.9),
 which is a pre-release and still contains a considerable amount of noisy annotation.
-Tuning is performed on the respective development sets.
+
+We use 100 English sentences from Section 02 of the Penn Treebank Wall Street Journal
+(PTB WSJ),
+annotated by a single expert UCCA annotator \cite{hershcovich2018multitask},
+and publicly available.\footnote{\url{http://github.com/danielhers/wsj}}
+These sentences had already been annotated by AMR, DM and UD$^{++}$,
+and we convert their annotation to the unified DAG format.
 
 \paragraph{Experimental setup.}
 
