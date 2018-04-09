@@ -67,6 +67,11 @@
 \maketitle
 
 \begin{abstract}
+To explain the difference in scores between syntactic and semantic parsers,
+we explore the various factors and perform experiments to demonstrate them.
+As a test case, we take Universal Dependencies (UD) and
+Universal Conceptual Cognitive Annotation (UCCA).
+By creating a full conversion protocol, we develop a novel UCCA parser.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
@@ -91,44 +96,19 @@ how much of the difference is explained by the differences in---
 The gap can be explained by fine-grained semantic annotation such as adposition and case supersenses
 \cite{schneider2017adposition,blodgett2018semantic}.
 
+To explore the difference in content, we experiment with converting UD to UCCA
+using a multi-step protocol:
+\begin{enumerate}
+\item Augment UD trees to get \textit{enhanced++} dependencies \cite{SCHUSTER16.779}, hence UD$^{++}$.
+\item Structurally convert bilexical dependency graphs into constituency-like graphs by inserting
+  non-terminal nodes and \textit{head} edges (\S\ref{sec:conversion}).
+\item Translate UD relations into UCCA edge labels,
+  either by a deterministic mapping (\S\ref{sec:mapping})
+  or through learning (\S\ref{sec:learning}).
+\end{enumerate}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
-
-\begin{figure}[!ht]
-\fbox{\begin{subfigure}{0.47\textwidth}
-  \centering
-  \scalebox{.95}{
-  \begin{tikzpicture}[level distance=8mm, ->]
-    \node (ROOT) [fill=black, circle] {}
-      child {node (After) {After} edge from parent node[above] {\scriptsize $L$}}
-      child {node (graduation) [fill=black, circle] {}
-      {
-        child {node {graduation} edge from parent node[left] {\scriptsize $P$}}
-      } edge from parent node[left] {\scriptsize $H$} }
-      child {node {,} edge from parent node[below] {\scriptsize $U$}}
-      child {node (moved) [fill=black, circle] {}
-      {
-        child {node (John) {John} edge from parent node[left] {\scriptsize $A$}}
-        child {node {moved} edge from parent node[left] {\scriptsize $P$}}
-        child {node [fill=black, circle] {}
-        {
-          child {node {to} edge from parent node[left] {\scriptsize $R$}}
-          child {node {Paris} edge from parent node[right] {\scriptsize $C$}}
-        } edge from parent node[above] {\scriptsize $A$} }
-      } edge from parent node[above] {\scriptsize $H$} }
-      ;
-    \draw[dashed,->] (graduation) to node [above] {\scriptsize $A$} (John);
-    \node (LKG) at (-1.8,0) [fill=cyan, circle] {};
-    \draw[bend right,color=cyan] (LKG) to node [auto, left] {\scriptsize $LR$} (After);
-    \draw[color=cyan] (LKG) to[out=-60, in=190] node [below] {\scriptsize $LA\quad$} (graduation);
-    \draw[color=cyan] (LKG) to[out=30, in=90] node [above] {\scriptsize $LA$} (moved);
-  \end{tikzpicture}
-  }\caption{UCCA \label{fig:original_example_ucca}}
-\end{subfigure}}
-
-\caption{\label{fig:original_examples}}
-
-\end{figure}
 
 \paragraph{AMR parsing.}
 
@@ -151,7 +131,6 @@ rather than the Stanford parser trained on the Penn TreeBank.
 \paragraph{Universal Conceptual Cognitive Annotation.}\label{sec:ucca}
 UCCA \cite{abend2013universal} is a semantic representation whose main design principles
 are ease of annotation, cross-linguistic applicability, and a modular architecture.
-%of semantic distinctions.
 UCCA represents the semantics of linguistic utterances
 as directed acyclic graphs (DAGs), where terminal (childless) nodes
 correspond to the text tokens, and non-terminal nodes to semantic units that participate
@@ -161,17 +140,136 @@ Nodes and edges belong to one of several \textit{layers}, each corresponding
 to a ``module'' of semantic distinctions.
 UCCA's \textit{foundational layer} (the only layer for which annotated data exists)
 mostly covers predicate-argument structure, semantic heads and inter-Scene relations.
-%The \textit{linkage} layer covers relations between events, including temporal and discourse relations
-%(exemplified by the gray node and its outgoing edges in Figure~\ref{fig:original_example_ucca}).
 
 UCCA distinguishes \textit{primary} edges, corresponding 
 to explicit relations, from \textit{remote} edges (appear dashed in
-Figure~\ref{fig:original_example_ucca}) that allow for a unit to participate
+Figure~\ref{fig:example_ucca}) that allow for a unit to participate
 in several super-ordinate relations.
 Primary edges form a tree in each layer, whereas remote edges enable reentrancy, forming a DAG.
-%As UCCA annotated data is currently fairly scarce (see \S\ref{sec:experiments}), 
-%we hypothesize it will benefit from MTL, and consider it as our
-%main task.
+
+
+\begin{figure}[!ht]
+  \centering
+    \begin{tikzpicture}[level distance=9mm, sibling distance=14mm, ->,
+        every circle node/.append style={fill=black}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node (After) [word] {After} edge from parent node[above] {\scriptsize $L$}}
+        child {node (graduation) [circle] {}
+        {
+          child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
+        } edge from parent node[right] {\scriptsize $H$} }
+        child {node [word] {,} edge from parent node[below] {\scriptsize $U$}}
+        child {node (moved) [circle] {}
+        {
+          child {node (John) [word] {John} edge from parent node[left] {\scriptsize $A$}}
+          child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
+          child {node [circle] {}
+          {
+            child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
+            child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
+          } edge from parent node[above] {\scriptsize $A$} }
+        } edge from parent node[right] {\scriptsize $H$} }
+        ;
+      \draw[dashed,->] (graduation) to node [above] {\scriptsize $A$} (John);
+    \end{tikzpicture}
+\caption{\label{fig:example_ucca}
+ Example UCCA graph. The dashed edge is remote.
+  Pre-terminal nodes and edges are omitted for brevity.}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Universal Dependencies.}\label{sec:ud}
+UD \cite{nivre2016universal,11234/1-2515} has quickly become
+the dominant dependency scheme for
+syntactic  annotation in many languages,
+aiming for cross-linguistically consistent and coarse-grained treebank
+annotation. Formally, UD uses bilexical trees, with edge labels 
+representing syntactic relations between words.
+Figure~\ref{fig:original_example_ud} shows an example UD tree.
+
+We use UD as an auxiliary task,
+inspired by previous work on joint syntactic and semantic parsing
+(see \S\ref{sec:related_work}).
+In order to reach comparable analyses cross-linguistically,
+UD often ends up in annotation that is similar to the common practice
+in semantic treebanks, such as linking content words to content words wherever possible.
+Using UD further allows conducting experiments on languages other than English, 
+for which AMR and SDP annotated data is not available (\S\ref{sec:experiments}).
+
+In addition to basic UD trees, we use the \textit{enhanced++} UD graphs available for English,
+which are generated by the Stanford CoreNLP converters \cite{SCHUSTER16.779}.
+These include additional and augmented relations between content words,
+partially overlapping with the notion of remote edges in UCCA:
+in the case of control verbs, for example, a direct relation is added in 
+enhanced++ UD between the subordinated verb and its controller,
+which is similar to the semantic schemes' treatment of this construction.
+
+\begin{figure}[!ht]
+
+\fbox{\begin{subfigure}{0.47\textwidth}
+  \centering
+    \begin{dependency}[text only label, label style={above}, font=\small]
+    \begin{deptext}[column sep=.8em,ampersand replacement=\^]
+    After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+    \end{deptext}
+        \depedge[edge unit distance=1ex]{2}{1}{case}
+        \depedge[edge unit distance=1ex]{4}{3}{punct}
+        \depedge[edge unit distance=1ex]{5}{4}{nsubj}
+        \depedge[edge unit distance=1ex, edge end x offset=-2pt]{2}{5}{obl}
+        \depedge[edge unit distance=1ex]{7}{6}{case}
+        \deproot[edge unit distance=1.5ex]{5}{root}
+        \depedge[edge unit distance=1.5ex]{5}{7}{obl}
+    \end{dependency}
+  \caption{UD \label{fig:original_example_ud}}
+\end{subfigure}}
+
+\fbox{\begin{subfigure}{0.47\textwidth}
+  \centering
+  \scalebox{.95}{
+  \begin{tikzpicture}[level distance=15mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
+      level 1/.style={sibling distance=13mm},
+      level 2/.style={sibling distance=1cm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=black,circle] {}
+      child {node (after) [fill=black,circle] {}
+      {
+        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
+        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
+      } edge from parent node {obl}}
+      child {node {}
+      {
+        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node {}
+      {
+        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node {}
+      {
+        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node (to) [fill=black,circle] {}
+      {
+          child {node [word] {to{\color{white}g}} edge from parent node {case}}
+          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
+      } edge from parent node {obl}}
+      ;
+      \draw (ROOT) to node {punct} (comma);
+      \draw (ROOT) to node {nsubj} (John);
+      \draw (ROOT) to node {head} (moved);
+  \end{tikzpicture}}
+  \captionof{figure}{UD}\label{fig:converted_example_ud}
+\end{subfigure}}
+
+\caption{Figure \ref{fig:original_example_ud} presents a UD tree.
+  Edge labels express syntactic relations.
+Figure~\ref{fig:converted_example_ud} presents a converted UD graph
+(with pre-terminals omitted: each terminal drawn in place of its parent).
+Intermediate non-terminals and \textit{head} edges are introduced.
+While converted UD graphs form trees, enhanced++ UD graphs may not.}\label{fig:ud_examples}
+\end{figure}
 
 
 \section{Amount of training data}\label{sec:data_size}
@@ -182,11 +280,57 @@ Even after around 500K tokens, the learning curves do not seem to saturate
 \cite{de2017old,velldal2017joint}.
 
 
-\section{Deterministic UD-to-UCCA conversion}\label{sec:}
+\section{Structural Conversion}\label{sec:conversion}
+
+We convert UD into a unified DAG format \cite{hershcovich2018multitask},
+which is inclusive enough to
+allow representing any of the schemes with very little loss of information.
+For UD, and conversion results in 98.5\% LAS $F_1$ on the UD English test set,
+due to multi-word tokens, not supported in the unified DAG format.
+
+The format consists of a rooted DAG, where the tokens are the terminal nodes.
+As in the UCCA format, edges are labeled (but not nodes),
+and are divided into \textit{primary} and \textit{remote} edges,
+where the primary edges form a tree (all nodes have at most one primary parent,
+and the root has none).
+Remote edges enable reentrancy, and thus together with primary edges
+form a DAG.
+Figure~\ref{fig:converted_example_ud} shows an example for a converted graph.
+
+To convert UD into the unified DAG format,
+we add a pre-terminal for each token,
+and attach the pre-terminals according to the original dependency edges:
+traversing the tree from the root down, for each head token we create a non-terminal
+parent with the edge label {\it head},
+and add the node's dependents as children of the created non-terminal node.
+In case of reentrancy, an arbitrary parent is marked as primary, and the rest as remote
+(denoted as dashed edges in Figure~\ref{fig:converted_example_ud}).
+
+Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation of the
+structurally converted UD graphs as compared to gold-annotated UCCA graphs.
+
+
+\begin{table}[t]
+\centering
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
+& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
+\hline
+\multicolumn{4}{l|}{\small \bf WSJ (manually annotated)} & \\
+\footnotesize UD$^{++}$
+& 84.6 & 85.6 & 85.1 & 12.5 & 12.7 & 12.6 \\
+\end{tabular}
+\caption{
+Unlabeled precision, recall and $F_1$ (in~\%) for primary and remote edges.}\label{tab:conversion_results_unlabeled}
+\end{table}
+
+
+\section{Deterministic label mapping}\label{sec:mapping}
 
 
 Using the standard UCCA evaluation
-script,\footnote{\mbox{\url{http://github.com/danielhers/ucca/blob/master/scripts/evaluate_standard.py}}}
+script,\footnote{\url{http://github.com/danielhers/ucca/blob/master/scripts/evaluate_standard.py}}
 we created a confusion matrix between the edge tags in converted UD$^{++}$ graphs
 \cite{SCHUSTER16.779}
 and the annotated UCCA graphs (see Table~\ref{tab:confusion_matrix}).
@@ -241,24 +385,9 @@ Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges.}\label
 \end{table}
 
 Despite the simple conversion protocol, labeled scores are quite high.
-For comparison, we also show the unlabeled evaluation (Table~\ref{tab:conversion_results_unlabeled}).
-This servers as an oracle experiment for the labeled conversion,
+For comparison, the unlabeled evaluation (Table~\ref{tab:conversion_results_unlabeled})
+servers as an oracle experiment for the labeled conversion,
 and is an upper bound given a fixed structural conversion.
-
-\begin{table}[t]
-\centering
-\begin{tabular}{l|lll|lll}
-& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
-& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
-& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
-\hline
-\multicolumn{4}{l|}{\small \bf WSJ (manually annotated)} & \\
-\footnotesize UD$^{++}$
-& 84.6 & 85.6 & 85.1 & 12.5 & 12.7 & 12.6 \\
-\end{tabular}
-\caption{
-Unlabeled precision, recall and $F_1$ (in~\%) for primary and remote edges.}\label{tab:conversion_results_unlabeled}
-\end{table}
 
 As an example for divergence between the schemes, Figure~\ref{fig:wsj_0010.17} shows
 the same sentence after conversion and as manually annotated.
@@ -337,11 +466,10 @@ This short sentence got an $F_1$ of 34.8\%.
 
 \end{figure}
 
-\vspace{2cm}
-
 \paragraph{Conversion of automatically parsed UD annotations.}
 
 
+\section{Learned label reassignment}\label{sec:learning}
 
 
 \section{Experiments}\label{sec:experiments}
