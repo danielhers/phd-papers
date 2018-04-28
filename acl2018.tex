@@ -173,6 +173,9 @@ and sharing the same formal structures (bilexical DAGs),
 with considerable edge overlap,
 but differing in target representations (see \S\ref{sec:tasks}).
 For all tasks, they reported an increase of 0.5-1 labeled $F_1$ points.
+Recently, \citet{Peng-EtAl:2018:NAACL} also	applied a similar approach to
+joint frame-semantic parsing and semantic dependency parsing,
+using disjoint datasets, and reported further improvements.
 
 
 In this work, we take the challenge of MTL for semantic parsing a step further,
@@ -308,7 +311,7 @@ i.e., produce a graph covering all (content) words in the text,
 or the lexical concepts they evoke.
 This contrasts with ``shallow'' semantic parsing,
 primarily semantic role labeling
-\cite[SRL;][]{gildea2002automatic,Palmer:05,swayamdipta2017frame},
+\cite[SRL;][]{gildea2002automatic,Palmer:05,swayamdipta2017frame,Peng-EtAl:2018:NAACL},
 which targets argument structure phenomena using flat structures.
 We consider four formalisms: UCCA, AMR, SDP and Universal Dependencies.
 Figure~\ref{fig:original_examples} presents one sentence annotated in each scheme.
