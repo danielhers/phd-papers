@@ -1019,9 +1019,7 @@ due to the incorporation of additional features (see \S\ref{sec:classifier}).
 It is further outperformed by all MTL models
 on the English out-of-domain test set.
 This improvement is largely additive: the best model, using all three auxiliary tasks (\textit{All}),
-yields an error reduction of  3.9\%.
-%Although UD$^{++}$ seems to hurt performance on remote edges,
-%its improvement on primary edges is the largest among the three auxiliary tasks.
+yields an error reduction of  2.9\%.
 
 
 \begin{table}[t]
@@ -1056,8 +1054,8 @@ yields an error reduction of  3.9\%.
 & 71.2$\star$ & 70.9$\star$ & \textbf{71}$\star$ & 45.1 & 22 & \textbf{29.6} \\
 \hline
 \multicolumn{4}{l|}{\small \bf French (in-domain)} & \\
-\small Single & 64.1 & 60.6 & 62.3 & 20 & \enskip 5.7 & \enskip 8.8 \\
-\small UD & 68.7$\star$ & 68.6$\star$ & \textbf{68.6}$\star$ & 15.8 & \enskip 5.7 & \enskip 8.3 \\
+\small Single & 68.2 & 67 & 67.6 & 26 & \enskip 9.4 & 13.9 \\
+\small UD & 70.3 & 70$\star$ & \textbf{70.1}$\star$ & 43.8 & 13.2 & 20.3 \\
 \hline
 \multicolumn{4}{l|}{\small \bf German (in-domain)} & \\
 \small Single & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
@@ -1108,7 +1106,7 @@ $\star$~indicates significantly better than \textit{Single}.}\label{tab:id_resul
 
 
 The contribution of MTL is apparent in French and German in-domain parsing:
-10.1\% error reduction in French
+3.7\% error reduction in French
 (having less than 10\% as much UCCA training data as English)
 and 1\% in German, where the training set is comparable in size to the English one,
 but is noisier (see~\S\ref{sec:experiments}).
