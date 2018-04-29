@@ -1151,9 +1151,9 @@ quantifying domain differences in English (low is similar).\label{tab:domain_sim
 & \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
 & \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
 \hline
-AMR & 53.4 & 15.6 & 24.2 & \enskip 7.3 & \enskip 5.5 & \enskip 6.3 \\
-DM & 64.7 & 49.4 & 56.1 & \enskip 7.4 & 65.9 & 13.3 \\
-UD$^{++}$ & 82.9 & 84.6 & 83.8 & 11.3 & 12.7 & 12
+AMR & 53.8 & 15.6 & 24.2 & \enskip 7.3 & \enskip 5.5 & \enskip 6.3 \\
+DM & 65 & 49.2 & 56 & \enskip 7.4 & 65.9 & 13.3 \\
+UD$^{++}$ & 82.7 & 84.6 & 83.6 & 12.5 & 12.7 & 12.6
 \end{tabular}
 \caption{Unlabeled $F_1$ scores between the representations of the same English sentences (from PTB WSJ), converted to the unified DAG format, and annotated UCCA graphs.\label{tab:common}}
 \end{table}
@@ -1217,6 +1217,7 @@ A natural question is whether our method can benefit AMR, DM or UD parsing.
 While we focus on UCCA in this work, our parser is capable of parsing any
 scheme that can be represented in the unified DAG format, which constitutes
 an important step towards a joint many-task model for semantic parsing.
+%While we found the 
 Preliminary experiments using our approach produced
 promising results on each of the tasks' respective English development sets:
 67.1\% Smatch $F_1$ \cite{cai2013smatch} on AMR
