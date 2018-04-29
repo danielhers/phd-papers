@@ -1037,24 +1037,23 @@ yields an error reduction of  3.9\%.
 \footnotesize TUPA
 & 68.7 & 68.5 & 68.6 & 38.6 & 18.8 & 25.3 \\
 \footnotesize Single
-& 68.9 & 68.9 & 68.9 & 40.7 & 19.6 & 26.5 \\
+& 69 & 69 & 69 & 41.2 & 19.8 & 26.7 \\
 \cline{1-1}
-%Single-task (PoE) & 69.7 & 69.5 & 69.6 & 50.5 & 19.4 & 28 \\
 %\small \bf Multitask &&& \\
 \footnotesize AMR
-& 69.4 & 69.6 & 69.5 & 44.3 & 21.4 & 28.8 \\
+& 69.5 & 69.5 & 69.5 & 42.9 & 20.2 & 27.5 \\
 \footnotesize DM
-& 70.1$\star$ & 69.5 & 69.8$\star$ & 40 & 18.6 & 25.4 \\
+& 70.7$\star$ & 70.7$\star$ & 70.7$\star$ & 42.7 & 18.6 & 25.9 \\
 \footnotesize UD$^{++}$
-& 69.8$\star$ & 69.4 & 69.6 & 39.8 & 14.7$\dagger$ & 21.4$\dagger$ \\
+& 69.6 & 69.8$\star$ & 69.7 & 41.4 & 22 & 28.7 \\
 \footnotesize AMR + DM
-& 69.8$\star$ & 69.5 & 69.7$\star$ & 48.8$\star$ & 19.6 & 28 \\
+& 70.7$\star$ & 70.2$\star$ & 70.5$\star$ & 45.8 & 19.4 & 27.3 \\
 \footnotesize AMR + UD$^{++}$
-& 69.7$\star$ & 70$\star$ & 69.8$\star$ & 39 & 21.4 & 27.6 \\
+& 70.2$\star$ & 69.9$\star$ & 70$\star$ & 45.1 & 21.8 & 29.4 \\
 \footnotesize DM + UD$^{++}$
-& 70$\star$ & 68.9 & 69.4 & 47.4$\star$ & 22 & 30$\star$ \\
+& 70.8$\star$ & 70.3$\star$ & 70.6$\star$ & 41.6 & 21.6 & 28.4 \\
 \footnotesize All
-& 71$\star$ & 72.2$\star$ & \textbf{71.6}$\star$ & 43.9 & 24.8$\star$ & \textbf{31.6}$\star$ \\
+& 71.2$\star$ & 70.9$\star$ & \textbf{71}$\star$ & 45.1 & 22 & \textbf{29.6} \\
 \hline
 \multicolumn{4}{l|}{\small \bf French (in-domain)} & \\
 \small Single & 64.1 & 60.6 & 62.3 & 20 & \enskip 5.7 & \enskip 8.8 \\
@@ -1067,8 +1066,7 @@ yields an error reduction of  3.9\%.
 \caption{
 Labeled precision, recall and $F_1$ (in~\%) for both primary and remote edges,
 on the 20K test sets.
-$\star$~indicates significantly better than \textit{Single},
-and $\dagger$ significantly worse.}\label{tab:ood_results}
+$\star$~indicates significantly better than \textit{Single}.}\label{tab:ood_results}
 \end{table}
 
 \begin{table}[t]
@@ -1084,30 +1082,28 @@ and $\dagger$ significantly worse.}\label{tab:ood_results}
 \footnotesize TUPA
 & 74.4 & 72.7 & 73.5 & 47.4 & 51.6 & 49.4 \\
 \footnotesize Single
-& 74.3 & 72.8 & 73.5 & 53 & 50 & 51.5 \\
-%Single-task (PoE) & 75.9 & 74.1 & 75 & 50.7 & 46.8 & 48.7 \\
+& 74.4 & 72.9 & 73.6 & 53 & 50 & 51.5 \\
 \cline{1-1}
 %\small \bf Multitask &&& \\
 \footnotesize AMR
-& 74.4 & 73.2 & 73.8 & 49.1$\dagger$ & 52.2 & 50.6 \\
+& 74.7 & 72.8 & 73.7 & 48.7$\star$ & 51.1 & 49.9 \\
 \footnotesize DM
-& 74.6 & 71.7$\dagger$ & 73.1 & 48.2$\dagger$ & 51.3 & 49.7 \\
+& 75.7$\star$ & 73.9$\star$ & 74.8$\star$ & 54.9 & 53 & 53.9 \\
 \footnotesize UD$^{++}$
-& 74.6 & 72.8 & 73.7 & 51.6 & 44.1$\dagger$ & 47.5$\dagger$ \\
+& 75$\star$ & 73.2 & 74.1$\star$ & 49 & 52.7 & 50.8 \\
 \footnotesize AMR + DM
-& 74.5 & 72.3 & 73.4 & 50.6 & 47 & 48.7 \\
+& 75.6$\star$ & 73.9$\star$ & 74.7$\star$ & 49.9 & 53 & 51.4 \\
 \footnotesize AMR + UD$^{++}$
-& 73.9 & 72.4 & 73.1 & 46.8$\dagger$ & 56.2$\star$ & 51 \\
+& 74.9 & 72.7 & 73.8 & 47.1 & 50 & 48.5 \\
 \footnotesize DM + UD$^{++}$
-& 74.4 & 72.1$\dagger$ & 73.2 & 49.5 & 53.2 & 51.3 \\
+& 75.9$\star$ & 73.9$\star$ & 74.9$\star$ & 48 & 54.8 & 51.2 \\
 \footnotesize All
-& 74.2 & 73.7$\star$ & 73.9 & 44.7$\dagger$ & 54.3$\star$ & 49
+& 75.6$\star$ & 73.1 & 74.4$\star$ & 50.9 & 53.2 & 52
 \end{tabular}
 \caption{
 Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
 on the English Wiki test set.
-$\star$~indicates significantly better than \textit{Single},
-and $\dagger$ significantly worse.}\label{tab:id_results}
+$\star$~indicates significantly better than \textit{Single}.}\label{tab:id_results}
 \end{table}
 
 
