@@ -116,62 +116,6 @@ $a_0, a_1$ & \texttt{eA} \\
 \caption{Transition classifier features.\label{tab:features}}
 \end{table}
 
-\paragraph{Hyperparameters.}
-
-We initialize embeddings randomly.
-We use dropout \cite{srivastava2014dropout} between MLP layers, and recurrent dropout
-\cite{NIPS2016_6241} between BiLSTM layers, both with $p=0.4$.
-We also use word, tag and dependency relation dropout \cite{kiperwasser2016simple}:
-in training, the embedding for a feature value $w$ is replaced with a zero vector
-with a probability of $\frac{0.2}{\#(w)+0.2}$, where $\#(w)$ is the number of occurrences of
-$w$ observed.
-In addition, we use a novel form of dropout, \textit{node dropout}:
-with a probability of 0.1 at each step, all features associated with a single
-node in the parser state are replaced with zero vectors.
-For optimization we use a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
-and train with stochastic gradient descent for $N$ epochs with a learning
-rate of 0.1, followed by AMSGrad \cite{j.2018on} for $N$ epochs with
-$\alpha=0.001,\beta_1=0.9$ and $\beta_2=0.999$.
-We use $N=30$ for English, $N=100$ for French and $N=50$ for German.
-We found this training strategy better than using only one of the optimization methods,
-similar to findings by \citet{keskar2017improving}.
-We select the epoch with the best average labeled $F_1$ score on the UCCA development set
-in the respective language.
-
-Other hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
-The middle column shows the hyperparameters used for the single-task architecture,
-described in \S\ref{sec:classifier}, and
-the right column for the multitask architecture,
-described in \S\ref{sec:multitask}.
-\textbf{Main} refers to parameters specific to the main task---UCCA parsing
-(task-specific MLP and BiLSTM, and edge label embedding),
-\textbf{Aux} to parameters specific to each auxiliary task
-(task-specific MLP and BiLSTM, but no edge label embedding since the tasks are unlabeled),
-and \textbf{Shared} to parameters shared among all tasks
-(shared BiLSTM and embeddings).
-
-\begin{table}[h]
-\centering
-\begin{tabular}{l|c|ccccc}
-&& \multicolumn{3}{c}{\bf Multitask} \\ 
-\bf Hyperparameter &  \bf Single & \bf Main & \bf Aux & \bf Shared \\
-\hline
-Pre-trained word embedding dimensions & 300 &&& 300 \\
-Randomly initialized word embedding dimensions & 200 &&& 200 \\
-POS tag embedding dimensions & 20 &&& 20 \\
-Syntactic dependency embedding dimensions & 10 &&& 10 \\
-Named entity type embedding dimensions & 3 &&& 3 \\
-Punctuation embedding dimensions & 1 &&& 1 \\
-Action embedding dimensions & 3 &&& 3 \\
-Edge label embedding dimensions & 20 & 20 \\
-\hline
-MLP layers & 2 & 2 & 1 \\
-MLP dimensions & 50 & 50 & 50 \\
-BiLSTM layers & 2 & 2 & 1 & 2 \\
-BiLSTM dimensions & 500 & 250 & 50 & 250
-\end{tabular}
-\caption{Hyperparameter settings.\label{tab:hyperparams}}
-\end{table}
 
 \paragraph{Conversion to and from Unified DAG Format.}
 
