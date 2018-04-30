@@ -173,7 +173,7 @@ and sharing the same formal structures (bilexical DAGs),
 with considerable edge overlap,
 but differing in target representations (see \S\ref{sec:tasks}).
 For all tasks, they reported an increase of 0.5-1 labeled $F_1$ points.
-Recently, \citet{Peng-EtAl:2018:NAACL} also	applied a similar approach to
+Recently, \citet{Peng-EtAl:2018:NAACL} applied a similar approach to
 joint frame-semantic parsing and semantic dependency parsing,
 using disjoint datasets, and reported further improvements.
 
@@ -1257,22 +1257,19 @@ To this end, we annotated 100 English sentences from Section 02 of the Penn Tree
 (PTB WSJ).
 Annotation was carried out by a single expert UCCA annotator,
 and is publicly available.\footnote{\url{http://github.com/danielhers/wsj}}
-These sentences had already been annotated in AMR, DM and PTB formats,\footnote{We
+These sentences had already been annotated by the AMR, DM and PTB schemes,\footnote{We
 convert the PTB format to UD$^{++}$ v1 using Stanford CoreNLP,
 and then to UD v2 using Udapi: \url{http://github.com/udapi/udapi-python}.}
 and we convert their annotation to the unified DAG format.
-Results are presented in Table~\ref{tab:common}.
+Unlabeled $F_1$ scores between the UCCA graphs and those converted from AMR, DM and UD$^{++}$
+are presented in Table~\ref{tab:common}.
 UD$^{++}$ is highly overlapping with UCCA, while DM less so, and AMR even less
 (cf. Figure~\ref{fig:converted_examples}).
 However, due to the deep model architecture (\S\ref{sec:multitask}),
 generalizations useful to all tasks (e.g., lexical) may be shared,
 even if not expressed directly in nodes and edges.
 
-These findings suggest the diversity of domains may play a role
-as important as the diversity of formalisms, or even more important.
-Investigation of this matter will require a more controlled experiment
-where the parser is trained on a large enough parallel corpus annotated
-for each of the representations, and is deferred to future work.
+These findings suggest the diversity of domains may have as important an effect on parsing performance, as the diversity of formalisms. Investigation of this matter will require a controlled experiments where the parser is trained on a large enough multiply-annotated parallel corpus, and is deferred to future work.
 
 
 \section{Conclusion}\label{sec:conclusion}
