@@ -1080,7 +1080,7 @@ and \textbf{Shared} to parameters shared among all tasks
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
 \hline
 \multicolumn{4}{l|}{\small \bf English (out-of-domain)} & \\
-\footnotesize TUPA
+\footnotesize HAR17
 & 68.7 & 68.5 & 68.6 & 38.6 & 18.8 & 25.3 \\
 \footnotesize Single
 & 69 & 69 & 69 & 41.2 & 19.8 & 26.7 \\
@@ -1112,13 +1112,14 @@ and \textbf{Shared} to parameters shared among all tasks
 \caption{
 Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
 on the \textbf{20K} test sets.
-$\star$~indicates significantly better than \textit{Single}.}\label{tab:ood_results}
+$\star$~indicates significantly better than \textit{Single}.
+HAR17: \citet{hershcovich2017a}.}\label{tab:ood_results}
 \end{table}
 
 Table~\ref{tab:ood_results} presents our experimental results.
 Our basic single-task model (\textit{Single})
 is slightly better than the current state-of-the-art
-\cite[TUPA;][]{hershcovich2017a},
+\cite[HAR17;][]{hershcovich2017a},
 due to the incorporation of additional features (see \S\ref{sec:classifier}).
 It is further outperformed by all MTL models
 on the English out-of-domain test set.
@@ -1136,7 +1137,7 @@ yields an error reduction of  2.9\%.
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
 \hline
 \multicolumn{4}{l|}{\small \bf English (in-domain)} & \\
-\footnotesize TUPA
+\footnotesize HAR17
 & 74.4 & 72.7 & 73.5 & 47.4 & 51.6 & 49.4 \\
 \footnotesize Single
 & 74.4 & 72.9 & 73.6 & 53 & 50 & 51.5 \\
@@ -1159,8 +1160,9 @@ yields an error reduction of  2.9\%.
 \end{tabular}
 \caption{
 Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
-on the \textbf{English Wiki} test set.
-$\star$~indicates significantly better than \textit{Single}.}\label{tab:id_results}
+on the \textbf{Wiki} test set.
+$\star$~indicates significantly better than \textit{Single}.
+HAR17: \citet{hershcovich2017a}.}\label{tab:id_results}
 \end{table}
 
 
