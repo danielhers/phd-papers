@@ -886,7 +886,7 @@ To support unlabeled parsing, we simply remove all labels from the
 \textsc{Edge}, \textsc{Remote} and \textsc{Node} transitions output by the oracle.
 This results in a much smaller number of transitions the classifier has to select from
 (no more than 10, as opposed to 45 in labeled UCCA parsing),
-allowing us to use fewer dimensions and layers for task-specific BiLSTMs and MLPs
+allowing us to use no BiLSTMs and fewer dimensions and layers for task-specific MLPs
 of auxiliary tasks (see \S\ref{sec:experiments}).
 This limited capacity forces the network to use the shared parameters for all tasks,
 increasing generalization \cite{E17-1005}.
@@ -1013,20 +1013,9 @@ $\alpha=0.001,\beta_1=0.9$ and $\beta_2=0.999$.
 We use $N=50$ for English and German, and $N=400$ for French.
 We found this training strategy better than using only one of the optimization methods,
 similar to findings by \citet{keskar2017improving}.
-We select the model from the epoch with the best average labeled $F_1$ score on the
-UCCA development set in the respective language.
-
+We select the epoch with the best average labeled $F_1$ score on the
+UCCA development set.
 Other hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
-The middle column shows the hyperparameters used for the single-task architecture,
-described in \S\ref{sec:classifier}, and
-the right column for the multitask architecture,
-described in \S\ref{sec:multitask}.
-\textbf{Main} refers to parameters specific to the main task---UCCA parsing
-(task-specific MLP and BiLSTM, and edge label embedding),
-\textbf{Aux} to parameters specific to each auxiliary task
-(task-specific MLP, but no edge label embedding since the tasks are unlabeled),
-and \textbf{Shared} to parameters shared among all tasks
-(shared BiLSTM and embeddings).
 
 \begin{table}[h]
 \centering
@@ -1050,7 +1039,17 @@ MLP dimensions & 50 & 50 & 50 \\
 BiLSTM layers & 2 & 2 & & 2 \\
 BiLSTM dimensions & 500 & 300 & & 300
 \end{tabular}
-\caption{Hyperparameter settings.\label{tab:hyperparams}}
+\caption{Hyperparameter settings.
+Middle column shows hyperparameters used for the single-task architecture,
+described in \S\ref{sec:classifier}, and
+right column for the multitask architecture,
+described in \S\ref{sec:multitask}.
+\textbf{Main} refers to parameters specific to the main task---UCCA parsing
+(task-specific MLP and BiLSTM, and edge label embedding),
+\textbf{Aux} to parameters specific to each auxiliary task
+(task-specific MLP, but no edge label embedding since the tasks are unlabeled),
+and \textbf{Shared} to parameters shared among all tasks
+(shared BiLSTM and embeddings).\label{tab:hyperparams}}
 \end{table}
 
 %\subsection{Ensembling}
@@ -1191,6 +1190,19 @@ on the UCCA development set, and that the model parameters dedicated to auxiliar
 very limited (to encourage using the shared parameters).
 
 
+
+\section{Discussion}\label{sec:discussion}
+
+Task similarity is an important factor in MTL success
+\cite{E17-2026,E17-1005}.
+In our case, the main and auxiliary tasks are annotated on different corpora
+from different domains (\S\ref{sec:experiments}), and
+the target representations vary both in form and in content.
+%We found that the combination of many different domains therefore benefits domain
+%adaptation even without auxiliary data from the target domain,
+%in accordance with previous work \cite{Finkel2009JointPA}.
+
+
 \begin{table}[t]
 \centering
 \small
@@ -1221,19 +1233,6 @@ UD$^{++}$ & 82.7 & 84.6 & 83.6 & 12.5 & 12.7 & 12.6
 \end{tabular}
 \caption{Unlabeled $F_1$ scores between the representations of the same English sentences (from PTB WSJ), converted to the unified DAG format, and annotated UCCA graphs.\label{tab:common}}
 \end{table}
-
-
-
-\section{Discussion}\label{sec:discussion}
-
-Task similarity is an important factor in MTL success
-\cite{E17-2026,E17-1005}.
-In our case, the main and auxiliary tasks are annotated on different corpora
-from different domains (\S\ref{sec:experiments}), and
-the target representations vary both in form and in content.
-%We found that the combination of many different domains therefore benefits domain
-%adaptation even without auxiliary data from the target domain,
-%in accordance with previous work \cite{Finkel2009JointPA}.
 
 To quantify the domain differences, we follow \citet{Plank2011EffectiveMO} and measure the L1 distance 
 between word distributions in the English training sets and 20K test set
