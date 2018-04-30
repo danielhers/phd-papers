@@ -1011,17 +1011,6 @@ Hyperparameter settings are listed in the Supplementary Material.
 
 \section{Results}\label{sec:results}
 
-Table~\ref{tab:ood_results} presents our experimental results.
-Our basic single-task model (\textit{Single})
-is slightly better than the current state-of-the-art
-\cite[TUPA;][]{hershcovich2017a},
-due to the incorporation of additional features (see \S\ref{sec:classifier}).
-It is further outperformed by all MTL models
-on the English out-of-domain test set.
-This improvement is largely additive: the best model, using all three auxiliary tasks (\textit{All}),
-yields an error reduction of  2.9\%.
-
-
 \begin{table}[t]
 \centering
 \small
@@ -1062,10 +1051,21 @@ yields an error reduction of  2.9\%.
 \small UD & 73.7$\star$ & 72.6$\star$ & \textbf{73.2}$\star$ & 61.8 & 24.9$\star$ & \textbf{35.5}$\star$
 \end{tabular}
 \caption{
-Labeled precision, recall and $F_1$ (in~\%) for both primary and remote edges,
-on the 20K test sets.
+Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
+on the \textbf{20K} test sets.
 $\star$~indicates significantly better than \textit{Single}.}\label{tab:ood_results}
 \end{table}
+
+Table~\ref{tab:ood_results} presents our experimental results.
+Our basic single-task model (\textit{Single})
+is slightly better than the current state-of-the-art
+\cite[TUPA;][]{hershcovich2017a},
+due to the incorporation of additional features (see \S\ref{sec:classifier}).
+It is further outperformed by all MTL models
+on the English out-of-domain test set.
+This improvement is largely additive: the best model, using all three auxiliary tasks (\textit{All}),
+yields an error reduction of  2.9\%.
+
 
 \begin{table}[t]
 \centering
@@ -1086,7 +1086,7 @@ $\star$~indicates significantly better than \textit{Single}.}\label{tab:ood_resu
 \footnotesize AMR
 & 74.7 & 72.8 & 73.7 & 48.7$\star$ & 51.1 & 49.9 \\
 \footnotesize DM
-& 75.7$\star$ & 73.9$\star$ & 74.8$\star$ & 54.9 & 53 & 53.9 \\
+& 75.7$\star$ & 73.9$\star$ & 74.8$\star$ & 54.9 & 53 & \textbf{53.9} \\
 \footnotesize UD$^{++}$
 & 75$\star$ & 73.2 & 74.1$\star$ & 49 & 52.7 & 50.8 \\
 \footnotesize AMR + DM
@@ -1094,13 +1094,13 @@ $\star$~indicates significantly better than \textit{Single}.}\label{tab:ood_resu
 \footnotesize AMR + UD$^{++}$
 & 74.9 & 72.7 & 73.8 & 47.1 & 50 & 48.5 \\
 \footnotesize DM + UD$^{++}$
-& 75.9$\star$ & 73.9$\star$ & 74.9$\star$ & 48 & 54.8 & 51.2 \\
+& 75.9$\star$ & 73.9$\star$ & \textbf{74.9}$\star$ & 48 & 54.8 & 51.2 \\
 \footnotesize All
 & 75.6$\star$ & 73.1 & 74.4$\star$ & 50.9 & 53.2 & 52
 \end{tabular}
 \caption{
 Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
-on the English Wiki test set.
+on the \textbf{English Wiki} test set.
 $\star$~indicates significantly better than \textit{Single}.}\label{tab:id_results}
 \end{table}
 
@@ -1114,11 +1114,21 @@ The best MTL models are significantly better than single-task models,
 demonstrating that even a small training set for the main task may suffice,
 given enough auxiliary training data (as in French).
 
-Finally, Table~\ref{tab:id_results} shows our results on the English in-domain Wiki test set:
-MTL $F_1$ scores are comparable to the single-task scores,
-except for remote edges with only UD$^{++}$ as an auxiliary, where they are worse
-(observed on the out-of-domain English set too), despite the UD$^{++}$ use of graphs (rather than trees).
-However, this adverse effect is countered when adding other tasks as auxiliaries.
+Table~\ref{tab:id_results} shows our results on the English in-domain Wiki test set:
+Again, MTL $F_1$ scores surpass single-task scores, and the best ones significantly so.
+However, in this case, using all auxiliary tasks contributed less than just DM and UD$^{++}$,
+the combination of which yielded the best scores yet in in-domain UCCA parsing,
+with 74.9 $F_1$ on primary edges.
+
+Finally, evaluating the full MTL model (\textit{All}) on the unlabeled auxiliary tasks yielded
+13.7\% unlabeled Smatch $F_1$ \cite{cai2013smatch} on the AMR development set,
+when using oracle concept identification
+(since the auxiliary model does not predict node labels),
+27.2\% unlabeled $F_1$ on the DM development set,
+and 4.9\% UAS on the UD development set.
+These poor results reflect the fact that model selection was based on the score
+on the UCCA development set, and that the model parameters dedicated to auxiliary tasks were
+very limited (to encourage using the shared parameters).
 
 
 \begin{table}[t]
@@ -1211,10 +1221,12 @@ A natural question is whether our method can benefit AMR, DM or UD parsing.
 While we focus on UCCA in this work, our parser is capable of parsing any
 scheme that can be represented in the unified DAG format, which constitutes
 an important step towards a joint many-task model for semantic parsing.
-%While we found the 
-Preliminary experiments using our approach produced
-promising results on each of the tasks' respective English development sets:
-67.1\% Smatch $F_1$ \cite{cai2013smatch} on AMR
+While we found the MTL models trained for UCCA parsing to perform poorly
+on the auxiliary tasks,
+preliminary experiments using our approach produced
+promising results on each of the tasks' respective English development sets,
+when treated as a main task:
+67.1\% Smatch $F_1$ on AMR
 (adding a transition for implicit nodes and classifier for node labels),
 76.5\% labeled $F_1$ on DM,
 and 80.1\% LAS $F_1$ on UD.
