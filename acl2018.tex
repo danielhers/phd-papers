@@ -77,7 +77,7 @@
   architecture for all parsing tasks.
   Despite notable conceptual, formal and domain differences,
   we show that multitask learning significantly improves UCCA parsing
-  in both in-domain and out-of-domain settings, and in three languages.
+  in both in-domain and out-of-domain settings.
   Our code is publicly available.\footnote{\url{http://github.com/danielhers/tupa}}
 \end{abstract}
 
@@ -1269,13 +1269,12 @@ However, due to the deep model architecture (\S\ref{sec:multitask}),
 generalizations useful to all tasks (e.g., lexical) may be shared,
 even if not expressed directly in nodes and edges.
 
-These findings suggest the diversity of domains may have as important an effect on parsing performance, as the diversity of formalisms. Investigation of this matter will require a controlled experiments where the parser is trained on a large enough multiply-annotated parallel corpus, and is deferred to future work.
+These findings suggest the diversity of domains may have as important an effect on parsing performance, as the diversity of formalisms. Investigation of this matter will require a controlled experiments where the parser is trained on a large enough multiply-annotated corpus, and is deferred to future work.
 
 
 \section{Conclusion}\label{sec:conclusion}
 
-We demonstrate that MTL improves UCCA parsing in out-of-domain settings
-or when training data is scarce or noisy,
+We demonstrate that MTL improves UCCA parsing,
 using AMR, DM and UD parsing as auxiliaries.
 We do so by proposing a unified DAG representation,
 constructing protocols for converting these schemes into the unified format,
