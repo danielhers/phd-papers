@@ -83,9 +83,9 @@
 
 \section{Introduction}\label{sec:introduction}
 
-The multitude of semantic representations put forth in recent years greatly enriches
-the discussion in NLP on the nature of semantic structure.
-Still, semantic parsing has arguably yet to reach its full 
+%The multitude of semantic representations put forth in recent years greatly enriches
+%the discussion in NLP on the nature of semantic structure.
+Semantic parsing has arguably yet to reach its full 
 potential in terms of its contribution to downstream linguistic tasks,
 partially due to the limited amount of semantically annotated training data.
 This shortage is more pronounced in 
@@ -116,7 +116,7 @@ Multitask learning \cite[MTL; ][]{caruana1998multitask} allows exploiting the ov
 to effectively extend the training data, 
 and has greatly advanced with neural networks and representation learning
 (see \S\ref{sec:related_work}).
-We build on these ideas and propose a general transition-based DAG parsing approach,
+We build on these ideas and propose a general transition-based DAG parser,
 able to parse UCCA, AMR, SDP and UD \cite{nivre2016universal}.
 We train the parser using MTL to obtain significant improvements
 on UCCA parsing over single-task training in
@@ -125,8 +125,11 @@ on UCCA parsing over single-task training in
 (4) an in-domain setting in French, where training data is
 scarce.
 
-No previous work, to our knowledge, has shown benefits 
-from applying MTL to such widely different parsing tasks.
+The novelty of this work is in proposing a general parsing and learning
+architecture, able to accomodate such widely different parsing tasks, and in leveraging it
+to show benefits from learning them jointly.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
@@ -178,8 +181,9 @@ joint frame-semantic parsing and semantic dependency parsing,
 using disjoint datasets, and reported further improvements.
 
 
-In this work, we take the challenge of MTL for semantic parsing a step further,
-improving UCCA parsing using MTL with conceptually and formally different tasks (AMR, SDP and UD; see \S\ref{sec:tasks}), whose training sets are from different domains.
+%In this work, we take the challenge of MTL for semantic parsing a step further,
+%improving UCCA parsing using MTL with conceptually and formally different tasks (AMR, SDP and UD; see \S\ref{sec:tasks}), 
+%whose training sets are from different domains.
 %Further, we show additional benefit from using a syntactic task parsing as auxiliary (UD).
 
 
@@ -311,7 +315,7 @@ i.e., produce a graph covering all (content) words in the text,
 or the lexical concepts they evoke.
 This contrasts with ``shallow'' semantic parsing,
 primarily semantic role labeling
-\cite[SRL;][]{gildea2002automatic,Palmer:05,swayamdipta2017frame,Peng-EtAl:2018:NAACL},
+\cite[SRL;][]{gildea2002automatic,Palmer:05},
 which targets argument structure phenomena using flat structures.
 We consider four formalisms: UCCA, AMR, SDP and Universal Dependencies.
 Figure~\ref{fig:original_examples} presents one sentence annotated in each scheme.
@@ -893,7 +897,7 @@ increasing generalization \cite{E17-1005}.
 
 
 
-\section{Experiments}\label{sec:experiments}
+\section{Experimental Setup}\label{sec:experiments}
 
 We here detail a range of experiments to assess the value of MTL to UCCA parsing,
 training the parser in single-task and multitask settings,
@@ -963,27 +967,19 @@ the domains for AMR, DM and UD are blogs, news, emails, reviews, and Q\&A.
 This domain difference between training and test is particularly challenging (see \S\ref{sec:discussion}).
 Unfortunately, none of the other schemes have available annotation over Wikipedia text.
 
-\paragraph{Experimental setup.}
+\paragraph{Settings.}
 
-As our main experiment, we evaluate our method in settings where MTL tends to be the most effective:
-in an out-of-domain setting (on English),
-training on Wiki and evaluating on 20K;
-and where the only available training data is small (French)
-or noisy (German), training on the 20K training sets and evaluating on the test sets.
-We use unlabeled AMR, DM and UD$^{++}$ parsing as auxiliary tasks in English,
+We explore the following settings: 
+(1) in-domain setting in English, training and testing on Wiki;
+(2) out-of-domain setting in English, training on Wiki and testing on 20K;
+(3) French in-domain setting, where available training dataset is small,
+training and testing on 20K;
+(4) German in-domain setting on 20K, with somewhat noisy annotation.
+For MTL experiments, we use unlabeled AMR, DM and UD$^{++}$ parsing as auxiliary tasks in English,
 and unlabeled UD parsing in French and German.\footnote{We did not use AMR, DM or UD$^{++}$ in French
 and German, as these are only available in English.}
-For completeness, we also evaluate the English models on the Wiki in-domain test set.
+We also report baseline results training only the UCCA training sets.
 
-
-\paragraph{Evaluation.}
-
-We evaluate on UCCA using labeled precision, recall and $F_1$ 
-on primary and remote edges,
-following previous work \cite{hershcovich2017a}.
-Edges in predicted and gold graphs are matched by terminal yield and label.
-Significance testing of improvements over the single-task model is done
-by the bootstrap test \cite{berg2012empirical}, with $p<0.05$.
 
 \paragraph{Training.}
 
@@ -994,28 +990,6 @@ UCCA training set size.
 Since training sets differ in size, we sample this many sentences from each training set.
 The model is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{http://dynet.io}}
 
-\paragraph{Hyperparameters.}
-
-We initialize embeddings randomly.
-We use dropout \cite{srivastava2014dropout} between MLP layers, and recurrent dropout
-\cite{NIPS2016_6241} between BiLSTM layers, both with $p=0.4$.
-We also use word ($\alpha=0.2$), tag ($\alpha=0.2$) and dependency relation ($\alpha=0.5$) dropout
-\cite{kiperwasser2016simple}.\footnote{In training, the embedding for a feature value $w$ is
-replaced with a zero vector with a probability of $\frac{\alpha}{\#(w)+\alpha}$,
-where $\#(w)$ is the number of occurrences of $w$ observed.}
-In addition, we use a novel form of dropout, \textit{node dropout}:
-with a probability of 0.1 at each step, all features associated with a single
-node in the parser state are replaced with zero vectors.
-For optimization we use a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
-and train with stochastic gradient descent for $N$ epochs with a learning
-rate of 0.1, followed by AMSGrad \cite{j.2018on} for $N$ epochs with
-$\alpha=0.001,\beta_1=0.9$ and $\beta_2=0.999$.
-We use $N=50$ for English and German, and $N=400$ for French.
-We found this training strategy better than using only one of the optimization methods,
-similar to findings by \citet{keskar2017improving}.
-We select the epoch with the best average labeled $F_1$ score on the
-UCCA development set.
-Other hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 
 \begin{table}[h]
 \centering
@@ -1052,6 +1026,40 @@ and \textbf{Shared} to parameters shared among all tasks
 (shared BiLSTM and embeddings).\label{tab:hyperparams}}
 \end{table}
 
+
+\paragraph{Hyperparameters.}
+
+We initialize embeddings randomly.
+We use dropout \cite{srivastava2014dropout} between MLP layers, and recurrent dropout
+\cite{NIPS2016_6241} between BiLSTM layers, both with $p=0.4$.
+We also use word ($\alpha=0.2$), tag ($\alpha=0.2$) and dependency relation ($\alpha=0.5$) dropout
+\cite{kiperwasser2016simple}.\footnote{In training, the embedding for a feature value $w$ is
+replaced with a zero vector with a probability of $\frac{\alpha}{\#(w)+\alpha}$,
+where $\#(w)$ is the number of occurrences of $w$ observed.}
+In addition, we use a novel form of dropout, \textit{node dropout}:
+with a probability of 0.1 at each step, all features associated with a single
+node in the parser state are replaced with zero vectors.
+For optimization we use a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
+and train with stochastic gradient descent for $N$ epochs with a learning
+rate of 0.1, followed by AMSGrad \cite{j.2018on} for $N$ epochs with
+$\alpha=0.001,\beta_1=0.9$ and $\beta_2=0.999$.
+We use $N=50$ for English and German, and $N=400$ for French.
+We found this training strategy better than using only one of the optimization methods,
+similar to findings by \citet{keskar2017improving}.
+We select the epoch with the best average labeled $F_1$ score on the
+UCCA development set.
+Other hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
+
+
+\paragraph{Evaluation.}
+
+We evaluate on UCCA using labeled precision, recall and $F_1$ 
+on primary and remote edges,
+following previous work \cite{hershcovich2017a}.
+Edges in predicted and gold graphs are matched by terminal yield and label.
+Significance testing of improvements over the single-task model is done
+by the bootstrap test \cite{berg2012empirical}, with $p<0.05$.
+
 %\subsection{Ensembling}
 %
 %During inference, we use Product of Experts \cite[PoE; ][]{hinton2002training} to combine the predictions
@@ -1069,6 +1077,46 @@ and \textbf{Shared} to parameters shared among all tasks
 
 
 \section{Results}\label{sec:results}
+
+
+\begin{table}[t]
+\centering
+\small
+\setlength\tabcolsep{3pt}
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+\hline
+\multicolumn{4}{l|}{\small \bf English (in-domain)} & \\
+\footnotesize HAR17
+& 74.4 & 72.7 & 73.5 & 47.4 & 51.6 & 49.4 \\
+\footnotesize Single
+& 74.4 & 72.9 & 73.6 & 53 & 50 & 51.5 \\
+\cline{1-1}
+%\small \bf Multitask &&& \\
+\footnotesize AMR
+& 74.7 & 72.8 & 73.7 & 48.7$\star$ & 51.1 & 49.9 \\
+\footnotesize DM
+& 75.7$\star$ & 73.9$\star$ & 74.8$\star$ & 54.9 & 53 & \textbf{53.9} \\
+\footnotesize UD$^{++}$
+& 75$\star$ & 73.2 & 74.1$\star$ & 49 & 52.7 & 50.8 \\
+\footnotesize AMR + DM
+& 75.6$\star$ & 73.9$\star$ & 74.7$\star$ & 49.9 & 53 & 51.4 \\
+\footnotesize AMR + UD$^{++}$
+& 74.9 & 72.7 & 73.8 & 47.1 & 50 & 48.5 \\
+\footnotesize DM + UD$^{++}$
+& 75.9$\star$ & 73.9$\star$ & \textbf{74.9}$\star$ & 48 & 54.8 & 51.2 \\
+\footnotesize All
+& 75.6$\star$ & 73.1 & 74.4$\star$ & 50.9 & 53.2 & 52
+\end{tabular}
+\caption{
+Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
+on the \textbf{Wiki} test set.
+$\star$~indicates significantly better than \textit{Single}.
+HAR17: \citet{hershcovich2017a}.}\label{tab:id_results}
+\end{table}
+
 
 \begin{table}[t]
 \centering
@@ -1116,57 +1164,27 @@ $\star$~indicates significantly better than \textit{Single}.
 HAR17: \citet{hershcovich2017a}.}\label{tab:ood_results}
 \end{table}
 
-Table~\ref{tab:ood_results} presents our experimental results.
-Our basic single-task model (\textit{Single})
-is slightly better than the current state-of-the-art
-\cite[HAR17;][]{hershcovich2017a},
+Table~\ref{tab:id_results} presents our results on the English in-domain Wiki test set.
+MTL with all auxiliary tasks and their combinations improves the primary $F_1$ score over
+the single task baseline. In most settings the improvement is statistically significant.
+Using all auxiliary tasks contributed less than just DM and UD$^{++}$,
+the combination of which yielded the best scores yet in in-domain UCCA parsing,
+with 74.9 $F_1$ on primary edges.
+Remote $F_1$ is improved in some settings, but due to the relatively small number of remote
+edges, none of the differences is significant.
+Note that our baseline single-task model (\textit{Single})
+is slightly better than the current state-of-the-art \cite[HAR17;][]{hershcovich2017a},
 due to the incorporation of additional features (see \S\ref{sec:classifier}).
-It is further outperformed by all MTL models
-on the English out-of-domain test set.
-This improvement is largely additive: the best model, using all three auxiliary tasks (\textit{All}),
-yields an error reduction of  2.9\%.
+
+Table~\ref{tab:ood_results} presents our experimental results on the 20K corpora in the three languages.
+For English out-of-domain, improvements from using MTL are even more marked. 
+Moreoever, the improvement is largely additive: the best model, using all three auxiliary tasks (\textit{All}),
+yields an error reduction of  2.9\%. Again, the single-task baseline is slightly better than HAR17.
 
 
-\begin{table}[t]
-\centering
-\small
-\setlength\tabcolsep{3pt}
-\begin{tabular}{l|lll|lll}
-& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
-& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
-& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
-\hline
-\multicolumn{4}{l|}{\small \bf English (in-domain)} & \\
-\footnotesize HAR17
-& 74.4 & 72.7 & 73.5 & 47.4 & 51.6 & 49.4 \\
-\footnotesize Single
-& 74.4 & 72.9 & 73.6 & 53 & 50 & 51.5 \\
-\cline{1-1}
-%\small \bf Multitask &&& \\
-\footnotesize AMR
-& 74.7 & 72.8 & 73.7 & 48.7$\star$ & 51.1 & 49.9 \\
-\footnotesize DM
-& 75.7$\star$ & 73.9$\star$ & 74.8$\star$ & 54.9 & 53 & \textbf{53.9} \\
-\footnotesize UD$^{++}$
-& 75$\star$ & 73.2 & 74.1$\star$ & 49 & 52.7 & 50.8 \\
-\footnotesize AMR + DM
-& 75.6$\star$ & 73.9$\star$ & 74.7$\star$ & 49.9 & 53 & 51.4 \\
-\footnotesize AMR + UD$^{++}$
-& 74.9 & 72.7 & 73.8 & 47.1 & 50 & 48.5 \\
-\footnotesize DM + UD$^{++}$
-& 75.9$\star$ & 73.9$\star$ & \textbf{74.9}$\star$ & 48 & 54.8 & 51.2 \\
-\footnotesize All
-& 75.6$\star$ & 73.1 & 74.4$\star$ & 50.9 & 53.2 & 52
-\end{tabular}
-\caption{
-Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
-on the \textbf{Wiki} test set.
-$\star$~indicates significantly better than \textit{Single}.
-HAR17: \citet{hershcovich2017a}.}\label{tab:id_results}
-\end{table}
 
 
-The contribution of MTL is apparent in French and German in-domain parsing:
+The contribution of MTL is also apparent in French and German in-domain parsing:
 3.7\% error reduction in French
 (having less than 10\% as much UCCA training data as English)
 and 1\% in German, where the training set is comparable in size to the English one,
@@ -1175,35 +1193,13 @@ The best MTL models are significantly better than single-task models,
 demonstrating that even a small training set for the main task may suffice,
 given enough auxiliary training data (as in French).
 
-Table~\ref{tab:id_results} shows our results on the English in-domain Wiki test set:
-Again, MTL $F_1$ scores surpass single-task scores, and the best ones significantly so.
-However, in this case, using all auxiliary tasks contributed less than just DM and UD$^{++}$,
-the combination of which yielded the best scores yet in in-domain UCCA parsing,
-with 74.9 $F_1$ on primary edges.
 
-Finally, evaluating the full MTL model (\textit{All}) on the unlabeled auxiliary tasks yielded
-64.7\% unlabeled Smatch $F_1$ \cite{cai2013smatch} on the AMR development set,
-when using oracle concept identification
-(since the auxiliary model does not predict node labels),
-27.2\% unlabeled $F_1$ on the DM development set,
-and 4.9\% UAS on the UD development set.
-These poor results reflect the fact that model selection was based on the score
-on the UCCA development set, and that the model parameters dedicated to auxiliary tasks were
-very limited (to encourage using the shared parameters).
-However, preliminary experiments using our approach produced
-promising results on each of the tasks' respective English development sets,
-when treated as a single task:
-67.1\% labeled Smatch $F_1$ on AMR
-(adding a transition for implicit nodes and classifier for node labels),
-79.1\% labeled $F_1$ on DM,
-and 80.1\% LAS $F_1$ on UD.
-These scores are not far from the state-of-the-art on these datasets
-\cite{foland2017abstract,Peng-EtAl:2018:NAACL,dozat2016deep}.
 
 
 
 \section{Discussion}\label{sec:discussion}
 
+\paragraph{Quantifying the similarity between tasks.}
 Task similarity is an important factor in MTL success
 \cite{E17-2026,E17-1005}.
 In our case, the main and auxiliary tasks are annotated on different corpora
@@ -1261,27 +1257,61 @@ These sentences had already been annotated by the AMR, DM and PTB schemes,\footn
 convert the PTB format to UD$^{++}$ v1 using Stanford CoreNLP,
 and then to UD v2 using Udapi: \url{http://github.com/udapi/udapi-python}.}
 and we convert their annotation to the unified DAG format.
+
 Unlabeled $F_1$ scores between the UCCA graphs and those converted from AMR, DM and UD$^{++}$
 are presented in Table~\ref{tab:common}.
 UD$^{++}$ is highly overlapping with UCCA, while DM less so, and AMR even less
-(cf. Figure~\ref{fig:converted_examples}).
-However, due to the deep model architecture (\S\ref{sec:multitask}),
-generalizations useful to all tasks (e.g., lexical) may be shared,
-even if not expressed directly in nodes and edges.
+(cf. Figure~\ref{fig:converted_examples}). 
 
-These findings suggest the diversity of domains may have as important an effect on parsing performance, as the diversity of formalisms. Investigation of this matter will require a controlled experiments where the parser is trained on a large enough multiply-annotated corpus, and is deferred to future work.
+Comparing the average improvements resulting from adding each of the tasks as auxiliary, we find that 
+in both in-domain and out-of-domain settings adding AMR was the least beneficial, UD$^{++}$ second,
+and DM the most beneficial. This trend is weakly correlated with the formal similarity between the tasks
+(as expressed in Table~\ref{tab:common}), but weakly negatively correlated with the word distribution similarity scores (Table~\ref{tab:domain_sim}).
+We conclude that other factors should be taken into account to fully explain this effect,
+and propose to address this in future work through controlled experiments, where corpora of the same
+domain are annotated with the various formalisms and used as training data for MTL.
+
+%However, due to the deep model architecture (\S\ref{sec:multitask}),
+%generalizations useful to all tasks (e.g., lexical) may be shared,
+%even if not expressed directly in nodes and edges.
+%These findings suggest the diversity of domains may have as important an effect on parsing performance, as the diversity of formalisms. 
+
+
+\paragraph{AMR, SDP and UD parsing.} 
+Evaluating the full MTL model (\textit{All}) on the unlabeled auxiliary tasks yielded
+64.7\% unlabeled Smatch $F_1$ \cite{cai2013smatch} on the AMR development set,
+when using oracle concept identification
+(since the auxiliary model does not predict node labels),
+27.2\% unlabeled $F_1$ on the DM development set,
+and 4.9\% UAS on the UD development set.
+These poor results reflect the fact that model selection was based on the score
+on the UCCA development set, and that the model parameters dedicated to auxiliary tasks were
+very limited (to encourage using the shared parameters).
+However, preliminary experiments using our approach produced
+promising results on each of the tasks' respective English development sets,
+when treated as a single task:
+67.1\% labeled Smatch $F_1$ on AMR
+(adding a transition for implicit nodes and classifier for node labels),
+79.1\% labeled $F_1$ on DM,
+and 80.1\% LAS $F_1$ on UD.
+These scores are not far from the state-of-the-art on these datasets
+\cite{foland2017abstract,Peng-EtAl:2018:NAACL,dozat2016deep}.
+
 
 
 \section{Conclusion}\label{sec:conclusion}
 
-We demonstrate that MTL improves UCCA parsing,
+We demonstrates that semantic parsers can leverage a range of 
+semantically and syntactically annotated data, to improve their performance.
+Our experiments show that MTL improves UCCA parsing,
 using AMR, DM and UD parsing as auxiliaries.
-We do so by proposing a unified DAG representation,
-constructing protocols for converting these schemes into the unified format,
-and generalizing a transition-based DAG parser to support all these tasks.
-While the machine learning techniques we use are not novel,
-our contribution is in allowing these models to learn from
-significantly different tasks.
+We propose a unified DAG representation, 
+construct protocols for converting these schemes into the unified format,
+and generalize a transition-based DAG parser to support all these tasks,
+allowing it to be jointly trained on them.
+%While the machine learning techniques we use are not novel,
+%our contribution is in allowing these models to learn from
+%significantly different tasks.
 
 %A natural question is whether our method can benefit AMR, DM or UD parsing.
 While we focus on UCCA in this work, our parser is capable of parsing any
