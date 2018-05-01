@@ -984,10 +984,10 @@ We also report baseline results training only the UCCA training sets.
 \paragraph{Training.}
 
 We create a unified corpus for each setting, shuffling all sentences from relevant datasets together,
-but using only the $F_1$ score on the UCCA development set as the criterion for early stopping.
+but using only the UCCA development set $F_1$ score as the early stopping criterion.
 In each training epoch, we use the same number of examples from each task---the
 UCCA training set size.
-Since training sets differ in size, we sample this many sentences from each training set.
+Since training sets differ in size, we sample this many sentences from each one.
 The model is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{http://dynet.io}}
 
 
@@ -1294,8 +1294,8 @@ when treated as a single task:
 (adding a transition for implicit nodes and classifier for node labels),
 79.1\% labeled $F_1$ on DM,
 and 80.1\% LAS $F_1$ on UD.
-These scores are not far from the state-of-the-art on these datasets
-\cite{foland2017abstract,Peng-EtAl:2018:NAACL,dozat2016deep}.
+For comparison, the best results on these datasets are 70.7\%, 91.2\% and 82.2\%, respectively
+\cite{foland2017abstract,Peng-EtAl:2018:NAACL,K17-3002}.
 
 
 
