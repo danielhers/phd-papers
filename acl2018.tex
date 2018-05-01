@@ -1263,9 +1263,11 @@ are presented in Table~\ref{tab:common}.
 UD$^{++}$ is highly overlapping with UCCA, while DM less so, and AMR even less
 (cf. Figure~\ref{fig:converted_examples}). 
 
-Comparing the average improvements resulting from adding each of the tasks as auxiliary, we find that 
-in both in-domain and out-of-domain settings adding AMR was the least beneficial, UD$^{++}$ second,
-and DM the most beneficial. This trend is weakly correlated with the formal similarity between the tasks
+Comparing the average improvements resulting from adding each of the tasks as auxiliary
+(see \S\ref{sec:results}), we find 
+AMR the least beneficial, UD$^{++}$ second, and DM the most beneficial,
+in both in-domain and out-of-domain settings.
+This trend is weakly correlated with the formal similarity between the tasks
 (as expressed in Table~\ref{tab:common}), but weakly negatively correlated with the word distribution similarity scores (Table~\ref{tab:domain_sim}).
 We conclude that other factors should be taken into account to fully explain this effect,
 and propose to address this in future work through controlled experiments, where corpora of the same
@@ -1301,7 +1303,7 @@ For comparison, the best results on these datasets are 70.7\%, 91.2\% and 82.2\%
 
 \section{Conclusion}\label{sec:conclusion}
 
-We demonstrates that semantic parsers can leverage a range of 
+We demonstrate that semantic parsers can leverage a range of 
 semantically and syntactically annotated data, to improve their performance.
 Our experiments show that MTL improves UCCA parsing,
 using AMR, DM and UD parsing as auxiliaries.
