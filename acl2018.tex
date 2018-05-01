@@ -1209,6 +1209,12 @@ the target representations vary both in form and in content.
 %adaptation even without auxiliary data from the target domain,
 %in accordance with previous work \cite{Finkel2009JointPA}.
 
+To quantify the domain differences, we follow \citet{Plank2011EffectiveMO} and measure the L1 distance 
+between word distributions in the English training sets and 20K test set
+(Table~\ref{tab:domain_sim}).
+All auxiliary training sets are more similar to 20K than Wiki is, which may
+contribute to the benefits observed on the English 20K test set.
+
 
 \begin{table}[t]
 \centering
@@ -1240,12 +1246,6 @@ UD$^{++}$ & 82.7 & 84.6 & 83.6 & 12.5 & 12.7 & 12.6
 \end{tabular}
 \caption{Unlabeled $F_1$ scores between the representations of the same English sentences (from PTB WSJ), converted to the unified DAG format, and annotated UCCA graphs.\label{tab:common}}
 \end{table}
-
-To quantify the domain differences, we follow \citet{Plank2011EffectiveMO} and measure the L1 distance 
-between word distributions in the English training sets and 20K test set
-(Table~\ref{tab:domain_sim}).
-All auxiliary training sets are more similar to 20K than Wiki is, which may
-contribute to the benefits observed on the English 20K test set.
 
 As a measure of the formal similarity of the different schemes to UCCA,
 we use unlabeled $F_1$ score evaluation on both primary and remote edges (ignoring edge labels).
