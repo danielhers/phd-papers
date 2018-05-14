@@ -90,6 +90,7 @@ how much of the difference is explained by the differences in---
 \begin{itemize}
 \item Evaluation metric,
 \item Amount of training data,
+\item Formal annotation choices,
 \item Content.
 \end{itemize}
 
@@ -274,21 +275,61 @@ While converted UD graphs form trees, enhanced++ UD graphs may not.}\label{fig:u
 
 \section{Amount of training data}\label{sec:data_size}
 
+
+\begin{table*}[t]
+\centering
+\small
+\setlength\tabcolsep{2pt}
+\begin{tabular}{l|ccc|ccc||ccc|ccc||ccc|ccc}
+& \multicolumn{6}{c||}{\footnotesize \bf English}
+& \multicolumn{6}{c||}{\footnotesize \bf French}
+& \multicolumn{6}{c}{\footnotesize \bf German} \\
+\hline
+& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
+& \multicolumn{3}{c||}{\footnotesize \bf {\#} sentences}
+& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
+& \multicolumn{3}{c||}{\footnotesize \bf {\#} sentences}
+& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
+& \multicolumn{3}{c}{\footnotesize \bf {\#} sentences} \\
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test 
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
+\hline
+\textbf{UCCA} &&&&&&&&&&&&&&&& \\
+Wiki & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
+20K &&& 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
+\textbf{UD} & \multicolumn{2}{l}{458277} && \multicolumn{2}{l}{17062} &&
+\multicolumn{2}{l}{899163} && \multicolumn{2}{l}{32347} && \multicolumn{2}{l}{268145} && 13814
+\end{tabular}
+\caption{Number of tokens and sentences in the training, development and test sets
+we use for each corpus and language.\label{tab:corpora}}
+\end{table*}
+
 Syntactic dependency parsers require many training examples to achieve
 state-of-the-art results.
 Even after around 500K tokens, the learning curves do not seem to saturate
 \cite{de2017old,velldal2017joint}.
 
+Whereas the largest UCCA training set (English Wiki) contains 128K tokens,
+The joined English UD training sets contain 458K tokens.
+In French UCCA has just 10K training tokens whereas UD has 899K,
+and in German UCCA has 80K and UD 268K.
+
 
 \section{Structural Conversion}\label{sec:conversion}
 
 To parse text into UD, we use UDPipe \cite{udpipe:2017}.
+On UD v1.2, UDPipe achieved 80.2\% LAS $F_1$ on English using automatic POS tags.
+On French it achieved 77.8\% and on German 71.8\%.
 
 We convert UD into a unified DAG format \cite{hershcovich2018multitask},
 which is inclusive enough to
 allow representing any of the schemes with very little loss of information.
-For UD, and conversion results in 98.5\% LAS $F_1$ on the UD English test set,
-due to multi-word tokens, not supported in the unified DAG format.
+%For UD, and conversion results in 98.5\% LAS $F_1$ on the UD English test set,
+%due to multi-word tokens, not supported in the unified DAG format.
 
 The format consists of a rooted DAG, where the tokens are the terminal nodes.
 As in the UCCA format, edges are labeled (but not nodes),
@@ -320,8 +361,12 @@ structurally converted UD graphs as compared to gold-annotated UCCA graphs.
 & \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
 \hline
 \multicolumn{4}{l|}{\small \bf WSJ (manually annotated)} & \\
+\footnotesize UD
+& 85.2 & 88.5 & 86.8 & -- & 0 & 0 \\
 \footnotesize UD$^{++}$
-& 84.6 & 85.6 & 85.1 & 12.5 & 12.7 & 12.6 \\
+& 82.7 & 85.9 & 84.3 & 12.5 & 12.7 & 12.6 \\
+\multicolumn{4}{l|}{\small \bf WSJ (automatically parsed)} & \\
+UDPipe & 81.5 & 84.5 & 83 & -- & 0 & 0 \\
 \end{tabular}
 \caption{
 Unlabeled precision, recall and $F_1$ (in~\%) for primary and remote edges.}\label{tab:conversion_results_unlabeled}
@@ -379,8 +424,12 @@ The results appear in Table~\ref{tab:conversion_results_labeled}.
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
 \hline
 \multicolumn{4}{l|}{\small \bf WSJ (manually annotated)} & \\
+\footnotesize UD
+& 68.3 & 71 & 69.6 & -- & 0 & 0 \\
 \footnotesize UD$^{++}$
-& 68 & 68.8 & 68.4 & 12.5 & 12.7 & 12.6 \\
+& 66.3 & 68.9 & 67.6 & 10.7 & 10.9 & 10.8 \\
+\multicolumn{4}{l|}{\small \bf WSJ (automatically parsed)} & \\
+UDPipe & 63.3 & 65.7 & 64.5 & -- & 0 & 0 \\
 \end{tabular}
 \caption{
 Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges.}\label{tab:conversion_results_labeled}
@@ -470,8 +519,18 @@ This short sentence got an $F_1$ of 34.8\%.
 
 \paragraph{Conversion of automatically parsed UD annotations.}
 
+To be able to evaluate the conversion on a larger corpus,
+such as the UCCA Wiki set, which does not have UD annotations,
+we use an automatic UD parser: UDPipe.
+The results appear in Table~\ref{tab:conversion_results_labeled}.
+
 
 \section{Learned label reassignment}\label{sec:learning}
+
+Rather than mapping syntactic UD labels to semantic UCCA labels
+by a fixed set of replacements, we can use the context to learn
+which replacement to apply, closing the gap between the labeled
+and unlabeled scores.
 
 
 \section{Experiments}\label{sec:experiments}
@@ -523,8 +582,10 @@ We also use 100 English sentences from Section 02 of the Penn Treebank Wall Stre
 (PTB WSJ),
 annotated by a single expert UCCA annotator \cite{hershcovich2018multitask},
 and publicly available.\footnote{\url{http://github.com/danielhers/wsj}}
-These sentences had already been annotated by AMR, DM and UD$^{++}$,
-and we convert their annotation to the unified DAG format.
+These sentences had already been annotated by the PTB scheme.
+We convert the PTB format to UD$^{++}$ v1 using Stanford CoreNLP,
+to UD v2 using Udapi\footnote{\url{http://github.com/udapi/udapi-python}},
+and then to the unified DAG format using our protocol.
 
 %\paragraph{Experimental setup.}
 %
