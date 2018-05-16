@@ -386,17 +386,17 @@ to each UD relation.
 To convert the UD graphs into fully labeled UCCA graphs,
 we replace each UD edge label with its most common UCCA counterpart.
 
-The \texttt{head} edges are introduced as part of the conversion do not have a single
+The \textit{head} edges introduced as part of the conversion do not have a single
 corresponding UCCA edge label---although C (center) is the most common corresponding label,
 other labels such as P (process) are also common.
 This is a difference between UD, which selects the most central token to be the head of a phrase,
 to UCCA, which also annotates the relation between that head and the unit it is part of.
-To overcome this limitation, we replace all \texttt{head} labels with C, but then
+To overcome this limitation, we replace all \textit{head} labels with C, but then
 apply standard UCCA normalization to the resulting graphs after conversion,
 replacing C with P when it has sibling A's (participants) or
 with H when it has sibling H's (parallel scenes).
 We select P rather than S (state) as the main relation in the normalization because
-it is much more common (14719 P's in the Wiki corpus as opposed to 3354 S's).
+it is much more common (14,719 P's in the Wiki corpus as opposed to 3354 S's).
 
 \begin{table}[t]
 \centering
@@ -456,12 +456,13 @@ the same sentence after conversion and as manually annotated.
 This short sentence got an $F_1$ of 34.8\%.
 
 
-\begin{figure}[!ht]
-\fbox{\begin{subfigure}{0.47\textwidth}
+\begin{figure*}[!ht]
+\fbox{\begin{subfigure}{\textwidth}
   \centering
   \scalebox{.95}{
-\begin{tikzpicture}[->,level distance=1cm, sibling distance=1cm,
-  level 2/.style={level distance=2cm},
+\begin{tikzpicture}[->,level distance=1cm, sibling distance=22mm,
+  level 2/.style={level distance=2cm,
+  level 3/.style={level distance=1cm}},
   every circle node/.append style={fill=black}]
   \tikzstyle{word} = [font=\rmfamily,color=black]
   \node (1_1) [circle] {}
@@ -495,43 +496,51 @@ This short sentence got an $F_1$ of 34.8\%.
   }\caption{Converted from gold UD to UCCA \label{fig:wsj_0011.8_converted}}
 \end{subfigure}}
   
-\fbox{\begin{subfigure}{0.47\textwidth}
+\fbox{\begin{subfigure}{\textwidth}
   \centering
   \scalebox{.95}{
-\begin{tikzpicture}[->,level distance=1cm,
-  level 1/.style={sibling distance=4cm},
-  level 2/.style={sibling distance=15mm},
-  level 3/.style={sibling distance=15mm},
+\begin{tikzpicture}[->,level distance=2cm,
+  level 1/.style={sibling distance=45mm},
+  level 2/.style={sibling distance=2cm},
+  level 3/.style={sibling distance=2cm},
   every circle node/.append style={fill=black}]
   \tikzstyle{word} = [font=\rmfamily,color=black]
   \node (1_1) [circle] {}
   {
   child {node (1_2) [circle] {}
     {
-    child {node (1_3) [word] {Imports} edge from parent node[auto] {\scriptsize $A$}}
-    child {node (1_4) [word] {were} edge from parent node[auto] {\scriptsize $S$}}
+    child {node (1_3) [word] {Imports}  edge from parent node[auto]  {\scriptsize $A$}}
+    child {node (1_4) [word] {were}  edge from parent node[auto]  {\scriptsize $S$}}
     child {node (1_5) [circle] {}
       {
-      child {node (1_6) [word] {at} edge from parent node[auto] {\scriptsize $R$}}
-      child {node (1_7) [circle] {}
-        {
-        child {node (1_8) [word] {50.38} edge from parent node[auto] {\scriptsize $E$}}
-        child {node (1_9) [word] {billion} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $A$}} }edge from parent node[above] {\scriptsize $H$}}
+      child {node (1_6) [word] {at}  edge from parent node[auto]  {\scriptsize $R$}}
+      child {node (1_14) [word] {\$}  edge from parent node[auto]  {\scriptsize $U$}}
+      child {node (1_8) [word] {50.38}  edge from parent node[auto]  {\scriptsize $E$}}
+      child {node (1_9) [word] {billion}  edge from parent node[auto]  {\scriptsize $C$}}
+      } edge from parent node[auto]  {\scriptsize $A$}}
+    } edge from parent node[auto]  {\scriptsize $H$}}
+  child {node (1_15) [word] {,}  edge from parent node[auto]  {\scriptsize $U$}}
   child {node (1_10) [circle] {}
     {
+    child {node (1_18) [word] {\textbf{IMPLICIT}}  edge from parent node[auto]  {\scriptsize $P$}}
     child {node (1_11) [circle] {}
       {
-      child {node (1_12) [word] {up} edge from parent node[auto] {\scriptsize $R$}}
-      child {node (1_13) [word] {19} edge from parent node[auto] {\scriptsize $C$}} }edge from parent node[auto] {\scriptsize $A$}} }edge from parent node[auto] {\scriptsize $H$}} }
-;
-\end{tikzpicture}  
+      child {node (1_12) [word] {up}  edge from parent node[auto]  {\scriptsize $R$}}
+      child {node (1_13) [word] {19}  edge from parent node[auto]  {\scriptsize $C$}}
+      child {node (1_16) [word] {\%}  edge from parent node[auto]  {\scriptsize $U$}}
+      } edge from parent node[auto]  {\scriptsize $A$}}
+    } edge from parent node[auto]  {\scriptsize $H$}}
+  child {node (1_17) [word] {.}  edge from parent node[auto]  {\scriptsize $U$}}
+  };
+  \draw[dashed,->] (1_10) to node [auto] {\scriptsize $A$} (1_3);
+\end{tikzpicture}
   }\caption{Manually annotated UCCA \label{fig:wsj_0011.8_orig}}
   
 \end{subfigure}}
 
 \caption{UCCA graphs for sentence \lstinline{wsj_0011.8}\label{fig:wsj_0011.8}}
 
-\end{figure}
+\end{figure*}
 
 \paragraph{Conversion of automatically parsed UD annotations.}
 
