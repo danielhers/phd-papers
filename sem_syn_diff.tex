@@ -90,11 +90,19 @@ how much of the difference is explained by the differences in---
 \begin{itemize}
 \item Evaluation metric,
 \item Amount of training data,
-\item Formal annotation choices,
-\item Content.
+\item Maturity of technology dedicated to the scheme,
+\item Learnability of the scheme.
 \end{itemize}
 
-The gap can be explained by fine-grained semantic annotation such as adposition and case supersenses
+Learnability, in turn, is affected by
+\begin{itemize}
+\item Formal annotation choices \cite{Schwartz:12},
+\item Actual content that the scheme attempts to capture.
+\end{itemize}
+
+
+The gap can be bridged by fine-grained semantic annotation,
+such as adposition and case supersenses
 \cite{schneider2017adposition,blodgett2018semantic}.
 
 To explore the difference in content, we experiment with converting UD to UCCA
@@ -123,6 +131,8 @@ as shown by \citet{wang-xue-pradhan:2015:ACL-IJCNLP},
 who achieved the best results using the Charniak parser trained on a
 much larger and more diverse dataset---the full OntoNotes corpus,
 rather than the Stanford parser trained on the Penn TreeBank.
+
+\citet{szubert2018structured} showed that
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -325,12 +335,8 @@ To parse text into UD, we use UDPipe \cite{udpipe:2017}.
 On UD v1.2, UDPipe achieved 80.2\% LAS $F_1$ on English using automatic POS tags.
 On French it achieved 77.8\% and on German 71.8\%.
 
-We convert UD into a unified DAG format \cite{hershcovich2018multitask},
-which is inclusive enough to
-allow representing any of the schemes with very little loss of information.
-%For UD, and conversion results in 98.5\% LAS $F_1$ on the UD English test set,
-%due to multi-word tokens, not supported in the unified DAG format.
-
+We extend the conversion protocol by \citet{hershcovich2018multitask},
+converting UD into a unified DAG format.
 The format consists of a rooted DAG, where the tokens are the terminal nodes.
 As in the UCCA format, edges are labeled (but not nodes),
 and are divided into \textit{primary} and \textit{remote} edges,
@@ -451,12 +457,55 @@ For comparison, the unlabeled evaluation (Table~\ref{tab:conversion_results_unla
 servers as an oracle experiment for the labeled conversion,
 and is an upper bound given a fixed structural conversion.
 
+\paragraph{Conversion of automatically parsed UD annotations.}
+
+To be able to evaluate the conversion on a larger corpus,
+such as the UCCA Wiki set, which does not have UD annotations,
+we use an automatic UD parser: UDPipe.
+The results appear in Table~\ref{tab:conversion_results_labeled}.
+
+
+\section{Learned label reassignment}\label{sec:learning}
+
+Rather than mapping syntactic UD labels to semantic UCCA labels
+by a fixed set of replacements, we can use the context to learn
+which replacement to apply, closing the gap between the labeled
+and unlabeled scores.
+
+
+\section{Analysis of differences}\label{sec:analysis}
+
+
+
 As an example for divergence between the schemes, Figure~\ref{fig:wsj_0011.8} shows
 the same sentence after conversion and as manually annotated.
 This short sentence got an $F_1$ of 34.8\%.
 
 
 \begin{figure*}[!ht]
+\fbox{\begin{subfigure}{\textwidth}
+\begin{dependency}
+\begin{deptext}[column sep=2em]
+% sent_id = wsj_0011.8
+% text = Imports were at $ 50.38 billion , up 19 % .
+% doc_id = wsj_0011
+Imports \& were \& at  \& \$   \& 50.38 \& billion \& ,     \& up  \& 19  \& \%   \& .    \\
+%NOUN    \& AUX  \& ADP \& SYM \& NUM   \& NUM     \& PUNCT \& ADV \& NUM \& SYM \& PUNCT \\
+\end{deptext}
+\depedge{4}{1}{nsubj}
+\depedge{4}{2}{cop}
+\depedge{4}{3}{case}
+\deproot{4}{root}
+\depedge{6}{5}{compound}
+\depedge{4}{6}{nummod}
+\depedge{4}{7}{punct}
+\depedge{4}{8}{advmod}
+\depedge{10}{9}{nummod}
+\depedge{8}{10}{obl:npmod}
+\depedge{4}{11}{punct}
+\end{dependency}
+\caption{Original UD tree.\label{fig:wsj_0011.8_ud}}
+\end{subfigure}}
 \fbox{\begin{subfigure}{\textwidth}
   \centering
   \scalebox{.95}{
@@ -493,7 +542,7 @@ This short sentence got an $F_1$ of 34.8\%.
   }
 ;
 \end{tikzpicture}
-  }\caption{Converted from gold UD to UCCA \label{fig:wsj_0011.8_converted}}
+  }\caption{Converted from gold UD to UCCA.\label{fig:wsj_0011.8_converted}}
 \end{subfigure}}
   
 \fbox{\begin{subfigure}{\textwidth}
@@ -534,28 +583,13 @@ This short sentence got an $F_1$ of 34.8\%.
   };
   \draw[dashed,->] (1_10) to node [auto] {\scriptsize $A$} (1_3);
 \end{tikzpicture}
-  }\caption{Manually annotated UCCA \label{fig:wsj_0011.8_orig}}
+  }\caption{Manually annotated UCCA.\label{fig:wsj_0011.8_orig}}
   
 \end{subfigure}}
 
 \caption{UCCA graphs for sentence \lstinline{wsj_0011.8}\label{fig:wsj_0011.8}}
 
 \end{figure*}
-
-\paragraph{Conversion of automatically parsed UD annotations.}
-
-To be able to evaluate the conversion on a larger corpus,
-such as the UCCA Wiki set, which does not have UD annotations,
-we use an automatic UD parser: UDPipe.
-The results appear in Table~\ref{tab:conversion_results_labeled}.
-
-
-\section{Learned label reassignment}\label{sec:learning}
-
-Rather than mapping syntactic UD labels to semantic UCCA labels
-by a fixed set of replacements, we can use the context to learn
-which replacement to apply, closing the gap between the labeled
-and unlabeled scores.
 
 
 \section{Experiments}\label{sec:experiments}
