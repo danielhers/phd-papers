@@ -128,26 +128,42 @@ AMR datasets already contain automatically aligned graphs.
 
 
 \begin{figure}
-  \begin{tikzpicture}[level distance=16mm, ->,
+  \begin{tikzpicture}[level distance=20mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
-      level 1/.style={sibling distance=28mm},
+      level 1/.style={sibling distance=26mm},
       level 2/.style={sibling distance=14mm},
       level 3/.style={sibling distance=12mm}]
-    \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [word] {moved}
-      child {node [word] {After}
+    \tikzstyle{word} = [font=\rmfamily\normalsize,color=black]
+    \node (ROOT) [draw=black,ellipse] {$\langle \ell \rangle$-01}
+      child {node [draw=black,ellipse] {$\langle \ell \rangle$}
       {
-            child {node (graduation) [word] {graduation} edge from parent node {op} }
+            child {node [word] {After} edge from parent node {\scriptsize Terminal}}
+            child {node (graduation) [draw=black,ellipse] {$\langle v \rangle$-01}
+            {
+              child {node [word] {graduation \quad ,} edge from parent node {\scriptsize Terminal}}
+            } edge from parent node {op} }
       } edge from parent node {time} }
-      child {node (John) [fill=black,circle] {}
+      child {node (John) [draw=black,ellipse] {person}
       {
-        child {node [word] {John} edge from parent node {name} }
+        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
+        {
+          child {node [word] {John} edge from parent node {\scriptsize Terminal}}
+        } edge from parent node {name} }
       } edge from parent node {ARG0} }
-      child {node [fill=black,circle] {}
+      child {node [draw=black,ellipse] {city}
       {
-        child {node [word] {Paris} edge from parent node {name} }
+        child {node {}
+        {
+            child {node [word] (moved) {\quad moved} edge from parent [draw=none]}
+            child {node [word] {to} edge from parent [draw=none]}
+        } edge from parent [draw=none]}
+        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
+        {
+          child {node [word] {Paris} edge from parent node {\scriptsize Terminal}}
+        } edge from parent node {name} }
       } edge from parent node {ARG2} }
       ;
+      \draw[bend left] (ROOT) to node {\scriptsize Terminal} (moved);
       \draw[dashed] (graduation) to node {ARG0} (John);
   \end{tikzpicture}
 \caption{Converted AMR graph, with
