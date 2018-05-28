@@ -422,14 +422,50 @@ head's swap indices.
 
 \section{Multitask transition-based parsing}\label{sec:multitask}
 
-Since the same model can be applied to different tasks, we can train it jointly on multiple tasks.
+We train the model jointly on concept and relation identification.
 In this section we focus on the NN model.
-Rather than sharing the whole set of parameters (and getting a mix of action labels as a result),
-we share only part of the model.
-Specifically, in addition to the task-specific input-encoding bidirectional LSTM,
+In addition to the task-specific input-encoding bidirectional LSTM,
 we use a shared bidirectional LSTM. The outputs of both LSTMs are concatenated and
-fed into the task-specific MLP (see Figure~\ref{fig:model}),
-in a manner similar to \citet{P17-1186}.
+fed into the task-specific MLP (see Figure~\ref{fig:multi_model}),
+in a manner similar to \citet{hershcovich2018multitask}.
+
+
+\begin{figure}[t]
+   \begin{tikzpicture}
+   \node[anchor=west] at (0,.75) {Parser state};
+   \draw[color=gray,dashed] (0,0) rectangle (7.5,.5);
+    \node (x4) at (3.75,0.25) {\ldots};
+   \end{tikzpicture}
+   \begin{tikzpicture}[->]
+   \node[anchor=west] at (0,6) {Classifier};
+   \tiny
+   \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
+   \node[main] (specific) at (1,3.5) {\small Task-specific BiLSTM};
+   \node[main,color=blue] (shared) at (6,3.5) {\small Shared BiLSTM};
+   \node[color=blue] (embeddings) at (3.5,1.5) {\small Shared embeddings};
+   \foreach \i/\word in {0/{After},2/{graduation},5/{to},7/{Paris}} {
+       \node (x\i) at (\i,1) {\scriptsize \word};
+       \node[main,color=blue] (e\i) at (\i,2.2) {};
+       \path[color=blue] (x\i) edge (e\i);
+       \path (e\i) edge (specific);
+       \path[color=blue] (e\i) edge (shared);
+   }
+    \node (x4) at (3.5,1) {\ldots};
+    \node[main] (mlp) at (3.5,4.6) {\small Task-specific MLP};
+    \path (specific) edge (mlp);
+    \path[color=blue] (shared) edge (mlp);
+    \coordinate (state) at (6.5,6.3);
+    \path (state) edge [bend left] (mlp);
+    \node (transition) at (3.5,5.8) {transition};
+    \path (mlp) edge node[right] {softmax} (transition);
+   \end{tikzpicture}
+   \caption{MTL model.
+      Token representations are computed both by a task-specific and a shared BiLSTM.
+      Their outputs are concatenated with the parser state embedding,
+      identical to Figure~\ref{fig:single_model},
+      and fed into the task-specific MLP for selecting the next transition.
+      Shared parameters are shown in blue.}\label{fig:multi_model}
+\end{figure}
 
 
 \section{Experiments}\label{sec:experiments}
@@ -442,11 +478,9 @@ For AMR, we use LDC2016E25, used in SemEval 2017 \cite{may2017semeval}.
 \begin{table}
 \begin{tabular}{lcc}
 Corpus & \# Tokens & \# Sentences \\
-\textbf{UCCA} \\
-\textbf{AMR} \\
 LDC2016E25 & 708701 & 39260 \\
 \end{tabular}
-\caption{Size of each corpus.\label{tab:corpora}}
+\caption{Size of the corpus.\label{tab:corpora}}
 \end{table}
 
 
@@ -462,16 +496,16 @@ The results when evaluated on the development set are shown in Table~\ref{tab:si
 
 
 \begin{table}
-\begin{tabular}{llccc}
-\textbf{AMR \small(LDC2016E25)} & \small Smatch & \textbf{P} & \textbf{R} & \textbf{F1} \\
-Sparse & & 55 & 53.7 & 54.4 \\
-NN & & 66 & 66 & 66 \\
-\multicolumn{4}{l}{\citet{lyu2018amr}} &  \\
-\multicolumn{4}{l}{\citet{damonte-17}} &  \\
-\multicolumn{4}{l}{\citet{vilares2018transition}} &  \\
+\begin{tabular}{lccc}
+\textbf{AMR \small(LDC2016E25)} & \textbf{P} & \textbf{R} & \textbf{F1} \\
+Ours (Sparse) & 55 & 53.7 & 54.4 \\
+Ours (BiLSTM) & 66 & 66 & 66 \\
+\multicolumn{3}{l}{\citet{lyu2018amr}} & 74.4 \\
+\multicolumn{3}{l}{\citet{damonte-17}} & 64 \\
+\multicolumn{3}{l}{\citet{vilares2018transition}} & 64 \\
 \end{tabular}
-\caption{Results on dev set.
-Best reported results given for comparison.
+\caption{Smatch results on dev set.
+Best reported results (on test) given for comparison.
 \label{tab:single}}
 \end{table}
 
