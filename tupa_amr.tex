@@ -60,10 +60,10 @@
 
 Following increased interest in semantic representation,
 recent developments in natural language processing have focused on semantic parsing, including
-Abstract Meaning Representation parsing \cite[AMR;][]{banarescu2013abstract,damonte-17,11099},
-Semantic Dependency Parsing \cite[SDP;][]{oepen2015semeval,P17-1186},
-Universal Conceptual Cognitive Annotation parsing \cite[UCCA;][]{abend2013universal,hershcovich2017a},
-and frame-semantic parsing \cite{gildea2002automatic,swayamdipta2017frame,ringgaard2017sling},
+Abstract Meaning Representation parsing \cite[AMR;][]{banarescu2013abstract},
+Semantic Dependency Parsing \cite[SDP;][]{oepen2015semeval},
+Universal Conceptual Cognitive Annotation parsing \cite[UCCA;][]{abend2013universal},
+and frame-semantic parsing \cite{gildea2002automatic},
 among others.
 
 Semantic parsing often requires parsers that can handle a general directed acyclic graph (DAG)
@@ -163,7 +163,7 @@ AMR datasets already contain automatically aligned graphs.
 
 \section{DAG format}\label{sec:conversion}
 
-\cite{hershcovich2018multitask}
+We convert AMR into a unified DAG format \cite{hershcovich2018multitask}.
 In this format, the graph is a rooted DAG, and the text tokens are terminal nodes.
 Edges are labeled, and nodes are optionally labeled too (to support AMR parsing).
 All edges entering terminals bear the \textit{Terminal} label.
