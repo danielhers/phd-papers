@@ -2,7 +2,7 @@
 % File tupa_amr.tex
 
 \documentclass[11pt,a4paper]{article}
-\usepackage[hyperref]{naaclhlt2018}
+\usepackage[hyperref]{conll2018}
 \usepackage{times}
 \usepackage{latexsym}
 \usepackage{tikz}
@@ -25,7 +25,6 @@
 \usetikzlibrary{shapes,shapes.misc}
 
 %\aclfinalcopy % Uncomment this line for the final submission
-%\def\aclpaperid{***} %  Enter the acl Paper ID here
 
 %\setlength\titlebox{5cm}
 % You can expand the titlebox if you need extra space
@@ -71,10 +70,12 @@ While each of these representation schemes has its own set of distinctions it fo
 much of the semantic content is shared between many of them \cite{abend2017state}.
 
 
-\begin{figure*}
-  \begin{tikzpicture}[level distance=15mm, ->,
-      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
-      level 1/.style={sibling distance=26mm}]
+\begin{figure}
+  \begin{tikzpicture}[->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
+      level 1/.style={level distance=18mm,sibling distance=26mm},
+      level 2/.style={level distance=16mm},
+      level 3/.style={level distance=15mm}]
     \node (ROOT) [draw=black,ellipse] {move-01}
       child {node [draw=black,ellipse] {after}
       {
@@ -102,7 +103,7 @@ much of the semantic content is shared between many of them \cite{abend2017state
   concepts and constants by alignment.
   Variables are represented by their concepts.}
 \label{fig:original_example}
-\end{figure*}
+\end{figure}
 
 
 \section{Abstract Meaning Representation}\label{sec:amr}
@@ -124,46 +125,29 @@ a process referred to as concept identification.
 AMR datasets already contain automatically aligned graphs.
 
 
-\begin{figure*}
+\begin{figure}
   \begin{tikzpicture}[level distance=16mm, ->,
-      every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
       level 1/.style={sibling distance=28mm},
       level 2/.style={sibling distance=14mm},
       level 3/.style={sibling distance=12mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [draw=black,ellipse] {$\langle \ell \rangle$-01}
-      child {node [draw=black,ellipse] {$\langle \ell \rangle$}
+    \node (ROOT) [word] {moved}
+      child {node [word] {After}
       {
-            child {node [word] {After} edge from parent node {\tiny Terminal}}
-            child {node (graduation) [draw=black,ellipse] {$\langle v \rangle$-01}
-            {
-              child {node [word] {graduation \quad ,} edge from parent node {\tiny Terminal}}
-            } edge from parent node {op} }
+            child {node (graduation) [word] {graduation} edge from parent node {op} }
       } edge from parent node {time} }
-      child {node (John) [draw=black,ellipse] {person}
+      child {node (John) [fill=black,circle] {}
       {
-        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
-        {
-          child {node [word] {John} edge from parent node {\tiny Terminal}}
-        } edge from parent node {name} }
+        child {node [word] {John} edge from parent node {name} }
       } edge from parent node {ARG0} }
-      child {node [draw=black,ellipse] {city}
+      child {node [fill=black,circle] {}
       {
-        child {node {}
-        {
-            child {node [word] (moved) {\quad moved} edge from parent [draw=none]}
-            child {node [word] {to} edge from parent [draw=none]}
-        } edge from parent [draw=none]}
-        child {node [draw=black,ellipse] {"$\langle T \rangle$"}
-        {
-          child {node [word] {Paris} edge from parent node {\tiny Terminal}}
-        } edge from parent node {name} }
+        child {node [word] {Paris} edge from parent node {name} }
       } edge from parent node {ARG2} }
       ;
-      \draw[bend left] (ROOT) to node {\tiny Terminal} (moved);
       \draw[dashed] (graduation) to node {ARG0} (John);
   \end{tikzpicture}
-
 \caption{Converted AMR graph, with
   text tokens added according to the alignments, and
   pre-terminals included to show node labels.
@@ -172,11 +156,12 @@ AMR datasets already contain automatically aligned graphs.
   Numeric suffixes of \textit{op} relations were removed,
   and names collapsed.}
 \label{fig:converted_example}
-\end{figure*}
+\end{figure}
 
 
 \section{DAG format}\label{sec:conversion}
 
+\cite{hershcovich2018multitask}
 In this format, the graph is a rooted DAG, and the text tokens are terminal nodes.
 Edges are labeled, and nodes are optionally labeled too (to support AMR parsing).
 All edges entering terminals bear the \textit{Terminal} label.
@@ -303,6 +288,7 @@ For all classifiers, inference is performed greedily,
 and training is done with an oracle that provides a set of all possible labels at a given state
 (but only valid transitions may be taken during training).
 
+
 \begin{figure}[t]
    \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
    \node[anchor=west] at (0,1.5) {Parser state};
@@ -324,36 +310,28 @@ and training is done with an oracle that provides a set of all possible labels a
      } edge from parent [->] node[right] {\small H} };
    \end{tikzpicture}
    \begin{tikzpicture}[->]
-   \node[anchor=west] at (0,6) {Transition classifier};
+   \node[anchor=west] at (0,6) {Classifier};
    \tiny
    \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
-   \node[main] (specific) at (2,3) {\small Task-specific BiLSTM};
-   \node[main] (shared) at (6,3) {\small Shared BiLSTM};
-   \foreach \i/\word in {1/{After},3/{graduation},5/{to},7/{Paris}} {
+   \node[main] (specific) at (3.5,3.5) {\small BiLSTM};
+   \node (embeddings) at (3.5,1.7) {\small Embeddings};
+   \foreach \i/\word in {0/{After},2/{graduation},5/{to},7/{Paris}} {
        \node (x\i) at (\i,1) {\scriptsize \word};
-       \path (x\i) edge (specific);
-       \path (x\i) edge (shared);
+       \node[main] (e\i) at (\i,2.2) {};
+       \path (x\i) edge (e\i);
+       \path (e\i) edge (specific);
    }
-    \node (x4) at (4,1) {\ldots};
-    \node[main] (mlp) at (4,4.6) {\small Task-specific MLP};
+    \node (x4) at (3.5,1) {\ldots};
+    \node[main] (mlp) at (3.5,4.6) {\small MLP};
     \path (specific) edge (mlp);
-    \path (shared) edge (mlp);
-    \coordinate (state) at (6.5,6.5);
+    \coordinate (state) at (6.5,6.3);
     \path (state) edge [bend left] (mlp);
-    \node (transition) at (4,5.8) {\textsc{Node}\textsubscript{U}};
-    \path (mlp) edge (transition);
+    \node (transition) at (3.5,5.8) {transition};
+    \path (mlp) edge node[right] {softmax} (transition);
    \end{tikzpicture}
-   \caption{Illustration of the model.
-      Top: parser state (stack, buffer and intermediate graph).
-      Bottom: NN architecture.
-      Vector representations for the input tokens is computed
-      by two multilayer BiLSTMs:
-      one specific to the current task, and one shared among all tasks.
-      The resulting vectors for specific tokens are concatenated with
-      embedding and numeric features from the parser state
-      (for existing edge labels, number of children, etc.),
-      and fed into the MLP for selecting the next transition.}
-   \label{fig:model}
+\caption{Illustration of the TUPA model, from \citet{hershcovich2018multitask}.
+Top: parser state.
+Bottom: BiLTSM architecture.}\label{fig:single_model}
 \end{figure}
 
 In addition to the features used by \citet{hershcovich2017a},
