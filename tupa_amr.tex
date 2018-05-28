@@ -32,7 +32,7 @@
 % smaller than 5cm (the original size); we will check this
 % in the camera-ready version and ask you to change it back.
 
-\title{A Transition-Based DAG Parser for Abstract Meaning Representation}
+\title{Multitask Transition-Based Parsing for Abstract Meaning Representation}
 
 \author{Daniel Hershcovich$^{1,2}$ \\
   \\\And
@@ -50,8 +50,10 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-  We fit a general transition-based DAG parser for AMR parsing,
-  achieving state-of-the-art results.
+  We apply TUPA, a transition-based semantic parser, to
+  Abstract Meaning Representation parsing.
+  By jointly modeling concept and relation identification,
+  we reach the best reported scores among transition-based AMR parsers.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
@@ -447,7 +449,7 @@ The results when evaluated on the development set are shown in Table~\ref{tab:si
 \begin{tabular}{llccc}
 \textbf{AMR \small(LDC2016E25)} & \small Smatch & \textbf{P} & \textbf{R} & \textbf{F1} \\
 Sparse & & 55 & 53.7 & 54.4 \\
-NN & & 66.7 & 64.7 & 65.7 \\
+NN & & 66 & 66 & 66 \\
 \multicolumn{4}{l}{\citet{foland2017abstract}} & 70.9 \\
 
 \end{tabular}
@@ -457,6 +459,24 @@ Best reported results given for comparison.
 \end{table}
 
 
+Fine-grained evaluation \cite{damonte-17} is in Table~\ref{tab:fine_grained}.
+
+\begin{table}
+\begin{tabular}{lc}
+\textbf{Metric} & \textbf{Ours} \\
+Smatch & 66 \\
+Unlabeled & 71 \\
+No WSD & 67 \\
+NER & 73 \\
+Wiki & 61 \\
+Negations & 55 \\
+Concepts & 81 \\
+Reentrancies & 47 \\
+SRL & 61
+\end{tabular}
+\caption{F-score comparison for the dev set.
+\label{tab:fine_grained}}
+\end{table}
 
 
 \section{Related work}\label{sec:related_work}
