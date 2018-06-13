@@ -152,13 +152,13 @@ Initial state:
 	\node[fill=black] at (0.5,0.25) {};
 	\draw[xstep=1cm,ystep=5mm,color=gray] (3,0) grid (10,.5);
 	\node[anchor=west,style={font=\sffamily}] at (8.9,1.00) {buffer};
-	\node[anchor=west] at (3,0.25) {\small You};
-	\node[anchor=west] at (4,0.25) {\small want};
-	\node[anchor=west] at (5,0.25) {\small to};
-	\node[anchor=west] at (6,0.25) {\small take};
-	\node[anchor=west] at (7,0.25) {\small a};
-	\node[anchor=west] at (8,0.25) {\small long};
-	\node[anchor=west] at (9,0.25) {\small bath};
+	\node[anchor=west] at (3,0.25) {You};
+	\node[anchor=west] at (4,0.25) {want};
+	\node[anchor=west] at (5,0.25) {to};
+	\node[anchor=west] at (6,0.25) {take};
+	\node[anchor=west] at (7,0.25) {a};
+	\node[anchor=west] at (8,0.25) {long};
+	\node[anchor=west] at (9,0.25) {bath};
 \end{tikzpicture}
 
 \vfill
@@ -210,8 +210,8 @@ ordinal features (height, number of parents and children)
 	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
 	\node[fill=black, circle] at (0.5,0.25) {};
 	\node[fill=blue, circle] at (2.5,0.25) {};
-	\node[anchor=west] at (1,0.25) {\small You};
-	\node[anchor=west] at (3,0.25) {\small take};
+	\node[anchor=west] at (1,0.25) {You};
+	\node[anchor=west] at (3,0.25) {take};
 \end{tikzpicture}
 
 \vspace{1cm}
@@ -219,9 +219,9 @@ ordinal features (height, number of parents and children)
 	\node[anchor=west,style={font=\sffamily}] at (3.8,0.25){buffer};
 	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (9,.5);
 	\node[fill=red, circle] at (5.5,0.25) {};
-	\node[anchor=west] at (6,0.25) {\small a};
-	\node[anchor=west] at (7,0.25) {\small long};
-	\node[anchor=west] at (8,0.25) {\small bath};
+	\node[anchor=west] at (6,0.25) {a};
+	\node[anchor=west] at (7,0.25) {long};
+	\node[anchor=west] at (8,0.25) {bath};
 \end{tikzpicture}
 \end{minipage}
 \begin{minipage}{.4\textwidth}
@@ -463,8 +463,8 @@ We consider four schemes \cite{abend2013universal,banarescu2013abstract,oepen201
 			\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
 			\node[fill=black, circle] at (0.5,0.25) {};
 			\node[fill=blue, circle] at (2.5,0.25) {};
-			\node[anchor=west] at (1,0.25) {\small You};
-			\node[anchor=west] at (3,0.25) {\small take};
+			\node[anchor=west] at (1,0.25) {You};
+			\node[anchor=west] at (3,0.25) {take};
 		\end{tikzpicture}
 		
 		\vspace{1cm}
@@ -472,9 +472,9 @@ We consider four schemes \cite{abend2013universal,banarescu2013abstract,oepen201
 			\node[anchor=west,style={font=\sffamily}] at (3.8,0.25){buffer};
 			\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (9,.5);
 			\node[fill=red, circle] at (5.5,0.25) {};
-			\node[anchor=west] at (6,0.25) {\small a};
-			\node[anchor=west] at (7,0.25) {\small long};
-			\node[anchor=west] at (8,0.25) {\small bath};
+			\node[anchor=west] at (6,0.25) {a};
+			\node[anchor=west] at (7,0.25) {long};
+			\node[anchor=west] at (8,0.25) {bath};
 		\end{tikzpicture}
 		\end{minipage}
 		\begin{minipage}{.4\textwidth}
@@ -571,7 +571,7 @@ supported by TUPA.
 	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
 	      level 1/.style={sibling distance=28mm,level distance=13mm},
 	      level 2/.style={sibling distance=16mm,level distance=15mm},
-	      level 3/.style={level distance=14mm}]
+	      level 3/.style={level distance=18mm}]
 	    \tikzstyle{word} = [font=\rmfamily,color=black]
 	    \node (ROOT) [fill=DarkRed,circle] {}
 	      child {node (after) [fill=DarkRed,circle] {}
@@ -621,7 +621,7 @@ supported by TUPA.
 	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkBlue,
 	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
 	      level 1/.style={sibling distance=16mm,level distance=13mm},
-	      level 2/.style={sibling distance=16mm,level distance=15mm}]
+	      level 2/.style={sibling distance=14mm,level distance=15mm}]
 	    \tikzstyle{word} = [font=\rmfamily,color=black]
 	    \node (ROOT) [fill=DarkBlue,circle] {}
 	      child {node (after) [fill=DarkBlue,circle] {}
@@ -728,82 +728,83 @@ Comparing graphs over the same sequence of tokens,
 
 \begin{frame}
 \frametitle{In-Domain Results}
-\parser{BiLSTM} obtains the highest F-scores in all metrics:
+Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English Wikipedia UCCA
 \begin{center}
-	\begin{tabular}{l|ccc|ccc}
-		& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
-		& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-		\hline
-		\parser{Sparse}
-		& 64.5 & 63.7 & 64.1 & 19.8 & 13.4 & 16 \\
-		\parser{MLP}
-		& 65.2 & 64.6 & 64.9 & 23.7 & 13.2 & 16.9 \\
-		\parser{BiLSTM}
-		& 74.4 & 72.7 & \textbf{73.5} & 47.4 & 51.6 & \textbf{49.4} \\
-		\hline
-		\scriptsize Bilexical DAG
-		& & & \scriptsize (91) & & & \scriptsize (58.3) \\
-		DAGParser
-		& 61.8 & 55.8 & 58.6 & 9.5 & 0.5 & 1 \\
-		TurboParser
-		& 57.7 & 46 & 51.2 & 77.8 & 1.8 & 3.7 \\
-		\hline
-		\scriptsize Bilexical tree
-		& & & \scriptsize (91) & & & \scriptsize -- \\
-		MaltParser
-		& 62.8 & 57.7 & 60.2 & -- & -- & -- \\
-		Stack LSTM
-		& 73.2 & 66.9 & 69.9 & -- & -- & -- \\
-		\hline
-		\scriptsize Tree
-		& & & \scriptsize (100) & & & \scriptsize -- \\
-		\textsc{uparse}
-		& 60.9 & 61.2 & 61.1 & -- & -- & --
+	\begin{tabular}{l|lll|lll}
+	& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
+	& \textbf{LP} & \textbf{LR} & \textbf{LF}
+	& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+	\hline
+	Single-task
+	& 74.4 & 72.9 & 73.6 & 53 & 50 & 51.5 \\
+	\cline{1-1}
+	AMR
+	& 74.7 & 72.8 & 73.7 & 48.7$\star$ & 51.1 & 49.9 \\
+	DM
+	& 75.7$\star$ & 73.9$\star$ & 74.8$\star$ & 54.9 & 53 & \textbf{53.9} \\
+	UD$^{++}$
+	& 75$\star$ & 73.2 & 74.1$\star$ & 49 & 52.7 & 50.8 \\
+	AMR + DM
+	& 75.6$\star$ & 73.9$\star$ & 74.7$\star$ & 49.9 & 53 & 51.4 \\
+	AMR + UD$^{++}$
+	& 74.9 & 72.7 & 73.8 & 47.1 & 50 & 48.5 \\
+	DM + UD$^{++}$
+	& 75.9$\star$ & 73.9$\star$ & \textbf{74.9}$\star$ & 48 & 54.8 & 51.2 \\
+	All
+	& 75.6$\star$ & 73.1 & 74.4$\star$ & 50.9 & 53.2 & 52
 	\end{tabular}
-	\captionof{table}{Results on the Wiki test set.}
 \end{center}
 \end{frame}
-\note{The experiments show \parser{} outperforms a large variety of baseline parsers. \\
-Remote edges are challenging -- they incorporate the REENTRANCY in the graph, and \parser{} parses them quite effectively.}
 
 \begin{frame}
 \frametitle{Out-of-Domain Results}
-Comparable on out-of-domain test set:
+Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English 20K Leagues UCCA
 \begin{center}
-	\begin{tabular}{l|ccc|ccc}
-		& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
-		& \textbf{LP} & \textbf{LR} & \textbf{LF} & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-		\hline
-		\parser{Sparse}
-		& 59.6 & 59.9 & 59.8 & 22.2 & 7.7 & 11.5 \\
-		\parser{MLP}
-		& 62.3 & 62.6 & 62.5 & 20.9 & 6.3 & 9.7 \\
-		\parser{BiLSTM}
-		& 68.7 & 68.5 & \textbf{68.6} & 38.6 & 18.8 & \textbf{25.3} \\
-		\hline
-		\scriptsize Bilexical DAG
-		& & & \scriptsize (91.3) & & & \scriptsize (43.4) \\
-		DAGParser
-		& 56.4 & 50.6 & 53.4 & -- & 0 & 0 \\
-		TurboParser
-		& 50.3 & 37.7 & 43.1 & 100 & 0.4 & 0.8 \\
-		\hline
-		\scriptsize Bilexical tree
-		& & & \scriptsize (91.3) & & & \scriptsize -- \\
-		MaltParser
-		& 57.8 & 53 & 55.3 & -- & -- & -- \\
-		Stack LSTM
-		& 66.1 & 61.1 & 63.5 & -- & -- & -- \\
-		\hline
-		\scriptsize Tree
-		& & & \scriptsize (100) & & & \scriptsize -- \\
-		\textsc{uparse}
-		& 52.7 & 52.8 & 52.8 & -- & -- & --
+	\begin{tabular}{l|lll|lll}
+	& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
+	& \textbf{LP} & \textbf{LR} & \textbf{LF}
+	& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+	\hline
+	Single-task
+	& 69 & 69 & 69 & 41.2 & 19.8 & 26.7 \\
+	\cline{1-1}
+	AMR
+	& 69.5 & 69.5 & 69.5 & 42.9 & 20.2 & 27.5 \\
+	DM
+	& 70.7$\star$ & 70.7$\star$ & 70.7$\star$ & 42.7 & 18.6 & 25.9 \\
+	UD$^{++}$
+	& 69.6 & 69.8$\star$ & 69.7 & 41.4 & 22 & 28.7 \\
+	AMR + DM
+	& 70.7$\star$ & 70.2$\star$ & 70.5$\star$ & 45.8 & 19.4 & 27.3 \\
+	AMR + UD$^{++}$
+	& 70.2$\star$ & 69.9$\star$ & 70$\star$ & 45.1 & 21.8 & 29.4 \\
+	DM + UD$^{++}$
+	& 70.8$\star$ & 70.3$\star$ & 70.6$\star$ & 41.6 & 21.6 & 28.4 \\
+	All
+	& 71.2$\star$ & 70.9$\star$ & \textbf{71}$\star$ & 45.1 & 22 & \textbf{29.6}
 	\end{tabular}
-	\captionof{table}{Results on the 20K Leagues out-of-domain set.}
 \end{center}
 \end{frame}
-\note{We also evaluated all parsers on the out-of-domain set, to test their domain adaptation ability. The results are quite good, despite the different genre.}
+
+\begin{frame}
+\frametitle{French and German Results}
+Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/German 20K Leagues UCCA
+\begin{center}
+	\begin{tabular}{l|lll|lll}
+	& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
+	& \textbf{LP} & \textbf{LR} & \textbf{LF}
+	& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+	\hline
+	\multicolumn{4}{l|}{\bf French (in-domain)} & \\
+	Single-task & 68.2 & 67 & 67.6 & 26 & \enskip 9.4 & 13.9 \\
+	UD & 70.3 & 70$\star$ & \textbf{70.1}$\star$ & 43.8 & 13.2 & 20.3 \\
+	\hline
+	\multicolumn{4}{l|}{\bf German (in-domain)} & \\
+	Single-task & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
+	UD & 73.7$\star$ & 72.6$\star$ & \textbf{73.2}$\star$ & 61.8 & 24.9$\star$ & \textbf{35.5}$\star$
+	\end{tabular}
+\end{center}
+\end{frame}
 
 
 
