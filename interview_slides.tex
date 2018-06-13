@@ -811,10 +811,14 @@ Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/Ge
 \begin{frame}
 \frametitle{Conclusion}
 \begin{itemize}
- \item UCCA's semantic distinctions require a graph structure including {\color{blue}non-terminals}, {\color{orange}reentrancy} and {\color{red}discontinuity}.
- \item \parser{} is an accurate transition-based UCCA parser,
- 	and the \textbf{first} to support UCCA and any DAG over the text tokens.
- \item Outperforms strong conversion-based baselines.
+ \item Multitask learning improves UCCA parsing.
+ \item \parser{} supports UCCA, AMR, SDP and UD with a uniform transition system and DAG format.
+\end{itemize}
+
+Future work:
+\begin{itemize}
+ \item Examination of the factors contributing to MTL success.
+ \item AMR, SDP and UD parsing as main tasks. Preliminary experiments show promising results.
 \end{itemize}
 
 \end{frame}
