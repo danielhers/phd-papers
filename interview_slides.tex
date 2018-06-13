@@ -28,7 +28,7 @@
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{multicol}
-\usepackage{tikz}
+\usepackage{tikz,pgfplots,pgfplotstable}
 \usepackage{tikz-dependency}
 \usetikzlibrary{arrows.meta,graphs,graphs.standard,graphdrawing,quotes,shapes}
 \usegdlibrary{layered,trees}
@@ -288,7 +288,7 @@ ordinal features (height, number of parents and children)
 \end{frame}
 
 \begin{frame}
-\frametitle{Multitask Parsing}
+\frametitle{Tackled Tasks}
 We consider four schemes \cite{abend2013universal,banarescu2013abstract,oepen2016towards,nivre2016universal}:
 
 	{
@@ -408,50 +408,50 @@ We consider four schemes \cite{abend2013universal,banarescu2013abstract,oepen201
 	
 \end{frame}
 
-
-\begin{frame}
-\frametitle{Experimental Setup}
-\begin{itemize}
- \item UCCA Wikipedia corpus ($\stackrel{\text{train}}{4268}+\stackrel{\text{dev}}{454}+\stackrel{\text{test}}{503}$ sentences).
- \item Out-of-domain: English part of English-French parallel corpus,
- 	\textit{Twenty Thousand Leagues Under the Sea} (506 sentences).
-\end{itemize}
-
-\vfill
-\begin{center}
-  \begin{minipage}{.3\textwidth}\includegraphics[width=\textwidth]{wikipedia.png}\end{minipage}
-  \begin{minipage}{.3\textwidth}\includegraphics[width=\textwidth]{squid.jpg}\end{minipage}
-\end{center}
-\end{frame}
-
 \begin{frame}
 \frametitle{Data}
-\centering
-\begin{tabular}{l|ccc|c}
-	& \multicolumn{3}{c|}{Wiki} & 20K \\
-	& \small Train & \small Dev & \small Test & Leagues \\
-	\hline
-	\# passages & 300 & 34 & 33 & 154 \\
-	\# sentences & 4268 & 454 & 503 & 506 \\
-	\hline
-	\# nodes & 298,993 & 33,704 & 35,718 & 29,315 \\
-	\% terminal & 42.96 & 43.54 & 42.87 & 42.09 \\
-	\% non-term. & 58.33 & 57.60 & 58.35 & 60.01 \\
-	\% \textbf{discont.} & \textbf{0.54} & \textbf{0.53} & \textbf{0.44} & \textbf{0.81} \\
-	\% \textbf{reentrant} & \textbf{2.38} & \textbf{1.88} & \textbf{2.15} & \textbf{2.03} \\
-	\hline
-	\# edges & 287,914 & 32,460 & 34,336 & 27,749 \\
-	\% primary & 98.25 & 98.75 & 98.74 & 97.73 \\
-	\% remote & 1.75 & 1.25 & 1.26 & 2.27 \\
-	\hline
-	\multicolumn{3}{l}{\footnotesize Average per non-terminal node} \\
-	\# children & 1.67 & 1.68 & 1.66 & 1.61 
-\end{tabular}
-\captionof{table}{Corpus statistics.}
+	The amount of labeled data varies, e.g., in English:
+	\begin{center}
+	\pgfplotstableread[row sep=\\,col sep=&]{
+		corpus & total \\
+		\color{NavyBlue} \textbf{UD} & 17062 \\
+		\color{DarkRed} \textbf{SDP} & 33964 \\
+		\color{DarkGreen} \textbf{AMR} & 36521 \\
+		\color{Indigo} \textbf{UCCA} & 5225 \\
+	    }\english
+	    \begin{tikzpicture}
+	    \begin{axis}[
+	    xbar stacked,
+	    width=10cm,
+	    height=39mm,
+	    xmin=0,
+	    xmax=60000,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\english}{corpus},
+	    axis x line=none,
+	    ]
+	    \addplot [fill=Navy, point meta=explicit symbolic,
+	    nodes near coords={\pgfmathprintnumber\pgfplotspointmeta~sentences},
+	    nodes near coords align={anchor=west}] table [x=total,y expr=\coordindex,meta=total] {\english};
+	    \end{axis}
+	    \end{tikzpicture}
+	\end{center}
+	
+	\pause
+	\vfill
+	
+	Domains differ, too:
+	\begin{center}
+		\begin{tabular}{llll}
+			\color{Indigo} \textbf{UCCA}  & \color{DarkGreen} \textbf{AMR}  & \color{DarkRed} \textbf{SDP}  & \color{NavyBlue} \textbf{UD}  \\
+			Wikipedia & blogs & news & blogs \\ books & news && news \\ & emails && emails \\ & reviews && reviews \\ &&& Q\&A
+		\end{tabular}
+	\end{center}
 \end{frame}
 
 \begin{frame}
-\frametitle{Evaluation}
+\frametitle{UCCA Evaluation}
 Comparing graphs over the same sequence of tokens,
 \begin{itemize}
 \item Match edges by their terminal yield and label.
@@ -520,7 +520,7 @@ Comparing graphs over the same sequence of tokens,
 \end{frame}
 
 \begin{frame}
-\frametitle{Results}
+\frametitle{In-Domain Results}
 \parser{BiLSTM} obtains the highest F-scores in all metrics:
 \begin{center}
 	\begin{tabular}{l|ccc|ccc}
@@ -560,7 +560,7 @@ Comparing graphs over the same sequence of tokens,
 Remote edges are challenging -- they incorporate the REENTRANCY in the graph, and \parser{} parses them quite effectively.}
 
 \begin{frame}
-\frametitle{Results}
+\frametitle{Out-of-Domain Results}
 Comparable on out-of-domain test set:
 \begin{center}
 	\begin{tabular}{l|ccc|ccc}
