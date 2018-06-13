@@ -451,6 +451,213 @@ We consider four schemes \cite{abend2013universal,banarescu2013abstract,oepen201
 \end{frame}
 
 \begin{frame}
+	\frametitle{Multitask Architecture}
+
+    We treat UCCA parsing as the main task, \\ and AMR, SDP and UD as auxiliaries.	
+	
+	\begin{center}
+		\fbox{\scalebox{.7}{
+		\begin{minipage}{.5\textwidth}
+		\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+			\node[anchor=west,style={font=\sffamily}] at (-1.2,0.25){stack};
+			\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+			\node[fill=black, circle] at (0.5,0.25) {};
+			\node[fill=blue, circle] at (2.5,0.25) {};
+			\node[anchor=west] at (1,0.25) {\small You};
+			\node[anchor=west] at (3,0.25) {\small take};
+		\end{tikzpicture}
+		
+		\vspace{1cm}
+		\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+			\node[anchor=west,style={font=\sffamily}] at (3.8,0.25){buffer};
+			\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (9,.5);
+			\node[fill=red, circle] at (5.5,0.25) {};
+			\node[anchor=west] at (6,0.25) {\small a};
+			\node[anchor=west] at (7,0.25) {\small long};
+			\node[anchor=west] at (8,0.25) {\small bath};
+		\end{tikzpicture}
+		\end{minipage}
+		\begin{minipage}{.4\textwidth}
+		\scalebox{.8}{
+		\begin{tikzpicture}[level distance=1cm, sibling distance=1cm, ->,
+		    every node/.append style={font=\rmfamily}]
+		    \node[anchor=west,style={font=\sffamily}] at (5,0) {graph};
+		    \draw[color=gray] (1.2,.3) rectangle (4.9,-3.2);
+		    \node(ROOT)[fill=black, circle] at (3,0) {}
+		      child {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
+		      child {node {want} edge from parent node [left] {\scriptsize $P$}}
+		      child {node (totakealongbath) [fill=blue, circle] {}
+		      {
+		        child {node {to} edge from parent node [left] {\scriptsize $F$}}
+		        child {node (takeabath) [fill=red, circle] {}
+		        {
+		          child {node {take} edge from parent node [right] {\scriptsize $C$}}
+		          child [opacity=0] {node {a} edge from parent node [right] {\scriptsize $F$}}
+		          child [opacity=0] {node (long) {long} edge from parent [draw=none]}
+		          child [opacity=0] {node {bath} edge from parent node [right] {\scriptsize $C$}}
+		        } edge from parent [draw=none]}
+		      } edge from parent [draw=none]}
+		      ;
+		\end{tikzpicture}
+		}
+		\end{minipage}
+		}}
+		
+		\scalebox{.3}{\Huge
+		   \begin{tikzpicture}[-{Latex[length=3mm]},thick]
+		   \tikzstyle{main}=[rounded rectangle, minimum size=23mm, draw=black!80, node distance=12mm]
+		   \node[main] (specific) at (0,10) {Task-specific BiLSTM};
+		   \node[main] (shared) at (22,10) {Shared BiLSTM};
+		   \node (embeddings) at (10.5,4.5) {Shared embeddings};
+		   \foreach \i/\word in {-4/{You},4/{want},17/{long},25/{bath}} {
+		       \node (x\i) at (\i,3) {\word};
+		       \node[main, minimum size=16mm] (e\i) at (\i,6) {};
+		       \path (x\i) edge (e\i);
+		       \path (e\i) edge (specific);
+		       \path (e\i) edge (shared);
+		   }
+		    \node (x4) at (10.5,3) {\ldots};
+		    \node[main] (mlp) at (10.5,12) {Task-specific MLP};
+		    \path (specific) edge (mlp);
+		    \path (shared) edge (mlp);
+		    \coordinate (state) at (22,17);
+		    \path (state) edge [bend left] (mlp);
+		    \node (transition) at (10.5,16.4) {transition};
+		    \path (mlp) edge node[right] {softmax} (transition);
+		   \end{tikzpicture}}
+   \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Unified DAG Format}
+
+We convert all representations into a format similar to UCCA and
+supported by TUPA.
+
+    \hspace{-5mm}
+	\begin{minipage}{.4\textwidth}
+	  \begin{center}
+	  \begin{tikzpicture}[level distance=22mm, -{Latex[length=2mm]}, color=DarkGreen,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=17mm},
+	      level 2/.style={sibling distance=13mm},
+	      level 3/.style={sibling distance=13mm}]
+	    \tikzstyle{word} = [font=\rmfamily,color=black]
+	    \node (ROOT) [word] {moved}
+	      child {node [word] {After}
+	      {
+	            child {node (graduation) [word] {graduation} edge from parent node {op} }
+	      } edge from parent node {time} }
+	      child {node (John) [fill=DarkGreen,circle] {}
+	      {
+	        child {node [word] {John} edge from parent node {name} }
+	      } edge from parent node {ARG0} }
+	      child {node [fill=DarkGreen,circle] {}
+	      {
+	        child {node [word] {Paris} edge from parent node {name} }
+	      } edge from parent node {ARG2} }
+	      ;
+	      \draw[dashed] (graduation) to node {ARG0} (John);
+	  \end{tikzpicture}
+	  \captionof{figure}{\color{DarkGreen} Converted AMR.}
+	  \end{center}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.5\textwidth}
+	  \begin{center}
+	  \scalebox{.7}{
+	  \hspace{-13mm}
+	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkRed,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=28mm,level distance=13mm},
+	      level 2/.style={sibling distance=16mm,level distance=15mm},
+	      level 3/.style={level distance=14mm}]
+	    \tikzstyle{word} = [font=\rmfamily,color=black]
+	    \node (ROOT) [fill=DarkRed,circle] {}
+	      child {node (after) [fill=DarkRed,circle] {}
+	      {
+	        child {node [draw=none] {}
+	        {
+	          child {node [word] (after_word) {After{\color{white}g}} edge from parent [draw=none]}
+	        } edge from parent [draw=none] }
+	        child {node [draw=none] {}
+	        {
+	          child {node [word] (graduation) {graduation ,} edge from parent [draw=none]}
+	        } edge from parent [draw=none] }
+	      } edge from parent node {root}}
+	      child {node [draw=none] {}
+	      {
+	        child {node (moved) [fill=DarkRed,circle] {}
+	        {
+	          child {node [word] {\quad{\color{white}g} John} edge from parent node {ARG1}}
+	          child {node [word] {moved{\color{white}g}} edge from parent node {head}}
+	        } edge from parent [draw=none] }
+	      } edge from parent [draw=none] }
+	      child {node (to) [fill=DarkRed,circle] {}
+	      {
+	        child {node [draw=none] {}
+	        {
+	            child {node [word] (to_word) {to{\color{white}g}} edge from parent [draw=none]}
+	          } edge from parent [draw=none] }
+	          child {node [draw=none] {}
+	        {
+	          child {node [word] (Paris) {Paris{\color{white}g}} edge from parent [draw=none]}
+	        } edge from parent [draw=none] }
+	      } edge from parent node {root}}
+	      ;
+	      \draw (ROOT) to node {top} (moved);
+	      \draw (after) to node {head} (after_word);
+	      \draw (after) to node {ARG2} (graduation);
+	      \draw[dashed] (after) to node {ARG1} (moved);
+	      \draw[dashed] (to) to node {ARG1} (moved);
+	      \draw (to) to node {head} (to_word);
+	      \draw (moved) to node {ARG2} (Paris);
+	      \draw[dashed] (to) to node {ARG2} (Paris);
+	  \end{tikzpicture}}
+	  \captionof{figure}{\color{DarkRed} Converted SDP.}
+	  \vfill
+	  \scalebox{.7}{
+	  \hspace{-13mm}
+	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkBlue,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=16mm,level distance=13mm},
+	      level 2/.style={sibling distance=16mm,level distance=15mm}]
+	    \tikzstyle{word} = [font=\rmfamily,color=black]
+	    \node (ROOT) [fill=DarkBlue,circle] {}
+	      child {node (after) [fill=DarkBlue,circle] {}
+	      {
+	        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
+	        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
+	      } edge from parent node {obl}}
+	      child {node {}
+	      {
+	        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
+	      } edge from parent [draw=none]}
+	      child {node {}
+	      {
+	        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
+	      } edge from parent [draw=none]}
+	      child {node {}
+	      {
+	        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
+	      } edge from parent [draw=none]}
+	      child {node (to) [fill=DarkBlue,circle] {}
+	      {
+	          child {node [word] {to{\color{white}g}} edge from parent node {case}}
+	          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
+	      } edge from parent node {obl}}
+	      ;
+	      \draw (ROOT) to node {punct} (comma);
+	      \draw (ROOT) to node {nsubj} (John);
+	      \draw (ROOT) to node {head} (moved);
+	  \end{tikzpicture}}
+	  \captionof{figure}{\color{DarkBlue} Converted UD.}
+	  \end{center}
+	\end{minipage}
+
+\end{frame}
+
+\begin{frame}
 \frametitle{UCCA Evaluation}
 Comparing graphs over the same sequence of tokens,
 \begin{itemize}
