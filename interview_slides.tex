@@ -1,5 +1,5 @@
 \documentclass[t]{beamer}
-\mode<presentation>
+%\mode<presentation>
 
 \setbeamertemplate{itemize items}[circle]
 \setbeamertemplate{headline}{% 
@@ -77,30 +77,24 @@
 \begin{document}
 
 
-\title[A Transition-Based DAG Parser for UCCA]{A Transition-Based Directed Acyclic Graph Parser for Universal Conceptual Cognitive Annotation}
-\author{Daniel Hershcovich, Omri Abend and Ari Rappoport}
-\institute[]{\includegraphics[width=.08\pagewidth]{huji_logo.jpg}
-\includegraphics[width=.3\pagewidth]{huji_banner.png}}
-\date{ACL 2017}
+\title{Multitask Parsing \\ Across Semantic Representations}
+\author{\textbf{Daniel Hershcovich}, Omri Abend and Ari Rappoport}
+\date{June 14, 2018}
 
 \begin{frame}
 \titlepage
 \end{frame}
-\note{Hi, I'm Daniel and this is joint work with... \\
-Today I'll tell you about a semantic parser called TUPA.}
 
 
 %----------------------------------------------------------------------------------------
 
 \begin{frame}
-\frametitle{\parser{} --- Transition-based UCCA Parser}
-The \textbf{first parser} to support the combination of three properties:
-\begin{enumerate}
-\item<1-> {\color{blue} Non-terminal nodes} --- entities and events over the text
-\item<2-> {\color{orange} Reentrancy} --- allow argument sharing
-\item<3-> {\color{red} Discontinuity} --- conceptual units are split
-\end{enumerate}
-\onslide<3->{--- needed for many semantic schemes (e.g. AMR, UCCA).}
+\frametitle{Semantic Graph Parsing}
+Semantic representations:
+graph structure for predicates, arguments, their attributes and relations.
+
+Abstract away from syntactic detail that does not affect meaning.
+
 \begin{center}
  \newcommand*\reecol{}
  \newcommand*\reewid{}
@@ -110,7 +104,7 @@ The \textbf{first parser} to support the combination of three properties:
  \newcommand*\diswid{}
  \only<3->{\renewcommand*\discol{red}}
  \only<3->{\renewcommand*\diswid{very thick}}
-  \begin{tikzpicture}[level distance=16mm, sibling distance=2cm, ->]
+  \begin{tikzpicture}[level distance=14mm, sibling distance=15mm, ->]
   \tikzstyle{word} = [font=\rmfamily,color=black]
     \node (ROOT) [fill=blue, circle] {}
       child {node (You) [word] {You} edge from parent}
@@ -131,73 +125,11 @@ The \textbf{first parser} to support the combination of three properties:
     \draw[bend left,->,\discol,\diswid] (totakealongbath) to (long);
   \end{tikzpicture}
 \end{center}
-\end{frame}
-\note{The first parser for UCCA (which we'll see in a minute), \\
-a parser that can generate output that support ... \\
-This combination is not supported by any other parser. \\
-Necessary for...}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Introduction}
-
-\begin{frame}
-\frametitle{Linguistic Structure Annotation Schemes}
-\begin{itemize}
-	\setlength\itemsep{1em}
-	\item Syntactic dependencies
-	\item Semantic dependencies \cite{oepen2016towards}
-  	\only<2>{
-  	\item Semantic role labeling (PropBank, FrameNet)
-	\item AMR \cite{banarescu2013abstract}
-	\item UCCA \cite{abend2013universal}
-	\item Other semantic representation schemes\footnote{See recent survey \cite{abend2017state}}
-	}
-\end{itemize}
-\vfill
-\only<1>{
-	\begin{flushleft}
-	Syntactic (UD)\\
-	\end{flushleft}
-	\vspace{-1cm}
-	\begin{adjustbox}{margin=1cm 5mm 1cm 5mm,frame,center}
-	\begin{dependency}
-		\begin{deptext}[column sep=1.5em,ampersand replacement=\^,font=\rmfamily]
-		You \^ want \^ to \^ take \^ a \^ long \^ bath \\
-		\end{deptext}
-		\deproot{2}{root}
-		\depedge{2}{1}{nsubj}
-		\depedge[edge start x offset=-4pt]{2}{4}{xcomp}
-		\depedge{2}{3}{mark}
-		\depedge{4}{7}{dobj}
-		\depedge{7}{5}{det}
-		\depedge{7}{6}{amod}
-		\deproot[edge below,edge style={red},edge unit distance=1em]{2}{top}
-		\depedge[edge below,draw=red]{2}{4}{ARG2}
-		\depedge[edge below,draw=red]{2}{1}{ARG1}
-		\depedge[edge below,draw=red,edge unit distance=1.6em,edge start x offset=6pt]{4}{1}{ARG1}
-		\depedge[edge below,draw=red]{4}{7}{ARG2}
-		\depedge[edge below,draw=red]{5}{7}{BV}
-		\depedge[edge below,draw=red]{6}{7}{ARG1}
-	\end{dependency}
-	\end{adjustbox}\\
-	\vspace{-1cm}
-	\begin{flushright}
-	\color{red}Semantic (DM)
-	\end{flushright}
-	\captionof{figure}{Bilexical dependencies.}
-}
-\only<2>{
-Semantic representation schemes attempt to
-abstract away from syntactic detail that does not affect meaning:
-\begin{center}
-	\fbox{\textrm{\ldots bathed}} = \fbox{\textrm{\ldots took a bath}}
-\end{center}
-}
-\vfill
+Semantic parsing is important for natural language understanding.
+Representation schemes vary.
+Data is mostly \textbf{small}, \textbf{in-domain}, and in \textbf{English}.
 \end{frame}
-\note{But before talking about TUPA, a brief introduction to semantic representation. \\
-For a survey on this topic, see this paper from my lab, which is also in this year's ACL.}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \section{The UCCA Semantic Representation Scheme}
@@ -328,70 +260,70 @@ Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color
 \frametitle{Example}
 \begin{minipage}[t][8mm][t]{\textwidth}
 	$\Rightarrow$\textsc{
-		\only<1>{Shift}\only<2>{Right-Edge$_A$}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge$_P$}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node$_F$}\only<10>{Reduce}\only<11>{Shift}\only<12>{Left-Remote$_A$}\only<13>{Shift}\only<14>{Node$_C$}\only<15>{Reduce}\only<16>{Shift}\only<17>{Right-Edge$_P$}\only<18>{Shift}\only<19>{Right-Edge$_F$}\only<20>{Reduce}\only<21>{Shift}\only<22>{Swap}\only<23>{Right-Edge$_D$}\only<24>{Reduce}\only<25>{Swap}\only<26>{Right-Edge$_A$}\only<27>{Reduce}\only<28>{Reduce}\only<29>{Shift}\only<30>{Reduce}\only<31>{Shift}\only<32>{Right-Edge$_C$}\only<33>{Finish}
+		\only<1>{Shift}\only<2>{Right-Edge$_A$}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge$_P$}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node$_F$}\only<10>{Reduce}\only<11>{Shift}\only<12>{Shift}\only<13>{Node$_C$}\only<14>{Reduce}\only<15>{Shift}\only<16>{Right-Edge$_P$}\only<17>{Shift}\only<18>{Right-Edge$_F$}\only<19>{Reduce}\only<20>{Shift}\only<21>{Swap}\only<22>{Right-Edge$_D$}\only<23>{Reduce}\only<24>{Swap}\only<25>{Right-Edge$_A$}\only<26>{Reduce}\only<27>{Reduce}\only<28>{Shift}\only<29>{Shift}\only<30>{Left-Remote$_A$}\only<31>{Shift}\only<32>{Right-Edge$_C$}\only<33>{Finish}
 	}
 \end{minipage}
 
 \vfill
 
 \begin{tikzpicture}[every node/.append style={font=\rmfamily}]
-	\only<31>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (1,.5);
-	\only<1,7>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (2,.5);
-	\only<2,5,26>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (2,.5);
-	\only<3,8,11>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (3,.5);
-	\only<13,16>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (2.99,0) grid (4,.5);
-	\only<18,21>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (3.99,0) grid (5,.5);
-	\only<17>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (4,.5);
-	\only<19>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (2.99,0) grid (5,.5);
+	\only<28>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (1,.5);
+	\only<1,7,29>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (2,.5);
+	\only<2,5,25>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (2,.5);
+	\only<3,8,11,31>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (3,.5);
+	\only<12,15>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (2.99,0) grid (4,.5);
+	\only<17,20>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (3.99,0) grid (5,.5);
+	\only<16>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (4,.5);
+	\only<18>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (2.99,0) grid (5,.5);
 	\only<4>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (4,0) grid (5,.5);
 	\only<9>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (5,0) grid (6,.5);
-	\only<14>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (6,0) grid (7,.5);
-	\only<22>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (8,0) grid (9,.5);
-	\only<25>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (7,0) grid (8,.5);
-	\only<23>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (4,.5);
-	\only<32>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (2,.5);
-	\only<12>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (3,.5);
-	\only<28,30>\draw[xstep=1mm,ystep=5mm,color=gray] (-0.01,0) grid (0.1,.5);
-	\only<6,27,29,31->\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
-	\only<-2,4-5,7,10,25-26,33>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (2,.5);
-	\only<3,8-9,11-12,15,24>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (3,.5);
-	\only<13-14,16-17,20,22-23>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
-	\only<18-19,21>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (5,.5);
+	\only<13>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (6,0) grid (7,.5);
+	\only<21>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (8,0) grid (9,.5);
+	\only<24>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (7,0) grid (8,.5);
+	\only<22>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (4,.5);
+	\only<30>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (2,.5);
+	\only<32>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (3,.5);
+	\only<27>\draw[xstep=1mm,ystep=5mm,color=gray] (-0.01,0) grid (0.1,.5);
+	\only<6,26,28>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
+	\only<-2,4-5,7,10,24-25,29-30>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (2,.5);
+	\only<3,8-9,11,14,23,31->\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (3,.5);
+	\only<12-13,15-16,19,21-22>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+	\only<17-18,20>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (5,.5);
 	\node[anchor=west,style={font=\sffamily}] at (-0.1,1.00){stack};
-	\only<-27>\node[fill=black, circle] at (0.5,0.25) {};
-	\only<25-26> \node[fill=blue, circle] at (1.5,0.25) {};
-	\only<11-24> \node[fill=blue, circle] at (2.5,0.25) {};
-	\only<31-> \node[fill=red, circle] at (0.5,0.25) {};
-	\only<16-21> \node[fill=red, circle] at (3.5,0.25) {};
-	\only<29> \node[anchor=west] at (0,0.25) {\small You};
-	\only<1-3,7-24> \node[anchor=west] at (1,0.25) {\small You};
+	\only<-26>\node[fill=black, circle] at (0.5,0.25) {};
+	\only<24-25> \node[fill=blue, circle] at (1.5,0.25) {};
+	\only<11-23> \node[fill=blue, circle] at (2.5,0.25) {};
+	\only<29-> \node[fill=red, circle] at (1.5,0.25) {};
+	\only<15-20> \node[fill=red, circle] at (3.5,0.25) {};
+	\only<28-> \node[anchor=west] at (0,0.25) {\small You};
+	\only<1-3,7-23> \node[anchor=west] at (1,0.25) {\small You};
 	\only<4-5> \node[anchor=west] at (1,0.25) {\small want};
 	\only<3>   \node[anchor=west] at (2,0.25) {\small want};
 	\only<8-9>  \node[anchor=west] at (2,0.25) {\small to};
-	\only<13-14> \node[anchor=west] at (3,0.25) {\small take};
-	\only<18-19> \node[anchor=west] at (4,0.25) {\small a};
-	\only<21> \node[anchor=west] at (4,0.25) {\small long};
-	\only<22-23> \node[anchor=west] at (3,0.25) {\small long};
-	\only<32-> \node[anchor=west] at (1,0.25) {\small bath};
+	\only<12-13> \node[anchor=west] at (3,0.25) {\small take};
+	\only<17-18> \node[anchor=west] at (4,0.25) {\small a};
+	\only<20> \node[anchor=west] at (4,0.25) {\small long};
+	\only<21-22> \node[anchor=west] at (3,0.25) {\small long};
+	\only<31-> \node[anchor=west] at (2,0.25) {\small bath};
 	\only<-2,4-6>\draw[xstep=1cm,ystep=5mm,color=gray] (4,0) grid (10,.5);
 	\only<3,5-7,9-10>\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (10,.5);
-	\only<8,11-12,14-15>\draw[xstep=1cm,ystep=5mm,color=gray] (6,0) grid (10,.5);
-	\only<13,16-17,25-28>\draw[xstep=1cm,ystep=5mm,color=gray] (7,0) grid (10,.5);
-	\only<18-20,22-24,29-30>\draw[xstep=1cm,ystep=5mm,color=gray] (8,0) grid (10,.5);
-	\only<21,31>\draw[xstep=1cm,ystep=5mm,color=gray] (9,0) grid (10,.5);
-	\only<32->\draw[xstep=1mm,ystep=5mm,color=gray] (9.89,0) grid (10,.5);
+	\only<8,11,13-14>\draw[xstep=1cm,ystep=5mm,color=gray] (6,0) grid (10,.5);
+	\only<12,15-16,24-27>\draw[xstep=1cm,ystep=5mm,color=gray] (7,0) grid (10,.5);
+	\only<17-19,21-23,28>\draw[xstep=1cm,ystep=5mm,color=gray] (8,0) grid (10,.5);
+	\only<20,29-30>\draw[xstep=1cm,ystep=5mm,color=gray] (9,0) grid (10,.5);
+	\only<31->\draw[xstep=1mm,ystep=5mm,color=gray] (9.89,0) grid (10,.5);
 	\node[anchor=west,style={font=\sffamily}] at (8.9,1) {buffer};
 	\only<9-10> \node[fill=blue, circle] at (5.5,0.25) {};
-	\only<14-15> \node[fill=red, circle] at (6.5,0.25) {};
-	\only<22-30> \node[fill=red, circle] at (8.5,0.25) {};
+	\only<13-14> \node[fill=red, circle] at (6.5,0.25) {};
+	\only<21-28> \node[fill=red, circle] at (8.5,0.25) {};
 	\only<4-6> \node[anchor=west] at (4,0.25) {\small You};
-	\only<25-28> \node[anchor=west] at (7,0.25) {\small You};
+	\only<24-27> \node[anchor=west] at (7,0.25) {\small You};
 	\only<-2>  \node[anchor=west] at (4,0.25) {\small want};
 	\only<-7> \node[anchor=west] at (5,0.25) {\small to};
-	\only<-12> \node[anchor=west] at (6,0.25) {\small take};
-	\only<-17> \node[anchor=west] at (7,0.25) {\small a};
-	\only<-20> \node[anchor=west] at (8,0.25) {\small long};
-	\only<-31> \node[anchor=west] at (9,0.25) {\small bath};
+	\only<-11> \node[anchor=west] at (6,0.25) {\small take};
+	\only<-16> \node[anchor=west] at (7,0.25) {\small a};
+	\only<-19> \node[anchor=west] at (8,0.25) {\small long};
+	\only<-30> \node[anchor=west] at (9,0.25) {\small bath};
 \end{tikzpicture}
 \vfill
 \fbox{
@@ -404,26 +336,26 @@ Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color
       child [visible on=<9->] {node (totakealongbath) [fill=blue, circle] {}
       {
         child [visible on=<9->] {node (to) {to} edge from parent node [left] {\scriptsize $F$}}
-        child [visible on=<14->] {node (takeabath) [fill=red, circle] {}
+        child [visible on=<13->] {node (takeabath) [fill=red, circle] {}
         {
-          child [visible on=<14->] {node (take) {take} edge from parent node [right] {\scriptsize $C$}}
-          child [visible on=<19->] {node (a) {a} edge from parent node [right] {\scriptsize $F$}}
-          child [visible on=<23->] {node (long) {long} edge from parent [draw=none]}
+          child [visible on=<13->] {node (take) {take} edge from parent node [right] {\scriptsize $C$}}
+          child [visible on=<18->] {node (a) {a} edge from parent node [right] {\scriptsize $F$}}
+          child [visible on=<22->] {node (long) {long} edge from parent [draw=none]}
           child [visible on=<32->] {node (bath) {bath} edge from parent node [right] {\scriptsize $C$}}
         } edge from parent [draw=none]}
       } edge from parent [draw=none]}
       ;
-    \draw[visible on=<17->] (totakealongbath) to node [left] {\scriptsize $P$} (takeabath);
-    \draw[visible on=<26->] (ROOT) to node [left] {\scriptsize $A$} (totakealongbath);
-    \draw[bend left,dashed, visible on=<12->] (totakealongbath) to node [auto] {\scriptsize $A$} (You);
-    \draw[bend left, visible on=<23->] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
+    \draw[visible on=<16->] (totakealongbath) to node [left] {\scriptsize $P$} (takeabath);
+    \draw[visible on=<25->] (ROOT) to node [left] {\scriptsize $A$} (totakealongbath);
+    \draw[bend left,dashed, visible on=<30->] (takeabath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left, visible on=<22->] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
     \draw[visible on=<2>,red] (ROOT) to node {} (You);
     \draw[visible on=<5>,red] (ROOT) to node {} (want);
-    \draw[visible on=<17>,red] (totakealongbath) to node {} (takeabath);
-    \draw[visible on=<19>,red] (takeabath) to node {} (a);
-    \draw[bend left, visible on=<23>,red] (totakealongbath) to node {} (long);
-    \draw[visible on=<26>,red] (ROOT) to node {} (totakealongbath);
-    \draw[bend left,dashed, visible on=<12>,red] (totakealongbath) to node {} (You);
+    \draw[visible on=<16>,red] (totakealongbath) to node {} (takeabath);
+    \draw[visible on=<18>,red] (takeabath) to node {} (a);
+    \draw[bend left, visible on=<22>,red] (totakealongbath) to node {} (long);
+    \draw[visible on=<25>,red] (ROOT) to node {} (totakealongbath);
+    \draw[bend left,dashed, visible on=<30>,red] (takeabath) to node {} (You);
     \draw[visible on=<32>,red] (takeabath) to node {} (bath);
 \end{tikzpicture}}
 \end{frame}
@@ -454,13 +386,13 @@ An \textit{oracle} provides the transition sequence given the correct graph:
       ;
     \draw(totakealongbath) to node [left] {\scriptsize $P$} (takeabath); 
     \draw(ROOT) to node [left] {\scriptsize $A$} (totakealongbath);
-    \draw[bend left,dashed] (totakealongbath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left,dashed] (takeabath) to node [auto] {\scriptsize $A$} (You);
     \draw[bend left] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
 \end{tikzpicture}}
 \[\Downarrow\]
 \begin{flushleft}
 \footnotesize
-\textsc{Shift}, \textsc{Right-Edge$_A$}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge$_P$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node$_F$}, \textsc{Reduce}, \textsc{Left-Remote$_A$}, \textsc{Shift}, \textsc{Shift}, \textsc{Node$_C$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Right-Edge$_P$}, \textsc{Shift}, \textsc{Right-Edge$_F$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge$_D$}, \textsc{Reduce}, \textsc{Swap}, \textsc{Right-Edge$_A$}, \textsc{Reduce}, \textsc{Reduce}, \textsc{Shift}, \textsc{Reduce}, \textsc{Shift}, \textsc{Right-Edge$_C$}, \textsc{Finish}
+\textsc{Shift}, \textsc{Right-Edge$_A$}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge$_P$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node$_F$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Node$_C$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Right-Edge$_P$}, \textsc{Shift}, \textsc{Right-Edge$_F$}, \textsc{Reduce}, \textsc{Shift}, \textsc{Swap}, \textsc{Right-Edge$_D$}, \textsc{Reduce}, \textsc{Swap}, \textsc{Right-Edge$_A$}, \textsc{Reduce}, \textsc{Reduce}, \textsc{Shift}, \textsc{Shift}, \textsc{Left-Remote$_A$}, \textsc{Shift}, \textsc{Right-Edge$_C$}, \textsc{Finish}
 \end{flushleft}
 \end{frame}
 
