@@ -529,135 +529,6 @@ We consider four schemes \cite{abend2013universal,banarescu2013abstract,oepen201
 \end{frame}
 
 \begin{frame}
-\frametitle{Unified DAG Format}
-
-We convert all representations into a format similar to UCCA and
-supported by TUPA.
-
-    \hspace{-5mm}
-	\begin{minipage}{.4\textwidth}
-	  \begin{center}
-	  \begin{tikzpicture}[level distance=22mm, -{Latex[length=2mm]}, color=DarkGreen,
-	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
-	      level 1/.style={sibling distance=17mm},
-	      level 2/.style={sibling distance=13mm},
-	      level 3/.style={sibling distance=13mm}]
-	    \tikzstyle{word} = [font=\rmfamily,color=black]
-	    \node (ROOT) [word] {moved}
-	      child {node [word] {After}
-	      {
-	            child {node (graduation) [word] {graduation} edge from parent node {op} }
-	      } edge from parent node {time} }
-	      child {node (John) [fill=DarkGreen,circle] {}
-	      {
-	        child {node [word] {John} edge from parent node {name} }
-	      } edge from parent node {ARG0} }
-	      child {node [fill=DarkGreen,circle] {}
-	      {
-	        child {node [word] {Paris} edge from parent node {name} }
-	      } edge from parent node {ARG2} }
-	      ;
-	      \draw[dashed] (graduation) to node {ARG0} (John);
-	  \end{tikzpicture}
-	  \captionof{figure}{\color{DarkGreen} Converted AMR.}
-	  \end{center}
-	\end{minipage}
-	\hfill
-	\begin{minipage}{.5\textwidth}
-	  \begin{center}
-	  \scalebox{.7}{
-	  \hspace{-13mm}
-	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkRed,
-	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
-	      level 1/.style={sibling distance=28mm,level distance=13mm},
-	      level 2/.style={sibling distance=16mm,level distance=15mm},
-	      level 3/.style={level distance=18mm}]
-	    \tikzstyle{word} = [font=\rmfamily,color=black]
-	    \node (ROOT) [fill=DarkRed,circle] {}
-	      child {node (after) [fill=DarkRed,circle] {}
-	      {
-	        child {node [draw=none] {}
-	        {
-	          child {node [word] (after_word) {After{\color{white}g}} edge from parent [draw=none]}
-	        } edge from parent [draw=none] }
-	        child {node [draw=none] {}
-	        {
-	          child {node [word] (graduation) {graduation ,} edge from parent [draw=none]}
-	        } edge from parent [draw=none] }
-	      } edge from parent node {root}}
-	      child {node [draw=none] {}
-	      {
-	        child {node (moved) [fill=DarkRed,circle] {}
-	        {
-	          child {node [word] {\quad{\color{white}g} John} edge from parent node {ARG1}}
-	          child {node [word] {moved{\color{white}g}} edge from parent node {head}}
-	        } edge from parent [draw=none] }
-	      } edge from parent [draw=none] }
-	      child {node (to) [fill=DarkRed,circle] {}
-	      {
-	        child {node [draw=none] {}
-	        {
-	            child {node [word] (to_word) {to{\color{white}g}} edge from parent [draw=none]}
-	          } edge from parent [draw=none] }
-	          child {node [draw=none] {}
-	        {
-	          child {node [word] (Paris) {Paris{\color{white}g}} edge from parent [draw=none]}
-	        } edge from parent [draw=none] }
-	      } edge from parent node {root}}
-	      ;
-	      \draw (ROOT) to node {top} (moved);
-	      \draw (after) to node {head} (after_word);
-	      \draw (after) to node {ARG2} (graduation);
-	      \draw[dashed] (after) to node {ARG1} (moved);
-	      \draw[dashed] (to) to node {ARG1} (moved);
-	      \draw (to) to node {head} (to_word);
-	      \draw (moved) to node {ARG2} (Paris);
-	      \draw[dashed] (to) to node {ARG2} (Paris);
-	  \end{tikzpicture}}
-	  \captionof{figure}{\color{DarkRed} Converted SDP.}
-	  \vfill
-	  \scalebox{.7}{
-	  \hspace{-13mm}
-	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkBlue,
-	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
-	      level 1/.style={sibling distance=16mm,level distance=13mm},
-	      level 2/.style={sibling distance=14mm,level distance=15mm}]
-	    \tikzstyle{word} = [font=\rmfamily,color=black]
-	    \node (ROOT) [fill=DarkBlue,circle] {}
-	      child {node (after) [fill=DarkBlue,circle] {}
-	      {
-	        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
-	        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
-	      } edge from parent node {obl}}
-	      child {node {}
-	      {
-	        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
-	      } edge from parent [draw=none]}
-	      child {node {}
-	      {
-	        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
-	      } edge from parent [draw=none]}
-	      child {node {}
-	      {
-	        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
-	      } edge from parent [draw=none]}
-	      child {node (to) [fill=DarkBlue,circle] {}
-	      {
-	          child {node [word] {to{\color{white}g}} edge from parent node {case}}
-	          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
-	      } edge from parent node {obl}}
-	      ;
-	      \draw (ROOT) to node {punct} (comma);
-	      \draw (ROOT) to node {nsubj} (John);
-	      \draw (ROOT) to node {head} (moved);
-	  \end{tikzpicture}}
-	  \captionof{figure}{\color{DarkBlue} Converted UD.}
-	  \end{center}
-	\end{minipage}
-
-\end{frame}
-
-\begin{frame}
 \frametitle{UCCA Evaluation}
 Comparing graphs over the same sequence of tokens,
 \begin{itemize}
@@ -758,7 +629,7 @@ Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English Wikipedia
 
 \begin{frame}
 \frametitle{Out-of-Domain Results}
-Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English 20K Leagues UCCA
+Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English \textbf{20K Leagues} UCCA
 \begin{center}
 	\begin{tabular}{l|lll|lll}
 	& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
@@ -798,7 +669,7 @@ Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/Ge
 	\multicolumn{4}{l|}{\bf French (in-domain)} & \\
 	Single-task & 68.2 & 67 & 67.6 & 26 & \enskip 9.4 & 13.9 \\
 	UD & 70.3 & 70$\star$ & \textbf{70.1}$\star$ & 43.8 & 13.2 & 20.3 \\
-	\hline
+	\hline\\
 	\multicolumn{4}{l|}{\bf German (in-domain)} & \\
 	Single-task & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
 	UD & 73.7$\star$ & 72.6$\star$ & \textbf{73.2}$\star$ & 61.8 & 24.9$\star$ & \textbf{35.5}$\star$
