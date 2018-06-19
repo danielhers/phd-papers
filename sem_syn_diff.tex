@@ -450,7 +450,9 @@ The results appear in Table~\ref{tab:conversion_results_labeled}.
 UDPipe & 63.3 & 65.7 & 64.5 & -- & 0 & 0 \\
 \end{tabular}
 \caption{
-Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges.}\label{tab:conversion_results_labeled}
+Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
+of passages converted automatically from UD to UCCA,
+with mapped edge labels, as evaluated against gold UCCA.}\label{tab:conversion_results_labeled}
 \end{table}
 
 Despite the simple conversion protocol, labeled scores are quite high.
@@ -637,7 +639,7 @@ For UCCA, we use v1.2 of the English Wikipedia corpus \cite[\textit{Wiki};][]{ab
 with the standard train/dev/test split (see Table~\ref{tab:corpora}),
 and the \textit{Twenty Thousand Leagues Under the Sea} corpora
 \cite[\textit{20K};][]{sulem2015conceptual},
-annotated in English, French and German.\footnote{\mbox{\url{http://github.com/huji-nlp/ucca-corpora}}}
+annotated in English, French and German.\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation}}
 %For English and French we use 20K v1.0,
 %a small parallel corpus comprising the first five chapters of the book.
 %As in previous work \cite{hershcovich2017a}, we use the English part only as an out-of-domain test set.
@@ -648,7 +650,7 @@ annotated in English, French and German.\footnote{\mbox{\url{http://github.com/h
 We also use 100 English sentences from Section 02 of the Penn Treebank Wall Street Journal
 (PTB WSJ),
 annotated by a single expert UCCA annotator \cite{hershcovich2018multitask},
-and publicly available.\footnote{\url{http://github.com/danielhers/wsj}}
+and publicly available.\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation/UCCA_English-WSJ}}
 These sentences had already been annotated by the PTB scheme.
 We convert the PTB format to UD$^{++}$ v1 using Stanford CoreNLP,
 to UD v2 using Udapi\footnote{\url{http://github.com/udapi/udapi-python}},
