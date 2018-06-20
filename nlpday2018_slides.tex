@@ -140,7 +140,7 @@ Hebrew
 \end{frame}
 
 \begin{frame}
-\frametitle{Transition-Based Parsing}
+\frametitle{Transition-Based UCCA Parsing}
 Parse text $w_1 \ldots w_n$ to graph $G$ incrementally by applying transitions to the parser state:
 stack, buffer and constructed graph.
 
@@ -162,7 +162,7 @@ Initial state:
 \end{tikzpicture}
 
 \vfill
-\parser{} transitions:
+\parser{} \cite{hershcovich2017a} transitions:
 
 \{\textsc{Shift, Reduce, Node$_X$, Left-Edge$_X$, Right-Edge$_X$,}\\
 \hspace{5mm}\textsc{Left-Remote$_X$, Right-Remote$_X$, Swap, Finish}\}
@@ -663,7 +663,7 @@ Comparing graphs over the same sequence of tokens,
 \begin{itemize}
 \item Match edges by their terminal yield and label.
 \item Calculate \textbf{labeled precision, recall and F1} scores.
-\item Separate primary and remote edges.
+\item Separate primary (---) and remote (- - -) edges.
 \end{itemize}
 \vfill
 \begin{adjustbox}{frame,scale=.75,center}
@@ -758,7 +758,7 @@ Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English Wikipedia
 
 \begin{frame}
 \frametitle{Out-of-Domain Results}
-Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English 20K Leagues UCCA
+Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English \textbf{20K Leagues} UCCA
 \begin{center}
 	\begin{tabular}{l|lll|lll}
 	& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
@@ -798,7 +798,7 @@ Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/Ge
 	\multicolumn{4}{l|}{\bf French (in-domain)} & \\
 	Single-task & 68.2 & 67 & 67.6 & 26 & \enskip 9.4 & 13.9 \\
 	UD & 70.3 & 70$\star$ & \textbf{70.1}$\star$ & 43.8 & 13.2 & 20.3 \\
-	\hline
+	\hline\\
 	\multicolumn{4}{l|}{\bf German (in-domain)} & \\
 	Single-task & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
 	UD & 73.7$\star$ & 72.6$\star$ & \textbf{73.2}$\star$ & 61.8 & 24.9$\star$ & \textbf{35.5}$\star$
