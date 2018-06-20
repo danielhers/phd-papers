@@ -768,10 +768,38 @@ Table~\ref{tab:fine_grained_ud} shows fine-grained evaluation according to UD re
 \small
 \setlength\tabcolsep{3pt}
 \begin{tabular}{l|l}
-
+nsubj & 0.92 \\ 
+Terminal & 1.0 \\ 
+head & 0.999 \\ 
+cop & 1.0 \\ 
+det & 1.0 \\    
+compound & 0.995 \\ 
+amod & 0.974 \\ 
+case & 0.994 \\ 
+obj & 0.808 \\ 
+aux & 1.0 \\ 
+cc & 0.98 \\ 
+conj & 0.769 \\ 
+advmod & 0.95 \\ 
+mark & 1.0 \\ 
+nmod & 0.606 \\ 
+obl & 0.623 \\ 
+appos & 0.571 \\ 
+nummod & 0.865 \\ 
+acl & 0.486 \\ 
+advcl & 0.696 \\ 
+xcomp & 0.636 \\ 
+iobj & 0.8 \\ 
+ccomp & 0.571 \\ 
+fixed & 1.0 \\ 
+dep & 0.737 \\ 
+expl & 1.0 \\  
+parataxis & 1.0
 \end{tabular}
 \caption{
-Fine-grained evaluation according to UCCA categories.}
+Fine-grained labeled $F_1$ according to UCCA categories,
+of TUPA trained on Wiki with features extraced by UDPipe
+and evaluated on WSJ with features extraced by UDPipe.}
 \label{tab:fine_grained_ucca}
 \end{table}
 
@@ -780,10 +808,25 @@ Fine-grained evaluation according to UCCA categories.}
 \small
 \setlength\tabcolsep{3pt}
 \begin{tabular}{l|l}
-
+ParallelScene & 0.539 \\ 
+Function & 0.705 \\ 
+Participant & 0.578 \\ 
+Punctuation & 0.98 \\ 
+Process & 0.699 \\ 
+State & 0.289 \\ 
+Elaborator & 0.686 \\ 
+Center & 0.757 \\ 
+Terminal & 1.0 \\ 
+Relator & 0.85 \\ 
+Connector & 0.778 \\ 
+Adverbial & 0.541 \\ 
+Linker & 0.658 \\ 
+Ground & 0.0
 \end{tabular}
 \caption{
-Fine-grained evaluation according to UD relations.}
+Fine-grained labeled $F_1$ according to gold UD relations,
+of TUPA trained on Wiki with features extraced by UDPipe
+and evaluated on WSJ with features extraced by UDPipe.}
 \label{tab:fine_grained_ud}
 \end{table}
 
