@@ -701,6 +701,50 @@ We convert the PTB format to UD$^{++}$ v1 using Stanford CoreNLP,
 to UD v2 using Udapi\footnote{\url{http://github.com/udapi/udapi-python}},
 and then to the unified DAG format using our protocol.
 
+
+\begin{table}[t]
+\centering
+\small
+\setlength\tabcolsep{3pt}
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+\hline
+\multicolumn{4}{l|}{\small \bf English (Wiki, in-domain)} & \\
+\footnotesize HAR18 Single
+& 74.4 & 72.9 & 73.6 & 53 & 50 & 51.5 \\
+\footnotesize HAR18 MTL UD$^{++}$
+& 75 & 73.2 & 74.1 & 49 & 52.7 & 50.8 \\
+\footnotesize Converted UD aux.
+\\
+\hline\\
+\multicolumn{4}{l|}{\small \bf English (20K, out-of-domain)} & \\
+\footnotesize HAR18 Single
+& 69 & 69 & 69 & 41.2 & 19.8 & 26.7 \\
+\footnotesize HAR18 MTL UD$^{++}$
+& 69.6 & 69.8 & 69.7 & 41.4 & 22 & 28.7 \\
+\footnotesize Converted UD aux.
+\\
+\hline\\
+\multicolumn{4}{l|}{\small \bf French (20K, in-domain)} & \\
+\small HAR18 Single & 68.2 & 67 & 67.6 & 26 & \enskip 9.4 & 13.9 \\
+\small HAR18 MTL UD & 70.3 & 70 & 70.1 & 43.8 & 13.2 & 20.3 \\
+\footnotesize Converted UD aux.
+\\
+\hline\\
+\multicolumn{4}{l|}{\small \bf German (20K, in-domain)} & \\
+\small HAR18 Single & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
+\small HAR18 MTL UD & 73.7 & 72.6 & 73.2 & 61.8 & 24.9 & 35.5 \\
+\footnotesize Converted UD aux.
+\\
+\end{tabular}
+\caption{
+Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
+on the Wiki and 20K test sets.
+HAR18: \citet{hershcovich2018multitask}.}\label{tab:aux_results}
+\end{table}
+
 \paragraph{Using converted UD as auxiliary data.}
 
 \citet{hershcovich2018multitask} used UD as an auxiliary task for UCCA parsing,
@@ -708,6 +752,7 @@ treating UD parsing as an auxiliary task and using a multitask learning model
 with hard parameter sharing.
 We perform a similar experiment, but instead of a multitask model,
 we use UD data converted to UCCA and train on it with the same single-task model.
+Table~\ref{tab:aux_results} shows the results of this experiment.
 
 \paragraph{Fine-grained evaluation of UCCA parsing performance.}
 
