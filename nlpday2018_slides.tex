@@ -79,7 +79,9 @@
 
 \title{Multitask Parsing \\ Across Semantic Representations}
 \author{\textbf{Daniel Hershcovich}, Omri Abend and Ari Rappoport}
-\date{June 14, 2018}
+\institute[]{\includegraphics[width=.08\pagewidth]{huji_logo.jpg}
+\includegraphics[width=.3\pagewidth]{huji_banner.png}}
+\date{NLP Day \\ June 24, 2018}
 
 \begin{frame}
 \titlepage
@@ -137,154 +139,6 @@ English\\
 \\
 \vspace{-1cm}
 Hebrew
-\end{frame}
-
-\begin{frame}
-\frametitle{Transition-Based UCCA Parsing}
-Parse text $w_1 \ldots w_n$ to graph $G$ incrementally by applying transitions to the parser state:
-stack, buffer and constructed graph.
-
-\vfill
-Initial state:
-\begin{tikzpicture}[every node/.append style={font=\rmfamily}, circle]
-	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
-	\node[anchor=west,style={font=\sffamily}] at (-0.1,1.00)     {stack};
-	\node[fill=black] at (0.5,0.25) {};
-	\draw[xstep=1cm,ystep=5mm,color=gray] (3,0) grid (10,.5);
-	\node[anchor=west,style={font=\sffamily}] at (8.9,1.00) {buffer};
-	\node[anchor=west] at (3,0.25) {You};
-	\node[anchor=west] at (4,0.25) {want};
-	\node[anchor=west] at (5,0.25) {to};
-	\node[anchor=west] at (6,0.25) {take};
-	\node[anchor=west] at (7,0.25) {a};
-	\node[anchor=west] at (8,0.25) {long};
-	\node[anchor=west] at (9,0.25) {bath};
-\end{tikzpicture}
-
-\vfill
-\parser{} \cite{hershcovich2017a} transitions:
-
-\{\textsc{Shift, Reduce, Node$_X$, Left-Edge$_X$, Right-Edge$_X$,}\\
-\hspace{5mm}\textsc{Left-Remote$_X$, Right-Remote$_X$, Swap, Finish}\}
-
-\vfill
-Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color{red}discontinuity}.
-\end{frame}
-
-\begin{frame}
-\frametitle{\parser{} Model}
-Learns to greedily predict transition based on current state.
-
-BiLSTM + MLP classifier \cite{kiperwasser2016simple}.
-
-\vfill
-
-Features:
-words, POS, syntactic dependencies, existing edge labels \\
-from the stack and buffer + parents, children, grandchildren;
-ordinal features (height, number of parents and children)
-
-\vspace{5mm}
-\begin{tikzpicture}
-	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
-	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (10,.5);
-	\node[anchor=west] at (-0.1,1.00) {stack};
-	\node[anchor=west] at (8.9,1.00) {buffer};
-	\foreach \i in {0.5,8.5,9.5} {
-		\node[fill=gray, circle] at (\i,0.25) {};
-	}
-	\foreach \i in {1.5,2.5,3.5,5.5,6.5,7.5} {
-		\node[fill=black, circle] at (\i,0.25) {};
-	}
-\end{tikzpicture}
-\end{frame}
-
-\begin{frame}
-\centering
-
-\onslide<2>{
-\fbox{
-\begin{minipage}{.5\textwidth}
-\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
-	\node[anchor=west,style={font=\sffamily}] at (-1.2,0.25){stack};
-	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
-	\node[fill=black, circle] at (0.5,0.25) {};
-	\node[fill=blue, circle] at (2.5,0.25) {};
-	\node[anchor=west] at (1,0.25) {You};
-	\node[anchor=west] at (3,0.25) {take};
-\end{tikzpicture}
-
-\vspace{1cm}
-\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
-	\node[anchor=west,style={font=\sffamily}] at (3.8,0.25){buffer};
-	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (9,.5);
-	\node[fill=red, circle] at (5.5,0.25) {};
-	\node[anchor=west] at (6,0.25) {a};
-	\node[anchor=west] at (7,0.25) {long};
-	\node[anchor=west] at (8,0.25) {bath};
-\end{tikzpicture}
-\end{minipage}
-\begin{minipage}{.4\textwidth}
-\scalebox{.8}{
-\begin{tikzpicture}[level distance=1cm, sibling distance=1cm, ->,
-    every node/.append style={font=\rmfamily}]
-    \node[anchor=west,style={font=\sffamily}] at (5,0) {graph};
-    \draw[color=gray] (1.2,.3) rectangle (4.9,-3.2);
-    \node(ROOT)[fill=black, circle, visible on=<2->] at (3,0) {}
-      child {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
-      child {node {want} edge from parent node [left] {\scriptsize $P$}}
-      child {node (totakealongbath) [fill=blue, circle] {}
-      {
-        child {node {to} edge from parent node [left] {\scriptsize $F$}}
-        child {node (takeabath) [fill=red, circle] {}
-        {
-          child {node {take} edge from parent node [right] {\scriptsize $C$}}
-          child [opacity=0] {node {a} edge from parent node [right] {\scriptsize $F$}}
-          child [opacity=0] {node (long) {long} edge from parent [draw=none]}
-          child [opacity=0] {node {bath} edge from parent node [right] {\scriptsize $C$}}
-        } edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      ;
-\end{tikzpicture}
-}
-\end{minipage}
-}
-}
-
-\scalebox{.7}{
-\begin{tikzpicture}[->]
-	\tiny
-	\tikzstyle{main}=[circle, minimum size=7mm, draw=black!80, node distance=12mm]
-	\foreach \i/\word in {1/{You},3/{want},5/{to},7/{take},9/{a},11/{long},13/{bath}} {
-	    \node (x\i) at (\i,-1.3) {\Large\textrm\word};
-	    \node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
-        \path (x\i) edge (h\i);
-	    \node[main, fill=white!100] (i\i) at (\i.5,.8) {LSTM};
-        \path (x\i) edge [bend right] (i\i);
-	    \node[main, fill=white!100] (l\i) at (\i.5,2.3) {LSTM};
-        \path (h\i) edge [bend left] (l\i);
-        \path (i\i) edge (l\i);
-	    \node[main, fill=white!100] (k\i) at (\i,3.1) {LSTM};
-        \path (i\i) edge [bend left] (k\i);
-        \path (h\i) edge [bend left] (k\i);
-	}
-	\foreach \current/\next in {1/3,3/5,5/7,7/9,9/11,11/13} {
-        \path (h\current) edge (h\next);
-        \path (i\next) edge (i\current);
-        \path (l\current) edge (l\next);
-        \path (k\next) edge (k\current);
-	}
-    \onslide<2>\node[main, fill=white!100] (mlp) at (7,4.6) {MLP};
-	\onslide<2>\foreach \i in {5,7,9} {
-        \path (l\i) edge (mlp);
-        \path (k\i) edge (mlp);
-    }
-    \coordinate (state) at (10.5,6.5);
-    \onslide<2>\path (state) edge [bend left] (mlp);
-    \onslide<2>\node (transition) at (7,5.8) {\large\textsc{Node}$_C$};
-    \onslide<2>\path (mlp) edge (transition);
-\end{tikzpicture}
-}
 \end{frame}
 
 \begin{frame}
@@ -449,6 +303,260 @@ We consider four schemes \cite{abend2013universal,banarescu2013abstract,oepen201
 		\end{tabular}
 	\end{center}
 \end{frame}
+
+\begin{frame}
+\frametitle{Transition-Based UCCA Parsing}
+Parse text $w_1 \ldots w_n$ to graph $G$ incrementally by applying transitions to the parser state:
+stack, buffer and constructed graph.
+
+\vfill
+Initial state:
+\begin{tikzpicture}[every node/.append style={font=\rmfamily}, circle]
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
+	\node[anchor=west,style={font=\sffamily}] at (-0.1,1.00)     {stack};
+	\node[fill=black] at (0.5,0.25) {};
+	\draw[xstep=1cm,ystep=5mm,color=gray] (3,0) grid (10,.5);
+	\node[anchor=west,style={font=\sffamily}] at (8.9,1.00) {buffer};
+	\node[anchor=west] at (3,0.25) {You};
+	\node[anchor=west] at (4,0.25) {want};
+	\node[anchor=west] at (5,0.25) {to};
+	\node[anchor=west] at (6,0.25) {take};
+	\node[anchor=west] at (7,0.25) {a};
+	\node[anchor=west] at (8,0.25) {long};
+	\node[anchor=west] at (9,0.25) {bath};
+\end{tikzpicture}
+
+\vfill
+\parser{} \cite{hershcovich2017a} transitions:
+
+\{\textsc{Shift, Reduce, Node$_X$, Left-Edge$_X$, Right-Edge$_X$,}\\
+\hspace{5mm}\textsc{Left-Remote$_X$, Right-Remote$_X$, Swap, Finish}\}
+
+\vfill
+Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color{red}discontinuity}.
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Example}
+\begin{minipage}[t][8mm][t]{\textwidth}
+	$\Rightarrow$\textsc{
+		\only<1>{Shift}\only<2>{Right-Edge$_A$}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge$_P$}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node$_F$}\only<10>{Reduce}\only<11>{Shift}\only<12>{Left-Remote$_A$}\only<13>{Shift}\only<14>{Node$_C$}\only<15>{Reduce}\only<16>{Shift}\only<17>{Right-Edge$_P$}\only<18>{Shift}\only<19>{Right-Edge$_F$}\only<20>{Reduce}\only<21>{Shift}\only<22>{Swap}\only<23>{Right-Edge$_D$}\only<24>{Reduce}\only<25>{Swap}\only<26>{Right-Edge$_A$}\only<27>{Reduce}\only<28>{Reduce}\only<29>{Shift}\only<30>{Reduce}\only<31>{Shift}\only<32>{Right-Edge$_C$}\only<33>{Finish}
+	}
+\end{minipage}
+
+\vfill
+
+\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+	\only<31>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (1,.5);
+	\only<1,7>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (2,.5);
+	\only<2,5,26>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (2,.5);
+	\only<3,8,11>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (3,.5);
+	\only<13,16>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (2.99,0) grid (4,.5);
+	\only<18,21>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (3.99,0) grid (5,.5);
+	\only<17>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (4,.5);
+	\only<19>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (2.99,0) grid (5,.5);
+	\only<4>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (4,0) grid (5,.5);
+	\only<9>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (5,0) grid (6,.5);
+	\only<14>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (6,0) grid (7,.5);
+	\only<22>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (8,0) grid (9,.5);
+	\only<25>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (7,0) grid (8,.5);
+	\only<23>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (4,.5);
+	\only<32>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (2,.5);
+	\only<12>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (3,.5);
+	\only<28,30>\draw[xstep=1mm,ystep=5mm,color=gray] (-0.01,0) grid (0.1,.5);
+	\only<6,27,29,31->\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
+	\only<-2,4-5,7,10,25-26,33>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (2,.5);
+	\only<3,8-9,11-12,15,24>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (3,.5);
+	\only<13-14,16-17,20,22-23>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+	\only<18-19,21>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (5,.5);
+	\node[anchor=west,style={font=\sffamily}] at (-0.1,1.00){stack};
+	\only<-27>\node[fill=black, circle] at (0.5,0.25) {};
+	\only<25-26> \node[fill=blue, circle] at (1.5,0.25) {};
+	\only<11-24> \node[fill=blue, circle] at (2.5,0.25) {};
+	\only<31-> \node[fill=red, circle] at (0.5,0.25) {};
+	\only<16-21> \node[fill=red, circle] at (3.5,0.25) {};
+	\only<29> \node[anchor=west] at (0,0.25) {\small You};
+	\only<1-3,7-24> \node[anchor=west] at (1,0.25) {\small You};
+	\only<4-5> \node[anchor=west] at (1,0.25) {\small want};
+	\only<3>   \node[anchor=west] at (2,0.25) {\small want};
+	\only<8-9>  \node[anchor=west] at (2,0.25) {\small to};
+	\only<13-14> \node[anchor=west] at (3,0.25) {\small take};
+	\only<18-19> \node[anchor=west] at (4,0.25) {\small a};
+	\only<21> \node[anchor=west] at (4,0.25) {\small long};
+	\only<22-23> \node[anchor=west] at (3,0.25) {\small long};
+	\only<32-> \node[anchor=west] at (1,0.25) {\small bath};
+	\only<-2,4-6>\draw[xstep=1cm,ystep=5mm,color=gray] (4,0) grid (10,.5);
+	\only<3,5-7,9-10>\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (10,.5);
+	\only<8,11-12,14-15>\draw[xstep=1cm,ystep=5mm,color=gray] (6,0) grid (10,.5);
+	\only<13,16-17,25-28>\draw[xstep=1cm,ystep=5mm,color=gray] (7,0) grid (10,.5);
+	\only<18-20,22-24,29-30>\draw[xstep=1cm,ystep=5mm,color=gray] (8,0) grid (10,.5);
+	\only<21,31>\draw[xstep=1cm,ystep=5mm,color=gray] (9,0) grid (10,.5);
+	\only<32->\draw[xstep=1mm,ystep=5mm,color=gray] (9.89,0) grid (10,.5);
+	\node[anchor=west,style={font=\sffamily}] at (8.9,1) {buffer};
+	\only<9-10> \node[fill=blue, circle] at (5.5,0.25) {};
+	\only<14-15> \node[fill=red, circle] at (6.5,0.25) {};
+	\only<22-30> \node[fill=red, circle] at (8.5,0.25) {};
+	\only<4-6> \node[anchor=west] at (4,0.25) {\small You};
+	\only<25-28> \node[anchor=west] at (7,0.25) {\small You};
+	\only<-2>  \node[anchor=west] at (4,0.25) {\small want};
+	\only<-7> \node[anchor=west] at (5,0.25) {\small to};
+	\only<-12> \node[anchor=west] at (6,0.25) {\small take};
+	\only<-17> \node[anchor=west] at (7,0.25) {\small a};
+	\only<-20> \node[anchor=west] at (8,0.25) {\small long};
+	\only<-31> \node[anchor=west] at (9,0.25) {\small bath};
+\end{tikzpicture}
+\vfill
+\fbox{
+\begin{tikzpicture}[level distance=15mm, sibling distance=2cm, ->,
+    every node/.append style={font=\rmfamily}]
+	\node[anchor=west,style={font=\sffamily}] at (0,0) {graph};
+    \node(ROOT)[fill=black, circle, visible on=<1->] at (3,0) {}
+      child [visible on=<2->] {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
+      child [visible on=<5->] {node (want) {want} edge from parent node [left] {\scriptsize $P$}}
+      child [visible on=<9->] {node (totakealongbath) [fill=blue, circle] {}
+      {
+        child [visible on=<9->] {node (to) {to} edge from parent node [left] {\scriptsize $F$}}
+        child [visible on=<14->] {node (takeabath) [fill=red, circle] {}
+        {
+          child [visible on=<14->] {node (take) {take} edge from parent node [right] {\scriptsize $C$}}
+          child [visible on=<19->] {node (a) {a} edge from parent node [right] {\scriptsize $F$}}
+          child [visible on=<23->] {node (long) {long} edge from parent [draw=none]}
+          child [visible on=<32->] {node (bath) {bath} edge from parent node [right] {\scriptsize $C$}}
+        } edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      ;
+    \draw[visible on=<17->] (totakealongbath) to node [left] {\scriptsize $P$} (takeabath);
+    \draw[visible on=<26->] (ROOT) to node [left] {\scriptsize $A$} (totakealongbath);
+    \draw[bend left,dashed, visible on=<12->] (totakealongbath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left, visible on=<23->] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
+    \draw[visible on=<2>,red] (ROOT) to node {} (You);
+    \draw[visible on=<5>,red] (ROOT) to node {} (want);
+    \draw[visible on=<17>,red] (totakealongbath) to node {} (takeabath);
+    \draw[visible on=<19>,red] (takeabath) to node {} (a);
+    \draw[bend left, visible on=<23>,red] (totakealongbath) to node {} (long);
+    \draw[visible on=<26>,red] (ROOT) to node {} (totakealongbath);
+    \draw[bend left,dashed, visible on=<12>,red] (totakealongbath) to node {} (You);
+    \draw[visible on=<32>,red] (takeabath) to node {} (bath);
+\end{tikzpicture}}
+\end{frame}
+
+\begin{frame}
+\frametitle{\parser{} Model}
+Learns to greedily predict transition based on current state.
+
+BiLSTM + MLP classifier \cite{kiperwasser2016simple}.
+
+\vfill
+
+Features:
+words, POS, syntactic dependencies, existing edge labels \\
+from the stack and buffer + parents, children, grandchildren;
+ordinal features (height, number of parents and children)
+
+\vspace{5mm}
+\begin{tikzpicture}
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (10,.5);
+	\node[anchor=west] at (-0.1,1.00) {stack};
+	\node[anchor=west] at (8.9,1.00) {buffer};
+	\foreach \i in {0.5,8.5,9.5} {
+		\node[fill=gray, circle] at (\i,0.25) {};
+	}
+	\foreach \i in {1.5,2.5,3.5,5.5,6.5,7.5} {
+		\node[fill=black, circle] at (\i,0.25) {};
+	}
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\centering
+
+\onslide<2>{
+\fbox{
+\begin{minipage}{.5\textwidth}
+\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+	\node[anchor=west,style={font=\sffamily}] at (-1.2,0.25){stack};
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+	\node[fill=black, circle] at (0.5,0.25) {};
+	\node[fill=blue, circle] at (2.5,0.25) {};
+	\node[anchor=west] at (1,0.25) {You};
+	\node[anchor=west] at (3,0.25) {take};
+\end{tikzpicture}
+
+\vspace{1cm}
+\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+	\node[anchor=west,style={font=\sffamily}] at (3.8,0.25){buffer};
+	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (9,.5);
+	\node[fill=red, circle] at (5.5,0.25) {};
+	\node[anchor=west] at (6,0.25) {a};
+	\node[anchor=west] at (7,0.25) {long};
+	\node[anchor=west] at (8,0.25) {bath};
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{.4\textwidth}
+\scalebox{.8}{
+\begin{tikzpicture}[level distance=1cm, sibling distance=1cm, ->,
+    every node/.append style={font=\rmfamily}]
+    \node[anchor=west,style={font=\sffamily}] at (5,0) {graph};
+    \draw[color=gray] (1.2,.3) rectangle (4.9,-3.2);
+    \node(ROOT)[fill=black, circle, visible on=<2->] at (3,0) {}
+      child {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
+      child {node {want} edge from parent node [left] {\scriptsize $P$}}
+      child {node (totakealongbath) [fill=blue, circle] {}
+      {
+        child {node {to} edge from parent node [left] {\scriptsize $F$}}
+        child {node (takeabath) [fill=red, circle] {}
+        {
+          child {node {take} edge from parent node [right] {\scriptsize $C$}}
+          child [opacity=0] {node {a} edge from parent node [right] {\scriptsize $F$}}
+          child [opacity=0] {node (long) {long} edge from parent [draw=none]}
+          child [opacity=0] {node {bath} edge from parent node [right] {\scriptsize $C$}}
+        } edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      ;
+\end{tikzpicture}
+}
+\end{minipage}
+}
+}
+
+\scalebox{.7}{
+\begin{tikzpicture}[->]
+	\tiny
+	\tikzstyle{main}=[circle, minimum size=7mm, draw=black!80, node distance=12mm]
+	\foreach \i/\word in {1/{You},3/{want},5/{to},7/{take},9/{a},11/{long},13/{bath}} {
+	    \node (x\i) at (\i,-1.3) {\Large\textrm\word};
+	    \node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
+        \path (x\i) edge (h\i);
+	    \node[main, fill=white!100] (i\i) at (\i.5,.8) {LSTM};
+        \path (x\i) edge [bend right] (i\i);
+	    \node[main, fill=white!100] (l\i) at (\i.5,2.3) {LSTM};
+        \path (h\i) edge [bend left] (l\i);
+        \path (i\i) edge (l\i);
+	    \node[main, fill=white!100] (k\i) at (\i,3.1) {LSTM};
+        \path (i\i) edge [bend left] (k\i);
+        \path (h\i) edge [bend left] (k\i);
+	}
+	\foreach \current/\next in {1/3,3/5,5/7,7/9,9/11,11/13} {
+        \path (h\current) edge (h\next);
+        \path (i\next) edge (i\current);
+        \path (l\current) edge (l\next);
+        \path (k\next) edge (k\current);
+	}
+    \onslide<2>\node[main, fill=white!100] (mlp) at (7,4.6) {MLP};
+	\onslide<2>\foreach \i in {5,7,9} {
+        \path (l\i) edge (mlp);
+        \path (k\i) edge (mlp);
+    }
+    \coordinate (state) at (10.5,6.5);
+    \onslide<2>\path (state) edge [bend left] (mlp);
+    \onslide<2>\node (transition) at (7,5.8) {\large\textsc{Node}$_C$};
+    \onslide<2>\path (mlp) edge (transition);
+\end{tikzpicture}
+}
+\end{frame}
+
 
 \begin{frame}
 	\frametitle{Multitask Architecture}
