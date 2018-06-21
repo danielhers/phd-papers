@@ -264,17 +264,18 @@ We consider four schemes \cite{abend2013universal,banarescu2013abstract,oepen201
 	
 \end{frame}
 
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & total \\
+	\color{NavyBlue} \textbf{UD} & 17062 \\
+	\color{DarkRed} \textbf{SDP} & 33964 \\
+	\color{DarkGreen} \textbf{AMR} & 36521 \\
+	\color{Indigo} \textbf{UCCA} & 5225 \\
+    }\englishdata
+    
 \begin{frame}
 \frametitle{Data}
 	The amount of labeled data varies, e.g., in English:
 	\begin{center}
-	\pgfplotstableread[row sep=\\,col sep=&]{
-		corpus & total \\
-		\color{NavyBlue} \textbf{UD} & 17062 \\
-		\color{DarkRed} \textbf{SDP} & 33964 \\
-		\color{DarkGreen} \textbf{AMR} & 36521 \\
-		\color{Indigo} \textbf{UCCA} & 5225 \\
-	    }\english
 	    \begin{tikzpicture}
 	    \begin{axis}[
 	    xbar stacked,
@@ -284,12 +285,12 @@ We consider four schemes \cite{abend2013universal,banarescu2013abstract,oepen201
 	    xmax=60000,
 	    xtick=\empty,
 	    ytick=data,
-	    yticklabels from table={\english}{corpus},
+	    yticklabels from table={\englishdata}{corpus},
 	    axis x line=none,
 	    ]
 	    \addplot [fill=Navy, point meta=explicit symbolic,
 	    nodes near coords={\pgfmathprintnumber\pgfplotspointmeta~sentences},
-	    nodes near coords align={anchor=west}] table [x=total,y expr=\coordindex,meta=total] {\english};
+	    nodes near coords align={anchor=west}] table [x=total,y expr=\coordindex,meta=total] {\englishdata};
 	    \end{axis}
 	    \end{tikzpicture}
 	\end{center}
@@ -771,6 +772,193 @@ supported by TUPA.
 
 \section{Experiments}
 
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & total \\
+	\color{NavyBlue} \textbf{UD} & 32347 \\
+	\color{Indigo} \textbf{UCCA} & 547 \\
+    }\frenchdata
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & total \\
+	\color{NavyBlue} \textbf{UD} & 13814 \\
+	\color{Indigo} \textbf{UCCA} & 6154 \\
+    }\germandata
+    
+\begin{frame}
+\frametitle{Experimental Setup}
+\begin{itemize}
+ \item UCCA Wikipedia corpus in English.
+ \item UCCA \textit{Twenty Thousand Leagues Under the Sea} corpus in English, French and German.
+ \item Auxiliary training data: in English, AMR, SDP and UD. In French and German, only UD.
+\end{itemize}
+
+\vfill
+%\begin{minipage}{.4\textwidth}
+%\scalebox{.6}{
+%    \begin{tikzpicture}
+%    \begin{axis}[
+%    xbar stacked,
+%    width=10cm,
+%    height=39mm,
+%    xmin=0,
+%    xmax=60000,
+%    xtick=\empty,
+%    ytick=data,
+%    yticklabels from table={\englishdata}{corpus},
+%    axis x line=none
+%    ]
+%    \addplot [fill=Navy, point meta=explicit symbolic,
+%    nodes near coords={\pgfmathprintnumber\pgfplotspointmeta~sentences},
+%    nodes near coords align={anchor=west}] table [x=total,y expr=\coordindex,meta=total] {\englishdata};
+%    \end{axis}
+%    \end{tikzpicture}
+%    \captionof{figure}{\textbf{English}}
+%}
+%\end{minipage}
+%\hspace{1mm}
+%\begin{minipage}{.34\textwidth}
+%\scalebox{.6}{
+%    \begin{tikzpicture}
+%    \begin{axis}[
+%    xbar stacked,
+%    width=10cm,
+%    height=39mm,
+%    xmin=0,
+%    xmax=15000,
+%    xtick=\empty,
+%    ytick=data,
+%    yticklabels from table={\frenchdata}{corpus},
+%    axis x line=none
+%    ]
+%    \addplot [fill=Navy, point meta=explicit symbolic,
+%    nodes near coords={\pgfmathprintnumber\pgfplotspointmeta~sentences},
+%    nodes near coords align={anchor=west}] table [x=total,y expr=\coordindex,meta=total] {\frenchdata};
+%    \end{axis}
+%    \end{tikzpicture}
+%    \captionof{figure}{\textbf{French}}
+%}
+%\end{minipage}
+%\begin{minipage}{.34\textwidth}
+%\scalebox{.6}{
+%    \begin{tikzpicture}
+%    \begin{axis}[
+%    xbar stacked,
+%    width=10cm,
+%    height=39mm,
+%    xmin=0,
+%    xmax=15000,
+%    xtick=\empty,
+%    ytick=data,
+%    yticklabels from table={\germandata}{corpus},
+%    axis x line=none
+%    ]
+%    \addplot [fill=Navy, point meta=explicit symbolic,
+%    nodes near coords={\pgfmathprintnumber\pgfplotspointmeta~sentences},
+%    nodes near coords align={anchor=west}] table [x=total,y expr=\coordindex,meta=total] {\germandata};
+%    \end{axis}
+%    \end{tikzpicture}
+%    \captionof{figure}{\textbf{German}}
+%}
+%\end{minipage}
+
+\scalebox{.27}{\Huge
+\begin{minipage}{1.4\textwidth}
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & total & train & dev & test \\
+	\color{DarkBlue} \textbf{UD} & 17062 & 9062 & 0 & 0 \\
+	\color{DarkRed} \textbf{SDP} & 33964 & 10964 & 0 & 0 \\
+	\color{DarkGreen} \textbf{AMR} & 36521 & 11521 & 0 & 0 \\
+	\color{Indigo} \textbf{Wiki} & 5225 & 4268 & 454 & 503 \\
+	\color{Indigo} \textbf{20K} & 506 & 0 & 0 & 506 \\
+    }\english
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar stacked,
+    width=13cm,
+    height=9cm,
+    xmin=0,
+    xmax=15000,
+    xtick=\empty,
+    ytick=data,
+    yticklabels from table={\english}{corpus}
+    ]
+    \draw[black] decorate [decoration={zigzag}] {(axis cs:8600,-4) -- (axis cs:8600,5)};
+    \addplot [fill=green!80] table [x=train,meta=corpus,y expr=\coordindex] {\english};
+    \addplot [fill=blue!60] table [x=dev,y expr=\coordindex] {\english};
+    \addplot [fill=red!60, point meta=explicit symbolic,nodes near coords, nodes near coords align={anchor=west}] table [x=test,y expr=\coordindex,meta=total] {\english};
+    \end{axis}
+    \end{tikzpicture}
+    English
+\end{center}
+\end{minipage}
+\hspace{1mm}
+\begin{minipage}{1.1\textwidth}
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & total & train & dev & test \\
+	UD & 32347 & 11347 & 0 & 0 \\
+	UCCA 20K & 547 & 413 & 67 & 67 \\
+    }\french
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar stacked,
+    width=13cm,
+    height=9cm,
+    xmin=0,
+    xmax=15000,
+    xtick=\empty,
+    ytick=\empty,
+    yticklabels=\empty
+    ]
+    \draw[black] decorate [decoration={zigzag}] {(axis cs:8600,-4) -- (axis cs:8600,5)};
+    \addplot [fill=green!80] table [x=train,y expr=\coordindex] {\french};
+    \addplot [fill=blue!60] table [x=dev,y expr=\coordindex] {\french};
+    \addplot [fill=red!60, point meta=explicit symbolic, nodes near coords, nodes near coords align={anchor=west}] table [x=test,y expr=\coordindex,meta=total] {\french};
+    \end{axis}
+    \end{tikzpicture}
+    French
+\end{center}
+\end{minipage}
+\begin{minipage}{1.3\textwidth}
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & total & train & dev & test \\
+	UD & 13814 & 9814 & 0 & 0 \\
+	UCCA 20K & 6154 & 3429 & 561 & 2164 \\
+    }\german
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar stacked,
+    width=13cm,
+    height=9cm,
+    xmin=0,
+    xmax=15000,
+    xtick=\empty,
+    ytick=\empty,
+    legend style={at={(axis cs:10000,.8)},anchor=north west},
+    yticklabels=\empty
+    ]
+    \draw[black] decorate [decoration={zigzag}] {(axis cs:9200,-4) -- (axis cs:9200,5)};
+    \addplot [fill=green!80] table [x=train,y expr=\coordindex] {\german};
+    \addplot [fill=blue!60] table [x=dev,y expr=\coordindex] {\german};
+    \addplot [fill=red!60, point meta=explicit symbolic, nodes near coords, nodes near coords align={anchor=west}] table [x=test, meta=corpus,y expr=\coordindex,meta=total] {\german};
+    \legend{train,dev,test}
+    \end{axis}
+    \end{tikzpicture}
+    German
+\end{center}
+\end{minipage}
+}
+
+\vfill
+\begin{center}
+  \begin{minipage}{.2\textwidth}\includegraphics[width=\textwidth]{wikipedia.png}\end{minipage}
+  \begin{minipage}{.2\textwidth}\includegraphics[width=\textwidth]{squid.jpg}\end{minipage}
+\end{center}
+
+\end{frame}
+
 \begin{frame}
 \frametitle{UCCA Evaluation}
 Comparing graphs over the same sequence of tokens,
@@ -840,88 +1028,365 @@ Comparing graphs over the same sequence of tokens,
 \end{adjustbox}
 \end{frame}
 
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 \\
+	\color{DarkGreen} \textbf{AMR} + \color{DarkRed} \textbf{SDP} + \color{NavyBlue} \textbf{UD} & 74.4 & 52 \\
+	{\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 74.9 & 51.2 \\
+	{\color{DarkGreen} \textbf{AMR}} + {\color{NavyBlue} \textbf{UD}} & 73.8 & 48.5 \\
+	{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} & 74.7 & 51.4 \\
+	\color{NavyBlue} \textbf{UD} & 74.1 & 50.8 \\
+	\color{DarkRed} \textbf{SDP} & 74.8 & 53.9 \\
+	\color{DarkGreen} \textbf{AMR} & 73.7 & 49.9 \\
+	\textbf{Single-task} & 73.6 & 51.5 \\
+}\indomaindata
+
 \begin{frame}
 \frametitle{In-Domain Results}
 Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English Wikipedia UCCA
+
+\vspace{-5mm}
 \begin{center}
-	\begin{tabular}{l|lll|lll}
-	& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
-	& \textbf{LP} & \textbf{LR} & \textbf{LF}
-	& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-	\hline
-	Single-task
-	& 74.4 & 72.9 & 73.6 & 53 & 50 & 51.5 \\
-	\cline{1-1}
-	AMR
-	& 74.7 & 72.8 & 73.7 & 48.7$\star$ & 51.1 & 49.9 \\
-	DM
-	& 75.7$\star$ & 73.9$\star$ & 74.8$\star$ & 54.9 & 53 & \textbf{53.9} \\
-	UD$^{++}$
-	& 75$\star$ & 73.2 & 74.1$\star$ & 49 & 52.7 & 50.8 \\
-	AMR + DM
-	& 75.6$\star$ & 73.9$\star$ & 74.7$\star$ & 49.9 & 53 & 51.4 \\
-	AMR + UD$^{++}$
-	& 74.9 & 72.7 & 73.8 & 47.1 & 50 & 48.5 \\
-	DM + UD$^{++}$
-	& 75.9$\star$ & 73.9$\star$ & \textbf{74.9}$\star$ & 48 & 54.8 & 51.2 \\
-	All
-	& 75.6$\star$ & 73.1 & 74.4$\star$ & 50.9 & 53.2 & 52
-	\end{tabular}
+\hspace{-1cm}
+\scalebox{.85}{
+\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=12cm,
+	    height=10cm,
+	    xmin=47,
+	    xmax=80,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\indomaindata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:35,4)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\indomaindata};
+	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\indomaindata};
+	    \legend{remote F1,primary F1}
+	    \end{axis}
+\end{tikzpicture}
+}
 \end{center}
 \end{frame}
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 \\
+	\color{DarkGreen} \textbf{AMR} + \color{DarkRed} \textbf{SDP} + \color{NavyBlue} \textbf{UD} & 71 & 29.6 \\
+	{\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 70.6 & 28.4 \\
+	{\color{DarkGreen} \textbf{AMR}} + {\color{NavyBlue} \textbf{UD}} & 70 & 29.4 \\
+	{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} & 70.5 & 27.3 \\
+	\color{NavyBlue} \textbf{UD} & 69.7 & 28.7 \\
+	\color{DarkRed} \textbf{SDP} & 70.7 & 25.9 \\
+	\color{DarkGreen} \textbf{AMR} & 69.5 & 27.5 \\
+	\textbf{Single-task} & 69 & 26.7 \\
+}\outdomaindata
 
 \begin{frame}
 \frametitle{Out-of-Domain Results}
 Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English \textbf{20K Leagues} UCCA
+
+\vspace{-5mm}
 \begin{center}
-	\begin{tabular}{l|lll|lll}
-	& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
-	& \textbf{LP} & \textbf{LR} & \textbf{LF}
-	& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-	\hline
-	Single-task
-	& 69 & 69 & 69 & 41.2 & 19.8 & 26.7 \\
-	\cline{1-1}
-	AMR
-	& 69.5 & 69.5 & 69.5 & 42.9 & 20.2 & 27.5 \\
-	DM
-	& 70.7$\star$ & 70.7$\star$ & 70.7$\star$ & 42.7 & 18.6 & 25.9 \\
-	UD$^{++}$
-	& 69.6 & 69.8$\star$ & 69.7 & 41.4 & 22 & 28.7 \\
-	AMR + DM
-	& 70.7$\star$ & 70.2$\star$ & 70.5$\star$ & 45.8 & 19.4 & 27.3 \\
-	AMR + UD$^{++}$
-	& 70.2$\star$ & 69.9$\star$ & 70$\star$ & 45.1 & 21.8 & 29.4 \\
-	DM + UD$^{++}$
-	& 70.8$\star$ & 70.3$\star$ & 70.6$\star$ & 41.6 & 21.6 & 28.4 \\
-	All
-	& 71.2$\star$ & 70.9$\star$ & \textbf{71}$\star$ & 45.1 & 22 & \textbf{29.6}
-	\end{tabular}
+\scalebox{.85}{
+\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=11cm,
+	    height=10cm,
+	    xmin=23,
+	    xmax=77,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\outdomaindata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:2,4)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\outdomaindata};
+	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\outdomaindata};
+	    \legend{remote F1,primary F1}
+	    \end{axis}
+\end{tikzpicture}
+}
 \end{center}
 \end{frame}
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 \\
+	\color{NavyBlue} \textbf{UD} & 70.1 & 20.3 \\
+	\textbf{Single-task} & 67.6 & 13.9 \\
+}\frenchdata
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 \\
+	\color{NavyBlue} \textbf{UD} & 72.5 & 27.1 \\
+	\textbf{Single-task} & 73.2 & 35.5 \\
+}\germandata
 
 \begin{frame}
 \frametitle{French and German Results}
 Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/German 20K Leagues UCCA
+
+\vfill
+
+{\bf French (in-domain)}
 \begin{center}
-	\begin{tabular}{l|lll|lll}
-	& \multicolumn{3}{c|}{Primary edges} & \multicolumn{3}{c}{Remote edges} \\
-	& \textbf{LP} & \textbf{LR} & \textbf{LF}
-	& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
-	\hline
-	\multicolumn{4}{l|}{\bf French (in-domain)} & \\
-	Single-task & 68.2 & 67 & 67.6 & 26 & \enskip 9.4 & 13.9 \\
-	UD & 70.3 & 70$\star$ & \textbf{70.1}$\star$ & 43.8 & 13.2 & 20.3 \\
-	\hline\\
-	\multicolumn{4}{l|}{\bf German (in-domain)} & \\
-	Single-task & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
-	UD & 73.7$\star$ & 72.6$\star$ & \textbf{73.2}$\star$ & 61.8 & 24.9$\star$ & \textbf{35.5}$\star$
-	\end{tabular}
+\scalebox{.85}{
+\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=11cm,
+	    height=37mm,
+	    xmin=10,
+	    xmax=80,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\frenchdata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:-10,.2)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\frenchdata};
+	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\frenchdata};
+	    \legend{remote F1,primary F1}
+	    \end{axis}
+\end{tikzpicture}
+}
+\end{center}
+
+{\bf German (in-domain)}
+\begin{center}
+\scalebox{.85}{
+\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=11cm,
+	    height=37mm,
+	    xmin=10,
+	    xmax=80,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\germandata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:-10,.2)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\germandata};
+	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\germandata};
+	    \legend{remote F1,primary F1}
+	    \end{axis}
+\end{tikzpicture}
+}
 \end{center}
 \end{frame}
 
 \section{Discussion}
 
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 & cpf1 & crf1 & l1 \\
+	\color{NavyBlue} \textbf{UD} & 74.1 & 50.8 & 83.6 & 12.6 & 84.3 \\
+	\color{DarkRed} \textbf{SDP} & 74.8 & 53.9 & 56 & 13.3 & 91.3 \\
+	\color{DarkGreen} \textbf{AMR} & 73.7 & 49.9 & 24.2 & 6.3 & 89.5 \\
+}\similaritydata
+	    
+\begin{frame}
+\frametitle{Factors in MTL Success}
+\begin{itemize}
+\item All auxiliary tasks contributed to the main task \\
+      (and their combination contributed further).
+\item<2-3> Does improvement depend on structural task similarity?
+\item<3> Or does it depend on similarity of the training corpora?
+\end{itemize}
+
+\only<2>{
+	\begin{minipage}{.4\textwidth}
+	  \begin{center}
+	  \scalebox{.8}{
+	  \begin{tikzpicture}[level distance=22mm, -{Latex[length=2mm]}, color=DarkGreen,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=17mm},
+	      level 2/.style={sibling distance=13mm},
+	      level 3/.style={sibling distance=13mm}]
+	    \tikzstyle{word} = [font=\rmfamily,color=black]
+	    \node (ROOT) [word] {moved}
+	      child {node [word] {After}
+	      {
+	            child {node (graduation) [word] {graduation} edge from parent node {op} }
+	      } edge from parent node {time} }
+	      child {node (John) [fill=DarkGreen,circle] {}
+	      {
+	        child {node [word] {John} edge from parent node {name} }
+	      } edge from parent node {ARG0} }
+	      child {node [fill=DarkGreen,circle] {}
+	      {
+	        child {node [word] {Paris} edge from parent node {name} }
+	      } edge from parent node {ARG2} }
+	      ;
+	      \draw[dashed] (graduation) to node {ARG0} (John);
+	  \end{tikzpicture}
+	  }
+	  \end{center}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.5\textwidth}
+	  \begin{center}
+	  \scalebox{.6}{
+	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkRed,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=28mm,level distance=13mm},
+	      level 2/.style={sibling distance=16mm,level distance=15mm},
+	      level 3/.style={level distance=18mm}]
+	    \tikzstyle{word} = [font=\rmfamily,color=black]
+	    \node (ROOT) [fill=DarkRed,circle] {}
+	      child {node (after) [fill=DarkRed,circle] {}
+	      {
+	        child {node [draw=none] {}
+	        {
+	          child {node [word] (after_word) {After{\color{white}g}} edge from parent [draw=none]}
+	        } edge from parent [draw=none] }
+	        child {node [draw=none] {}
+	        {
+	          child {node [word] (graduation) {graduation ,} edge from parent [draw=none]}
+	        } edge from parent [draw=none] }
+	      } edge from parent node {root}}
+	      child {node [draw=none] {}
+	      {
+	        child {node (moved) [fill=DarkRed,circle] {}
+	        {
+	          child {node [word] {\quad{\color{white}g} John} edge from parent node {ARG1}}
+	          child {node [word] {moved{\color{white}g}} edge from parent node {head}}
+	        } edge from parent [draw=none] }
+	      } edge from parent [draw=none] }
+	      child {node (to) [fill=DarkRed,circle] {}
+	      {
+	        child {node [draw=none] {}
+	        {
+	            child {node [word] (to_word) {to{\color{white}g}} edge from parent [draw=none]}
+	          } edge from parent [draw=none] }
+	          child {node [draw=none] {}
+	        {
+	          child {node [word] (Paris) {Paris{\color{white}g}} edge from parent [draw=none]}
+	        } edge from parent [draw=none] }
+	      } edge from parent node {root}}
+	      ;
+	      \draw (ROOT) to node {top} (moved);
+	      \draw (after) to node {head} (after_word);
+	      \draw (after) to node {ARG2} (graduation);
+	      \draw[dashed] (after) to node {ARG1} (moved);
+	      \draw[dashed] (to) to node {ARG1} (moved);
+	      \draw (to) to node {head} (to_word);
+	      \draw (moved) to node {ARG2} (Paris);
+	      \draw[dashed] (to) to node {ARG2} (Paris);
+	  \end{tikzpicture}}
+	  \vfill
+	  \scalebox{.6}{
+	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkBlue,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=16mm,level distance=13mm},
+	      level 2/.style={sibling distance=14mm,level distance=15mm}]
+	    \tikzstyle{word} = [font=\rmfamily,color=black]
+	    \node (ROOT) [fill=DarkBlue,circle] {}
+	      child {node (after) [fill=DarkBlue,circle] {}
+	      {
+	        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
+	        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
+	      } edge from parent node {obl}}
+	      child {node {}
+	      {
+	        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
+	      } edge from parent [draw=none]}
+	      child {node {}
+	      {
+	        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
+	      } edge from parent [draw=none]}
+	      child {node {}
+	      {
+	        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
+	      } edge from parent [draw=none]}
+	      child {node (to) [fill=DarkBlue,circle] {}
+	      {
+	          child {node [word] {to{\color{white}g}} edge from parent node {case}}
+	          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
+	      } edge from parent node {obl}}
+	      ;
+	      \draw (ROOT) to node {punct} (comma);
+	      \draw (ROOT) to node {nsubj} (John);
+	      \draw (ROOT) to node {head} (moved);
+	  \end{tikzpicture}}
+	  \end{center}
+	\end{minipage}
+}
+
+\vfill
+\only<2>{\scalebox{.5}}{\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=9cm,
+	    height=45mm,
+	    xmin=0,
+	    xmax=130,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\similaritydata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:100,-.4)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\similaritydata};
+	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\similaritydata};
+	    \legend{in-domain primary F1,in-domain remote F1}
+	    \end{axis}
+\end{tikzpicture}}
+\end{frame}
+
+\begin{frame}
+\frametitle{Task Similarity}
+\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=9cm,
+	    height=85mm,
+	    xmin=0,
+	    xmax=130,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\similaritydata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:100,-.4)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Green, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=l1,y expr=\coordindex,meta=l1] {\similaritydata};
+	    \addplot [fill=Red, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=crf1,y expr=\coordindex,meta=crf1] {\similaritydata};
+	    \addplot [fill=Blue, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=cpf1,y expr=\coordindex,meta=cpf1] {\similaritydata};
+	    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\similaritydata};
+	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\similaritydata};
+	    \legend{in-domain primary F1,in-domain remote F1,conversion primary F1,conversion remote F1,unigram L1 distance}
+	    \end{axis}
+\end{tikzpicture}
+\end{frame}
 
 
 \begin{frame}
@@ -933,7 +1398,7 @@ Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/Ge
 
 Future work:
 \begin{itemize}
- \item Examination of the factors contributing to MTL success.
+ \item Further examination of the factors contributing to MTL success.
  \item AMR, SDP and UD parsing as main tasks. Preliminary experiments show promising results.
 \end{itemize}
 
