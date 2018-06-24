@@ -1046,12 +1046,12 @@ Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English Wikipedia
 
 \vspace{-5mm}
 \begin{center}
-\hspace{-1cm}
+\hspace{-13mm}
 \scalebox{.85}{
 \begin{tikzpicture}
 	    \begin{axis}[
 	    xbar,
-	    width=12cm,
+	    width=115mm,
 	    height=10cm,
 	    xmin=47,
 	    xmax=80,
@@ -1059,7 +1059,7 @@ Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English Wikipedia
 	    ytick=data,
 	    yticklabels from table={\indomaindata}{aux},
 	    reverse legend,
-        legend style={at={(axis cs:35,4)},anchor=south west},
+        legend style={at={(axis cs:34,4)},anchor=south west},
 	    axis x line=none,
 	    clip=false
 	    ]
@@ -1331,8 +1331,17 @@ Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/Ge
 	\end{minipage}
 }
 
+\only<3>{
+	\begin{center}
+		\begin{tabular}{llll}
+			\color{Indigo} \textbf{UCCA}  & \color{DarkGreen} \textbf{AMR}  & \color{DarkRed} \textbf{SDP}  & \color{NavyBlue} \textbf{UD}  \\
+			Wikipedia & blogs & news & blogs \\ books & news && news \\ & emails && emails \\ & reviews && reviews \\ &&& Q\&A
+		\end{tabular}
+	\end{center}
+}
+
 \vfill
-\only<2>{\scalebox{.5}}{\begin{tikzpicture}
+\only<2-3>{\scalebox{.5}}{\begin{tikzpicture}
 	    \begin{axis}[
 	    xbar,
 	    width=9cm,
@@ -1351,7 +1360,7 @@ Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/Ge
 	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\similaritydata};
 	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
 	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\similaritydata};
-	    \legend{in-domain primary F1,in-domain remote F1}
+	    \legend{in-domain remote F1,in-domain primary F1}
 	    \end{axis}
 \end{tikzpicture}}
 \end{frame}
@@ -1383,7 +1392,7 @@ Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/Ge
 	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\similaritydata};
 	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
 	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\similaritydata};
-	    \legend{in-domain primary F1,in-domain remote F1,conversion primary F1,conversion remote F1,unigram L1 distance}
+	    \legend{,unigram L1 distance,conversion remote F1,conversion primary F1,in-domain remote F1,in-domain primary F1}
 	    \end{axis}
 \end{tikzpicture}
 \end{frame}
@@ -1392,9 +1401,12 @@ Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/Ge
 \begin{frame}
 \frametitle{Conclusion}
 \begin{itemize}
- \item Multitask learning improves UCCA parsing.
  \item \parser{} supports UCCA, AMR, SDP and UD with a uniform transition system and DAG format.
+ \item Multitask learning improves UCCA parsing, with auxiliary tasks varying
+   both formally and in annotated corpora.
 \end{itemize}
+
+\vfill
 
 Future work:
 \begin{itemize}
