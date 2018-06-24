@@ -1030,13 +1030,13 @@ Comparing graphs over the same sequence of tokens,
 
 \pgfplotstableread[row sep=\\,col sep=&]{
 	aux & pf1 & rf1 \\
-	\color{DarkGreen} \textbf{AMR} + \color{DarkRed} \textbf{SDP} + \color{NavyBlue} \textbf{UD} & 74.4 & 52 \\
-	{\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 74.9 & 51.2 \\
-	{\color{DarkGreen} \textbf{AMR}} + {\color{NavyBlue} \textbf{UD}} & 73.8 & 48.5 \\
-	{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} & 74.7 & 51.4 \\
-	\color{NavyBlue} \textbf{UD} & 74.1 & 50.8 \\
-	\color{DarkRed} \textbf{SDP} & 74.8 & 53.9 \\
-	\color{DarkGreen} \textbf{AMR} & 73.7 & 49.9 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 74.4 & 52 \\
+	+{\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 74.9 & 51.2 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{NavyBlue} \textbf{UD}} & 73.8 & 48.5 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} & 74.7 & 51.4 \\
+	+\color{NavyBlue} \textbf{UD} & 74.1 & 50.8 \\
+	+\color{DarkRed} \textbf{SDP} & 74.8 & 53.9 \\
+	+\color{DarkGreen} \textbf{AMR} & 73.7 & 49.9 \\
 	\textbf{Single-task} & 73.6 & 51.5 \\
 }\indomaindata
 
@@ -1059,7 +1059,7 @@ Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English Wikipedia
 	    ytick=data,
 	    yticklabels from table={\indomaindata}{aux},
 	    reverse legend,
-        legend style={at={(axis cs:35,4)},anchor=south west},
+        legend style={at={(axis cs:33,4)},anchor=south west},
 	    axis x line=none,
 	    clip=false
 	    ]
@@ -1076,13 +1076,13 @@ Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English Wikipedia
 
 \pgfplotstableread[row sep=\\,col sep=&]{
 	aux & pf1 & rf1 \\
-	\color{DarkGreen} \textbf{AMR} + \color{DarkRed} \textbf{SDP} + \color{NavyBlue} \textbf{UD} & 71 & 29.6 \\
-	{\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 70.6 & 28.4 \\
-	{\color{DarkGreen} \textbf{AMR}} + {\color{NavyBlue} \textbf{UD}} & 70 & 29.4 \\
-	{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} & 70.5 & 27.3 \\
-	\color{NavyBlue} \textbf{UD} & 69.7 & 28.7 \\
-	\color{DarkRed} \textbf{SDP} & 70.7 & 25.9 \\
-	\color{DarkGreen} \textbf{AMR} & 69.5 & 27.5 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 71 & 29.6 \\
+	+{\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 70.6 & 28.4 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{NavyBlue} \textbf{UD}} & 70 & 29.4 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} & 70.5 & 27.3 \\
+	+\color{NavyBlue} \textbf{UD} & 69.7 & 28.7 \\
+	+\color{DarkRed} \textbf{SDP} & 70.7 & 25.9 \\
+	+\color{DarkGreen} \textbf{AMR} & 69.5 & 27.5 \\
 	\textbf{Single-task} & 69 & 26.7 \\
 }\outdomaindata
 
@@ -1104,7 +1104,7 @@ Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English \textbf{2
 	    ytick=data,
 	    yticklabels from table={\outdomaindata}{aux},
 	    reverse legend,
-        legend style={at={(axis cs:2,4)},anchor=south west},
+        legend style={at={(axis cs:1,4)},anchor=south west},
 	    axis x line=none,
 	    clip=false
 	    ]
@@ -1121,13 +1121,13 @@ Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English \textbf{2
 
 \pgfplotstableread[row sep=\\,col sep=&]{
 	aux & pf1 & rf1 \\
-	\color{NavyBlue} \textbf{UD} & 70.1 & 20.3 \\
+	+\color{NavyBlue} \textbf{UD} & 70.1 & 20.3 \\
 	\textbf{Single-task} & 67.6 & 13.9 \\
 }\frenchdata
 
 \pgfplotstableread[row sep=\\,col sep=&]{
 	aux & pf1 & rf1 \\
-	\color{NavyBlue} \textbf{UD} & 72.5 & 27.1 \\
+	+\color{NavyBlue} \textbf{UD} & 72.5 & 27.1 \\
 	\textbf{Single-task} & 73.2 & 35.5 \\
 }\germandata
 
@@ -1151,7 +1151,7 @@ Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/Ge
 	    ytick=data,
 	    yticklabels from table={\frenchdata}{aux},
 	    reverse legend,
-        legend style={at={(axis cs:-10,.2)},anchor=south west},
+        legend style={at={(axis cs:-13,.2)},anchor=south west},
 	    axis x line=none,
 	    clip=false
 	    ]
@@ -1179,7 +1179,7 @@ Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/Ge
 	    ytick=data,
 	    yticklabels from table={\germandata}{aux},
 	    reverse legend,
-        legend style={at={(axis cs:-10,.2)},anchor=south west},
+        legend style={at={(axis cs:-11,.2)},anchor=south west},
 	    axis x line=none,
 	    clip=false
 	    ]
