@@ -1,0 +1,1427 @@
+\documentclass[t,xcolor={svgnames}]{beamer}
+%\mode<presentation>
+
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{headline}{% 
+  \hfill% 
+  \usebeamercolor[fg]{page number in head/foot}% 
+  \usebeamerfont{page number in head/foot}% 
+  \insertpagenumber% 
+  \kern1em\vskip-1em% 
+}
+\usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=right}
+\usepackage{apalike}
+\usepackage{graphicx} % Required for including images
+\graphicspath{{figures/}} % Location of the graphics files
+\usepackage{booktabs} % Top and bottom rules for table
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+\usepackage{wrapfig} % Allows wrapping text around tables and figures
+\usepackage{lipsum,adjustbox}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{url}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{color}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{tikz,pgfplots,pgfplotstable}
+\usepackage{tikz-dependency}
+\usetikzlibrary{arrows.meta,graphs,graphs.standard,graphdrawing,quotes,shapes}
+\usegdlibrary{layered,trees}
+\tikzset{
+  invisible/.style={opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+\captionsetup{labelformat=empty}
+\newcommand{\parser}[1]{TUPA\textsubscript{#1}}
+
+\makeatletter
+\pgfdeclareshape{vector}{
+	  \inheritsavedanchors[from={rectangle}]
+	  \inheritbackgroundpath[from={rectangle}]
+	  \inheritanchorborder[from={rectangle}]
+	  \foreach \x in {center,north east,north west,north,south,south east,south west,east,west}{
+	    \inheritanchor[from={rectangle}]{\x}
+	  }
+
+    \backgroundpath{
+      \pgftransformshift{\pgfpoint{-16pt}{-4pt}}
+		  \draw[rounded corners=2pt] (0,0) rectangle (32pt,8pt);
+    }
+
+    \beforebackgroundpath{
+      \draw[step=8pt,help lines,-] (8pt,.1pt) grid (24pt,7.9pt);
+    }
+}
+\makeatother
+
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
+
+\begin{document}
+
+
+\title{Multitask Parsing \\ Across Semantic Representations}
+\author{\textbf{Daniel Hershcovich}, Omri Abend and Ari Rappoport}
+\institute[]{\includegraphics[width=.08\pagewidth]{huji_logo.jpg}
+\includegraphics[width=.3\pagewidth]{huji_banner.png}}
+\date{NLP Day \\ June 24, 2018}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+%----------------------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Semantic Graph Parsing}
+Semantic representations:
+graph structure for predicates, arguments, their attributes and relations.
+
+Abstract away from syntactic detail that does not affect meaning.
+
+\begin{center}
+  \begin{tikzpicture}[level distance=14mm, sibling distance=15mm, ->]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=blue, circle] {}
+      child {node (You) [word] {You} edge from parent}
+      child {node [word] {want} edge from parent}
+      child {node (totakealongbath) [fill=blue, circle] {}
+      {
+        child {node [word] {to} edge from parent}
+        child {node (takeabath) [fill=blue, circle] {}
+        {
+          child {node [word] {take} edge from parent}
+          child {node [word] {a} edge from parent}
+          child {node [word] (long) {long} edge from parent[draw=none]}
+          child {node [word] {bath} edge from parent}
+        } edge from parent}
+      } edge from parent}
+      ;
+    \draw[bend left,dashed,->] (totakealongbath) to (You);
+    \draw[bend left,->] (totakealongbath) to (long);
+  \end{tikzpicture}
+\end{center}
+
+Semantic parsing is important for natural language understanding.
+Representation schemes vary.
+Data is mostly \textbf{small}, \textbf{in-domain}, and in \textbf{English}.
+\end{frame}
+
+\section{Tasks}
+
+\begin{frame}
+\frametitle{Universal Conceptual Cognitive Annotation (UCCA)}
+Cross-linguistically applicable \cite{abend2013universal}.
+Stable in translation \cite{sulem2015conceptual}.
+
+\vfill
+English\\
+\vspace{-1cm}
+\begin{adjustbox}{center}
+  \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{crosslinguistic.png}
+\end{adjustbox}
+\\
+\vspace{-1cm}
+Hebrew
+\end{frame}
+
+\begin{frame}
+\frametitle{Tackled Tasks}
+We consider four schemes \cite{abend2013universal,banarescu2013abstract,oepen2016towards,nivre2016universal}:
+
+	{
+	\hfill
+	  \color{Indigo}
+	    \scalebox{.6}{
+	    \begin{tikzpicture}[level distance=15mm, -{Latex[length=2mm]},
+	        every node/.append style={font=\bf\ttfamily},
+	        every circle node/.append style={fill=Indigo},
+	      level 1/.style={sibling distance=29mm},
+	      level 2/.style={sibling distance=18mm}]
+	      \tikzstyle{word} = [font=\rmfamily,color=black]
+	      \node[font=\bf\sffamily\Large] at (-4,0) {UCCA:};
+      \node (ROOT) [circle] {}
+        child {node (After) [word] {After} edge from parent node[above] {L}}
+        child {node (graduation) [circle] {}
+        {
+          child {node [word] {graduation} edge from parent node[left] {P}}
+        } edge from parent node[right] {H} }
+        child {node [word] {,} edge from parent node[below] {U}}
+        child {node (moved) [circle] {}
+        {
+          child {node (John) [word] {John} edge from parent node[left] {A}}
+          child {node [word] {moved} edge from parent node[left] {P}}
+          child {node [circle] {}
+          {
+            child {node [word] {to} edge from parent node[left] {R}}
+            child {node [word] {Paris} edge from parent node[right] {C}}
+          } edge from parent node[above] {A} }
+        } edge from parent node[above] {H} }
+        ;
+      \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [above] {A} (John);
+	    \end{tikzpicture}
+	    }
+	}
+	
+	\vspace{-14mm}
+	\hspace{-9mm}
+	\scalebox{.9}{
+	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkGreen, level distance=16mm,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=24mm}]
+	    \node[font=\bf\sffamily\small] at (-2.6,0) {AMR:};
+    \node (ROOT) [ellipse] {move-01}
+      child {node [ellipse] {after}
+      {
+            child {node (graduation) [ellipse] {graduate-01} edge from parent node {op1} }
+      } edge from parent node {time} }
+      child {node (John) [ellipse] {person}
+      {
+        child {node [ellipse] {name}
+        {
+            child {node [ellipse] {"John"} edge from parent node {op1} }
+        } edge from parent node {name} }
+      } edge from parent node {ARG0} }
+      child {node [ellipse] {city}
+      {
+        child {node [ellipse] {name}
+        {
+            child {node [ellipse] {"Paris"} edge from parent node {op1} }
+        } edge from parent node {name} }
+      } edge from parent node {ARG2} }
+      ;
+      \draw (graduation) to node {ARG0} (John);
+	  \end{tikzpicture}
+	  }
+	\vspace{-24mm}
+	
+	\begin{center}
+	\hspace{2cm}{\color{NavyBlue}\bf\sffamily\scriptsize UD:}
+	\end{center}
+	
+	\vspace{-9mm}
+	
+	\begin{flushright}
+	\begin{minipage}{.5\textwidth}
+	    \rmfamily
+	    \scalebox{.7}{
+	    \begin{dependency}[edge style={-{Latex[length=2mm]}, color=NavyBlue},
+	        text only label, label style={above, color=NavyBlue, font=\bf\ttfamily}, font=\small]
+	    \begin{deptext}[column sep=.8em,ampersand replacement=\^]
+    After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+    \end{deptext}
+        \depedge[edge unit distance=1em]{2}{1}{case}
+        \depedge[edge unit distance=1em]{4}{3}{punct}
+        \depedge[edge unit distance=1em, edge start x offset=-4mm]{5}{4}{nsubj}
+        \depedge[edge unit distance=1em, edge end x offset=-3mm]{2}{5}{obl}
+        \depedge[edge unit distance=1em]{7}{6}{case}
+        \deproot[edge unit distance=1em]{5}{root}
+        \depedge[edge unit distance=1.5em, edge start x offset=1mm]{5}{7}{obl}
+    \end{dependency}
+	}
+	\end{minipage}
+	
+	\begin{minipage}{.06\textwidth}
+	{\color{DarkRed}\bf\sffamily\scriptsize SDP:}
+	\end{minipage}
+	\begin{minipage}{.5\textwidth}
+	    \rmfamily
+	    \scalebox{.7}{
+	    \begin{dependency}[edge style={-{Latex[length=2mm]}, color=DarkRed},
+	        text only label, label style={above, color=DarkRed, font=\bf\ttfamily}, font=\small]
+	    \begin{deptext}[column sep=.8em,ampersand replacement=\^]
+    After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+    \end{deptext}
+        \depedge[edge unit distance=1em]{1}{2}{ARG2}
+        \depedge[edge unit distance=1em, edge start x offset=-4mm]{5}{4}{ARG1}
+        \depedge[edge unit distance=1em, edge end x offset=-3mm]{1}{5}{ARG1}
+        \deproot[edge unit distance=1.25em]{5}{top}
+        \depedge[edge unit distance=2em, edge start x offset=1mm, edge end x offset=3mm]{5}{7}{ARG2}
+        \depedge[edge unit distance=1em, edge end x offset=5mm]{6}{5}{ARG1}
+        \depedge[edge unit distance=1em]{6}{7}{ARG2}
+    \end{dependency}
+	}
+	\end{minipage}
+	\end{flushright}
+	
+\end{frame}
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & total \\
+	\color{NavyBlue} \textbf{UD} & 17062 \\
+	\color{DarkRed} \textbf{SDP} & 33964 \\
+	\color{DarkGreen} \textbf{AMR} & 36521 \\
+	\color{Indigo} \textbf{UCCA} & 5225 \\
+    }\englishdata
+    
+\begin{frame}
+\frametitle{Data}
+	The amount of labeled data varies, e.g., in English:
+	\begin{center}
+	    \begin{tikzpicture}
+	    \begin{axis}[
+	    xbar stacked,
+	    width=10cm,
+	    height=39mm,
+	    xmin=0,
+	    xmax=60000,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\englishdata}{corpus},
+	    axis x line=none,
+	    ]
+	    \addplot [fill=Navy, point meta=explicit symbolic,
+	    nodes near coords={\pgfmathprintnumber\pgfplotspointmeta~sentences},
+	    nodes near coords align={anchor=west}] table [x=total,y expr=\coordindex,meta=total] {\englishdata};
+	    \end{axis}
+	    \end{tikzpicture}
+	\end{center}
+	
+	\pause
+	\vfill
+	
+	Domains differ, too:
+	\begin{center}
+		\begin{tabular}{llll}
+			\color{Indigo} \textbf{UCCA}  & \color{DarkGreen} \textbf{AMR}  & \color{DarkRed} \textbf{SDP}  & \color{NavyBlue} \textbf{UD}  \\
+			Wikipedia & blogs & news & blogs \\ books & news && news \\ & emails && emails \\ & reviews && reviews \\ &&& Q\&A
+		\end{tabular}
+	\end{center}
+\end{frame}
+
+\section{Parser}
+
+\begin{frame}
+\frametitle{Transition-Based UCCA Parsing}
+Parse text $w_1 \ldots w_n$ to graph $G$ incrementally by applying transitions to the parser state:
+stack, buffer and constructed graph.
+
+\vfill
+Initial state:
+\begin{tikzpicture}[every node/.append style={font=\rmfamily}, circle]
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
+	\node[anchor=west,style={font=\sffamily}] at (-0.1,1.00)     {stack};
+	\node[fill=black] at (0.5,0.25) {};
+	\draw[xstep=1cm,ystep=5mm,color=gray] (3,0) grid (10,.5);
+	\node[anchor=west,style={font=\sffamily}] at (8.9,1.00) {buffer};
+	\node[anchor=west] at (3,0.25) {You};
+	\node[anchor=west] at (4,0.25) {want};
+	\node[anchor=west] at (5,0.25) {to};
+	\node[anchor=west] at (6,0.25) {take};
+	\node[anchor=west] at (7,0.25) {a};
+	\node[anchor=west] at (8,0.25) {long};
+	\node[anchor=west] at (9,0.25) {bath};
+\end{tikzpicture}
+
+\vfill
+\parser{} \cite{hershcovich2017a} transitions:
+
+\{\textsc{Shift, Reduce, Node$_X$, Left-Edge$_X$, Right-Edge$_X$,}\\
+\hspace{5mm}\textsc{Left-Remote$_X$, Right-Remote$_X$, Swap, Finish}\}
+
+\vfill
+Support {\color{blue}non-terminal nodes}, {\color{orange}reentrancy} and {\color{red}discontinuity}.
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Example}
+\begin{minipage}[t][8mm][t]{\textwidth}
+	$\Rightarrow$\textsc{
+		\only<1>{Shift}\only<2>{Right-Edge$_A$}\only<3>{Shift}\only<4>{Swap}\only<5>{Right-Edge$_P$}\only<6>{Reduce}\only<7>{Shift}\only<8>{Shift}\only<9>{Node$_F$}\only<10>{Reduce}\only<11>{Shift}\only<12>{Left-Remote$_A$}\only<13>{Shift}\only<14>{Node$_C$}\only<15>{Reduce}\only<16>{Shift}\only<17>{Right-Edge$_P$}\only<18>{Shift}\only<19>{Right-Edge$_F$}\only<20>{Reduce}\only<21>{Shift}\only<22>{Swap}\only<23>{Right-Edge$_D$}\only<24>{Reduce}\only<25>{Swap}\only<26>{Right-Edge$_A$}\only<27>{Reduce}\only<28>{Reduce}\only<29>{Shift}\only<30>{Reduce}\only<31>{Shift}\only<32>{Right-Edge$_C$}\only<33>{Finish}
+	}
+\end{minipage}
+
+\vfill
+
+\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+	\only<31>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (1,.5);
+	\only<1,7>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (2,.5);
+	\only<2,5,26>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (2,.5);
+	\only<3,8,11>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (3,.5);
+	\only<13,16>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (2.99,0) grid (4,.5);
+	\only<18,21>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (3.99,0) grid (5,.5);
+	\only<17>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (4,.5);
+	\only<19>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (2.99,0) grid (5,.5);
+	\only<4>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (4,0) grid (5,.5);
+	\only<9>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (5,0) grid (6,.5);
+	\only<14>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (6,0) grid (7,.5);
+	\only<22>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (8,0) grid (9,.5);
+	\only<25>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (7,0) grid (8,.5);
+	\only<23>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (1.99,0) grid (4,.5);
+	\only<32>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (-0.01,0) grid (2,.5);
+	\only<12>\draw[xstep=1cm,ystep=5mm,color=red,line width=1pt] (.99,0) grid (3,.5);
+	\only<28,30>\draw[xstep=1mm,ystep=5mm,color=gray] (-0.01,0) grid (0.1,.5);
+	\only<6,27,29,31->\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (1,.5);
+	\only<-2,4-5,7,10,25-26,33>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (2,.5);
+	\only<3,8-9,11-12,15,24>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (3,.5);
+	\only<13-14,16-17,20,22-23>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+	\only<18-19,21>\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (5,.5);
+	\node[anchor=west,style={font=\sffamily}] at (-0.1,1.00){stack};
+	\only<-27>\node[fill=black, circle] at (0.5,0.25) {};
+	\only<25-26> \node[fill=blue, circle] at (1.5,0.25) {};
+	\only<11-24> \node[fill=blue, circle] at (2.5,0.25) {};
+	\only<31-> \node[fill=red, circle] at (0.5,0.25) {};
+	\only<16-21> \node[fill=red, circle] at (3.5,0.25) {};
+	\only<29> \node[anchor=west] at (0,0.25) {\small You};
+	\only<1-3,7-24> \node[anchor=west] at (1,0.25) {\small You};
+	\only<4-5> \node[anchor=west] at (1,0.25) {\small want};
+	\only<3>   \node[anchor=west] at (2,0.25) {\small want};
+	\only<8-9>  \node[anchor=west] at (2,0.25) {\small to};
+	\only<13-14> \node[anchor=west] at (3,0.25) {\small take};
+	\only<18-19> \node[anchor=west] at (4,0.25) {\small a};
+	\only<21> \node[anchor=west] at (4,0.25) {\small long};
+	\only<22-23> \node[anchor=west] at (3,0.25) {\small long};
+	\only<32-> \node[anchor=west] at (1,0.25) {\small bath};
+	\only<-2,4-6>\draw[xstep=1cm,ystep=5mm,color=gray] (4,0) grid (10,.5);
+	\only<3,5-7,9-10>\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (10,.5);
+	\only<8,11-12,14-15>\draw[xstep=1cm,ystep=5mm,color=gray] (6,0) grid (10,.5);
+	\only<13,16-17,25-28>\draw[xstep=1cm,ystep=5mm,color=gray] (7,0) grid (10,.5);
+	\only<18-20,22-24,29-30>\draw[xstep=1cm,ystep=5mm,color=gray] (8,0) grid (10,.5);
+	\only<21,31>\draw[xstep=1cm,ystep=5mm,color=gray] (9,0) grid (10,.5);
+	\only<32->\draw[xstep=1mm,ystep=5mm,color=gray] (9.89,0) grid (10,.5);
+	\node[anchor=west,style={font=\sffamily}] at (8.9,1) {buffer};
+	\only<9-10> \node[fill=blue, circle] at (5.5,0.25) {};
+	\only<14-15> \node[fill=red, circle] at (6.5,0.25) {};
+	\only<22-30> \node[fill=red, circle] at (8.5,0.25) {};
+	\only<4-6> \node[anchor=west] at (4,0.25) {\small You};
+	\only<25-28> \node[anchor=west] at (7,0.25) {\small You};
+	\only<-2>  \node[anchor=west] at (4,0.25) {\small want};
+	\only<-7> \node[anchor=west] at (5,0.25) {\small to};
+	\only<-12> \node[anchor=west] at (6,0.25) {\small take};
+	\only<-17> \node[anchor=west] at (7,0.25) {\small a};
+	\only<-20> \node[anchor=west] at (8,0.25) {\small long};
+	\only<-31> \node[anchor=west] at (9,0.25) {\small bath};
+\end{tikzpicture}
+\vfill
+\fbox{
+\begin{tikzpicture}[level distance=15mm, sibling distance=2cm, ->,
+    every node/.append style={font=\rmfamily}]
+	\node[anchor=west,style={font=\sffamily}] at (0,0) {graph};
+    \node(ROOT)[fill=black, circle, visible on=<1->] at (3,0) {}
+      child [visible on=<2->] {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
+      child [visible on=<5->] {node (want) {want} edge from parent node [left] {\scriptsize $P$}}
+      child [visible on=<9->] {node (totakealongbath) [fill=blue, circle] {}
+      {
+        child [visible on=<9->] {node (to) {to} edge from parent node [left] {\scriptsize $F$}}
+        child [visible on=<14->] {node (takeabath) [fill=red, circle] {}
+        {
+          child [visible on=<14->] {node (take) {take} edge from parent node [right] {\scriptsize $C$}}
+          child [visible on=<19->] {node (a) {a} edge from parent node [right] {\scriptsize $F$}}
+          child [visible on=<23->] {node (long) {long} edge from parent [draw=none]}
+          child [visible on=<32->] {node (bath) {bath} edge from parent node [right] {\scriptsize $C$}}
+        } edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      ;
+    \draw[visible on=<17->] (totakealongbath) to node [left] {\scriptsize $P$} (takeabath);
+    \draw[visible on=<26->] (ROOT) to node [left] {\scriptsize $A$} (totakealongbath);
+    \draw[bend left,dashed, visible on=<12->] (totakealongbath) to node [auto] {\scriptsize $A$} (You);
+    \draw[bend left, visible on=<23->] (totakealongbath) to node [auto] {\scriptsize $D$} (long);
+    \draw[visible on=<2>,red] (ROOT) to node {} (You);
+    \draw[visible on=<5>,red] (ROOT) to node {} (want);
+    \draw[visible on=<17>,red] (totakealongbath) to node {} (takeabath);
+    \draw[visible on=<19>,red] (takeabath) to node {} (a);
+    \draw[bend left, visible on=<23>,red] (totakealongbath) to node {} (long);
+    \draw[visible on=<26>,red] (ROOT) to node {} (totakealongbath);
+    \draw[bend left,dashed, visible on=<12>,red] (totakealongbath) to node {} (You);
+    \draw[visible on=<32>,red] (takeabath) to node {} (bath);
+\end{tikzpicture}}
+\end{frame}
+
+\begin{frame}
+\frametitle{\parser{} Model}
+Learns to greedily predict transition based on current state.
+
+BiLSTM + MLP classifier \cite{kiperwasser2016simple}.
+
+\vfill
+
+Features:
+words, POS, syntactic dependencies, existing edge labels \\
+from the stack and buffer + parents, children, grandchildren;
+ordinal features (height, number of parents and children)
+
+\vspace{5mm}
+\begin{tikzpicture}
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (10,.5);
+	\node[anchor=west] at (-0.1,1.00) {stack};
+	\node[anchor=west] at (8.9,1.00) {buffer};
+	\foreach \i in {0.5,8.5,9.5} {
+		\node[fill=gray, circle] at (\i,0.25) {};
+	}
+	\foreach \i in {1.5,2.5,3.5,5.5,6.5,7.5} {
+		\node[fill=black, circle] at (\i,0.25) {};
+	}
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+\centering
+
+\onslide<2>{
+\fbox{
+\begin{minipage}{.5\textwidth}
+\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+	\node[anchor=west,style={font=\sffamily}] at (-1.2,0.25){stack};
+	\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+	\node[fill=black, circle] at (0.5,0.25) {};
+	\node[fill=blue, circle] at (2.5,0.25) {};
+	\node[anchor=west] at (1,0.25) {You};
+	\node[anchor=west] at (3,0.25) {take};
+\end{tikzpicture}
+
+\vspace{1cm}
+\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+	\node[anchor=west,style={font=\sffamily}] at (3.8,0.25){buffer};
+	\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (9,.5);
+	\node[fill=red, circle] at (5.5,0.25) {};
+	\node[anchor=west] at (6,0.25) {a};
+	\node[anchor=west] at (7,0.25) {long};
+	\node[anchor=west] at (8,0.25) {bath};
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{.4\textwidth}
+\scalebox{.8}{
+\begin{tikzpicture}[level distance=1cm, sibling distance=1cm, ->,
+    every node/.append style={font=\rmfamily}]
+    \node[anchor=west,style={font=\sffamily}] at (5,0) {graph};
+    \draw[color=gray] (1.2,.3) rectangle (4.9,-3.2);
+    \node(ROOT)[fill=black, circle, visible on=<2->] at (3,0) {}
+      child {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
+      child {node {want} edge from parent node [left] {\scriptsize $P$}}
+      child {node (totakealongbath) [fill=blue, circle] {}
+      {
+        child {node {to} edge from parent node [left] {\scriptsize $F$}}
+        child {node (takeabath) [fill=red, circle] {}
+        {
+          child {node {take} edge from parent node [right] {\scriptsize $C$}}
+          child [opacity=0] {node {a} edge from parent node [right] {\scriptsize $F$}}
+          child [opacity=0] {node (long) {long} edge from parent [draw=none]}
+          child [opacity=0] {node {bath} edge from parent node [right] {\scriptsize $C$}}
+        } edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      ;
+\end{tikzpicture}
+}
+\end{minipage}
+}
+}
+
+\scalebox{.7}{
+\begin{tikzpicture}[->]
+	\tiny
+	\tikzstyle{main}=[circle, minimum size=7mm, draw=black!80, node distance=12mm]
+	\foreach \i/\word in {1/{You},3/{want},5/{to},7/{take},9/{a},11/{long},13/{bath}} {
+	    \node (x\i) at (\i,-1.3) {\Large\textrm\word};
+	    \node[main, fill=white!100] (h\i) at (\i,0) {LSTM};
+        \path (x\i) edge (h\i);
+	    \node[main, fill=white!100] (i\i) at (\i.5,.8) {LSTM};
+        \path (x\i) edge [bend right] (i\i);
+	    \node[main, fill=white!100] (l\i) at (\i.5,2.3) {LSTM};
+        \path (h\i) edge [bend left] (l\i);
+        \path (i\i) edge (l\i);
+	    \node[main, fill=white!100] (k\i) at (\i,3.1) {LSTM};
+        \path (i\i) edge [bend left] (k\i);
+        \path (h\i) edge [bend left] (k\i);
+	}
+	\foreach \current/\next in {1/3,3/5,5/7,7/9,9/11,11/13} {
+        \path (h\current) edge (h\next);
+        \path (i\next) edge (i\current);
+        \path (l\current) edge (l\next);
+        \path (k\next) edge (k\current);
+	}
+    \onslide<2>\node[main, fill=white!100] (mlp) at (7,4.6) {MLP};
+	\onslide<2>\foreach \i in {5,7,9} {
+        \path (l\i) edge (mlp);
+        \path (k\i) edge (mlp);
+    }
+    \coordinate (state) at (10.5,6.5);
+    \onslide<2>\path (state) edge [bend left] (mlp);
+    \onslide<2>\node (transition) at (7,5.8) {\large\textsc{Node}$_C$};
+    \onslide<2>\path (mlp) edge (transition);
+\end{tikzpicture}
+}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Multitask Architecture}
+
+    We treat UCCA parsing as the main task, \\ and AMR, SDP and UD as auxiliaries.	
+	
+	\begin{center}
+		\fbox{\scalebox{.7}{
+		\begin{minipage}{.5\textwidth}
+		\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+			\node[anchor=west,style={font=\sffamily}] at (-1.2,0.25){stack};
+			\draw[xstep=1cm,ystep=5mm,color=gray] (-0.01,0) grid (4,.5);
+			\node[fill=black, circle] at (0.5,0.25) {};
+			\node[fill=blue, circle] at (2.5,0.25) {};
+			\node[anchor=west] at (1,0.25) {You};
+			\node[anchor=west] at (3,0.25) {take};
+		\end{tikzpicture}
+		
+		\vspace{1cm}
+		\begin{tikzpicture}[every node/.append style={font=\rmfamily}]
+			\node[anchor=west,style={font=\sffamily}] at (3.8,0.25){buffer};
+			\draw[xstep=1cm,ystep=5mm,color=gray] (5,0) grid (9,.5);
+			\node[fill=red, circle] at (5.5,0.25) {};
+			\node[anchor=west] at (6,0.25) {a};
+			\node[anchor=west] at (7,0.25) {long};
+			\node[anchor=west] at (8,0.25) {bath};
+		\end{tikzpicture}
+		\end{minipage}
+		\begin{minipage}{.4\textwidth}
+		\scalebox{.8}{
+		\begin{tikzpicture}[level distance=1cm, sibling distance=1cm, ->,
+		    every node/.append style={font=\rmfamily}]
+		    \node[anchor=west,style={font=\sffamily}] at (5,0) {graph};
+		    \draw[color=gray] (1.2,.3) rectangle (4.9,-3.2);
+		    \node(ROOT)[fill=black, circle] at (3,0) {}
+		      child {node (You) {You} edge from parent node [left] {\scriptsize $A$}}
+		      child {node {want} edge from parent node [left] {\scriptsize $P$}}
+		      child {node (totakealongbath) [fill=blue, circle] {}
+		      {
+		        child {node {to} edge from parent node [left] {\scriptsize $F$}}
+		        child {node (takeabath) [fill=red, circle] {}
+		        {
+		          child {node {take} edge from parent node [right] {\scriptsize $C$}}
+		          child [opacity=0] {node {a} edge from parent node [right] {\scriptsize $F$}}
+		          child [opacity=0] {node (long) {long} edge from parent [draw=none]}
+		          child [opacity=0] {node {bath} edge from parent node [right] {\scriptsize $C$}}
+		        } edge from parent [draw=none]}
+		      } edge from parent [draw=none]}
+		      ;
+		\end{tikzpicture}
+		}
+		\end{minipage}
+		}}
+		
+		\scalebox{.3}{\Huge
+		   \begin{tikzpicture}[-{Latex[length=3mm]},thick]
+		   \tikzstyle{main}=[rounded rectangle, minimum size=23mm, draw=black!80, node distance=12mm]
+		   \node[main] (specific) at (0,10) {Task-specific BiLSTM};
+		   \node[main] (shared) at (22,10) {Shared BiLSTM};
+		   \node (embeddings) at (10.5,4.5) {Shared embeddings};
+		   \foreach \i/\word in {-4/{You},4/{want},17/{long},25/{bath}} {
+		       \node (x\i) at (\i,3) {\word};
+		       \node[main, minimum size=16mm] (e\i) at (\i,6) {};
+		       \path (x\i) edge (e\i);
+		       \path (e\i) edge (specific);
+		       \path (e\i) edge (shared);
+		   }
+		    \node (x4) at (10.5,3) {\ldots};
+		    \node[main] (mlp) at (10.5,12) {Task-specific MLP};
+		    \path (specific) edge (mlp);
+		    \path (shared) edge (mlp);
+		    \coordinate (state) at (22,17);
+		    \path (state) edge [bend left] (mlp);
+		    \node (transition) at (10.5,16.4) {transition};
+		    \path (mlp) edge node[right] {softmax} (transition);
+		   \end{tikzpicture}}
+   \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Unified DAG Format}
+
+We convert all representations into a format similar to UCCA and
+supported by TUPA.
+
+    \hspace{-5mm}
+	\begin{minipage}{.4\textwidth}
+	  \begin{center}
+	  \begin{tikzpicture}[level distance=22mm, -{Latex[length=2mm]}, color=DarkGreen,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=17mm},
+	      level 2/.style={sibling distance=13mm},
+	      level 3/.style={sibling distance=13mm}]
+	    \tikzstyle{word} = [font=\rmfamily,color=black]
+	    \node (ROOT) [word] {moved}
+	      child {node [word] {After}
+	      {
+	            child {node (graduation) [word] {graduation} edge from parent node {op} }
+	      } edge from parent node {time} }
+	      child {node (John) [fill=DarkGreen,circle] {}
+	      {
+	        child {node [word] {John} edge from parent node {name} }
+	      } edge from parent node {ARG0} }
+	      child {node [fill=DarkGreen,circle] {}
+	      {
+	        child {node [word] {Paris} edge from parent node {name} }
+	      } edge from parent node {ARG2} }
+	      ;
+	      \draw[dashed] (graduation) to node {ARG0} (John);
+	  \end{tikzpicture}
+	  \captionof{figure}{\color{DarkGreen} Converted AMR.}
+	  \end{center}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.5\textwidth}
+	  \begin{center}
+	  \scalebox{.7}{
+	  \hspace{-13mm}
+	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkRed,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=28mm,level distance=13mm},
+	      level 2/.style={sibling distance=16mm,level distance=15mm},
+	      level 3/.style={level distance=18mm}]
+	    \tikzstyle{word} = [font=\rmfamily,color=black]
+	    \node (ROOT) [fill=DarkRed,circle] {}
+	      child {node (after) [fill=DarkRed,circle] {}
+	      {
+	        child {node [draw=none] {}
+	        {
+	          child {node [word] (after_word) {After{\color{white}g}} edge from parent [draw=none]}
+	        } edge from parent [draw=none] }
+	        child {node [draw=none] {}
+	        {
+	          child {node [word] (graduation) {graduation ,} edge from parent [draw=none]}
+	        } edge from parent [draw=none] }
+	      } edge from parent node {root}}
+	      child {node [draw=none] {}
+	      {
+	        child {node (moved) [fill=DarkRed,circle] {}
+	        {
+	          child {node [word] {\quad{\color{white}g} John} edge from parent node {ARG1}}
+	          child {node [word] {moved{\color{white}g}} edge from parent node {head}}
+	        } edge from parent [draw=none] }
+	      } edge from parent [draw=none] }
+	      child {node (to) [fill=DarkRed,circle] {}
+	      {
+	        child {node [draw=none] {}
+	        {
+	            child {node [word] (to_word) {to{\color{white}g}} edge from parent [draw=none]}
+	          } edge from parent [draw=none] }
+	          child {node [draw=none] {}
+	        {
+	          child {node [word] (Paris) {Paris{\color{white}g}} edge from parent [draw=none]}
+	        } edge from parent [draw=none] }
+	      } edge from parent node {root}}
+	      ;
+	      \draw (ROOT) to node {top} (moved);
+	      \draw (after) to node {head} (after_word);
+	      \draw (after) to node {ARG2} (graduation);
+	      \draw[dashed] (after) to node {ARG1} (moved);
+	      \draw[dashed] (to) to node {ARG1} (moved);
+	      \draw (to) to node {head} (to_word);
+	      \draw (moved) to node {ARG2} (Paris);
+	      \draw[dashed] (to) to node {ARG2} (Paris);
+	  \end{tikzpicture}}
+	  \captionof{figure}{\color{DarkRed} Converted SDP.}
+	  \vfill
+	  \scalebox{.7}{
+	  \hspace{-13mm}
+	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkBlue,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=16mm,level distance=13mm},
+	      level 2/.style={sibling distance=14mm,level distance=15mm}]
+	    \tikzstyle{word} = [font=\rmfamily,color=black]
+	    \node (ROOT) [fill=DarkBlue,circle] {}
+	      child {node (after) [fill=DarkBlue,circle] {}
+	      {
+	        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
+	        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
+	      } edge from parent node {obl}}
+	      child {node {}
+	      {
+	        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
+	      } edge from parent [draw=none]}
+	      child {node {}
+	      {
+	        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
+	      } edge from parent [draw=none]}
+	      child {node {}
+	      {
+	        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
+	      } edge from parent [draw=none]}
+	      child {node (to) [fill=DarkBlue,circle] {}
+	      {
+	          child {node [word] {to{\color{white}g}} edge from parent node {case}}
+	          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
+	      } edge from parent node {obl}}
+	      ;
+	      \draw (ROOT) to node {punct} (comma);
+	      \draw (ROOT) to node {nsubj} (John);
+	      \draw (ROOT) to node {head} (moved);
+	  \end{tikzpicture}}
+	  \captionof{figure}{\color{DarkBlue} Converted UD.}
+	  \end{center}
+	\end{minipage}
+
+\end{frame}
+
+\section{Experiments}
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & total \\
+	\color{NavyBlue} \textbf{UD} & 32347 \\
+	\color{Indigo} \textbf{UCCA} & 547 \\
+    }\frenchdata
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & total \\
+	\color{NavyBlue} \textbf{UD} & 13814 \\
+	\color{Indigo} \textbf{UCCA} & 6154 \\
+    }\germandata
+    
+\begin{frame}
+\frametitle{Experimental Setup}
+\begin{itemize}
+ \item UCCA Wikipedia corpus in English.
+ \item UCCA \textit{Twenty Thousand Leagues Under the Sea} corpus in English, French and German.
+ \item Auxiliary training data: in English, AMR, SDP and UD. In French and German, only UD.
+\end{itemize}
+
+\vfill
+%\begin{minipage}{.4\textwidth}
+%\scalebox{.6}{
+%    \begin{tikzpicture}
+%    \begin{axis}[
+%    xbar stacked,
+%    width=10cm,
+%    height=39mm,
+%    xmin=0,
+%    xmax=60000,
+%    xtick=\empty,
+%    ytick=data,
+%    yticklabels from table={\englishdata}{corpus},
+%    axis x line=none
+%    ]
+%    \addplot [fill=Navy, point meta=explicit symbolic,
+%    nodes near coords={\pgfmathprintnumber\pgfplotspointmeta~sentences},
+%    nodes near coords align={anchor=west}] table [x=total,y expr=\coordindex,meta=total] {\englishdata};
+%    \end{axis}
+%    \end{tikzpicture}
+%    \captionof{figure}{\textbf{English}}
+%}
+%\end{minipage}
+%\hspace{1mm}
+%\begin{minipage}{.34\textwidth}
+%\scalebox{.6}{
+%    \begin{tikzpicture}
+%    \begin{axis}[
+%    xbar stacked,
+%    width=10cm,
+%    height=39mm,
+%    xmin=0,
+%    xmax=15000,
+%    xtick=\empty,
+%    ytick=data,
+%    yticklabels from table={\frenchdata}{corpus},
+%    axis x line=none
+%    ]
+%    \addplot [fill=Navy, point meta=explicit symbolic,
+%    nodes near coords={\pgfmathprintnumber\pgfplotspointmeta~sentences},
+%    nodes near coords align={anchor=west}] table [x=total,y expr=\coordindex,meta=total] {\frenchdata};
+%    \end{axis}
+%    \end{tikzpicture}
+%    \captionof{figure}{\textbf{French}}
+%}
+%\end{minipage}
+%\begin{minipage}{.34\textwidth}
+%\scalebox{.6}{
+%    \begin{tikzpicture}
+%    \begin{axis}[
+%    xbar stacked,
+%    width=10cm,
+%    height=39mm,
+%    xmin=0,
+%    xmax=15000,
+%    xtick=\empty,
+%    ytick=data,
+%    yticklabels from table={\germandata}{corpus},
+%    axis x line=none
+%    ]
+%    \addplot [fill=Navy, point meta=explicit symbolic,
+%    nodes near coords={\pgfmathprintnumber\pgfplotspointmeta~sentences},
+%    nodes near coords align={anchor=west}] table [x=total,y expr=\coordindex,meta=total] {\germandata};
+%    \end{axis}
+%    \end{tikzpicture}
+%    \captionof{figure}{\textbf{German}}
+%}
+%\end{minipage}
+
+\scalebox{.27}{\Huge
+\begin{minipage}{1.4\textwidth}
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & total & train & dev & test \\
+	\color{DarkBlue} \textbf{UD} & 17062 & 9062 & 0 & 0 \\
+	\color{DarkRed} \textbf{SDP} & 33964 & 10964 & 0 & 0 \\
+	\color{DarkGreen} \textbf{AMR} & 36521 & 11521 & 0 & 0 \\
+	\color{Indigo} \textbf{Wiki} & 5225 & 4268 & 454 & 503 \\
+	\color{Indigo} \textbf{20K} & 506 & 0 & 0 & 506 \\
+    }\english
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar stacked,
+    width=13cm,
+    height=9cm,
+    xmin=0,
+    xmax=15000,
+    xtick=\empty,
+    ytick=data,
+    yticklabels from table={\english}{corpus}
+    ]
+    \draw[black] decorate [decoration={zigzag}] {(axis cs:8600,-4) -- (axis cs:8600,5)};
+    \addplot [fill=green!80] table [x=train,meta=corpus,y expr=\coordindex] {\english};
+    \addplot [fill=blue!60] table [x=dev,y expr=\coordindex] {\english};
+    \addplot [fill=red!60, point meta=explicit symbolic,nodes near coords, nodes near coords align={anchor=west}] table [x=test,y expr=\coordindex,meta=total] {\english};
+    \end{axis}
+    \end{tikzpicture}
+    English
+\end{center}
+\end{minipage}
+\hspace{1mm}
+\begin{minipage}{1.1\textwidth}
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & total & train & dev & test \\
+	UD & 32347 & 11347 & 0 & 0 \\
+	UCCA 20K & 547 & 413 & 67 & 67 \\
+    }\french
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar stacked,
+    width=13cm,
+    height=9cm,
+    xmin=0,
+    xmax=15000,
+    xtick=\empty,
+    ytick=\empty,
+    yticklabels=\empty
+    ]
+    \draw[black] decorate [decoration={zigzag}] {(axis cs:8600,-4) -- (axis cs:8600,5)};
+    \addplot [fill=green!80] table [x=train,y expr=\coordindex] {\french};
+    \addplot [fill=blue!60] table [x=dev,y expr=\coordindex] {\french};
+    \addplot [fill=red!60, point meta=explicit symbolic, nodes near coords, nodes near coords align={anchor=west}] table [x=test,y expr=\coordindex,meta=total] {\french};
+    \end{axis}
+    \end{tikzpicture}
+    French
+\end{center}
+\end{minipage}
+\begin{minipage}{1.3\textwidth}
+\pgfplotstableread[row sep=\\,col sep=&]{
+	corpus & total & train & dev & test \\
+	UD & 13814 & 9814 & 0 & 0 \\
+	UCCA 20K & 6154 & 3429 & 561 & 2164 \\
+    }\german
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+    xbar stacked,
+    width=13cm,
+    height=9cm,
+    xmin=0,
+    xmax=15000,
+    xtick=\empty,
+    ytick=\empty,
+    legend style={at={(axis cs:10000,.8)},anchor=north west},
+    yticklabels=\empty
+    ]
+    \draw[black] decorate [decoration={zigzag}] {(axis cs:9200,-4) -- (axis cs:9200,5)};
+    \addplot [fill=green!80] table [x=train,y expr=\coordindex] {\german};
+    \addplot [fill=blue!60] table [x=dev,y expr=\coordindex] {\german};
+    \addplot [fill=red!60, point meta=explicit symbolic, nodes near coords, nodes near coords align={anchor=west}] table [x=test, meta=corpus,y expr=\coordindex,meta=total] {\german};
+    \legend{train,dev,test}
+    \end{axis}
+    \end{tikzpicture}
+    German
+\end{center}
+\end{minipage}
+}
+
+\vfill
+\begin{center}
+  \begin{minipage}{.2\textwidth}\includegraphics[width=\textwidth]{wikipedia.png}\end{minipage}
+  \begin{minipage}{.2\textwidth}\includegraphics[width=\textwidth]{squid.jpg}\end{minipage}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{UCCA Evaluation}
+Comparing graphs over the same sequence of tokens,
+\begin{itemize}
+\item Match edges by their terminal yield and label.
+\item Calculate \textbf{labeled precision, recall and F1} scores.
+\item Separate primary (---) and remote (- - -) edges.
+\end{itemize}
+\vfill
+\begin{adjustbox}{frame,scale=.75,center}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=15mm, ->,
+	    every circle node/.append style={fill=black}]
+	  \tikzstyle{word} = [font=\rmfamily,color=black]
+	  \node at (-1,.7) {gold};
+	  \node (ROOT) at (0,0) [circle] {}
+	    child {node (After) [word] {After} edge from parent node[left] {$L$}}
+	    child {node (graduation) [circle] {}
+	    {
+	      child {node [word] {graduation} edge from parent node[left] {$P$}}
+	    } edge from parent node[left] {$H$} }
+	    child {node [word] {,} edge from parent node[right] {$U$}}
+	    child {node (moved) [circle] {}
+	    {
+	      child {node (Joe) [word] {Joe} edge from parent node[left] {$A$}}
+	      child {node [word] {moved} edge from parent node[left] {$P$}}
+	      child {node [circle] {}
+	      {
+	        child {node [word] {to} edge from parent node[left] {$R$}}
+	        child {node [word] {Paris} edge from parent node[right] {$C$}}
+	      } edge from parent node[right] {$A$} }
+	    } edge from parent node[right] {$H$} }
+	    ;
+	  \draw[dashed,->] (graduation) to node [auto] {$A$} (Joe);
+	  \node at (6,.7) {predicted};
+	  \node (ROOT_) at (7,0) [circle] {}
+	    child {node (After_) [word] {After} edge from parent node[left] {$L$}}
+	    child {node (graduation_) [circle] {}
+	    {
+	      child[red] {node [word] {graduation} edge from parent node[left] {$S$}}
+	    } edge from parent node[left] {$H$} }
+	    child {node [word] {,} edge from parent node[right] {$U$}}
+	    child {node (moved) [circle,xshift=3mm,yshift=-7mm] {}
+	    {
+	      child {node (Joe_) [word] {Joe} edge from parent node[left] {$A$}}
+	      child {node [word] {moved} edge from parent node[left] {$P$}}
+	      child[red] {node [word] {to} edge from parent node[left] {$F$}}
+	      child[red] {node (Paris_) [word] {Paris} edge from parent node[right] {$A$}}
+	    } edge from parent node[right] {$H$} }
+	    ;
+	  \draw[bend left,dashed,->] (graduation_) to node [auto] {$A$} (Joe_);
+	  \draw[bend left,dashed,->,red] (graduation_) to node [auto] {$A$} (Paris_);
+	\end{tikzpicture}
+\end{adjustbox}
+\vfill
+\begin{adjustbox}{scale=.75,center}
+	Primary:
+	\begin{tabular}{ccc}
+		\textbf{LP} & \textbf{LR} & \textbf{LF} \\ \hline
+		$\frac69=67\%$ & $\frac6{10}=60\%$ & 64\%
+	\end{tabular}
+	\hspace{1cm}
+	Remote:
+	\begin{tabular}{ccc}
+		\textbf{LP} & \textbf{LR} & \textbf{LF} \\ \hline
+		$\frac12=50\%$ & $\frac11=100\%$ & 67\%
+	\end{tabular}
+\end{adjustbox}
+\end{frame}
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 74.4 & 52 \\
+	+{\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 74.9 & 51.2 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{NavyBlue} \textbf{UD}} & 73.8 & 48.5 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} & 74.7 & 51.4 \\
+	+\color{NavyBlue} \textbf{UD} & 74.1 & 50.8 \\
+	+\color{DarkRed} \textbf{SDP} & 74.8 & 53.9 \\
+	+\color{DarkGreen} \textbf{AMR} & 73.7 & 49.9 \\
+	\textbf{Single-task} & 73.6 & 51.5 \\
+}\indomaindata
+
+\begin{frame}
+\frametitle{In-Domain Results}
+Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English Wikipedia UCCA
+
+\vspace{-5mm}
+\begin{center}
+\hspace{-13mm}
+\scalebox{.85}{
+\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=115mm,
+	    height=10cm,
+	    xmin=47,
+	    xmax=80,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\indomaindata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:34,4)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\indomaindata};
+	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\indomaindata};
+	    \legend{remote F1,primary F1}
+	    \end{axis}
+\end{tikzpicture}
+}
+\end{center}
+\end{frame}
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 71 & 29.6 \\
+	+{\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 70.6 & 28.4 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{NavyBlue} \textbf{UD}} & 70 & 29.4 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} & 70.5 & 27.3 \\
+	+\color{NavyBlue} \textbf{UD} & 69.7 & 28.7 \\
+	+\color{DarkRed} \textbf{SDP} & 70.7 & 25.9 \\
+	+\color{DarkGreen} \textbf{AMR} & 69.5 & 27.5 \\
+	\textbf{Single-task} & 69 & 26.7 \\
+}\outdomaindata
+
+\begin{frame}
+\frametitle{Out-of-Domain Results}
+Training on English Wikipedia UCCA (+ auxiliary) \\ Testing on English \textbf{20K Leagues} UCCA
+
+\vspace{-5mm}
+\begin{center}
+\scalebox{.85}{
+\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=11cm,
+	    height=10cm,
+	    xmin=23,
+	    xmax=77,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\outdomaindata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:1,4)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\outdomaindata};
+	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\outdomaindata};
+	    \legend{remote F1,primary F1}
+	    \end{axis}
+\end{tikzpicture}
+}
+\end{center}
+\end{frame}
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 \\
+	+\color{NavyBlue} \textbf{UD} & 70.1 & 20.3 \\
+	\textbf{Single-task} & 67.6 & 13.9 \\
+}\frenchdata
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 \\
+	+\color{NavyBlue} \textbf{UD} & 72.5 & 27.1 \\
+	\textbf{Single-task} & 73.2 & 35.5 \\
+}\germandata
+
+\begin{frame}
+\frametitle{French and German Results}
+Training on French/German 20K Leagues UCCA (+ auxiliary) \\ Testing on French/German 20K Leagues UCCA
+
+\vfill
+
+{\bf French (in-domain)}
+\begin{center}
+\scalebox{.85}{
+\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=11cm,
+	    height=37mm,
+	    xmin=10,
+	    xmax=80,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\frenchdata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:-13,.2)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\frenchdata};
+	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\frenchdata};
+	    \legend{remote F1,primary F1}
+	    \end{axis}
+\end{tikzpicture}
+}
+\end{center}
+
+{\bf German (in-domain)}
+\begin{center}
+\scalebox{.85}{
+\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=11cm,
+	    height=37mm,
+	    xmin=10,
+	    xmax=80,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\germandata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:-11,.2)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\germandata};
+	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\germandata};
+	    \legend{remote F1,primary F1}
+	    \end{axis}
+\end{tikzpicture}
+}
+\end{center}
+\end{frame}
+
+\section{Discussion}
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 & cpf1 & crf1 & l1 \\
+	\color{NavyBlue} \textbf{UD} & 74.1 & 50.8 & 83.6 & 12.6 & 84.3 \\
+	\color{DarkRed} \textbf{SDP} & 74.8 & 53.9 & 56 & 13.3 & 91.3 \\
+	\color{DarkGreen} \textbf{AMR} & 73.7 & 49.9 & 24.2 & 6.3 & 89.5 \\
+}\similaritydata
+	    
+\begin{frame}
+\frametitle{Factors in MTL Success}
+\begin{itemize}
+\item All auxiliary tasks contributed to the main task \\
+      (and their combination contributed further).
+\item<2-3> Does improvement depend on structural task similarity?
+\item<3> Or does it depend on similarity of the training corpora?
+\end{itemize}
+
+\only<2>{
+	\begin{minipage}{.4\textwidth}
+	  \begin{center}
+	  \scalebox{.8}{
+	  \begin{tikzpicture}[level distance=22mm, -{Latex[length=2mm]}, color=DarkGreen,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=17mm},
+	      level 2/.style={sibling distance=13mm},
+	      level 3/.style={sibling distance=13mm}]
+	    \tikzstyle{word} = [font=\rmfamily,color=black]
+	    \node (ROOT) [word] {moved}
+	      child {node [word] {After}
+	      {
+	            child {node (graduation) [word] {graduation} edge from parent node {op} }
+	      } edge from parent node {time} }
+	      child {node (John) [fill=DarkGreen,circle] {}
+	      {
+	        child {node [word] {John} edge from parent node {name} }
+	      } edge from parent node {ARG0} }
+	      child {node [fill=DarkGreen,circle] {}
+	      {
+	        child {node [word] {Paris} edge from parent node {name} }
+	      } edge from parent node {ARG2} }
+	      ;
+	      \draw[dashed] (graduation) to node {ARG0} (John);
+	  \end{tikzpicture}
+	  }
+	  \end{center}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{.5\textwidth}
+	  \begin{center}
+	  \scalebox{.6}{
+	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkRed,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=28mm,level distance=13mm},
+	      level 2/.style={sibling distance=16mm,level distance=15mm},
+	      level 3/.style={level distance=18mm}]
+	    \tikzstyle{word} = [font=\rmfamily,color=black]
+	    \node (ROOT) [fill=DarkRed,circle] {}
+	      child {node (after) [fill=DarkRed,circle] {}
+	      {
+	        child {node [draw=none] {}
+	        {
+	          child {node [word] (after_word) {After{\color{white}g}} edge from parent [draw=none]}
+	        } edge from parent [draw=none] }
+	        child {node [draw=none] {}
+	        {
+	          child {node [word] (graduation) {graduation ,} edge from parent [draw=none]}
+	        } edge from parent [draw=none] }
+	      } edge from parent node {root}}
+	      child {node [draw=none] {}
+	      {
+	        child {node (moved) [fill=DarkRed,circle] {}
+	        {
+	          child {node [word] {\quad{\color{white}g} John} edge from parent node {ARG1}}
+	          child {node [word] {moved{\color{white}g}} edge from parent node {head}}
+	        } edge from parent [draw=none] }
+	      } edge from parent [draw=none] }
+	      child {node (to) [fill=DarkRed,circle] {}
+	      {
+	        child {node [draw=none] {}
+	        {
+	            child {node [word] (to_word) {to{\color{white}g}} edge from parent [draw=none]}
+	          } edge from parent [draw=none] }
+	          child {node [draw=none] {}
+	        {
+	          child {node [word] (Paris) {Paris{\color{white}g}} edge from parent [draw=none]}
+	        } edge from parent [draw=none] }
+	      } edge from parent node {root}}
+	      ;
+	      \draw (ROOT) to node {top} (moved);
+	      \draw (after) to node {head} (after_word);
+	      \draw (after) to node {ARG2} (graduation);
+	      \draw[dashed] (after) to node {ARG1} (moved);
+	      \draw[dashed] (to) to node {ARG1} (moved);
+	      \draw (to) to node {head} (to_word);
+	      \draw (moved) to node {ARG2} (Paris);
+	      \draw[dashed] (to) to node {ARG2} (Paris);
+	  \end{tikzpicture}}
+	  \vfill
+	  \scalebox{.6}{
+	  \begin{tikzpicture}[-{Latex[length=2mm]}, color=DarkBlue,
+	      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+	      level 1/.style={sibling distance=16mm,level distance=13mm},
+	      level 2/.style={sibling distance=14mm,level distance=15mm}]
+	    \tikzstyle{word} = [font=\rmfamily,color=black]
+	    \node (ROOT) [fill=DarkBlue,circle] {}
+	      child {node (after) [fill=DarkBlue,circle] {}
+	      {
+	        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
+	        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
+	      } edge from parent node {obl}}
+	      child {node {}
+	      {
+	        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
+	      } edge from parent [draw=none]}
+	      child {node {}
+	      {
+	        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
+	      } edge from parent [draw=none]}
+	      child {node {}
+	      {
+	        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
+	      } edge from parent [draw=none]}
+	      child {node (to) [fill=DarkBlue,circle] {}
+	      {
+	          child {node [word] {to{\color{white}g}} edge from parent node {case}}
+	          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
+	      } edge from parent node {obl}}
+	      ;
+	      \draw (ROOT) to node {punct} (comma);
+	      \draw (ROOT) to node {nsubj} (John);
+	      \draw (ROOT) to node {head} (moved);
+	  \end{tikzpicture}}
+	  \end{center}
+	\end{minipage}
+}
+
+\only<3>{
+	\begin{center}
+		\begin{tabular}{llll}
+			\color{Indigo} \textbf{UCCA}  & \color{DarkGreen} \textbf{AMR}  & \color{DarkRed} \textbf{SDP}  & \color{NavyBlue} \textbf{UD}  \\
+			Wikipedia & blogs & news & blogs \\ books & news && news \\ & emails && emails \\ & reviews && reviews \\ &&& Q\&A
+		\end{tabular}
+	\end{center}
+}
+
+\vfill
+\only<2-3>{\scalebox{.5}}{\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=9cm,
+	    height=45mm,
+	    xmin=0,
+	    xmax=130,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\similaritydata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:100,-.4)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\similaritydata};
+	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\similaritydata};
+	    \legend{in-domain remote F1,in-domain primary F1}
+	    \end{axis}
+\end{tikzpicture}}
+\end{frame}
+
+\begin{frame}
+\frametitle{Task Similarity}
+\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=9cm,
+	    height=85mm,
+	    xmin=0,
+	    xmax=130,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\similaritydata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:100,-.4)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Green, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=l1,y expr=\coordindex,meta=l1] {\similaritydata};
+	    \addplot [fill=Red, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=crf1,y expr=\coordindex,meta=crf1] {\similaritydata};
+	    \addplot [fill=Blue, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=cpf1,y expr=\coordindex,meta=cpf1] {\similaritydata};
+	    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\similaritydata};
+	    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\similaritydata};
+	    \legend{,unigram L1 distance,conversion remote F1,conversion primary F1,in-domain remote F1,in-domain primary F1}
+	    \end{axis}
+\end{tikzpicture}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Conclusion}
+\begin{itemize}
+ \item \parser{} supports UCCA, AMR, SDP and UD with a uniform transition system and DAG format.
+ \item Multitask learning improves UCCA parsing, with auxiliary tasks varying
+   both formally and in annotated corpora.
+\end{itemize}
+
+\vfill
+
+Future work:
+\begin{itemize}
+ \item Further examination of the factors contributing to MTL success.
+ \item AMR, SDP and UD parsing as main tasks. Preliminary experiments show promising results.
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\bibliographystyle{apalike}
+\tiny\bibliography{references}
+\end{frame}
+
+\end{document}

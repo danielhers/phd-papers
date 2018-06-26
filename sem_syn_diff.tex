@@ -329,6 +329,33 @@ The joined English UD training sets contain 458K tokens.
 In French UCCA has just 10K training tokens whereas UD has 899K,
 and in German UCCA has 80K and UD 268K.
 
+\begin{table}[t]
+\centering
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+\hline
+\footnotesize 10\% \\
+\footnotesize 20\% \\
+\footnotesize 30\% \\
+\footnotesize 40\% \\
+\footnotesize 50\% \\
+\footnotesize 60\% \\
+\footnotesize 70\% \\
+\footnotesize 80\% \\
+\footnotesize 90\% \\
+\footnotesize 100\% \\
+\end{tabular}
+\caption{
+Results for TUPA \cite{hershcovich2017a} when trained on increasing amount of training data
+(English Wiki corpus).
+\label{tab:partial_data_results}}
+\end{table}
+
+Table~\ref{tab:partial_data_results} shows results for TUPA,
+trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki test set.
+
 
 \section{Structural Conversion}\label{sec:conversion}
 
@@ -372,11 +399,20 @@ structurally converted UD graphs as compared to gold-annotated UCCA graphs.
 & 85.2 & 88.5 & 86.8 & -- & 0 & 0 \\
 \footnotesize UD$^{++}$
 & 82.7 & 85.9 & 84.3 & 12.5 & 12.7 & 12.6 \\
+\footnotesize TUPA
+& 84.3 & 84.2 & 84.3 & 39.5 & 30.9 & 34.7 \\
+\\
 \multicolumn{4}{l|}{\small \bf WSJ (automatically parsed)} & \\
 UDPipe & 81.5 & 84.5 & 83 & -- & 0 & 0 \\
+\footnotesize TUPA
+& 83.9 & 83.7 & 83.8 & 40.5 & 30.9 & 35.1
 \end{tabular}
 \caption{
-Unlabeled precision, recall and $F_1$ (in~\%) for primary and remote edges.}\label{tab:conversion_results_unlabeled}
+Unlabeled precision, recall and $F_1$ (in~\%) for primary and remote edges.
+For comparison, TUPA \cite{hershcovich2017a} is trained on Wikipedia with features predicted by UDPipe
+and tested on WSJ with gold POS and dependency features (above)
+or on WSJ with gold POS and dependency features (below).
+\label{tab:conversion_results_unlabeled}}
 \end{table}
 
 
@@ -446,11 +482,22 @@ The results appear in Table~\ref{tab:conversion_results_labeled}.
 & 68.3 & 71 & 69.6 & -- & 0 & 0 \\
 \footnotesize UD$^{++}$
 & 66.3 & 68.9 & 67.6 & 10.7 & 10.9 & 10.8 \\
+\footnotesize TUPA
+& 69.7 & 69.6 & 69.7 & 39.5 & 30.9 & 34.7 \\
+\\
 \multicolumn{4}{l|}{\small \bf WSJ (automatically parsed)} & \\
 UDPipe & 63.3 & 65.7 & 64.5 & -- & 0 & 0 \\
+\footnotesize TUPA
+& 69.6 & 69.4 & 69.5 & 40.5 & 30.9 & 35.1
 \end{tabular}
 \caption{
-Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges.}\label{tab:conversion_results_labeled}
+Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
+of passages converted automatically from UD to UCCA,
+with mapped edge labels, as evaluated against gold UCCA.
+For comparison, TUPA \cite{hershcovich2017a} is trained on Wikipedia with features predicted by UDPipe
+and tested on WSJ with gold POS and dependency features (above)
+or on WSJ with gold POS and dependency features (below).
+\label{tab:conversion_results_labeled}}
 \end{table}
 
 Despite the simple conversion protocol, labeled scores are quite high.
@@ -637,7 +684,7 @@ For UCCA, we use v1.2 of the English Wikipedia corpus \cite[\textit{Wiki};][]{ab
 with the standard train/dev/test split (see Table~\ref{tab:corpora}),
 and the \textit{Twenty Thousand Leagues Under the Sea} corpora
 \cite[\textit{20K};][]{sulem2015conceptual},
-annotated in English, French and German.\footnote{\mbox{\url{http://github.com/huji-nlp/ucca-corpora}}}
+annotated in English, French and German.\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation}}
 %For English and French we use 20K v1.0,
 %a small parallel corpus comprising the first five chapters of the book.
 %As in previous work \cite{hershcovich2017a}, we use the English part only as an out-of-domain test set.
@@ -648,11 +695,141 @@ annotated in English, French and German.\footnote{\mbox{\url{http://github.com/h
 We also use 100 English sentences from Section 02 of the Penn Treebank Wall Street Journal
 (PTB WSJ),
 annotated by a single expert UCCA annotator \cite{hershcovich2018multitask},
-and publicly available.\footnote{\url{http://github.com/danielhers/wsj}}
+and publicly available.\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation/UCCA_English-WSJ}}
 These sentences had already been annotated by the PTB scheme.
 We convert the PTB format to UD$^{++}$ v1 using Stanford CoreNLP,
 to UD v2 using Udapi\footnote{\url{http://github.com/udapi/udapi-python}},
 and then to the unified DAG format using our protocol.
+
+
+\begin{table}[t]
+\centering
+\small
+\setlength\tabcolsep{3pt}
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+\hline
+\multicolumn{4}{l|}{\small \bf English (Wiki, in-domain)} & \\
+\footnotesize HAR18 Single
+& 74.4 & 72.9 & 73.6 & 53 & 50 & 51.5 \\
+\footnotesize HAR18 MTL UD$^{++}$
+& 75 & 73.2 & 74.1 & 49 & 52.7 & 50.8 \\
+\footnotesize Converted UD aux.
+\\
+\hline\\
+\multicolumn{4}{l|}{\small \bf English (20K, out-of-domain)} & \\
+\footnotesize HAR18 Single
+& 69 & 69 & 69 & 41.2 & 19.8 & 26.7 \\
+\footnotesize HAR18 MTL UD$^{++}$
+& 69.6 & 69.8 & 69.7 & 41.4 & 22 & 28.7 \\
+\footnotesize Converted UD aux.
+\\
+\hline\\
+\multicolumn{4}{l|}{\small \bf French (20K, in-domain)} & \\
+\small HAR18 Single & 68.2 & 67 & 67.6 & 26 & \enskip 9.4 & 13.9 \\
+\small HAR18 MTL UD & 70.3 & 70 & 70.1 & 43.8 & 13.2 & 20.3 \\
+\footnotesize Converted UD aux.
+\\
+\hline\\
+\multicolumn{4}{l|}{\small \bf German (20K, in-domain)} & \\
+\small HAR18 Single & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
+\small HAR18 MTL UD & 73.7 & 72.6 & 73.2 & 61.8 & 24.9 & 35.5 \\
+\footnotesize Converted UD aux.
+\\
+\end{tabular}
+\caption{
+Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
+on the Wiki and 20K test sets.
+HAR18: \citet{hershcovich2018multitask}.}\label{tab:aux_results}
+\end{table}
+
+\paragraph{Using converted UD as auxiliary data.}
+
+\citet{hershcovich2018multitask} used UD as an auxiliary task for UCCA parsing,
+treating UD parsing as an auxiliary task and using a multitask learning model
+with hard parameter sharing.
+We perform a similar experiment, but instead of a multitask model,
+we use UD data converted to UCCA and train on it with the same single-task model.
+Table~\ref{tab:aux_results} shows the results of this experiment.
+
+\paragraph{Fine-grained evaluation of UCCA parsing performance.}
+
+\citet{damonte-17,szubert2018structured} suggested fine-grained evaluation measures
+for AMR parsing, using sub-tasks of the AMR parsing task or UD labels to evaluate on.
+Similarly, our conversion protocol allows fine-grained evaluation of UCCA parsing.
+Table~\ref{tab:fine_grained_ucca} shows fine-grained evaluation according to UCCA categories, and
+Table~\ref{tab:fine_grained_ud} shows fine-grained evaluation according to UD relations.
+
+
+\begin{table}[t]
+\centering
+\small
+\setlength\tabcolsep{3pt}
+\begin{tabular}{l|l}
+nsubj & 0.92 \\ 
+Terminal & 1.0 \\ 
+head & 0.999 \\ 
+cop & 1.0 \\ 
+det & 1.0 \\    
+compound & 0.995 \\ 
+amod & 0.974 \\ 
+case & 0.994 \\ 
+obj & 0.808 \\ 
+aux & 1.0 \\ 
+cc & 0.98 \\ 
+conj & 0.769 \\ 
+advmod & 0.95 \\ 
+mark & 1.0 \\ 
+nmod & 0.606 \\ 
+obl & 0.623 \\ 
+appos & 0.571 \\ 
+nummod & 0.865 \\ 
+acl & 0.486 \\ 
+advcl & 0.696 \\ 
+xcomp & 0.636 \\ 
+iobj & 0.8 \\ 
+ccomp & 0.571 \\ 
+fixed & 1.0 \\ 
+dep & 0.737 \\ 
+expl & 1.0 \\  
+parataxis & 1.0
+\end{tabular}
+\caption{
+Fine-grained labeled $F_1$ according to UCCA categories,
+of TUPA trained on Wiki with features extraced by UDPipe
+and evaluated on WSJ with features extraced by UDPipe.}
+\label{tab:fine_grained_ucca}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\setlength\tabcolsep{3pt}
+\begin{tabular}{l|l}
+ParallelScene & 0.539 \\ 
+Function & 0.705 \\ 
+Participant & 0.578 \\ 
+Punctuation & 0.98 \\ 
+Process & 0.699 \\ 
+State & 0.289 \\ 
+Elaborator & 0.686 \\ 
+Center & 0.757 \\ 
+Terminal & 1.0 \\ 
+Relator & 0.85 \\ 
+Connector & 0.778 \\ 
+Adverbial & 0.541 \\ 
+Linker & 0.658 \\ 
+Ground & 0.0
+\end{tabular}
+\caption{
+Fine-grained labeled $F_1$ according to gold UD relations,
+of TUPA trained on Wiki with features extraced by UDPipe
+and evaluated on WSJ with features extraced by UDPipe.}
+\label{tab:fine_grained_ud}
+\end{table}
+
 
 %\paragraph{Experimental setup.}
 %
