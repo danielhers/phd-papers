@@ -1,25 +1,39 @@
 %
 % File udst2018.tex
-%
-%% adapted from CONLL 2017 Shared Task on Universal Dependencies for the CoNLL 2018 Shared Task on Universal Dependencies
-%% adapted from acl2017.tex for the CoNLL 2017 Shared Task on Universal Dependencies
-%% system papers
-%%
-%% Based on the style files for ACL-2015, with some improvements
-%%  taken from the NAACL-2016 style
-%% Based on the style files for ACL-2014, which were, in turn,
-%% based on ACL-2013, ACL-2012, ACL-2011, ACL-2010, ACL-IJCNLP-2009,
-%% EACL-2009, IJCNLP-2008...
-%% Based on the style files for EACL 2006 by 
-%%e.agirre@ehu.es or Sergi.Balari@uab.es
-%% and that of ACL 08 by Joakim Nivre and Noah Smith
 
 \documentclass[11pt,a4paper]{article}
 \usepackage[hyperref]{udst2018}
 \usepackage{times}
 \usepackage{latexsym}
-
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{tikz-dependency}
+\usepackage[warn]{textcomp}
+\usepackage[font=small]{caption}
+\usepackage{subcaption}
+\usepackage{multirow}
 \usepackage{url}
+\usepackage{etoolbox}
+\usepackage{xr}
+
+\newcommand{\com}[1]{}
+\newcommand{\oa}[1]{\footnote{\color{red}OA: #1}}
+\newcommand{\daniel}[1]{\footnote{\color{blue}Daniel: #1}}
+
+
+\hyphenation{SemEval}
+
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+
+\makeatletter
+\patchcmd\@combinedblfloats{\box\@outputbox}{\unvbox\@outputbox}{}{%
+   \errmessage{\noexpand\@combinedblfloats could not be patched}%
+}%
+ \makeatother
+
+
+\usetikzlibrary{shapes,shapes.misc}
 
 
 \aclfinalcopy 
@@ -31,555 +45,425 @@
 % smaller than 5cm (the original size); we will check this
 % in the camera-ready version and ask you to change it back.
 
-\newcommand\BibTeX{B{\sc ib}\TeX}
+\title{TUPA: the HUJI System for the CoNLL 2018 UD Shared Task}
 
-\title{Instructions for CoNLL 2018 UD Shared Task}
-
-\author{First Author \\
-  Affiliation / Address line 1 \\
-  Affiliation / Address line 2 \\
-  Affiliation / Address line 3 \\
-  {\tt email@domain} \\\And
-  Second Author \\
-  Affiliation / Address line 1 \\
-  Affiliation / Address line 2 \\
-  Affiliation / Address line 3 \\
-  {\tt email@domain} \\}
+\author{Daniel Hershcovich$^{1,2}$ \\
+  \\\And
+  Omri Abend$^2$ \\
+  $^1$The Edmond and Lily Safra Center for Brain Sciences \\
+  $^2$School of Computer Science and Engineering \\
+  Hebrew University of Jerusalem \\
+  \texttt{\{danielh,oabend,arir\}@cs.huji.ac.il}
+  \\\And
+  Ari Rappoport$^2$
+}
 
 \date{}
 
 \begin{document}
 \maketitle
-
-\newcommand{\udst}[0]{\emph{CoNLL 2018 UD Shared Task}}
-
 \begin{abstract}
-  This document contains the instructions for preparing a camera-ready
-  manuscript for the proceedings of \emph{CoNLL 2018 Shared Task: 
-  Multilingual Parsing from Raw Text to Universal Dependencies} 
-  (\udst{} for short). The document itself conforms to its own      
-  specifications, and is therefore an example of
-  what your manuscript should look like. These instructions should be
-  used for both papers submitted for review and for final versions of
-  accepted papers.  Authors are asked to conform to all the directions
-  reported in this document.
-  
-  Please always include official \udst{} results, available at the official \udst{} website.\footnote{\scriptsize \url{
-http://universaldependencies.org/conll18/results.html}} You may also include additional results obtained after the official evaluation period at TIRA ended and the evaluation test sets were released.
-  
-  There are a few references we would like you to use in the system description papers to give proper credit, especially to data providers: the core Universal Dependencies paper from LREC 2016 \cite{ud}, the UD version 2.2 datasets \cite{ud22data}, the baseline UDPipe models \cite{udpipe}, the baseline SyntaxNet models \cite{syntaxnet} and the evaluation platform TIRA \cite{tira}. There is also a reference to the overview (intro) paper in the proceedings \cite{udst:overview}. If you use the CLAS metric in any way, please cite \cite{nivre17udw}. If you refer to the overview paper of the previous year's shared task (2017), use \cite{udst:overview2017}. The udst2018.bib file available in the latex style package contains all these .bib entries - please use them.
-  
-If you do any post-TIRA-evaluation yourself, using the development and gold evaluation data, please cite them, too, as \cite{ud20testdata}. Please note that the reference provided in the .bib file is provisional only, since we are still collecting the full list of authors (we will publish the final bib reference before the camera ready deadline). 
-  
-  Please also don't forget to fill in the structured Google Forms questionnaire about your system.\footnote{\scriptsize \url{https://docs.google.com/forms/d/19q4LNgPghMkGZBUPzpB1JwO0aNSqQmcK2boH66p1PuE}} The organizers will use these data for the overview paper about \udst{}.
-
-By default, system description papers will be presented as posters. If there are any exceptions, we will contact those concerned individually.
-
+  We apply TUPA, a transition-based semantic parser, to
+  Universal Dependency Parsing.
 \end{abstract}
 
-\section{Credits}
+\section{Introduction}\label{sec:introduction}
 
-This document has been adapted from the instructions for earlier 
-CoNLL 2017 Shared Task on Universal Dependencies by Jan Hajic\v{c}, ACL
-and NAACL proceedings, including those for ACL 2017 by Dan Gildea and
-Min-Yen Kan, NAACL-2017 by Margaret Mitchell, ACL-2012 by Maggie Li
-and Michael White, those from ACL-2010 by Jing-Shing Chang and Philipp
-Koehn, those for ACL-2008 by Johanna D. Moore, Simone Teufel, James
-Allan, and Sadaoki Furui, those for ACL-2005 by Hwee Tou Ng and Kemal
-Oflazer, those for ACL-2002 by Eugene Charniak and Dekang Lin, and
-earlier ACL and EACL formats. Those versions were written by several
-people, including John Chen, Henry S. Thompson and Donald
-Walker. Additional elements were taken from the formatting
-instructions of the {\em International Joint Conference on Artificial
-  Intelligence} and the \emph{Conference on Computer Vision and
-  Pattern Recognition}.
+%The multitude of semantic representations put forth in recent years greatly enriches
+%the discussion in NLP on the nature of semantic structure.
+Semantic parsing has arguably yet to reach its full 
+potential in terms of its contribution to downstream linguistic tasks,
+partially due to the limited amount of semantically annotated training data.
+This shortage is more pronounced in 
+languages other than English, and less researched domains.
 
-\section{Introduction}
+%While the development of syntactic treebanks has had a tremendous impact on natural 
+%language processing, semantic representation has arguably yet to reach its full 
+%potential in terms of its contribution to downstream linguistic tasks.
+%As an example for syntactic annotation, the Universal Dependencies (UD) project provides
+%cross-linguistically consistent treebanks in many languages \cite{nivre2016universal},
+%and accurate parsers based upon it and other datasets have been extremely useful in natural
+%language understanding tasks \cite{P16-1139,E17-1117,K17-3002}.
+%Semantic representation, while increasingly adopting whole-text annotation rather than more specific
+%shallow schemes, faces several challenges: semantic distinctions, besides requiring deeper understanding
+%and being harder to learn, are not always well-defined, and progress is hindered by fragmentation.
+%Semantic schemes diverge in the content they choose to annotate, their coupling with syntax,
+%and their degree of cross-linguistic applicability and consistency \cite{abend2017state}.
 
-The following instructions are directed to authors of system description 
-papers submitted
-to the \udst{}. All
-authors are required to adhere to these specifications. Authors are
-required to provide a Portable Document Format (PDF) version of their
-papers. \textbf{The proceedings are designed for printing on A4
-paper.}
+Indeed, recent work in semantic parsing has targeted, among others,
+Abstract Meaning Representation \cite[AMR;][]{banarescu2013abstract},
+bilexical Semantic Dependencies \cite[SDP;][]{oepen2016towards}
+%with target representations such as DELPH-IN MRS \cite[DM;][]{flickinger2012deepbank},
+and Universal Conceptual Cognitive Annotation \cite[UCCA;][]{abend2013universal}.
+While these schemes are formally different and focus on different distinctions,
+much of their semantic content is shared \cite{abend2017state}.
 
-\section{General Instructions}
 
-Manuscripts must be in two-column format.  Exceptions to the
-two-column format include the title, authors' names and complete
-addresses, which must be centered at the top of the first page, and
-any full-width figures or tables (see the guidelines in
-Subsection~\ref{ssec:first}). {\bf Type single-spaced.}  Start all
-pages directly under the top margin. See the guidelines later
-regarding formatting the first page.  The manuscript should be
-printed single-sided and its length
-should not exceed the maximum page limit described in Section~\ref{sec:length}.
-{\bf Please do not number the pages in the camera-ready version.}
+\begin{figure}[ht]
+\begin{subfigure}{0.47\textwidth}
+  \centering
+    \begin{dependency}[text only label, label style={above}, font=\small]
+    \begin{deptext}[column sep=.8em,ampersand replacement=\^]
+    After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+    \end{deptext}
+        \depedge[edge unit distance=1ex]{2}{1}{case}
+        \depedge[edge unit distance=1ex]{4}{3}{punct}
+        \depedge[edge unit distance=1ex]{5}{4}{nsubj}
+        \depedge[edge unit distance=1ex, edge end x offset=-2pt]{2}{5}{obl}
+        \depedge[edge unit distance=1ex]{7}{6}{case}
+        \deproot[edge unit distance=1.5ex]{5}{root}
+        \depedge[edge unit distance=1.5ex]{5}{7}{obl}
+    \end{dependency}
+  \caption{\label{fig:original_examples}Example UD tree.
+  %Each word has exactly one head, and there is a single root.
+  Edge labels express syntactic relations.}
+\end{subfigure}
+\begin{subfigure}{0.47\textwidth}
+  \centering
+  \scalebox{.95}{
+  \begin{tikzpicture}[level distance=17mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
+      level 1/.style={sibling distance=13mm},
+      level 2/.style={sibling distance=1cm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=black,circle] {}
+      child {node (after) [fill=black,circle] {}
+      {
+        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
+        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
+      } edge from parent node {obl}}
+      child {node {}
+      {
+        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node {}
+      {
+        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node {}
+      {
+        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node (to) [fill=black,circle] {}
+      {
+          child {node [word] {to{\color{white}g}} edge from parent node {case}}
+          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
+      } edge from parent node {obl}}
+      ;
+      \draw (ROOT) to node {punct} (comma);
+      \draw (ROOT) to node {nsubj} (John);
+      \draw (ROOT) to node {head} (moved);
+  \end{tikzpicture}}
+  \captionof{figure}{UD}\label{fig:converted_example_ud}
+\end{subfigure}
 
-At the main conference, papers are anonymized by commenting out
-{\small\verb|\aclfinalcopy|} at the top of this 
- document. Since \udst{} submissions are not anonymous, the {\small\verb|\aclfinalcopy|} command is uncommented; please leave it uncommented even for initial submission. However, for the final camera ready copy, fill in the paper number as assigned by START into {\small\verb|\def\aclpaperid{***}|} definition at the top.
+\caption{Graph after conversion to  the unified DAG format
+(with pre-terminals omitted: each terminal drawn in place of its parent).
+Figure~\ref{fig:converted_example_ud} presents a converted UD graph.
+Intermediate non-terminals and \textit{head} edges are introduced.
+While converted UD graphs form trees, enhanced++ UD graphs may not.}\label{fig:converted_examples}
+\end{figure}
 
-%The review process is double-blind, so do not include any author information (names, addresses) when submitting a paper for review.  
-%However, you should maintain space for names and addresses so that they will fit in the final (accepted) version.  The ACL 2017 \LaTeX\ style will create a titlebox space of 2.5in for you when {\small\verb|\aclfinalcopy|} is commented out.  
 
-%\subsection{The Ruler}
-%The ACL 2017 style defines a printed ruler which should be presented in the
-%version submitted for review.  The ruler is provided in order that
-%reviewers may comment on particular lines in the paper without
-%circumlocution.  If you are preparing a document without the provided
-%style files, please arrange for an equivalent ruler to
-%appear on the final output pages.  The presence or absence of the ruler
-%should not change the appearance of any other content on the page.  The
-%camera ready copy should not contain a ruler. (\LaTeX\ users may uncomment
-%the {\small\verb|\aclfinalcopy|} command in the document preamble.)  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Unified DAG Format}\label{sec:format}
 
-%Reviewers: note that the ruler measurements do not align well with
-%lines in the paper -- this turns out to be very difficult to do well
-%when the paper contains many figures and equations, and, when done,
-%looks ugly. In most cases one would expect that the approximate
-%location will be adequate, although you can also use fractional
-%references ({\em e.g.}, the first paragraph on this page ends at mark $114.5$).
+To apply our parser to UD,
+we convert it into a unified DAG format, which is inclusive enough to
+allow representing any of the schemes with very little loss of information.\footnote{See
+Supplementary Material for more conversion details.}
 
-\subsection{Electronically-available resources}
+The format consists of a rooted DAG, where the tokens are the terminal nodes.
+As in the UCCA format, edges are labeled (but not nodes),
+and are divided into \textit{primary} and \textit{remote} edges,
+where the primary edges form a tree (all nodes have at most one primary parent,
+and the root has none).
+Remote edges enable reentrancy, and thus together with primary edges
+form a DAG.
+Figure~\ref{fig:converted_examples} shows examples for converted graphs.
 
-The LaTeX udst2018.* style, bibtex and sample files are available 
-as a zipped package at \url{http://universaldependencies.org/conll18/}.
-%
-%The original files from which this documentACL provides this description in \LaTeX2e{} ({\small\tt acl2017.tex}) and PDF
-%format ({\small\tt acl2017.pdf}), along with the \LaTeX2e{} style file used to
-%format it ({\small\tt acl2017.sty}) and an ACL bibliography style ({\small\tt acl\_natbib.bst})
-%and example bibliography ({\small\tt acl2017.bib}).
-%These files are all available at
-%{\small\tt acl2017.org/index.php?article\_id=9}. We
-%strongly recommend the use of these style files, which have been
-%appropriately tailored for the ACL 2017 proceedings.
+\paragraph{Converting bilexical dependencies.}
+To convert UD into the unified DAG format,
+we add a pre-terminal for each token,
+and attach the pre-terminals according to the original dependency edges:
+traversing the tree from the root down, for each head token we create a non-terminal
+parent with the edge label {\it head},
+and add the node's dependents as children of the created non-terminal node
+(see Figure~\ref{fig:converted_example_ud}).
 
-\subsection{Format of Electronic Manuscript}
-\label{sect:pdf}
 
-For the production of the electronic manuscript you must use Adobe's
-Portable Document Format (PDF). PDF files are usually produced from
-\LaTeX\ using the \textit{pdflatex} command. If your version of
-\LaTeX\ produces Postscript files, you can convert these into PDF
-using \textit{ps2pdf} or \textit{dvipdf}. On Windows, you can also use
-Adobe Distiller to generate PDF.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{General Transition-based DAG Parser}\label{sec:model}
 
-Please make sure that your PDF file includes all the necessary fonts
-(especially tree diagrams, symbols, and fonts with Asian
-characters). When you print or create the PDF file, there is usually
-an option in your printer setup to include none, all or just
-non-standard fonts.  Please make sure that you select the option of
-including ALL the fonts. \textbf{Before sending it, test your PDF by
-  printing it from a computer different from the one where it was
-  created.} Moreover, some word processors may generate very large PDF
-files, where each page is rendered as an image. Such images may
-reproduce poorly. In this case, try alternative ways to obtain the
-PDF. One way on some systems is to install a driver for a postscript
-printer, send your document to the printer specifying ``Output to a
-file'', then convert the file to PDF.
+We extend TUPA \cite{hershcovich2017a}, 
+a transition-based parser 
+originally developed for UCCA,  to support UD parsing.
 
-It is of utmost importance to specify the \textbf{A4 format} (21 cm
-x 29.7 cm) when formatting the paper. When working with
-{\tt dvips}, for instance, one should specify {\tt -t a4}.
-Or using the command \verb|\special{papersize=210mm,297mm}| in the latex
-preamble (directly below the \verb|\usepackage| commands). Then using 
-{\tt dvipdf} and/or {\tt pdflatex} which would make it easier for some.
+First used for projective syntactic dependency tree parsing \cite{Nivre03anefficient},
+transition-based parsers have since been generalized to parse into many other
+graph families, such as (discontinuous) constituency trees \cite[e.g., ][]{zhang2009transition,maier-lichte:2016:DiscoNLP},
+and DAGs \cite[e.g.,][]{sagae2008shift,du-EtAl:2015:SemEval}. %ribeyre-villemontedelaclergerie-seddah:2014:SemEval,
+Transition-based parsers apply \textit{transitions}
+incrementally to an internal state defined by a buffer $B$ of remaining tokens 
+and nodes, a stack $S$ of unresolved nodes, and a labeled graph $G$ of 
+constructed nodes and edges.
+When a terminal state is reached, the graph $G$ is the final output.
+A classifier is used at each step to select the next transition, 
+based on features that encode the current state.
+%During training, an oracle converts the gold-standard annotations into
+% training instances.
 
-Print-outs of the PDF file on A4 paper should be identical to the
-hardcopy version. If you cannot meet the above requirements about the
-production of your electronic submission, please contact the
-publication chairs as soon as possible.
 
-\subsection{Layout}
-\label{ssec:layout}
 
-Format manuscripts two columns to a page, in the manner these
-instructions are formatted. The exact dimensions for a page on A4
-paper are:
 
-\begin{itemize}
-\item Left and right margins: 2.5 cm
-\item Top margin: 2.5 cm
-\item Bottom margin: 2.5 cm
-\item Column width: 7.7 cm
-\item Column height: 24.7 cm
-\item Gap between columns: 0.6 cm
-\end{itemize}
+\subsection{TUPA's Transition Set}\label{sec:transition_set}
 
-\noindent Papers should not be submitted on any other paper size.
- If you cannot meet the above requirements about the production of 
- your electronic submission, please contact the publication chairs 
- above as soon as possible.
+Given a sequence of tokens $w_1, \ldots, w_n$,
+we predict a rooted graph $G$ whose terminals are the tokens.
+Parsing starts with the root node on the stack,
+and the input tokens in the buffer.
 
-\subsection{Fonts}
+The TUPA transition set includes
+the standard \textsc{Shift} and \textsc{Reduce} operations,
+\textsc{Node$_X$} for creating a new non-terminal node and an $X$-labeled edge,
+\textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} to create a new primary $X$-labeled edge,
+\textsc{Left-Remote$_X$} and \textsc{Right-Remote$_X$} to create a new remote $X$-labeled edge,
+\textsc{Swap} to handle discontinuous nodes,
+and \textsc{Finish} to mark the state as terminal.
 
-For reasons of uniformity, Adobe's {\bf Times Roman} font should be
-used. In \LaTeX2e{} this is accomplished by putting
+Although UCCA contains nodes without any text tokens as descendants
+(called \textit{implicit units}),
+these nodes are infrequent and only cover 0.5\% of non-terminal nodes.
+For this reason we follow previous work \cite{hershcovich2017a} and discard implicit units from
+the training and evaluation,
+and so do not include transitions for creating them.
 
-\begin{quote}
-\begin{verbatim}
-\usepackage{times}
-\usepackage{latexsym}
-\end{verbatim}
-\end{quote}
-in the preamble. If Times Roman is unavailable, use {\bf Computer
-  Modern Roman} (\LaTeX2e{}'s default).  Note that the latter is about
-  10\% less dense than Adobe's Times Roman font.
+In AMR, implicit units are considerably more common, as any unaligned concept
+with no aligned descendents is implicit (about 6\% of the nodes).
+Implicit AMR nodes usually result from alignment errors, or from abstract concepts
+which have no explicit realization in the text \cite{buys2017oxford}.
+We ignore implicit nodes when training on AMR as well.
+TUPA also does not support node labels, 
+which are ubiquitous in AMR but absent in UCCA structures (only edges are labeled in UCCA). 
+We therefore only produce edge labels and not node labels when training on AMR.
+
+\begin{figure}[t]
+   \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
+   \node[anchor=west] at (0,1.5) {Parser state};
+   \draw[color=gray,dashed] (0,-1.2) rectangle (7.5,1.25);
+   \draw[color=gray] (.1,0) rectangle (1.5,.5);
+   \node[anchor=west] at (.1,.8) {$S$};
+   \node[fill=black, circle] at (.4,.275) {};
+   \node[fill=blue, circle] at (.9,.275) {};
+   \node[anchor=west] at (1.15,.175) {\small ,};
+   \draw[color=gray] (1.95,0) rectangle (4.9,.5);
+   \node[anchor=west] at (1.95,.8) {$B$};
+   \node[anchor=west] at (1.95,.275) {\small John moved to Paris .};
+   \node[anchor=west] at (5.1,.8) {$G$};
+   \node[fill=black, circle] at (6.35,.75) {}
+     child {node  {\tiny After} edge from parent [->] node[left] {\small L}}
+     child {node [fill=blue, circle] {}
+     {
+       child {node {\tiny graduation} edge from parent [->] node[right] {\small P}}
+     } edge from parent [->] node[right] {\small H} };
+   \end{tikzpicture}
+   \begin{tikzpicture}[->]
+   \node[anchor=west] at (0,6) {Classifier};
+   \tiny
+   \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
+   \node[main] (specific) at (3.5,3.5) {\small BiLSTM};
+   \node (embeddings) at (3.5,1.7) {\small Embeddings};
+   \foreach \i/\word in {0/{After},2/{graduation},5/{to},7/{Paris}} {
+       \node (x\i) at (\i,1) {\scriptsize \word};
+       \node[main] (e\i) at (\i,2.2) {};
+       \path (x\i) edge (e\i);
+       \path (e\i) edge (specific);
+   }
+    \node (x4) at (3.5,1) {\ldots};
+    \node[main] (mlp) at (3.5,4.6) {\small MLP};
+    \path (specific) edge (mlp);
+    \coordinate (state) at (6.5,6.3);
+    \path (state) edge [bend left] (mlp);
+    \node (transition) at (3.5,5.8) {transition};
+    \path (mlp) edge node[right] {softmax} (transition);
+   \end{tikzpicture}
+\caption{Illustration of the TUPA model from \citet{hershcovich2018multitask}.
+Top: parser state.
+Bottom: BiLTSM architecture.}\label{fig:single_model}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Transition Classifier}\label{sec:classifier}
+
+To predict the next transition at each step,
+we use a BiLSTM with embeddings as inputs,
+followed by an MLP and a softmax layer for classification \cite{kiperwasser2016simple}.
+The model is illustrated in Figure~\ref{fig:single_model}.
+Inference is performed greedily,
+and training is done with an oracle that yields the set of all optimal 
+transitions at a given state (those that lead to a state from which the gold graph is still reachable).
+Out of this set, the actual transition performed in training is the one
+with the highest score given by the classifier,
+which is trained to maximize the sum of log-likelihoods of all 
+optimal transitions at each step.
+
+
+
+
+\paragraph{Features.}
+We use the original TUPA features,
+representing the words, POS tags, syntactic dependency relations, and previously predicted edge labels
+for nodes in specific locations in the parser state.
+In addition, for each token
+we use embeddings representing the one-character prefix, three-character suffix,
+shape (capturing orthographic features, e.g., ``Xxxx''),
+and named entity type,\footnote{See Supplementary Material for a full listing of features.}
+all provided by spaCy \cite{spacy2}.\footnote{\url{http://spacy.io}}
+To the learned word vectors, we concatenate the 250K most frequent word vectors from fastText
+\cite{bojanowski2016enriching},\footnote{\url{http://fasttext.cc}}
+pre-trained over Wikipedia and updated during training.
+%For AMR we add node label features according to gold node labels.
+
+
+\paragraph{Constraints.}
+As each annotation scheme has different constraints on the allowed graph structures,
+we apply these constraints separately for each task.
+During training and parsing, the relevant constraint set rules out some of the transitions
+according to the parser state.
+Some constraints are task-specific, others are generic.
+For example, in UCCA, a terminal may only have one parent.
+In AMR, a concept corresponding to a PropBank frame may only have 
+the core arguments defined for the frame as children.
+An example of a generic constraint is that stack nodes 
+that have been swapped
+should not be swapped again \cite{hershcovich2018multitask}.
+
+
+\section{Training details}\label{sec:details}
+
+\paragraph{Training.}
+
+The model is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{http://dynet.io}}
+
 
 \begin{table}[h]
-\begin{center}
-\begin{tabular}{|l|rl|}
-\hline \bf Type of Text & \bf Font Size & \bf Style \\ \hline
-paper title & 15 pt & bold \\
-author names & 12 pt & bold \\
-author affiliation & 12 pt & \\
-the word ``Abstract'' & 12 pt & bold \\
-section titles & 12 pt & bold \\
-document text & 11 pt  &\\
-captions & 11 pt & \\
-abstract text & 10 pt & \\
-bibliography & 10 pt & \\
-footnotes & 9 pt & \\
-\hline
-\end{tabular}
-\end{center}
-\caption{\label{font-table} Font guide. }
-\end{table}
-
-\subsection{The First Page}
-\label{ssec:first}
-
-Center the title, author's name(s) and affiliation(s) across both
-columns. Do not use footnotes for affiliations. Do not include the
-paper ID number assigned during the submission process. Use the
-two-column format only when you begin the abstract.
-
-{\bf Title}: Place the title centered at the top of the first page, in
-a 15-point bold font. (For a complete guide to font sizes and styles,
-see Table~\ref{font-table}) Long titles should be typed on two lines
-without a blank line intervening. Approximately, put the title at 2.5
-cm from the top of the page, followed by a blank line, then the
-author's names(s), and the affiliation on the following line. Do not
-use only initials for given names (middle initials are allowed). Do
-not format surnames in all capitals ({\em e.g.}, use ``Mitchell'' not
-``MITCHELL'').  Do not format title and section headings in all
-capitals as well except for proper names (such as ``BLEU'') that are
-conventionally in all capitals.  The affiliation should contain the
-author's complete address, and if possible, an electronic mail
-address. Start the body of the first page 7.5 cm from the top of the
-page.
-
-The title, author names and addresses should be completely identical
-to those entered to the electronic paper submission website in order
-to maintain the consistency of author information among all
-publications of the conference. If they are different, the publication
-chairs may resolve the difference without consulting with you; so it
-is in your own interest to double-check that the information is
-consistent.
-
-{\bf Abstract}: Type the abstract at the beginning of the first
-column. The width of the abstract text should be smaller than the
-width of the columns for the text in the body of the paper by about
-0.6 cm on each side. Center the word {\bf Abstract} in a 12 point bold
-font above the body of the abstract. The abstract should be a concise
-summary of the general thesis and conclusions of the paper. It should
-be no longer than 200 words. The abstract text should be in 10 point font.
-
-{\bf Text}: Begin typing the main body of the text immediately after
-the abstract, observing the two-column format as shown in 
-the present document. Do not include page numbers.
-
-{\bf Indent}: When starting a new paragraph. Use 11 points for text and 
-subsection headings, 12 points for section headings and 15 points for
-the title. 
-
-\begin{table}
 \centering
 \small
-\begin{tabular}{cc}
-\begin{tabular}{|l|l|}
+\setlength\tabcolsep{2pt}
+\begin{tabular}{l|c|ccccc}
+&& \multicolumn{3}{c}{\bf Multitask} \\ 
+\bf Hyperparameter &  \bf Single & \bf Main & \bf Aux & \bf Shared \\
 \hline
-{\bf Command} & {\bf Output}\\\hline
-\verb|{\"a}| & {\"a} \\
-\verb|{\^e}| & {\^e} \\
-\verb|{\`i}| & {\`i} \\ 
-\verb|{\.I}| & {\.I} \\ 
-\verb|{\o}| & {\o} \\
-\verb|{\'u}| & {\'u}  \\ 
-\verb|{\aa}| & {\aa}  \\\hline
-\end{tabular} & 
-\begin{tabular}{|l|l|}
+Pre-trained word dim. & 300 &&& 300 \\
+Learned word dim. & 200 &&& 200 \\
+POS tag dim. & 20 &&& 20 \\
+Dependency relation dim. & 10 &&& 10 \\
+Named entity dim. & 3 &&& 3 \\
+Punctuation dim. & 1 &&& 1 \\
+Action dim. & 3 &&& 3 \\
+Edge label dim. & 20 & 20 \\
 \hline
-{\bf Command} & {\bf  Output}\\\hline
-\verb|{\c c}| & {\c c} \\ 
-\verb|{\u g}| & {\u g} \\ 
-\verb|{\l}| & {\l} \\ 
-\verb|{\~n}| & {\~n} \\ 
-\verb|{\H o}| & {\H o} \\ 
-\verb|{\v r}| & {\v r} \\ 
-\verb|{\ss}| & {\ss} \\\hline
+MLP layers & 2 & 2 & 1 \\
+MLP dimensions & 50 & 50 & 50 \\
+BiLSTM layers & 2 & 2 & & 2 \\
+BiLSTM dimensions & 500 & 300 & & 300
 \end{tabular}
-\end{tabular}
-\caption{Example commands for accented characters, to be used in, {\em e.g.}, \BibTeX\ names.}\label{tab:accents}
+\caption{Hyperparameter settings.
+Middle column shows hyperparameters used for the single-task architecture,
+described in \S\ref{sec:classifier}, and
+right column for the multitask architecture,
+described in \S\ref{sec:multitask}.
+\textbf{Main} refers to parameters specific to the main task---UCCA parsing
+(task-specific MLP and BiLSTM, and edge label embedding),
+\textbf{Aux} to parameters specific to each auxiliary task
+(task-specific MLP, but no edge label embedding since the tasks are unlabeled),
+and \textbf{Shared} to parameters shared among all tasks
+(shared BiLSTM and embeddings).\label{tab:hyperparams}}
 \end{table}
 
-\subsection{Sections}
 
-{\bf Headings}: Type and label section and subsection headings in the
-style shown on the present document.  Use numbered sections (Arabic
-numerals) in order to facilitate cross references. Number subsections
-tablwith the section number and the subsection number separated by a dot,
-in Arabic numerals. Do not number subsubsections.
+\paragraph{Hyperparameters.}
 
-\begin{table*}
-\centering
-\begin{tabular}{lll}
-  output & natbib & previous ACL style files\\
-  \hline
-  \citep{Gusfield:97} & \verb|\citep| & \verb|\cite| \\
-  \citet{Gusfield:97} & \verb|\citet| & \verb|\newcite| \\
-  \citeyearpar{Gusfield:97} & \verb|\citeyearpar| & \verb|\shortcite| \\
-\end{tabular}
-\caption{Citation commands supported by the style file.
-  The citation style is based on the natbib package and
-  supports all natbib citation commands.
-  It also supports commands defined in previous ACL style files
-  for compatibility.
-  }
-\end{table*}
+We initialize embeddings randomly.
+We use dropout \cite{srivastava2014dropout} between MLP layers, and recurrent dropout
+\cite{NIPS2016_6241} between BiLSTM layers, both with $p=0.4$.
+We also use word ($\alpha=0.2$), tag ($\alpha=0.2$) and dependency relation ($\alpha=0.5$) dropout
+\cite{kiperwasser2016simple}.\footnote{In training, the embedding for a feature value $w$ is
+replaced with a zero vector with a probability of $\frac{\alpha}{\#(w)+\alpha}$,
+where $\#(w)$ is the number of occurrences of $w$ observed.}
+In addition, we use a novel form of dropout, \textit{node dropout}:
+with a probability of 0.1 at each step, all features associated with a single
+node in the parser state are replaced with zero vectors.
+For optimization we use a minibatch size of 100, decaying all weights by $10^{-5}$ at each update,
+and train with stochastic gradient descent for $N$ epochs with a learning
+rate of 0.1, followed by AMSGrad \cite{j.2018on} for $N$ epochs with
+$\alpha=0.001,\beta_1=0.9$ and $\beta_2=0.999$.
+We use $N=50$ for English and German, and $N=400$ for French.
+We found this training strategy better than using only one of the optimization methods,
+similar to findings by \citet{keskar2017improving}.
+We select the epoch with the best average labeled $F_1$ score on the
+UCCA development set.
+Other hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 
-{\bf Citations}: Citations within the text appear in parentheses
-as~\cite{Gusfield:97} or, if the author's name appears in the text
-itself, as Gusfield~\shortcite{Gusfield:97}.
-Using the provided \LaTeX\ style, the former is accomplished using
-{\small\verb|\cite|} and the latter with {\small\verb|\shortcite|} or {\small\verb|\newcite|}.  Collapse multiple citations as in~\cite{Gusfield:97,Aho:72}; this is accomplished with the provided style using commas within the {\small\verb|\cite|} command, {\em e.g.}, {\small\verb|\cite{Gusfield:97,Aho:72}|}.  
-Append lowercase letters to the year in cases of ambiguities.  
- Treat double authors as
-in~\cite{Aho:72}, but write as in~\cite{Chandra:81} when more than two
-authors are involved. Collapse multiple citations as
-in~\cite{Gusfield:97,Aho:72}. Also refrain from using full citations
-as sentence constituents.
 
-\penalty -5000
+\paragraph{Evaluation.}
 
-We suggest that instead of
-\begin{quote}
-  ``\cite{Gusfield:97} showed that ...''
-\end{quote}
-you use
-\begin{quote}
-``Gusfield \shortcite{Gusfield:97}   showed that ...''
-\end{quote}
+We evaluate on UCCA using labeled precision, recall and $F_1$ 
+on primary and remote edges,
+following previous work \cite{hershcovich2017a}.
+Edges in predicted and gold graphs are matched by terminal yield and label.
+Significance testing of improvements over the single-task model is done
+by the bootstrap test \cite{berg2012empirical}, with $p<0.05$.
 
-If you are using the provided \LaTeX{} and Bib\TeX{} style files, you
-can use the command \verb|\citet| (cite in text)
-to get ``author (year)'' citations.
+%\subsection{Ensembling}
+%
+%During inference, we use Product of Experts \cite[PoE; ][]{hinton2002training} to combine the predictions
+%of three models trained in the same setting, but with different random seeds. The transition selected is
+%\[
+%\argmax_{t\in T}\sum_{i=1}^3\big[\log(\mathrm{softmax}(m_i(s)))\big]_t
+%\]
+%where $T$ is the set of possible transitions, $m_i$ are the combined models, and $s$ is the current state.
+%
+%In order to ensemble multitask models, we combine models trained with the same auxiliary task.
+%Another alternative is to combine models trained with different auxiliary tasks.\oa{don't write about alternatives,
+%but rather on what we actually do}
+%This provides greater variability between the combined models.
 
-If the Bib\TeX{} file contains DOI fields, the paper
-title in the references section will appear as a hyperlink
-to the DOI, using the hyperref \LaTeX{} package.
-To disable the hyperref package, load the style file
-with the \verb|nohyperref| option:
-\verb|\usepackage[nohyperref]{udst2018}|
 
-\textbf{Digital Object Identifiers}:  As part of our work to make ACL
-materials more widely used and cited outside of our discipline, ACL
-has registered as a CrossRef member, as a registrant of Digital Object
-Identifiers (DOIs), the standard for registering permanent URNs for
-referencing scholarly materials.  As of 2017, we are requiring all
-camera-ready references to contain the appropriate DOIs (or as a
-second resort, the hyperlinked ACL Anthology Identifier) to all cited
-works.  Thus, please ensure that you use Bib\TeX records that contain
-DOI or URLs for any of the ACL materials that you reference.
-Appropriate records should be found for most materials in the current
-ACL Anthology at \url{http://aclanthology.info/}.
 
-As examples, we cite \cite{P16-1001} to show you how papers with a DOI
-will appear in the bibliography.  We cite \cite{C14-1001} to show how
-papers without a DOI but with an ACL Anthology Identifier will appear
-in the bibliography.  
+\section{Results}\label{sec:results}
 
-%As reviewing will be double-blind, the submitted version of the papers
-%should not include the authors' names and affiliations. Furthermore,
-%self-references that reveal the author's identity, {\em e.g.},
-%\begin{quote}
-%``We previously showed \cite{Gusfield:97} ...''  
-%\end{quote}
-%should be avoided. Instead, use citations such as 
-%\begin{quote}
-%``\citeauthor{Gusfield:97} \shortcite{Gusfield:97}
-%previously showed ... ''
-%\end{quote}
 
-\textbf{Please do not use anonymous citations} and do not include
-acknowledgements when submitting your papers. Papers that do not
-conform to these requirements may be rejected without review.
+Table~\ref{tab:id_results} presents our results.
 
-\textbf{References}: Gather the full set of references together under
-the heading {\bf References}; place the section before any Appendices,
-unless they contain references. Arrange the references alphabetically
-by first author, rather than by order of occurrence in the text.
-Provide as complete a citation as possible, using a consistent format,
-such as the one for {\em Computational Linguistics\/} or the one in the 
-{\em Publication Manual of the American 
-Psychological Association\/}~\cite{APA:83}.  Use of full names for
-authors rather than initials is preferred.  A list of abbreviations
-for common computer science journals can be found in the ACM 
-{\em Computing Reviews\/}~\cite{ACM:83}.
 
-The \LaTeX{} and Bib\TeX{} style files provided roughly fit the
-American Psychological Association format, allowing regular citations, 
-short citations and multiple citations as described above.
+\section{Conclusion}\label{sec:conclusion}
 
-{\bf Appendices}: Appendices, if any, directly follow the text and the
-references (but see above).  Letter them in sequence and provide an
-informative title: {\bf Appendix A. Title of Appendix}.
+We demonstrate that semantic parsers can leverage a range of 
+semantically and syntactically annotated data, to improve their performance.
+Our experiments show that MTL improves UCCA parsing,
+using AMR, DM and UD parsing as auxiliaries.
+We propose a unified DAG representation, 
+construct protocols for converting these schemes into the unified format,
+and generalize a transition-based DAG parser to support all these tasks,
+allowing it to be jointly trained on them.
+%While the machine learning techniques we use are not novel,
+%our contribution is in allowing these models to learn from
+%significantly different tasks.
 
-\subsection{Footnotes}
+%A natural question is whether our method can benefit AMR, DM or UD parsing.
+While we focus on UCCA in this work, our parser is capable of parsing any
+scheme that can be represented in the unified DAG format,
+and preliminary results on AMR, DM and UD are promising (see~\S\ref{sec:discussion}).
+Future work will investigate whether a single
+algorithm and architecture can be competitive on all of these parsing tasks,
+an important step towards a joint many-task model for semantic parsing.
 
-{\bf Footnotes}: Put footnotes at the bottom of the page and use 9
-points text. They may be numbered or referred to by asterisks or other
-symbols.\footnote{This is how a footnote should appear.} Footnotes
-should be separated from the text by a line.\footnote{Note the line
-separating the footnotes from the text.}
 
-\subsection{Graphics}
 
-{\bf Illustrations}: Place figures, tables, and photographs in the
-paper near where they are first discussed, rather than at the end, if
-possible.  Wide illustrations may run across both columns.  Color
-illustrations are discouraged, unless you have verified that  
-they will be understandable when printed in black ink.
-
-{\bf Captions}: Provide a caption for every illustration; number each one
-sequentially in the form:  ``Figure 1. Caption of the Figure.'' ``Table 1.
-Caption of the Table.''  Type the captions of the figures and 
-tables below the body, using 11 point text.
-
-\subsection{Accessibility}
-\label{ssec:accessibility}
-
-In an effort to accommodate the color-blind (as well as those printing
-to paper), grayscale readability for all accepted papers will be
-encouraged.  Color is not forbidden, but authors should ensure that
-tables and figures do not rely solely on color to convey critical
-distinctions.
-Here we give a simple criterion on your colored figures, if your paper has to be printed in black and white, then you must assure that every curves or points in your figures can be still clearly distinguished.
-
-% Min: no longer used as of ACL 2017, following ACL exec's decision to
-% remove this extra workflow that was not executed much.
-% BEGIN: remove
-%% \section{XML conversion and supported \LaTeX\ packages}
-
-%% Following ACL 2014 we will also we will attempt to automatically convert 
-%% your \LaTeX\ source files to publish papers in machine-readable 
-%% XML with semantic markup in the ACL Anthology, in addition to the 
-%% traditional PDF format.  This will allow us to create, over the next 
-%% few years, a growing corpus of scientific text for our own future research, 
-%% and picks up on recent initiatives on converting ACL papers from earlier 
-%% years to XML. 
-
-%% We encourage you to submit a ZIP file of your \LaTeX\ sources along
-%% with the camera-ready version of your paper. We will then convert them
-%% to XML automatically, using the LaTeXML tool
-%% (\url{http://dlmf.nist.gov/LaTeXML}). LaTeXML has \emph{bindings} for
-%% a number of \LaTeX\ packages, including the ACL 2017 stylefile. These
-%% bindings allow LaTeXML to render the commands from these packages
-%% correctly in XML. For best results, we encourage you to use the
-%% packages that are officially supported by LaTeXML, listed at
-%% \url{http://dlmf.nist.gov/LaTeXML/manual/included.bindings}
-% END: remove
-
-\section{Translation of non-English Terms}
-
-It is also advised to supplement non-English characters and terms
-with appropriate transliterations and/or translations
-since not all readers understand all such characters and terms.
-Inline transliteration or translation can be represented in
-the order of: original-form transliteration ``translation''.
-
-\section{Length of Submission}
-\label{sec:length}
-
-The \udst{} Workshop accepts submissions of system papers, consisting of eight (8)
-pages of content plus unlimited pages for references. 
-%Upon acceptance, final
-%versions of long papers will be given one additional page -- up to nine (9)
-%pages of content plus unlimited pages for references -- so that reviewers' comments
-%can be taken into account. Short papers may consist of up to four (4)
-%pages of content, plus unlimited pages for references. Upon
-%acceptance, short papers will be given five (5) pages in the
-%proceedings and unlimited pages for references. 
-
-%For both long and short papers,
-All illustrations and tables that are part
-of the main text must be accommodated within these page limits, observing
-the formatting instructions given in the present document. 
-
-%Supplementary
-%material in the form of appendices does not count towards the page limit.
-
-%However, note that supplementary material should be supplementary
-%(rather than central) to the paper, and that reviewers may ignore
-%supplementary material when reviewing the paper (see Appendix
-%\ref{sec:supplemental}). Papers that do not conform to the specified
-%length and formatting requirements are subject to be rejected without
-%review.
-
-%Workshop chairs may have different rules for allowed length and
-%whether supplemental material is welcome. As always, the respective
-%call for papers is the authoritative source.
-
-\section*{Acknowledgments}
-
-The acknowledgments should go immediately before the references.  Do
-not number the acknowledgments section. 
-%Do not include this section
-%when submitting your paper for review.
-
-% include your own bib file like this:
-%\bibliographystyle{acl}
-%\bibliography{acl2017}
-\bibliography{udst2018}
-
+\bibliography{references}
 \bibliographystyle{acl_natbib}
-
-%\appendix
-
-%\section{Supplemental Material}
-%\label{sec:supplemental}
-%ACL 2017 also encourages the submission of supplementary material
-%to report preprocessing decisions, model parameters, and other details
-%necessary for the replication of the experiments reported in the 
-%paper. Seemingly small preprocessing decisions can sometimes make
-%a large difference in performance, so it is crucial to record such
-%decisions to precisely characterize state-of-the-art methods.
-
-%Nonetheless, supplementary material should be supplementary (rather
-%than central) to the paper. {\bf Submissions that misuse the supplementary 
-%material may be rejected without review.}
-%Essentially, supplementary material may include explanations or details
-%of proofs or derivations that do not fit into the paper, lists of
-%features or feature templates, sample inputs and outputs for a system,
-%pseudo-code or source code, and data. (Source code and data should
-%be separate uploads, rather than part of the paper).
-
-%The paper should not rely on the supplementary material: while the paper
-%may refer to and cite the supplementary material and the supplementary material 
-%will be available to the
-%reviewers, they will not be asked to review the
-%supplementary material.
-
-%Appendices ({\em i.e.} supplementary material in the form of proofs, tables,
-%or pseudo-code) should come after the references, as shown here. Use
-%\verb|\appendix| before any appendix section to switch the section
-%numbering over to letters.
-
-%\section{Multiple Appendices}
-%\dots can be gotten by using more than one section. We hope you won't
-%need that.
 
 \end{document}
 
