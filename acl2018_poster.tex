@@ -66,6 +66,7 @@
 
 %----------------------------------------------------------------------------------------
 
+
 \begin{adjustbox}{margin=3mm,frame,minipage=.6\linewidth,center}
 \Large\color{Navy}
 Multitask parsing across semantic representations facilitates generalization,
@@ -748,29 +749,22 @@ and $\dagger$ significantly worse.}
 Multitask learning consistently improve UCCA parsing when compared to single-task.
 The contribution is largely additive: using all three auxiliary tasks gives the best model.
 
-\hrule
-
-
-\section*{Conclusion}
-
-We propose a unified DAG format for semantic representation,
-and train a transition-based BiLSTM semantic DAG parser on UCCA parsing,
-using unlabeled AMR, SDP and UD parsing as auxiliary tasks.
-We demonstrate that multitask learning significantly improves UCCA parsing in out-of-domain settings
-or when training data is scarce or noisy.\footnote{Code:
-\url{http://github.com/danielhers/tupa} \hfill
-Corpora: \url{https://github.com/UniversalConceptualCognitiveAnnotation} \hfill
-Implemented using DyNet: \url{http://github.com/clab/dynet}}
-
-A natural question is whether our method can benefit AMR, SDP or UD.
-Future work will investigate whether a single
-algorithm and architecture can be competitive on all of these.
-
 \begin{multicols}{2}
 \color{DarkSlateGray}
 \tiny\titleformat*{\section}{\small}
 \bibliographystyle{plain}
 \bibliography{references}
+
+\color{Black}
+\begin{adjustbox}{margin=3mm,frame,minipage=\columnwidth}
+\centering\large
+Please join SemEval 2019 Task 1: \\
+Cross-lingual Semantic Parsing with UCCA
+
+\begin{minipage}{.3\textwidth}\includegraphics[width=\textwidth]{qr}\end{minipage}
+\hfill
+\begin{minipage}{.6\textwidth}\Large\url{tinyurl.com/semeval-ucca}\end{minipage}
+\end{adjustbox}
 \end{multicols}
 
 \end{multicols}
