@@ -557,7 +557,7 @@ Concatenated to select each transition using a task-specific feedforward NN.
     \node (x4) at (10.5,3) {\ldots};
     \node[main] (mlp) at (10.5,12) {Task-specific MLP};
     \path (specific) edge (mlp);
-    \path[color=DarkCyan] (shared) edge (mlp);
+    \path (shared) edge (mlp);
     \coordinate (state) at (22,17);
     \path (state) edge [bend left] (mlp);
     \node (transition) at (10.5,16.4) {transition};
@@ -703,7 +703,7 @@ supported by TUPA.
 {\color{Indigo} 20K} (out-of-domain).
 \textbf{French} and \textbf{German}. Train: {\color{Indigo} 20K}
 (+{\color{DarkBlue} UD} as aux),
-test: {\color{Indigo} 20K}.
+test: {\color{Indigo} 20K} (both in-domain).
 \pgfplotstableread[row sep=\\,col sep=&]{
 	aux & pf1 & rf1 \\
 	+All & 74.4 & 52 \\
