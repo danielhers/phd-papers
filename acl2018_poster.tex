@@ -79,18 +79,12 @@ effectively overcoming domain adaptation and data scarcity in UCCA parsing.
 
 \color{Black}
 
-\section*{Introduction}
-
-Semantic parsing is important for natural language understanding.
-Representation schemes vary,
-but data is mostly \textbf{small}, \textbf{in-domain}, and in \textbf{English}.
-\hfill We consider four schemes:
-\begin{itemize}[nosep,labelsep=1em]
+Training data for parsing semantic representations is scarce.
+We consider four schemes:
+\begin{itemize}[labelsep=1em]
 {\color{Indigo} \item[\textbf{UCCA}:] Intuitive, cross-lingual, and modular semantic representation.
     \textit{Primary edges} form a tree. \textit{Remote edges} (dashed) allow reentrancy,
-    creating a directed acyclic graph (DAG).
-    Edge labels encode predicate-argument structure, semantic heads and inter-scene relations
-    \cite{abend2013universal}.}
+    creating a directed acyclic graph \cite{abend2013universal}.}
 {\color{DarkGreen} \item[\textbf{AMR}:] Abstract graph on concepts and constants.
     Rooted DAG with labeled nodes and edges.
     Encodes named entities, argument structure, semantic roles, word sense, coreference \cite{banarescu2013abstract}.}
@@ -222,17 +216,16 @@ but data is mostly \textbf{small}, \textbf{in-domain}, and in \textbf{English}.
   \end{center}
 \end{minipage}
 
-While formally different, semantic representations
+Semantic representations
 share much of their content \cite{abend2017state}.
+
 \textbf{Multitask learning} exploits task overlap,
-effectively extending the training data:
-training our transition-based DAG parser with \textbf{auxiliary tasks}
-shows benefit for UCCA parsing.
+effectively extending the training data.
 
+We focus on UCCA parsing due to its small training set.
 
-We focus on UCCA due to its small training set,
-where multitask learning is likely to help the most.
-As auxiliary tasks, we use \textbf{unlabeled} AMR, SDP and UD parsing.
+As auxiliary tasks, we use \textbf{unlabeled}
+{\color{DarkGreen} AMR}, {\color{DarkRed} SDP} and {\color{DarkBlue} UD} parsing.
 
 \hrule
 
@@ -347,10 +340,10 @@ the domains for AMR, SDP and UD are blogs, news, emails, reviews, and Q\&A---a c
 \hrule
 
 
-\section*{General Transition-based DAG Parser}
+\section*{TUPA: A Transition-Based DAG Parser}
 
-We extend TUPA \cite{hershcovich2017a}, a UCCA parser supporting
-reentrancy, discontinuity and non-terminal nodes.
+We extend a UCCA parser supporting
+reentrancy, discontinuity and non-terminal nodes \cite{hershcovich2017a}.
 It applies a \textit{transition}
 at each step to the parser state, comprising
 a working \textbf{stack} of nodes,
@@ -507,19 +500,16 @@ and \textbf{graph} of constructed nodes and edges.
 \end{minipage}
 }
 
-A \textbf{classifier} selects the next transition, given the current state's features.
-Architecture: bidirectional LSTM RNN to encode text token features +
-feedforward NN for classification.
-For training, TUPA uses an oracle, returning correct transitions given gold-standard graphs.
-
 \vfill
 
-\section*{Multitask Architecture}
+\section*{Transition Classifier}
 
-We use a \textbf{task-specific} BiLSTM for each task +
-BiLSTM \textbf{shared} across all tasks.
-We concatenate their outputs and select each transition using
-a task-specific feedforward NN.
+Bidirectional LSTM RNN to encode text token features +
+feedforward NN for classification.
+
+Multitask architecture: \textbf{Task-specific} BiLSTM for the main task +
+\textbf{shared} BiLSTM across all tasks.
+Concatenated to select each transition using a task-specific feedforward NN.
 \begin{center}
    \vspace{-1mm}
    \begin{tikzpicture}[-{Latex[length=3mm]},level distance=15mm, sibling distance=5cm]
