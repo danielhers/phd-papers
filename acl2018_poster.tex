@@ -100,8 +100,8 @@ We consider four schemes:
 \begin{minipage}{.8\columnwidth}
   \color{Indigo}
   \begin{center}
-    \begin{tikzpicture}[level distance=3cm, sibling distance=55mm, -{Latex[length=5mm]},
-        every node/.append style={font=\bf\ttfamily},
+    \begin{tikzpicture}[level distance=3cm, sibling distance=55mm, -{Latex[length=5mm]}, line width=2pt,
+        every node/.append style={font=\large\bf\ttfamily},
         every circle node/.append style={fill=Indigo}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
@@ -152,11 +152,12 @@ We consider four schemes:
   \end{center}
 \end{minipage}
 
-\begin{minipage}{.45\columnwidth}
+\hspace{-35mm}
+\begin{minipage}{.50\columnwidth}
   \begin{center}
-  \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkGreen, level distance=45mm,
-      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
-      level 1/.style={sibling distance=55mm}]
+  \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkGreen, level distance=48mm, line width=2pt,
+      every node/.append style={sloped,anchor=south,auto=false,font=\small\bf\ttfamily},
+      level 1/.style={sibling distance=57mm}]
     \node (ROOT) [draw=DarkGreen,ellipse] {move-01}
       child {node [draw=DarkGreen,ellipse] {after}
       {
@@ -184,9 +185,9 @@ We consider four schemes:
 \end{minipage}
 \begin{minipage}{.55\columnwidth}
     \begin{center}
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkRed},
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkRed, line width=2pt},
         text only label, label style={above, color=DarkRed, font=\bf\ttfamily}, font=\small]
-    \begin{deptext}[column sep=.8em,ampersand replacement=\^]
+    \begin{deptext}[column sep=.8em,ampersand replacement=\^, color=DarkRed]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
         \depedge[edge unit distance=1em]{1}{2}{ARG2}
@@ -198,10 +199,10 @@ We consider four schemes:
         \depedge[edge unit distance=1em]{6}{7}{ARG2}
     \end{dependency}
     \captionof{figure}{\color{DarkRed} Semantic Dependency Parsing (SDP): DM representation.}
-    \vfill
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue},
+    \vspace{7mm}
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
         text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
-    \begin{deptext}[column sep=.8em,ampersand replacement=\^]
+    \begin{deptext}[column sep=.8em,ampersand replacement=\^, color=DarkBlue]
     After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
     \end{deptext}
         \depedge[edge unit distance=1em]{2}{1}{case}
@@ -215,6 +216,8 @@ We consider four schemes:
   \captionof{figure}{\color{DarkBlue} Universal Dependencies (UD).}
   \end{center}
 \end{minipage}
+
+\vspace{5mm}
 
 Semantic representations
 share much of their content \cite{abend2017state}.
@@ -512,7 +515,7 @@ Multitask architecture: \textbf{Task-specific} BiLSTM for the main task +
 Concatenated to select each transition using a task-specific feedforward NN.
 \begin{center}
    \vspace{-1mm}
-   \begin{tikzpicture}[-{Latex[length=3mm]},level distance=15mm, sibling distance=5cm]
+   \begin{tikzpicture}[-{Latex[length=3mm]},level distance=15mm, sibling distance=5cm, line width=2pt]
    \draw[color=gray,dashed,fill=lightgray!20] (0,-.8) rectangle (34,3.6);
    \node[anchor=west] at (0,2.5) {\textbf{Parser state}};
    \node[anchor=west] at (0,.5) {Stack:};
@@ -532,7 +535,7 @@ Concatenated to select each transition using a task-specific feedforward NN.
      } edge from parent node[font=\scriptsize\bf\ttfamily,right] {H} };
    \end{tikzpicture}
    
-   \begin{tikzpicture}[-{Latex[length=3mm]},thick]
+   \begin{tikzpicture}[-{Latex[length=3mm]},thick, line width=2pt]
    \node[anchor=west] at (-7,16) {\textbf{Classifier}};
    \tikzstyle{main}=[rounded rectangle, minimum size=23mm, draw=black!80, node distance=12mm]
    \node[main] (specific) at (0,10) {Task-specific BiLSTM};
@@ -568,7 +571,7 @@ supported by TUPA.
 
 \begin{minipage}{.4\columnwidth}
   \begin{center}
-  \begin{tikzpicture}[level distance=6cm, -{Latex[length=5mm]}, color=DarkGreen,
+  \begin{tikzpicture}[level distance=6cm, -{Latex[length=5mm]}, color=DarkGreen, line width=2pt,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
       level 1/.style={sibling distance=53mm},
       level 2/.style={sibling distance=3cm},
@@ -597,7 +600,7 @@ supported by TUPA.
 \begin{minipage}{.6\columnwidth}
   \begin{center}
   \scalebox{.9}{
-  \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkRed,
+  \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkRed, line width=2pt,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
       level 1/.style={sibling distance=7cm,level distance=1cm},
       level 2/.style={sibling distance=4cm,level distance=24mm},
@@ -646,7 +649,7 @@ supported by TUPA.
   \end{tikzpicture}}
   \captionof{figure}{\color{DarkRed} Converted DM.}
   \scalebox{.9}{
-  \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue,
+  \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
       level 1/.style={sibling distance=4cm,level distance=1cm},
       level 2/.style={sibling distance=3cm,level distance=4cm}]
