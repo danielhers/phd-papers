@@ -699,55 +699,151 @@ supported by TUPA.
 
 \section*{Experiments}
 
-In \textbf{English}, we train on the {\color{Indigo} UCCA Wiki} training set
-(adding various tasks as auxiliaries), and test on the {\color{Indigo} 20K} out-of-domain test set.
-In \textbf{French} and \textbf{German}, we train on the {\color{Indigo} 20K} training set
-(using {\color{DarkBlue} UD} in the same language as auxiliary),
-and test on the {\color{Indigo} 20K} test set.
+\textbf{English}. Train: {\color{Indigo} UCCA Wiki}
+(+aux), test: {\color{Indigo} UCCA Wiki} (in-domain) or
+{\color{Indigo} 20K} (out-of-domain).
+\textbf{French} and \textbf{German}. Train: {\color{Indigo} 20K}
+(+{\color{DarkBlue} UD} as aux),
+test: {\color{Indigo} 20K}.
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 \\
+	+All & 74.4 & 52 \\
+	+{\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 74.9 & 51.2 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{NavyBlue} \textbf{UD}} & 73.8 & 48.5 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} & 74.7 & 51.4 \\
+	+\color{NavyBlue} \textbf{UD} & 74.1 & 50.8 \\
+	+\color{DarkRed} \textbf{SDP} & 74.8 & 53.9 \\
+	+\color{DarkGreen} \textbf{AMR} & 73.7 & 49.9 \\
+	\textbf{Single-task} & 73.6 & 51.5 \\
+}\indomaindata
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 \\
+	+All & 71 & 29.6 \\
+	+{\color{DarkRed} \textbf{SDP}} + {\color{NavyBlue} \textbf{UD}} & 70.6 & 28.4 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{NavyBlue} \textbf{UD}} & 70 & 29.4 \\
+	+{\color{DarkGreen} \textbf{AMR}} + {\color{DarkRed} \textbf{SDP}} & 70.5 & 27.3 \\
+	+\color{NavyBlue} \textbf{UD} & 69.7 & 28.7 \\
+	+\color{DarkRed} \textbf{SDP} & 70.7 & 25.9 \\
+	+\color{DarkGreen} \textbf{AMR} & 69.5 & 27.5 \\
+	\textbf{Single-task} & 69 & 26.7 \\
+}\outdomaindata
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 \\
+	+\color{NavyBlue} \textbf{UD} & 70.1 & 20.3 \\
+	\textbf{Single} & 67.6 & 13.9 \\
+}\frenchdata
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & pf1 & rf1 \\
+	+\color{NavyBlue} \textbf{UD} & 73.2 & 35.5 \\
+	\textbf{Single} & 72.5 & 27.1 \\
+}\germandata
 
 \begin{center}
-\vspace{-1cm}
-\setlength\tabcolsep{1cm}
-\begin{tabular}{l|lll|lll}
-& \multicolumn{3}{c|}{\bf\small Primary} & \multicolumn{3}{c}{\bf\small Remote} \\
-& \textbf{\small LP} & \textbf{\small LR} & \textbf{LF}
-& \textbf{\small LP} & \textbf{\small LR} & \textbf{LF} \\
-\hline
-\bf English (out-of-domain) & \\
-Single ({\color{Indigo} UCCA} only)
-& 68.9 & 68.9 & \large 68.9 & 40.7 & 19.6 & \large 26.5 \\
-\cline{1-1}
-+ \color{DarkGreen} AMR
-& 69.4 & 69.6 & \large 69.5 & 44.3 & 21.4 & \large 28.8 \\
-+ \color{DarkRed} DM
-& 70.1$\star$ & 69.5 & {\large 69.8}$\star$ & 40 & 18.6 & \large 25.4 \\
-+ \color{DarkBlue} UD$^{++}$
-& 69.8$\star$ & 69.4 & \large 69.6 & 39.8 & 14.7$\dagger$ & {\large 21.4}$\dagger$ \\
-+ {\color{DarkGreen} AMR} + \color{DarkRed} DM
-& 69.8$\star$ & 69.5 & {\large 69.7}$\star$ & 48.8$\star$ & 19.6 & \large 28 \\
-+ {\color{DarkGreen} AMR} + \color{DarkBlue} UD$^{++}$
-& 69.7$\star$ & 70$\star$ & {\large 69.8}$\star$ & 39 & 21.4 & \large 27.6 \\
-+ {\color{DarkRed} DM} + \color{DarkBlue} UD$^{++}$
-& 70$\star$ & 68.9 & \large 69.4 & 47.4$\star$ & 22 & {\large 30}$\star$ \\
-+ {\color{DarkGreen} AMR} + {\color{DarkRed} DM} + \color{DarkBlue} UD$^{++}$
-& 71$\star$ & 72.2$\star$ & {\large \textbf{71.6}}$\star$ & 43.9 & 24.8$\star$ & {\large \textbf{31.6}}$\star$ \\
-\hline
-\bf French (in-domain) & \\
-Single ({\color{Indigo} UCCA} only) & 68 & 66.8 & \large 67.4 & 26.3 & \enskip 9.4 & \large 13.9 \\
-+ \color{DarkBlue} UD & 70.2 & 69.9$\star$ & {\large \textbf{70}}$\star$ & 43.8 & 13.2 & \large 20.3 \\
-\hline
-\bf German (in-domain) & \\
-Single ({\color{Indigo} UCCA} only) & 73.3 & 71.7 & \large 72.5 & 57.1 & 17.7 & \large 27.1 \\
-+ \color{DarkBlue} UD & 73.7$\star$ & 72.6$\star$ & {\large \textbf{73.2}}$\star$ & 61.8 & 24.9$\star$ & {\large \textbf{35.5}}$\star$
-\end{tabular}
-\captionof{table}{Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges
-on the UCCA 20K gold standard test sets.
-$\star$~indicates significantly better than \textit{Single},
-and $\dagger$ significantly worse.}
+    \small
+	\begin{minipage}{.45\columnwidth}
+	\begin{tikzpicture}
+		    \begin{axis}[
+		    xbar,
+		    width=11cm,
+		    height=17cm,
+		    xmin=47,
+		    xmax=80,
+		    bar width=7mm,
+		    xtick=\empty,
+		    ytick=data,
+		    yticklabels from table={\indomaindata}{aux},
+		    axis x line=none,
+		    axis line style={draw=none},
+		    clip=false
+		    ]
+		    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+		    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\indomaindata};
+		    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+		    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\indomaindata};
+		    \end{axis}
+	\end{tikzpicture}
+	\captionof{figure}{English In-Domain.}
+	\end{minipage}
+	\begin{minipage}{.30\columnwidth}
+	\begin{tikzpicture}
+		    \begin{axis}[
+		    xbar,
+		    width=11cm,
+		    height=17cm,
+		    xmin=23,
+		    xmax=77,
+		    bar width=7mm,
+		    xtick=\empty,
+		    axis x line=none,
+		    axis y line=none,
+		    clip=false
+		    ]
+		    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+		    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\outdomaindata};
+		    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+		    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\outdomaindata};
+		    \end{axis}
+	\end{tikzpicture}
+	\captionof{figure}{English Out-of-Domain.}
+	\end{minipage}
+	\begin{minipage}{.21\columnwidth}
+	\begin{tikzpicture}
+		    \begin{axis}[
+		    xbar,
+		    width=7cm,
+		    height=5cm,
+		    xmin=10,
+		    xmax=80,
+		    bar width=7mm,
+		    xtick=\empty,
+		    ytick=data,
+		    yticklabels from table={\frenchdata}{aux},
+		    axis x line=none,
+		    axis line style={draw=none},
+		    clip=false
+		    ]
+		    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+		    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\frenchdata};
+		    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+		    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\frenchdata};
+		    \end{axis}
+	\end{tikzpicture}
+	\captionof{figure}{French (in-domain).}
+
+    \vspace{5mm}
+	
+	\begin{tikzpicture}
+		    \begin{axis}[
+		    xbar,
+		    width=7cm,
+		    height=5cm,
+		    xmin=10,
+		    xmax=80,
+		    bar width=7mm,
+		    reverse legend,
+	        legend style={at={(axis cs:0,1.5)},anchor=south west},
+		    xtick=\empty,
+		    ytick=data,
+		    yticklabels from table={\germandata}{aux},
+		    axis x line=none,
+		    axis line style={draw=none},
+		    clip=false
+		    ]
+		    \addplot [fill=Crimson, point meta=explicit symbolic,nodes near coords,
+		    nodes near coords align={anchor=west}] table [x=rf1,y expr=\coordindex,meta=rf1] {\germandata};
+		    \addplot [fill=Navy, point meta=explicit symbolic,nodes near coords,
+		    nodes near coords align={anchor=west}] table [x=pf1,y expr=\coordindex,meta=pf1] {\germandata};
+		    \legend{remote F1,primary F1}
+		    \end{axis}
+	\end{tikzpicture}
+	\captionof{figure}{German (in-domain).}
+	\end{minipage}
 \end{center}
 
 Multitask learning consistently improve UCCA parsing when compared to single-task.
-The contribution is largely additive: using all three auxiliary tasks gives the best model.
 
 \begin{multicols}{2}
 \color{DarkSlateGray}
