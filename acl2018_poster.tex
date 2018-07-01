@@ -856,6 +856,9 @@ Multitask learning consistently improve UCCA parsing when compared to single-tas
 
 Does improvement depend on structural task similarity,
 or training corpus similarity?
+To check,
+we (1) annotated 100 sentences from the WSJ,
+and (2) compared training corpora text.
 
 \begin{tikzpicture}
 	    \begin{axis}[
@@ -863,14 +866,15 @@ or training corpus similarity?
 	    width=22cm,
 	    height=8cm,
 	    xmin=0,
-	    xmax=130,
+	    xmax=105,
 		bar width=7mm,
 	    xtick=\empty,
 	    ytick=data,
 	    yticklabels from table={\similaritydata}{aux},
 	    reverse legend,
-        legend style={at={(axis cs:130,.5)},anchor=south west},
+        legend style={at={(axis cs:105,1)},anchor=west,cells={align=left},row sep=6mm,font=\small},
 	    axis x line=none,
+		axis line style={draw=none},
 	    clip=false
 	    ]
 	    \addplot [fill=Green, point meta=explicit symbolic,nodes near coords,
@@ -879,7 +883,9 @@ or training corpus similarity?
 	    nodes near coords align={anchor=west}] table [x=crf1,y expr=\coordindex,meta=crf1] {\similaritydata};
 	    \addplot [fill=Blue, point meta=explicit symbolic,nodes near coords,
 	    nodes near coords align={anchor=west}] table [x=cpf1,y expr=\coordindex,meta=cpf1] {\similaritydata};
-	    \legend{,unigram L1 distance ($\times 100$),conversion remote F1,conversion primary F1}
+	    \legend{,unigram distribution L1 distance \\ ($\times 100$; compared to UCCA Wiki),
+	             remote F1 \\ (compared to gold UCCA on WSJ),
+	             primary F1 \\ (compared to gold UCCA on WSJ)}
 	    \end{axis}
 \end{tikzpicture}
 
