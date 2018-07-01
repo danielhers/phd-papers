@@ -857,10 +857,10 @@ Multitask learning consistently improve UCCA parsing when compared to single-tas
 }\similaritydata
 
 Does improvement depend on structural task similarity,
-or training corpus similarity?
-To check,
-we (1) annotated 100 sentences from the WSJ,
-and (2) compared training corpora text.
+or training corpus similarity? \\
+We compared
+\textbf{\color{NavyBlue} annotations of 100 WSJ sentences},
+and \textbf{\color{DarkGreen} training corpus word distributions}.
 
 \begin{tikzpicture}
 	    \begin{axis}[
@@ -886,8 +886,8 @@ and (2) compared training corpora text.
 	    \addplot [fill=Blue, point meta=explicit symbolic,nodes near coords,
 	    nodes near coords align={anchor=west}] table [x=cpf1,y expr=\coordindex,meta=cpf1] {\similaritydata};
 	    \legend{,unigram distribution L1 distance \\ ($\times 100$; compared to UCCA Wiki),
-	             remote F1 \\ (compared to gold UCCA on WSJ),
-	             primary F1 \\ (compared to gold UCCA on WSJ)}
+	             unlabeled remote F1 \\ (compared to gold UCCA on WSJ),
+	             unlabeled primary F1 \\ (compared to gold UCCA on WSJ)}
 	    \end{axis}
 \end{tikzpicture}
 
