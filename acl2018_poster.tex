@@ -844,6 +844,46 @@ test: {\color{Indigo} 20K} (both in-domain).
 
 Multitask learning consistently improve UCCA parsing when compared to single-task.
 
+
+\section*{Task Similarity}
+
+\pgfplotstableread[row sep=\\,col sep=&]{
+	aux & cpf1 & crf1 & l1 \\
+	\color{NavyBlue} \textbf{UD} & 74.1 & 12.6 & 84.3 \\
+	\color{DarkRed} \textbf{SDP} & 74.8 & 13.3 & 91.3 \\
+	\color{DarkGreen} \textbf{AMR} & 73.7 & 6.3 & 89.5 \\
+}\similaritydata
+
+Does improvement depend on structural task similarity,
+or training corpus similarity?
+
+\begin{tikzpicture}
+	    \begin{axis}[
+	    xbar,
+	    width=22cm,
+	    height=8cm,
+	    xmin=0,
+	    xmax=130,
+		bar width=7mm,
+	    xtick=\empty,
+	    ytick=data,
+	    yticklabels from table={\similaritydata}{aux},
+	    reverse legend,
+        legend style={at={(axis cs:130,.5)},anchor=south west},
+	    axis x line=none,
+	    clip=false
+	    ]
+	    \addplot [fill=Green, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=l1,y expr=\coordindex,meta=l1] {\similaritydata};
+	    \addplot [fill=Red, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=crf1,y expr=\coordindex,meta=crf1] {\similaritydata};
+	    \addplot [fill=Blue, point meta=explicit symbolic,nodes near coords,
+	    nodes near coords align={anchor=west}] table [x=cpf1,y expr=\coordindex,meta=cpf1] {\similaritydata};
+	    \legend{,unigram L1 distance ($\times 100$),conversion remote F1,conversion primary F1}
+	    \end{axis}
+\end{tikzpicture}
+
+
 \begin{multicols}{2}
 \color{DarkSlateGray}
 \tiny\titleformat*{\section}{\small}
