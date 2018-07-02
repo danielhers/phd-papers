@@ -45,8 +45,8 @@
 % smaller than 5cm (the original size); we will check this
 % in the camera-ready version and ask you to change it back.
 
-\title{TUPA: the HUJI System for the CoNLL 2018 UD Shared Task}
-% Applying a Transition-Based General DAG Parser to Universal Dependencies
+\title{HUJI at the CoNLL 2018 UD Shared Task: \\
+Universal Dependency Parsing with a Transition-Based DAG Parser}
 
 \author{Daniel Hershcovich$^{1,2}$ \\
   \\\And
@@ -64,19 +64,31 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-  We apply TUPA, a transition-based parser
-  designed for parsing UCCA (a cross-linguistic
-  semantic annotation scheme),
-  to Universal Dependency Parsing.
+  We present TUPA, a neural transition-based general DAG parser,
+  submitted by HUJI to the CoNLL 2018 UD shared task.
+  TUPA was designed for parsing UCCA, a cross-linguistic
+  semantic annotation scheme, exhibiting
+  reentrancy, discontinuity and non-terminal nodes.
   By employing a conversion protocol for representing
   UD trees and graphs in a UCCA-like unified DAG format,
-  we train TUPA without modification on the UD
-  parsing task.
+  we train TUPA without modification on the UD parsing task.
+  Our code is available at \url{https://github.com/danielhers/tupa}.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
 
-
+In this paper we describe the HUJI submission to the CoNLL 2018 shared task
+on Universal Dependency parsing \cite{nivre2016universal,11234/1-2515}.
+We focus only on dependency parsing, using a baseline model \cite[UDPipe;][]{udpipe:2017}
+for tokenization, sentence splitting, part-of-speech tagging and morphological tagging.
+Our system is based on TUPA \cite{hershcovich2017a,hershcovich2018multitask},
+a transition-based UCCA parser.
+UCCA \cite[Universal Conceptual Cognitive Annotation;][]{abend2013universal} is a
+cross-linguistic semantic annotation scheme, representing scenes, participants,
+attributes and relations in a directed acyclic graph (DAG) structure,
+and allowing reentrancy (argument sharing),
+discontinuity (corresponding to non-projectivity in dependency annotations)
+and non-terminal nodes (as opposed to dependencies, which are bi-lexical).
 
 
 \begin{figure}[ht]
@@ -439,6 +451,13 @@ and preliminary results on AMR, DM and UD are promising (see~\S\ref{sec:discussi
 Future work will investigate whether a single
 algorithm and architecture can be competitive on all of these parsing tasks,
 an important step towards a joint many-task model for semantic parsing.
+
+
+\section*{Acknowledgments}
+
+This work was supported by the Israel Science Foundation (grant no. 929/17) and
+by the HUJI Cyber Security Research Center
+in conjunction with the Israel National Cyber Bureau in the Prime Minister's Office.
 
 
 
