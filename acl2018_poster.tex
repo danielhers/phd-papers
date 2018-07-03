@@ -509,12 +509,6 @@ It is a transition-based parser supporting reentrancy, discontinuity and non-ter
 
 \section*{Transition Classifier}
 
-Bidirectional LSTM RNN to encode text token features +
-feedforward NN for classification.
-
-Multitask architecture: \textbf{Task-specific} BiLSTM for the main task +
-\textbf{shared} BiLSTM across all tasks.
-Concatenated to select each transition using a task-specific feedforward NN.
 \begin{center}
    \vspace{-1mm}
    \begin{tikzpicture}[-{Latex[length=3mm]},level distance=15mm, sibling distance=5cm, line width=2pt]
