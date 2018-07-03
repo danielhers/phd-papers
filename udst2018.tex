@@ -69,7 +69,7 @@ Universal Dependency Parsing with a Transition-Based DAG Parser}
   TUPA was designed for parsing UCCA, a cross-linguistic
   semantic annotation scheme, exhibiting
   reentrancy, discontinuity and non-terminal nodes.
-  By employing a conversion protocol for representing
+  By employing a conversion protocol to represent
   UD trees and graphs in a UCCA-like unified DAG format,
   we train TUPA without modification on the UD parsing task.
   Our code is available at \url{https://github.com/danielhers/tupa}.
@@ -79,7 +79,7 @@ Universal Dependency Parsing with a Transition-Based DAG Parser}
 
 In this paper we describe the HUJI submission to the CoNLL 2018 shared task
 on Universal Dependency parsing \cite{nivre2016universal,11234/1-2515}.
-We focus only on dependency parsing, using a baseline model \cite[UDPipe;][]{udpipe:2017}
+We focus only on parsing, using a baseline model \cite[UDPipe;][]{udpipe:2017}
 for tokenization, sentence splitting, part-of-speech tagging and morphological tagging.
 Our system is based on TUPA \cite{hershcovich2017a,hershcovich2018multitask},
 a transition-based UCCA parser.
@@ -89,7 +89,8 @@ attributes and relations in a directed acyclic graph (DAG) structure,
 and allowing reentrancy (argument sharing),
 discontinuity (corresponding to non-projectivity in dependency annotations)
 and non-terminal nodes (as opposed to dependencies, which are bi-lexical).
-
+To parse UD using TUPA, we employ a conversion protocol to represent
+UD trees and graphs in a UCCA-like unified DAG format (\S\ref{sec:format}).
 
 \begin{figure}[ht]
 \begin{subfigure}{0.47\textwidth}
@@ -223,22 +224,6 @@ the standard \textsc{Shift} and \textsc{Reduce} operations,
 \textsc{Swap} to handle discontinuous nodes,
 and \textsc{Finish} to mark the state as terminal.
 
-Although UCCA contains nodes without any text tokens as descendants
-(called \textit{implicit units}),
-these nodes are infrequent and only cover 0.5\% of non-terminal nodes.
-For this reason we follow previous work \cite{hershcovich2017a} and discard implicit units from
-the training and evaluation,
-and so do not include transitions for creating them.
-
-In AMR, implicit units are considerably more common, as any unaligned concept
-with no aligned descendents is implicit (about 6\% of the nodes).
-Implicit AMR nodes usually result from alignment errors, or from abstract concepts
-which have no explicit realization in the text \cite{buys2017oxford}.
-We ignore implicit nodes when training on AMR as well.
-TUPA also does not support node labels, 
-which are ubiquitous in AMR but absent in UCCA structures (only edges are labeled in UCCA). 
-We therefore only produce edge labels and not node labels when training on AMR.
-
 \begin{figure}[t]
    \begin{tikzpicture}[level distance=8mm, sibling distance=1cm]
    \node[anchor=west] at (0,1.5) {Parser state};
@@ -253,11 +238,11 @@ We therefore only produce edge labels and not node labels when training on AMR.
    \node[anchor=west] at (1.95,.275) {\small John moved to Paris .};
    \node[anchor=west] at (5.1,.8) {$G$};
    \node[fill=black, circle] at (6.35,.75) {}
-     child {node  {\tiny After} edge from parent [->] node[left] {\small L}}
      child {node [fill=blue, circle] {}
      {
-       child {node {\tiny graduation} edge from parent [->] node[right] {\small P}}
-     } edge from parent [->] node[right] {\small H} };
+       child {node  {\tiny After} edge from parent [->] node[left] {\small case}}
+       child {node {\tiny graduation} edge from parent [->] node[right] {\small head}}
+     } edge from parent [->] node[right] {\small obl} };
    \end{tikzpicture}
    \begin{tikzpicture}[->]
    \node[anchor=west] at (0,6) {Classifier};
