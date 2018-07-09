@@ -94,7 +94,36 @@ To parse UD using TUPA, we employ a conversion protocol to represent
 UD trees and graphs in a UCCA-like unified DAG format (\S\ref{sec:format}).
 
 \begin{figure}[ht]
-\begin{subfigure}{0.47\textwidth}
+\fbox{\begin{subfigure}{0.47\textwidth}
+    \centering
+    \scalebox{.95}{
+    \begin{tikzpicture}[level distance=9mm, sibling distance=14mm, ->,
+        every circle node/.append style={fill=black}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node (After) [word] {After} edge from parent node[above] {\scriptsize $L$}}
+        child {node (graduation) [circle] {}
+        {
+          child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
+        } edge from parent node[right] {\scriptsize $H$} }
+        child {node [word] {,} edge from parent node[below] {\scriptsize $U$}}
+        child {node (moved) [circle] {}
+        {
+          child {node (John) [word] {John} edge from parent node[left] {\scriptsize $A$}}
+          child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
+          child {node [circle] {}
+          {
+            child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
+            child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
+          } edge from parent node[above] {\scriptsize $A$} }
+        } edge from parent node[right] {\scriptsize $H$} }
+        ;
+      \draw[dashed,->] (graduation) to node [above] {\scriptsize $A$} (John);
+    \end{tikzpicture}}
+  \caption{Example UCCA graph.}
+  \label{fig:converted_example_ucca}
+\end{subfigure}}
+\fbox{\begin{subfigure}{0.47\textwidth}
   \centering
     \begin{dependency}[text only label, label style={above}, font=\small]
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
@@ -109,8 +138,8 @@ UD trees and graphs in a UCCA-like unified DAG format (\S\ref{sec:format}).
         \depedge[edge unit distance=3ex]{5}{7}{obl}
     \end{dependency}
   \caption{\label{fig:original_examples}Example UD tree.}
-\end{subfigure}
-\begin{subfigure}{0.47\textwidth}
+\end{subfigure}}
+\fbox{\begin{subfigure}{0.47\textwidth}
   \centering
   \scalebox{.95}{
   \begin{tikzpicture}[level distance=17mm, ->,
@@ -147,11 +176,14 @@ UD trees and graphs in a UCCA-like unified DAG format (\S\ref{sec:format}).
       \draw (ROOT) to node {head} (moved);
   \end{tikzpicture}}
   \captionof{figure}{UD tree after conversion to unified DAG format.}\label{fig:converted_example_ud}
-\end{subfigure}
+\end{subfigure}}
 
-\caption{UD tree before and after conversion to the unified DAG format.
+\caption{(a) Example UCCA annotation for the sentence
+``After graduation, John moved to Paris''.
+(b) Bilexical tree annotating the same sentence according to the UD guidelines.
+(c) The same UD tree, after conversion to the unified DAG format.
 Intermediate non-terminals and \textit{head} edges are introduced,
-to get a constituency-like format.}\label{fig:converted_examples}
+to get a UCCA-like structure.}\label{fig:converted_examples}
 \end{figure}
 
 
@@ -363,6 +395,7 @@ otherwise selecting the leftmost child.
 \centering
 \small
 \begin{tabular}{l|l}
+\hline
 \bf Nodes & \\
 $s_0$ & \texttt{wmtuepT\#\^{}\$xhqyPCIEMN} \\
 $s_1$ & \texttt{wmtueT\#\^{}\$xhyN} \\
@@ -449,6 +482,7 @@ without any hyperparameter tuning on UD treebanks.
 \begin{table}[h]
 \centering
 \begin{tabular}{l|c|ccccc}
+\hline
 \bf Hyperparameter &  \bf Value \\
 \hline
 Pre-trained word dim. & 300 \\
@@ -506,14 +540,35 @@ Other hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 For the purpose of parsing languages with no training data,
 we use a multilingual model, trained on the shuffled training sets
 from all corpora.
-We train this model for two epochs using stochastic gradient descent,
+We train this model for two epochs using stochastic gradient descent
 with a learning rate of $0.1$.
 
 
 \section{Results}\label{sec:results}
 
 
-Table~\ref{tab:id_results} presents our results.
+Table~\ref{tab:overall_results} presents the overall
+official results on the shared task test sets.
+Our system ranked 24th in the LAS-F1 ranking,
+23rd by MLAS and 21st by BLEX.
+
+\begin{table}
+\begin{tabular}{lcc}
+\hline
+\bf & TUPA & \bf UDPipe 1.2 \\
+\hline
+All treebanks & 53.69 & 65.80 \\
+Big treebanks & 62.07 & 74.14 \\
+PUD treebanks & 56.35 & 66.63 \\
+Small treebanks & 36.74 & 55.01 \\
+Low-resource languages & 8.53 & 17.17
+\end{tabular}
+\caption{Official aggregated test LAS-F1 scores
+for our system (TUPA) and the baseline model (UDPipe 1.2).
+\label{tab:overall_results}}
+\end{table}
+
+
 
 
 \section{Conclusion}\label{sec:conclusion}
