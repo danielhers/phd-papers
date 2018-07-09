@@ -2,6 +2,7 @@
 % File udst2018.tex
 
 \documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
 \usepackage[hyperref]{udst2018}
 \usepackage{times}
 \usepackage{latexsym}
@@ -16,6 +17,7 @@
 \usepackage{etoolbox}
 \usepackage{xr}
 \usepackage{adjustbox}
+\usepackage{pgfplots,pgfplotstable}
 
 \newcommand{\com}[1]{}
 \newcommand{\oa}[1]{\footnote{\color{red}OA: #1}}
@@ -552,10 +554,14 @@ official results on the shared task test sets.
 Our system ranked 24th in the LAS-F1 ranking,
 23rd by MLAS and 21st by BLEX.
 
+Figure~\ref{fig:test_per_corpus} presents the LAS-F1
+obtained by TUPA and the baseline (UDPipe 1.2) on each
+of the test datasets.
+
 \begin{table}
 \begin{tabular}{lcc}
 \hline
-\bf & TUPA & \bf UDPipe 1.2 \\
+& \bf TUPA & \bf UDPipe 1.2 \\
 \hline
 All treebanks & 53.69 & 65.80 \\
 Big treebanks & 62.07 & 74.14 \\
@@ -567,6 +573,156 @@ Low-resource languages & 8.53 & 17.17
 for our system (TUPA) and the baseline model (UDPipe 1.2).
 \label{tab:overall_results}}
 \end{table}
+
+
+\catcode`\_=12 % category other
+\pgfplotstableread[row sep=\\,col sep=&]{
+corpus & tupa & baseline \\
+af_afribooms & 71.78 & 77.88 \\
+ar_padt &  0.00 & 66.41 \\
+bg_btb & 75.03 & 84.91 \\
+br_keb &  7.29 & 10.25 \\
+bxr_bdt &  8.17 & 12.61 \\
+ca_ancora & 77.52 & 85.61 \\
+cs_cac & 74.30 & 83.72 \\
+cs_fictree & 70.87 & 82.49 \\
+cs_pdt & 72.03 & 83.94 \\
+cs_pud & 68.50 & 80.08 \\
+cu_proiel & 61.30 & 65.46 \\
+da_ddt & 66.77 & 75.43 \\
+de_gsd & 65.24 & 70.85 \\
+el_gdt & 75.49 & 82.11 \\
+en_ewt & 72.00 & 77.56 \\
+en_gum & 66.05 & 74.20 \\
+en_lines & 67.34 & 73.10 \\
+en_pud & 74.12 & 79.56 \\
+es_ancora & 75.74 & 84.43 \\
+et_edt & 67.45 & 75.02 \\
+eu_bdt & 56.63 & 70.13 \\
+fa_seraji & 75.72 & 79.10 \\
+fi_ftb & 72.35 & 75.64 \\
+fi_pud & 68.47 & 80.15 \\
+fi_tdt & 66.19 & 76.45 \\
+fo_oft & 15.44 & 25.19 \\
+fr_gsd & 74.97 & 81.05 \\
+fr_sequoia & 77.72 & 81.12 \\
+fr_spoken & 60.65 & 65.56 \\
+fro_srcmf &  2.88 & 79.27 \\
+ga_idt & 53.30 & 62.93 \\
+gl_ctg &  0.00 & 76.10 \\
+gl_treegal & 58.66 & 66.16 \\
+got_proiel & 57.69 & 62.16 \\
+grc_perseus &  1.92 & 57.75 \\
+grc_proiel &  1.89 & 67.57 \\
+he_htb & 54.02 & 57.86 \\
+hi_hdtb & 84.54 & 87.15 \\
+hr_set & 75.77 & 78.61 \\
+hsb_ufal & 14.91 & 23.64 \\
+hu_szeged & 50.62 & 66.76 \\
+}\lasa
+\pgfplotstableread[row sep=\\,col sep=&]{
+corpus & tupa & baseline \\
+hy_armtdp &  7.59 & 21.79 \\
+id_gsd & 70.74 & 74.37 \\
+it_isdt & 85.89 & 86.26 \\
+it_postwita & 62.56 & 66.81 \\
+ja_gsd & 57.36 & 72.32 \\
+ja_modern &  8.26 & 22.71 \\
+kk_ktb &  7.95 & 24.21 \\
+kmr_mg & 12.89 & 23.92 \\
+ko_gsd & 58.60 & 61.40 \\
+ko_kaist & 69.15 & 70.25 \\
+la_ittb & 73.85 & 75.95 \\
+la_perseus & 30.35 & 47.61 \\
+la_proiel & 52.96 & 59.66 \\
+lv_lvtb & 55.19 & 69.43 \\
+nl_alpino & 69.92 & 77.60 \\
+nl_lassysmall & 66.20 & 74.56 \\
+no_bokmaal & 80.85 & 83.47 \\
+no_nynorsk & 70.58 & 82.13 \\
+no_nynorsklia & 34.93 & 48.95 \\
+pcm_nsc &  2.15 & 12.18 \\
+pl_lfg & 76.58 & 87.53 \\
+pl_sz & 71.68 & 81.90 \\
+pt_bosque & 74.34 & 82.07 \\
+ro_rrt & 78.99 & 80.27 \\
+ru_syntagrus & 69.20 & 84.59 \\
+ru_taiga & 33.17 & 55.51 \\
+sk_snk & 71.97 & 75.41 \\
+sl_ssj & 68.31 & 77.33 \\
+sl_sst & 40.09 & 46.95 \\
+sme_giella &  6.69 & 56.98 \\
+sr_set & 70.73 & 82.07 \\
+sv_lines & 68.02 & 74.06 \\
+sv_pud & 62.38 & 70.63 \\
+sv_talbanken & 70.27 & 77.91 \\
+th_pud &  0.36 & 0.70 \\
+tr_imst & 43.82 & 54.04 \\
+ug_udt & 45.63 & 56.26 \\
+uk_iu & 71.24 & 74.91 \\
+ur_udtb & 72.27 & 77.29 \\
+vi_vtb & 36.48 & 39.63 \\
+zh_gsd & 50.70 & 57.91 \\
+}\lasb
+\catcode`\_=8 % category subscript
+\begin{figure*}
+    \begin{tikzpicture}
+    \begin{axis}[
+    ybar=0pt,  
+    enlarge x limits={0.01},
+    enlarge y limits={value=0.3,upper},
+    ymin=0,
+    width=.8\pagewidth,
+    height=8cm,
+    bar width=4pt,
+    xtick=data,
+    xticklabels from table={\lasa}{corpus},
+    xticklabel style={font=\tiny,rotate=90,anchor=east},
+    xtick align=inside,
+    xticklabel pos=left,
+    tickwidth=0pt,
+    legend style={at={(axis cs:0,113)},anchor=north west},
+    ymajorgrids,
+    reverse legend,
+    nodes near coords={
+     \tiny\pgfmathprintnumber[precision=0]{\pgfplotspointmeta}
+    },
+    every node near coord/.append style={rotate=90, anchor=west}
+    ]
+    \addplot table[x expr=\coordindex,meta=corpus,y=tupa]{\lasa};
+    \addplot table[x expr=\coordindex,meta=corpus,y=baseline]{\lasa};
+    \legend{TUPA, UDPipe 1.2}
+    \end{axis}
+    \end{tikzpicture}
+   
+    \begin{tikzpicture}
+    \begin{axis}[
+    ybar=0pt,  
+    enlarge x limits={0.01},
+    enlarge y limits={value=0.1,upper},
+    ymin=0,
+    width=.8\pagewidth,
+    height=8cm,
+    bar width=4pt,
+    xtick=data,
+    xticklabels from table={\lasb}{corpus},
+    xticklabel style={font=\tiny,rotate=90,anchor=east},
+    xtick align=inside,
+    xticklabel pos=left,
+    tickwidth=0pt,
+    ymajorgrids,
+    nodes near coords={
+     \tiny\pgfmathprintnumber[precision=0]{\pgfplotspointmeta}
+    },
+    every node near coord/.append style={rotate=90, anchor=west}
+    ]
+    \addplot table[x expr=\coordindex,meta=corpus,y=tupa]{\lasb};
+    \addplot table[x expr=\coordindex,meta=corpus,y=baseline]{\lasb};
+    \end{axis}
+    \end{tikzpicture}
+    \caption{LAS-F1 per test dataset.
+    \label{fig:test_per_corpus}}
+\end{figure*}
 
 
 
