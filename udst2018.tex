@@ -23,9 +23,6 @@
 \newcommand{\oa}[1]{\footnote{\color{red}OA: #1}}
 \newcommand{\daniel}[1]{\footnote{\color{blue}Daniel: #1}}
 
-
-\hyphenation{SemEval}
-
 \DeclareMathOperator*{\argmin}{argmin}
 \DeclareMathOperator*{\argmax}{argmax}
 
@@ -72,7 +69,7 @@
   semantic annotation scheme, exhibiting
   reentrancy, discontinuity and non-terminal nodes.
   By employing a conversion protocol to represent
-  UD trees and graphs in a UCCA-like unified DAG format,
+  UD trees and graphs in a UCCA-like unified directed acyclic graph format,
   we train TUPA without modification on the UD parsing task.
   Our code is available at \url{https://github.com/danielhers/tupa}.
 \end{abstract}
@@ -80,8 +77,8 @@
 \section{Introduction}\label{sec:introduction}
 
 In this paper we describe the HUJI submission to the CoNLL 2018 shared task
-on Universal Dependency parsing \cite{nivre2016universal,11234/1-2515}.
-We focus only on parsing, using a baseline model \cite[UDPipe;][]{udpipe:2017}
+on Universal Dependency parsing \cite{udst:overview2018}.
+We focus only on parsing, using a baseline model \cite[UDPipe;][]{udpipe,udpipe:2017}
 for tokenization, sentence splitting, part-of-speech tagging and morphological tagging.
 Our system is based on TUPA \cite{hershcovich2017a,hershcovich2018multitask},
 a transition-based UCCA parser.
@@ -91,7 +88,8 @@ attributes and relations in a directed acyclic graph (DAG) structure,
 and allowing reentrancy (argument sharing),
 discontinuity (corresponding to non-projectivity in dependency annotations)
 and non-terminal nodes (as opposed to dependencies, which are bi-lexical).
-To parse UD using TUPA, we employ a conversion protocol to represent
+To parse Universal Dependencies \cite{nivre2016universal}
+using TUPA, we employ a conversion protocol to represent
 UD trees and graphs in a UCCA-like unified DAG format (\S\ref{sec:format}).
 
 \begin{figure}[ht]
@@ -213,9 +211,15 @@ parent with the edge label {\it head},
 and add the node's dependents as children of the created non-terminal node
 (see Figure~\ref{fig:converted_example_ud}).
 
-Any \textit{enhanced UD} heads beyond the normal head of a node are converted
-to remote edges in the unified DAG format.
-
+Any \textit{enhanced UD}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
+heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
+Although not included in the evaluation metrics for UD parsing,
+we believe these enhancements, representing elided predicates,
+shared arguments due to conjunction, control, raising and coreference,
+case information,
+as well as partitives and light noun constructions \cite{SCHUSTER16.779},
+provide richer information to the parser, and may improve parsing performance
+on the main dependency tree.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -263,13 +267,13 @@ based on gold-standard annotations.
 	  The transition set of TUPA.
 	  We write the stack with its top to the right and the buffer with its head to the left.
 	  $(\cdot,\cdot)_X$ denotes a primary $X$-labeled edge, and $(\cdot,\cdot)_X^*$ a remote $X$-labeled edge.
-	  $\mathrm{i}(x)$ is the swap index (see \S\ref{sec:classifier}).
+	  $\mathrm{i}(x)$ is the swap index (see \S\ref{sec:constraints}).
 	  In addition to the specified conditions,
 	  the prospective child in an \textsc{Edge} transition must not already have a primary parent.
 	}
 \end{figure*}
 
-\paragraph{Transition Set.}
+\subsection{Transition Set.}
 Given a sequence of tokens $w_1, \ldots, w_n$, we predict a UCCA graph $G$ over the sequence.
 Parsing starts with a single node on the stack (an artificial root node), and the input tokens
 in the buffer. Figure~\ref{fig:transitions} shows the transition set.
@@ -447,7 +451,7 @@ $a_i$ to the transition taken $i+1$ steps ago.\\
 \texttt{node ratio} is the ratio between non-terminals and terminals \cite{hershcovich2017a}.}
 \end{table}
 
-\paragraph{Constraints.}
+\subsection{Constraints.}\label{sec:constraints}
 During parsing, we apply constraints on the parser state
 to limit the possible transitions to valid ones.
 
@@ -471,7 +475,7 @@ Until then, that node may not be reduced.
 
 \section{Training details}\label{sec:details}
 
-\paragraph{Training.}
+\subsection{Training.}
 
 The model is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{http://dynet.io}}
 Unless otherwise noted, we use the default values provided by the package.
@@ -504,7 +508,7 @@ BiLSTM dimensions & 500
 \end{table}
 
 
-\paragraph{Hyperparameters.}
+\subsection{Hyperparameters.}
 
 We initialize embeddings randomly.
 We use dropout \cite{srivastava2014dropout} between MLP layers, and recurrent dropout
@@ -536,7 +540,7 @@ subsets, and then select the model from the fold with the best LAS $F_1$
 on the corresponding validation set.
 Other hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 
-\paragraph{Multilingual model.}
+\subsection{Multilingual model.}
 
 For the purpose of parsing languages with no training data,
 we use a multilingual model, trained on the shuffled training sets
@@ -547,6 +551,11 @@ with a learning rate of $0.1$.
 
 \section{Results}\label{sec:results}
 
+%All training, development and test treebanks used in the shared task
+%are from Universal Dependencies 2.2 \cite{11234/1-2837}.
+Evaluation is done on the TIRA online platform \cite{tira}.
+Since our system only performs dependency parsing and not other pipeline tasks,
+we focus on LAS-F1 \cite{nivre17udw} for evaluation.
 
 Table~\ref{tab:overall_results} presents the overall
 official results on the shared task test sets.
