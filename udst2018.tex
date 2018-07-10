@@ -33,6 +33,8 @@
  \makeatother
 
 
+\hyphenation{UDPipe}
+
 \usetikzlibrary{shapes,shapes.misc}
 
 
@@ -64,13 +66,17 @@
 \maketitle
 \begin{abstract}
   We present TUPA, a neural transition-based general DAG parser,
-  submitted by HUJI to the CoNLL 2018 UD shared task.
+  submitted by the HUJI team to the CoNLL 2018 UD shared task.
   TUPA was designed for parsing UCCA, a cross-linguistic
   semantic annotation scheme, exhibiting
   reentrancy, discontinuity and non-terminal nodes.
   By employing a conversion protocol to represent
-  UD trees and graphs in a UCCA-like unified directed acyclic graph format,
-  we train TUPA without modification on the UD parsing task.
+  UD trees and graphs in a UCCA-like unified directed acyclic graph (DAG) format,
+  we train TUPA almost without modification on the UD parsing task.
+  Although not among the leading submissions in the task,
+  the results are promising given the uniform parsing architecture,
+  which allows recovering enhanced relations and shared arguments,
+  as well as multitask learning.
   Our code is available at \url{https://github.com/danielhers/tupa}.
 \end{abstract}
 
@@ -78,9 +84,9 @@
 
 In this paper we describe the HUJI submission to the CoNLL 2018 shared task
 on Universal Dependency parsing \cite{udst:overview2018}.
-We focus only on parsing, using a baseline model \cite[UDPipe;][]{udpipe,udpipe:2017}
+We focus only on parsing, using a baseline model \cite[UDPipe 1.2;][]{udpipe,udpipe:2017}
 for tokenization, sentence splitting, part-of-speech tagging and morphological tagging.
-Our system is based on TUPA \cite{hershcovich2017a,hershcovich2018multitask},
+Our system is based on TUPA \cite[see \S\ref{sec:model}]{hershcovich2017a,hershcovich2018multitask},
 a transition-based UCCA parser.
 UCCA \cite[Universal Conceptual Cognitive Annotation;][]{abend2013universal} is a
 cross-linguistic semantic annotation scheme, representing scenes, participants,
@@ -179,6 +185,10 @@ UD trees and graphs in a UCCA-like unified DAG format (\S\ref{sec:format}).
 
 \caption{(a) Example UCCA annotation for the sentence
 ``After graduation, John moved to Paris''.
+The dashed \textit{A} edge is a \textit{remote edge},
+representing a \textit{Participant} relation that is not explicit in the text,
+and allowing argument sharing and reentrancy,
+creating a DAG structure.
 (b) Bilexical tree annotating the same sentence according to the UD guidelines.
 (c) The same UD tree, after conversion to the unified DAG format.
 Intermediate non-terminals and \textit{head} edges are introduced,
@@ -190,7 +200,7 @@ to get a UCCA-like structure.}\label{fig:converted_examples}
 \section{Unified DAG Format}\label{sec:format}
 
 To apply TUPA to UD parsing,
-we convert it into a unified DAG format \cite{hershcovich2018multitask}.
+we convert UD trees and graphs into a unified DAG format \cite{hershcovich2018multitask}.
 The format consists of a rooted DAG, where the tokens are the terminal
 nodes.\footnote{Our conversion code supports full conversion between UCCA and UD,
 among other representation schemes,
@@ -201,7 +211,8 @@ where the primary edges form a tree (all nodes have at most one primary parent,
 and the root has none).
 Remote edges enable reentrancy, and thus together with primary edges
 form a DAG.
-Figure~\ref{fig:converted_examples} shows an example for a converted tree.
+Figure~\ref{fig:converted_examples} shows an example a UCCA graph,
+and a UD tree before and after conversion.
 
 To convert UD into the unified DAG format,
 we add a pre-terminal for each token,
@@ -210,6 +221,8 @@ traversing the tree from the root down, for each head token we create a non-term
 parent with the edge label {\it head},
 and add the node's dependents as children of the created non-terminal node
 (see Figure~\ref{fig:converted_example_ud}).
+This creates a constituency-like structure,
+which is supported by TUPA's transition set (see \S\ref{sec:transition_set}).
 
 Any \textit{enhanced UD}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
 heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
@@ -218,8 +231,13 @@ we believe these enhancements, representing elided predicates,
 shared arguments due to conjunction, control, raising and coreference,
 case information,
 as well as partitives and light noun constructions \cite{SCHUSTER16.779},
-provide richer information to the parser, and may improve parsing performance
+provide richer information to the parser, and may possibly even improve parsing performance
 on the main dependency tree.
+
+In the conversion process, we strip any language-specific relation subtypes
+(ignored by the evaluation),
+leaving only the universal relations:
+for example, the language-specific \verb|acl:relcl| is replaced by the universal relation \verb|acl|.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -273,18 +291,13 @@ based on gold-standard annotations.
 	}
 \end{figure*}
 
-\subsection{Transition Set.}
-Given a sequence of tokens $w_1, \ldots, w_n$, we predict a UCCA graph $G$ over the sequence.
-Parsing starts with a single node on the stack (an artificial root node), and the input tokens
-in the buffer. Figure~\ref{fig:transitions} shows the transition set.
-
-
+\subsection{Transition Set}\label{sec:transition_set}
 Given a sequence of tokens $w_1, \ldots, w_n$,
 we predict a rooted graph $G$ whose terminals are the tokens.
 Parsing starts with the root node on the stack,
 and the input tokens in the buffer.
 
-The TUPA transition set includes
+The TUPA transition set, shown in Figure~\ref{fig:transitions}, includes
 the standard \textsc{Shift} and \textsc{Reduce} operations,
 \textsc{Node$_X$} for creating a new non-terminal node and an $X$-labeled edge,
 \textsc{Left-Edge$_X$} and \textsc{Right-Edge$_X$} to create a new primary $X$-labeled edge,
@@ -292,6 +305,9 @@ the standard \textsc{Shift} and \textsc{Reduce} operations,
 \textsc{Swap} to handle discontinuous nodes,
 and \textsc{Finish} to mark the state as terminal.
 
+Although the \textsc{Remote$_X$} transitions are not required for parsing trees,
+we treat the problem as general DAG parsing, due to the inclusion of enhanced UD arcs
+in the converted DAG format (see~\S\ref{sec:format}).
 
 
 \begin{figure}[t]
@@ -350,7 +366,7 @@ Top: parser state (stack, buffer and intermediate graph).
 \subsection{Transition Classifier}\label{sec:classifier}
 
 To predict the next transition at each step,
-we use a BiLSTM with embeddings as inputs,
+TUPA uses a BiLSTM with feature embeddings as inputs (see below),
 followed by an MLP and a softmax layer for classification \cite{kiperwasser2016simple}.
 The model is illustrated in Figure~\ref{fig:single_model}.
 Inference is performed greedily,
@@ -366,34 +382,40 @@ optimal transitions at each step.
 
 \paragraph{Features.}
 
-As features, we use vector embeddings
-representing the words, lemmas, coarse POS tags, fine-grained POS tags,
-punctuation, gap type, one-character prefix, three-character suffix,
-shape (capturing orthographic features, e.g., ``Xxxx''), named entity type
-(provided by spaCy\footnote{\url{http://spacy.io}}),
+We use vector embeddings
+representing the words, lemmas, coarse (universal) POS tags and fine-grained POS tags,
+provided by UDPipe during test.
+For training, we use the gold-annotated lemmas and POS tags.
+In addition, we use one-character prefix, three-character suffix,
+shape (capturing orthographic features, e.g., ``Xxxx'') and named entity type,
+provided by spaCy;\footnote{\url{http://spacy.io}}
+punctuation and gap type features \cite{maier-lichte:2016:DiscoNLP},
 and previously predicted edge labels and parser actions.
 These embeddings are initialized randomly, except for the word embeddings,
 which are initialized with the 250K most frequent word vectors from fastText
 for each language
 \cite{bojanowski2016enriching},\footnote{\url{http://fasttext.cc}}
 pre-trained over Wikipedia and updated during training.
+We do not use word embeddings for languages without pre-trained fastText vectors
+(Ancient Greek, North Sami and Old French).
 
-Finally, for all classifiers we add a real-valued feature to the input vector,
-\textbf{ratio}, corresponding to the ratio between the number of terminals to number of nodes
+To the feature embeddings, we concatenate
+numeric features representing the node height, number of (remote) parents and children,
+and a real-valued feature,
+\texttt{node ratio}, corresponding to the ratio between the number of terminals to number of nodes
 in the graph $G$.
-
-
-In addition, for each token
-we use embeddings representing the 
-To the learned word vectors, we concatenate 
 
 Table~\ref{tab:features} lists all feature used for the classifier.
 Numeric features are taken as they are, whereas categorical features are mapped to real-valued embedding
 vectors.
-For each node, we select a \textit{head terminal} by traversing the graph according to
-a priority order on edge labels (\textrm{parataxis}, \textrm{conj},
-\textrm{advcl}, and \textrm{xcomp}),
-otherwise selecting the leftmost child.
+For each non-terminal node,
+we select a \textit{head terminal} for feature extraction,
+by traversing down the graph according to
+a priority order on edge labels (otherwise selecting the leftmost child).
+The priority order is:
+\begin{verbatim}
+parataxis, conj, advcl, xcomp
+\end{verbatim}
 
 
 \begin{table}[h]
@@ -451,7 +473,7 @@ $a_i$ to the transition taken $i+1$ steps ago.\\
 \texttt{node ratio} is the ratio between non-terminals and terminals \cite{hershcovich2017a}.}
 \end{table}
 
-\subsection{Constraints.}\label{sec:constraints}
+\subsection{Constraints}\label{sec:constraints}
 During parsing, we apply constraints on the parser state
 to limit the possible transitions to valid ones.
 
@@ -469,13 +491,12 @@ should not be swapped again \cite{hershcovich2018multitask}.
  
 In addition, we enforce UD-specific constraints, resulting from
 the nature of the converted DAG format:
-every non-terminal node must have a single outgoing \textrm{head} edge.
-Until then, that node may not be reduced.
+every non-terminal node must have a single outgoing \textrm{head} edge:
+once it has one, it may not get another, and
+until it does, the node may not be reduced.
 
 
 \section{Training details}\label{sec:details}
-
-\subsection{Training.}
 
 The model is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{http://dynet.io}}
 Unless otherwise noted, we use the default values provided by the package.
@@ -491,11 +512,14 @@ without any hyperparameter tuning on UD treebanks.
 \bf Hyperparameter &  \bf Value \\
 \hline
 Pre-trained word dim. & 300 \\
-Learned word dim. & 200 \\
-POS tag dim. & 20 \\
-Dependency relation dim. & 10 \\
+Lemma dim. & 200 \\
+Coarse (universal) POS tag dim. & 20 \\
+Fine-grained POS tag dim. & 20 \\
 Named entity dim. & 3 \\
 Punctuation dim. & 1 \\
+Shape dim. & 3 \\
+Prefix dim. & 2 \\
+Suffix dim. & 3 \\
 Action dim. & 3 \\
 Edge label dim. & 20 \\
 \hline
@@ -508,7 +532,7 @@ BiLSTM dimensions & 500
 \end{table}
 
 
-\subsection{Hyperparameters.}
+\subsection{Hyperparameters}
 
 We initialize embeddings randomly.
 We use dropout \cite{srivastava2014dropout} between MLP layers, and recurrent dropout
@@ -530,6 +554,10 @@ We found this training strategy better than using only one of the optimization m
 similar to findings by \citet{keskar2017improving}.
 We select the epoch with the best LAS $F_1$ on the
 development set.
+Other hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
+
+\subsection{Small Treebanks}
+
 For corpora with less than 100 training sentences,
 we use $750$ epochs of AMSGrad instead of $250$.
 For corpora with no development set,
@@ -538,15 +566,21 @@ each time splitting it to 80\% training, 10\% development and 10\% validation.
 We perform the normal training procedure on the training and development
 subsets, and then select the model from the fold with the best LAS $F_1$
 on the corresponding validation set.
-Other hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 
-\subsection{Multilingual model.}
+\subsection{Multilingual Model}
 
 For the purpose of parsing languages with no training data,
-we use a multilingual model, trained on the shuffled training sets
-from all corpora.
+we use a delexicalized multilingual model, trained on the shuffled training sets
+from all corpora, with no word, lemma, fine-grained tag, prefix and suffix features.
 We train this model for two epochs using stochastic gradient descent
-with a learning rate of $0.1$.
+with a learning rate of $0.1$
+(due to the long training time, we could not train this model for more epochs).
+
+\subsection{Out-of-domain Evaluation}
+
+For test treebanks without corresponding training data,
+but with training data in the same language,
+we simply use the model trained on the largest training treebank in the same language.
 
 
 \section{Results}\label{sec:results}
