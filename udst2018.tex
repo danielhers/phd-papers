@@ -40,7 +40,7 @@
 
 
 \aclfinalcopy 
-\def\aclpaperid{***} %  Enter the Paper ID here for final camera ready copy
+\def\aclpaperid{8} %  Enter the Paper ID here for final camera ready copy
 
 %\setlength\titlebox{5cm}
 % You can expand the titlebox if you need extra space
@@ -734,7 +734,17 @@ zh_gsd & 50.70 & 57.91 \\
 
 \section{Conclusion}\label{sec:conclusion}
 
+We have presented TUPA, a general transition-based DAG parser, which was used
+for the HUJI submission to the CoNLL 2018 shared task on parsing Universal Dependencies.
+Using a simple conversion protocol to convert UD into a unified DAG format,
+training TUPA as-is on the UD treebanks yields results that are lower than
+most other task submissions, but are close to the baseline for some of the treebanks.
+We believe that with hyperparameter tuning and more careful handling of
+cross-lingual and cross-domain parsing, TUPA can be among the leading parsers for this task.
 
+A uniform parser for many representation schemes (as well as domains and languages)
+will allow improving performance by multitask learning \cite{hershcovich2018multitask},
+an experiment we have not performed for this shared task, but are planning to pursue in future work.
 
 
 \section*{Acknowledgments}
