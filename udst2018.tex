@@ -65,8 +65,8 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-  We present TUPA, a neural transition-based general DAG parser,
-  submitted by the HUJI team to the CoNLL 2018 UD shared task.
+  We apply TUPA, a neural transition-based general DAG parser,
+  as the submission by the HUJI team to the CoNLL 2018 UD shared task.
   TUPA was designed for parsing UCCA, a cross-linguistic
   semantic annotation scheme, exhibiting
   reentrancy, discontinuity and non-terminal nodes.
@@ -243,7 +243,7 @@ for example, the language-specific \verb|acl:relcl| is replaced by the universal
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{General Transition-based DAG Parser}\label{sec:model}
 
-We now turn to presenting TUPA \cite{hershcovich2017a,hershcovich2018multitask},
+We now turn to describing TUPA \cite{hershcovich2017a,hershcovich2018multitask},
 a general transition-based parser \cite{Nivre03anefficient}.
 TUPA uses an extended set of transitions and features that supports
 reentrancies, discontinuities and non-terminal nodes.
@@ -777,8 +777,7 @@ zh_gsd & 50.70 & 57.91 \\
 
 \section{Conclusion}\label{sec:conclusion}
 
-We have presented TUPA, a general transition-based DAG parser, which was used
-for the HUJI submission to the CoNLL 2018 shared task on parsing Universal Dependencies.
+We have presented the HUJI submission to the CoNLL 2018 shared task on parsing Universal Dependencies, based on TUPA, a general transition-based DAG parser.
 Using a simple conversion protocol to convert UD into a unified DAG format,
 training TUPA as-is on the UD treebanks yields results that are lower than
 most other task submissions, but are close to the baseline for some of the treebanks.
