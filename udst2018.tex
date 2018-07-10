@@ -298,14 +298,14 @@ and \textsc{Finish} to mark the state as terminal.
    \draw[color=gray] (.1,0) rectangle (1.5,.5);
    \node[anchor=west] at (.1,.8) {$S$};
    \node[fill=black, circle] at (.4,.275) {};
-   \node[fill=blue, circle] at (.9,.275) {};
+   \node[fill=purple, circle] at (.9,.275) {};
    \node[anchor=west] at (1.15,.175) {\small ,};
    \draw[color=gray] (1.95,0) rectangle (4.9,.5);
    \node[anchor=west] at (1.95,.8) {$B$};
    \node[anchor=west] at (1.95,.275) {\small John moved to Paris .};
    \node[anchor=west] at (5.1,.8) {$G$};
    \node[fill=black, circle] at (6.35,.75) {}
-     child {node [fill=blue, circle] {}
+     child {node [fill=purple, circle] {}
      {
        child {node  {\tiny After} edge from parent [->] node[left] {\small case}}
        child {node {\tiny graduation} edge from parent [->] node[right] {\small head}}
@@ -553,10 +553,16 @@ Table~\ref{tab:overall_results} presents the overall
 official results on the shared task test sets.
 Our system ranked 24th in the LAS-F1 ranking,
 23rd by MLAS and 21st by BLEX.
-
 Figure~\ref{fig:test_per_corpus} presents the LAS-F1
 obtained by TUPA and the baseline (UDPipe 1.2) on each
 of the test datasets.
+Although the scores are uniformly lower than the baseline,
+the fact that many of them are close, despite using a
+parsing architecture designed for a different task
+with a simple conversion protocol, is encouraging.
+
+For two of the test sets, \verb|ar_padt| and \verb|gl_ctg|, TUPA got
+a zero score due to a bug with the treatment of multi-token words.
 
 \begin{table}
 \begin{tabular}{lcc}
@@ -665,7 +671,7 @@ vi_vtb & 36.48 & 39.63 \\
 zh_gsd & 50.70 & 57.91 \\
 }\lasb
 \catcode`\_=8 % category subscript
-\begin{figure*}
+\begin{figure*}[ht]
     \begin{tikzpicture}
     \begin{axis}[
     ybar=0pt,  
@@ -699,7 +705,7 @@ zh_gsd & 50.70 & 57.91 \\
     \begin{axis}[
     ybar=0pt,  
     enlarge x limits={0.01},
-    enlarge y limits={value=0.1,upper},
+    enlarge y limits={value=0.15,upper},
     ymin=0,
     width=.8\pagewidth,
     height=8cm,
