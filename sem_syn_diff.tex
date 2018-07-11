@@ -2,21 +2,31 @@
 %
 % File sem_syn_diff.tex
 
-\documentclass[11pt,a4paper]{article}
-\usepackage[hyperref]{emnlp2018}
+
+\documentclass[11pt,letterpaper]{article}
+\usepackage[letterpaper]{geometry}
+\usepackage{acl2012}
 \usepackage{times}
 \usepackage{latexsym}
 \usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{url}
 \usepackage{tikz}
 \usepackage{tikz-dependency}
 \usepackage[warn]{textcomp}
 \usepackage[font=small]{caption}
 \usepackage{subcaption}
 \usepackage{multirow}
-\usepackage{url}
 \usepackage{etoolbox}
 \usepackage{xr}
 \usepackage{listings}
+
+\makeatletter
+\newcommand{\@BIBLABEL}{\@emptybiblabel}
+\newcommand{\@emptybiblabel}[1]{}
+\makeatother
+\usepackage[hidelinks]{hyperref}
+\DeclareMathOperator*{\argmax}{arg\,max}
 
 \newcommand{\com}[1]{}
 \newcommand{\oa}[1]{\footnote{\color{red}OA: #1}}
@@ -24,16 +34,8 @@
 
 \hyphenation{SemEval}
 
-\DeclareMathOperator*{\argmin}{argmin}
-\DeclareMathOperator*{\argmax}{argmax}
 
 \lstset{basicstyle=\ttfamily}
-
-\makeatletter
-\patchcmd\@combinedblfloats{\box\@outputbox}{\unvbox\@outputbox}{}{%
-   \errmessage{\noexpand\@combinedblfloats could not be patched}%
-}%
- \makeatother
 
 
 \usetikzlibrary{shapes,shapes.misc}
@@ -49,16 +51,16 @@
 
 \title{Why Semantics is Harder than Syntax}
 
-\author{Daniel Hershcovich$^{1,2}$ \\
-  \\\And
-  Omri Abend$^2$ \\
-  $^1$The Edmond and Lily Safra Center for Brain Sciences \\
-  $^2$School of Computer Science and Engineering \\
-  Hebrew University of Jerusalem \\
-  \texttt{\{danielh,oabend,arir\}@cs.huji.ac.il}
-  \\\And
-  Ari Rappoport$^2$
-}
+\author{First Author \\
+  Affiliation / Address line 1 \\
+  Affiliation / Address line 2 \\
+  Affiliation / Address line 3 \\
+  {\tt email@domain} \\\And
+  Second Author \\
+  Affiliation / Address line 1 \\
+  Affiliation / Address line 2 \\
+  Affiliation / Address line 3 \\
+  {\tt email@domain} \\}
 
 \date{}
 
@@ -121,18 +123,18 @@ using a multi-step protocol:
 
 \paragraph{AMR parsing.}
 
-\citet{wang2015transition,wang-xue-pradhan:2015:ACL-IJCNLP,wang-EtAl:2016:SemEval,goodman2016noise,wang2017getting}
+\newcite{wang2015transition,wang-xue-pradhan:2015:ACL-IJCNLP,wang-EtAl:2016:SemEval,goodman2016noise,wang2017getting}
 presented a transition-based AMR parser, CAMR, which requires a
 syntactic dependency tree as input.
 It operates on the input tree, transforming it into an AMR graph
 by a sequence of transitions.
 The accuracy of the underlying syntactic dependency parser is important,
-as shown by \citet{wang-xue-pradhan:2015:ACL-IJCNLP},
+as shown by \newcite{wang-xue-pradhan:2015:ACL-IJCNLP},
 who achieved the best results using the Charniak parser trained on a
 much larger and more diverse dataset---the full OntoNotes corpus,
 rather than the Stanford parser trained on the Penn TreeBank.
 
-\citet{szubert2018structured} showed that when comparing AMR to Universal Dependencies (UD),
+\newcite{szubert2018structured} showed that when comparing AMR to Universal Dependencies (UD),
 97\% of AMR edges are evoked by words or syntactic relations.
 
 
@@ -348,7 +350,7 @@ and in German UCCA has 80K and UD 268K.
 \footnotesize 100\% \\
 \end{tabular}
 \caption{
-Results for TUPA \cite{hershcovich2017a} when trained on increasing amount of training data
+Results for TUPA \protect\cite{hershcovich2017a} when trained on increasing amount of training data
 (English Wiki corpus).
 \label{tab:partial_data_results}}
 \end{table}
@@ -363,7 +365,7 @@ To parse text into UD, we use UDPipe \cite{udpipe:2017}.
 On UD v1.2, UDPipe achieved 80.2\% LAS $F_1$ on English using automatic POS tags.
 On French it achieved 77.8\% and on German 71.8\%.
 
-We extend the conversion protocol by \citet{hershcovich2018multitask},
+We extend the conversion protocol by \newcite{hershcovich2018multitask},
 converting UD into a unified DAG format.
 The format consists of a rooted DAG, where the tokens are the terminal nodes.
 As in the UCCA format, edges are labeled (but not nodes),
@@ -409,7 +411,7 @@ UDPipe & 81.5 & 84.5 & 83 & -- & 0 & 0 \\
 \end{tabular}
 \caption{
 Unlabeled precision, recall and $F_1$ (in~\%) for primary and remote edges.
-For comparison, TUPA \cite{hershcovich2017a} is trained on Wikipedia with features predicted by UDPipe
+For comparison, TUPA \protect\cite{hershcovich2017a} is trained on Wikipedia with features predicted by UDPipe
 and tested on WSJ with gold POS and dependency features (above)
 or on WSJ with gold POS and dependency features (below).
 \label{tab:conversion_results_unlabeled}}
@@ -494,7 +496,7 @@ UDPipe & 63.3 & 65.7 & 64.5 & -- & 0 & 0 \\
 Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
 of passages converted automatically from UD to UCCA,
 with mapped edge labels, as evaluated against gold UCCA.
-For comparison, TUPA \cite{hershcovich2017a} is trained on Wikipedia with features predicted by UDPipe
+For comparison, TUPA \protect\cite{hershcovich2017a} is trained on Wikipedia with features predicted by UDPipe
 and tested on WSJ with gold POS and dependency features (above)
 or on WSJ with gold POS and dependency features (below).
 \label{tab:conversion_results_labeled}}
@@ -742,12 +744,12 @@ and then to the unified DAG format using our protocol.
 \caption{
 Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
 on the Wiki and 20K test sets.
-HAR18: \citet{hershcovich2018multitask}.}\label{tab:aux_results}
+HAR18: \protect\newcite{hershcovich2018multitask}.}\label{tab:aux_results}
 \end{table}
 
 \paragraph{Using converted UD as auxiliary data.}
 
-\citet{hershcovich2018multitask} used UD as an auxiliary task for UCCA parsing,
+\newcite{hershcovich2018multitask} used UD as an auxiliary task for UCCA parsing,
 treating UD parsing as an auxiliary task and using a multitask learning model
 with hard parameter sharing.
 We perform a similar experiment, but instead of a multitask model,
@@ -756,7 +758,7 @@ Table~\ref{tab:aux_results} shows the results of this experiment.
 
 \paragraph{Fine-grained evaluation of UCCA parsing performance.}
 
-\citet{damonte-17,szubert2018structured} suggested fine-grained evaluation measures
+\newcite{damonte-17,szubert2018structured} suggested fine-grained evaluation measures
 for AMR parsing, using sub-tasks of the AMR parsing task or UD labels to evaluate on.
 Similarly, our conversion protocol allows fine-grained evaluation of UCCA parsing.
 Table~\ref{tab:fine_grained_ucca} shows fine-grained evaluation according to UCCA categories, and
@@ -847,6 +849,6 @@ and evaluated on WSJ with features extraced by UDPipe.}
 
 
 \bibliography{references}
-\bibliographystyle{acl_natbib}
+\bibliographystyle{acl2012}
 
 \end{document}
