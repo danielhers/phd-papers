@@ -113,9 +113,9 @@ scarce.
   \centering
   \begin{tikzpicture}[->,
       every node/.append style={sloped,anchor=south,auto=false,font=\tiny},
-      level 1/.style={level distance=14mm,sibling distance=26mm},
-      level 2/.style={level distance=13mm},
-      level 3/.style={level distance=12mm}]
+      level 1/.style={level distance=13mm,sibling distance=26mm},
+      level 2/.style={level distance=12mm},
+      level 3/.style={level distance=11mm}]
     \node (ROOT) [draw=black,ellipse] {move-01}
       child {node [draw=black,ellipse] {after}
       {
@@ -188,14 +188,11 @@ To parse graphs from all four tasks,
 we extend TUPA \cite{hershcovich2017a}, 
 a transition-based parser 
 originally developed for UCCA.
-TUPA's transition system can yield any labeled DAG
-whose terminals are anchored in the text tokens.
 We generalize TUPA so it can be applied to different tasks
 by converting them to a unified DAG format (see Figure~\ref{fig:converted_examples}),
 and train it in a multitask setting.
-The fairly small training set available for UCCA
-makes MTL particularly appealing,
-and we focus on it in this paper, treating AMR, SDP and UD parsing as auxiliary tasks.
+UCCA's small training set makes MTL particularly appealing,
+and we focus on it, treating AMR, SDP and UD parsing as auxiliary tasks.
 
 
 \begin{figure}[h]
@@ -203,7 +200,7 @@ and we focus on it in this paper, treating AMR, SDP and UD parsing as auxiliary 
 \fbox{\begin{subfigure}{0.47\textwidth}
     \centering
     \scalebox{.95}{
-    \begin{tikzpicture}[level distance=9mm, sibling distance=14mm, ->,
+    \begin{tikzpicture}[level distance=7mm, sibling distance=14mm, ->,
         every circle node/.append style={fill=black}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
@@ -232,7 +229,7 @@ and we focus on it in this paper, treating AMR, SDP and UD parsing as auxiliary 
 \fbox{\begin{subfigure}{0.47\textwidth}
   \centering
   \scalebox{.95}{
-  \begin{tikzpicture}[level distance=15mm, ->,
+  \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
       level 1/.style={sibling distance=28mm},
       level 2/.style={sibling distance=14mm},
@@ -264,7 +261,7 @@ and we focus on it in this paper, treating AMR, SDP and UD parsing as auxiliary 
   \begin{tikzpicture}[level distance=11mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
       level 1/.style={sibling distance=26mm,level distance=5mm},
-      level 2/.style={sibling distance=14mm,level distance=13mm}]
+      level 2/.style={sibling distance=14mm,level distance=10mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
     \node (ROOT) [fill=black,circle] {}
       child {node (after) [fill=black,circle] {}
@@ -313,7 +310,7 @@ and we focus on it in this paper, treating AMR, SDP and UD parsing as auxiliary 
 \fbox{\begin{subfigure}{0.47\textwidth}
   \centering
   \scalebox{.95}{
-  \begin{tikzpicture}[level distance=15mm, ->,
+  \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
       level 1/.style={sibling distance=13mm},
       level 2/.style={sibling distance=1cm}]
@@ -354,7 +351,7 @@ and we focus on it in this paper, treating AMR, SDP and UD parsing as auxiliary 
 
 
 We keep the BiLSTM used by TUPA for the main task (UCCA parsing),
-add a BiLSTM that is shared across all tasks,
+add a BiLSTM shared across all tasks,
 and replicate the MLP (feedforward sub-network) for each task.
 The BiLSTM outputs (concatenated for the main task) are
 fed into the task-specific MLP (see Figure~\ref{fig:multi_model}).
@@ -362,29 +359,29 @@ Feature embeddings are shared across tasks.
 
 \begin{figure}[ht]
    \centering
-   \begin{minipage}{.425\textwidth}
+   \begin{minipage}{.55\textwidth}
    \scalebox{.8}{
    \begin{tikzpicture}[->]
-   \node[anchor=west] at (0,6) {Classifier};
+   \node[anchor=west] at (0,5.5) {Classifier};
    \tiny
    \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
-   \node[main] (specific) at (1,3.5) {\small Task-specific BiLSTM};
-   \node[main,color=blue] (shared) at (6,3.5) {\small Shared BiLSTM};
-   \node[color=blue] (embeddings) at (3.5,1.5) {\small Shared embeddings};
-   \foreach \i/\word in {0/{After},2/{graduation},5/{to},7/{Paris}} {
-       \node (x\i) at (\i,1) {\scriptsize \word};
-       \node[main,color=blue] (e\i) at (\i,2.2) {};
+   \node[main] (specific) at (1.3,4) {\small Task-specific BiLSTM};
+   \node[main,color=blue] (shared) at (9,4) {\small Shared BiLSTM};
+   \node[color=blue] (embeddings) at (5.3,2.5) {\small Shared embeddings};
+   \foreach \i/\word in {0/{After},3/{graduation},8/{to},11/{Paris}} {
+       \node (x\i) at (\i,2) {\scriptsize \word};
+       \node[main,color=blue] (e\i) at (\i,3) {};
        \path[color=blue] (x\i) edge (e\i);
        \path (e\i) edge (specific);
        \path[color=blue] (e\i) edge (shared);
    }
-    \node (x4) at (3.5,1) {\ldots};
-    \node[main] (mlp) at (3.5,4.6) {\small Task-specific MLP};
+    \node (x4) at (5.3,2) {\ldots};
+    \node[main] (mlp) at (5.3,4.6) {\small Task-specific MLP};
     \path (specific) edge (mlp);
     \path[color=blue] (shared) edge (mlp);
-    \coordinate (state) at (8,4.6);
-    \path (state) edge (mlp);
-    \node (transition) at (3.5,5.8) {transition};
+    \coordinate (state) at (10.8,4.6);
+    \path[bend right] (state) edge (mlp);
+    \node (transition) at (5.3,5.8) {transition};
     \path (mlp) edge node[right] {softmax} (transition);
    \end{tikzpicture}
    }
