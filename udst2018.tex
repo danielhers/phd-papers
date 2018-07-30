@@ -367,7 +367,7 @@ Top: parser state (stack, buffer and intermediate graph).
 
 To predict the next transition at each step,
 TUPA uses a BiLSTM with feature embeddings as inputs (see below),
-followed by an MLP and a softmax layer for classification \cite{kiperwasser2016simple}.
+followed by an MLP and a softmax layer for classification.
 The model is illustrated in Figure~\ref{fig:single_model}.
 Inference is performed greedily,
 and training is done with an oracle that yields the set of all optimal 
