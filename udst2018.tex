@@ -588,13 +588,14 @@ we simply use the model trained on the largest training treebank in the same lan
 %All training, development and test treebanks used in the shared task
 %are from Universal Dependencies 2.2 \cite{11234/1-2837}.
 Evaluation is done on the TIRA online platform \cite{tira}.
+Our system ranked 24th in the LAS-F1 ranking
+(with an average of 53.69 over all test treebanks),
+23rd by MLAS (average of 44.6) and 21st by BLEX (average of 48.05).
+
 Since our system only performs dependency parsing and not other pipeline tasks,
 we focus on LAS-F1 \cite{nivre17udw} for evaluation.
-
 Table~\ref{tab:overall_results} presents the overall
 official results on the shared task test sets.
-Our system ranked 24th in the LAS-F1 ranking,
-23rd by MLAS and 21st by BLEX.
 Figure~\ref{fig:test_per_corpus} presents the LAS-F1
 obtained by TUPA and the baseline (UDPipe 1.2) on each
 of the test treebanks,
