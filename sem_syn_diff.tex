@@ -3,14 +3,13 @@
 % File sem_syn_diff.tex
 
 
-\documentclass[11pt,letterpaper]{article}
-\usepackage[letterpaper]{geometry}
-\usepackage{acl2012}
-\usepackage{times}
-\usepackage{latexsym}
+\documentclass[11pt,a4paper]{article}
+\usepackage[hyperref]{tacl2018} % use ``nohyperref'' to disable  hyperref
+\usepackage{times,latexsym}
+\usepackage{url}
+\usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{multirow}
-\usepackage{url}
 \usepackage{tikz}
 \usepackage{tikz-dependency}
 \usepackage[warn]{textcomp}
@@ -22,10 +21,9 @@
 \usepackage{listings}
 
 \makeatletter
-\newcommand{\@BIBLABEL}{\@emptybiblabel}
+\renewcommand{\@BIBLABEL}{\@emptybiblabel}
 \newcommand{\@emptybiblabel}[1]{}
 \makeatother
-\usepackage[hidelinks]{hyperref}
 \DeclareMathOperator*{\argmax}{arg\,max}
 
 \newcommand{\com}[1]{}
@@ -40,14 +38,9 @@
 
 \usetikzlibrary{shapes,shapes.misc}
 
-%\aclfinalcopy % Uncomment this line for the final submission
-\def\aclpaperid{***}
+\taclfinalfalse % For camera-ready, replace "\taclfinalfalse" with
+% "\taclfinalcopy"
 
-%\setlength\titlebox{5cm}
-% You can expand the titlebox if you need extra space
-% to show all the authors. Please do not make the titlebox
-% smaller than 5cm (the original size); we will check this
-% in the camera-ready version and ask you to change it back.
 
 \title{Why Semantics is Harder than Syntax}
 
@@ -288,39 +281,6 @@ While converted UD graphs form trees, enhanced++ UD graphs may not.}\label{fig:u
 
 \section{Amount of training data}\label{sec:data_size}
 
-
-\begin{table*}[t]
-\centering
-\small
-\setlength\tabcolsep{2pt}
-\begin{tabular}{l|ccc|ccc||ccc|ccc||ccc|ccc}
-& \multicolumn{6}{c||}{\footnotesize \bf English}
-& \multicolumn{6}{c||}{\footnotesize \bf French}
-& \multicolumn{6}{c}{\footnotesize \bf German} \\
-\hline
-& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
-& \multicolumn{3}{c||}{\footnotesize \bf {\#} sentences}
-& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
-& \multicolumn{3}{c||}{\footnotesize \bf {\#} sentences}
-& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
-& \multicolumn{3}{c}{\footnotesize \bf {\#} sentences} \\
-& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
-& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
-& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test 
-& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
-& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
-& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
-\hline
-\textbf{UCCA} &&&&&&&&&&&&&&&& \\
-Wiki & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
-20K &&& 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
-\textbf{UD} & \multicolumn{2}{l}{458277} && \multicolumn{2}{l}{17062} &&
-\multicolumn{2}{l}{899163} && \multicolumn{2}{l}{32347} && \multicolumn{2}{l}{268145} && 13814
-\end{tabular}
-\caption{Number of tokens and sentences in the training, development and test sets
-we use for each corpus and language.\label{tab:corpora}}
-\end{table*}
-
 Syntactic dependency parsers require many training examples to achieve
 state-of-the-art results.
 Even after around 500K tokens, the learning curves do not seem to saturate
@@ -361,7 +321,7 @@ trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki test 
 
 \section{Structural Conversion}\label{sec:conversion}
 
-To parse text into UD, we use UDPipe \cite{udpipe:2017}.
+To parse text into UD, we use UDPipe v1.2 \cite{udpipe:2017}.
 On UD v1.2, UDPipe achieved 80.2\% LAS $F_1$ on English using automatic POS tags.
 On French it achieved 77.8\% and on German 71.8\%.
 
@@ -770,6 +730,33 @@ Table~\ref{tab:fine_grained_ud} shows fine-grained evaluation according to UD re
 \small
 \setlength\tabcolsep{3pt}
 \begin{tabular}{l|l}
+ParallelScene & 0.539 \\ 
+Function & 0.705 \\ 
+Participant & 0.578 \\ 
+Punctuation & 0.98 \\ 
+Process & 0.699 \\ 
+State & 0.289 \\ 
+Elaborator & 0.686 \\ 
+Center & 0.757 \\ 
+Terminal & 1.0 \\ 
+Relator & 0.85 \\ 
+Connector & 0.778 \\ 
+Adverbial & 0.541 \\ 
+Linker & 0.658 \\ 
+Ground & 0.0
+\end{tabular}
+\caption{
+Fine-grained labeled $F_1$ according to UCCA categories,
+of TUPA trained on Wiki with features extracted by UDPipe
+and evaluated on WSJ with features extracted by UDPipe.}
+\label{tab:fine_grained_ucca}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\setlength\tabcolsep{3pt}
+\begin{tabular}{l|l}
 nsubj & 0.92 \\ 
 Terminal & 1.0 \\ 
 head & 0.999 \\ 
@@ -799,36 +786,9 @@ expl & 1.0 \\
 parataxis & 1.0
 \end{tabular}
 \caption{
-Fine-grained labeled $F_1$ according to UCCA categories,
-of TUPA trained on Wiki with features extraced by UDPipe
-and evaluated on WSJ with features extraced by UDPipe.}
-\label{tab:fine_grained_ucca}
-\end{table}
-
-\begin{table}[t]
-\centering
-\small
-\setlength\tabcolsep{3pt}
-\begin{tabular}{l|l}
-ParallelScene & 0.539 \\ 
-Function & 0.705 \\ 
-Participant & 0.578 \\ 
-Punctuation & 0.98 \\ 
-Process & 0.699 \\ 
-State & 0.289 \\ 
-Elaborator & 0.686 \\ 
-Center & 0.757 \\ 
-Terminal & 1.0 \\ 
-Relator & 0.85 \\ 
-Connector & 0.778 \\ 
-Adverbial & 0.541 \\ 
-Linker & 0.658 \\ 
-Ground & 0.0
-\end{tabular}
-\caption{
 Fine-grained labeled $F_1$ according to gold UD relations,
-of TUPA trained on Wiki with features extraced by UDPipe
-and evaluated on WSJ with features extraced by UDPipe.}
+of TUPA trained on Wiki with features extracted by UDPipe
+and evaluated on WSJ with features extracted by UDPipe.}
 \label{tab:fine_grained_ud}
 \end{table}
 
@@ -849,6 +809,6 @@ and evaluated on WSJ with features extraced by UDPipe.}
 
 
 \bibliography{references}
-\bibliographystyle{acl2012}
+\bibliographystyle{acl_natbib}
 
 \end{document}
