@@ -12,6 +12,7 @@
 \usepackage[warn]{textcomp}
 \usepackage[font=small]{caption}
 \usepackage{subcaption}
+\usepackage{cprotect}
 \usepackage{multirow}
 \usepackage{url}
 \usepackage{etoolbox}
@@ -102,28 +103,23 @@ UD trees and graphs in a UCCA-like unified DAG format (\S\ref{sec:format}).
 \fbox{\begin{subfigure}{0.47\textwidth}
     \centering
     \scalebox{.95}{
-    \begin{tikzpicture}[level distance=9mm, sibling distance=14mm, ->,
+    \begin{tikzpicture}[level distance=14mm,sibling distance=12mm, ->,
         every circle node/.append style={fill=black}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
-        child {node (After) [word] {After} edge from parent node[above] {\scriptsize $L$}}
-        child {node (graduation) [circle] {}
+        child {node (We) [word] {We} edge from parent node[above] {\scriptsize $A$}}
+        child {node [word] {were} edge from parent node[below] {\scriptsize $F$}}
+        child {node [word] {made} edge from parent node[right] {\scriptsize $D$}}
+        child {node [word] {to} edge from parent node[right] {\scriptsize $F$}}
+        child {node [word] {feel} edge from parent node[right] {\scriptsize $P$}}
+        child {node (verywelcome) [circle] {}
         {
-          child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
-        } edge from parent node[right] {\scriptsize $H$} }
-        child {node [word] {,} edge from parent node[below] {\scriptsize $U$}}
-        child {node (moved) [circle] {}
-        {
-          child {node (John) [word] {John} edge from parent node[left] {\scriptsize $A$}}
-          child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
-          child {node [circle] {}
-          {
-            child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
-            child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
-          } edge from parent node[above] {\scriptsize $A$} }
-        } edge from parent node[right] {\scriptsize $H$} }
-        ;
-      \draw[dashed,->] (graduation) to node [above] {\scriptsize $A$} (John);
+          child {node [word] {very} edge from parent node[left] {\scriptsize $D$}}
+          child {node [word] {welcome} edge from parent node[right] {\scriptsize $S$}}
+          child {node [word] {.} edge from parent node[right] {\scriptsize $U$}}
+        } edge from parent node[above] {\scriptsize $A$} }
+      ;
+      \draw[dashed,->,bend left] (verywelcome) to node [below] {\scriptsize $A$} (We);
     \end{tikzpicture}}
   \caption{Example UCCA graph.}
   \label{fig:converted_example_ucca}
@@ -131,66 +127,65 @@ UD trees and graphs in a UCCA-like unified DAG format (\S\ref{sec:format}).
 \fbox{\begin{subfigure}{0.47\textwidth}
   \centering
     \begin{dependency}[text only label, label style={above}, font=\small]
-    \begin{deptext}[column sep=.8em,ampersand replacement=\^]
-    After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+    \begin{deptext}[column sep=.5em,ampersand replacement=\^]
+    We \^ were \^ made \^ to \^ feel \^ very \^ welcome \^ . \\
     \end{deptext}
-        \depedge{2}{1}{case}
-        \depedge{4}{3}{punct}
-        \depedge{5}{4}{nsubj}
-        \depedge[edge end x offset=-2pt]{2}{5}{obl}
-        \depedge{7}{6}{case}
-        \deproot[edge unit distance=3ex]{5}{root}
-        \depedge[edge unit distance=3ex]{5}{7}{obl}
+        \depedge[edge start x offset=1pt]{3}{1}{nsubj:pass}
+        \depedge[edge below,dashed,edge unit distance=.65ex,edge end x offset=2pt]{5}{1}{nsubj:xsubj}
+        \depedge[edge below,dashed,edge unit distance=.8ex,edge end x offset=-1pt]{7}{1}{nsubj:xsubj}
+        \depedge{3}{2}{aux:pass}
+        \deproot[edge unit distance=3ex]{3}{root}
+        \depedge{5}{4}{mark}
+        \depedge{3}{5}{xcomp}
+        \depedge{7}{6}{advmod}
+        \depedge{5}{7}{xcomp}
+        \depedge[edge unit distance=2ex,edge start x offset=-1pt]{3}{8}{punct}
     \end{dependency}
-  \caption{\label{fig:original_examples}Example UD tree.}
+  \caption{\label{fig:original_examples}Example UD graph.}
 \end{subfigure}}
 \fbox{\begin{subfigure}{0.47\textwidth}
   \centering
   \scalebox{.95}{
-  \begin{tikzpicture}[level distance=17mm, ->,
-      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
-      level 1/.style={sibling distance=13mm},
-      level 2/.style={sibling distance=1cm}]
-    \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [fill=black,circle] {}
-      child {node (after) [fill=black,circle] {}
-      {
-        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
-        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
-      } edge from parent node {obl}}
-      child {node {}
-      {
-        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node {}
-      {
-        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node {}
-      {
-        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node (to) [fill=black,circle] {}
-      {
-          child {node [word] {to{\color{white}g}} edge from parent node {case}}
-          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
-      } edge from parent node {obl}}
+    \begin{tikzpicture}[sibling distance=14mm, ->,
+        every circle node/.append style={fill=black},
+        level 1/.style={level distance=13mm},
+        level 2/.style={level distance=9mm},
+        level 3/.style={level distance=12mm}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node (We) [word] {We} edge from parent node[midway,above,sloped] {\scriptsize nsubj}}
+        child {node (feelverywelcome) [circle] {}
+        {
+          child {node [word] {were} edge from parent node[midway,above,sloped] {\scriptsize aux}}
+          child {node [word] {made} edge from parent node[midway,above,sloped] {\scriptsize head}}
+        } edge from parent node[midway,above,sloped] {\scriptsize head} }
+        child {node [word] {to} edge from parent node[midway,above,sloped] {\scriptsize mark}}
+        child {node (feelverywelcome) [circle] {}
+        {
+          child {node [word] {feel} edge from parent node[midway,above,sloped] {\scriptsize head}}
+          child {node (verywelcome) [circle] {}
+          {
+            child {node [word] {very} edge from parent node[midway,below,sloped] {\scriptsize advmod}}
+            child {node [word] {welcome} edge from parent node[midway,above,sloped] {\scriptsize head}}
+            child {node [word] {.} edge from parent node[midway,above,sloped] {\scriptsize punct}}
+          } edge from parent node[midway,above,sloped] {\scriptsize xcomp} }
+        } edge from parent node[midway,above,sloped] {\scriptsize xcomp} }
       ;
-      \draw (ROOT) to node {punct} (comma);
-      \draw (ROOT) to node {nsubj} (John);
-      \draw (ROOT) to node {head} (moved);
-  \end{tikzpicture}}
-  \captionof{figure}{UD tree after conversion to unified DAG format.}\label{fig:converted_example_ud}
+      \draw[dashed,->,bend left=36] (verywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
+      \draw[dashed,->,bend right=90] (feelverywelcome) to node [midway,above,sloped] {\scriptsize nsubj} (We);
+    \end{tikzpicture}}
+  \captionof{figure}{UD graph after conversion to unified DAG format.}\label{fig:converted_example_ud}
 \end{subfigure}}
 
-\caption{(a) Example UCCA annotation for the sentence
-``After graduation, John moved to Paris''.
+\cprotect\caption{(a) Example UCCA annotation for the sentence
+``We were made to feel very welcome.''
 The dashed \textit{A} edge is a \textit{remote edge},
 representing a \textit{Participant} relation that is not explicit in the text,
 and allowing argument sharing and reentrancy,
 creating a DAG structure.
-(b) Bilexical tree annotating the same sentence according to the UD guidelines.
-(c) The same UD tree, after conversion to the unified DAG format.
+(b) Bilexical graph annotating the same sentence in UD
+(\verb|reviews-077034-0002| from \verb|UD_English-EWT|).
+(c) The same UD graph, after conversion to the unified DAG format.
 Intermediate non-terminals and \textit{head} edges are introduced,
 to get a UCCA-like structure.}\label{fig:converted_examples}
 \end{figure}
