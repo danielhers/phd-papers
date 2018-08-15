@@ -238,9 +238,9 @@ Any \textit{enhanced}
 heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
 
 In the conversion process, we strip any language-specific relation subtypes
-(ignored by the evaluation),
-leaving only the universal relations:
-for example, the language-specific \verb|acl:relcl| is replaced by the universal relation \verb|acl|.
+(ignored by the parsing evaluation metrics),
+leaving only the universal relations.
+For example, the language-specific \verb|acl:relcl| is replaced by the universal relation \verb|acl|.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -773,7 +773,7 @@ vi_vtb & 36.48 &        39.63 \\
     \addplot table[x expr=\coordindex,meta=corpus,y=baseline]{\lasb};
     \end{axis}
     \end{tikzpicture}
-    \caption{LAS-F1 per test treebanks.
+    \caption{LAS-F1 per test treebank.
     \label{fig:test_per_corpus}}
 \end{figure*}
 
@@ -904,7 +904,7 @@ vi_vtb & 39.43 &       43.65 \\
     \addplot table[x expr=\coordindex,meta=corpus,y=baseline]{\lasdevb};
     \end{axis}
     \end{tikzpicture}
-    \caption{LAS-F1 per development treebanks.
+    \caption{LAS-F1 per development treebank.
     \label{fig:dev_per_corpus}}
 \end{figure*}
 
