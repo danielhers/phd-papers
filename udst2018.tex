@@ -67,37 +67,53 @@
 \maketitle
 \begin{abstract}
   We apply TUPA, a neural transition-based general DAG parser,
-  as the submission by the HUJI team to the CoNLL 2018 UD shared task.
+  as the submission by the HUJI team to the CoNLL 2018 UD shared task,
+  demonstrating an approach for learning to recover \textit{enhanced dependencies}
+  as part of the general parsing task.
   TUPA was designed for parsing UCCA, a cross-linguistic
   semantic annotation scheme, exhibiting
   reentrancy, discontinuity and non-terminal nodes.
   By employing a conversion protocol to represent
   UD trees and graphs in a UCCA-like unified directed acyclic graph (DAG) format,
   we train TUPA almost without modification on the UD parsing task.
-  Although not among the leading submissions in the task,
-  the results are promising given the uniform parsing architecture,
-  which allows recovering enhanced relations and shared arguments,
-  as well as multitask learning.
+  The uniform parsing architecture opens the way for improvement by employing
+  multitask learning.
   Our code is available at \url{https://github.com/CoNLL-UD-2018/HUJI}.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
 
-In this paper we describe the HUJI submission to the CoNLL 2018 shared task
+In this paper, we describe the HUJI submission to the CoNLL 2018 shared task
 on Universal Dependency parsing \cite{udst:overview2018}.
 We focus only on parsing, using a baseline model \cite[UDPipe 1.2;][]{udpipe,udpipe:2017}
 for tokenization, sentence splitting, part-of-speech tagging and morphological tagging.
+
 Our system is based on TUPA \cite[see \S\ref{sec:model}]{hershcovich2017a,hershcovich2018multitask},
 a transition-based UCCA parser.
 UCCA \cite[Universal Conceptual Cognitive Annotation;][]{abend2013universal} is a
 cross-linguistic semantic annotation scheme, representing scenes, participants,
 attributes and relations in a directed acyclic graph (DAG) structure,
-and allowing reentrancy (argument sharing),
-discontinuity (corresponding to non-projectivity in dependency annotations)
+and allowing reentrancy (enabling argument sharing),
+discontinuity (corresponding to non-projectivity in dependency formalisms)
 and non-terminal nodes (as opposed to dependencies, which are bi-lexical).
 To parse Universal Dependencies \cite{nivre2016universal}
-using TUPA, we employ a conversion protocol to represent
+using TUPA, we employ a bidirectional conversion protocol to represent
 UD trees and graphs in a UCCA-like unified DAG format (\S\ref{sec:format}).
+
+Our method treats \textit{enhanced dependencies}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
+as part of the dependency graph, providing the first approach, to our knowledge,
+for supervised learning of enhanced UD parsing.
+Although not included in the evaluation metrics for UD parsing,
+we believe these enhancements, representing elided predicates,
+shared arguments due to conjunction, control, raising and coreference,
+case information,
+as well as partitives and light noun constructions,
+provide richer information to downstream semantic applications,
+making UD better suited to be used as the representation for semantic tasks.
+Due to the scarcity of their annotation in UD treebanks, previous approaches
+\cite{SCHUSTER16.779,D17-1009} have attempted to recover these enhanced
+dependencies using language-specific rules.
+Our approach attempts to learn them from data.
 
 \begin{figure}[ht]
 \fbox{\begin{subfigure}{0.47\textwidth}
@@ -218,16 +234,8 @@ and add the node's dependents as children of the created non-terminal node
 (see Figure~\ref{fig:converted_example_ud}).
 This creates a constituency-like structure,
 which is supported by TUPA's transition set (see \S\ref{sec:transition_set}).
-
-Any \textit{enhanced UD}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
+Any \textit{enhanced}
 heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
-Although not included in the evaluation metrics for UD parsing,
-we believe these enhancements, representing elided predicates,
-shared arguments due to conjunction, control, raising and coreference,
-case information,
-as well as partitives and light noun constructions \cite{SCHUSTER16.779},
-provide richer information to downstream applications,
-making UD better suited to be used as the representation for semantic tasks.
 
 In the conversion process, we strip any language-specific relation subtypes
 (ignored by the evaluation),
