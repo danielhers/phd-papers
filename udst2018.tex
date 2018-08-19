@@ -165,30 +165,34 @@ Our approach attempts to learn them from data.
     \begin{tikzpicture}[sibling distance=14mm, ->,
         every circle node/.append style={fill=black},
         level 1/.style={level distance=13mm},
-        level 2/.style={level distance=9mm},
-        level 3/.style={level distance=12mm}]
+        level 2/.style={level distance=12mm},
+        level 3/.style={level distance=13mm}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
         child {node (We) [word] {We} edge from parent node[midway,above,sloped] {\scriptsize nsubj}}
-        child {node (feelverywelcome) [circle] {}
+        child {node {}
         {
-          child {node [word] {were} edge from parent node[midway,above,sloped] {\scriptsize aux}}
-          child {node [word] {made} edge from parent node[midway,above,sloped] {\scriptsize head}}
-        } edge from parent node[midway,above,sloped] {\scriptsize head} }
+	        child {node (weremade) [circle] {}
+	        {
+	          child {node [word] {were} edge from parent node[midway,above,sloped] {\scriptsize aux}}
+	          child {node [word] {made} edge from parent node[midway,above,sloped] {\scriptsize head}}
+	        } edge from parent [draw=none]}
+        } edge from parent [draw=none]}
         child {node [word] {to} edge from parent node[midway,above,sloped] {\scriptsize mark}}
         child {node (feelverywelcome) [circle] {}
         {
           child {node [word] {feel} edge from parent node[midway,above,sloped] {\scriptsize head}}
           child {node (verywelcome) [circle] {}
           {
-            child {node [word] {very} edge from parent node[midway,below,sloped] {\scriptsize advmod}}
+            child {node [word] {very} edge from parent node[midway,above,sloped] {\scriptsize advmod}}
             child {node [word] {welcome} edge from parent node[midway,above,sloped] {\scriptsize head}}
             child {node [word] {.} edge from parent node[midway,above,sloped] {\scriptsize punct}}
           } edge from parent node[midway,above,sloped] {\scriptsize xcomp} }
         } edge from parent node[midway,above,sloped] {\scriptsize xcomp} }
       ;
-      \draw[dashed,->,bend left=36] (verywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
-      \draw[dashed,->,bend right=90] (feelverywelcome) to node [midway,above,sloped] {\scriptsize nsubj} (We);
+      \draw[->] (ROOT) to node [midway,above,sloped] {\scriptsize head} (weremade);
+      \draw[dashed,->,bend left=25] (verywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
+      \draw[dashed,->,bend left=20] (feelverywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
     \end{tikzpicture}}
   \captionof{figure}{UD graph after conversion to unified DAG format.}\label{fig:converted_example_ud}
 \end{subfigure}}
