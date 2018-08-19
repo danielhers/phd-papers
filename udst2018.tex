@@ -608,12 +608,15 @@ obtained by TUPA and the baseline (UDPipe 1.2) on each
 of the test treebanks,
 and Figure~\ref{fig:dev_per_corpus} on the development treebanks.
 Although the scores are uniformly lower than the baseline,
-the fact that many of them are close, despite using a
+the fact that many of them are close is encouraging,
+given the harder parsing tasks that includes enhanced dependencies,
+and the fact that TUPA uses a
 parsing architecture designed for a different task
-with a simple conversion protocol, is encouraging.
+with a simple conversion protocol.
 
 For two of the test sets, \verb|ar_padt| and \verb|gl_ctg|, TUPA got
-a zero score due to a bug with the treatment of multi-token words.
+a zero score in the official evaluation due to a bug with the treatment of multi-token words.
+After fixing this bug, the LAS-F1 scores on these test sets are 79.4 and 80.1, respectively.
 
 \begin{table}
 \begin{tabular}{lcc}
