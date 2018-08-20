@@ -187,7 +187,7 @@ Primary edges form a tree in each layer, whereas remote edges enable reentrancy,
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Universal Dependencies.}\label{sec:ud}
-UD \cite{nivre2016universal,11234/1-2515} has quickly become
+UD \cite{nivre2016universal} has quickly become
 the dominant dependency scheme for
 syntactic  annotation in many languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
@@ -310,24 +310,22 @@ and in German UCCA has 80K and UD 268K.
 \footnotesize 100\% & 74.7 & 74.8 & 74.8 & 48.5 & 51.2 & 49.8\\
 \end{tabular}
 \caption{
-Results for TUPA \protect\cite{hershcovich2017a} when trained on increasing amount of training data
+Development scores for TUPA \protect\cite{hershcovich2017a} when trained on increasing amount of training data
 (English Wiki corpus).
 \label{tab:partial_data_results}}
 \end{table}
 
 Table~\ref{tab:partial_data_results} shows results for TUPA,
-trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki test set.
+trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki development set.
 
 
 \section{Structural Conversion}\label{sec:conversion}
 
-To parse text into UD, we use UDPipe v1.2 \cite{udpipe:2017}.
-On UD v1.2, UDPipe achieved 80.2\% LAS $F_1$ on English using automatic POS tags.
-On French it achieved 77.8\% and on German 71.8\%.
-
-We extend the conversion protocol by \newcite{hershcovich2018multitask},
-converting UD into a unified DAG format.
-The format consists of a rooted DAG, where the tokens are the terminal nodes.
+We convert UD trees and graphs into a unified DAG format \cite{hershcovich2018multitask,hershcovich2018universal}.
+The format consists of a rooted DAG, where the tokens are the terminal
+nodes.\footnote{Our conversion code supports full conversion between UCCA and UD,
+among other representation schemes,
+and is publicly available at \url{http://github.com/danielhers/semstr/tree/master/semstr/conversion}.}
 As in the UCCA format, edges are labeled (but not nodes),
 and are divided into \textit{primary} and \textit{remote} edges,
 where the primary edges form a tree (all nodes have at most one primary parent,
@@ -341,9 +339,13 @@ we add a pre-terminal for each token,
 and attach the pre-terminals according to the original dependency edges:
 traversing the tree from the root down, for each head token we create a non-terminal
 parent with the edge label {\it head},
-and add the node's dependents as children of the created non-terminal node.
-In case of reentrancy, an arbitrary parent is marked as primary, and the rest as remote
-(denoted as dashed edges in Figure~\ref{fig:converted_example_ud}).
+and add the node's dependents as children of the created non-terminal node
+(see Figure~\ref{fig:converted_example_ud}).
+Any \textit{enhanced}
+heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
+In the conversion process, we strip any language-specific relation subtypes,
+leaving only the universal relations.
+For example, the language-specific \verb|acl:relcl| is replaced by the universal relation \verb|acl|.
 
 Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation of the
 structurally converted UD graphs as compared to gold-annotated UCCA graphs.
@@ -380,7 +382,6 @@ or on WSJ with gold POS and dependency features (below).
 
 \section{Deterministic label mapping}\label{sec:mapping}
 
-
 Using the standard UCCA evaluation
 script,\footnote{\url{http://github.com/danielhers/ucca/blob/master/scripts/evaluate_standard.py}}
 we created a confusion matrix between the edge tags in converted UD trees
@@ -402,6 +403,20 @@ replacing C with P when it has sibling A's (participants) or
 with H when it has sibling H's (parallel scenes).
 We select P rather than S (state) as the main relation in the normalization because
 it is much more common (14,719 P's in the Wiki corpus as opposed to 3354 S's).
+
+In general, the conversion protocol attaches low,
+selecting for each terminal $t$ the lowest non-terminal of which $t$
+is the head terminal.
+We extend the conversion protocol by adding special rules for a few cases,
+where there is a systematic mapping between the UCCA and UD guidelines
+and it is different from the default low-attaching behavior,
+selecting a forward-attaching behavior instead:
+\begin{itemize}
+  \item Conjunctions (\verb|cc| in UD) attach to the following
+  conjuncts (word with an incoming \verb|conj| relation).
+  \item \verb|mark| is attached to the following \verb|advcl|/\verb|xcomp|.
+\end{itemize}
+These rules are applied to the bilexical graph after the conversion process.
 
 \begin{table}[t]
 \centering
@@ -610,6 +625,15 @@ More differences:
 
 
 \section{Experiments}\label{sec:experiments}
+
+To parse text into UD, we use UDPipe v1.2 \cite{udpipe,udpipe:2017},
+which was used as the baseline model in the CoNLL 2018 shared task on
+Univesal Dependency Parsing \cite{udst:overview2018},
+achieving 77.56\% LAS $F_1$ on English EWT using automatic POS tags.
+On French GSD it achieved 81.05\% and on German GSD 70.85\%.
+These are the largest treebanks in these languages
+used in the shared task, containing a total of 254K, 402K and 292K
+words, respectively.
 
 \begin{table*}[t]
 \centering
