@@ -353,7 +353,7 @@ we include these transitions.
    \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
    \node[main] (specific) at (3.5,3.5) {\small BiLSTM};
    \node (embeddings) at (3.5,1.7) {\small Embeddings};
-   \foreach \i/\word in {0/{After},2/{graduation},5/{to},7/{Paris}} {
+   \foreach \i/\word in {0/{We},2/{were},5/{welcome},7/{.}} {
        \node (x\i) at (\i,1) {\scriptsize \word};
        \node[main] (e\i) at (\i,2.2) {};
        \path (x\i) edge (e\i);
