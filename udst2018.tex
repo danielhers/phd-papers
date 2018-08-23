@@ -642,9 +642,100 @@ for our system (TUPA) and the baseline model (UDPipe 1.2).
 \label{tab:overall_results}}
 \end{table}
 
+\catcode`\_=12
+\pgfplotstableread{
+corpus
+af_afribooms
+grc_perseus
+grc_proiel
+ar_padt
+hy_armtdp
+eu_bdt
+br_keb
+bg_btb
+bxr_bdt
+ca_ancora
+hr_set
+cs_cac
+cs_fictree
+cs_pdt
+cs_pud
+da_ddt
+nl_alpino
+nl_lassysmall
+en_ewt
+en_gum
+en_lines
+en_pud
+et_edt
+fo_oft
+fi_ftb
+fi_pud
+fi_tdt
+fr_gsd
+}\corpusa
+\pgfplotstableread{
+corpus
+fr_sequoia
+fr_spoken
+gl_ctg
+gl_treegal
+de_gsd
+got_proiel
+el_gdt
+he_htb
+hi_hdtb
+hu_szeged
+zh_gsd
+id_gsd
+ga_idt
+it_isdt
+it_postwita
+ja_gsd
+ja_modern
+kk_ktb
+ko_gsd
+ko_kaist
+kmr_mg
+la_ittb
+la_perseus
+la_proiel
+lv_lvtb
+pcm_nsc
+sme_giella
+}\corpusb
+\pgfplotstableread{
+corpus
+no_bokmaal
+no_nynorsk
+no_nynorsklia
+fro_srcmf
+cu_proiel
+fa_seraji
+pl_lfg
+pl_sz
+pt_bosque
+ro_rrt
+ru_syntagrus
+ru_taiga
+sr_set
+sk_snk
+sl_ssj
+sl_sst
+es_ancora
+sv_lines
+sv_pud
+sv_talbanken
+th_pud
+tr_imst
+uk_iu
+hsb_ufal
+ur_udtb
+ug_udt
+vi_vtb
+}\corpusc
 
 \begin{figure*}[h]
-    \catcode`\_=12
     \begin{tikzpicture}
     \begin{axis}[
     ybar=0pt,  
@@ -655,7 +746,7 @@ for our system (TUPA) and the baseline model (UDPipe 1.2).
     height=8cm,
     bar width=4pt,
     xtick=data,
-    xticklabels from table={udst2018scores.txt}{corpusa},
+    xticklabels from table={\corpusa}{corpus},
     xticklabel style={font=\tiny,rotate=90,anchor=east},
     xtick align=inside,
     xticklabel pos=left,
@@ -668,8 +759,8 @@ for our system (TUPA) and the baseline model (UDPipe 1.2).
     },
     every node near coord/.append style={rotate=90, anchor=west}
     ]
-    \addplot [select coords between index={0}{26}] table[x expr=\coordindex,meta=corpus,y=tupa]{udst2018scores.txt};
-    \addplot [select coords between index={0}{26}] table[x expr=\coordindex,meta=corpus,y=tupadev]{udst2018scores.txt};
+    \addplot [select coords between index={0}{27}] table[x expr=\coordindex,meta=corpus,y=tupa]{udst2018scores.txt};
+    \addplot [select coords between index={0}{27}] table[x expr=\coordindex,meta=corpus,y=tupadev]{udst2018scores.txt};
     \legend{TUPA (dev), TUPA (test)}
     \end{axis}
     \end{tikzpicture}
@@ -684,7 +775,7 @@ for our system (TUPA) and the baseline model (UDPipe 1.2).
     height=8cm,
     bar width=4pt,
     xtick=data,
-    xticklabels from table={udst2018scores.txt}{corpusb},
+    xticklabels from table={\corpusb}{corpus},
     xticklabel style={font=\tiny,rotate=90,anchor=east},
     xtick align=inside,
     xticklabel pos=left,
@@ -695,8 +786,8 @@ for our system (TUPA) and the baseline model (UDPipe 1.2).
     },
     every node near coord/.append style={rotate=90, anchor=west}
     ]
-    \addplot [select coords between index={27}{53}] table[x expr=\coordindex,meta=corpus,y=tupa]{udst2018scores.txt};
-    \addplot [select coords between index={27}{53}] table[x expr=\coordindex,meta=corpus,y=tupadev]{udst2018scores.txt};
+    \addplot [select coords between index={28}{54}] table[x expr=\coordindex,meta=corpus,y=tupa]{udst2018scores.txt};
+    \addplot [select coords between index={28}{54}] table[x expr=\coordindex,meta=corpus,y=tupadev]{udst2018scores.txt};
     \end{axis}
     \end{tikzpicture}
    
@@ -710,7 +801,7 @@ for our system (TUPA) and the baseline model (UDPipe 1.2).
     height=8cm,
     bar width=4pt,
     xtick=data,
-    xticklabels from table={udst2018scores.txt}{corpusc},
+    xticklabels from table={\corpusc}{corpus},
     xticklabel style={font=\tiny,rotate=90,anchor=east},
     xtick align=inside,
     xticklabel pos=left,
@@ -721,14 +812,14 @@ for our system (TUPA) and the baseline model (UDPipe 1.2).
     },
     every node near coord/.append style={rotate=90, anchor=west}
     ]
-    \addplot [select coords between index={54}{81}] table[x expr=\coordindex,meta=corpus,y=tupa]{udst2018scores.txt};
-    \addplot [select coords between index={54}{81}] table[x expr=\coordindex,meta=corpus,y=tupadev]{udst2018scores.txt};
+    \addplot [select coords between index={55}{81}] table[x expr=\coordindex,meta=corpus,y=tupa]{udst2018scores.txt};
+    \addplot [select coords between index={55}{81}] table[x expr=\coordindex,meta=corpus,y=tupadev]{udst2018scores.txt};
     \end{axis}
     \end{tikzpicture}
     \caption{LAS-F1 per test treebank.
     \label{fig:test_per_corpus}}
-    \catcode`\_=8
 \end{figure*}
+\catcode`\_=8
 
 
 
