@@ -753,7 +753,6 @@ vi_vtb
     tickwidth=0pt,
     legend style={at={(axis cs:0,113)},anchor=north west},
     legend cell align={left},
-    reverse legend,
     nodes near coords={
      \scalebox{.4}{\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}}
     },
@@ -762,7 +761,7 @@ vi_vtb
     \addplot[select coords between index={0}{27},fill=green]table[x expr=\coordindex,meta=corpus,y=official]{udst2018scores.txt};
     \addplot[select coords between index={0}{27},fill=red]table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
     \addplot[select coords between index={0}{27},fill=blue]table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
-    \legend{TUPA (dev), TUPA (test--unofficial), TUPA (test--official)}
+    \legend{TUPA (test--official), TUPA (test--unofficial), TUPA (dev)}
     \end{axis}
     \end{tikzpicture}
    
