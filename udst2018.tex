@@ -600,21 +600,25 @@ we simply use the model trained on the largest training treebank in the same lan
 
 \section{Results}\label{sec:results}
 
-%All training, development and test treebanks used in the shared task
-%are from Universal Dependencies 2.2 \cite{11234/1-2837}.
-Evaluation is done on the TIRA online platform \cite{tira}.
+Official evaluation was done on the TIRA online platform \cite{tira}.
 Our system ranked 24th in the LAS-F1 ranking
 (with an average of 53.69 over all test treebanks),
 23rd by MLAS (average of 44.6) and 21st by BLEX (average of 48.05).
-
 Since our system only performs dependency parsing and not other pipeline tasks,
-we focus on LAS-F1 \cite{nivre17udw} for evaluation.
-Table~\ref{tab:overall_results} presents the overall
-official results on the shared task test sets.
-Figure~\ref{fig:test_per_corpus} presents the LAS-F1
-obtained by TUPA and the baseline (UDPipe 1.2) on each
-of the test treebanks,
-and Figure~\ref{fig:dev_per_corpus} on the development treebanks.
+we henceforth focus on LAS-F1 \cite{nivre17udw} for evaluation.
+
+After fixing bugs with the conversion to the CoNLL-U format,
+we re-ran TUPA on all test treebanks, without re-training the models,
+getting an unofficial average test LAS-F1 of 61.05.
+In particular, for two test sets, \verb|ar_padt| and \verb|gl_ctg|, TUPA got
+a zero score in the official evaluation due to a bug with the treatment of multi-token words.
+These went up to 70.59 and 72.68, respectively.
+We also ran TUPA on all available development treebanks after fixing the bugs.
+
+Table~\ref{tab:overall_results} presents the
+averaged scores on the shared task test sets,
+and Figure~\ref{fig:test_per_corpus} presents the (official and unofficial) LAS-F1
+scores obtained by TUPA on each of the test and development treebanks.
 Although the scores are uniformly lower than the baseline,
 the fact that many of them are close is encouraging,
 given the harder parsing tasks that includes enhanced dependencies,
@@ -622,23 +626,20 @@ and the fact that TUPA uses a
 parsing architecture designed for a different task
 with a simple conversion protocol.
 
-For two of the test sets, \verb|ar_padt| and \verb|gl_ctg|, TUPA got
-a zero score in the official evaluation due to a bug with the treatment of multi-token words.
-After fixing this bug, the LAS-F1 scores on these test sets are 75.52 and 80.1, respectively.
-
 \begin{table}
-\begin{tabular}{lcc}
+\begin{tabular}{lccc}
 \hline
-& \bf TUPA & \bf UDPipe 1.2 \\
+& \multirow{2}{13mm}{\bf TUPA {\small(official)}} & \multirow{2}{13mm}{\bf TUPA {\small(unofficial)}}
+& \multirow{2}{13mm}{\bf UDPipe {\small(baseline)}} \\\\
 \hline
-All treebanks & 53.69 & 65.80 \\
-Big treebanks & 62.07 & 74.14 \\
-PUD treebanks & 56.35 & 66.63 \\
-Small treebanks & 36.74 & 55.01 \\
-Low-resource languages & 8.53 & 17.17
+All treebanks & 53.69 & 61.05 & 65.80 \\
+Big treebanks & 62.07 & 69.17 & 74.14 \\
+PUD treebanks & 56.35 & 62.41 & 66.63 \\
+Small treebanks & 36.74 & 42.72 & 55.01 \\
+Low-resource & 8.53 & 14.27 & 17.17
 \end{tabular}
-\caption{Official aggregated test LAS-F1 scores
-for our system (TUPA) and the baseline model (UDPipe 1.2).
+\caption{Aggregated test LAS-F1 scores
+for our system (TUPA) and the baseline system (UDPipe 1.2).
 \label{tab:overall_results}}
 \end{table}
 
@@ -762,7 +763,7 @@ vi_vtb
     \addplot[select coords between index={0}{27},fill=green]table[x expr=\coordindex,meta=corpus,y=official]{udst2018scores.txt};
     \addplot[select coords between index={0}{27},fill=red]table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
     \addplot[select coords between index={0}{27},fill=blue]table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
-    \legend{TUPA (test--official), TUPA (test--unofficial), TUPA (dev)}
+    \legend{TUPA (test---official), TUPA (test---unofficial), TUPA (development)}
     \end{axis}
     \end{tikzpicture}
    
@@ -819,7 +820,7 @@ vi_vtb
     \addplot[select coords between index={55}{81},fill=blue]table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
     \end{axis}
     \end{tikzpicture}
-    \caption{LAS-F1 per test treebank.
+    \caption{TUPA's LAS-F1 per treebank: official and unofficial test scores, and development scores (where available).
     \label{fig:test_per_corpus}}
 \end{figure*}
 \catcode`\_=8
