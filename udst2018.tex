@@ -752,6 +752,7 @@ vi_vtb
     xticklabel pos=left,
     tickwidth=0pt,
     legend style={at={(axis cs:0,113)},anchor=north west},
+    legend cell align={left},
     ymajorgrids,
     reverse legend,
     nodes near coords={
@@ -759,9 +760,10 @@ vi_vtb
     },
     every node near coord/.append style={rotate=90, anchor=west}
     ]
-    \addplot [select coords between index={0}{27}] table[x expr=\coordindex,meta=corpus,y=tupa]{udst2018scores.txt};
-    \addplot [select coords between index={0}{27}] table[x expr=\coordindex,meta=corpus,y=tupadev]{udst2018scores.txt};
-    \legend{TUPA (dev), TUPA (test)}
+    \addplot [select coords between index={0}{27}] table[x expr=\coordindex,meta=corpus,y=official]{udst2018scores.txt};
+    \addplot [select coords between index={0}{27}] table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
+    \addplot [select coords between index={0}{27}] table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
+    \legend{TUPA (dev), TUPA (test--unofficial), TUPA (test--official)}
     \end{axis}
     \end{tikzpicture}
    
@@ -786,8 +788,9 @@ vi_vtb
     },
     every node near coord/.append style={rotate=90, anchor=west}
     ]
-    \addplot [select coords between index={28}{54}] table[x expr=\coordindex,meta=corpus,y=tupa]{udst2018scores.txt};
-    \addplot [select coords between index={28}{54}] table[x expr=\coordindex,meta=corpus,y=tupadev]{udst2018scores.txt};
+    \addplot [select coords between index={28}{54}] table[x expr=\coordindex,meta=corpus,y=official]{udst2018scores.txt};
+    \addplot [select coords between index={28}{54}] table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
+    \addplot [select coords between index={28}{54}] table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
     \end{axis}
     \end{tikzpicture}
    
@@ -812,8 +815,9 @@ vi_vtb
     },
     every node near coord/.append style={rotate=90, anchor=west}
     ]
-    \addplot [select coords between index={55}{81}] table[x expr=\coordindex,meta=corpus,y=tupa]{udst2018scores.txt};
-    \addplot [select coords between index={55}{81}] table[x expr=\coordindex,meta=corpus,y=tupadev]{udst2018scores.txt};
+    \addplot [select coords between index={55}{81}] table[x expr=\coordindex,meta=corpus,y=official]{udst2018scores.txt};
+    \addplot [select coords between index={55}{81}] table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
+    \addplot [select coords between index={55}{81}] table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
     \end{axis}
     \end{tikzpicture}
     \caption{LAS-F1 per test treebank.
