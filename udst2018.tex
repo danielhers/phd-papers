@@ -43,6 +43,7 @@
 
 
 \hyphenation{UDPipe}
+\hyphenation{CoNLL-U}
 
 \usetikzlibrary{shapes,shapes.misc}
 
@@ -218,6 +219,14 @@ Intermediate non-terminals and \textit{head} edges are introduced,
 to get a UCCA-like structure.}\label{fig:converted_examples}
 \end{figure}
 
+\begin{figure*}[!t]
+\begin{adjustbox}{width=\textwidth,margin=3pt,frame}
+\texttt{1 We we PRON PRP Case=Nom|Number=Plur|Person=1|PronType=Prs 3 nsubj:pass 3:nsubj:pass|5:nsubj:xsubj|7:nsubj:xsubj}
+\end{adjustbox}
+\cprotect\caption{Example line from CoNLL-U file with two enhanced dependencies:
+\verb|5:nsubj:xsubj| and \verb|7:nsubj:xsubj|.}\label{fig:enhanced_conllu}
+\end{figure*}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Unified DAG Format}\label{sec:format}
@@ -248,8 +257,15 @@ and add the node's dependents as children of the created non-terminal node
 (see Figure~\ref{fig:converted_example_ud}).
 This creates a constituency-like structure,
 which is supported by TUPA's transition set (see \S\ref{sec:transition_set}).
+
 Any \textit{enhanced}
-heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
+heads beyond the standard head of a node are converted to remote edges in the unified DAG format.
+These enhanced dependencies are encoded in the last column of the \mbox{CoNLL-U} format,
+by an additional head index, followed by a colon and dependency relation.
+Multiple enhanced dependencies are separated by pipes.
+Figure~\ref{fig:enhanced_conllu} demonstrates this format.
+Note that if the standard dependency is repeated in the last column
+(\verb|3:nsubj:pass| in the example), we do not treat it as an enhanced dependency.
 
 In the conversion process, we strip any language-specific relation subtypes
 (ignored by the parsing evaluation metrics),
@@ -620,12 +636,6 @@ Table~\ref{tab:overall_results} presents the
 averaged scores on the shared task test sets,
 and Figure~\ref{fig:test_per_corpus} presents the (official and unofficial) LAS~$F_1$
 scores obtained by TUPA on each of the test and development treebanks.
-Although the scores are uniformly lower than the baseline,
-the fact that many of them are close is encouraging,
-given the harder parsing tasks that includes enhanced dependencies,
-and the fact that TUPA uses a
-parsing architecture designed for a different task
-with a simple conversion protocol.
 
 \begin{table}
 \begin{tabular}{lccc}
@@ -835,7 +845,7 @@ evaluation\footnote{\url{https://github.com/danielhers/semstr/blob/master/semstr
 We calculate the \textit{enhanced LAS},
 identical to the standard LAS except that the set of dependencies
 in both gold and predicted graphs are the enhanced dependencies instead
-of the regular tree arcs.
+of the standard tree arcs.
 Table~\ref{tab:enhanced} lists the LAS precision, recall and $F_1$ score
 on the test treebanks with any enhanced dependencies,
 as well as the number of enhanced dependencies in the gold standard
@@ -848,20 +858,20 @@ training and test sets for these treebanks.
 & \multicolumn{3}{c|}{Enhanced LAS} & \multicolumn{2}{c}{\#Enhanced} \\
 \bf Treebank & \bf P & \bf R & \bf F1 & \bf Train & \bf Test \\
 \hline
-\small ar_padt       & 36.7&27.6&31.5 & 13051 & 1527\\
-\small cs_cac        & 58.9&38.7&46.7 & 38438 & 1003\\
-\small cs_fictree    & 52.2&20&28.9 & 10153 & 1209\\
-\small cs_pdt        & 52.4&28.1&36.6 & 69308 & 9910\\
-\small nl_alpino     & 59.1&52.2&55.5 & 5577 & 459\\
-\small nl_lassysmall & 52.7&53.9&53.3 & 2565 & 433\\
-\small en_ewt        & 63.9&57.8&60.7 & 9177 & 935\\
-\small en_pud        & 64&53&58 & -- & 898\\
-\small fi_tdt        & 46.2&33.5&38.8 & 1008 & 139\\
-\small lv_lvtb       & 37.7&14.2&20.6 & 3237 & 9634\\
-\small pl_lfg        & 61.3&55.8&58.4 & 2739 & 342\\
-\small sk_snk        & 39.3&22.9&28.9 & 3540 & 648\\
-\small sv_pud        & 50&42.9&46.2 & -- & 927\\
-\small sv_talbanken  & 55.5&46.8&50.8 & 3691 & 1168\\
+\small ar_padt       & 36.7&27.6&31.5 & 13051 & 1626\\
+\small cs_cac        & 58.9&38.7&46.7 & 38438 & 1076\\
+\small cs_fictree    & 52.2&20&28.9 & 10153 & 1290\\
+\small cs_pdt        & 52.4&28.1&36.6 & 69308 & 10718\\
+\small nl_alpino     & 59.1&52.2&55.5 & 5577 & 557\\
+\small nl_lassysmall & 52.7&53.9&53.3 & 2565 & 499\\
+\small en_ewt        & 63.9&57.8&60.7 & 9177 & 1147\\
+\small en_pud        & 64&53&58 & -- & 1169\\
+\small fi_tdt        & 46.2&33.5&38.8 & 1008 & 1777\\
+\small lv_lvtb       & 37.7&14.2&20.6 & 3237 & 1029\\
+\small pl_lfg        & 61.3&55.8&58.4 & 2739 & 351\\
+\small sk_snk        & 39.3&22.9&28.9 & 3540 & 685\\
+\small sv_pud        & 50&42.9&46.2 & -- & 1318\\
+\small sv_talbanken  & 55.5&46.8&50.8 & 3691 & 1527\\
 \end{tabular}
 \caption{TUPA's enhanced LAS precision, recall and F1 per test treebank with enhanced dependencies,
 and their count.
