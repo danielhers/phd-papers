@@ -739,7 +739,7 @@ vi_vtb
     \begin{tikzpicture}
     \begin{axis}[
     ybar=0pt,  
-    enlarge x limits={0.01},
+    enlarge x limits={0.02},
     enlarge y limits={value=0.3,upper},
     ymin=0,
     width=.8\pagewidth,
@@ -747,22 +747,21 @@ vi_vtb
     bar width=4pt,
     xtick=data,
     xticklabels from table={\corpusa}{corpus},
-    xticklabel style={font=\tiny,rotate=90,anchor=east},
+    xticklabel style={font=\tiny,rotate=75,anchor=east},
     xtick align=inside,
     xticklabel pos=left,
     tickwidth=0pt,
     legend style={at={(axis cs:0,113)},anchor=north west},
     legend cell align={left},
-    ymajorgrids,
     reverse legend,
     nodes near coords={
-     \tiny\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}
+     \scalebox{.4}{\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}}
     },
-    every node near coord/.append style={rotate=90, anchor=west}
+    every node near coord/.append style={rotate=90,anchor=west}
     ]
-    \addplot [select coords between index={0}{27}] table[x expr=\coordindex,meta=corpus,y=official]{udst2018scores.txt};
-    \addplot [select coords between index={0}{27}] table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
-    \addplot [select coords between index={0}{27}] table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
+    \addplot[select coords between index={0}{27},fill=green]table[x expr=\coordindex,meta=corpus,y=official]{udst2018scores.txt};
+    \addplot[select coords between index={0}{27},fill=red]table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
+    \addplot[select coords between index={0}{27},fill=blue]table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
     \legend{TUPA (dev), TUPA (test--unofficial), TUPA (test--official)}
     \end{axis}
     \end{tikzpicture}
@@ -770,7 +769,7 @@ vi_vtb
     \begin{tikzpicture}
     \begin{axis}[
     ybar=0pt,  
-    enlarge x limits={0.01},
+    enlarge x limits={0.02},
     enlarge y limits={value=0.15,upper},
     ymin=0,
     width=.8\pagewidth,
@@ -778,26 +777,25 @@ vi_vtb
     bar width=4pt,
     xtick=data,
     xticklabels from table={\corpusb}{corpus},
-    xticklabel style={font=\tiny,rotate=90,anchor=east},
+    xticklabel style={font=\tiny,rotate=75,anchor=east},
     xtick align=inside,
     xticklabel pos=left,
     tickwidth=0pt,
-    ymajorgrids,
     nodes near coords={
-     \tiny\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}
+     \scalebox{.4}{\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}}
     },
     every node near coord/.append style={rotate=90, anchor=west}
     ]
-    \addplot [select coords between index={28}{54}] table[x expr=\coordindex,meta=corpus,y=official]{udst2018scores.txt};
-    \addplot [select coords between index={28}{54}] table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
-    \addplot [select coords between index={28}{54}] table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
+    \addplot[select coords between index={28}{54},fill=green]table[x expr=\coordindex,meta=corpus,y=official]{udst2018scores.txt};
+    \addplot[select coords between index={28}{54},fill=red]table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
+    \addplot[select coords between index={28}{54},fill=blue]table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
     \end{axis}
     \end{tikzpicture}
    
     \begin{tikzpicture}
     \begin{axis}[
     ybar=0pt,  
-    enlarge x limits={0.01},
+    enlarge x limits={0.02},
     enlarge y limits={value=0.15,upper},
     ymin=0,
     width=.8\pagewidth,
@@ -805,19 +803,18 @@ vi_vtb
     bar width=4pt,
     xtick=data,
     xticklabels from table={\corpusc}{corpus},
-    xticklabel style={font=\tiny,rotate=90,anchor=east},
+    xticklabel style={font=\tiny,rotate=75,anchor=east},
     xtick align=inside,
     xticklabel pos=left,
     tickwidth=0pt,
-    ymajorgrids,
     nodes near coords={
-     \tiny\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}
+     \scalebox{.4}{\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}}
     },
     every node near coord/.append style={rotate=90, anchor=west}
     ]
-    \addplot [select coords between index={55}{81}] table[x expr=\coordindex,meta=corpus,y=official]{udst2018scores.txt};
-    \addplot [select coords between index={55}{81}] table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
-    \addplot [select coords between index={55}{81}] table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
+    \addplot[select coords between index={55}{81},fill=green]table[x expr=\coordindex,meta=corpus,y=official]{udst2018scores.txt};
+    \addplot[select coords between index={55}{81},fill=red]table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
+    \addplot[select coords between index={55}{81},fill=blue]table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
     \end{axis}
     \end{tikzpicture}
     \caption{LAS-F1 per test treebank.
