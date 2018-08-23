@@ -851,6 +851,13 @@ on the test treebanks with any enhanced dependencies,
 as well as the number of enhanced dependencies in the gold standard
 training and test sets for these treebanks.
 
+Just as remote edges in UCCA parsing are more challenging
+than primary edges \cite{hershcovich2017a},
+parsing enhanced dependencies is a harder task than standard UD parsing,
+as the scores demonstrate.
+However, TUPA learns them successfully, getting as much as 60.7 enhanced LAS $F_1$
+on the English EWT test set.
+
 \catcode`\_=12
 \begin{table}
 \begin{tabular}{l|ccc|cc}
@@ -884,12 +891,14 @@ and their count.
 
 We have presented the HUJI submission to the CoNLL 2018 shared task on parsing Universal Dependencies, based on TUPA, a general transition-based DAG parser.
 Using a simple conversion protocol to convert UD into a unified DAG format,
-training TUPA as-is on the UD treebanks yields results that are lower than
-most other task submissions, but are close to the baseline for some of the treebanks.
+training TUPA as-is on the UD treebanks yields results
+close to the UDPipe baseline for most treebanks in the standard evaluation.
+While other systems ignore enhanced dependencies,
+TUPA learns to produce them too as part of the general dependency parsing process.
 We believe that with hyperparameter tuning and more careful handling of
-cross-lingual and cross-domain parsing, TUPA can be among the leading parsers for this task.
+cross-lingual and cross-domain parsing, TUPA can be competitive on the standard metrics too.
 
-A uniform parser for many representation schemes (as well as domains and languages)
+Furthermore, a uniform parser for many representation schemes (as well as domains and languages)
 will allow improving performance by multitask learning \cite{hershcovich2018multitask},
 an experiment we have not performed for this shared task, but are planning to pursue in future work.
 
