@@ -418,9 +418,7 @@ We do not use word embeddings for languages without pre-trained fastText vectors
 
 To the feature embeddings, we concatenate
 numeric features representing the node height, number of (remote) parents and children,
-and a real-valued feature,
-\texttt{node ratio}, corresponding to the ratio between the number of terminals to number of nodes
-in the graph $G$.
+and the ratio between the number of terminals to total number of nodes in the graph $G$.
 
 Table~\ref{tab:features} lists all feature used for the classifier.
 Numeric features are taken as they are, whereas categorical features are mapped to real-valued embedding
@@ -458,7 +456,7 @@ $s_0 \to b_0, b_0 \to s_0$ & \texttt{e} \\
 \bf Past actions \\
 $a_0, a_1$ & \texttt{eA} \\
 \hline
-\bf Misc. & \texttt{node ratio}
+\bf Global & \texttt{node ratio}
 \end{tabular}
 \caption{Transition classifier features.\label{tab:features}\\
 $s_i$: stack node $i$ from the top.
@@ -491,7 +489,7 @@ $a_i$ to the transition taken $i+1$ steps ago.\\
 \end{table}
 
 \subsection{Constraints}\label{sec:constraints}
-During parsing, we apply constraints on the parser state
+During training and parsing, we apply constraints on the parser state
 to limit the possible transitions to valid ones.
 
 A generic constraint implemented in TUPA is that stack nodes 
@@ -508,7 +506,7 @@ should not be swapped again \cite{hershcovich2018multitask}.
  
 In addition, we enforce UD-specific constraints, resulting from
 the nature of the converted DAG format:
-every non-terminal node must have a single outgoing \textrm{head} edge:
+every non-terminal node must have a single outgoing \verb|head| edge:
 once it has one, it may not get another, and
 until it does, the node may not be reduced.
 
@@ -597,13 +595,14 @@ with a learning rate of $0.1$
 
 For test treebanks without corresponding training data,
 but with training data in the same language,
-we simply use the model trained on the largest training treebank in the same language.
+we simply use the model trained on the largest training treebank in the same language
+during testing.
 
 
 \section{Results}\label{sec:results}
 
 Official evaluation was done on the TIRA online platform \cite{tira}.
-Our system ranked 24th in the LAS~$F_1$ ranking
+Our system (named ``HUJI'') ranked 24th in the LAS~$F_1$ ranking
 (with an average of 53.69 over all test treebanks),
 23rd by MLAS (average of 44.6) and 21st by BLEX (average of 48.05).
 Since our system only performs dependency parsing and not other pipeline tasks,
