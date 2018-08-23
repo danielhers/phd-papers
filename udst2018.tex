@@ -827,6 +827,47 @@ vi_vtb
 \catcode`\_=8
 
 
+\subsection{Evaluation on Enhanced Dependencies}\label{sec:enhanced_results}
+
+Since the official scores ignore enhanced dependencies,
+we evaluate them separately using a script similar to the one used for UCCA
+evaluation\footnote{\url{https://github.com/danielhers/semstr/blob/master/semstr/evaluate.py}}.
+We calculate the \textit{enhanced LAS},
+identical to the standard LAS except that the set of dependencies
+in both gold and predicted graphs are the enhanced dependencies instead
+of the regular tree arcs.
+Table~\ref{tab:enhanced} lists the LAS precision, recall and $F_1$ score
+on the test treebanks with any enhanced dependencies,
+as well as the number of enhanced dependencies in the gold standard
+training and test sets for these treebanks.
+
+\catcode`\_=12
+\begin{table}
+\begin{tabular}{l|ccc|cc}
+\hline
+& \multicolumn{3}{c|}{Enhanced LAS} & \multicolumn{2}{c}{\#Enhanced} \\
+\bf Treebank & \bf P & \bf R & \bf F1 & \bf Train & \bf Test \\
+\hline
+\small ar_padt       & 36.7&27.6&31.5 & 13051 & 1527\\
+\small cs_cac        & 58.9&38.7&46.7 & 38438 & 1003\\
+\small cs_fictree    & 52.2&20&28.9 & 10153 & 1209\\
+\small cs_pdt        & 52.4&28.1&36.6 & 69308 & 9910\\
+\small nl_alpino     & 59.1&52.2&55.5 & 5577 & 459\\
+\small nl_lassysmall & 52.7&53.9&53.3 & 2565 & 433\\
+\small en_ewt        & 63.9&57.8&60.7 & 9177 & 935\\
+\small en_pud        & 64&53&58 & -- & 898\\
+\small fi_tdt        & 46.2&33.5&38.8 & 1008 & 139\\
+\small lv_lvtb       & 37.7&14.2&20.6 & 3237 & 9634\\
+\small pl_lfg        & 61.3&55.8&58.4 & 2739 & 342\\
+\small sk_snk        & 39.3&22.9&28.9 & 3540 & 648\\
+\small sv_pud        & 50&42.9&46.2 & -- & 927\\
+\small sv_talbanken  & 55.5&46.8&50.8 & 3691 & 1168\\
+\end{tabular}
+\caption{TUPA's enhanced LAS precision, recall and F1 per test treebank with enhanced dependencies,
+and their count.
+\label{tab:enhanced}}
+\end{table}
+\catcode`\_=8
 
 
 \section{Conclusion}\label{sec:conclusion}
