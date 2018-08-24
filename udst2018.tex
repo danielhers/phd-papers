@@ -260,11 +260,11 @@ which is supported by TUPA's transition set (see \S\ref{sec:transition_set}).
 
 Any \textit{enhanced}
 heads beyond the standard head of a node are converted to remote edges in the unified DAG format.
-These enhanced dependencies are encoded in the last column of the \mbox{CoNLL-U} format,
+These enhanced dependencies are encoded in the 9th column of the \mbox{CoNLL-U} format,
 by an additional head index, followed by a colon and dependency relation.
 Multiple enhanced dependencies are separated by pipes.
 Figure~\ref{fig:enhanced_conllu} demonstrates this format.
-Note that if the standard dependency is repeated in the last column
+Note that if the standard dependency is repeated in the 9th column
 (\verb|3:nsubj:pass| in the example), we do not treat it as an enhanced dependency.
 
 In the conversion process, we strip any language-specific relation subtypes
@@ -624,13 +624,20 @@ Our system (named ``HUJI'') ranked 24th in the LAS~$F_1$ ranking
 Since our system only performs dependency parsing and not other pipeline tasks,
 we henceforth focus on LAS~$F_1$ \cite{nivre17udw} for evaluation.
 
-After fixing bugs with the conversion to the CoNLL-U format,
-we re-ran TUPA on all test treebanks, without re-training the models,
-getting an unofficial average test LAS~$F_1$ of 61.05.
+After the official evaluation period ended,
+we discovered several bugs in the conversion between the CoNLL-U format
+and the unified DAG format, which is used by TUPA for training and is output by it
+(see~\S\ref{sec:format}).
+We did not re-train TUPA on the training treebanks after fixing these bugs,
+but we did re-evaluate the already trained models on all test treebanks,
+and used the fixed code for converting their output to CoNLL-U.
+This yielded an unofficial average test LAS~$F_1$ of 61.05,
+an improvement of 7.36 points over the official average score.
 In particular, for two test sets, \verb|ar_padt| and \verb|gl_ctg|, TUPA got
 a zero score in the official evaluation due to a bug with the treatment of multi-token words.
 These went up to 70.59 and 72.68, respectively.
-We also ran TUPA on all available development treebanks after fixing the bugs.
+We also evaluated the trained TUPA models on all available development treebanks
+after fixing the bugs.
 
 Table~\ref{tab:overall_results} presents the
 averaged scores on the shared task test sets,
@@ -640,8 +647,8 @@ scores obtained by TUPA on each of the test and development treebanks.
 \begin{table}
 \begin{tabular}{lccc}
 \hline
-& \multirow{2}{13mm}{\bf TUPA {\small(official)}} & \multirow{2}{13mm}{\bf TUPA {\small(unofficial)}}
-& \multirow{2}{13mm}{\bf UDPipe {\small(baseline)}} \\\\
+& \multirow{2}{12mm}{\bf TUPA {\small(official)}} & \multirow{2}{15mm}{\bf TUPA {\small(unofficial)}}
+& \multirow{2}{14mm}{\bf UDPipe {\small(baseline)}} \\\\
 \hline
 All treebanks & 53.69 & 61.05 & 65.80 \\
 Big treebanks & 62.07 & 69.17 & 74.14 \\
@@ -840,8 +847,8 @@ vi_vtb
 \subsection{Evaluation on Enhanced Dependencies}\label{sec:enhanced_results}
 
 Since the official scores ignore enhanced dependencies,
-we evaluate them separately using a script similar to the one used for UCCA
-evaluation\footnote{\url{https://github.com/danielhers/semstr/blob/master/semstr/evaluate.py}}.
+we evaluate them separately using our own evaluation
+script\footnote{\url{https://github.com/danielhers/semstr/blob/master/semstr/evaluate.py}}.
 We calculate the \textit{enhanced LAS},
 identical to the standard LAS except that the set of dependencies
 in both gold and predicted graphs are the enhanced dependencies instead
@@ -859,26 +866,27 @@ However, TUPA learns them successfully, getting as much as 60.7 enhanced LAS $F_
 on the English EWT test set.
 
 \catcode`\_=12
-\begin{table}
+\begin{table}[t]
 \begin{tabular}{l|ccc|cc}
 \hline
 & \multicolumn{3}{c|}{Enhanced LAS} & \multicolumn{2}{c}{\#Enhanced} \\
 \bf Treebank & \bf P & \bf R & \bf F1 & \bf Train & \bf Test \\
 \hline
-\small ar_padt       & 36.7&27.6&31.5 & 13051 & 1626\\
-\small cs_cac        & 58.9&38.7&46.7 & 38438 & 1076\\
-\small cs_fictree    & 52.2&20&28.9 & 10153 & 1290\\
-\small cs_pdt        & 52.4&28.1&36.6 & 69308 & 10718\\
-\small nl_alpino     & 59.1&52.2&55.5 & 5577 & 557\\
-\small nl_lassysmall & 52.7&53.9&53.3 & 2565 & 499\\
-\small en_ewt        & 63.9&57.8&60.7 & 9177 & 1147\\
-\small en_pud        & 64&53&58 & -- & 1169\\
-\small fi_tdt        & 46.2&33.5&38.8 & 1008 & 1777\\
-\small lv_lvtb       & 37.7&14.2&20.6 & 3237 & 1029\\
-\small pl_lfg        & 61.3&55.8&58.4 & 2739 & 351\\
-\small sk_snk        & 39.3&22.9&28.9 & 3540 & 685\\
-\small sv_pud        & 50&42.9&46.2 & -- & 1318\\
-\small sv_talbanken  & 55.5&46.8&50.8 & 3691 & 1527\\
+% rubbish, should use my modified conll18_ud_eval.py instead of evaluate.py
+%\small ar_padt       & 36.7&27.6&31.5 & 13051 & 1626\\
+%\small cs_cac        & 58.9&38.7&46.7 & 38438 & 1076\\
+%\small cs_fictree    & 52.2&20&28.9 & 10153 & 1290\\
+%\small cs_pdt        & 52.4&28.1&36.6 & 69308 & 10718\\
+%\small nl_alpino     & 59.1&52.2&55.5 & 5577 & 557\\
+%\small nl_lassysmall & 52.7&53.9&53.3 & 2565 & 499\\
+%\small en_ewt        & 63.9&57.8&60.7 & 9177 & 1147\\
+%\small en_pud        & 64&53&58 & -- & 1169\\
+%\small fi_tdt        & 46.2&33.5&38.8 & 1008 & 1777\\
+%\small lv_lvtb       & 37.7&14.2&20.6 & 3237 & 1029\\
+%\small pl_lfg        & 61.3&55.8&58.4 & 2739 & 351\\
+%\small sk_snk        & 39.3&22.9&28.9 & 3540 & 685\\
+%\small sv_pud        & 50&42.9&46.2 & -- & 1318\\
+%\small sv_talbanken  & 55.5&46.8&50.8 & 3691 & 1527\\
 \end{tabular}
 \caption{TUPA's enhanced LAS precision, recall and F1 per test treebank with enhanced dependencies,
 and their count.
@@ -886,6 +894,40 @@ and their count.
 \end{table}
 \catcode`\_=8
 
+\subsection{Ablation Experiments}\label{sec:ablation}
+
+The spaCy name entity
+recognizer\footnote{\url{https://spacy.io/api/annotation}}, 
+used in the transition classifier features for some of the languages,
+was trained on
+OntoNotes\footnote{\url{https://catalog.ldc.upenn.edu/LDC2013T19}}
+for English, and on Wikipedia \cite{nothman2013learning} for
+German, Spanish, Portuguese, French, Italian, Dutch and Russian.
+While Wikipedia is allowed as an additional resource by the shared task
+organizers, OntoNotes is not.
+The quantify the contribution of the NER features,
+we re-trained TUPA on the English EWT treebank without NER features.
+
+
+\begin{table}[t]
+\begin{tabular}{l|cc|cc}
+\hline
+& \multicolumn{2}{c|}{\small LAS-F1} & \multicolumn{2}{c}{\small Enhanced LAS-F1} \\
+\bf Model & \bf Dev & \bf Test & \bf Dev & \bf Test \\
+\hline
+% rubbish... this is evaluated vs. udpipe, not vs. gold
+%\small original          & 74.3 & 74.9 & 26.9 & 25.1 \\
+%\small fixed             & 76.9 & 77.3 & 27.3 & 26.3 \\
+%\small no ner            & 76.6 & 76.7 & 26.5 & 26   \\
+%\small no ner, no remote & 76.8 & 76.9 & 0    & 0    \\
+%\small no pos            & 70.6 & 70.8 & 24   & 24.7 \\
+%\small no w2v            & 77.3 & 77.6 & 25.9 & 25.8 \\
+%\small no w2v, no remote & 77.2 & 77.7 & 0    & 0    \\
+%\small no remote         & 76.9 & 77.4 & 0    & 0
+\end{tabular}
+\caption{Ablation LAS F1 and Enhanced LAS F1 on the English EWT development and test set.
+\label{tab:ablation}}
+\end{table}
 
 \section{Conclusion}\label{sec:conclusion}
 
