@@ -846,24 +846,25 @@ vi_vtb
 
 \subsection{Evaluation on Enhanced Dependencies}\label{sec:enhanced_results}
 
-Since the official scores ignore enhanced dependencies,
+Since the official evaluation ignores enhanced dependencies,
 we evaluate them separately using a modified version of the shared task evaluation
 script\footnote{\url{https://github.com/danielhers/tupa/blob/master/tupa/scripts/conll18_ud_eval.py}}.
 We calculate the \textit{enhanced LAS},
 identical to the standard LAS except that the set of dependencies
 in both gold and predicted graphs are the enhanced dependencies instead
 of the standard tree arcs.
-Table~\ref{tab:enhanced} lists the LAS precision, recall and $F_1$ score
+Table~\ref{tab:enhanced} lists the enhanced LAS precision, recall and $F_1$ score
 on the test treebanks with any enhanced dependencies,
-as well as the number of enhanced dependencies in the gold standard
-training and test sets for these treebanks.
+as well as the percentage of enhanced dependencies in the gold standard
+training and test sets for these treebanks, calculated as
+$100 \times \frac{\#enhanced}{\#enhanced + \#words}$.
 
 Just as remote edges in UCCA parsing are more challenging
 than primary edges \cite{hershcovich2017a},
 parsing enhanced dependencies is a harder task than standard UD parsing,
 as the scores demonstrate.
 However, TUPA learns them successfully, getting as much as 51.13 enhanced LAS $F_1$
-on the Dutch Alpino test set.
+(on the Dutch Alpino test set).
 
 \catcode`\_=12
 \begin{table}[t]
@@ -873,11 +874,11 @@ on the Dutch Alpino test set.
 \bf Treebank & \bf P & \bf R & \bf F1 & \\
 \hline
 ar_padt & 26.71 & 15.79 & 19.85 & 5.30 \\
-cs_cac & 49 & 38.65 & 43.22 & 7.57 \\
+cs_cac & 49.00 & 38.65 & 43.22 & 7.57 \\
 cs_fictree & 45.62 & 29.83 & 36.07 & 4.30 \\
 cs_pdt & 45.95 & 31.66 & 37.49 & 4.61 \\
 nl_alpino & 53.88 & 48.65 & 51.13 & 4.80 \\
-nl_lassysmall & 48.93 & 50.5 & 49.7 & 4.13 \\
+nl_lassysmall & 48.93 & 50.50 & 49.70 & 4.13 \\
 en_ewt & 27.84 & 25.24 & 26.48 & 4.36 \\
 en_pud & 28.84 & 24.22 & 26.33 & 5.14 \\
 fi_tdt & 27.23 & 21.42 & 23.98 & 7.34 \\
@@ -889,25 +890,47 @@ sv_talbanken & 37.27 & 32.05 & 34.46 & 6.89
 \end{tabular}
 \caption{TUPA's enhanced LAS precision, recall and F1 per test treebank with 
 any enhanced dependencies,
-and percentage of enhanced dependencies in test treebank, calculated as
-\#enhanced / (\#enhanced + \#words).
+and percentage of enhanced dependencies in test treebank.
 \label{tab:enhanced}}
 \end{table}
 \catcode`\_=8
 
 \subsection{Ablation Experiments}\label{sec:ablation}
 
-The spaCy name entity
-recognizer\footnote{\url{https://spacy.io/api/annotation}}, 
-used in the transition classifier features for some of the languages,
-was trained on
-OntoNotes\footnote{\url{https://catalog.ldc.upenn.edu/LDC2013T19}}
-for English, and on Wikipedia \cite{nothman2013learning} for
-German, Spanish, Portuguese, French, Italian, Dutch and Russian.
-While Wikipedia is allowed as an additional resource by the shared task
-organizers, OntoNotes is not.
-The quantify the contribution of the NER features,
-we re-trained TUPA on the English EWT treebank without NER features.
+The TUPA transition classifier for some of the languages uses
+named entity features calculated by
+spaCy.\footnote{\url{https://spacy.io/api/annotation}}
+For German, Spanish, Portuguese, French, Italian, Dutch and Russian,
+the spaCy named entity recognizer was trained
+on Wikipedia \cite{nothman2013learning}.
+However, the English model was trained on
+OntoNotes\footnote{\url{https://catalog.ldc.upenn.edu/LDC2013T19}},
+which is in fact not among the additional resources allowed by the shared task
+organizers.
+To get a fair evaluation
+and to quantify the contribution of the NER features,
+we re-trained TUPA on the English EWT (\verb|en_ewt|) training set
+with the same hyperparameters as in our submitted model,
+just without these features.
+As Table~\ref{tab:ablation} shows,
+removing the NER features ($-$NER) only slightly hurts the performance,
+by 0.64 LAS-F1 points on the test treebank,
+and 0.42 on the development treebank. 
+
+As further ablation experiments, we tried removing POS features,
+pre-trained word embeddings,
+and remote edges (the latter corresponding to enhanced dependencies).
+Removing the POS features does hurt performance substantially,
+by 3.25 LAS-F1 points on the test set,
+while removing the pre-trained word embeddings much less so,
+even improving the performance on the development set
+(in both standard and enhanced LAS-F1),
+and the enhanced LAS-F1 on the test set too (by 0.3 enhanced LAS-F1 points).
+Removing remote edges and transitions from TUPA makes almost no difference
+to LAS-F1 (it degrades LAS-F1 by 0.28 on the test treebank but improves it
+by the same number on the development treebank),
+but of course enhanced dependencies
+can then no longer be produced at all.
 
 
 \begin{table}[t]
@@ -916,15 +939,20 @@ we re-trained TUPA on the English EWT treebank without NER features.
 & \multicolumn{2}{c|}{\small LAS-F1} & \multicolumn{2}{c}{\small Enhanced LAS-F1} \\
 \bf Model & \bf Dev & \bf Test & \bf Dev & \bf Test \\
 \hline
-original & 70.24 & 70.41 & 26.92 & 25.61 \\ 
--ner & 69.91 & 70.06 & 27.31 & 25.83 \\ 
--pos & 67.69 & 67.45 & 23.91 & 25.82 \\ 
--w2v & 70.66 & 70.37 & 27.29 & 26.78 \\ 
--ner-remote & 70 & 69.59 & 0 & 0 \\ 
--remote & 70.61 & 70.42 & 0 & 0 \\ 
--w2v-remote & 70.71 & 70.47 & 0 & 0
+Original & 70.33 & 70.70 & 26.92 & 26.48 \\ 
+$-$NER & 69.91 & 70.06 & 27.31 & 25.83 \\ 
+$-$POS & 67.69 & 67.45 & 23.91 & 25.82 \\ 
+$-$Embed. & 70.66 & 70.37 & 27.29 & 26.78 \\ 
+$-$Remote & 70.61 & 70.42 & 0 & 0 \\ 
+%$-$R$-$N & 70.00 & 69.59 & 0 & 0 \\ 
+%$-$R$-$E & 70.71 & 70.47 & 0 & 0
 \end{tabular}
-\caption{Ablation LAS F1 and Enhanced LAS F1 on the English EWT development and test set.
+\caption{Ablation LAS-F1 and Enhanced LAS-F1 on the English EWT development
+and test set.
+NER: named entity features.
+POS: part-of-speech tag features (both universal and fine-grained).
+Embed.: external pre-trained word embeddings (fastText).
+Remote: remote edges and transitions in TUPA.
 \label{tab:ablation}}
 \end{table}
 
