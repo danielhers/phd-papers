@@ -631,11 +631,11 @@ and the unified DAG format, which is used by TUPA for training and is output by 
 We did not re-train TUPA on the training treebanks after fixing these bugs,
 but we did re-evaluate the already trained models on all test treebanks,
 and used the fixed code for converting their output to CoNLL-U.
-This yielded an unofficial average test LAS~$F_1$ of 61.05,
-an improvement of 7.36 points over the official average score.
+This yielded an unofficial average test LAS~$F_1$ of 57.79,
+an improvement of 4.1 points over the official average score.
 In particular, for two test sets, \verb|ar_padt| and \verb|gl_ctg|, TUPA got
 a zero score in the official evaluation due to a bug with the treatment of multi-token words.
-These went up to 70.59 and 72.68, respectively.
+These went up to 61.82 and 71.42, respectively.
 We also evaluated the trained TUPA models on all available development treebanks
 after fixing the bugs.
 
@@ -650,11 +650,11 @@ scores obtained by TUPA on each of the test and development treebanks.
 & \multirow{2}{12mm}{\bf TUPA {\small(official)}} & \multirow{2}{15mm}{\bf TUPA {\small(unofficial)}}
 & \multirow{2}{14mm}{\bf UDPipe {\small(baseline)}} \\\\
 \hline
-All treebanks & 53.69 & 61.05 & 65.80 \\
-Big treebanks & 62.07 & 69.17 & 74.14 \\
-PUD treebanks & 56.35 & 62.41 & 66.63 \\
-Small treebanks & 36.74 & 42.72 & 55.01 \\
-Low-resource & 8.53 & 14.27 & 17.17
+All treebanks & 53.69 & 57.79 & 65.80 \\
+Big treebanks & 62.07 & 66.60 & 74.14 \\
+PUD treebanks & 56.35 & 55.81 & 66.63 \\
+Small treebanks & 36.74 & 40.85 & 55.01 \\
+Low-resource & 8.53 & 12.39 & 17.17
 \end{tabular}
 \caption{Aggregated test LAS~$F_1$ scores
 for our system (TUPA) and the baseline system (UDPipe 1.2).
