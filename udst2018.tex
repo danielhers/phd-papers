@@ -847,8 +847,8 @@ vi_vtb
 \subsection{Evaluation on Enhanced Dependencies}\label{sec:enhanced_results}
 
 Since the official scores ignore enhanced dependencies,
-we evaluate them separately using our own evaluation
-script\footnote{\url{https://github.com/danielhers/semstr/blob/master/semstr/evaluate.py}}.
+we evaluate them separately using a modified version of the shared task evaluation
+script\footnote{\url{https://github.com/danielhers/tupa/blob/master/tupa/scripts/conll18_ud_eval.py}}.
 We calculate the \textit{enhanced LAS},
 identical to the standard LAS except that the set of dependencies
 in both gold and predicted graphs are the enhanced dependencies instead
@@ -862,34 +862,35 @@ Just as remote edges in UCCA parsing are more challenging
 than primary edges \cite{hershcovich2017a},
 parsing enhanced dependencies is a harder task than standard UD parsing,
 as the scores demonstrate.
-However, TUPA learns them successfully, getting as much as 60.7 enhanced LAS $F_1$
-on the English EWT test set.
+However, TUPA learns them successfully, getting as much as 51.13 enhanced LAS $F_1$
+on the Dutch Alpino test set.
 
 \catcode`\_=12
 \begin{table}[t]
-\begin{tabular}{l|ccc|cc}
+\begin{tabular}{l|ccc|c}
 \hline
-& \multicolumn{3}{c|}{Enhanced LAS} & \multicolumn{2}{c}{\#Enhanced} \\
-\bf Treebank & \bf P & \bf R & \bf F1 & \bf Train & \bf Test \\
+& \multicolumn{3}{c|}{Enhanced LAS} & \multirow{2}{11mm}{\% Enhanced} \\
+\bf Treebank & \bf P & \bf R & \bf F1 & \\
 \hline
-% rubbish, should use my modified conll18_ud_eval.py instead of evaluate.py
-%\small ar_padt       & 36.7&27.6&31.5 & 13051 & 1626\\
-%\small cs_cac        & 58.9&38.7&46.7 & 38438 & 1076\\
-%\small cs_fictree    & 52.2&20&28.9 & 10153 & 1290\\
-%\small cs_pdt        & 52.4&28.1&36.6 & 69308 & 10718\\
-%\small nl_alpino     & 59.1&52.2&55.5 & 5577 & 557\\
-%\small nl_lassysmall & 52.7&53.9&53.3 & 2565 & 499\\
-%\small en_ewt        & 63.9&57.8&60.7 & 9177 & 1147\\
-%\small en_pud        & 64&53&58 & -- & 1169\\
-%\small fi_tdt        & 46.2&33.5&38.8 & 1008 & 1777\\
-%\small lv_lvtb       & 37.7&14.2&20.6 & 3237 & 1029\\
-%\small pl_lfg        & 61.3&55.8&58.4 & 2739 & 351\\
-%\small sk_snk        & 39.3&22.9&28.9 & 3540 & 685\\
-%\small sv_pud        & 50&42.9&46.2 & -- & 1318\\
-%\small sv_talbanken  & 55.5&46.8&50.8 & 3691 & 1527\\
+ar_padt & 26.71 & 15.79 & 19.85 & 5.30 \\
+cs_cac & 49 & 38.65 & 43.22 & 7.57 \\
+cs_fictree & 45.62 & 29.83 & 36.07 & 4.30 \\
+cs_pdt & 45.95 & 31.66 & 37.49 & 4.61 \\
+nl_alpino & 53.88 & 48.65 & 51.13 & 4.80 \\
+nl_lassysmall & 48.93 & 50.5 & 49.7 & 4.13 \\
+en_ewt & 27.84 & 25.24 & 26.48 & 4.36 \\
+en_pud & 28.84 & 24.22 & 26.33 & 5.14 \\
+fi_tdt & 27.23 & 21.42 & 23.98 & 7.34 \\
+lv_lvtb & 26.23 & 15.61 & 19.57 & 4.12 \\
+pl_lfg & 51.88 & 47.29 & 49.48 & 2.61 \\
+sk_snk & 35.48 & 26.98 & 30.65 & 3.91 \\
+sv_pud & 33.63 & 29.32 & 31.33 & 6.36 \\
+sv_talbanken & 37.27 & 32.05 & 34.46 & 6.89
 \end{tabular}
-\caption{TUPA's enhanced LAS precision, recall and F1 per test treebank with enhanced dependencies,
-and their count.
+\caption{TUPA's enhanced LAS precision, recall and F1 per test treebank with 
+any enhanced dependencies,
+and percentage of enhanced dependencies in test treebank, calculated as
+\#enhanced / (\#enhanced + \#words).
 \label{tab:enhanced}}
 \end{table}
 \catcode`\_=8
@@ -915,15 +916,13 @@ we re-trained TUPA on the English EWT treebank without NER features.
 & \multicolumn{2}{c|}{\small LAS-F1} & \multicolumn{2}{c}{\small Enhanced LAS-F1} \\
 \bf Model & \bf Dev & \bf Test & \bf Dev & \bf Test \\
 \hline
-% rubbish... this is evaluated vs. udpipe, not vs. gold
-%\small original          & 74.3 & 74.9 & 26.9 & 25.1 \\
-%\small fixed             & 76.9 & 77.3 & 27.3 & 26.3 \\
-%\small no ner            & 76.6 & 76.7 & 26.5 & 26   \\
-%\small no ner, no remote & 76.8 & 76.9 & 0    & 0    \\
-%\small no pos            & 70.6 & 70.8 & 24   & 24.7 \\
-%\small no w2v            & 77.3 & 77.6 & 25.9 & 25.8 \\
-%\small no w2v, no remote & 77.2 & 77.7 & 0    & 0    \\
-%\small no remote         & 76.9 & 77.4 & 0    & 0
+original & 70.24 & 70.41 & 26.92 & 25.61 \\ 
+-ner & 69.91 & 70.06 & 27.31 & 25.83 \\ 
+-pos & 67.69 & 67.45 & 23.91 & 25.82 \\ 
+-w2v & 70.66 & 70.37 & 27.29 & 26.78 \\ 
+-ner-remote & 70 & 69.59 & 0 & 0 \\ 
+-remote & 70.61 & 70.42 & 0 & 0 \\ 
+-w2v-remote & 70.71 & 70.47 & 0 & 0
 \end{tabular}
 \caption{Ablation LAS F1 and Enhanced LAS F1 on the English EWT development and test set.
 \label{tab:ablation}}
