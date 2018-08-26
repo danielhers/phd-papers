@@ -351,7 +351,7 @@ While UCCA supports empty nodes without surface realization
 in the form of \textit{implicit units},
 previous work on UCCA parsing has removed these from the graphs.
 We do the same for UD parsing, leaving elided predicates
-and their associated dependencies to future work.
+and their associated dependencies for future work.
 
 \paragraph{Propagation of conjuncts.}
 
@@ -372,7 +372,7 @@ as semantically only the subject is shared and not the modifiers.
 \paragraph{Relative clauses.}
 
 Finally, enhanced graphs attach predicates of relative clauses directly
-to the antecedent modified by the relative clause, also adding a \verb|ref|
+to the antecedent modified by the relative clause, adding a \verb|ref|
 dependency between the antecedent and the relative pronoun.
 While these graphs may contain cycles, we remove them upon conversion to
 the unified DAG format by deleting an arbitrary edge in each cycle, to
