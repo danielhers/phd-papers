@@ -109,20 +109,31 @@ To parse Universal Dependencies \cite{nivre2016universal}
 using TUPA, we employ a bidirectional conversion protocol to represent
 UD trees and graphs in a UCCA-like unified DAG format (\S\ref{sec:format}).
 
+\paragraph{Enhanced dependencies.}
+
 Our method treats \textit{enhanced dependencies}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
 as part of the dependency graph, providing the first approach, to our knowledge,
 for supervised learning of enhanced UD parsing.
-Although not included in the evaluation metrics for UD parsing,
-we believe these enhancements, representing elided predicates,
-shared arguments due to conjunction, control, raising and coreference,
-case information,
-as well as partitives and light noun constructions,
+Due to the scarcity of enhanced dependencies in UD treebanks,
+previous approaches
+\cite{SCHUSTER16.779,D17-1009} have attempted to recover them
+using language-specific rules.
+Our approach attempts to learn them from data.
+
+Enhanced dependencies are \textit{not included}
+in the evaluation metrics for UD parsing,
+and so TUPA's ability to parse them is not reflected in the official
+shared task scores.
+However, we believe these enhancements, representing
+case information, elided predicates,
+and shared arguments due to conjunction, control, raising
+and relative clauses
+(see examples in \S\ref{sec:format}),
 provide richer information to downstream semantic applications,
 making UD better suited to be used as the representation for semantic tasks.
-Due to the scarcity of their annotation in UD treebanks, previous approaches
-\cite{SCHUSTER16.779,D17-1009} have attempted to recover these enhanced
-dependencies using language-specific rules.
-Our approach attempts to learn them from data.
+We propose an evaluation metric specific to enhanced dependencies,
+\textit{enhanced~LAS} (\S\ref{sec:enhanced_results}),
+and use it to evaluate our method.
 
 \begin{figure}[ht]
 \fbox{\begin{subfigure}{0.47\textwidth}
@@ -207,7 +218,8 @@ Our approach attempts to learn them from data.
 \end{subfigure}}
 
 \cprotect\caption{(a) Example UCCA annotation for the sentence
-``We were made to feel very welcome.''
+``We were made to feel very welcome.'',
+containing a control verb, \textit{made}.
 The dashed \textit{A} edge is a \textit{remote edge},
 representing a \textit{Participant} relation that is not explicit in the text,
 and allowing argument sharing by reentrancy,
@@ -237,16 +249,18 @@ The format consists of a rooted DAG, where the tokens are the terminal
 nodes.\footnote{Our conversion code supports full conversion between UCCA and UD,
 among other representation schemes,
 and is publicly available at \url{http://github.com/danielhers/semstr/tree/master/semstr/conversion}.}
-As in the UCCA format, edges are labeled (but not nodes),
+Edges are labeled (but not nodes),
 and are divided into \textit{primary} and \textit{remote} edges,
 where the primary edges form a tree (all nodes have at most one primary parent,
 and the root has none).
-Remote edges enable reentrancy, and thus together with primary edges
-form a DAG.
+Remote edges (denoted as dashed edges in Figure~\ref{fig:converted_examples})
+enable reentrancy, and thus form a DAG together with primary edges.
 Figure~\ref{fig:converted_examples} shows an example UCCA graph,
 and a UD graph (containing two enhanced dependencies) before and after conversion.
 Both annotate the same sentence, \verb|reviews-077034-0002| from the
 English Web Treebank \cite{L14-1067}\footnote{\url{https://catalog.ldc.upenn.edu/LDC2012T13}}.
+
+\paragraph{Conversion protocol.}
 
 To convert UD into the unified DAG format,
 we add a pre-terminal for each token,
@@ -258,19 +272,74 @@ and add the node's dependents as children of the created non-terminal node
 This creates a constituency-like structure,
 which is supported by TUPA's transition set (see \S\ref{sec:transition_set}).
 
-Any \textit{enhanced}
-heads beyond the basic head of a node are converted to remote edges in the unified DAG format.
-These enhanced dependencies are encoded in the 9th column of the \mbox{CoNLL-U} format,
-by an additional head index, followed by a colon and dependency relation.
-Multiple enhanced dependencies are separated by pipes.
-Figure~\ref{fig:enhanced_conllu} demonstrates this format.
-Note that if the basic dependency is repeated in the 9th column
-(\verb|3:nsubj:pass| in the example), we do not treat it as an enhanced dependency.
+Although the enhanced dependency graph is not necessarily a supergraph
+of the basic dependency tree,
+the graph we convert to the unified DAG format is their union:
+any enhanced dependnecies that are distinct from the basic dependency of a
+node (by having a different head or universal dependency relation)
+are converted to \textit{remote edges} in the unified DAG format.
 
-In the conversion process, we strip any language-specific relation subtypes
-(ignored by the parsing evaluation metrics),
+To convert graphs in the unified DAG format back into dependency graphs,
+we collapse all \textit{head} edges,
+determining for each terminal what is the highest non-terminal headed by it,
+and then attaching the terminals to each other according to the edges among
+their headed non-terminals.
+
+\paragraph{Input format.}
+
+Enhanced dependencies are encoded in the 9th column of the \mbox{CoNLL-U} format,
+by an additional head index, followed by a colon and dependency relation.
+Multiple enhanced dependencies for the same node are separated by pipes.
+Figure~\ref{fig:enhanced_conllu} demonstrates this format.
+Note that if the basic dependency is repeated in the enhanced graph
+(\verb|3:nsubj:pass| in the example), we do not treat it as an enhanced 
+dependency, so that the converted graph will only contain each edge once.
+In addition to the universal dependency relations defined in the basic
+representations, enhanced dependencies may contain the relation \verb|ref|,
+used for relative clauses.
+In addition, they may contain more specific relation subtypes,
+and optionally also case information.
+
+\paragraph{Language-specific extensions and case information.}
+
+Dependencies may contain language-specific relation subtypes,
+encoded as a suffix separated from the universal relation by a colon.
+These extensions are ignored by the parsing evaluation metrics,
+so for example, the language-specific \verb|nsubj:pass|
+is considered the same as the universal relation \verb|nsubj|.
+In the conversion process, we strip any language-specific extensions
+from both basic and enhanced dependencies,
 leaving only the universal relations.
-For example, the language-specific \verb|acl:relcl| is replaced by the universal relation \verb|acl|.
+Consequently, case information that might be encoded in the enhanced
+dependencies is lost, and we do not handle it in our current system.
+
+\paragraph{Ellipsis and null nodes.}
+
+In addition to enhanced dependencies, the enhanced UD representation
+adds null nodes to represented elided predicates.
+These, too, are ignored in the standard evaluation.
+While UCCA supports empty nodes without surface realization
+in the form of \textit{implicit units},
+previous work on UCCA parsing has removed these from the graphs.
+We do the same for UD parsing, leaving elided predicates
+and their associated dependencies to future work.
+
+\paragraph{Propagation of conjuncts.}
+
+Enhanced dependencies contain dependencies between conjoined predicates
+and their arguments, and between predicates and their conjoined arguments
+or modifiers.
+While these relations can often be inferred from the basic dependencies,
+in many cases they require semantic knowledge to parse correctly.
+
+\paragraph{Relative clauses.}
+
+Finally, enhanced graphs attach predicates of relative clauses directly
+to the antecedent modified by the relative clause, also adding a \verb|ref|
+dependency between the antecedent and the relative pronoun.
+While these graphs may contain cycles, we remove them upon conversion to
+the unified DAG format by deleting an arbitrary edge in each cycle, to
+get an acyclic graph.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
