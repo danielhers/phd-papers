@@ -259,12 +259,12 @@ This creates a constituency-like structure,
 which is supported by TUPA's transition set (see \S\ref{sec:transition_set}).
 
 Any \textit{enhanced}
-heads beyond the standard head of a node are converted to remote edges in the unified DAG format.
+heads beyond the basic head of a node are converted to remote edges in the unified DAG format.
 These enhanced dependencies are encoded in the 9th column of the \mbox{CoNLL-U} format,
 by an additional head index, followed by a colon and dependency relation.
 Multiple enhanced dependencies are separated by pipes.
 Figure~\ref{fig:enhanced_conllu} demonstrates this format.
-Note that if the standard dependency is repeated in the 9th column
+Note that if the basic dependency is repeated in the 9th column
 (\verb|3:nsubj:pass| in the example), we do not treat it as an enhanced dependency.
 
 In the conversion process, we strip any language-specific relation subtypes
@@ -852,7 +852,7 @@ script\footnote{\url{https://github.com/danielhers/tupa/blob/master/tupa/scripts
 We calculate the \textit{enhanced LAS},
 identical to the standard LAS except that the set of dependencies
 in both gold and predicted graphs are the enhanced dependencies instead
-of the standard tree arcs.
+of the basic dependencies.
 Table~\ref{tab:enhanced} lists the enhanced LAS precision, recall and $F_1$ score
 on the test treebanks with any enhanced dependencies,
 as well as the percentage of enhanced dependencies in the gold standard
@@ -924,7 +924,7 @@ Removing the POS features does hurt performance substantially,
 by 3.25 LAS-F1 points on the test set,
 while removing the pre-trained word embeddings much less so,
 even improving the performance on the development set
-(in both standard and enhanced LAS-F1),
+(in both basic and enhanced LAS-F1),
 and the enhanced LAS-F1 on the test set too (by 0.3 enhanced LAS-F1 points).
 Removing remote edges and transitions from TUPA makes almost no difference
 to LAS-F1 (it degrades LAS-F1 by 0.28 on the test treebank but improves it
