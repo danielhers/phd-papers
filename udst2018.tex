@@ -135,6 +135,9 @@ We propose an evaluation metric specific to enhanced dependencies,
 \textit{enhanced~LAS} (\S\ref{sec:enhanced_results}),
 and use it to evaluate our method.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{figure}[ht]
 \fbox{\begin{subfigure}{0.47\textwidth}
     \centering
@@ -220,12 +223,10 @@ and use it to evaluate our method.
 \cprotect\caption{(a) Example UCCA annotation for the sentence
 ``We were made to feel very welcome.'',
 containing a control verb, \textit{made}.
-The dashed \textit{A} edge is a \textit{remote edge},
-representing a \textit{Participant} relation that is not explicit in the text,
-and allowing argument sharing by reentrancy,
-creating a DAG structure.
+The dashed \textit{A} edge is a \textit{remote edge}.
 (b) Bilexical graph annotating the same sentence in UD
 (\verb|reviews-077034-0002| from \verb|UD_English-EWT|).
+Enhanced dependencies appear below the sentence.
 (c) The same UD graph, after conversion to the unified DAG format.
 Intermediate non-terminals and \textit{head} edges are introduced,
 to get a UCCA-like structure.}\label{fig:converted_examples}
@@ -239,8 +240,36 @@ to get a UCCA-like structure.}\label{fig:converted_examples}
 \verb|5:nsubj:xsubj| and \verb|7:nsubj:xsubj|.}\label{fig:enhanced_conllu}
 \end{figure*}
 
+\begin{figure*}[ht]
+\fbox{
+  \centering
+    \begin{dependency}[text only label, label style={above}, font=\small]
+    \begin{deptext}[column sep=1.15em,ampersand replacement=\^]
+    he \^ went \^ straight \^ to \^ work \^ and \^ finished \^ the \^ job \^ efficiently \^ and \^ promptly \^ ! \\
+    \end{deptext}
+        \depedge[edge start x offset=1pt]{2}{1}{nsubj}
+        \depedge[edge below,dashed,edge unit distance=.5ex,edge end x offset=2pt]{7}{1}{nsubj}
+        \deproot[edge unit distance=3ex]{2}{root}
+        \depedge[edge start x offset=3pt]{2}{3}{advmod}
+        \depedge{5}{4}{mark}
+        \depedge[edge unit distance=1.75ex,edge start x offset=2pt]{2}{5}{advcl}
+        \depedge{7}{6}{cc}
+        \depedge[edge unit distance=1.5ex,edge start x offset=1pt]{2}{7}{conj}
+        \depedge{9}{8}{det}
+        \depedge[edge unit distance=2.5ex,edge start x offset=1pt]{7}{9}{obj}
+        \depedge[edge unit distance=2.5ex,edge start x offset=-1pt]{7}{10}{advmod}
+        \depedge{12}{11}{cc}
+        \depedge{10}{12}{conj}
+        \depedge[edge below,dashed,edge unit distance=.65ex,edge end x offset=2pt]{7}{12}{advmod}
+        \depedge[edge unit distance=1ex,edge start x offset=-1pt]{2}{13}{punct}
+    \end{dependency}
+}
+\cprotect\caption{UD annotation adapted from \verb|reviews-341397-0003|,
+containing conjoined predicates and arguments.}
+\label{fig:example_conj}
+\end{figure*}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Unified DAG Format}\label{sec:format}
 
 To apply TUPA to UD parsing,
@@ -257,7 +286,7 @@ Remote edges (denoted as dashed edges in Figure~\ref{fig:converted_examples})
 enable reentrancy, and thus form a DAG together with primary edges.
 Figure~\ref{fig:converted_examples} shows an example UCCA graph,
 and a UD graph (containing two enhanced dependencies) before and after conversion.
-Both annotate the same sentence, \verb|reviews-077034-0002| from the
+Both annotate the same sentence from the
 English Web Treebank \cite{L14-1067}\footnote{\url{https://catalog.ldc.upenn.edu/LDC2012T13}}.
 
 \paragraph{Conversion protocol.}
@@ -331,6 +360,14 @@ and their arguments, and between predicates and their conjoined arguments
 or modifiers.
 While these relations can often be inferred from the basic dependencies,
 in many cases they require semantic knowledge to parse correctly.
+For example, in Figure~\ref{fig:example_conj},
+the enhanced dependencies represent the shared subject (``he'') among the
+conjoined predicates (``went'' and ``finished''),
+and the conjoined modifiers (``efficiently'' and ``promptly'')
+for the second predicate (``finished'').
+However, there are no enhanced dependencies between the first predicate
+and the second predicate's modifiers (e.g. ``went'' $\to$ ``efficiently''),
+as semantically only the subject is shared and not the modifiers.
 
 \paragraph{Relative clauses.}
 
