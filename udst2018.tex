@@ -118,17 +118,21 @@ Due to the scarcity of enhanced dependencies in UD treebanks,
 previous approaches
 \cite{SCHUSTER16.779,D17-1009} have attempted to recover them
 using language-specific rules.
-Our approach attempts to learn them from data.
+Our approach attempts to learn them from data:
+while only a few UD treebanks contain any enhanced dependencies,
+similar structures are an integral part of UCCA and its annotated corpora
+(realized as reentrancy by remote edges; see \S\ref{sec:format}),
+and TUPA supports them as a standard feature.
 
-Enhanced dependencies are \textit{not included}
+As their annotation in UD is not yet widespread and standardized,
+enhanced dependencies are \textit{not included}
 in the evaluation metrics for UD parsing,
 and so TUPA's ability to parse them is not reflected in the official
 shared task scores.
 However, we believe these enhancements, representing
 case information, elided predicates,
 and shared arguments due to conjunction, control, raising
-and relative clauses
-(see examples in \S\ref{sec:format}),
+and relative clauses,
 provide richer information to downstream semantic applications,
 making UD better suited to be used as the representation for semantic tasks.
 We propose an evaluation metric specific to enhanced dependencies,
@@ -980,13 +984,13 @@ However, TUPA learns them successfully, getting as much as 50.33 enhanced LAS $F
 \bf Treebank & \bf P & \bf R & \bf F1 & \\
 \hline
 ar_padt & 26.71 & 15.79 & 19.85 & 5.30\\
-cs_cac & 48.43 & 38.2 & 42.71 & 7.57\\
+cs_cac & 48.43 & 38.20 & 42.71 & 7.57\\
 cs_fictree & 45.82 & 29.96 & 36.23 & 4.30\\
 cs_pdt & 45.88 & 31.65 & 37.46 & 4.61\\
 nl_alpino & 52.98 & 47.94 & 50.33 & 4.80\\
-nl_lassysmall & 48.45 & 50.1 & 49.26 & 4.13\\
+nl_lassysmall & 48.45 & 50.10 & 49.26 & 4.13\\
 en_ewt & 28.26 & 25.76 & 26.95 & 4.36\\
-en_pud & 28.9 & 24.39 & 26.45 & 5.14\\
+en_pud & 28.90 & 24.39 & 26.45 & 5.14\\
 fi_tdt & 27.99 & 22.02 & 24.65 & 7.34\\
 lv_lvtb & 27.46 & 16.38 & 20.52 & 4.12\\
 pl_lfg & 51.25 & 46.72 & 48.88 & 2.61\\
@@ -1020,22 +1024,19 @@ with the same hyperparameters as in our submitted model,
 just without these features.
 As Table~\ref{tab:ablation} shows,
 removing the NER features ($-$NER) only slightly hurts the performance,
-by 0.64 LAS-F1 points on the test treebank,
-and 0.42 on the development treebank. 
+by 0.26 LAS-F1 points on the test treebank,
+and 0.64 on the development treebank. 
 
 As further ablation experiments, we tried removing POS features,
 pre-trained word embeddings,
-and remote edges (the latter corresponding to enhanced dependencies).
-Removing the POS features does hurt performance substantially,
-by 3.25 LAS-F1 points on the test set,
-while removing the pre-trained word embeddings much less so,
-even improving the performance on the development set
-(in both basic and enhanced LAS-F1),
-and the enhanced LAS-F1 on the test set too (by 0.3 enhanced LAS-F1 points).
-Removing remote edges and transitions from TUPA makes almost no difference
-to LAS-F1 (it degrades LAS-F1 by 0.28 on the test treebank but improves it
-by the same number on the development treebank),
-but of course enhanced dependencies
+and remote edges (the latter enabling TUPA to parse enhanced dependencies).
+Removing the POS features does hurt performance to a larger degree,
+by 2.85 LAS-F1 points on the test set,
+while removing the pre-trained word embeddings
+even slightly improves the performance on basic dependencies,
+but hurts the enhanced LAS.
+Removing remote edges and transitions from TUPA makes a very small improvement
+to LAS-F1, but of course enhanced dependencies
 can then no longer be produced at all.
 
 
@@ -1043,15 +1044,16 @@ can then no longer be produced at all.
 \begin{tabular}{l|cc|cc}
 \hline
 & \multicolumn{2}{c|}{\small LAS-F1} & \multicolumn{2}{c}{\small Enhanced LAS-F1} \\
-\bf Model & \bf Dev & \bf Test & \bf Dev & \bf Test \\
+\bf Model & \bf Test & \bf Dev & \bf Test & \bf Dev \\
 \hline
-Original & 70.33 & 70.70 & 26.92 & 26.48 \\ 
-$-$NER & 69.91 & 70.06 & 27.31 & 25.83 \\ 
-$-$POS & 67.69 & 67.45 & 23.91 & 25.82 \\ 
-$-$Embed. & 70.66 & 70.37 & 27.29 & 26.78 \\ 
-$-$Remote & 70.61 & 70.42 & 0 & 0 \\ 
-%$-$R$-$N & 70.00 & 69.59 & 0 & 0 \\ 
-%$-$R$-$E & 70.71 & 70.47 & 0 & 0
+Original & 71.98 & 72.30 & 26.95 & 28.51 \\
+%Re-trained & 71.98 & 71.89 & 26.01 & 27.22\\
+$-$NER & 71.72 & 71.66 & 26.63 & 27.63\\
+$-$POS & 69.13 & 69.38 & 26.53 & 24.30\\
+$-$Embed. & 72.22 & 72.40 & 26.29 & 27.65\\
+$-$Remote & 72.08 & 72.32 & 0 & 0
+%$-$Remote$-$NER & 71.36 & 71.78 & 0 & 0\\
+%$-$Remote$-$Embed. & 72.22 & 72.44 & 0 & 0
 \end{tabular}
 \caption{Ablation LAS-F1 and Enhanced LAS-F1 on the English EWT development
 and test set.
