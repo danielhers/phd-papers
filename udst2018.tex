@@ -268,9 +268,41 @@ to get a UCCA-like structure.}\label{fig:converted_examples}
         \depedge[edge unit distance=1ex,edge start x offset=-1pt]{2}{13}{punct}
     \end{dependency}
 }
-\cprotect\caption{UD annotation adapted from \verb|reviews-341397-0003|,
+\cprotect\caption{UD graph from \verb|reviews-341397-0003| (\verb|UD_English-EWT|),
 containing conjoined predicates and arguments.}
 \label{fig:example_conj}
+\end{figure*}
+
+\begin{figure*}[ht]
+\fbox{
+  \centering
+    \begin{dependency}[text only label, label style={above}, font=\small]
+    \begin{deptext}[column sep=1.25em,ampersand replacement=\^]
+    I \^ wish \^ all \^ happy \^ holidays \^ , \^ and \^ moreso \^ , \^ \textbf{E9.1} \^ peace \^ on \^ earth \^ . \\
+    \end{deptext}
+        \depedge[edge start x offset=1pt]{2}{1}{nsubj}
+        \deproot[edge start x offset=-1pt,edge unit distance=3ex]{2}{root}
+        \depedge[edge start x offset=2pt,edge start x offset=3pt]{2}{3}{iobj}
+        \depedge{5}{4}{amod}
+        \depedge[edge start x offset=2pt]{2}{5}{obj}
+        \depedge[edge unit distance=2ex]{11}{6}{punct}
+        \depedge[edge start x offset=4pt,edge below,dashed]{10}{6}{punct}
+        \depedge[edge start x offset=-1pt,edge unit distance=1.85ex]{11}{7}{cc}
+        \depedge[edge start x offset=1pt,edge below,dashed]{10}{7}{cc}
+        \depedge[edge start x offset=-3pt,edge unit distance=1.5ex]{11}{8}{orphan}
+        \depedge[edge start x offset=-1pt,edge below,dashed]{10}{8}{advmod}
+        \depedge[edge start x offset=-5pt,edge unit distance=.8ex]{11}{9}{punct}
+        \depedge[edge start x offset=-3pt,edge below,dashed]{10}{9}{punct}
+        \depedge[edge unit distance=1.45ex]{2}{11}{conj}
+        \depedge[edge below,dashed]{10}{11}{obj}
+        \depedge{13}{12}{case}
+        \depedge[edge start x offset=1pt]{11}{13}{nmod}
+        \depedge[edge start x offset=-1pt,edge unit distance=1.35ex]{2}{14}{punct}
+    \end{dependency}
+}
+\cprotect\caption{\verb|newsgroup-groups.google.com_GuildWars_086f0f64ab633ab3_ENG_20041111_173500-0051| (\verb|UD_English-EWT|), containing a null node (\textbf{E9.1}) and
+case information (nmod:on).}
+\label{fig:example_ellipsis}
 \end{figure*}
 
 
@@ -338,8 +370,16 @@ and optionally also case information.
 Dependencies may contain language-specific relation subtypes,
 encoded as a suffix separated from the universal relation by a colon.
 These extensions are ignored by the parsing evaluation metrics,
-so for example, the language-specific \verb|nsubj:pass|
-is considered the same as the universal relation \verb|nsubj|.
+so for example, the subtyped relation \verb|nsubj:pass| (Figure~\ref{fig:original_examples})
+is considered the same as the universal relation \verb|nsubj|
+for evaluation purposes.
+In the enhanced dependencies,
+these suffixes may also contain case information,
+which may be represented by the lemma of an adposition.
+For example, the ``peace''~$\to$~``earth'' dependency in Figure~\ref{fig:example_ellipsis}
+is augmented as \verb|nmod:on| in the enhanced graph
+(not shown in the figure because it shares the universal relation with the basic dependency).
+
 In the conversion process, we strip any language-specific extensions
 from both basic and enhanced dependencies,
 leaving only the universal relations.
@@ -351,11 +391,19 @@ dependencies is lost, and we do not handle it in our current system.
 In addition to enhanced dependencies, the enhanced UD representation
 adds null nodes to represented elided predicates.
 These, too, are ignored in the standard evaluation.
+An example is shown in Figure~\ref{fig:example_ellipsis},
+where an elided ``wish'' is represented by the node E9.1.
+The elided predicate's dependents are attached to its argument ``peace''
+in the basic representation, and the argument itself is attached as an \verb|orphan|.
+In the enhanced representation, all arguments are attached to the null node as if
+the elided predicate was present.
+
 While UCCA supports empty nodes without surface realization
 in the form of \textit{implicit units},
 previous work on UCCA parsing has removed these from the graphs.
-We do the same for UD parsing, leaving elided predicates
-and their associated dependencies for future work.
+We do the same for UD parsing, dropping null nodes and their
+associated dependencies on the conversion to the unified DAG format.
+We leave parsing elided predicates for future work.
 
 \paragraph{Propagation of conjuncts.}
 
@@ -370,7 +418,7 @@ conjoined predicates (``went'' and ``finished''),
 and the conjoined modifiers (``efficiently'' and ``promptly'')
 for the second predicate (``finished'').
 However, there are no enhanced dependencies between the first predicate
-and the second predicate's modifiers (e.g. ``went'' $\to$ ``efficiently''),
+and the second predicate's modifiers (e.g. ``went''~$\to$~``efficiently''),
 as semantically only the subject is shared and not the modifiers.
 
 \paragraph{Relative clauses.}
