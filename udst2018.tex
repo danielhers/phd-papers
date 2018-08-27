@@ -1182,7 +1182,7 @@ As further ablation experiments, we tried removing POS features,
 pre-trained word embeddings,
 and remote edges (the latter enabling TUPA to parse enhanced dependencies).
 Removing the POS features does hurt performance to a larger degree,
-by 2.85 LAS-F1 points on the test set,
+by 2.84 LAS-F1 points on the test set,
 while removing the pre-trained word embeddings
 even slightly improves the performance on basic dependencies,
 but hurts the enhanced LAS.
@@ -1198,13 +1198,13 @@ can then no longer be produced at all.
 \bf Model & \bf Test & \bf Dev & \bf Test & \bf Dev \\
 \hline
 Original & 71.98 & 72.30 & 26.95 & 28.51 \\
-%Re-trained & 71.98 & 71.89 & 26.01 & 27.22\\
-$-$NER & 71.72 & 71.66 & 26.63 & 27.63\\
-$-$POS & 69.13 & 69.38 & 26.53 & 24.30\\
-$-$Embed. & 72.22 & 72.40 & 26.29 & 27.65\\
-$-$Remote & 72.08 & 72.32 & 0 & 0
+%Re-trained & 71.98 & 71.91 & 54.94 & 56.21\\
+$-$NER & 71.72 & 71.67 & 55.56 & 54.86\\
+$-$POS & 69.14 & 69.41 & 54.21 & 49.42\\
+$-$Embed. & 72.23 & 72.42 & 56.47 & 54.82\\
+$-$Remote & 72.08 & 72.32 & 0 & 0\\
 %$-$Remote$-$NER & 71.36 & 71.78 & 0 & 0\\
-%$-$Remote$-$Embed. & 72.22 & 72.44 & 0 & 0
+%$-$Remote$-$Embed. & 72.22 & 72.44 & 0 & 0\\
 \end{tabular}
 \caption{Ablation LAS-F1 and Enhanced LAS-F1 on the English EWT development
 and test set.
