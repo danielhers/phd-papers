@@ -282,7 +282,7 @@ containing conjoined predicates and arguments.}
     \end{deptext}
         \depedge[edge start x offset=1pt]{2}{1}{nsubj}
         \deproot[edge start x offset=-1pt,edge unit distance=3ex]{2}{root}
-        \depedge[edge start x offset=2pt,edge start x offset=3pt]{2}{3}{iobj}
+        \depedge[edge start x offset=3pt]{2}{3}{iobj}
         \depedge{5}{4}{amod}
         \depedge[edge start x offset=2pt]{2}{5}{obj}
         \depedge[edge unit distance=2ex]{11}{6}{punct}
@@ -303,6 +303,95 @@ containing conjoined predicates and arguments.}
 \cprotect\caption{\verb|newsgroup-groups.google.com_GuildWars_086f0f64ab633ab3_ENG_20041111_173500-0051| (\verb|UD_English-EWT|), containing a null node (\textbf{E9.1}) and
 case information (nmod:on).}
 \label{fig:example_ellipsis}
+\end{figure*}
+
+\begin{figure*}[ht]
+\fbox{\begin{subfigure}{0.48\textwidth}
+    \centering
+    \begin{dependency}[text only label, label style={above}, font=\small]
+    \begin{deptext}[column sep=.1em,ampersand replacement=\^]
+    He \^ had \^ a \^ robe \^ that \^ was \^ made \^ back \^ in \^ the \^ '60s \^ . \\
+    \end{deptext}
+        \depedge[edge start x offset=1pt]{2}{1}{nsubj}
+        \deproot[edge start x offset=-1pt,edge unit distance=3.355ex]{2}{root}
+        \depedge{4}{3}{det}
+        \depedge{2}{4}{obj}
+        \depedge[edge unit distance=1.5ex,edge below,dashed]{7}{4}{nsubj:pass}
+        \depedge[edge start x offset=2pt]{7}{5}{nsubj:pass}
+        \depedge[edge start x offset=4pt,edge below,dashed]{4}{5}{ref}
+        \depedge[edge unit distance=2ex]{7}{6}{aux:pass}
+        \depedge[edge start x offset=-1pt,edge unit distance=2.75ex]{4}{7}{acl:relcl}
+        \depedge[edge start x offset=-3pt]{7}{8}{advmod}
+        \depedge{11}{9}{case}
+        \depedge{11}{10}{det}
+        \depedge[edge unit distance=1ex,edge below,dashed]{8}{11}{obl}
+        \depedge[edge start x offset=-1pt,edge unit distance=1.2ex]{2}{12}{punct}
+    \end{dependency}
+  \caption{\label{fig:example_relcl_ud}UD.}
+\end{subfigure}}
+\fbox{\begin{subfigure}{0.5\textwidth}
+  \centering\scalebox{.7}{
+	\begin{tikzpicture}[->,level distance=11.5mm,
+	  level 1/.style={sibling distance=5cm},
+	  level 2/.style={sibling distance=18mm},
+	  level 3/.style={sibling distance=9mm},
+	  level 4/.style={sibling distance=9mm,level distance=14mm},
+	  every circle node/.append style={fill=black}]
+	  \tikzstyle{word} = [font=\rmfamily,color=black]
+	  \node (1_1) [circle] {}
+	  {
+	  child {node (1_2) [circle] {}
+	    {
+	    child {node {}
+	    {
+    	    child {node (1_6) [word] {He}  edge from parent [draw=none]}
+    	} edge from parent [draw=none]}
+	    child {node {}
+	    {
+    	    child {node (1_3) [word] {had}  edge from parent [draw=none]}
+    	} edge from parent [draw=none]}
+	    child {node (1_7) [circle] {}
+	      {
+	      child {node (1_14) [word] {a}  edge from parent node[midway,above,sloped]  {\scriptsize det}}
+	      child {node (1_8) [word] {robe}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
+	      } edge from parent node[midway,above,sloped]  {\scriptsize obj}}
+	    } edge from parent node[midway,above,sloped]  {\scriptsize head}}
+	  child {node (1_4) [circle] {}
+	    {
+	    child {node {}
+	    {
+    	    child {node (1_15) [word] {that}  edge from parent [draw=none]}
+    	} edge from parent [draw=none]}
+	    child {node (1_5) [circle] {}
+	      {
+	      child {node (1_9) [word] {was}  edge from parent node[midway,above,sloped]  {\scriptsize aux}}
+	      child {node (1_10) [word] {made}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
+	      } edge from parent node[midway,above,sloped]  {\scriptsize head}}
+	    child {node (1_11) [circle] {}
+	      {
+	      child {node (1_12) [word] {back}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
+	      child {node (1_16) [circle] {}
+	        {
+	        child {node (1_18) [word] {in}  edge from parent node[midway,above,sloped]  {\scriptsize case}}
+	        child {node (1_19) [word] {the}  edge from parent node[midway,above,sloped]  {\scriptsize det}}
+	        child {node (1_17) [word] {'60s}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
+	        child {node (1_20) [word] {.}  edge from parent node[midway,above,sloped]  {\scriptsize punct}}
+	        } edge from parent node[midway,above,sloped]  {\scriptsize obl}}
+	      } edge from parent node[midway,above,sloped]  {\scriptsize advmod}}
+	    } edge from parent node[midway,above,sloped]  {\scriptsize acl}}
+	  };
+	  \draw[->] (1_2) to node [midway,above,sloped] {\scriptsize nsubj} (1_6);
+	  \draw[->] (1_2) to node [midway,above,sloped] {\scriptsize head} (1_3);
+	  \draw[->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_15);
+	  \draw[dashed,->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_7);
+	  \draw[dashed,->] (1_7) to node [midway,above,sloped] {\scriptsize ref} (1_15);
+	\end{tikzpicture}}
+  \captionof{figure}{UD converted to unified DAG format.}\label{fig:converted_example_relcl}
+\end{subfigure}}
+\cprotect\caption{(a) \verb|reviews-255261-0007| (\verb|UD_English-EWT|), containing a relative clause,
+and (b) the same graph after conversion to the unified DAG format.
+The cycle is removed due to the non-terminal nodes introduced in the conversion.}
+\label{fig:example_relcl}
 \end{figure*}
 
 
@@ -426,8 +515,13 @@ as semantically only the subject is shared and not the modifiers.
 Finally, enhanced graphs attach predicates of relative clauses directly
 to the antecedent modified by the relative clause, adding a \verb|ref|
 dependency between the antecedent and the relative pronoun.
-While these graphs may contain cycles, we remove them upon conversion to
-the unified DAG format by deleting an arbitrary edge in each cycle, to
+An example is shown in Figure~\ref{fig:example_relcl_ud}.
+While these graphs may contain cycles
+(``robe''~$\leftrightarrow$~``made''
+in the example), they are often removed upon conversion to
+the unified DAG format by the introduction of non-terminal nodes
+(see Figure~\ref{fig:converted_example_relcl}).
+If any cycles remain, we delete an arbitrary edge in each one, to
 get an acyclic graph.
 
 
