@@ -835,7 +835,7 @@ rate of 0.1, followed by AMSGrad \cite{j.2018on} for $250$ epochs with
 $\alpha=0.001,\beta_1=0.9$ and $\beta_2=0.999$.
 We found this training strategy better than using only one of the optimization methods,
 similar to findings by \citet{keskar2017improving}.
-We select the epoch with the best LAS~$F_1$ on the
+We select the epoch with the best LAS-F1 on the
 development set.
 Other hyperparameter settings are listed in Table~\ref{tab:hyperparams}.
 
@@ -847,7 +847,7 @@ For corpora with no development set,
 we use 10-fold cross-validation on the training set,
 each time splitting it to 80\% training, 10\% development and 10\% validation.
 We perform the normal training procedure on the training and development
-subsets, and then select the model from the fold with the best LAS~$F_1$
+subsets, and then select the model from the fold with the best LAS-F1
 on the corresponding validation set.
 
 \subsection{Multilingual Model}
@@ -870,11 +870,11 @@ during testing.
 \section{Results}\label{sec:results}
 
 Official evaluation was done on the TIRA online platform \cite{tira}.
-Our system (named ``HUJI'') ranked 24th in the LAS~$F_1$ ranking
+Our system (named ``HUJI'') ranked 24th in the LAS-F1 ranking
 (with an average of 53.69 over all test treebanks),
 23rd by MLAS (average of 44.6) and 21st by BLEX (average of 48.05).
 Since our system only performs dependency parsing and not other pipeline tasks,
-we henceforth focus on LAS~$F_1$ \cite{nivre17udw} for evaluation.
+we henceforth focus on LAS-F1 \cite{nivre17udw} for evaluation.
 
 After the official evaluation period ended,
 we discovered several bugs in the conversion between the CoNLL-U format
@@ -883,7 +883,7 @@ and the unified DAG format, which is used by TUPA for training and is output by 
 We did not re-train TUPA on the training treebanks after fixing these bugs,
 but we did re-evaluate the already trained models on all test treebanks,
 and used the fixed code for converting their output to CoNLL-U.
-This yielded an unofficial average test LAS~$F_1$ of 58.47,
+This yielded an unofficial average test LAS-F1 of 58.47,
 an improvement of 4.78 points over the official average score.
 In particular, for two test sets, \verb|ar_padt| and \verb|gl_ctg|, TUPA got
 a zero score in the official evaluation due to a bug with the treatment of multi-token words.
@@ -893,7 +893,7 @@ after fixing the bugs.
 
 Table~\ref{tab:overall_results} presents the
 averaged scores on the shared task test sets,
-and Figure~\ref{fig:test_per_corpus} the (official and unofficial) LAS~$F_1$
+and Figure~\ref{fig:test_per_corpus} the (official and unofficial) LAS-F1
 scores obtained by TUPA on each of the test and development treebanks.
 
 \begin{table}
@@ -908,7 +908,7 @@ PUD treebanks & 56.35 & 56.72 & 66.63 \\
 Small treebanks & 36.74 & 41.19 & 55.01 \\
 Low-resource & 8.53 & 12.68 & 17.17
 \end{tabular}
-\caption{Aggregated test LAS~$F_1$ scores
+\caption{Aggregated test LAS-F1 scores
 for our system (TUPA) and the baseline system (UDPipe 1.2).
 \label{tab:overall_results}}
 \end{table}
