@@ -75,48 +75,36 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-  We apply TUPA, a neural transition-based general DAG parser,
-  as the submission by the HUJI team to the CoNLL 2018 UD shared task,
-  demonstrating an approach for learning to recover \textit{enhanced dependencies}
-  as part of the general parsing task.
-  TUPA was designed for parsing UCCA, a cross-linguistic
-  semantic annotation scheme, exhibiting
-  reentrancy, discontinuity and non-terminal nodes.
-  By employing a conversion protocol to represent
-  UD trees and graphs in a UCCA-like unified directed acyclic graph (DAG) format,
-  we train TUPA almost without modification on the UD parsing task.
-  The uniform parsing architecture opens the way for improvement by employing
-  multitask learning.
-  Our code is available at \url{https://github.com/CoNLL-UD-2018/HUJI}.
+The paper presents our experiments with applying TUPA to the CoNLL 2018 UD shared task. TUPA is a general neural transition-based DAG parser, which we use to present the first experiments on recovering enhanced dependencies as part of the general parsing task. TUPA was designed for parsing UCCA, a cross-linguistic semantic annotation scheme, exhibiting reentrancy, discontinuity and non-terminal nodes. By converting UD trees and graphs to a UCCA-like DAG format, we train TUPA almost without modification on the UD parsing task. The generic nature of our approach lends itself naturally to multitask learning.  
+Our code is available at \url{https://github.com/CoNLL-UD-2018/HUJI}.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
 
-In this paper, we describe the HUJI submission to the CoNLL 2018 shared task
+In this paper, we present the HUJI submission to the CoNLL 2018 shared task
 on Universal Dependency parsing \cite{udst:overview2018}.
-We focus only on parsing, using a baseline model \cite[UDPipe 1.2;][]{udpipe,udpipe:2017}
+We focus only on parsing, using a baseline model \cite[UDPipe 1.2;][]{udpipe,udpipe:2017}\oa{{\bf the} baseline model?}
 for tokenization, sentence splitting, part-of-speech tagging and morphological tagging.
 
 Our system is based on TUPA \cite[see \S\ref{sec:model}]{hershcovich2017a,hershcovich2018multitask},
 a transition-based UCCA parser.
 UCCA \cite[Universal Conceptual Cognitive Annotation;][]{abend2013universal} is a
-cross-linguistic semantic annotation scheme, representing scenes, participants,
-attributes and relations in a directed acyclic graph (DAG) structure,
-and allowing reentrancy (enabling argument sharing),
+cross-linguistic semantic annotation scheme, representing events, participants,
+attributes and relations in a directed acyclic graph (DAG) structure.
+UCCA allows reentrancy to support argument sharing,
 discontinuity (corresponding to non-projectivity in dependency formalisms)
 and non-terminal nodes (as opposed to dependencies, which are bi-lexical).
 To parse Universal Dependencies \cite{nivre2016universal}
 using TUPA, we employ a bidirectional conversion protocol to represent
 UD trees and graphs in a UCCA-like unified DAG format (\S\ref{sec:format}).
 
-\paragraph{Enhanced dependencies.}
 
+\paragraph{Enhanced dependencies.}
 Our method treats \textit{enhanced dependencies}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
 as part of the dependency graph, providing the first approach, to our knowledge,
 for supervised learning of enhanced UD parsing.
 Due to the scarcity of enhanced dependencies in UD treebanks,
-previous approaches
-\cite{SCHUSTER16.779,D17-1009} have attempted to recover them
+previous approaches \cite{SCHUSTER16.779,D17-1009} have attempted to recover them
 using language-specific rules.
 Our approach attempts to learn them from data:
 while only a few UD treebanks contain any enhanced dependencies,
@@ -134,7 +122,7 @@ case information, elided predicates,
 and shared arguments due to conjunction, control, raising
 and relative clauses,
 provide richer information to downstream semantic applications,
-making UD better suited to be used as the representation for semantic tasks.
+making UD better suited for text understanding.
 We propose an evaluation metric specific to enhanced dependencies,
 \textit{enhanced~LAS} (\S\ref{sec:enhanced_results}),
 and use it to evaluate our method.
@@ -150,7 +138,7 @@ and use it to evaluate our method.
         every circle node/.append style={fill=black}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
-        child {node (We) [word] {We} edge from parent node[above] {\scriptsize $A$}}
+        child {node (We) [word] {We} edge from parent node[above] {\scriptsize  $A$}}
         child {node [word] {were} edge from parent node[below] {\scriptsize $F$}}
         child {node [word] {made} edge from parent node[right] {\scriptsize $D$}}
         child {node [word] {to} edge from parent node[right] {\scriptsize $F$}}
@@ -448,7 +436,7 @@ Figure~\ref{fig:enhanced_conllu} demonstrates this format.
 Note that if the basic dependency is repeated in the enhanced graph
 (\verb|3:nsubj:pass| in the example), we do not treat it as an enhanced 
 dependency, so that the converted graph will only contain each edge once.
-In addition to the universal dependency relations defined in the basic
+In addition to the UD relations defined in the basic
 representations, enhanced dependencies may contain the relation \verb|ref|,
 used for relative clauses.
 In addition, they may contain more specific relation subtypes,
@@ -522,7 +510,7 @@ in the example), they are often removed upon conversion to
 the unified DAG format by the introduction of non-terminal nodes
 (see Figure~\ref{fig:converted_example_relcl}).
 If any cycles remain, we delete an arbitrary edge in each one, to
-get an acyclic graph.
+get an acyclic graph.\oa{how often does that happen?}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -782,7 +770,7 @@ until it does, the node may not be reduced.
 \section{Training details}\label{sec:details}
 
 The model is implemented using DyNet \cite{neubig2017dynet}.\footnote{\url{http://dynet.io}}
-Unless otherwise noted, we use the default values provided by the package.
+Unless otherwise noted, we use the default values provided by the package.\oa{it's good to write down DyNet's version in this case}
 We use the same hyperparameters as used in previous experiments on UCCA
 parsing \cite{hershcovich2018multitask},
 without any hyperparameter tuning on UD treebanks.
@@ -1226,9 +1214,9 @@ TUPA learns to produce them too as part of the general dependency parsing proces
 We believe that with hyperparameter tuning and more careful handling of
 cross-lingual and cross-domain parsing, TUPA can be competitive on the standard metrics too.
 
-Furthermore, a uniform parser for many representation schemes (as well as domains and languages)
-will allow improving performance by multitask learning \cite{hershcovich2018multitask},
-which is left for future work.
+Furthermore, the generic nature of our parser, which supports many representation schemes, as well as domains and languages,
+will allow improving performance by multitask learning \citep[cf.][]{hershcovich2018multitask},
+which we plan to explore in future work.
 
 
 \section*{Acknowledgments}
