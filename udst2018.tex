@@ -1019,7 +1019,7 @@ vi_vtb
     \addplot[select coords between index={0}{27},fill=green]table[x expr=\coordindex,meta=corpus,y=official]{udst2018scores.txt};
     \addplot[select coords between index={0}{27},fill=red]table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
     \addplot[select coords between index={0}{27},fill=blue]table[x expr=\coordindex,meta=corpus,y=dev]{udst2018scores.txt};
-    \legend{TUPA (test---official), TUPA (test---unofficial), TUPA (development)}
+    \legend{Test (official), Test (unofficial), Development}
     \end{axis}
     \end{tikzpicture}
    
@@ -1161,20 +1161,18 @@ with the same hyperparameters as in our submitted model,
 just without these features.
 As Table~\ref{tab:ablation} shows,
 removing the NER features ($-$NER) only slightly hurts the performance,
-by 0.26 LAS-F1 points on the test treebank,
-and 0.64 on the development treebank. 
+by 0.28 LAS-F1 points on the test treebank,
+and 0.63 on the development treebank. 
 
 As further ablation experiments, we tried removing POS features,
 pre-trained word embeddings,
 and remote edges (the latter enabling TUPA to parse enhanced dependencies).
 Removing the POS features does hurt performance to a larger degree,
-by 2.85 LAS-F1 points on the test set,
+by 2.87 LAS-F1 points on the test set,
 while removing the pre-trained word embeddings
-even slightly improves the performance
-(except the enhanced LAS on the development treebank).
-Removing remote edges and transitions from TUPA makes a very small improvement
-to LAS-F1, but of course enhanced dependencies
-can then no longer be produced at all.
+even slightly improves the performance.
+Removing remote edges and transitions from TUPA causes a very small decrease
+in LAS-F1, and of course enhanced dependencies can then no longer be produced at all.
 
 
 \begin{table}[t]
@@ -1183,7 +1181,7 @@ can then no longer be produced at all.
 & \multicolumn{2}{c|}{\small LAS-F1} & \multicolumn{2}{c}{\small Enhanced LAS-F1} \\
 \bf Model & \bf Test & \bf Dev & \bf Test & \bf Dev \\
 \hline
-Original & 71.98 & 72.30 & 54.58 & 57.13 \\
+Original & 72.10 & 72.44 & 54.58 & 57.13 \\
 %Re-trained & 72.07 & 72.08 & 54.71 & 55.97\\ 
 $-$NER & 71.82 & 71.81 & 55.31 & 54.65\\ 
 $-$POS & 69.23 & 69.54 & 53.78 & 49.12\\ 
