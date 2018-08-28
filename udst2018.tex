@@ -75,7 +75,7 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-The paper presents our experiments with applying TUPA to the CoNLL 2018 UD shared task. TUPA is a general neural transition-based DAG parser, which we use to present the first experiments on recovering enhanced dependencies as part of the general parsing task. TUPA was designed for parsing UCCA, a cross-linguistic semantic annotation scheme, exhibiting reentrancy, discontinuity and non-terminal nodes. By converting UD trees and graphs to a UCCA-like DAG format, we train TUPA almost without modification on the UD parsing task. The generic nature of our approach lends itself naturally to multitask learning.  
+This paper presents our experiments with applying TUPA to the CoNLL 2018 UD shared task. TUPA is a general neural transition-based DAG parser, which we use to present the first experiments on recovering enhanced dependencies as part of the general parsing task. TUPA was designed for parsing UCCA, a cross-linguistic semantic annotation scheme, exhibiting reentrancy, discontinuity and non-terminal nodes. By converting UD trees and graphs to a UCCA-like DAG format, we train TUPA almost without modification on the UD parsing task. The generic nature of our approach lends itself naturally to multitask learning.  
 Our code is available at \url{https://github.com/CoNLL-UD-2018/HUJI}.
 \end{abstract}
 
@@ -1110,8 +1110,8 @@ Just as remote edges in UCCA parsing are more challenging
 than primary edges \cite{hershcovich2017a},
 parsing enhanced dependencies is a harder task than standard UD parsing,
 as the scores demonstrate.
-However, TUPA learns them successfully, getting as much as 50.33 enhanced LAS-F1
-(on the Dutch Alpino test set).
+However, TUPA learns them successfully, getting as much as 56.63 enhanced LAS-F1
+(on the Polish LFG test set).
 
 \catcode`\_=12
 \begin{table}[t]
@@ -1120,20 +1120,20 @@ However, TUPA learns them successfully, getting as much as 50.33 enhanced LAS-F1
 & \multicolumn{3}{c|}{Enhanced LAS} & \multirow{2}{11mm}{\% Enhanced} \\
 \bf Treebank & \bf P & \bf R & \bf F1 & \\
 \hline
-ar_padt & 26.71 & 15.79 & 19.85 & 5.30\\
-cs_cac & 48.43 & 38.20 & 42.71 & 7.57\\
-cs_fictree & 45.82 & 29.96 & 36.23 & 4.30\\
-cs_pdt & 45.88 & 31.65 & 37.46 & 4.61\\
-nl_alpino & 52.98 & 47.94 & 50.33 & 4.80\\
-nl_lassysmall & 48.45 & 50.10 & 49.26 & 4.13\\
-en_ewt & 28.26 & 25.76 & 26.95 & 4.36\\
-en_pud & 28.90 & 24.39 & 26.45 & 5.14\\
-fi_tdt & 27.99 & 22.02 & 24.65 & 7.34\\
-lv_lvtb & 27.46 & 16.38 & 20.52 & 4.12\\
-pl_lfg & 51.25 & 46.72 & 48.88 & 2.61\\
-sk_snk & 35.48 & 26.98 & 30.65 & 3.91\\
-sv_pud & 33.19 & 29.01 & 30.96 & 6.36\\
-sv_talbanken & 36.36 & 31.32 & 33.65 & 6.89
+ar_padt & 28.63 & 16.48 & 20.92 & 5.30\\ 
+cs_cac & 56.13 & 36.62 & 44.32 & 7.57\\ 
+cs_fictree & 49.29 & 18.76 & 27.18 & 4.30\\ 
+cs_pdt & 50.15 & 27.11 & 35.20 & 4.61\\ 
+nl_alpino & 56.15 & 50.81 & 53.35 & 4.80\\ 
+nl_lassysmall & 49.81 & 51.50 & 50.64 & 4.13\\ 
+en_ewt & 57.66 & 52.58 & 55.00 & 4.36\\ 
+en_pud & 59.34 & 50.09 & 54.32 & 5.14\\ 
+fi_tdt & 40.73 & 32.03 & 35.86 & 7.34\\ 
+lv_lvtb & 31.87 & 19.01 & 23.81 & 4.12\\ 
+pl_lfg & 59.38 & 54.13 & 56.63 & 2.61\\ 
+sk_snk & 37.47 & 22.04 & 27.76 & 3.91\\ 
+sv_pud & 45.45 & 39.74 & 42.40 & 6.36\\ 
+sv_talbanken & 50.08 & 43.13 & 46.35 & 6.89
 \end{tabular}
 \caption{TUPA's enhanced LAS precision, recall and F1 per test treebank with 
 any enhanced dependencies,
@@ -1168,10 +1168,10 @@ As further ablation experiments, we tried removing POS features,
 pre-trained word embeddings,
 and remote edges (the latter enabling TUPA to parse enhanced dependencies).
 Removing the POS features does hurt performance to a larger degree,
-by 2.84 LAS-F1 points on the test set,
+by 2.85 LAS-F1 points on the test set,
 while removing the pre-trained word embeddings
-even slightly improves the performance on basic dependencies,
-but hurts the enhanced LAS.
+even slightly improves the performance
+(except the enhanced LAS on the development treebank).
 Removing remote edges and transitions from TUPA makes a very small improvement
 to LAS-F1, but of course enhanced dependencies
 can then no longer be produced at all.
@@ -1183,14 +1183,14 @@ can then no longer be produced at all.
 & \multicolumn{2}{c|}{\small LAS-F1} & \multicolumn{2}{c}{\small Enhanced LAS-F1} \\
 \bf Model & \bf Test & \bf Dev & \bf Test & \bf Dev \\
 \hline
-Original & 71.98 & 72.30 & 26.95 & 28.51 \\
-%Re-trained & 71.98 & 71.91 & 54.94 & 56.21\\
-$-$NER & 71.72 & 71.67 & 55.56 & 54.86\\
-$-$POS & 69.14 & 69.41 & 54.21 & 49.42\\
-$-$Embed. & 72.23 & 72.42 & 56.47 & 54.82\\
-$-$Remote & 72.08 & 72.32 & 0 & 0\\
-%$-$Remote$-$NER & 71.36 & 71.78 & 0 & 0\\
-%$-$Remote$-$Embed. & 72.22 & 72.44 & 0 & 0\\
+Original & 71.98 & 72.30 & 55.00 & 56.12 \\
+%Re-trained & 71.98 & 71.89 & 54.94 & 56.12\\ 
+$-$NER & 71.72 & 71.66 & 55.59 & 54.83\\ 
+$-$POS & 69.13 & 69.38 & 54.17 & 49.29\\ 
+$-$Embed. & 72.22 & 72.40 & 56.46 & 54.76\\ 
+$-$Remote & 72.08 & 72.32 & 0 & 0\\ 
+%$-$Remote$-$NER & 71.36 & 71.78 & 0 & 0\\ 
+%$-$Remote$-$Embed. & 72.22 & 72.44 & 0 & 0
 \end{tabular}
 \caption{Ablation LAS-F1 and Enhanced LAS-F1 on the English EWT development
 and test set.
