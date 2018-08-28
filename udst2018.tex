@@ -869,11 +869,11 @@ and the unified DAG format, which is used by TUPA for training and is output by 
 We did not re-train TUPA on the training treebanks after fixing these bugs,
 but we did re-evaluate the already trained models on all test treebanks,
 and used the fixed code for converting their output to CoNLL-U.
-This yielded an unofficial average test LAS-F1 of 58.47,
-an improvement of 4.78 points over the official average score.
+This yielded an unofficial average test LAS-F1 of 58.48,
+an improvement of 4.79 points over the official average score.
 In particular, for two test sets, \verb|ar_padt| and \verb|gl_ctg|, TUPA got
 a zero score in the official evaluation due to a bug with the treatment of multi-token words.
-These went up to 61.97 and 71.42, respectively.
+These went up to 61.9 and 71.42, respectively.
 We also evaluated the trained TUPA models on all available development treebanks
 after fixing the bugs.
 
@@ -888,9 +888,9 @@ scores obtained by TUPA on each of the test and development treebanks.
 & \multirow{2}{12mm}{\bf TUPA {\small(official)}} & \multirow{2}{15mm}{\bf TUPA {\small(unofficial)}}
 & \multirow{2}{14mm}{\bf UDPipe {\small(baseline)}} \\\\
 \hline
-All treebanks & 53.69 & 58.47 & 65.80 \\
+All treebanks & 53.69 & 58.48 & 65.80 \\
 Big treebanks & 62.07 & 67.36 & 74.14 \\
-PUD treebanks & 56.35 & 56.72 & 66.63 \\
+PUD treebanks & 56.35 & 56.82 & 66.63 \\
 Small treebanks & 36.74 & 41.19 & 55.01 \\
 Low-resource & 8.53 & 12.68 & 17.17
 \end{tabular}
@@ -1110,7 +1110,7 @@ Just as remote edges in UCCA parsing are more challenging
 than primary edges \cite{hershcovich2017a},
 parsing enhanced dependencies is a harder task than standard UD parsing,
 as the scores demonstrate.
-However, TUPA learns them successfully, getting as much as 56.63 enhanced LAS-F1
+However, TUPA learns them successfully, getting as much as 56.55 enhanced LAS-F1
 (on the Polish LFG test set).
 
 \catcode`\_=12
@@ -1120,20 +1120,20 @@ However, TUPA learns them successfully, getting as much as 56.63 enhanced LAS-F1
 & \multicolumn{3}{c|}{Enhanced LAS} & \multirow{2}{11mm}{\% Enhanced} \\
 \bf Treebank & \bf P & \bf R & \bf F1 & \\
 \hline
-ar_padt & 28.63 & 16.48 & 20.92 & 5.30\\ 
-cs_cac & 56.13 & 36.62 & 44.32 & 7.57\\ 
-cs_fictree & 49.29 & 18.76 & 27.18 & 4.30\\ 
-cs_pdt & 50.15 & 27.11 & 35.20 & 4.61\\ 
-nl_alpino & 56.15 & 50.81 & 53.35 & 4.80\\ 
-nl_lassysmall & 49.81 & 51.50 & 50.64 & 4.13\\ 
-en_ewt & 57.66 & 52.58 & 55.00 & 4.36\\ 
-en_pud & 59.34 & 50.09 & 54.32 & 5.14\\ 
-fi_tdt & 40.73 & 32.03 & 35.86 & 7.34\\ 
-lv_lvtb & 31.87 & 19.01 & 23.81 & 4.12\\ 
-pl_lfg & 59.38 & 54.13 & 56.63 & 2.61\\ 
-sk_snk & 37.47 & 22.04 & 27.76 & 3.91\\ 
-sv_pud & 45.45 & 39.74 & 42.40 & 6.36\\ 
-sv_talbanken & 50.08 & 43.13 & 46.35 & 6.89
+ar_padt & 28.51 & 16.24 & 20.69 & 5.30\\ 
+cs_cac & 54.94 & 35.69 & 43.27 & 7.57\\ 
+cs_fictree & 48.78 & 18.53 & 26.85 & 4.30\\ 
+cs_pdt & 49.46 & 26.47 & 34.48 & 4.61\\ 
+nl_alpino & 56.04 & 50.81 & 53.30 & 4.80\\ 
+nl_lassysmall & 49.71 & 51.30 & 50.49 & 4.13\\ 
+en_ewt & 57.36 & 52.05 & 54.58 & 4.36\\ 
+en_pud & 58.99 & 50.00 & 54.13 & 5.14\\ 
+fi_tdt & 40.20 & 31.37 & 35.24 & 7.34\\ 
+lv_lvtb & 31.76 & 18.70 & 23.54 & 4.12\\ 
+pl_lfg & 59.19 & 54.13 & 56.55 & 2.61\\ 
+sk_snk & 37.28 & 21.61 & 27.36 & 3.91\\ 
+sv_pud & 45.40 & 39.58 & 42.29 & 6.36\\ 
+sv_talbanken & 50.15 & 43.20 & 46.42 & 6.89
 \end{tabular}
 \caption{TUPA's enhanced LAS precision, recall and F1 per test treebank with 
 any enhanced dependencies,
@@ -1183,14 +1183,14 @@ can then no longer be produced at all.
 & \multicolumn{2}{c|}{\small LAS-F1} & \multicolumn{2}{c}{\small Enhanced LAS-F1} \\
 \bf Model & \bf Test & \bf Dev & \bf Test & \bf Dev \\
 \hline
-Original & 71.98 & 72.30 & 55.00 & 56.12 \\
-%Re-trained & 71.98 & 71.89 & 54.94 & 56.12\\ 
-$-$NER & 71.72 & 71.66 & 55.59 & 54.83\\ 
-$-$POS & 69.13 & 69.38 & 54.17 & 49.29\\ 
-$-$Embed. & 72.22 & 72.40 & 56.46 & 54.76\\ 
-$-$Remote & 72.08 & 72.32 & 0 & 0\\ 
-%$-$Remote$-$NER & 71.36 & 71.78 & 0 & 0\\ 
-%$-$Remote$-$Embed. & 72.22 & 72.44 & 0 & 0
+Original & 71.98 & 72.30 & 54.58 & 57.13 \\
+%Re-trained & 72.07 & 72.08 & 54.71 & 55.97\\ 
+$-$NER & 71.82 & 71.81 & 55.31 & 54.65\\ 
+$-$POS & 69.23 & 69.54 & 53.78 & 49.12\\ 
+$-$Embed. & 72.33 & 72.55 & 56.26 & 54.54\\ 
+$-$Remote & 72.08 & 72.32 & 0.00 & 0.00\\ 
+%$-$Remote$-$NER & 71.36 & 71.78 & 0.00 & 0.00\\ 
+%$-$Remote$-$Embed. & 72.22 & 72.44 & 0.00 & 0.00
 \end{tabular}
 \caption{Ablation LAS-F1 and Enhanced LAS-F1 on the English EWT development
 and test set.
