@@ -325,20 +325,17 @@ It is a transition-based parser supporting reentrancy, discontinuity and non-ter
    \begin{tikzpicture}[-{Latex[length=3mm]},thick, line width=2pt]
    \node[anchor=west] at (-7,16) {\textbf{Classifier}};
    \tikzstyle{main}=[rounded rectangle, minimum size=23mm, draw=black!80, node distance=12mm]
-   \node[main] (specific) at (0,10) {Task-specific BiLSTM};
-   \node[main,color=DarkCyan] (shared) at (22,10) {Shared BiLSTM};
-   \node[color=DarkCyan] (embeddings) at (10.5,4.5) {Shared embeddings};
+   \node[main] (specific) at (10.5,8) {BiLSTM};
+   \node (embeddings) at (10.5,4.5) {Embeddings};
    \foreach \i/\word in {-4/{After},4/{graduation},17/{to},25/{Paris}} {
        \node (x\i) at (\i,3) {\word};
-       \node[main, minimum size=16mm, fill=DarkCyan, draw=none] (e\i) at (\i,6) {};
-       \path[color=DarkCyan] (x\i) edge (e\i);
+       \node[main, minimum size=16mm, fill=black, draw=none] (e\i) at (\i,6) {};
+       \path (x\i) edge (e\i);
        \path (e\i) edge (specific);
-       \path[color=DarkCyan] (e\i) edge (shared);
    }
     \node (x4) at (10.5,3) {\ldots};
-    \node[main] (mlp) at (10.5,12) {Task-specific MLP};
+    \node[main] (mlp) at (10.5,12) {MLP};
     \path (specific) edge (mlp);
-    \path (shared) edge (mlp);
     \coordinate (state) at (22,17);
     \path (state) edge [bend left] (mlp);
     \node (transition) at (10.5,16.4) {transition};
