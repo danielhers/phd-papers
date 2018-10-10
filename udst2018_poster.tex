@@ -277,8 +277,8 @@ It is a transition-based parser supporting reentrancy, discontinuity and non-ter
 	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.2) rectangle (19.5,1.5);
 	\draw[color=gray,fill=white] (.4,0) rectangle (2.6,1);
 	\node[fill=cyan, circle] at (1.5,.45) {};
-	\draw[color=gray,fill=white] (3,0) rectangle (17,1);
-	\node[anchor=west] at (3,.45) {After graduation , John moved to Paris .};
+	\draw[color=gray,fill=white] (3,0) rectangle (16,1);
+	\node[anchor=west] at (3,.45) {We were made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,.45) {};
 	\node[anchor=west] at (10,-.8) {\bf\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
@@ -287,22 +287,22 @@ It is a transition-based parser supporting reentrancy, discontinuity and non-ter
 	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.2) rectangle (19.5,1.5);
 	\draw[color=gray,fill=white] (.4,0) rectangle (4.3,1);
 	\node[fill=cyan, circle] at (1.5,.45) {};
-	\node[color=red,anchor=west] at (2,.45) {After};
-	\draw[color=gray,fill=white] (5,0) rectangle (17,1);
-	\node[anchor=west] at (5,.45) {graduation , John moved to Paris .};
+	\node[color=red,anchor=west] at (2,.45) {We};
+	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
+	\node[anchor=west] at (5,.45) {were made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,.45) {};
-	\node[anchor=west] at (10,-.9) {\bf\small\textsc{Right-Edge\textsubscript L}};
+	\node[anchor=west] at (10,-.9) {\bf\small\textsc{Right-Edge\textsubscript {nsubj}}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
 	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
 	\draw[color=gray,fill=white] (.4,0) rectangle (4.3,1);
 	\node[fill=cyan, circle] at (1.5,.45) {};
-	\node[anchor=west] at (2,.45) {After};
-	\draw[color=gray,fill=white] (5,0) rectangle (17,1);
-	\node[anchor=west] at (5,.45) {graduation , John moved to Paris .};
+	\node[anchor=west] at (2,.45) {We};
+	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
+	\node[anchor=west] at (5,.45) {were made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent [red] node[font=\scriptsize\bf\ttfamily,left] {L}};
+	  child {node[font=\scriptsize] {We} edge from parent [red] node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
@@ -310,37 +310,37 @@ It is a transition-based parser supporting reentrancy, discontinuity and non-ter
 	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
 	\draw[color=gray,fill=white] (.4,0) rectangle (3,1);
 	\node[fill=cyan, circle] at (1.5,.45) {};
-	\draw[color=gray,fill=white] (5,0) rectangle (17,1);
-	\node[anchor=west] at (5,.45) {graduation , John moved to Paris .};
+	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
+	\node[anchor=west] at (5,.45) {were made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}};
+	  child {node[font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
 	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
-	\draw[color=gray,fill=white] (.4,0) rectangle (6,1);
+	\draw[color=gray,fill=white] (.4,0) rectangle (4.5,1);
 	\node[fill=cyan, circle] at (1.5,.45) {};
-	\node[color=red,anchor=west] at (2,.45) {graduation};
-	\draw[color=gray,fill=white] (8.5,0) rectangle (17,1);
-	\node[anchor=west] at (8.8,.45) {, John moved to Paris .};
+	\node[color=red,anchor=west] at (2,.45) {were};
+	\draw[color=gray,fill=white] (7.5,0) rectangle (16,1);
+	\node[anchor=west] at (7.5,.45) {made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}};
-	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Node\textsubscript P}};
+	  child {node[font=\scriptsize] {were} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
+	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Node\textsubscript {aux}}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
 	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
-	\draw[color=gray,fill=white] (.4,0) rectangle (7,1);
+	\draw[color=gray,fill=white] (.4,0) rectangle (5,1);
 	\node[fill=cyan, circle] at (1.5,.45) {};
 	\node[fill=orange, draw=red, circle] at (2.5,.45) {};
-	\node[anchor=west] at (3,.45) {graduation};
-	\draw[color=gray,fill=white] (7.2,0) rectangle (15,1);
-	\node[anchor=west] at (7.2,.45) {, John moved to Paris .};
+	\node[anchor=west] at (3,.45) {were};
+	\draw[color=gray,fill=white] (5.2,0) rectangle (14,1);
+	\node[anchor=west] at (5.2,.45) {made to feel very welcome .};
 	\node[fill=cyan, circle] at (16.2,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}};
+	  child {node[font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
 	\node[fill=orange, draw=red, circle] at (18.3,1.4) {}
-	  child {node[font=\scriptsize] {graduation} edge from parent [red] node[font=\scriptsize\bf\ttfamily,right] {P}};
+	  child {node[font=\scriptsize] {were} edge from parent [red] node[font=\scriptsize\bf\ttfamily,right] {aux}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
@@ -352,72 +352,77 @@ It is a transition-based parser supporting reentrancy, discontinuity and non-ter
 	\draw[color=gray,fill=white] (0.2,0) rectangle (3.5,1);
 	\node[fill=cyan, circle] at (1,.45) {};
 	\node[fill=orange, circle] at (2,.45) {};
-	\draw[color=gray,fill=white] (3.8,0) rectangle (11.5,1);
-	\node[anchor=west] at (3.8,.45) {, John moved to Paris .};
-	\node[fill=cyan, circle] at (13.2,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}};
+	\draw[color=gray,fill=white] (3.8,0) rectangle (12,1);
+	\node[anchor=west] at (3.8,.45) {made to feel very welcome .};
+	\node[fill=cyan, circle] at (13.7,1.4) {}
+	  child {node[font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
 	\node[fill=orange, circle] at (16.2,1.4) {}
-	  child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize\bf\ttfamily,right] {P}};
-	\node[anchor=west] at (6,-1.2) {\bf\small\textsc{Right-Edge\textsubscript H}};
+	  child {node[font=\scriptsize] {were} edge from parent node[font=\scriptsize\bf\ttfamily,right] {aux}};
+	\node[anchor=west] at (6,-1.2) {\bf\small\textsc{Right-Edge\textsubscript {head}}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-.6) -- (5,-1.7);
 	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\begin{tikzpicture}[level distance=13mm, sibling distance=3cm, font=\small, -{Latex[length=3mm]}]
 	\draw[color=gray,dashed,fill=lightgray!20] (0,-1.9) rectangle (18,1.9);
 	\draw[color=gray,fill=white] (0.2,0) rectangle (3.5,1);
 	\node[fill=cyan, circle] at (1,.45) {};
 	\node[fill=orange, circle] at (2,.45) {};
-	\draw[color=gray,fill=white] (3.8,0) rectangle (11.5,1);
-	\node[anchor=west] at (3.8,.45) {, John moved to Paris .};
-	\node[fill=cyan, circle] at (14.7,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}}
-	  child {node [fill=orange, circle] {}
-	  {
-	    child {node[font=\scriptsize] {graduation} edge from parent [black] node[font=\scriptsize\bf\ttfamily,right] {P}}
-	  } edge from parent [red] node[font=\scriptsize\bf\ttfamily,right] {H} };
+	\draw[color=gray,fill=white] (3.8,0) rectangle (12.4,1);
+	\node[anchor=west] at (3.8,.45) {made to feel very welcome .};
+   \node[fill=cyan, circle] at (14.8,1.3) {}   
+     child {node[font=\scriptsize] {We} edge from parent [->] node[font=\scriptsize\bf\ttfamily,left] {nsubj}}
+     child {node [fill=orange, circle] {}
+     {
+       child {node[font=\scriptsize] {were} edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {aux}}
+     } edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {head} };
 	\node[anchor=west] at (6,-2.5) {\bf\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
 	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\begin{tikzpicture}[level distance=15mm, sibling distance=3cm, font=\small, -{Latex[length=3mm]}]
 	\draw[color=gray,dashed,fill=lightgray!20] (0,-1.9) rectangle (18,1.9);
-	\draw[color=gray,fill=white] (0.2,0) rectangle (3.6,1);
+	\draw[color=gray,fill=white] (0.2,0) rectangle (4.8,1);
 	\node[fill=cyan, circle] at (1,.45) {};
 	\node[fill=orange, circle] at (2,.45) {};
-	\node[color=red, anchor=west] at (3,.25) {,};
-	\draw[color=gray,fill=white] (3.9,0) rectangle (11.5,1);
-	\node[anchor=west] at (3.9,.45) {John moved to Paris .};
-	\node[fill=cyan, circle] at (14.7,1.4) {}
-	  child {node[font=\scriptsize] {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}}
-	  child {node [fill=orange, circle] {}
-	  {
-	    child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize\bf\ttfamily,right] {P}}
-	  } edge from parent node[font=\scriptsize\bf\ttfamily,right] {H} };
+	\node[color=red, anchor=west] at (2.5,.45) {made};
+	\draw[color=gray,fill=white] (5,0) rectangle (12.4,1);
+	\node[anchor=west] at (5,.45) {to feel very welcome .};
+   \node[fill=cyan, circle] at (14.8,1.3) {}   
+     child {node[font=\scriptsize] {We} edge from parent [->] node[font=\scriptsize\bf\ttfamily,left] {nsubj}}
+     child {node [fill=orange, circle] {}
+     {
+       child {node[font=\scriptsize] {were} edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {aux}}
+     } edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {head} };
 	\node[anchor=west] at (6,-2.5) {\Large \ldots};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
 	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=3cm, font=\small, -{Latex[length=3mm]}]
-	\draw[color=gray,dashed,fill=lightgray!20] (0,-4) rectangle (18,2.2);
-	\draw[color=gray,fill=white] (.2,0) rectangle (1,1);
-	\draw[color=gray,fill=white] (1.3,0) rectangle (2,1);
-    \node (ROOT) [fill=cyan,circle] at (8,1.5) {}
-      child {node[font=\scriptsize] (After) {After} edge from parent node[font=\scriptsize\bf\ttfamily,left] {L}}
-      child {node (graduation) [fill=orange,circle] {}
-      {
-        child {node[font=\scriptsize] {graduation} edge from parent node[font=\scriptsize\bf\ttfamily,left] {P}}
-      } edge from parent node[font=\scriptsize\bf\ttfamily,left] {H} }
-      child {node[font=\scriptsize\bf\ttfamily] {,} edge from parent node[font=\scriptsize\bf\ttfamily,right] {U}}
-      child {node (moved) [fill=DarkBlue,circle] {}
-      {
-        child {node[font=\scriptsize] (John) {John} edge from parent node[font=\scriptsize\bf\ttfamily,left] {A}}
-        child {node[font=\scriptsize] {moved} edge from parent node[font=\scriptsize\bf\ttfamily,left] {P}}
-        child {node [fill=olive,circle] {}
+    \begin{tikzpicture}[level distance=18mm, sibling distance=39mm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed,fill=lightgray!20] (0,-4.7) rectangle (18,1.9);
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) at (6.8,1.3) [fill=cyan, circle] {}
+        child {node (We) [font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize nsubj}}
+        child {node {}
         {
-          child {node[font=\scriptsize] {to} edge from parent node[font=\scriptsize\bf\ttfamily,left] {R}}
-          child {node[font=\scriptsize] {Paris} edge from parent node[font=\scriptsize\bf\ttfamily,right] {C}}
-        } edge from parent node[font=\scriptsize\bf\ttfamily,right] {A} }
-      } edge from parent node[font=\scriptsize\bf\ttfamily,above] {H} }
+	        child {node (weremade) [fill=orange, circle] {}
+	        {
+	          child {node [font=\scriptsize] {were} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize aux}}
+	          child {node [font=\scriptsize] {made} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
+	        } edge from parent [draw=none]}
+        } edge from parent [draw=none]}
+        child {node [font=\scriptsize] {to} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize mark}}
+        child {node (feelverywelcome) [fill=blue, circle] {}
+        {
+          child {node [font=\scriptsize] {feel} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
+          child {node (verywelcome) [fill=green, circle] {}
+          {
+            child {node [font=\scriptsize] {very} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize advmod}}
+            child {node [font=\scriptsize] {welcome} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
+            child {node [font=\scriptsize] {.} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize punct}}
+          } edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize xcomp} }
+        } edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize xcomp} }
       ;
-    \draw[dashed] (graduation) to node [font=\scriptsize\bf\ttfamily,above] {A} (John);
-	\end{tikzpicture}
+      \draw[->] (ROOT) to node [font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head} (weremade);
+      \draw[dashed,->,bend left=25] (verywelcome) to node [font=\scriptsize\bf\ttfamily,midway,below,sloped] {\scriptsize nsubj} (We);
+      \draw[dashed,->,bend left=20] (feelverywelcome) to node [font=\scriptsize\bf\ttfamily,midway,below,sloped] {\scriptsize nsubj} (We);
+    \end{tikzpicture}
 \end{minipage}
 }
 
