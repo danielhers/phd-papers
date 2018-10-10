@@ -427,19 +427,19 @@ It is a transition-based parser supporting reentrancy, discontinuity and non-ter
 
 \begin{center}
 \large
-   \begin{tikzpicture}[level distance=18mm, sibling distance=3cm]
-   \node[anchor=west] at (0,6) {Parser state};
-   \draw[color=gray,dashed] (0,-3.6) rectangle (15.5,5.45);
-   \draw[color=gray] (.5,2.5) rectangle (6,4.5);
-   \node[anchor=west] at (.5,3.3) {$S$};
-   \node[fill=black, circle] at (3.2,3.5) {};
-   \node[fill=purple, circle] at (4.7,3.5) {};
-   \node[anchor=west] at (3.3,.775) {\scriptsize\ttfamily made};
-   \draw[color=gray] (6.5,2.5) rectangle (15,4.5);
-   \node[anchor=west] at (6.51,3.3) {$B$};
-   \node[anchor=west] at (8.11,3.26) {\ttfamily to feel\ldots};
-   \node[anchor=west] at (2.1,.8) {$G$};
-   \node[fill=black, circle] at (8.35,.75) {}   
+   \begin{tikzpicture}[level distance=27mm, sibling distance=5cm]
+   \node[anchor=west] at (0,5.1) {Parser state};
+   \draw[color=gray,dashed] (0,-5) rectangle (18,5.6);
+   \draw[color=gray] (.5,2.2) rectangle (8,4.2);
+   \node[anchor=west] at (.5,3.2) {$S$};
+   \node[fill=black, circle] at (3,3.2) {};
+   \node[fill=purple, circle] at (4.7,3.2) {};
+   \node[anchor=west] at (5.2,3.2) {\ttfamily made};
+   \draw[color=gray] (8.5,2.2) rectangle (17.5,4.2);
+   \node[anchor=west] at (8.51,3.2) {$B$};
+   \node[anchor=west] at (10.11,3.2) {\ttfamily to feel very wel\ldots};
+   \node[anchor=west] at (2,0) {$G$};
+   \node[fill=black, circle] at (9,1.2) {}   
      child {node  {\ttfamily We} edge from parent [->] node[left] {nsubj}}
      child {node [fill=purple, circle] {}
      {
@@ -447,22 +447,20 @@ It is a transition-based parser supporting reentrancy, discontinuity and non-ter
      } edge from parent [->] node[right] {head} };
    \end{tikzpicture}
    \begin{tikzpicture}[->]
-   \node[anchor=west] at (0,10) {Classifier};
+   \node[anchor=west] at (-.8,11.3) {Classifier};
    \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
    \node[main] (specific) at (7,5) {BiLSTM};
    \foreach \i/\word in {0/{We},5/{were},10/{welcome},15/{.}} {
-       \node (x\i) at (\i,1) {\ttfamily\word};
-       \node[main] (e\i) at (\i,2.2) {};
-       \path (x\i) edge (e\i);
-       \path (e\i) edge (specific);
+       \node (x\i) at (\i,2) {\ttfamily\word};
+       \path (x\i) edge (specific);
    }
-    \node (x4) at (7,1) {\large\ldots};
+    \node (x4) at (7,2) {\large\ldots};
     \node[main] (mlp) at (7,7.6) {MLP};
     \path (specific) edge (mlp);
-    \coordinate (state) at (0,6.3);
+    \coordinate (state) at (-1.1,6.3);
     \path (state) edge [bend right] (mlp);
-    \node (transition) at (7,9) {transition};
-    \path (mlp) edge node[right] {softmax} (transition);
+    \node (transition) at (7,10) {transition};
+    \path (mlp) edge node[right] {} (transition);
    \end{tikzpicture}
 \end{center}
 
