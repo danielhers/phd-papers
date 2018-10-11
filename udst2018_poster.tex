@@ -358,14 +358,14 @@ The transition classifier is based on a BiLSTM and features of the stack, buffer
 
 We convert UD into a format similar to UCCA and supported by TUPA.
 
-\begin{center}
+\begin{minipage}{.4\columnwidth}
   \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
       sibling distance=34mm, ->,
         every circle node/.append style={fill=DarkBlue},
-        level 1/.style={level distance=33mm},
+        level 1/.style={level distance=37mm},
         level 2/.style={level distance=32mm},
-        level 3/.style={level distance=33mm}]
+        level 3/.style={level distance=37mm}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
         child {node (We) [word] {We} edge from parent node[midway,above,sloped] {\scriptsize nsubj}}
@@ -393,7 +393,62 @@ We convert UD into a format similar to UCCA and supported by TUPA.
       \draw[dashed,->,bend left=25] (verywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
       \draw[dashed,->,bend left=20] (feelverywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
   \end{tikzpicture}
-\end{center}
+\end{minipage}
+\hfill
+\begin{minipage}{.6\columnwidth}
+	\begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+      level distance=41mm,
+	  level 1/.style={sibling distance=10cm},
+	  level 2/.style={sibling distance=36mm},
+	  level 3/.style={sibling distance=17mm},
+	  level 4/.style={sibling distance=19mm},
+	  every circle node/.append style={fill=DarkBlue}]
+	  \tikzstyle{word} = [font=\rmfamily,color=black]
+	  \node (1_1) [circle] {}
+	  {
+	  child {node (1_2) [circle] {}
+	    {
+	    child {node (1_6) [word] {He}  edge from parent [draw=none]}
+	    child {node (1_3) [word] {had}  edge from parent [draw=none]}
+	    child {node (1_7) [circle] {}
+	      {
+	      child {node (1_14) [word] {a}  edge from parent node[midway,above,sloped]  {\scriptsize det}}
+	      child {node (1_8) [word] {robe}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
+	      } edge from parent node[midway,above,sloped]  {\scriptsize obj}}
+	    } edge from parent node[midway,above,sloped]  {\scriptsize head}}
+	  child {node (1_4) [circle] {}
+	    {
+	    child {node {}
+	    {
+    	    child {node (1_15) [word] {that}  edge from parent [draw=none]}
+    	} edge from parent [draw=none]}
+	    child {node (1_5) [circle] {}
+	      {
+	      child {node (1_9) [word] {was}  edge from parent node[midway,above,sloped]  {\scriptsize aux}}
+	      child {node (1_10) [word] {made}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
+	      } edge from parent node[midway,above,sloped]  {\scriptsize head}}
+	    child {node (1_11) [circle] {}
+	      {
+	      child {node (1_12) [word] {back}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
+	      child {node (1_16) [circle] {}
+	        {
+	        child {node (1_18) [word] {in}  edge from parent node[midway,above,sloped]  {\scriptsize case}}
+	        child {node (1_19) [word] {the}  edge from parent node[midway,above,sloped]  {\scriptsize det}}
+	        child {node (1_17) [word] {'60s}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
+	        child {node (1_20) [word] {.}  edge from parent node[midway,above,sloped]  {\scriptsize punct}}
+	        } edge from parent node[midway,above,sloped]  {\scriptsize obl}}
+	      } edge from parent node[midway,above,sloped]  {\scriptsize advmod}}
+	    } edge from parent node[midway,above,sloped]  {\scriptsize acl}}
+	  };
+	  \draw[->] (1_2) to node [midway,above,sloped] {\scriptsize nsubj} (1_6);
+	  \draw[->] (1_2) to node [midway,above,sloped] {\scriptsize head} (1_3);
+	  \draw[->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_15);
+	  \draw[dashed,->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_7);
+	  \draw[dashed,->] (1_7) to node [midway,above,sloped] {\scriptsize ref} (1_15);
+	\end{tikzpicture}
+\end{minipage}
+
 
 \columnbreak
 
@@ -484,61 +539,6 @@ case information (nmod:on):
 The same graph after conversion to the unified DAG format.
 The cycle is removed due to the non-terminal nodes introduced in the conversion.
 
-	\begin{tikzpicture}[->,level distance=21.5mm,
-	  level 1/.style={sibling distance=15cm},
-	  level 2/.style={sibling distance=43mm},
-	  level 3/.style={sibling distance=21mm},
-	  level 4/.style={sibling distance=29mm,level distance=24mm},
-	  every circle node/.append style={fill=black}]
-	  \tikzstyle{word} = [font=\rmfamily,color=black]
-	  \node (1_1) [circle] {}
-	  {
-	  child {node (1_2) [circle] {}
-	    {
-	    child {node {}
-	    {
-    	    child {node (1_6) [word] {He}  edge from parent [draw=none]}
-    	} edge from parent [draw=none]}
-	    child {node {}
-	    {
-    	    child {node (1_3) [word] {had}  edge from parent [draw=none]}
-    	} edge from parent [draw=none]}
-	    child {node (1_7) [circle] {}
-	      {
-	      child {node (1_14) [word] {a}  edge from parent node[midway,above,sloped]  {\scriptsize det}}
-	      child {node (1_8) [word] {robe}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
-	      } edge from parent node[midway,above,sloped]  {\scriptsize obj}}
-	    } edge from parent node[midway,above,sloped]  {\scriptsize head}}
-	  child {node (1_4) [circle] {}
-	    {
-	    child {node {}
-	    {
-    	    child {node (1_15) [word] {that}  edge from parent [draw=none]}
-    	} edge from parent [draw=none]}
-	    child {node (1_5) [circle] {}
-	      {
-	      child {node (1_9) [word] {was}  edge from parent node[midway,above,sloped]  {\scriptsize aux}}
-	      child {node (1_10) [word] {made}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
-	      } edge from parent node[midway,above,sloped]  {\scriptsize head}}
-	    child {node (1_11) [circle] {}
-	      {
-	      child {node (1_12) [word] {back}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
-	      child {node (1_16) [circle] {}
-	        {
-	        child {node (1_18) [word] {in}  edge from parent node[midway,above,sloped]  {\scriptsize case}}
-	        child {node (1_19) [word] {the}  edge from parent node[midway,above,sloped]  {\scriptsize det}}
-	        child {node (1_17) [word] {'60s}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
-	        child {node (1_20) [word] {.}  edge from parent node[midway,above,sloped]  {\scriptsize punct}}
-	        } edge from parent node[midway,above,sloped]  {\scriptsize obl}}
-	      } edge from parent node[midway,above,sloped]  {\scriptsize advmod}}
-	    } edge from parent node[midway,above,sloped]  {\scriptsize acl}}
-	  };
-	  \draw[->] (1_2) to node [midway,above,sloped] {\scriptsize nsubj} (1_6);
-	  \draw[->] (1_2) to node [midway,above,sloped] {\scriptsize head} (1_3);
-	  \draw[->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_15);
-	  \draw[dashed,->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_7);
-	  \draw[dashed,->] (1_7) to node [midway,above,sloped] {\scriptsize ref} (1_15);
-	\end{tikzpicture}
 
 \hrule
 
