@@ -355,42 +355,8 @@ We convert UD into a format similar to UCCA and supported by TUPA.
 \begin{center}
   \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
-      level 1/.style={sibling distance=4cm,level distance=1cm},
-      level 2/.style={sibling distance=3cm,level distance=4cm}]
-    \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [fill=DarkBlue,circle] {}
-      child {node (after) [fill=DarkBlue,circle] {}
-      {
-        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
-        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
-      } edge from parent node {obl}}
-      child {node {}
-      {
-        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node {}
-      {
-        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node {}
-      {
-        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node (to) [fill=DarkBlue,circle] {}
-      {
-          child {node [word] {to{\color{white}g}} edge from parent node {case}}
-          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
-      } edge from parent node {obl}}
-      ;
-      \draw (ROOT) to node {punct} (comma);
-      \draw (ROOT) to node {nsubj} (John);
-      \draw (ROOT) to node {head} (moved);
-  \end{tikzpicture}
-  \captionof{figure}{\color{DarkBlue} Converted UD.}
-\end{center}
-
-    \begin{tikzpicture}[sibling distance=34mm, ->,
-        every circle node/.append style={fill=black},
+      sibling distance=34mm, ->,
+        every circle node/.append style={fill=DarkBlue},
         level 1/.style={level distance=33mm},
         level 2/.style={level distance=32mm},
         level 3/.style={level distance=33mm}]
@@ -420,10 +386,10 @@ We convert UD into a format similar to UCCA and supported by TUPA.
       \draw[->] (ROOT) to node [midway,above,sloped] {\scriptsize head} (weremade);
       \draw[dashed,->,bend left=25] (verywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
       \draw[dashed,->,bend left=20] (feelverywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
-    \end{tikzpicture}
-    \captionof{figure}{UD graph after conversion to unified DAG format.}
+  \end{tikzpicture}
+\end{center}
 
-\hrule
+\columnbreak
 
 
 
