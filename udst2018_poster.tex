@@ -77,100 +77,43 @@ Learning to parse \textbf{enhanced dependencies} jointly with basic Universal De
 
 \color{Black}
 
-\begin{itemize}[labelsep=1em]
-{\color{Indigo} \item[\textbf{UCCA}:] Intuitive, cross-lingual, and modular semantic representation.
+\textbf{UCCA}: Intuitive, cross-lingual, and modular semantic representation.
     \textit{Primary edges} form a tree. \textit{Remote edges} (dashed) allow reentrancy,
-    creating a directed acyclic graph \cite{abend2013universal}.}
-{\color{DarkBlue} \item[\textbf{UD}:] Cross-lingual syntactic bilexical tree.
-    Encodes syntactic relations between words \cite{nivre2016universal}. \\
-    \textbf{UD$^{++}$} (Enhanced++ UD) adds and augments edges, creating a bilexical DAG
-    \cite{SCHUSTER16.779}.}
-\end{itemize}
+    creating a directed acyclic graph \cite{abend2013universal}.
+    
 
-\begin{minipage}{.45\columnwidth}
+\begin{minipage}{.5\columnwidth}
   \color{Indigo}
   \begin{center}
-  \scalebox{.6}{
-    \begin{tikzpicture}[level distance=3cm, sibling distance=55mm, -{Latex[length=5mm]}, line width=2pt,
+  \scalebox{.9}{
+    \begin{tikzpicture}[level distance=41mm,sibling distance=29mm, -{Latex[length=5mm]}, line width=2pt,
         every node/.append style={font=\large\bf\ttfamily},
         every circle node/.append style={fill=Indigo}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
-        child {node (After) [word] {After} edge from parent node[above] {L}}
-        child {node (graduation) [circle] {}
+        child {node (We) [word] {We} edge from parent node[above] {A}}
+        child {node [word] {were} edge from parent node[below] {F}}
+        child {node [word] {made} edge from parent node[right] {D}}
+        child {node [word] {to} edge from parent node[right] {F}}
+        child {node [word] {feel} edge from parent node[right] {P}}
+        child {node (verywelcome) [circle] {}
         {
-          child {node [word] {graduation} edge from parent node[left] {P}}
-        } edge from parent node[right] {H} }
-        child {node [word] {,} edge from parent node[below] {U}}
-        child {node (moved) [circle] {}
-        {
-          child {node (John) [word] {John} edge from parent node[left] {A}}
-          child {node [word] {moved} edge from parent node[left] {P}}
-          child {node [circle] {}
-          {
-            child {node [word] {to} edge from parent node[left] {R}}
-            child {node [word] {Paris} edge from parent node[right] {C}}
-          } edge from parent node[above] {A} }
-        } edge from parent node[above] {H} }
-        ;
-      \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [above] {A} (John);
+          child {node [word] {very} edge from parent node[left] {D}}
+          child {node [word] {welcome} edge from parent node[right] {S}}
+          child {node [word] {.} edge from parent node[right] {U}}
+        } edge from parent node[above] {A} }
+      ;
+      \draw[dashed,->,bend left] (verywelcome) to node [below] {A} (We);
     \end{tikzpicture}
   }
   \captionof{figure}{\color{Indigo} Universal Conceptual Cognitive Annotation (UCCA).}
   \end{center}
 \end{minipage}
-\begin{minipage}{.55\columnwidth}
+\begin{minipage}{.45\columnwidth}
     \begin{center}
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
         text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
-    \begin{deptext}[column sep=.8em,ampersand replacement=\^, color=DarkBlue]
-    After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
-    \end{deptext}
-        \depedge[edge unit distance=1em]{2}{1}{case}
-        \depedge[edge unit distance=1em]{4}{3}{punct}
-        \depedge[edge unit distance=1em, edge start x offset=-4mm]{5}{4}{nsubj}
-        \depedge[edge unit distance=1em, edge end x offset=-3mm]{2}{5}{obl}
-        \depedge[edge unit distance=1em]{7}{6}{case}
-        \deproot[edge unit distance=1em]{5}{root}
-        \depedge[edge unit distance=1.5em, edge start x offset=1mm]{5}{7}{obl}
-    \end{dependency}
-  \captionof{figure}{\color{DarkBlue} Universal Dependencies (UD).}
-  \end{center}
-\end{minipage}
-
-\vspace{5mm}
-
-\hrule
-
-
-\section*{Enhanced Dependencies}
-
-\begin{adjustbox}{width=\columnwidth,margin=3pt,frame}
-\texttt{1 We we PRON PRP Case=Nom|Number=Plur|Person=1|PronType=Prs 3 nsubj:pass 3:nsubj:pass|5:nsubj:xsubj|7:nsubj:xsubj \textunderscore}
-\end{adjustbox}
-
-    \begin{tikzpicture}[level distance=34mm,sibling distance=29mm, ->,
-        every circle node/.append style={fill=black}]
-      \tikzstyle{word} = [font=\rmfamily,color=black]
-      \node (ROOT) [circle] {}
-        child {node (We) [word] {We} edge from parent node[above] {\scriptsize  $A$}}
-        child {node [word] {were} edge from parent node[below] {\scriptsize $F$}}
-        child {node [word] {made} edge from parent node[right] {\scriptsize $D$}}
-        child {node [word] {to} edge from parent node[right] {\scriptsize $F$}}
-        child {node [word] {feel} edge from parent node[right] {\scriptsize $P$}}
-        child {node (verywelcome) [circle] {}
-        {
-          child {node [word] {very} edge from parent node[left] {\scriptsize $D$}}
-          child {node [word] {welcome} edge from parent node[right] {\scriptsize $S$}}
-          child {node [word] {.} edge from parent node[right] {\scriptsize $U$}}
-        } edge from parent node[above] {\scriptsize $A$} }
-      ;
-      \draw[dashed,->,bend left] (verywelcome) to node [below] {\scriptsize $A$} (We);
-    \end{tikzpicture}
-    \captionof{figure}{Example UCCA graph.}
-
-    \begin{dependency}[text only label, label style={above}, font=\small]
-    \begin{deptext}[column sep=.5em,ampersand replacement=\^]
+   \begin{deptext}[column sep=.5em,ampersand replacement=\^]
     We \^ were \^ made \^ to \^ feel \^ very \^ welcome \^ . \\
     \end{deptext}
         \depedge[edge start x offset=1pt]{3}{1}{nsubj:pass}
@@ -184,7 +127,312 @@ Learning to parse \textbf{enhanced dependencies} jointly with basic Universal De
         \depedge{5}{7}{xcomp}
         \depedge[edge unit distance=2ex,edge start x offset=-1pt]{3}{8}{punct}
     \end{dependency}
-    \captionof{figure}{Example UD graph.}
+  \captionof{figure}{\color{DarkBlue} Universal Dependencies (UD).}
+  \end{center}
+\end{minipage}
+
+\vspace{5mm}
+
+We extend \textbf{TUPA}, a general DAG parser,
+which has been proposed as a UCCA parser \cite{hershcovich2017a}.
+
+Transition-based parser supporting reentrancy, discontinuity and non-terminal nodes.
+
+\scalebox{.9}{
+\begin{minipage}{.55\columnwidth}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small]
+	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.2) rectangle (19.5,1.5);
+	\draw[color=gray,fill=white] (.4,0) rectangle (2.6,1);
+	\node[fill=cyan, circle] at (1.5,.45) {};
+	\draw[color=gray,fill=white] (3,0) rectangle (16,1);
+	\node[anchor=west] at (3,.45) {We were made to feel very welcome .};
+	\node[fill=cyan, circle] at (18.5,.45) {};
+	\node[anchor=west] at (10,-.8) {\bf\small\textsc{Shift}};
+	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
+	\end{tikzpicture}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small]
+	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.2) rectangle (19.5,1.5);
+	\draw[color=gray,fill=white] (.4,0) rectangle (4.3,1);
+	\node[fill=cyan, circle] at (1.5,.45) {};
+	\node[color=red,anchor=west] at (2,.45) {We};
+	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
+	\node[anchor=west] at (5,.45) {were made to feel very welcome .};
+	\node[fill=cyan, circle] at (18.5,.45) {};
+	\node[anchor=west] at (10,-.9) {\bf\small\textsc{Right-Edge\textsubscript {nsubj}}};
+	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
+	\end{tikzpicture}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
+	\draw[color=gray,fill=white] (.4,0) rectangle (4.3,1);
+	\node[fill=cyan, circle] at (1.5,.45) {};
+	\node[anchor=west] at (2,.45) {We};
+	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
+	\node[anchor=west] at (5,.45) {were made to feel very welcome .};
+	\node[fill=cyan, circle] at (18.5,1.4) {}
+	  child {node[font=\scriptsize] {We} edge from parent [red] node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
+	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
+	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
+	\end{tikzpicture}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
+	\draw[color=gray,fill=white] (.4,0) rectangle (3,1);
+	\node[fill=cyan, circle] at (1.5,.45) {};
+	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
+	\node[anchor=west] at (5,.45) {were made to feel very welcome .};
+	\node[fill=cyan, circle] at (18.5,1.4) {}
+	  child {node[font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
+	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Shift}};
+	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
+	\end{tikzpicture}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
+	\draw[color=gray,fill=white] (.4,0) rectangle (4.5,1);
+	\node[fill=cyan, circle] at (1.5,.45) {};
+	\node[color=red,anchor=west] at (2,.45) {were};
+	\draw[color=gray,fill=white] (5.5,0) rectangle (15,1);
+	\node[anchor=west] at (5.5,.45) {made to feel very welcome .};
+	\node[fill=cyan, circle] at (18.5,1.4) {}
+	  child {node[font=\scriptsize] {were} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
+	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Node\textsubscript {aux}}};
+	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
+	\end{tikzpicture}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
+	\draw[color=gray,fill=white] (.4,0) rectangle (5,1);
+	\node[fill=cyan, circle] at (1.5,.45) {};
+	\node[fill=orange, draw=red, circle] at (2.5,.45) {};
+	\node[anchor=west] at (3,.45) {were};
+	\draw[color=gray,fill=white] (5.2,0) rectangle (14.5,1);
+	\node[anchor=west] at (5.2,.45) {made to feel very welcome .};
+	\node[fill=cyan, circle] at (16.5,1.4) {}
+	  child {node[font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
+	\node[fill=orange, draw=red, circle] at (18.3,1.4) {}
+	  child {node[font=\scriptsize] {were} edge from parent [red] node[font=\scriptsize\bf\ttfamily,right] {aux}};
+	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
+	\draw[arrows={-[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
+	\draw[arrows={-[line width=2pt,length=4mm,width=6mm]}] (9,-1.7) -- (20.1,-1.7);
+	\end{tikzpicture}
+\end{minipage}
+\hspace{1pt}
+\begin{minipage}{0.02\columnwidth}
+    \vspace{5mm}
+    \begin{tikzpicture}
+    	\draw[arrows={-[line width=2pt,length=4mm,width=6mm]}] (0,0) -- (0,20);
+    	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (0,20) -- (1,20);
+	\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{.4\columnwidth}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed,fill=lightgray!20] (0,-.5) rectangle (18,1.9);
+	\draw[color=gray,fill=white] (0.2,0) rectangle (3,1);
+	\node[fill=cyan, circle] at (1,.45) {};
+	\node[fill=orange, circle] at (2,.45) {};
+	\draw[color=gray,fill=white] (3.3,0) rectangle (12,1);
+	\node[anchor=west] at (3.3,.45) {made to feel very welcome .};
+	\node[fill=cyan, circle] at (13.7,1.4) {}
+	  child {node[font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
+	\node[fill=orange, circle] at (16.2,1.4) {}
+	  child {node[font=\scriptsize] {were} edge from parent node[font=\scriptsize\bf\ttfamily,right] {aux}};
+	\node[anchor=west] at (6,-1.2) {\bf\small\textsc{Right-Edge\textsubscript {head}}};
+	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-.6) -- (5,-1.7);
+	\end{tikzpicture}
+	\begin{tikzpicture}[level distance=13mm, sibling distance=3cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed,fill=lightgray!20] (0,-1.9) rectangle (18,1.9);
+	\draw[color=gray,fill=white] (0.2,0) rectangle (3.5,1);
+	\node[fill=cyan, circle] at (1,.45) {};
+	\node[fill=orange, circle] at (2,.45) {};
+	\draw[color=gray,fill=white] (3.8,0) rectangle (12.4,1);
+	\node[anchor=west] at (3.8,.45) {made to feel very welcome .};
+   \node[fill=cyan, circle] at (14.8,1.3) {}   
+     child {node[font=\scriptsize] {We} edge from parent [->] node[font=\scriptsize\bf\ttfamily,left] {nsubj}}
+     child {node [fill=orange, circle] {}
+     {
+       child {node[font=\scriptsize] {were} edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {aux}}
+     } edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {head} };
+	\node[anchor=west] at (6,-2.5) {\bf\small\textsc{Shift}};
+	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
+	\end{tikzpicture}
+	\begin{tikzpicture}[level distance=15mm, sibling distance=3cm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed,fill=lightgray!20] (0,-1.9) rectangle (18,1.9);
+	\draw[color=gray,fill=white] (0.2,0) rectangle (4.8,1);
+	\node[fill=cyan, circle] at (1,.45) {};
+	\node[fill=orange, circle] at (2,.45) {};
+	\node[color=red, anchor=west] at (2.5,.45) {made};
+	\draw[color=gray,fill=white] (5,0) rectangle (12.4,1);
+	\node[anchor=west] at (5,.45) {to feel very welcome .};
+   \node[fill=cyan, circle] at (14.8,1.3) {}   
+     child {node[font=\scriptsize] {We} edge from parent [->] node[font=\scriptsize\bf\ttfamily,left] {nsubj}}
+     child {node [fill=orange, circle] {}
+     {
+       child {node[font=\scriptsize] {were} edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {aux}}
+     } edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {head} };
+	\node[anchor=west] at (6,-2.5) {\Large \ldots};
+	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
+	\end{tikzpicture}
+    \begin{tikzpicture}[level distance=18mm, sibling distance=37mm, font=\small, -{Latex[length=3mm]}]
+	\draw[color=gray,dashed,fill=lightgray!20] (0,-4.7) rectangle (18,1.9);
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) at (6.8,1.3) [fill=cyan, circle] {}
+        child {node (We) [font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize nsubj}}
+        child {node {}
+        {
+	        child {node (weremade) [fill=orange, circle] {}
+	        {
+	          child {node [font=\scriptsize] {were} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize aux}}
+	          child {node [font=\scriptsize] {made} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
+	        } edge from parent [draw=none]}
+        } edge from parent [draw=none]}
+        child {node [font=\scriptsize] {to} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize mark}}
+        child {node (feelverywelcome) [fill=blue, circle] {}
+        {
+          child {node [font=\scriptsize] {feel} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
+          child {node (verywelcome) [fill=green, circle] {}
+          {
+            child {node [font=\scriptsize] {very} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize advmod}}
+            child {node [font=\scriptsize] {welcome} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
+            child {node [font=\scriptsize] {.} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize punct}}
+          } edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize xcomp} }
+        } edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize xcomp} }
+      ;
+      \draw[->] (ROOT) to node [font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head} (weremade);
+      \draw[dashed,->,bend left=25] (verywelcome) to node [font=\scriptsize\bf\ttfamily,midway,below,sloped] {\scriptsize nsubj} (We);
+      \draw[dashed,->,bend left=20] (feelverywelcome) to node [font=\scriptsize\bf\ttfamily,midway,below,sloped] {\scriptsize nsubj} (We);
+    \end{tikzpicture}
+\end{minipage}
+}
+
+
+
+Transition classifier:
+
+\begin{center}
+\large
+   \begin{tikzpicture}[level distance=27mm, sibling distance=5cm]
+   \node[anchor=west] at (0,5.1) {Parser state};
+   \draw[color=gray,dashed] (0,-5) rectangle (18,5.6);
+   \draw[color=gray] (.5,2.2) rectangle (8,4.2);
+   \node[anchor=west] at (.5,3.2) {$S$};
+   \node[fill=cyan, circle] at (3,3.2) {};
+   \node[fill=orange, circle] at (4.7,3.2) {};
+   \node[anchor=west] at (5.2,3.2) {\ttfamily made};
+   \draw[color=gray] (8.5,2.2) rectangle (17.5,4.2);
+   \node[anchor=west] at (8.51,3.2) {$B$};
+   \node[anchor=west] at (10.11,3.2) {\ttfamily to feel very wel\ldots};
+   \node[anchor=west] at (2,0) {$G$};
+   \node[fill=cyan, circle] at (9,1.2) {}   
+     child {node  {\ttfamily We} edge from parent [->] node[left] {nsubj}}
+     child {node [fill=orange, circle] {}
+     {
+       child {node {\ttfamily were} edge from parent [->] node[right] {aux}}
+     } edge from parent [->] node[right] {head} };
+   \end{tikzpicture}
+   \begin{tikzpicture}[->]
+   \node[anchor=west] at (-.8,11.3) {Classifier};
+   \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
+   \node[main] (specific) at (7,5) {BiLSTM};
+   \foreach \i/\word in {0/{We},5/{were},10/{welcome},15/{.}} {
+       \node (x\i) at (\i,2) {\ttfamily\word};
+       \path (x\i) edge (specific);
+   }
+    \node (x4) at (7,2) {\large\ldots};
+    \node[main] (mlp) at (7,7.6) {MLP};
+    \path (specific) edge (mlp);
+    \coordinate (state) at (-1.1,6.3);
+    \path (state) edge [bend right] (mlp);
+    \node (transition) at (7,10) {transition};
+    \path (mlp) edge node[right] {} (transition);
+   \end{tikzpicture}
+\end{center}
+
+
+\hrule
+
+
+\section*{Unified DAG Format}
+
+We convert UD into a format similar to UCCA and supported by TUPA.
+
+\begin{center}
+  \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+      level 1/.style={sibling distance=4cm,level distance=1cm},
+      level 2/.style={sibling distance=3cm,level distance=4cm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=DarkBlue,circle] {}
+      child {node (after) [fill=DarkBlue,circle] {}
+      {
+        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
+        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
+      } edge from parent node {obl}}
+      child {node {}
+      {
+        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node {}
+      {
+        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node {}
+      {
+        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node (to) [fill=DarkBlue,circle] {}
+      {
+          child {node [word] {to{\color{white}g}} edge from parent node {case}}
+          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
+      } edge from parent node {obl}}
+      ;
+      \draw (ROOT) to node {punct} (comma);
+      \draw (ROOT) to node {nsubj} (John);
+      \draw (ROOT) to node {head} (moved);
+  \end{tikzpicture}
+  \captionof{figure}{\color{DarkBlue} Converted UD.}
+\end{center}
+
+    \begin{tikzpicture}[sibling distance=34mm, ->,
+        every circle node/.append style={fill=black},
+        level 1/.style={level distance=33mm},
+        level 2/.style={level distance=32mm},
+        level 3/.style={level distance=33mm}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node (We) [word] {We} edge from parent node[midway,above,sloped] {\scriptsize nsubj}}
+        child {node {}
+        {
+	        child {node (weremade) [circle] {}
+	        {
+	          child {node [word] {were} edge from parent node[midway,above,sloped] {\scriptsize aux}}
+	          child {node [word] {made} edge from parent node[midway,above,sloped] {\scriptsize head}}
+	        } edge from parent [draw=none]}
+        } edge from parent [draw=none]}
+        child {node [word] {to} edge from parent node[midway,above,sloped] {\scriptsize mark}}
+        child {node (feelverywelcome) [circle] {}
+        {
+          child {node [word] {feel} edge from parent node[midway,above,sloped] {\scriptsize head}}
+          child {node (verywelcome) [circle] {}
+          {
+            child {node [word] {very} edge from parent node[midway,above,sloped] {\scriptsize advmod}}
+            child {node [word] {welcome} edge from parent node[midway,above,sloped] {\scriptsize head}}
+            child {node [word] {.} edge from parent node[midway,above,sloped] {\scriptsize punct}}
+          } edge from parent node[midway,above,sloped] {\scriptsize xcomp} }
+        } edge from parent node[midway,above,sloped] {\scriptsize xcomp} }
+      ;
+      \draw[->] (ROOT) to node [midway,above,sloped] {\scriptsize head} (weremade);
+      \draw[dashed,->,bend left=25] (verywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
+      \draw[dashed,->,bend left=20] (feelverywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
+    \end{tikzpicture}
+    \captionof{figure}{UD graph after conversion to unified DAG format.}
+
+\hrule
+
+
+
+\section*{Enhanced Dependencies}
+
+\begin{adjustbox}{width=\columnwidth,margin=3pt,frame}
+\texttt{1 We we PRON PRP Case=Nom|Number=Plur|Person=1|PronType=Prs 3 nsubj:pass 3:nsubj:pass|5:nsubj:xsubj|7:nsubj:xsubj \textunderscore}
+\end{adjustbox}
+
 
 UD graph from \verb|reviews-341397-0003| (\verb|UD_English-EWT|),
 containing conjoined predicates and arguments:
@@ -259,85 +507,6 @@ case information (nmod:on):
         \depedge[edge start x offset=-1pt,edge unit distance=1.2ex]{2}{12}{punct}
     \end{dependency}
 
-
-\hrule
-
-\section*{Unified DAG Format}
-
-We convert UD into a format similar to UCCA and
-supported by TUPA.
-
-\begin{center}
-  \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
-      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
-      level 1/.style={sibling distance=4cm,level distance=1cm},
-      level 2/.style={sibling distance=3cm,level distance=4cm}]
-    \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [fill=DarkBlue,circle] {}
-      child {node (after) [fill=DarkBlue,circle] {}
-      {
-        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
-        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
-      } edge from parent node {obl}}
-      child {node {}
-      {
-        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node {}
-      {
-        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node {}
-      {
-        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node (to) [fill=DarkBlue,circle] {}
-      {
-          child {node [word] {to{\color{white}g}} edge from parent node {case}}
-          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
-      } edge from parent node {obl}}
-      ;
-      \draw (ROOT) to node {punct} (comma);
-      \draw (ROOT) to node {nsubj} (John);
-      \draw (ROOT) to node {head} (moved);
-  \end{tikzpicture}
-  \captionof{figure}{\color{DarkBlue} Converted UD.}
-\end{center}
-
-    \begin{tikzpicture}[sibling distance=34mm, ->,
-        every circle node/.append style={fill=black},
-        level 1/.style={level distance=33mm},
-        level 2/.style={level distance=32mm},
-        level 3/.style={level distance=33mm}]
-      \tikzstyle{word} = [font=\rmfamily,color=black]
-      \node (ROOT) [circle] {}
-        child {node (We) [word] {We} edge from parent node[midway,above,sloped] {\scriptsize nsubj}}
-        child {node {}
-        {
-	        child {node (weremade) [circle] {}
-	        {
-	          child {node [word] {were} edge from parent node[midway,above,sloped] {\scriptsize aux}}
-	          child {node [word] {made} edge from parent node[midway,above,sloped] {\scriptsize head}}
-	        } edge from parent [draw=none]}
-        } edge from parent [draw=none]}
-        child {node [word] {to} edge from parent node[midway,above,sloped] {\scriptsize mark}}
-        child {node (feelverywelcome) [circle] {}
-        {
-          child {node [word] {feel} edge from parent node[midway,above,sloped] {\scriptsize head}}
-          child {node (verywelcome) [circle] {}
-          {
-            child {node [word] {very} edge from parent node[midway,above,sloped] {\scriptsize advmod}}
-            child {node [word] {welcome} edge from parent node[midway,above,sloped] {\scriptsize head}}
-            child {node [word] {.} edge from parent node[midway,above,sloped] {\scriptsize punct}}
-          } edge from parent node[midway,above,sloped] {\scriptsize xcomp} }
-        } edge from parent node[midway,above,sloped] {\scriptsize xcomp} }
-      ;
-      \draw[->] (ROOT) to node [midway,above,sloped] {\scriptsize head} (weremade);
-      \draw[dashed,->,bend left=25] (verywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
-      \draw[dashed,->,bend left=20] (feelverywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
-    \end{tikzpicture}
-    \captionof{figure}{UD graph after conversion to unified DAG format.}
-
     
     
 The same graph after conversion to the unified DAG format.
@@ -400,216 +569,6 @@ The cycle is removed due to the non-terminal nodes introduced in the conversion.
 	\end{tikzpicture}
 
 \hrule
-
-
-\section*{TUPA: A Transition-Based DAG Parser}
-
-We extend TUPA, a general DAG parser,
-which has been proposed as a UCCA parser \cite{hershcovich2017a}. \\
-It is a transition-based parser supporting reentrancy, discontinuity and non-terminal nodes.
-
-\scalebox{.9}{
-\begin{minipage}{.55\columnwidth}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small]
-	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.2) rectangle (19.5,1.5);
-	\draw[color=gray,fill=white] (.4,0) rectangle (2.6,1);
-	\node[fill=cyan, circle] at (1.5,.45) {};
-	\draw[color=gray,fill=white] (3,0) rectangle (16,1);
-	\node[anchor=west] at (3,.45) {We were made to feel very welcome .};
-	\node[fill=cyan, circle] at (18.5,.45) {};
-	\node[anchor=west] at (10,-.8) {\bf\small\textsc{Shift}};
-	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
-	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small]
-	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.2) rectangle (19.5,1.5);
-	\draw[color=gray,fill=white] (.4,0) rectangle (4.3,1);
-	\node[fill=cyan, circle] at (1.5,.45) {};
-	\node[color=red,anchor=west] at (2,.45) {We};
-	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
-	\node[anchor=west] at (5,.45) {were made to feel very welcome .};
-	\node[fill=cyan, circle] at (18.5,.45) {};
-	\node[anchor=west] at (10,-.9) {\bf\small\textsc{Right-Edge\textsubscript {nsubj}}};
-	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
-	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
-	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
-	\draw[color=gray,fill=white] (.4,0) rectangle (4.3,1);
-	\node[fill=cyan, circle] at (1.5,.45) {};
-	\node[anchor=west] at (2,.45) {We};
-	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
-	\node[anchor=west] at (5,.45) {were made to feel very welcome .};
-	\node[fill=cyan, circle] at (18.5,1.4) {}
-	  child {node[font=\scriptsize] {We} edge from parent [red] node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
-	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
-	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
-	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
-	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
-	\draw[color=gray,fill=white] (.4,0) rectangle (3,1);
-	\node[fill=cyan, circle] at (1.5,.45) {};
-	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
-	\node[anchor=west] at (5,.45) {were made to feel very welcome .};
-	\node[fill=cyan, circle] at (18.5,1.4) {}
-	  child {node[font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
-	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Shift}};
-	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
-	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
-	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
-	\draw[color=gray,fill=white] (.4,0) rectangle (4.5,1);
-	\node[fill=cyan, circle] at (1.5,.45) {};
-	\node[color=red,anchor=west] at (2,.45) {were};
-	\draw[color=gray,fill=white] (7.5,0) rectangle (16,1);
-	\node[anchor=west] at (7.5,.45) {made to feel very welcome .};
-	\node[fill=cyan, circle] at (18.5,1.4) {}
-	  child {node[font=\scriptsize] {were} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
-	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Node\textsubscript {aux}}};
-	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
-	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
-	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
-	\draw[color=gray,fill=white] (.4,0) rectangle (5,1);
-	\node[fill=cyan, circle] at (1.5,.45) {};
-	\node[fill=orange, draw=red, circle] at (2.5,.45) {};
-	\node[anchor=west] at (3,.45) {were};
-	\draw[color=gray,fill=white] (5.2,0) rectangle (14,1);
-	\node[anchor=west] at (5.2,.45) {made to feel very welcome .};
-	\node[fill=cyan, circle] at (16.2,1.4) {}
-	  child {node[font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
-	\node[fill=orange, draw=red, circle] at (18.3,1.4) {}
-	  child {node[font=\scriptsize] {were} edge from parent [red] node[font=\scriptsize\bf\ttfamily,right] {aux}};
-	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
-	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
-	\end{tikzpicture}
-\end{minipage}
-\hspace{1cm}
-\begin{minipage}{.4\columnwidth}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
-	\draw[color=gray,dashed,fill=lightgray!20] (0,-.5) rectangle (18,1.9);
-	\draw[color=gray,fill=white] (0.2,0) rectangle (3.5,1);
-	\node[fill=cyan, circle] at (1,.45) {};
-	\node[fill=orange, circle] at (2,.45) {};
-	\draw[color=gray,fill=white] (3.8,0) rectangle (12,1);
-	\node[anchor=west] at (3.8,.45) {made to feel very welcome .};
-	\node[fill=cyan, circle] at (13.7,1.4) {}
-	  child {node[font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
-	\node[fill=orange, circle] at (16.2,1.4) {}
-	  child {node[font=\scriptsize] {were} edge from parent node[font=\scriptsize\bf\ttfamily,right] {aux}};
-	\node[anchor=west] at (6,-1.2) {\bf\small\textsc{Right-Edge\textsubscript {head}}};
-	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-.6) -- (5,-1.7);
-	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=13mm, sibling distance=3cm, font=\small, -{Latex[length=3mm]}]
-	\draw[color=gray,dashed,fill=lightgray!20] (0,-1.9) rectangle (18,1.9);
-	\draw[color=gray,fill=white] (0.2,0) rectangle (3.5,1);
-	\node[fill=cyan, circle] at (1,.45) {};
-	\node[fill=orange, circle] at (2,.45) {};
-	\draw[color=gray,fill=white] (3.8,0) rectangle (12.4,1);
-	\node[anchor=west] at (3.8,.45) {made to feel very welcome .};
-   \node[fill=cyan, circle] at (14.8,1.3) {}   
-     child {node[font=\scriptsize] {We} edge from parent [->] node[font=\scriptsize\bf\ttfamily,left] {nsubj}}
-     child {node [fill=orange, circle] {}
-     {
-       child {node[font=\scriptsize] {were} edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {aux}}
-     } edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {head} };
-	\node[anchor=west] at (6,-2.5) {\bf\small\textsc{Shift}};
-	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
-	\end{tikzpicture}
-	\begin{tikzpicture}[level distance=15mm, sibling distance=3cm, font=\small, -{Latex[length=3mm]}]
-	\draw[color=gray,dashed,fill=lightgray!20] (0,-1.9) rectangle (18,1.9);
-	\draw[color=gray,fill=white] (0.2,0) rectangle (4.8,1);
-	\node[fill=cyan, circle] at (1,.45) {};
-	\node[fill=orange, circle] at (2,.45) {};
-	\node[color=red, anchor=west] at (2.5,.45) {made};
-	\draw[color=gray,fill=white] (5,0) rectangle (12.4,1);
-	\node[anchor=west] at (5,.45) {to feel very welcome .};
-   \node[fill=cyan, circle] at (14.8,1.3) {}   
-     child {node[font=\scriptsize] {We} edge from parent [->] node[font=\scriptsize\bf\ttfamily,left] {nsubj}}
-     child {node [fill=orange, circle] {}
-     {
-       child {node[font=\scriptsize] {were} edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {aux}}
-     } edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {head} };
-	\node[anchor=west] at (6,-2.5) {\Large \ldots};
-	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
-	\end{tikzpicture}
-    \begin{tikzpicture}[level distance=18mm, sibling distance=37mm, font=\small, -{Latex[length=3mm]}]
-	\draw[color=gray,dashed,fill=lightgray!20] (0,-4.7) rectangle (18,1.9);
-      \tikzstyle{word} = [font=\rmfamily,color=black]
-      \node (ROOT) at (6.8,1.3) [fill=cyan, circle] {}
-        child {node (We) [font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize nsubj}}
-        child {node {}
-        {
-	        child {node (weremade) [fill=orange, circle] {}
-	        {
-	          child {node [font=\scriptsize] {were} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize aux}}
-	          child {node [font=\scriptsize] {made} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
-	        } edge from parent [draw=none]}
-        } edge from parent [draw=none]}
-        child {node [font=\scriptsize] {to} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize mark}}
-        child {node (feelverywelcome) [fill=blue, circle] {}
-        {
-          child {node [font=\scriptsize] {feel} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
-          child {node (verywelcome) [fill=green, circle] {}
-          {
-            child {node [font=\scriptsize] {very} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize advmod}}
-            child {node [font=\scriptsize] {welcome} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
-            child {node [font=\scriptsize] {.} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize punct}}
-          } edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize xcomp} }
-        } edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize xcomp} }
-      ;
-      \draw[->] (ROOT) to node [font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head} (weremade);
-      \draw[dashed,->,bend left=25] (verywelcome) to node [font=\scriptsize\bf\ttfamily,midway,below,sloped] {\scriptsize nsubj} (We);
-      \draw[dashed,->,bend left=20] (feelverywelcome) to node [font=\scriptsize\bf\ttfamily,midway,below,sloped] {\scriptsize nsubj} (We);
-    \end{tikzpicture}
-\end{minipage}
-}
-
-\hrule
-
-
-\section*{Transition Classifier}
-
-\begin{center}
-\large
-   \begin{tikzpicture}[level distance=27mm, sibling distance=5cm]
-   \node[anchor=west] at (0,5.1) {Parser state};
-   \draw[color=gray,dashed] (0,-5) rectangle (18,5.6);
-   \draw[color=gray] (.5,2.2) rectangle (8,4.2);
-   \node[anchor=west] at (.5,3.2) {$S$};
-   \node[fill=black, circle] at (3,3.2) {};
-   \node[fill=purple, circle] at (4.7,3.2) {};
-   \node[anchor=west] at (5.2,3.2) {\ttfamily made};
-   \draw[color=gray] (8.5,2.2) rectangle (17.5,4.2);
-   \node[anchor=west] at (8.51,3.2) {$B$};
-   \node[anchor=west] at (10.11,3.2) {\ttfamily to feel very wel\ldots};
-   \node[anchor=west] at (2,0) {$G$};
-   \node[fill=black, circle] at (9,1.2) {}   
-     child {node  {\ttfamily We} edge from parent [->] node[left] {nsubj}}
-     child {node [fill=purple, circle] {}
-     {
-       child {node {\ttfamily were} edge from parent [->] node[right] {aux}}
-     } edge from parent [->] node[right] {head} };
-   \end{tikzpicture}
-   \begin{tikzpicture}[->]
-   \node[anchor=west] at (-.8,11.3) {Classifier};
-   \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
-   \node[main] (specific) at (7,5) {BiLSTM};
-   \foreach \i/\word in {0/{We},5/{were},10/{welcome},15/{.}} {
-       \node (x\i) at (\i,2) {\ttfamily\word};
-       \path (x\i) edge (specific);
-   }
-    \node (x4) at (7,2) {\large\ldots};
-    \node[main] (mlp) at (7,7.6) {MLP};
-    \path (specific) edge (mlp);
-    \coordinate (state) at (-1.1,6.3);
-    \path (state) edge [bend right] (mlp);
-    \node (transition) at (7,10) {transition};
-    \path (mlp) edge node[right] {} (transition);
-   \end{tikzpicture}
-\end{center}
-
-
-\hrule
-
 
 
 \section*{Results}
@@ -739,7 +698,7 @@ vi_vtb
     \begin{axis}[
     ybar=0pt,  
     enlarge x limits={0.01},
-    enlarge y limits={value=0.3,upper},
+    enlarge y limits={value=0.1,upper},
     ymin=0,
     width=\textwidth,
     height=18cm,
@@ -751,7 +710,7 @@ vi_vtb
     xticklabel pos=left,
     yticklabels=none,
     tickwidth=0pt,
-    legend style={at={(axis cs:0,113)},anchor=north west},
+    legend style={at={(axis cs:0.5,90)},anchor=north west},
     legend cell align={left},
     nodes near coords={
      \scalebox{.4}{\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}}
@@ -764,6 +723,5 @@ vi_vtb
     \end{axis}
     \end{tikzpicture}
 \catcode`\_=8
-\captionof{figure}{Unofficial test scores for TUPA on basic and enhanced dependencies.}
 
 \end{document}
