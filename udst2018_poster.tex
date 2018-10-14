@@ -695,7 +695,7 @@ vi_vtb
     ymin=0,
     width=1.04\textwidth,
     height=18cm,
-    bar width=6pt,
+    bar width=10pt,
     xtick=data,
     xticklabels from table={\corpus}{corpus},
     xticklabel style={font=\tiny,rotate=75,anchor=east},
@@ -706,9 +706,10 @@ vi_vtb
     legend style={at={(axis cs:0.5,90)},anchor=north west},
     legend cell align={left},
     nodes near coords={
-     \scalebox{.4}{\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}}
+     \scalebox{.6}{\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}}
     },
-    every node near coord/.append style={rotate=90,anchor=west}
+    every node near coord/.append style={rotate=90,anchor=west},
+    axis background/.style={fill=lightgray!50}
     ]
     \addplot[fill=red]table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
     \addplot[fill=blue]table[x expr=\coordindex,meta=corpus,y=enhanced]{udst2018scores.txt};
