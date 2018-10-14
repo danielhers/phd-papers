@@ -375,7 +375,7 @@ Example:
 
 \section*{Unified DAG Format}
 
-We convert UD into a format similar to UCCA and supported by TUPA.
+We convert UD into a UCCA-like format supported by TUPA, by inserting non-terminal nodes.
 
 \begin{minipage}{.4\columnwidth}
   \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
@@ -414,13 +414,14 @@ We convert UD into a format similar to UCCA and supported by TUPA.
   \end{tikzpicture}
 \end{minipage}
 \hfill
-\begin{minipage}{.6\columnwidth}
+\begin{minipage}{.5\columnwidth}
+    \scalebox{.8}{
 	\begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
       level distance=41mm,
-	  level 1/.style={sibling distance=10cm},
-	  level 2/.style={sibling distance=36mm},
-	  level 3/.style={sibling distance=17mm},
+	  level 1/.style={sibling distance=107mm},
+	  level 2/.style={sibling distance=39mm},
+	  level 3/.style={sibling distance=19mm},
 	  level 4/.style={sibling distance=19mm},
 	  every circle node/.append style={fill=DarkBlue}]
 	  \tikzstyle{word} = [font=\rmfamily,color=black]
@@ -465,7 +466,7 @@ We convert UD into a format similar to UCCA and supported by TUPA.
 	  \draw[->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_15);
 	  \draw[dashed,->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_7);
 	  \draw[dashed,->] (1_7) to node [midway,above,sloped] {\scriptsize ref} (1_15);
-	\end{tikzpicture}
+	\end{tikzpicture}}
 \end{minipage}
 
 
