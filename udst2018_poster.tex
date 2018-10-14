@@ -317,7 +317,7 @@ Example:
 
 We convert UD into a UCCA-like format supported by TUPA, by inserting non-terminal nodes.
 
-\begin{minipage}{.4\columnwidth}
+\begin{minipage}{.42\columnwidth}
   \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
       sibling distance=34mm, ->,
@@ -353,15 +353,14 @@ We convert UD into a UCCA-like format supported by TUPA, by inserting non-termin
       \draw[dashed,red,->,bend left=20] (feelverywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
   \end{tikzpicture}
 \end{minipage}
-\hfill
-\begin{minipage}{.5\columnwidth}
+\begin{minipage}{.48\columnwidth}
     \scalebox{.8}{
 	\begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
       level distance=41mm,
-	  level 1/.style={sibling distance=107mm},
-	  level 2/.style={sibling distance=39mm},
-	  level 3/.style={sibling distance=19mm},
+	  level 1/.style={sibling distance=115mm},
+	  level 2/.style={sibling distance=42mm},
+	  level 3/.style={sibling distance=21mm},
 	  level 4/.style={sibling distance=19mm},
 	  every circle node/.append style={fill=DarkBlue}]
 	  \tikzstyle{word} = [font=\rmfamily,color=black]
@@ -412,9 +411,11 @@ We convert UD into a UCCA-like format supported by TUPA, by inserting non-termin
 \begin{tcolorbox}
 {\color{Indigo}
 \textbf{UCCA} (Universal Conceptual Cognitive Annotation): cross-lingual semantic representation  \cite{abend2013universal}.
-    \textit{Primary edges} form a tree. \textit{Remote edges} (dashed) allow reentrancy.}
+Nodes are scenes/concepts.
+\textit{Primary edges} form a tree. \textit{Remote edges} (dashed) allow reentrancy.
+}
 
-\begin{minipage}{.4\columnwidth}
+\begin{minipage}{.44\columnwidth}
   \color{Indigo}
   \begin{center}
   \scalebox{.8}{
@@ -440,8 +441,7 @@ We convert UD into a UCCA-like format supported by TUPA, by inserting non-termin
   }
   \end{center}
 \end{minipage}
-\hfill
-\begin{minipage}{.38\columnwidth}
+\begin{minipage}{.41\columnwidth}
   \color{Indigo}
   \begin{center}
   \scalebox{.8}{
@@ -471,8 +471,7 @@ We convert UD into a UCCA-like format supported by TUPA, by inserting non-termin
     \end{tikzpicture}}
   \end{center}
 \end{minipage}
-\hfill
-\begin{minipage}{.2\columnwidth}
+\begin{minipage}{.1\columnwidth}
   \begin{center}
   \begin{adjustbox}{margin=2mm,frame,scale=.75,bgcolor=white}
   \color{Indigo}
@@ -497,7 +496,7 @@ We convert UD into a UCCA-like format supported by TUPA, by inserting non-termin
 
 \section*{Enhanced Dependencies}
 
-Some UD treebanks contain enhanced graphs with additional or augmented edges.
+Some UD treebanks contain enhanced graphs with additional or augmented edges \cite{SCHUSTER16.779,D17-1009}.
 
 \vfill
 Conjoined predicates and arguments:
@@ -627,7 +626,7 @@ Relative clause:
 	$-$Embed. & 72.33 & 54.54\\ 
 	$-$Remote & 72.08 & 0.00\\ 
 	\end{tabular}
-	\captionof{table}{Ablation on English EWT dev set.}
+	\captionof{table}{TUPA ablation on English EWT dev set.}
 \end{minipage}
 
 
@@ -641,7 +640,7 @@ Relative clause:
 \bibliography{references}
 
 \color{Black}
-\begin{adjustbox}{margin=3mm,frame,minipage=1.1\columnwidth}
+\begin{adjustbox}{margin=3mm,frame,minipage=1.15\columnwidth}
 \centering\large
 Please join SemEval 2019 Task 1: \\
 Cross-lingual Semantic Parsing with UCCA
