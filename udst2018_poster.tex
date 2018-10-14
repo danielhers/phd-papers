@@ -355,8 +355,8 @@ Example:
     We \^ were \^ made \^ to \^ feel \^ very \^ welcome \^ . \\
     \end{deptext}
         \depedge[edge start x offset=1pt]{3}{1}{nsubj:pass}
-        \depedge[edge below,dashed,edge unit distance=.65ex,edge end x offset=4pt]{5}{1}{nsubj:xsubj}
-        \depedge[edge below,dashed,edge unit distance=.9ex,edge end x offset=-3pt]{7}{1}{nsubj:xsubj}
+        \depedge[edge below,dashed,red,edge unit distance=.65ex,edge end x offset=4pt]{5}{1}{\color{red}nsubj:xsubj}
+        \depedge[edge below,dashed,red,edge unit distance=.9ex,edge end x offset=-3pt]{7}{1}{\color{red}nsubj:xsubj}
         \depedge[edge start x offset=-3pt]{3}{2}{aux:pass}
         \deproot[edge unit distance=3.4ex]{3}{root}
         \depedge{5}{4}{mark}
@@ -409,8 +409,8 @@ We convert UD into a UCCA-like format supported by TUPA, by inserting non-termin
         } edge from parent node[midway,above,sloped] {\scriptsize xcomp} }
       ;
       \draw[->] (ROOT) to node [midway,above,sloped] {\scriptsize head} (weremade);
-      \draw[dashed,->,bend left=25] (verywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
-      \draw[dashed,->,bend left=20] (feelverywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
+      \draw[dashed,red,->,bend left=25] (verywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
+      \draw[dashed,red,->,bend left=20] (feelverywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
   \end{tikzpicture}
 \end{minipage}
 \hfill
@@ -464,8 +464,8 @@ We convert UD into a UCCA-like format supported by TUPA, by inserting non-termin
 	  \draw[->] (1_2) to node [midway,above,sloped] {\scriptsize nsubj} (1_6);
 	  \draw[->] (1_2) to node [midway,above,sloped] {\scriptsize head} (1_3);
 	  \draw[->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_15);
-	  \draw[dashed,->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_7);
-	  \draw[dashed,->] (1_7) to node [midway,above,sloped] {\scriptsize ref} (1_15);
+	  \draw[dashed,red,->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_7);
+	  \draw[dashed,red,->] (1_7) to node [midway,above,sloped] {\scriptsize ref} (1_15);
 	\end{tikzpicture}}
 \end{minipage}
 
@@ -476,89 +476,81 @@ We convert UD into a UCCA-like format supported by TUPA, by inserting non-termin
 
 \section*{Enhanced Dependencies}
 
-\begin{adjustbox}{width=\columnwidth,margin=3pt,frame}
-\texttt{1 We we PRON PRP Case=Nom|Number=Plur|Person=1|PronType=Prs 3 nsubj:pass 3:nsubj:pass|5:nsubj:xsubj|7:nsubj:xsubj \textunderscore}
-\end{adjustbox}
+Some UD treebanks contain enhanced graphs with additional or augmented edges.
 
+Conjoined predicates and arguments:
 
-UD graph from \verb|reviews-341397-0003| (\verb|UD_English-EWT|),
-containing conjoined predicates and arguments:
-
-    \begin{dependency}[text only label, label style={above}, font=\small]
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
+        text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
     \begin{deptext}[column sep=1em,ampersand replacement=\^]
     he \^ went \^ straight \^ to \^ work \^ and \^ finished \^ the \^ job \^ efficiently \^ and \^ promptly \^ ! \\
     \end{deptext}
-        \depedge[edge start x offset=1pt]{2}{1}{nsubj}
-        \depedge[edge below,dashed,edge unit distance=.5ex,edge end x offset=2pt]{7}{1}{nsubj}
+        \depedge[edge start x offset=-2pt]{2}{1}{nsubj}
+        \depedge[edge below,dashed,red,edge unit distance=.5ex,edge end x offset=2pt]{7}{1}{\color{red}nsubj}
         \deproot[edge unit distance=3ex]{2}{root}
-        \depedge[edge start x offset=3pt]{2}{3}{advmod}
+        \depedge[edge start x offset=15pt]{2}{3}{advmod}
         \depedge{5}{4}{mark}
-        \depedge[edge unit distance=1.75ex,edge start x offset=2pt]{2}{5}{advcl}
-        \depedge{7}{6}{cc}
-        \depedge[edge unit distance=1.5ex,edge start x offset=1pt]{2}{7}{conj}
+        \depedge[edge unit distance=1.75ex,edge start x offset=10pt]{2}{5}{advcl}
+        \depedge[edge start x offset=-3pt]{7}{6}{cc}
+        \depedge[edge unit distance=1.5ex,edge start x offset=6pt]{2}{7}{conj}
         \depedge{9}{8}{det}
-        \depedge[edge unit distance=2.5ex,edge start x offset=1pt]{7}{9}{obj}
-        \depedge[edge unit distance=2.5ex,edge start x offset=-1pt]{7}{10}{advmod}
+        \depedge[edge unit distance=2.5ex,edge start x offset=6pt]{7}{9}{obj}
+        \depedge[edge unit distance=2.5ex,edge start x offset=2pt]{7}{10}{advmod}
         \depedge{12}{11}{cc}
         \depedge{10}{12}{conj}
-        \depedge[edge below,dashed,edge unit distance=.65ex,edge end x offset=2pt]{7}{12}{advmod}
-        \depedge[edge unit distance=1ex,edge start x offset=-1pt]{2}{13}{punct}
+        \depedge[edge below,dashed,red,edge unit distance=.65ex,edge end x offset=2pt]{7}{12}{\color{red}advmod}
+        \depedge[edge unit distance=1ex,edge start x offset=3pt]{2}{13}{punct}
     \end{dependency}
     
-{\small\verb|newsgroup-groups.google.com_GuildWars_086f0f64ab633ab3_ENG_20041111_173500-0051|} (\verb|UD_English-EWT|), containing a null node (\textbf{E9.1}) and
-case information (nmod:on):
+Null nodes, case information:
 
-    \begin{dependency}[text only label, label style={above}, font=\small]
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
+        text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
     \begin{deptext}[column sep=1.2em,ampersand replacement=\^]
     I \^ wish \^ all \^ happy \^ holidays \^ , \^ and \^ moreso \^ , \^ \textbf{E9.1} \^ peace \^ on \^ earth \^ . \\
     \end{deptext}
-        \depedge[edge start x offset=1pt]{2}{1}{nsubj}
-        \deproot[edge start x offset=-1pt,edge unit distance=3ex]{2}{root}
-        \depedge[edge start x offset=3pt]{2}{3}{iobj}
+        \depedge[edge start x offset=-2pt]{2}{1}{nsubj}
+        \deproot[edge start x offset=-1pt,edge unit distance=4.4ex]{2}{root}
+        \depedge[edge start x offset=15pt]{2}{3}{iobj}
         \depedge{5}{4}{amod}
-        \depedge[edge start x offset=2pt]{2}{5}{obj}
-        \depedge[edge unit distance=2ex]{11}{6}{punct}
-        \depedge[edge start x offset=4pt,edge below,dashed]{10}{6}{punct}
-        \depedge[edge start x offset=-1pt,edge unit distance=1.85ex]{11}{7}{cc}
-        \depedge[edge start x offset=1pt,edge below,dashed]{10}{7}{cc}
-        \depedge[edge start x offset=-3pt,edge unit distance=1.5ex]{11}{8}{orphan}
-        \depedge[edge start x offset=-1pt,edge below,dashed]{10}{8}{advmod}
-        \depedge[edge start x offset=-5pt,edge unit distance=.8ex]{11}{9}{punct}
-        \depedge[edge start x offset=-3pt,edge below,dashed]{10}{9}{punct}
-        \depedge[edge unit distance=1.45ex]{2}{11}{conj}
+        \depedge[edge start x offset=12pt]{2}{5}{obj}
+        \depedge[edge start x offset=-2pt,edge unit distance=2ex]{11}{6}{punct}
+        \depedge[edge start x offset=1pt,edge below,dashed,red]{10}{6}{\color{red}punct}
+        \depedge[edge start x offset=-3pt,edge unit distance=1.85ex]{11}{7}{cc}
+        \depedge[edge start x offset=-6pt,edge below,dashed,red]{10}{7}{\color{red}cc}
+        \depedge[edge start x offset=-9pt,edge unit distance=1.5ex]{11}{8}{orphan}
+        \depedge[edge start x offset=-6pt,edge below,dashed,red]{10}{8}{\color{red}advmod}
+        \depedge[edge start x offset=-12pt,edge unit distance=.8ex]{11}{9}{punct}
+        \depedge[edge start x offset=-12pt,edge below,dashed,red]{10}{9}{\color{red}punct}
+        \depedge[edge unit distance=1.45ex,edge start x offset=6pt]{2}{11}{conj}
         \depedge[edge below,dashed]{10}{11}{obj}
         \depedge{13}{12}{case}
-        \depedge[edge start x offset=1pt]{11}{13}{nmod}
-        \depedge[edge start x offset=-1pt,edge unit distance=1.35ex]{2}{14}{punct}
+        \depedge[edge start x offset=1pt]{11}{13}{nmod{\color{red!50}:on}}
+        \depedge[edge start x offset=3pt,edge unit distance=1.35ex]{2}{14}{punct}
     \end{dependency}
     
-\verb|reviews-255261-0007| (\verb|UD_English-EWT|), containing a relative clause:
+Relative clause:
 
-    \begin{dependency}[text only label, label style={above}, font=\small]
+    \begin{dependency}[background style={fill=lightgray},edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
+        text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
     \begin{deptext}[column sep=.1em,ampersand replacement=\^]
     He \^ had \^ a \^ robe \^ that \^ was \^ made \^ back \^ in \^ the \^ '60s \^ . \\
     \end{deptext}
-        \depedge[edge start x offset=1pt]{2}{1}{nsubj}
+        \depedge[edge start x offset=-3pt]{2}{1}{nsubj}
         \deproot[edge start x offset=-1pt,edge unit distance=3.355ex]{2}{root}
-        \depedge{4}{3}{det}
-        \depedge{2}{4}{obj}
-        \depedge[edge unit distance=1.5ex,edge below,dashed]{7}{4}{nsubj:pass}
-        \depedge[edge start x offset=2pt]{7}{5}{nsubj:pass}
-        \depedge[edge start x offset=4pt,edge below,dashed]{4}{5}{ref}
-        \depedge[edge unit distance=2ex]{7}{6}{aux:pass}
-        \depedge[edge start x offset=-1pt,edge unit distance=2.75ex]{4}{7}{acl:relcl}
-        \depedge[edge start x offset=-3pt]{7}{8}{advmod}
+        \depedge[edge start x offset=-3pt]{4}{3}{det}
+        \depedge[edge start x offset=6pt]{2}{4}{obj}
+        \depedge[edge start x offset=-3pt,edge unit distance=1.5ex,edge below,dashed,red]{7}{4}{\color{red}nsubj:pass}
+        \depedge[edge start x offset=-3pt]{7}{5}{nsubj:pass}
+        \depedge[edge start x offset=4pt,edge below,dashed,red]{4}{5}{\color{red}ref}
+        \depedge[edge start x offset=-9pt,edge unit distance=2ex]{7}{6}{aux:pass}
+        \depedge[edge start x offset=3pt,edge unit distance=2.75ex]{4}{7}{acl:relcl}
+        \depedge[edge start x offset=3pt]{7}{8}{advmod}
         \depedge{11}{9}{case}
-        \depedge{11}{10}{det}
-        \depedge[edge unit distance=1ex,edge below,dashed]{8}{11}{obl}
-        \depedge[edge start x offset=-1pt,edge unit distance=1.2ex]{2}{12}{punct}
+        \depedge[edge start x offset=-3pt]{11}{10}{det}
+        \depedge[edge unit distance=1ex,edge below,dashed,red]{8}{11}{\color{red}obl}
+        \depedge[edge start x offset=3pt,edge unit distance=1.2ex]{2}{12}{punct}
     \end{dependency}
-
-    
-    
-The same graph after conversion to the unified DAG format.
-The cycle is removed due to the non-terminal nodes introduced in the conversion.
-
 
 \hrule
 
