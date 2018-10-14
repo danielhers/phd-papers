@@ -93,13 +93,14 @@ originally designed for UCCA:
 transition-based parser supporting reentrancy (DAG),
 discontinuity (non-projectivity) and non-terminal nodes.
 
-\vfill
+\vspace{5mm}
+Transitions:
 
-\begin{adjustbox}{margin=3mm,frame}
+\begin{adjustbox}{margin=3mm,frame,bgcolor=white}
 \textsc{Shift, Reduce, Node$_X$, Right-Edge$_X$, Left-Enhanced$_X$, Right-Enhanced$_X$, Swap, Finish}
 \end{adjustbox}
 
-\vfill
+\vspace{5mm}
 
 \begin{center}
 \large
@@ -140,11 +141,12 @@ discontinuity (non-projectivity) and non-terminal nodes.
    \end{tikzpicture}
 \end{center}
 
-\vfill
+\vspace{5mm}
 
 Example:
 
-\scalebox{.9}{
+\begin{center}
+\scalebox{.8}{
 \begin{minipage}{.538\columnwidth}
 	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small]
 	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.2) rectangle (19.5,1.5);
@@ -227,7 +229,7 @@ Example:
     	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (0,20) -- (1,20);
 	\end{tikzpicture}
 \end{minipage}
-\begin{minipage}{.4\columnwidth}
+\begin{minipage}{.51\columnwidth}
 	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
 	\draw[color=gray,dashed,fill=lightgray!20] (0,-.5) rectangle (18,1.9);
 	\draw[color=gray,fill=white] (0.2,0) rectangle (3,1);
@@ -306,72 +308,10 @@ Example:
     \end{tikzpicture}
 \end{minipage}
 }
+\end{center}
 \end{tcolorbox}
 
 \vfill
-
-\vspace{5mm}
-{\color{Indigo}
-\textbf{UCCA} \cite{abend2013universal}: Intuitive, cross-lingual, and modular semantic representation.
-    \textit{Primary edges} form a tree. \textit{Remote edges} (dashed) allow reentrancy.
-    Nodes represent scenes and concepts.}
-
-\begin{minipage}{.55\columnwidth}
-  \color{Indigo}
-  \begin{center}
-  \scalebox{.9}{
-    \begin{tikzpicture}[level distance=38mm,sibling distance=33mm, -{Latex[length=5mm]}, line width=2pt,
-        every node/.append style={font=\large\bf\ttfamily},
-        every circle node/.append style={fill=Indigo}]
-      \tikzstyle{word} = [font=\rmfamily,color=black]
-      \node (ROOT) [circle] {}
-        child {node (We) [word] {We} edge from parent node[above] {A}}
-        child {node [word] {were} edge from parent node[below] {F}}
-        child {node [word] {made} edge from parent node[right] {D}}
-        child {node [word] {to} edge from parent node[right] {F}}
-        child {node [word] {feel} edge from parent node[below] {P}}
-        child {node (verywelcome) [circle] {}
-        {
-          child {node [word] {very} edge from parent node[left] {D}}
-          child {node [word] {welcome} edge from parent node[right] {S}}
-          child {node [word] {.} edge from parent node[right] {U}}
-        } edge from parent node[above] {A} }
-      ;
-      \draw[dashed,->,bend left] (verywelcome) to node [below] {A} (We);
-    \end{tikzpicture}
-  }
-	\begin{adjustbox}{margin=3mm,frame,width=\textwidth}  \color{Indigo}
-	\texttt{A}: participant \hspace{1cm} \texttt{F}: function \hspace{1cm} \texttt{D}: adverbial
-	\hspace{1cm} \texttt{P}: process \hspace{1cm} \texttt{S}: state \hspace{1cm} \texttt{U}: punctuation
-	\end{adjustbox}
-  \captionof{figure}{\color{Indigo} Universal Conceptual Cognitive Annotation (UCCA).}
-  \end{center}
-\end{minipage}
-\begin{minipage}{.45\columnwidth}
-    \begin{center}
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
-        text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
-   \begin{deptext}[column sep=.2em,ampersand replacement=\^]
-    We \^ were \^ made \^ to \^ feel \^ very \^ welcome \^ . \\
-    \end{deptext}
-        \depedge[edge start x offset=1pt]{3}{1}{nsubj:pass}
-        \depedge[edge below,dashed,red,edge unit distance=.65ex,edge end x offset=4pt]{5}{1}{\color{red}nsubj:xsubj}
-        \depedge[edge below,dashed,red,edge unit distance=.9ex,edge end x offset=-3pt]{7}{1}{\color{red}nsubj:xsubj}
-        \depedge[edge start x offset=-3pt]{3}{2}{aux:pass}
-        \deproot[edge unit distance=3.4ex]{3}{root}
-        \depedge{5}{4}{mark}
-        \depedge[edge start x offset=3pt]{3}{5}{xcomp}
-        \depedge{7}{6}{advmod}
-        \depedge{5}{7}{xcomp}
-        \depedge[edge unit distance=2ex,edge start x offset=-1pt]{3}{8}{punct}
-    \end{dependency}
-  \captionof{figure}{\color{DarkBlue} Universal Dependencies (UD).}
-  \end{center}
-\end{minipage}
-
-\vfill
-\hrule
-
 
 \section*{Unified DAG Format}
 
@@ -469,15 +409,97 @@ We convert UD into a UCCA-like format supported by TUPA, by inserting non-termin
 	\end{tikzpicture}}
 \end{minipage}
 
+\begin{tcolorbox}
+{\color{Indigo}
+\textbf{UCCA} (Universal Conceptual Cognitive Annotation): cross-lingual semantic representation  \cite{abend2013universal}.
+    \textit{Primary edges} form a tree. \textit{Remote edges} (dashed) allow reentrancy.}
 
-\columnbreak
+\begin{minipage}{.4\columnwidth}
+  \color{Indigo}
+  \begin{center}
+  \scalebox{.8}{
+    \begin{tikzpicture}[level distance=38mm,sibling distance=33mm, -{Latex[length=5mm]}, line width=2pt,
+        every node/.append style={font=\large\bf\ttfamily},
+        every circle node/.append style={fill=Indigo}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node (We) [word] {We} edge from parent node[above] {A}}
+        child {node [word] {were} edge from parent node[below] {F}}
+        child {node [word] {made} edge from parent node[right] {D}}
+        child {node [word] {to} edge from parent node[right] {F}}
+        child {node [word] {feel} edge from parent node[below] {P}}
+        child {node (verywelcome) [circle] {}
+        {
+          child {node [word] {very} edge from parent node[left] {D}}
+          child {node [word] {welcome} edge from parent node[right] {S}}
+          child {node [word] {.} edge from parent node[right] {U}}
+        } edge from parent node[above] {A} }
+      ;
+      \draw[dashed,->,bend left] (verywelcome) to node [below] {A} (We);
+    \end{tikzpicture}
+  }
+  \end{center}
+\end{minipage}
+\hfill
+\begin{minipage}{.38\columnwidth}
+  \color{Indigo}
+  \begin{center}
+  \scalebox{.8}{
+    \begin{tikzpicture}[level distance=28mm, sibling distance=35mm, -{Latex[length=5mm]}, line width=2pt,
+        every node/.append style={font=\large\bf\ttfamily},
+        every circle node/.append style={fill=Indigo}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node (After) [word] {After} edge from parent node[above] {L}}
+        child {node (graduation) [circle] {}
+        {
+          child {node [word] {graduation} edge from parent node[left] {P}}
+        } edge from parent node[right] {H} }
+        child {node [word] {,} edge from parent node[below] {U}}
+        child {node (moved) [circle] {}
+        {
+          child {node (John) [word] {John} edge from parent node[left] {A}}
+          child {node [word] {moved} edge from parent node[left] {P}}
+          child {node [circle] {}
+          {
+            child {node [word] {to} edge from parent node[left] {R}}
+            child {node [word] {Paris} edge from parent node[right] {C}}
+          } edge from parent node[above] {A} }
+        } edge from parent node[above] {H} }
+        ;
+      \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [above] {A} (John);
+    \end{tikzpicture}}
+  \end{center}
+\end{minipage}
+\hfill
+\begin{minipage}{.2\columnwidth}
+  \begin{center}
+  \begin{adjustbox}{margin=2mm,frame,scale=.75,bgcolor=white}
+  \color{Indigo}
+  \begin{tabular}{>{\bf\ttfamily}cl}
+	  P & process \\
+	  S & state \\
+	  A & participant \\
+	  L & linker \\
+	  H & linked scene \\
+	  C & center \\
+	  D & adverbial \\
+	  R & relator \\
+	  U & punctuation \\
+	  F & function \\
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+\end{minipage}
 
+\end{tcolorbox}
 
 
 \section*{Enhanced Dependencies}
 
 Some UD treebanks contain enhanced graphs with additional or augmented edges.
 
+\vfill
 Conjoined predicates and arguments:
 
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
@@ -502,6 +524,7 @@ Conjoined predicates and arguments:
         \depedge[edge unit distance=1ex,edge start x offset=3pt]{2}{13}{punct}
     \end{dependency}
     
+\vfill
 Null nodes due to elided predicates, case information:
 
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
@@ -529,6 +552,28 @@ Null nodes due to elided predicates, case information:
         \depedge[edge start x offset=3pt,edge unit distance=1.35ex]{2}{14}{punct}
     \end{dependency}
     
+\vfill
+\begin{minipage}{.5\columnwidth}
+Raising:
+
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
+        text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
+   \begin{deptext}[column sep=.2em,ampersand replacement=\^]
+    We \^ were \^ made \^ to \^ feel \^ very \^ welcome \^ . \\
+    \end{deptext}
+        \depedge[edge start x offset=1pt]{3}{1}{nsubj:pass}
+        \depedge[edge below,dashed,red,edge unit distance=.65ex,edge end x offset=4pt]{5}{1}{\color{red}nsubj:xsubj}
+        \depedge[edge below,dashed,red,edge unit distance=.9ex,edge end x offset=-3pt]{7}{1}{\color{red}nsubj:xsubj}
+        \depedge[edge start x offset=-3pt]{3}{2}{aux:pass}
+        \deproot[edge unit distance=3.4ex]{3}{root}
+        \depedge{5}{4}{mark}
+        \depedge[edge start x offset=3pt]{3}{5}{xcomp}
+        \depedge{7}{6}{advmod}
+        \depedge{5}{7}{xcomp}
+        \depedge[edge unit distance=2ex,edge start x offset=-1pt]{3}{8}{punct}
+    \end{dependency}
+\end{minipage}
+\begin{minipage}{.5\columnwidth}
 Relative clause:
 
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
@@ -551,7 +596,9 @@ Relative clause:
         \depedge[edge unit distance=1ex,edge below,dashed,red]{8}{11}{\color{red}obl}
         \depedge[edge start x offset=3pt,edge unit distance=1.2ex]{2}{12}{punct}
     \end{dependency}
+\end{minipage}
 
+\vfill
 \hrule
 
 
@@ -560,7 +607,7 @@ Relative clause:
 \begin{minipage}{.5\columnwidth}
 	\begin{tabular}{lccc}
 	& \bf TUPA & \bf TUPA & \bf UDPipe \\
-	& \small(official) & \small(unofficial) & \small(baseline) \\
+	& \bf \small(official) & \bf \small(unofficial) & \bf \small(baseline) \\
 	All treebanks & 53.69 & 58.48 & 65.80 \\
 	Big treebanks & 62.07 & 67.36 & 74.14 \\
 	PUD treebanks & 56.35 & 56.82 & 66.63 \\
@@ -572,15 +619,15 @@ Relative clause:
 \hfill
 \begin{minipage}{.4\columnwidth}
 	\begin{tabular}{lcc}
-	& \bf LAS-F1 & \bf Enhanced \\
-	& & \bf LAS-F1 \\
+	& & \bf Enhanced \\
+	& \bf LAS-F1 & \bf LAS-F1 \\
 	Original & 72.10 & 57.13 \\
 	$-$NER & 71.82 & 54.65\\ 
 	$-$POS & 69.23 & 49.12\\ 
 	$-$Embed. & 72.33 & 54.54\\ 
 	$-$Remote & 72.08 & 0.00\\ 
 	\end{tabular}
-	\captionof{table}{Ablation on English EWT development set.}
+	\captionof{table}{Ablation on English EWT dev set.}
 \end{minipage}
 
 
