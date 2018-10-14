@@ -502,7 +502,7 @@ Conjoined predicates and arguments:
         \depedge[edge unit distance=1ex,edge start x offset=3pt]{2}{13}{punct}
     \end{dependency}
     
-Null nodes, case information:
+Null nodes due to elided predicates, case information:
 
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
         text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
@@ -531,7 +531,7 @@ Null nodes, case information:
     
 Relative clause:
 
-    \begin{dependency}[background style={fill=lightgray},edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
         text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
     \begin{deptext}[column sep=.1em,ampersand replacement=\^]
     He \^ had \^ a \^ robe \^ that \^ was \^ made \^ back \^ in \^ the \^ '60s \^ . \\
@@ -584,6 +584,7 @@ Low-resource & 8.53 & 12.68 & 17.17
 \centering\large
 Please join SemEval 2019 Task 1: \\
 Cross-lingual Semantic Parsing with UCCA
+
 
 \begin{minipage}{.3\textwidth}\includegraphics[width=\textwidth]{qr}\end{minipage}
 \hfill
@@ -684,7 +685,7 @@ vi_vtb
     \begin{axis}[
     ybar=0pt,  
     enlarge x limits={0.01},
-    enlarge y limits={value=0.1,upper},
+    enlarge y limits={value=0.12,upper},
     ymin=0,
     width=1.04\textwidth,
     height=18cm,
@@ -710,5 +711,6 @@ vi_vtb
     \end{axis}
     \end{tikzpicture}
 \catcode`\_=8
+\captionof{figure}{Unofficial test LAS-F1 and Enhanced LAS-F1 for TUPA}
 
 \end{document}
