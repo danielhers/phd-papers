@@ -23,6 +23,11 @@
 \usepackage{url}
 \usepackage{tikz,pgfplots,pgfplotstable}
 \usepackage{tikz-dependency}
+\usepackage[most]{tcolorbox}
+\usepackage[charter]{mathdesign}
+\def\rmdefault{bch} % not scaled
+\def\ttdefault{blg}
+\def\scdefault{sc}
 \usetikzlibrary{arrows.meta}
 \captionsetup{labelformat=empty}
 
@@ -76,20 +81,77 @@ Learning to parse \textbf{enhanced dependencies} jointly with basic Universal De
 
 
 \color{Black}
-
+\tcbset{
+    colback=gray!40,
+    width=1.05\columnwidth,
+    colframe=white
+    }
+    
+\begin{tcolorbox}
 We extend \textbf{TUPA}, a general DAG parser
 originally designed for UCCA \cite{hershcovich2017a,hershcovich2018multitask}:
 transition-based parser supporting reentrancy (DAG),
-discontinuity (non-projectivity) and non-terminal nodes (constituency).
+discontinuity (non-projectivity) and non-terminal nodes.
+
+\vfill
+
+\begin{adjustbox}{margin=3mm,frame}
+\textsc{Shift, Reduce, Node$_X$, Right-Edge$_X$, Left-Enhanced$_X$, Right-Enhanced$_X$, Swap, Finish}
+\end{adjustbox}
+
+\vfill
+
+\begin{center}
+\large
+   \begin{tikzpicture}[level distance=27mm, sibling distance=5cm,line width=.6mm,-{Latex[length=3mm]}]
+   \draw[color=gray,dashed,fill=lightgray!20] (0,-5) rectangle (18,5.6);
+   \node[anchor=west] at (0,5) {Parser state};
+   \draw[color=gray,fill=white] (.5,2) rectangle (8,4.2);
+   \node[anchor=north,rotate=90] at (.5,3) {\normalsize stack};
+   \node[fill=cyan, circle] at (3,3.2) {};
+   \node[fill=orange, circle] at (4.7,3.2) {};
+   \node[anchor=west] at (5.2,3.2) {\ttfamily made};
+   \draw[color=gray,fill=white] (8.5,2) rectangle (17.5,4.2);
+   \node[anchor=north,rotate=90] at (8.51,3) {\normalsize buffer};
+   \node[anchor=west] at (10.11,3.2) {\ttfamily to feel very w\ldots};
+   \node[anchor=north] at (2,0) {graph};
+   \node[fill=cyan, circle] at (9,1.2) {}   
+     child {node  {\ttfamily We} edge from parent [->] node[left] {nsubj}}
+     child {node [fill=orange, circle] {}
+     {
+       child {node {\ttfamily were} edge from parent [->] node[right] {aux}}
+     } edge from parent [->] node[right] {head} };
+   \end{tikzpicture}
+   \begin{tikzpicture}[->,line width=1mm]
+   \node[anchor=west] at (-1.3,11.3) {Transition classifier};
+   \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm,fill=white]
+   \node[main] (specific) at (7,5) {BiLSTM};
+   \foreach \i/\word in {0/{We},5/{were},10/{welcome},15/{.}} {
+       \node (x\i) at (\i,2) {\ttfamily\word};
+       \path[arrows={->[line width=2pt,length=4mm,width=6mm]}] (x\i) edge (specific);
+   }
+    \node (x4) at (7,2) {\large\ldots};
+    \node[main] (mlp) at (7,7.6) {MLP};
+    \path[arrows={->[line width=2pt,length=4mm,width=6mm]}] (specific) edge (mlp);
+    \coordinate (state) at (-1.6,6.3);
+    \path[arrows={->[line width=2pt,length=4mm,width=6mm]}] (state) edge [bend right] (mlp);
+    \node (transition) at (7,10) {transition};
+    \path[arrows={->[line width=2pt,length=4mm,width=6mm]}] (mlp) edge node[right] {} (transition);
+   \end{tikzpicture}
+\end{center}
+
+\vfill
+
+Example:
 
 \scalebox{.9}{
-\begin{minipage}{.55\columnwidth}
+\begin{minipage}{.538\columnwidth}
 	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small]
 	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.2) rectangle (19.5,1.5);
 	\draw[color=gray,fill=white] (.4,0) rectangle (2.6,1);
 	\node[fill=cyan, circle] at (1.5,.45) {};
 	\draw[color=gray,fill=white] (3,0) rectangle (16,1);
-	\node[anchor=west] at (3,.45) {We were made to feel very welcome .};
+	\node[anchor=west] at (3,.45) {\ttfamily We were made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,.45) {};
 	\node[anchor=west] at (10,-.8) {\bf\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
@@ -98,9 +160,9 @@ discontinuity (non-projectivity) and non-terminal nodes (constituency).
 	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.2) rectangle (19.5,1.5);
 	\draw[color=gray,fill=white] (.4,0) rectangle (4.3,1);
 	\node[fill=cyan, circle] at (1.5,.45) {};
-	\node[color=red,anchor=west] at (2,.45) {We};
+	\node[color=red,anchor=west] at (2,.45) {\ttfamily We};
 	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
-	\node[anchor=west] at (5,.45) {were made to feel very welcome .};
+	\node[anchor=west] at (5,.45) {\ttfamily were made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,.45) {};
 	\node[anchor=west] at (10,-.9) {\bf\small\textsc{Right-Edge\textsubscript {nsubj}}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
@@ -109,11 +171,11 @@ discontinuity (non-projectivity) and non-terminal nodes (constituency).
 	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
 	\draw[color=gray,fill=white] (.4,0) rectangle (4.3,1);
 	\node[fill=cyan, circle] at (1.5,.45) {};
-	\node[anchor=west] at (2,.45) {We};
+	\node[anchor=west] at (2,.45) {\ttfamily We};
 	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
-	\node[anchor=west] at (5,.45) {were made to feel very welcome .};
+	\node[anchor=west] at (5,.45) {\ttfamily were made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,1.4) {}
-	  child {node[font=\scriptsize] {We} edge from parent [red] node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
+	  child {node[font=\scriptsize] {\ttfamily We} edge from parent [red] node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
@@ -122,9 +184,9 @@ discontinuity (non-projectivity) and non-terminal nodes (constituency).
 	\draw[color=gray,fill=white] (.4,0) rectangle (3,1);
 	\node[fill=cyan, circle] at (1.5,.45) {};
 	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
-	\node[anchor=west] at (5,.45) {were made to feel very welcome .};
+	\node[anchor=west] at (5,.45) {\ttfamily were made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,1.4) {}
-	  child {node[font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
+	  child {node[font=\scriptsize] {\ttfamily We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
@@ -132,11 +194,11 @@ discontinuity (non-projectivity) and non-terminal nodes (constituency).
 	\draw[color=gray,dashed,fill=lightgray!20] (.2,-.5) rectangle (19.5,1.9);
 	\draw[color=gray,fill=white] (.4,0) rectangle (4.5,1);
 	\node[fill=cyan, circle] at (1.5,.45) {};
-	\node[color=red,anchor=west] at (2,.45) {were};
+	\node[color=red,anchor=west] at (2,.45) {\ttfamily were};
 	\draw[color=gray,fill=white] (5.5,0) rectangle (15,1);
-	\node[anchor=west] at (5.5,.45) {made to feel very welcome .};
+	\node[anchor=west] at (5.5,.45) {\ttfamily made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,1.4) {}
-	  child {node[font=\scriptsize] {were} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
+	  child {node[font=\scriptsize] {\ttfamily were} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Node\textsubscript {aux}}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
@@ -145,20 +207,20 @@ discontinuity (non-projectivity) and non-terminal nodes (constituency).
 	\draw[color=gray,fill=white] (.4,0) rectangle (5,1);
 	\node[fill=cyan, circle] at (1.5,.45) {};
 	\node[fill=orange, draw=red, circle] at (2.5,.45) {};
-	\node[anchor=west] at (3,.45) {were};
+	\node[anchor=west] at (3,.45) {\ttfamily were};
 	\draw[color=gray,fill=white] (5.2,0) rectangle (14.5,1);
-	\node[anchor=west] at (5.2,.45) {made to feel very welcome .};
+	\node[anchor=west] at (5.2,.45) {\ttfamily made to feel very welcome .};
 	\node[fill=cyan, circle] at (16.5,1.4) {}
-	  child {node[font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
+	  child {node[font=\scriptsize] {\ttfamily We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
 	\node[fill=orange, draw=red, circle] at (18.3,1.4) {}
-	  child {node[font=\scriptsize] {were} edge from parent [red] node[font=\scriptsize\bf\ttfamily,right] {aux}};
+	  child {node[font=\scriptsize] {\ttfamily were} edge from parent [red] node[font=\scriptsize\bf\ttfamily,right] {aux}};
 	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
 	\draw[arrows={-[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\draw[arrows={-[line width=2pt,length=4mm,width=6mm]}] (9,-1.7) -- (20.1,-1.7);
 	\end{tikzpicture}
 \end{minipage}
 \hspace{1pt}
-\begin{minipage}{0.02\columnwidth}
+\begin{minipage}{8mm}
     \vspace{5mm}
     \begin{tikzpicture}
     	\draw[arrows={-[line width=2pt,length=4mm,width=6mm]}] (0,0) -- (0,20);
@@ -172,11 +234,11 @@ discontinuity (non-projectivity) and non-terminal nodes (constituency).
 	\node[fill=cyan, circle] at (1,.45) {};
 	\node[fill=orange, circle] at (2,.45) {};
 	\draw[color=gray,fill=white] (3.3,0) rectangle (12,1);
-	\node[anchor=west] at (3.3,.45) {made to feel very welcome .};
+	\node[anchor=west] at (3.3,.45) {\ttfamily made to feel very welcome .};
 	\node[fill=cyan, circle] at (13.7,1.4) {}
-	  child {node[font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
+	  child {node[font=\scriptsize] {\ttfamily We} edge from parent node[font=\scriptsize\bf\ttfamily,left] {nsubj}};
 	\node[fill=orange, circle] at (16.2,1.4) {}
-	  child {node[font=\scriptsize] {were} edge from parent node[font=\scriptsize\bf\ttfamily,right] {aux}};
+	  child {node[font=\scriptsize] {\ttfamily were} edge from parent node[font=\scriptsize\bf\ttfamily,right] {aux}};
 	\node[anchor=west] at (6,-1.2) {\bf\small\textsc{Right-Edge\textsubscript {head}}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-.6) -- (5,-1.7);
 	\end{tikzpicture}
@@ -186,12 +248,12 @@ discontinuity (non-projectivity) and non-terminal nodes (constituency).
 	\node[fill=cyan, circle] at (1,.45) {};
 	\node[fill=orange, circle] at (2,.45) {};
 	\draw[color=gray,fill=white] (3.8,0) rectangle (12.4,1);
-	\node[anchor=west] at (3.8,.45) {made to feel very welcome .};
+	\node[anchor=west] at (3.8,.45) {\ttfamily made to feel very welcome .};
    \node[fill=cyan, circle] at (14.8,1.3) {}   
-     child {node[font=\scriptsize] {We} edge from parent [->] node[font=\scriptsize\bf\ttfamily,left] {nsubj}}
+     child {node[font=\scriptsize] {\ttfamily We} edge from parent [->] node[font=\scriptsize\bf\ttfamily,left] {nsubj}}
      child {node [fill=orange, circle] {}
      {
-       child {node[font=\scriptsize] {were} edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {aux}}
+       child {node[font=\scriptsize] {\ttfamily were} edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {aux}}
      } edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {head} };
 	\node[anchor=west] at (6,-2.5) {\bf\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
@@ -201,40 +263,40 @@ discontinuity (non-projectivity) and non-terminal nodes (constituency).
 	\draw[color=gray,fill=white] (0.2,0) rectangle (4.8,1);
 	\node[fill=cyan, circle] at (1,.45) {};
 	\node[fill=orange, circle] at (2,.45) {};
-	\node[color=red, anchor=west] at (2.5,.45) {made};
+	\node[color=red, anchor=west] at (2.5,.45) {\ttfamily made};
 	\draw[color=gray,fill=white] (5,0) rectangle (12.4,1);
-	\node[anchor=west] at (5,.45) {to feel very welcome .};
+	\node[anchor=west] at (5,.45) {\ttfamily to feel very welcome .};
    \node[fill=cyan, circle] at (14.8,1.3) {}   
-     child {node[font=\scriptsize] {We} edge from parent [->] node[font=\scriptsize\bf\ttfamily,left] {nsubj}}
+     child {node[font=\scriptsize] {\ttfamily We} edge from parent [->] node[font=\scriptsize\bf\ttfamily,left] {nsubj}}
      child {node [fill=orange, circle] {}
      {
-       child {node[font=\scriptsize] {were} edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {aux}}
+       child {node[font=\scriptsize] {\ttfamily were} edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {aux}}
      } edge from parent [->] node[font=\scriptsize\bf\ttfamily,right] {head} };
 	\node[anchor=west] at (6,-2.5) {\Large \ldots};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
 	\end{tikzpicture}
     \begin{tikzpicture}[level distance=18mm, sibling distance=37mm, font=\small, -{Latex[length=3mm]}]
 	\draw[color=gray,dashed,fill=lightgray!20] (0,-4.7) rectangle (18,1.9);
-      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \tikzstyle{word} = [color=black]
       \node (ROOT) at (6.8,1.3) [fill=cyan, circle] {}
-        child {node (We) [font=\scriptsize] {We} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize nsubj}}
+        child {node (We) [font=\scriptsize\ttfamily] {We} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize nsubj}}
         child {node {}
         {
 	        child {node (weremade) [fill=orange, circle] {}
 	        {
-	          child {node [font=\scriptsize] {were} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize aux}}
-	          child {node [font=\scriptsize] {made} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
+	          child {node [font=\scriptsize\ttfamily] {were} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize aux}}
+	          child {node [font=\scriptsize\ttfamily] {made} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
 	        } edge from parent [draw=none]}
         } edge from parent [draw=none]}
-        child {node [font=\scriptsize] {to} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize mark}}
+        child {node [font=\scriptsize\ttfamily] {to} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize mark}}
         child {node (feelverywelcome) [fill=blue, circle] {}
         {
-          child {node [font=\scriptsize] {feel} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
+          child {node [font=\scriptsize\ttfamily] {feel} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
           child {node (verywelcome) [fill=green, circle] {}
           {
-            child {node [font=\scriptsize] {very} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize advmod}}
-            child {node [font=\scriptsize] {welcome} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
-            child {node [font=\scriptsize] {.} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize punct}}
+            child {node [font=\scriptsize\ttfamily] {very} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize advmod}}
+            child {node [font=\scriptsize\ttfamily] {welcome} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize head}}
+            child {node [font=\scriptsize\ttfamily] {.} edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize punct}}
           } edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize xcomp} }
         } edge from parent node[font=\scriptsize\bf\ttfamily,midway,above,sloped] {\scriptsize xcomp} }
       ;
@@ -244,51 +306,9 @@ discontinuity (non-projectivity) and non-terminal nodes (constituency).
     \end{tikzpicture}
 \end{minipage}
 }
+\end{tcolorbox}
 
 \vfill
-
-The transition classifier is based on a BiLSTM and features of the stack, buffer and current graph:
-\begin{center}
-\large
-   \begin{tikzpicture}[level distance=27mm, sibling distance=5cm,line width=.6mm,-{Latex[length=3mm]}]
-   \node[anchor=west] at (0,5.1) {Parser state};
-   \draw[color=gray,dashed] (0,-5) rectangle (18,5.6);
-   \draw[color=gray] (.5,2.2) rectangle (8,4.2);
-   \node[anchor=west] at (.5,3.2) {$S$};
-   \node[fill=cyan, circle] at (3,3.2) {};
-   \node[fill=orange, circle] at (4.7,3.2) {};
-   \node[anchor=west] at (5.2,3.2) {\ttfamily made};
-   \draw[color=gray] (8.5,2.2) rectangle (17.5,4.2);
-   \node[anchor=west] at (8.51,3.2) {$B$};
-   \node[anchor=west] at (10.11,3.2) {\ttfamily to feel very wel\ldots};
-   \node[anchor=west] at (2,0) {$G$};
-   \node[fill=cyan, circle] at (9,1.2) {}   
-     child {node  {\ttfamily We} edge from parent [->] node[left] {nsubj}}
-     child {node [fill=orange, circle] {}
-     {
-       child {node {\ttfamily were} edge from parent [->] node[right] {aux}}
-     } edge from parent [->] node[right] {head} };
-   \end{tikzpicture}
-   \begin{tikzpicture}[->,line width=1mm]
-   \node[anchor=west] at (-.8,11.3) {Classifier};
-   \tikzstyle{main}=[rounded rectangle, minimum size=7mm, draw=black!80, node distance=12mm]
-   \node[main] (specific) at (7,5) {BiLSTM};
-   \foreach \i/\word in {0/{We},5/{were},10/{welcome},15/{.}} {
-       \node (x\i) at (\i,2) {\ttfamily\word};
-       \path[arrows={->[line width=2pt,length=4mm,width=6mm]}] (x\i) edge (specific);
-   }
-    \node (x4) at (7,2) {\large\ldots};
-    \node[main] (mlp) at (7,7.6) {MLP};
-    \path[arrows={->[line width=2pt,length=4mm,width=6mm]}] (specific) edge (mlp);
-    \coordinate (state) at (-1.3,6.3);
-    \path[arrows={->[line width=2pt,length=4mm,width=6mm]}] (state) edge [bend right] (mlp);
-    \node (transition) at (7,10) {transition};
-    \path[arrows={->[line width=2pt,length=4mm,width=6mm]}] (mlp) edge node[right] {} (transition);
-   \end{tikzpicture}
-\end{center}
-
-\vfill
-\hrule
 
 \vspace{5mm}
 {\color{Indigo}
