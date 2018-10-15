@@ -756,7 +756,7 @@ vi_vtb
     \begin{axis}[
     ybar=0pt,  
     enlarge x limits={0.01},
-    enlarge y limits={value=0.12,upper},
+    enlarge y limits={value=0.14,upper},
     ymin=0,
     width=1.1\textwidth,
     height=18cm,
@@ -768,7 +768,7 @@ vi_vtb
     xticklabel pos=left,
     yticklabels=none,
     tickwidth=0pt,
-    legend style={at={(axis cs:0.5,90)},anchor=north west},
+    legend style={at={(axis cs:-.8,98)},anchor=north west},
     legend cell align={left},
     nodes near coords={
      \scalebox{.6}{\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}}
@@ -778,7 +778,7 @@ vi_vtb
     ]
     \addplot[fill=red]table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
     \addplot[fill=blue]table[x expr=\coordindex,meta=corpus,y=enhanced]{udst2018scores.txt};
-    \legend{Basic,Enhanced}
+    \legend{LAS-F1,Enhanced LAS-F1}
     \end{axis}
     \end{tikzpicture}
 \catcode`\_=8
