@@ -613,21 +613,31 @@ Relative clause:
 	Small treebanks & 36.74 & 41.19 & 55.01 \\
 	Low-resource & 8.53 & 12.68 & 17.17
 	\end{tabular}
-	\captionof{table}{Aggregated test LAS-F1.}
+	\captionsetup{justification=centering}
+	\captionof{table}{Macro-averaged \textbf{LAS-F1} on test treebanks.\\
+    (\textit{Unofficial}: after some bug fixes.)}
+    \vspace{5mm}
+    \textbf{\color{DarkBlue} TUPA: first general parser for enhanced UD.}
 \end{minipage}
 \hfill
-\begin{minipage}{.4\columnwidth}
+\begin{minipage}{.45\columnwidth}
 	\begin{tabular}{lcc}
-	& & \bf Enhanced \\
-	& \bf LAS-F1 & \bf LAS-F1 \\
-	Original & 72.10 & 57.13 \\
+	& \multirow{2}{*}{\bf LAS-F1} & \bf Enhanced \\
+	& & \bf LAS-F1 \\
+	TUPA (unofficial) & 72.10 & 57.13 \\
 	$-$NER & 71.82 & 54.65\\ 
 	$-$POS & 69.23 & 49.12\\ 
 	$-$Embed. & 72.33 & 54.54\\ 
 	$-$Remote & 72.08 & 0.00\\ 
+	\hline
+	UDPipe & 77.62 & 0.00\\
+	UDPipe + CoreNLP & 76.66 & 21.68
 	\end{tabular}
-	\captionof{table}{TUPA ablation on English EWT dev set.}
+	\captionsetup{justification=centering}
+	\captionof{table}{Ablation + baselines on \textbf{English EWT} dev.\\
+	(\textit{CoreNLP}: English-specific rule-based postprocessor for enhanced dependencies.)}
 \end{minipage}
+
 
 
 {
@@ -741,18 +751,19 @@ ur_udtb
 ug_udt
 vi_vtb
 }\corpus
+\hspace{-4cm}
     \begin{tikzpicture}
     \begin{axis}[
     ybar=0pt,  
     enlarge x limits={0.01},
     enlarge y limits={value=0.12,upper},
     ymin=0,
-    width=1.04\textwidth,
+    width=1.1\textwidth,
     height=18cm,
-    bar width=10pt,
+    bar width=11pt,
     xtick=data,
     xticklabels from table={\corpus}{corpus},
-    xticklabel style={font=\tiny,rotate=75,anchor=east},
+    xticklabel style={font=\footnotesize,rotate=90,anchor=east},
     xtick align=inside,
     xticklabel pos=left,
     yticklabels=none,
@@ -771,6 +782,6 @@ vi_vtb
     \end{axis}
     \end{tikzpicture}
 \catcode`\_=8
-\captionof{figure}{Unofficial test LAS-F1 and Enhanced LAS-F1 for TUPA.}
+\captionof{figure}{LAS-F1 and Enhanced LAS-F1 for TUPA on test treebanks (unofficial).}
 
 \end{document}
