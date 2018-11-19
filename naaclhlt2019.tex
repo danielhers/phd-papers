@@ -520,7 +520,7 @@ parataxis & 2 & 0 & 0 & 1 & 0 & 2 & \textbf{64} & 0 & 0 & 1 & 0 & 4 \\
 vocative & \textbf{9} & 1 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
 xcomp & \textbf{15} & 0 & 0 & 0 & 0 & 0 & 5 & 0 & 0 & 3 & 0 & 0
 \end{tabular}
-\caption{UD-UCCA confusion matrix calculated from the EWT dataset.
+\caption{UD-UCCA confusion matrix calculated from the EWT dataset (\S\ref{sec:experiments}).
 \label{tab:confusion_matrix}}
 \end{table}
 
@@ -651,27 +651,31 @@ More differences:
 \item Infinitive vs. purpose ``to''. 
 \end{itemize}
 
+\subsection{Automatic identification of divergences}
+
 In order to automatically detect divergences between UCCA and UD,
 we compare the unlabeled yields of all nodes for each sentence.
 We use manually annotated data for both schemes.
 Excluding punctuation, this gives 13293 yields in UCCA and
-9817 in UD.
+9817 in UD in the EWT dataset (\S\ref{sec:experiments}).
 Of these, 8416 are common, meaning that an oracle would get an $F_1$ score
-of 72.8\% if it had the gold labels for each edge on conversion.
+of 72.8\% if it had the gold label for each edge on conversion.
 
-We inspect the differences and categorize them.
+In the following subsections, we inspect the differences and categorize them.
 
-\subsection{Coordination.}
+\subsection{Coordination}
 Focusing on yields with a \verb|conj| UD label,
 we get 474 yields, out of which 391 have a corresponding UCCA yield (82.5\%).
 
-\subsection{Subordinate clauses.}
+\subsection{Subordinate clauses}
 Focusing on yields with a \verb|acl| UD label,
 we get 200 yields, out of which 96 have a corresponding UCCA yield (48\%).
 
-The 104 divergences can be subcategorized as follows:
+The 104 subordinate clause divergences can be subcategorized as follows:
 
 \paragraph{Nominal predicates.}
+
+A noun annotated as a process.
 
 26307003:
 Did services I asked them NOT to do.
