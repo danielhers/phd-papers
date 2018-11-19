@@ -4,6 +4,7 @@
 
 
 \documentclass[11pt,a4paper]{article}
+\usepackage[draft]{hyperref}  % removing this line sometimes causes errors, but we should remove it still
 \usepackage[hyperref]{naaclhlt2019}
 \usepackage{times}
 \usepackage{latexsym}
@@ -121,16 +122,17 @@ ignoring language-specific distinctions and capturing only what is preserved in 
 Parsing the source language and generating the target language, on the other hand, becomes more
 difficult as the representation becomes more semantic.
 
-Semantic representation schemes have seen major progress in recent years.
-In parallel, syntactic representation is becoming more semantic.
+Semantic representation schemes have seen major progress in recent years \cite{abend2017state}.
+At the same time, semantic considerations are taken into account in the design of syntactic annotation schemes
+\cite{przepiorkowski2018arguments}.
 However, looking at the absolute scores achieved in semantic parsing tasks
 as opposed to syntactic parsing,
 there is still a gap:
-UCCA parsers get just about 75\% F-score, whereas UD parsers get more than 85\% LAS F1. Why?
+UCCA parsers get just about 75\% F-score, whereas UD parsers get around 85\% LAS F1.
+One possible explanation is that
 UD has much more training data (UCCA: 5K, UD: about 17K for English).
-But inter-annotator agreement is also lower: about 85\% for UCCA, and more than 95\% for UD.
-
-Apart from the obvious difference in the actual task with the distinctions it requires a parser to make,
+Inter-annotator agreement is also different: about 85\% for UCCA, and more than 95\% for UD,
+in addition to obvious difference in the actual task and the understanding it requires,
 we investigate other possible factors.
 Several questions naturally manifest themselves:
 how much of the difference is explained by
@@ -147,10 +149,6 @@ Learnability, in turn, is affected by
 \item Actual content that the scheme attempts to capture.
 \end{itemize}
 
-
-The gap can be bridged by fine-grained semantic annotation,
-such as adposition and case supersenses
-\cite{schneider2017adposition,blodgett2018semantic}.
 
 \paragraph{Content.}
 
@@ -194,13 +192,14 @@ The UCCA representation does make this distinction, as Figure~\ref{fig:conjoined
       \draw[dashed,->,bend right=10] (watchingamovie) to node [above] {\scriptsize $F$} (was);
       \draw(ROOT) to node [right] {\scriptsize $L$} (or);
     \end{tikzpicture}
-\caption{\label{fig:conjoined_verbs}}
+\caption{Coordinated predicates in UCCA.
+\label{fig:conjoined_verbs}}
 \end{figure}
 
 We begin by carefully examining the structures captured by each of the annotation schemes,
 to find distinctions made by one but not the other.
 To explore the difference in content, we experiment with converting UD to UCCA
-using a multi-step protocol:
+using a two-step protocol:
 \begin{enumerate}
 %\item Augment UD trees to get \textit{enhanced++} dependencies \cite{SCHUSTER16.779}, hence UD$^{++}$.
 \item Structurally convert bilexical dependency graphs into constituency-like graphs by inserting
@@ -218,8 +217,8 @@ in the evaluation.
 This implicitly determines what the scheme focuses on and what parser developers
 will spend a larger effort improving.
 
-For example, punctuation takes up ...\% of the edges in UD,
-and parsers typically achieve ... LAS F1 on punctuation.
+For example, punctuation takes up 11.4\% of the edges in the English EWT UD treebank,
+and parsers typically achieve more than 90\% LAS F1 on punctuation.
 In UCCA, punctuation is excluded from the evaluation completely.
 
 A multi-word named entity is represented in UD by a \verb|flat| arc between
