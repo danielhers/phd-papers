@@ -96,21 +96,25 @@ On the other hand, \citet{dozat2016deep,P18-2077}
 score 93.76 LAS when parsing the WST it into Stanford syntactic dependencies,
 and a very near 93.7 labeled F1 for semantic dependencies with the
 DM target representations \cite{oepen2016towards}.
+While of course the evaluation metrics are not identical,
+they do bear similarities.
 Clearly, all semantic representations are not the same in terms of their parsing difficulty.
 
 In this work we attempt to explain the common gap between syntactic and semantic parsing.
 We take Universal Dependencies \cite[UD; ][]{nivre2016universal} as a representative of the syntactic side,
 and Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal}
 as an instance of a semantic structure representation scheme.
-On the English EWT corpus,
+On v2.2 of the UD English EWT corpus \cite{11234/1-2837},
 the current state-of-the-art in UD parsing is 84.57 LAS F1 \cite{che-EtAl:2018:K18-2},
 whereas \citet{hershcovich2018multitask} achieve at most
-74.9 primary labeled F1 in UCCA parsing on the Wiki corpus.
+74.9 primary labeled F1 in UCCA parsing on the Wiki corpus
+\cite{hershcovich2017a}.
 
 The motivation for parsing into semantic structural representation is that it can be used more readily
 by semantic applications to reason about the processed utterance and manipulate it to find the required
 result.
-For example, in machine translation, a common model is the Vauquois triangle,
+For example, in machine translation, a common model is the Vauquois Pyramid 
+\cite{vauquois1968survey},
 according to which translation between languages will become easier and more direct as we use
 a more semantic representation for the source and target languages,
 ignoring language-specific distinctions and capturing only what is preserved in translation.
