@@ -53,16 +53,16 @@
 
 \title{Identifying Divergences between Syntactic and Semantic Parsing}
 
-\author{First Author \\
-  Affiliation / Address line 1 \\
-  Affiliation / Address line 2 \\
-  Affiliation / Address line 3 \\
-  {\tt email@domain} \\\And
-  Second Author \\
-  Affiliation / Address line 1 \\
-  Affiliation / Address line 2 \\
-  Affiliation / Address line 3 \\
-  {\tt email@domain} \\}
+\author{Daniel Hershcovich$^{1,2}$ \\
+  \\\And
+  Omri Abend$^2$ \\
+  $^1$The Edmond and Lily Safra Center for Brain Sciences \\
+  $^2$School of Computer Science and Engineering \\
+  Hebrew University of Jerusalem \\
+  \texttt{\{danielh,oabend,arir\}@cs.huji.ac.il}
+  \\\And
+  Ari Rappoport$^2$
+}
 
 \date{}
 
@@ -71,11 +71,15 @@
 \maketitle
 
 \begin{abstract}
-To explain the difference in scores between syntactic and semantic parsers,
-we explore the various factors and perform experiments to demonstrate them.
-As a test case, we take Universal Dependencies (UD) and
-Universal Conceptual Cognitive Annotation (UCCA).
-By creating a full conversion protocol, we develop a novel UCCA parser.
+Syntactic parsers tend to outperform semantic ones in absolute terms,
+using similar evaluation metrics.
+We explore the commonalities and differences between them,
+taking Universal Dependencies (UD) and
+Universal Conceptual Cognitive Annotation (UCCA)
+as a test case.
+The conversion protocol we develop as part of the analysis
+can be used for enriching the training data,
+which we utilize to achieve state-of-the-art UCCA parsing.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
