@@ -718,7 +718,7 @@ Did a great job of removing my tree in Conyers.
 Wiki & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
 20K &&& 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
 UD & \multicolumn{2}{l}{177345} && \multicolumn{2}{l}{13734} &&
-\multicolumn{2}{l}{295153} && \multicolumn{2}{l}{23506} && \multicolumn{2}{l}{228516} && 20692
+\multicolumn{2}{l}{293552} && \multicolumn{2}{l}{23377} && \multicolumn{2}{l}{228515} && 20692
 \end{tabular}
 \caption{Number of tokens and sentences in the training, development and test sets
 we use for each corpus and language.\label{tab:corpora}}
@@ -763,89 +763,8 @@ we convert the gold-standard UD graphs into UCCA.
 We use the converted UD data as ``silver-standard'' data \cite{W17-7306,N18-1104}
 and add it to the UCCA training set for training TUPA.
 
-\paragraph{Fine-grained evaluation of UCCA parsing performance.}
-
-Our conversion protocol allows fine-grained evaluation of UCCA parsing.
-Table~\ref{tab:fine_grained_ucca} shows fine-grained evaluation according to UCCA categories, and
-Table~\ref{tab:fine_grained_ud} shows fine-grained evaluation according to UD relations.
-
-
-\begin{table}[t]
-\centering
-\small
-\setlength\tabcolsep{3pt}
-\begin{tabular}{l|l}
-ParallelScene & 0.539 \\ 
-Function & 0.705 \\ 
-Participant & 0.578 \\ 
-Punctuation & 0.98 \\ 
-Process & 0.699 \\ 
-State & 0.289 \\ 
-Elaborator & 0.686 \\ 
-Center & 0.757 \\ 
-Terminal & 1.0 \\ 
-Relator & 0.85 \\ 
-Connector & 0.778 \\ 
-Adverbial & 0.541 \\ 
-Linker & 0.658 \\ 
-Ground & 0.0
-\end{tabular}
-\caption{
-Fine-grained labeled $F_1$ according to UCCA categories,
-of TUPA trained on Wiki with features extracted by UDPipe
-and evaluated on WSJ with features extracted by UDPipe.}
-\label{tab:fine_grained_ucca}
-\end{table}
-
-\begin{table}[t]
-\centering
-\small
-\setlength\tabcolsep{3pt}
-\begin{tabular}{l|l}
-nsubj & 0.92 \\ 
-Terminal & 1.0 \\ 
-head & 0.999 \\ 
-cop & 1.0 \\ 
-det & 1.0 \\    
-compound & 0.995 \\ 
-amod & 0.974 \\ 
-case & 0.994 \\ 
-obj & 0.808 \\ 
-aux & 1.0 \\ 
-cc & 0.98 \\ 
-conj & 0.769 \\ 
-advmod & 0.95 \\ 
-mark & 1.0 \\ 
-nmod & 0.606 \\ 
-obl & 0.623 \\ 
-appos & 0.571 \\ 
-nummod & 0.865 \\ 
-acl & 0.486 \\ 
-advcl & 0.696 \\ 
-xcomp & 0.636 \\ 
-iobj & 0.8 \\ 
-ccomp & 0.571 \\ 
-fixed & 1.0 \\ 
-dep & 0.737 \\ 
-expl & 1.0 \\  
-parataxis & 1.0
-\end{tabular}
-\caption{
-Fine-grained labeled $F_1$ according to gold UD relations,
-of TUPA trained on Wiki with features extracted by UDPipe
-and evaluated on WSJ with features extracted by UDPipe.}
-\label{tab:fine_grained_ud}
-\end{table}
-
-
-%\paragraph{Experimental setup.}
-%
-%
-%\paragraph{Evaluation.}
-%
-%
-%
 \section{Results}\label{sec:results}
+
 
 \begin{table}[t]
 \centering
@@ -875,15 +794,16 @@ or on WSJ with gold POS and dependency features (below).
 \label{tab:conversion_results_unlabeled}}
 \end{table}
 
-Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation of the
-structurally converted UD graphs as compared to gold-annotated UCCA graphs (\S\ref{sec:conversion})
 
 
 \paragraph{Conversion of gold UD annotations.}
 
-We performed out conversion protocol (\S\ref{sec:conversion}) on the 100 human-annotated UD sentences
-and evaluated on the human-annotated UCCA graphs on the same sentences.
-The results appear in Table~\ref{tab:conversion_results_labeled}.
+We performed our conversion protocol (\S\ref{sec:conversion}) on the gold-standard English EWT UD sentences,
+and evaluated on the gold-standard UCCA for same sentences.
+Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation of the
+structurally converted UD graphs as compared to gold-annotated UCCA graphs (\S\ref{sec:conversion}).
+Labeled evaluation results, after applying the label mapping,
+appear in Table~\ref{tab:conversion_results_labeled}.
 
 \begin{table}[t]
 \centering
@@ -917,13 +837,13 @@ or on WSJ with POS and dependency features predicted by UDPipe (below).
 
 Despite the simple conversion protocol, labeled scores are quite high.
 For comparison, the unlabeled evaluation (Table~\ref{tab:conversion_results_unlabeled})
-servers as an oracle experiment for the labeled conversion,
+serves as an oracle experiment for the labeled conversion,
 and is an upper bound given a fixed structural conversion.
 
 \paragraph{Conversion of automatically parsed UD annotations.}
 
 To be able to evaluate the conversion on a larger corpus,
-such as the UCCA Wiki set, which does not have UD annotations,
+such as the UCCA Wiki set, which does not have gold standard UD,
 we use an automatic UD parser: UDPipe.
 The results appear in Table~\ref{tab:conversion_results_labeled}.
 
@@ -974,6 +894,55 @@ HAR18: \protect\newcite{hershcovich2018multitask}.}\label{tab:aux_results}
 \paragraph{Using converted UD as ``silver-standard'' data.}
 
 Table~\ref{tab:aux_results} shows the results of this experiment.
+
+
+\paragraph{Fine-grained evaluation of UCCA parsing.}
+
+Our conversion protocol allows fine-grained evaluation of UCCA parsing.
+Table~\ref{tab:fine_grained_ucca} shows fine-grained evaluation according to UCCA categories, and
+Table~\ref{tab:fine_grained_ud} shows fine-grained evaluation according to UD relations.
+
+
+\begin{table}[t]
+\centering
+\tiny
+\setlength\tabcolsep{2pt}
+\begin{tabular}{l|ccccccccccccc}
+& A & C & D & E & F & G & H & L & N & P & R & S \\
+\hline
+\textbf{en EWT} & 3017 & 1760 & 1091 & 1727 & 983 & 82 & 1655 & 602 & 78 & 1301 & 618 & 954 \\
+\hline
+\textbf{en Wiki} &  \\
+\hline
+\textbf{en 20K} & 2848 & 2788 & 904 & 3116 & 622 & 98 & 1091 & 461 & 162 & 1277 & 1370 & 352 \\
+TUPA & 56.1 & 75.7 & 52.7 & 73.8 & 70.1 & 7.4 & 50.6 & 64.3 & 75.9 & 65.7 & 84.4 & 20.1 \\
+\hline
+\textbf{fr 20K} & \\
+\hline
+\textbf{de 20K} & 
+\end{tabular}
+\caption{
+Fine-grained labeled $F_1$ according to UCCA categories,
+as well as the number of edges per category in the gold-standard.}
+\label{tab:fine_grained_ucca}
+\end{table}
+
+\begin{table*}[t]
+\centering
+\tiny
+\setlength\tabcolsep{2pt}
+\begin{tabular}{l|ccccccccccccccccccccccccccccccc}
+&  \\
+\hline
+\end{tabular}
+\caption{
+Fine-grained labeled $F_1$ according to gold UD relations (for EWT)
+or as parsed by UDPipe (for the other datasets),
+as well as the number of arcs per relation in UD,
+and the number of matched UCCA units in the gold-standard UCCA.
+Some relations omitted for brevity.}
+\label{tab:fine_grained_ud}
+\end{table*}
 
 
 
