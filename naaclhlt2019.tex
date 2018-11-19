@@ -605,7 +605,7 @@ The results appear in Table~\ref{tab:conversion_results_labeled}.
 %and unlabeled scores.
 
 
-\section{Analysis of differences}\label{sec:analysis}
+\section{Analysis of divergences}\label{sec:analysis}
 
 
 
@@ -729,6 +729,41 @@ More differences:
     ``Mr. Vinken is chairman of Elsevier N.V.'' vs. ``The morbidity rate is a striking finding''.
 \item Infinitive vs. purpose ``to''. 
 \end{itemize}
+
+In order to automatically detect divergences between UCCA and UD,
+we compare the unlabeled yields of all nodes for each sentence.
+We use manually annotated data for both schemes.
+Excluding punctuation, this gives 13293 yields in UCCA and
+9817 in UD.
+Of these, 8416 are common, meaning that an oracle would get an $F_1$ score
+of 72.8\% if it had the gold labels for each edge on conversion.
+
+We inspect the differences and categorize them.
+
+\subsection{Coordination.}
+Focusing on yields with a \verb|conj| UD label,
+we get 474 yields, out of which 391 have a corresponding UCCA yield (82.5\%).
+
+\subsection{Subordinate clauses.}
+Focusing on yields with a \verb|acl| UD label,
+we get 200 yields, out of which 96 have a corresponding UCCA yield (48\%).
+
+The 104 divergences can be subcategorized as follows:
+
+\paragraph{Nominal predicates.}
+
+26307003:
+Did services I asked them NOT to do.
+
+\paragraph{Free/fused relative clause.}
+
+26315003:
+The prices were worth what I got.
+
+\paragraph{Flattening of scene structure.}
+
+26510000
+Did a great job of removing my tree in Conyers.
 
 
 \section{Experiments}\label{sec:experiments}
