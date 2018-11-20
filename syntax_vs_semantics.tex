@@ -1,0 +1,991 @@
+
+%
+% File divergences.tex
+
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[draft]{hyperref}  % removing this line sometimes causes errors, but we should remove it still
+\usepackage[hyperref]{naaclhlt2019}
+\usepackage{times}
+\usepackage{latexsym}
+
+\usepackage{url}
+
+%\aclfinalcopy % Uncomment this line for the final submission
+%\def\aclpaperid{***} %  Enter the acl Paper ID here
+
+%\setlength\titlebox{5cm}
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
+
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{tikz}
+\usepackage{tikz-dependency}
+\usepackage[warn]{textcomp}
+\usepackage[font=small]{caption}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{etoolbox}
+\usepackage{xr}
+\usepackage{listings}
+
+\makeatletter
+\renewcommand{\@BIBLABEL}{\@emptybiblabel}
+\newcommand{\@emptybiblabel}[1]{}
+\makeatother
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcommand{\com}[1]{}
+\newcommand{\oa}[1]{\footnote{\color{red}OA: #1}}
+\newcommand{\daniel}[1]{\footnote{\color{blue}Daniel: #1}}
+
+\hyphenation{SemEval}
+
+
+\lstset{basicstyle=\ttfamily}
+
+
+\usetikzlibrary{shapes,shapes.misc}
+
+
+\title{Is Syntactic Parsing More Accurate than Semantic Parsing?}
+
+
+\author{Daniel Hershcovich$^{1,2}$ \\
+  \\\And
+  Omri Abend$^2$ \\
+  $^1$The Edmond and Lily Safra Center for Brain Sciences \\
+  $^2$School of Computer Science and Engineering \\
+  Hebrew University of Jerusalem \\
+  \texttt{\{danielh,oabend,arir\}@cs.huji.ac.il}
+  \\\And
+  Ari Rappoport$^2$
+}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  Syntactic parsers are known to outperform semantic ones in absolute terms,
+  using similar evaluation metrics, but the sources of this gap have never
+  been empirically clarified.  
+  We explore the fine differences in the evaluation of syntactic
+  and semantic parsing, taking Universal Dependencies (UD) and 
+  Universal Conceptual Cognitive Annotation (UCCA) as a test case.
+  Our findings suggest that the performance gap can be partially explained
+  by the different set of tokens used by the two tasks, and by the tendency
+  of UD structures to underspecify some fundamental semantic distinctions.
+  When comparing parsing performance in more similar terms, the gap in performance
+  is of only ...\%.
+\end{abstract}
+
+
+\section{Introduction}\label{sec:introduction}
+
+Parsing into meaning representation is generally seen as a harder task than
+syntactic parsing, as today's top parsers can attest:
+while in English in-domain parsing,
+\citet{P18-1249} reach 95.13 F1 when parsing the Wall-Street Journal (WST) into
+Penn Treebank syntactic constituency trees,
+the state-of-the-art in AMR parsing, \citet{lyu2018amr},
+achieve only 74.4 Smatch F1 on the LDC2016E25 test set.
+On the other hand, \citet{dozat2016deep,P18-2077}
+score 93.76 LAS when parsing the WST it into Stanford syntactic dependencies,
+and a very near 93.7 labeled F1 for semantic dependencies with the
+DM target representations \cite{oepen2016towards}.
+While of course the evaluation metrics are not identical,
+they do bear similarities.
+Clearly, all semantic representations are not the same in terms of their parsing difficulty.
+
+In this work we attempt to explain the common gap between syntactic and semantic parsing.
+We take Universal Dependencies \cite[UD; ][]{nivre2016universal} as a representative of the syntactic side,
+and Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal}
+as an instance of a semantic structure representation scheme.
+On v2.2 of the UD English EWT corpus \cite{11234/1-2837},
+the current state-of-the-art in UD parsing is 84.57 LAS F1 \cite{che-EtAl:2018:K18-2},
+whereas \citet{hershcovich2018multitask} achieve at most
+74.9 primary labeled F1 in UCCA parsing on the Wiki corpus
+\cite{hershcovich2017a}.
+
+The motivation for parsing into semantic structural representation is that it can be used more readily
+by semantic applications to reason about the processed utterance and manipulate it to find the required
+result.
+For example, in machine translation, a common model is the Vauquois Pyramid 
+\cite{vauquois1968survey},
+according to which translation between languages will become easier and more direct as we use
+a more semantic representation for the source and target languages,
+ignoring language-specific distinctions and capturing only what is preserved in translation.
+Parsing the source language and generating the target language, on the other hand, becomes more
+difficult as the representation becomes more semantic.
+
+Semantic representation schemes have seen major progress in recent years \cite{abend2017state}.
+At the same time, semantic considerations are taken into account in the design of syntactic annotation schemes
+\cite{przepiorkowski2018arguments}.
+However, looking at the absolute scores achieved in semantic parsing tasks
+as opposed to syntactic parsing,
+there is still a gap:
+UCCA parsers get just about 75\% F-score, whereas UD parsers get around 85\% LAS F1.
+One possible explanation is that
+UD has much more training data (UCCA: 5K, UD: about 17K for English).
+Inter-annotator agreement is also different: about 85\% for UCCA, and more than 95\% for UD,
+in addition to obvious difference in the actual task and the understanding it requires,
+we investigate other possible factors.
+Several questions naturally manifest themselves:
+how much of the difference is explained by
+\begin{itemize}
+\item Evaluation metric,
+\item Amount of training data,
+\item Maturity of technology dedicated to the scheme,
+\item Learnability of the scheme.
+\end{itemize}
+
+Learnability, in turn, is affected by
+\begin{itemize}
+\item Formal annotation choices \cite{Schwartz:12},
+\item Actual content that the scheme attempts to capture.
+\end{itemize}
+
+
+\paragraph{Content.}
+
+Different schemes capture different content.
+For example, dependencies are ambiguous as to the arguments of conjoined verbs:
+``the store buys and sells cameras'' and ``she was reading or watching a movie''
+are analyzed similarly, even though in the first sentence ``cameras'' is an argument
+of both ``buys'' and ``sells'', and in the second sentence ``movie'' is only an argument
+of ``watching''.
+The UCCA representation does make this distinction, as Figure~\ref{fig:conjoined_verbs} shows.
+
+\begin{figure}[!ht]
+  \centering
+    \begin{tikzpicture}[level distance=12mm, ->,
+        level 1/.style={sibling distance=21mm},
+        level 2/.style={sibling distance=11mm},
+        every circle node/.append style={fill=black}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node [circle] {}
+        {
+          child {node (She) [word] {She} edge from parent node[above] {\scriptsize $A$}}
+          child {node (was) [word] {was} edge from parent node[left] {\scriptsize $F$}}
+          child {node [word] {reading} edge from parent node[below] {\scriptsize $P$}}
+        } edge from parent node[left] {\scriptsize $H$} }
+        child {{}
+        {
+          child {node (or) [word] {or} edge from parent [draw=none]}
+        } edge from parent [draw=none]}
+        child {node (watchingamovie) [circle] {}
+        {
+          child {node [word] {watching} edge from parent node[left] {\scriptsize $P$}}
+          child {node [circle] {}
+          {
+            child {node [word] {a} edge from parent node[left] {\scriptsize $E$}}
+            child {node [word] {movie} edge from parent node[right] {\scriptsize $C$}}
+          } edge from parent node[above] {\scriptsize $A$} }
+        } edge from parent node[right] {\scriptsize $H$} }
+        ;
+      \draw[dashed,->,bend right=20] (watchingamovie) to node [above] {\scriptsize $A$} (She);
+      \draw[dashed,->,bend right=10] (watchingamovie) to node [above] {\scriptsize $F$} (was);
+      \draw(ROOT) to node [right] {\scriptsize $L$} (or);
+    \end{tikzpicture}
+\caption{Coordinated predicates in UCCA.
+\label{fig:conjoined_verbs}}
+\end{figure}
+
+We begin by carefully examining the structures captured by each of the annotation schemes,
+to find distinctions made by one but not the other.
+To explore the difference in content, we experiment with converting UD to UCCA
+using a two-step protocol:
+\begin{enumerate}
+%\item Augment UD trees to get \textit{enhanced++} dependencies \cite{SCHUSTER16.779}, hence UD$^{++}$.
+\item Structurally convert bilexical dependency graphs into constituency-like graphs by inserting
+  non-terminal nodes and \textit{head} edges (\S\ref{sec:conversion}).
+\item Translate UD relations into UCCA edge labels
+  by a deterministic mapping (\S\ref{sec:mapping}).
+%  or through learning (\S\ref{sec:learning}).
+\end{enumerate}
+
+\paragraph{Evaluation.}
+
+Apart from the set of distinctions each scheme makes,
+an important driver of the difference in scores is the proportion of each constructions
+in the evaluation.
+This implicitly determines what the scheme focuses on and what parser developers
+will spend a larger effort improving.
+
+For example, punctuation takes up 11.4\% of the edges in the English EWT UD treebank,
+and parsers typically achieve more than 90\% LAS F1 on punctuation.
+In UCCA, punctuation is excluded from the evaluation completely.
+
+A multi-word named entity is represented in UD by a \verb|flat| arc between
+each pair of consecutive words in the entity mention.
+In UCCA, a named entity is represented as one unanalyzable unit, and analyzing it
+incorrectly results in an incorrect edge with no partial credit.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Representations}\label{sec:representations}
+
+\paragraph{Universal Conceptual Cognitive Annotation.}\label{sec:ucca}
+UCCA \cite{abend2013universal} is a semantic representation whose main design principles
+are ease of annotation, cross-linguistic applicability, and a modular architecture.
+UCCA represents the semantics of linguistic utterances
+as directed acyclic graphs (DAGs), where terminal (childless) nodes
+correspond to the text tokens, and non-terminal nodes to semantic units that participate
+in some super-ordinate relation.
+Edges are labeled, indicating the role of a child in the relation the parent represents.
+Nodes and edges belong to one of several \textit{layers}, each corresponding
+to a ``module'' of semantic distinctions.
+UCCA's \textit{foundational layer} (the only layer for which annotated data exists)
+mostly covers predicate-argument structure, semantic heads and inter-Scene relations.
+
+UCCA distinguishes \textit{primary} edges, corresponding 
+to explicit relations, from \textit{remote} edges (appear dashed in
+Figure~\ref{fig:example_ucca}) that allow for a unit to participate
+in several super-ordinate relations.
+Primary edges form a tree in each layer, whereas remote edges enable reentrancy, forming a DAG.
+
+
+\begin{figure}[!ht]
+  \centering
+    \begin{tikzpicture}[level distance=9mm, sibling distance=14mm, ->,
+        every circle node/.append style={fill=black}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node (After) [word] {After} edge from parent node[above] {\scriptsize $L$}}
+        child {node (graduation) [circle] {}
+        {
+          child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
+        } edge from parent node[right] {\scriptsize $H$} }
+        child {node [word] {,} edge from parent node[below] {\scriptsize $U$}}
+        child {node (moved) [circle] {}
+        {
+          child {node (John) [word] {John} edge from parent node[left] {\scriptsize $A$}}
+          child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
+          child {node [circle] {}
+          {
+            child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
+            child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
+          } edge from parent node[above] {\scriptsize $A$} }
+        } edge from parent node[right] {\scriptsize $H$} }
+        ;
+      \draw[dashed,->] (graduation) to node [above] {\scriptsize $A$} (John);
+    \end{tikzpicture}
+\caption{\label{fig:example_ucca}
+ Example UCCA graph. The dashed edge is remote.
+  Pre-terminal nodes and edges are omitted for brevity.}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Universal Dependencies.}\label{sec:ud}
+UD \cite{nivre2016universal} has quickly become
+the dominant dependency scheme for
+syntactic  annotation in many languages,
+aiming for cross-linguistically consistent and coarse-grained treebank
+annotation. Formally, UD uses bilexical trees, with edge labels 
+representing syntactic relations between words.
+Figure~\ref{fig:original_example_ud} shows an example UD tree.
+
+UD includes \textit{enhanced dependencies}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
+as part of the dependency graph, representing
+case information, elided predicates,
+and shared arguments due to conjunction, control, raising and relative clauses.
+They provide richer information to downstream semantic applications,
+making UD better suited for text understanding.
+
+
+\begin{figure}[!ht]
+
+\fbox{\begin{subfigure}{0.47\textwidth}
+  \centering
+    \begin{dependency}[text only label, label style={above}, font=\small]
+    \begin{deptext}[column sep=.8em,ampersand replacement=\^]
+    After \^ graduation \^ , \^ John \^ moved \^ to \^ Paris \\
+    \end{deptext}
+        \depedge[edge unit distance=1ex]{2}{1}{case}
+        \depedge[edge unit distance=1ex]{4}{3}{punct}
+        \depedge[edge unit distance=1ex]{5}{4}{nsubj}
+        \depedge[edge unit distance=1ex, edge end x offset=-2pt]{2}{5}{obl}
+        \depedge[edge unit distance=1ex]{7}{6}{case}
+        \deproot[edge unit distance=1.5ex]{5}{root}
+        \depedge[edge unit distance=1.5ex]{5}{7}{obl}
+    \end{dependency}
+  \caption{UD \label{fig:original_example_ud}}
+\end{subfigure}}
+
+\fbox{\begin{subfigure}{0.47\textwidth}
+  \centering
+  \scalebox{.95}{
+  \begin{tikzpicture}[level distance=15mm, ->,
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize},
+      level 1/.style={sibling distance=13mm},
+      level 2/.style={sibling distance=1cm}]
+    \tikzstyle{word} = [font=\rmfamily,color=black]
+    \node (ROOT) [fill=black,circle] {}
+      child {node (after) [fill=black,circle] {}
+      {
+        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
+        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
+      } edge from parent node {obl}}
+      child {node {}
+      {
+        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node {}
+      {
+        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node {}
+      {
+        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
+      } edge from parent [draw=none]}
+      child {node (to) [fill=black,circle] {}
+      {
+          child {node [word] {to{\color{white}g}} edge from parent node {case}}
+          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
+      } edge from parent node {obl}}
+      ;
+      \draw (ROOT) to node {punct} (comma);
+      \draw (ROOT) to node {nsubj} (John);
+      \draw (ROOT) to node {head} (moved);
+  \end{tikzpicture}}
+  \captionof{figure}{UD}\label{fig:converted_example_ud}
+\end{subfigure}}
+
+\caption{Figure \ref{fig:original_example_ud} presents a UD tree.
+  Edge labels express syntactic relations.
+Figure~\ref{fig:converted_example_ud} presents a converted UD graph
+(with pre-terminals omitted: each terminal drawn in place of its parent).
+Intermediate non-terminals and \textit{head} edges are introduced.
+While converted UD graphs form trees, enhanced++ UD graphs may not.}\label{fig:ud_examples}
+\end{figure}
+
+
+\section{Training Data Size}\label{sec:data_size}
+
+Syntactic dependency parsers require many training examples to achieve
+state-of-the-art results.
+Even after around 500K tokens, the learning curves do not seem to saturate
+\cite{de2017old,velldal2017joint}.
+
+Whereas the largest UCCA training set (English Wiki) contains 128K tokens,
+The largest joined English UD training set (EWT) contains 177K tokens.
+In French UCCA has just 10K training tokens whereas UD has 295K,
+and in German UCCA has 80K and UD 228K.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+\hline
+\footnotesize 10\% & 65.1 & 65.2 & 65.1 & 38.4 & 24.3 & 29.8\\
+\footnotesize 20\% & 68.9 & 68.3 & 68.6 & 47.1 & 28.0 & 35.2\\
+\footnotesize 30\% & 70.2 & 70.1 & 70.2 & 47.2 & 45.5 & 46.3\\
+\footnotesize 40\% & 71.5 & 71.3 & 71.4 & 52.5 & 46.1 & 49.1\\
+\footnotesize 50\% & 71.9 & 71.9 & 71.9 & 51.3 & 48.6 & 49.9\\
+\footnotesize 60\% & 71.3 & 72.4 & 71.9 & 52.9 & 45.5 & 48.9\\
+\footnotesize 70\% & 73.1 & 72.7 & 72.9 & 50.8 & 50.5 & 50.6\\
+\footnotesize 80\% & 73.5 & 72.6 & 73.0 & 52.8 & 47.0 & 49.8\\
+\footnotesize 90\% & 73.9 & 73.1 & 73.5 & 52.3 & 48.6 & 50.4\\
+\footnotesize 100\% & 74.7 & 74.8 & 74.8 & 48.5 & 51.2 & 49.8\\
+\end{tabular}
+\caption{
+Development scores for TUPA \protect\cite{hershcovich2017a} when trained on increasing amount of training data
+(English Wiki corpus).
+\label{tab:partial_data_results}}
+\end{table}
+
+Table~\ref{tab:partial_data_results} shows results for TUPA,
+trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki development set.
+As can be seen, the primary labeled F1 continues improving substantially even from 90\% to 100\%
+of the training data. More training data is likely to yield even better performance.
+
+\section{Conversion}\label{sec:conversion}
+
+\subsection{Structural Conversion}\label{sec:structural}
+
+We convert UD trees and graphs into a unified DAG format \cite{hershcovich2018multitask,hershcovich2018universal}.
+The format consists of a rooted DAG, where the tokens are the terminal
+nodes.\footnote{Our conversion code supports full conversion between UCCA and UD,
+among other representation schemes,
+and is publicly available at \url{http://github.com/danielhers/semstr/tree/master/semstr/conversion}.}
+As in the UCCA format, edges are labeled (but not nodes),
+and are divided into \textit{primary} and \textit{remote} edges,
+where the primary edges form a tree (all nodes have at most one primary parent,
+and the root has none).
+Remote edges enable reentrancy, and thus together with primary edges
+form a DAG.
+Figure~\ref{fig:converted_example_ud} shows an example for a converted graph.
+
+To convert UD into the unified DAG format,
+we add a pre-terminal for each token,
+and attach the pre-terminals according to the original dependency edges:
+traversing the tree from the root down, for each head token we create a non-terminal
+parent with the edge label {\it head},
+and add the node's dependents as children of the created non-terminal node
+(see Figure~\ref{fig:converted_example_ud}).
+Any \textit{enhanced}
+heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
+In the conversion process, we strip any language-specific relation subtypes,
+leaving only the universal relations.
+For example, the language-specific \verb|acl:relcl| is replaced by the universal relation \verb|acl|..
+
+
+
+\subsection{Label Mapping}\label{sec:mapping}
+
+Using the standard UCCA evaluation
+script,\footnote{\url{http://github.com/danielhers/ucca/blob/master/scripts/evaluate_standard.py}}
+we create a confusion matrix between the edge tags in converted UD graphs
+and the annotated UCCA graphs (see Table~\ref{tab:confusion_matrix}).
+We performed this analysis on gold UD and UCCA graphs from the EWT corpus (see \S\ref{sec:experiments}).
+Edges are matched by terminal yield.
+In this confusion matrix, we can see what is the most common UCCA edge label corresponding
+to each UD relation.
+To convert the UD graphs into fully labeled UCCA graphs,
+we replace each UD edge label with its most common UCCA counterpart.
+
+The \textit{head} edges introduced as part of the conversion do not have a single
+corresponding UCCA edge label---although C (center) is the most common corresponding label,
+other labels such as P (process) are also common.
+This is a difference between UD, which selects the most central token to be the head of a phrase,
+to UCCA, which also annotates the relation between that head and the unit it is part of.
+To overcome this limitation, we replace all \textit{head} labels with C, but then
+apply standard UCCA
+normalization\footnote{\url{https://github.com/danielhers/ucca/blob/master/scripts/normalize.py}}
+to the resulting graphs after conversion,
+replacing C with P when it has sibling A's (participants) or
+with H when it has sibling H's (parallel scenes).
+We select P rather than S (state) as the main relation in the normalization because
+it is much more common (14,719 P's in the Wiki corpus as opposed to 3354 S's).
+
+In general, the conversion protocol attaches low,
+selecting for each terminal $t$ the lowest non-terminal of which $t$
+is the head terminal.
+We extend the conversion protocol by adding special rules for a few cases,
+where there is a systematic mapping between the UCCA and UD guidelines
+and it is different from the default low-attaching behavior,
+selecting a forward-attaching behavior instead:
+\begin{itemize}
+  \item Conjunctions (\verb|cc| in UD) attach to the following
+  conjuncts (word with an incoming \verb|conj| relation).
+  \item \verb|mark| is attached to the following \verb|advcl|/\verb|xcomp|.
+\end{itemize}
+These rules are applied to the bilexical graph after the conversion process.
+
+\begin{table}[t]
+\centering
+\scriptsize
+\setlength\tabcolsep{2pt}
+\begin{tabular}{l|cccccccccccc}
+ & A & C & D & E & F & G & H & L & N & P & R & S \\
+\hline
+acl & 15 & 0 & 0 & \textbf{38} & 1 & 0 & 16 & 0 & 0 & 1 & 0 & 2 \\
+advcl & 2 & 3 & 0 & 0 & 0 & 0 & \textbf{97} & 1 & 0 & 9 & 0 & 0 \\
+advmod & 61 & 10 & \textbf{528} & 48 & 13 & 33 & 4 & 61 & 0 & 2 & 9 & 5 \\
+amod & 1 & 36 & 101 & \textbf{217} & 2 & 0 & 7 & 0 & 0 & 5 & 0 & 155 \\
+appos & 1 & 11 & 1 & \textbf{12} & 0 & 0 & 4 & 0 & 0 & 0 & 0 & 4 \\
+aux & 0 & 0 & 95 & 0 & \textbf{284} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+case & 1 & 5 & 3 & 20 & 39 & 0 & 0 & 50 & 7 & 1 & \textbf{473} & 62 \\
+cc & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \textbf{305} & 69 & 0 & 2 & 0 \\
+ccomp & \textbf{73} & 0 & 0 & 0 & 0 & 0 & 7 & 0 & 0 & 0 & 0 & 1 \\
+compound & 18 & 23 & 12 & \textbf{181} & 7 & 0 & 0 & 0 & 0 & 24 & 3 & 5 \\
+conj & 10 & 84 & 1 & 0 & 0 & 0 & \textbf{255} & 0 & 0 & 16 & 1 & 47 \\
+cop & 0 & 0 & 1 & 0 & \textbf{332} & 0 & 0 & 1 & 0 & 3 & 1 & 22 \\
+csubj & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+dep & 0 & 0 & 0 & 0 & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+det & 4 & 1 & 22 & \textbf{773} & 1 & 1 & 0 & 0 & 0 & 0 & 2 & 0 \\
+discourse & 0 & 1 & 0 & 0 & 1 & 6 & \textbf{13} & 3 & 0 & 0 & 0 & 1 \\
+expl & 3 & 0 & 0 & 0 & \textbf{19} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+fixed & 0 & \textbf{2} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+goeswith & 0 & 0 & 1 & \textbf{4} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+head & 168 & \textbf{1395} & 147 & 62 & 101 & 24 & 432 & 3 & 1 & 1050 & 12 & 398 \\
+iobj & \textbf{19} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+list & 0 & 2 & 0 & 0 & 0 & 0 & \textbf{8} & 0 & 0 & 0 & 0 & 2 \\
+mark & 0 & 0 & 5 & 1 & \textbf{155} & 1 & 0 & 134 & 1 & 0 & 83 & 1 \\
+nmod & 92 & 1 & 7 & \textbf{232} & 0 & 0 & 7 & 0 & 0 & 0 & 0 & 126 \\
+nsubj & \textbf{979} & 1 & 0 & 0 & 14 & 0 & 4 & 14 & 0 & 9 & 15 & 3 \\
+nummod & 9 & 4 & 4 & \textbf{58} & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 \\
+obj & \textbf{427} & 6 & 10 & 6 & 2 & 0 & 2 & 3 & 0 & 13 & 3 & 0 \\
+obl & \textbf{233} & 1 & 91 & 8 & 7 & 4 & 8 & 4 & 0 & 1 & 7 & 0 \\
+orphan & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+parataxis & 2 & 0 & 0 & 1 & 0 & 2 & \textbf{64} & 0 & 0 & 1 & 0 & 4 \\
+vocative & \textbf{9} & 1 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
+xcomp & \textbf{15} & 0 & 0 & 0 & 0 & 0 & 5 & 0 & 0 & 3 & 0 & 0
+\end{tabular}
+\caption{UD-UCCA confusion matrix calculated from the EWT dataset (\S\ref{sec:experiments}).
+\label{tab:confusion_matrix}}
+\end{table}
+
+
+
+\section{Analysis of Divergences}\label{sec:analysis}
+
+
+
+As an example for divergence between the schemes, Figure~\ref{fig:wsj_0011.8} shows
+the same sentence after conversion and as manually annotated.
+This short sentence got an $F_1$ of 34.8\%.
+
+
+\begin{figure*}[!ht]
+\fbox{\begin{subfigure}{\textwidth}
+\begin{dependency}
+\begin{deptext}[column sep=2em]
+% sent_id = wsj_0011.8
+% text = Imports were at $ 50.38 billion , up 19 % .
+% doc_id = wsj_0011
+Imports \& were \& at  \& \$   \& 50.38 \& billion \& ,     \& up  \& 19  \& \%   \& .    \\
+%NOUN    \& AUX  \& ADP \& SYM \& NUM   \& NUM     \& PUNCT \& ADV \& NUM \& SYM \& PUNCT \\
+\end{deptext}
+\depedge{4}{1}{nsubj}
+\depedge{4}{2}{cop}
+\depedge{4}{3}{case}
+\deproot{4}{root}
+\depedge{6}{5}{compound}
+\depedge{4}{6}{nummod}
+\depedge{4}{7}{punct}
+\depedge{4}{8}{advmod}
+\depedge{10}{9}{nummod}
+\depedge{8}{10}{obl:npmod}
+\depedge{4}{11}{punct}
+\end{dependency}
+\caption{Original UD tree.\label{fig:wsj_0011.8_ud}}
+\end{subfigure}}
+\fbox{\begin{subfigure}{\textwidth}
+  \centering
+  \scalebox{.95}{
+\begin{tikzpicture}[->,level distance=1cm, sibling distance=22mm,
+  level 2/.style={level distance=2cm,
+  level 3/.style={level distance=1cm}},
+  every circle node/.append style={fill=black}]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
+  \node (1_1) [circle] {}
+  {
+  child {node (1_2) [circle] {}
+    {
+    child {node (1_4) [word] {Imports}  edge from parent node[left]  {\scriptsize $A$}}
+    child {node (1_5) [word] {were}  edge from parent node[left]  {\scriptsize $F$}}
+    child {node (1_6) [word] {at}  edge from parent node[left]  {\scriptsize $R$}}
+    child {node (1_3) [word] {\$}  edge from parent node[left]  {\scriptsize $P$}}
+    child {node (1_7) [circle] {}
+      {
+      child {node (1_13) [word] {50.38}  edge from parent node[left]  {\scriptsize $E$}}
+      child {node (1_8) [word] {billion}  edge from parent node[auto]  {\scriptsize $C$}}
+      } edge from parent node[left]  {\scriptsize $E$}}
+    child {node (1_9) [word] {,}  edge from parent node[right]  {\scriptsize $U$}}
+    child {node (1_10) [circle] {}
+      {
+      child {node (1_14) [circle] {}
+        {
+        child {node (1_16) [word] {up}  edge from parent node[left]  {\scriptsize $D$}}
+        child {node (1_15) [word] {19}  edge from parent node[auto]  {\scriptsize $C$}}
+        } edge from parent node[left]  {\scriptsize $E$}}
+      child {node (1_11) [word] {\%}  edge from parent node[auto]  {\scriptsize $C$}}
+      child {node (1_12) [word] {.}  edge from parent node[auto]  {\scriptsize $U$}}
+      } edge from parent node[auto]  {\scriptsize $E$}}
+    } edge from parent node[auto]  {\scriptsize $H$}}
+  }
+;
+\end{tikzpicture}
+  }\caption{Converted from gold UD to UCCA.\label{fig:wsj_0011.8_converted}}
+\end{subfigure}}
+  
+\fbox{\begin{subfigure}{\textwidth}
+  \centering
+  \scalebox{.95}{
+\begin{tikzpicture}[->,level distance=2cm,
+  level 1/.style={sibling distance=45mm},
+  level 2/.style={sibling distance=2cm},
+  level 3/.style={sibling distance=2cm},
+  every circle node/.append style={fill=black}]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
+  \node (1_1) [circle] {}
+  {
+  child {node (1_2) [circle] {}
+    {
+    child {node (1_3) [word] {Imports}  edge from parent node[auto]  {\scriptsize $A$}}
+    child {node (1_4) [word] {were}  edge from parent node[auto]  {\scriptsize $S$}}
+    child {node (1_5) [circle] {}
+      {
+      child {node (1_6) [word] {at}  edge from parent node[auto]  {\scriptsize $R$}}
+      child {node (1_14) [word] {\$}  edge from parent node[auto]  {\scriptsize $U$}}
+      child {node (1_8) [word] {50.38}  edge from parent node[auto]  {\scriptsize $E$}}
+      child {node (1_9) [word] {billion}  edge from parent node[auto]  {\scriptsize $C$}}
+      } edge from parent node[auto]  {\scriptsize $A$}}
+    } edge from parent node[auto]  {\scriptsize $H$}}
+  child {node (1_15) [word] {,}  edge from parent node[auto]  {\scriptsize $U$}}
+  child {node (1_10) [circle] {}
+    {
+    child {node (1_18) [word] {\textbf{IMPLICIT}}  edge from parent node[auto]  {\scriptsize $P$}}
+    child {node (1_11) [circle] {}
+      {
+      child {node (1_12) [word] {up}  edge from parent node[auto]  {\scriptsize $R$}}
+      child {node (1_13) [word] {19}  edge from parent node[auto]  {\scriptsize $C$}}
+      child {node (1_16) [word] {\%}  edge from parent node[auto]  {\scriptsize $U$}}
+      } edge from parent node[auto]  {\scriptsize $A$}}
+    } edge from parent node[auto]  {\scriptsize $H$}}
+  child {node (1_17) [word] {.}  edge from parent node[auto]  {\scriptsize $U$}}
+  };
+  \draw[dashed,->] (1_10) to node [auto] {\scriptsize $A$} (1_3);
+\end{tikzpicture}
+  }\caption{Manually annotated UCCA.\label{fig:wsj_0011.8_orig}}
+  
+\end{subfigure}}
+
+\caption{UCCA graphs for sentence \lstinline{wsj_0011.8}\label{fig:wsj_0011.8}}
+
+\end{figure*}
+
+More differences:
+\begin{itemize}
+\item Identity vs. set membership in copular constructions:
+    ``Mr. Vinken is chairman of Elsevier N.V.'' vs. ``The morbidity rate is a striking finding''.
+\item Infinitive vs. purpose ``to''. 
+\end{itemize}
+
+\subsection{Automatic identification of divergences}
+
+In order to automatically detect divergences between UCCA and UD,
+we compare the unlabeled yields of all nodes for each sentence.
+We use manually annotated data for both schemes.
+Excluding punctuation, this gives 13293 yields in UCCA and
+9817 in UD in the EWT dataset (\S\ref{sec:experiments}).
+Of these, 8416 are common, meaning that an oracle would get an $F_1$ score
+of 72.8\% if it had the gold label for each edge on conversion.
+
+In the following subsections, we inspect the differences and categorize them.
+
+\subsection{Coordination}
+Focusing on yields with a \verb|conj| UD label,
+we get 474 yields, out of which 391 have a corresponding UCCA yield (82.5\%).
+
+\subsection{Subordinate clauses}
+Focusing on yields with a \verb|acl| UD label,
+we get 200 yields, out of which 96 have a corresponding UCCA yield (48\%).
+
+The 104 subordinate clause divergences can be subcategorized as follows:
+
+\paragraph{Nominal predicates.}
+
+A noun annotated as a process.
+
+26307003:
+Did services I asked them NOT to do.
+
+\paragraph{Free/fused relative clause.}
+
+26315003:
+The prices were worth what I got.
+
+\paragraph{Flattening of scene structure.}
+
+26510000
+Did a great job of removing my tree in Conyers.
+
+
+\section{Experiments}\label{sec:experiments}
+
+\begin{table*}[t]
+\centering
+\small
+\setlength\tabcolsep{2pt}
+\begin{tabular}{l|ccc|ccc||ccc|ccc||ccc|ccc}
+& \multicolumn{6}{c||}{\footnotesize \bf English}
+& \multicolumn{6}{c||}{\footnotesize \bf French}
+& \multicolumn{6}{c}{\footnotesize \bf German} \\
+\hline
+& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
+& \multicolumn{3}{c||}{\footnotesize \bf {\#} sentences}
+& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
+& \multicolumn{3}{c||}{\footnotesize \bf {\#} sentences}
+& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
+& \multicolumn{3}{c}{\footnotesize \bf {\#} sentences} \\
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test 
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
+\hline
+Wiki & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
+20K &&& 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
+UD & \multicolumn{2}{l}{177345} && \multicolumn{2}{l}{13734} &&
+\multicolumn{2}{l}{293552} && \multicolumn{2}{l}{23377} && \multicolumn{2}{l}{228515} && 20692
+\end{tabular}
+\caption{Number of tokens and sentences in the training, development and test sets
+we use for each corpus and language.\label{tab:corpora}}
+\end{table*}
+
+\paragraph{Data.}
+
+For UCCA, we use v1.2.3 of the English Wikipedia corpus \cite[\textit{Wiki}; ][]{abend2013universal},
+with the standard train/dev/test split (see Table~\ref{tab:corpora}),
+and the \textit{Twenty Thousand Leagues Under the Sea} corpora
+\cite[\textit{20K}; ][]{sulem2015conceptual},
+annotated in English (v1.2.2), French (v1.2.2)
+and German (v1.0.1).\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation}}
+
+For UD, we use the \verb|English_EWT|, \verb|French_GSD| and \verb|German_GSD|
+treebanks from Universal Dependencies v2.3
+\cite{11234/1-2895}.\footnote{\url{http://hdl.handle.net/11234/1-2895}}
+
+We also use 804 English sentences from the reviews section of the English Web Treebank
+\cite[EWT; ][]{bies2012english},
+annotated by two UCCA annotators and
+cross-reviewed.\footnote{The data will be publicly
+available upon publication.}
+This corpus has already been annotated in Universal Dependencies,
+and so we have both gold UCCA and gold UD for these sentences.
+
+\paragraph{Preprocessing.}
+
+To parse text into UD, we use UDPipe v1.2 \cite{udpipe,udpipe:2017},
+which was used as the baseline model in the CoNLL 2018 shared task on
+Univesal Dependency Parsing \cite{zeman-EtAl:2018:K18-2},
+achieving 77.56\% LAS $F_1$ on English EWT using predicted POS tags.
+On French GSD it achieved 81.05\% and on German GSD 70.85\%.
+These are the largest treebanks in these languages
+used in the shared task, containing a total of 254K, 402K and 292K
+words, respectively.
+
+\paragraph{Using converted UD as ``silver-standard'' data.}
+
+Using our conversion protocol (\S\ref{sec:conversion}),
+we convert the gold-standard UD graphs into UCCA.
+We use the converted UD data as ``silver-standard'' data \cite{W17-7306,N18-1104}
+and add it to the UCCA training set for training TUPA.
+
+\section{Results}\label{sec:results}
+
+
+\begin{table}[t]
+\centering
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
+& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
+\hline
+\multicolumn{4}{l|}{\small \bf EWT (gold-standard)} & \\
+\footnotesize UD
+&  \\
+\footnotesize TUPA
+& 84.3 & 84.2 & 84.3 & 39.5 & 30.9 & 34.7 \\
+\\
+\end{tabular}
+\caption{
+Unlabeled precision, recall and $F_1$ (in~\%) for primary and remote edges.
+For comparison, TUPA \protect\cite{hershcovich2017a} is trained on Wiki with features predicted by UDPipe
+and tested on EWT with gold POS and dependency features (above)
+or on EWT with gold POS and dependency features (below).
+\label{tab:conversion_results_unlabeled}}
+\end{table}
+
+
+
+\paragraph{Conversion of gold UD annotations.}
+
+We performed our conversion protocol (\S\ref{sec:conversion}) on the gold-standard English EWT UD sentences,
+and evaluated on the gold-standard UCCA for same sentences.
+Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation of the
+structurally converted UD graphs as compared to gold-annotated UCCA graphs (\S\ref{sec:conversion}).
+Labeled evaluation results, after applying the label mapping,
+appear in Table~\ref{tab:conversion_results_labeled}.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+\hline
+\multicolumn{4}{l|}{\small \bf EWT (gold-standard)} & \\
+\footnotesize UD
+&  \\
+\footnotesize TUPA
+&  \\
+\end{tabular}
+\caption{
+Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
+of passages converted automatically from UD to UCCA,
+with mapped edge labels, as evaluated against gold UCCA.
+For comparison, TUPA \protect\cite{hershcovich2017a} is trained on Wikipedia with features predicted by UDPipe
+and tested on EWT with gold POS and dependency features (above)
+or on EWT with POS and dependency features predicted by UDPipe (below).
+\label{tab:conversion_results_labeled}}
+\end{table}
+
+Despite the simple conversion protocol, labeled scores are quite high.
+For comparison, the unlabeled evaluation (Table~\ref{tab:conversion_results_unlabeled})
+serves as an oracle experiment for the labeled conversion,
+and is an upper bound given a fixed structural conversion.
+
+\paragraph{Conversion of automatically parsed UD annotations.}
+
+To be able to evaluate the conversion on a larger corpus,
+such as the UCCA Wiki set, which does not have gold standard UD,
+we use an automatic UD parser: UDPipe.
+The results appear in Table~\ref{tab:conversion_results_labeled}.
+
+
+\begin{table}[t]
+\centering
+\small
+\setlength\tabcolsep{3pt}
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+\hline
+\multicolumn{4}{l|}{\small \bf English (Wiki, in-domain)} & \\
+\footnotesize HAR18 Single
+& 74.4 & 72.9 & 73.6 & 53 & 50 & 51.5 \\
+\footnotesize HAR18 MTL UD$^{++}$
+& 75 & 73.2 & 74.1 & 49 & 52.7 & 50.8 \\
+\footnotesize Converted UD aux.
+\\
+\hline\\
+\multicolumn{4}{l|}{\small \bf English (20K, out-of-domain)} & \\
+\footnotesize HAR18 Single
+& 69 & 69 & 69 & 41.2 & 19.8 & 26.7 \\
+\footnotesize HAR18 MTL UD$^{++}$
+& 69.6 & 69.8 & 69.7 & 41.4 & 22 & 28.7 \\
+\footnotesize Converted UD aux.
+\\
+\hline\\
+\multicolumn{4}{l|}{\small \bf French (20K, in-domain)} & \\
+\small HAR18 Single & 68.2 & 67 & 67.6 & 26 & \enskip 9.4 & 13.9 \\
+\small HAR18 MTL UD & 70.3 & 70 & 70.1 & 43.8 & 13.2 & 20.3 \\
+\footnotesize Converted UD aux.
+\\
+\hline\\
+\multicolumn{4}{l|}{\small \bf German (20K, in-domain)} & \\
+\small HAR18 Single & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
+\small HAR18 MTL UD & 73.7 & 72.6 & 73.2 & 61.8 & 24.9 & 35.5 \\
+\footnotesize Converted UD aux.
+\\
+\end{tabular}
+\caption{
+Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
+on the Wiki and 20K test sets.
+HAR18: \protect\newcite{hershcovich2018multitask}.}\label{tab:aux_results}
+\end{table}
+
+\paragraph{Using converted UD as ``silver-standard'' data.}
+
+Table~\ref{tab:aux_results} shows the results of this experiment.
+
+
+\paragraph{Fine-grained evaluation of UCCA parsing.}
+
+Our conversion protocol allows fine-grained evaluation of UCCA parsing.
+Table~\ref{tab:fine_grained_ucca} shows fine-grained evaluation according to UCCA categories, and
+Table~\ref{tab:fine_grained_ud} shows fine-grained evaluation according to UD relations.
+
+
+\begin{table}[t]
+\centering
+\tiny
+\setlength\tabcolsep{2pt}
+\begin{tabular}{l|ccccccccccccc}
+& A & C & D & E & F & G & H & L & N & P & R & S \\
+\hline
+\textbf{en EWT} & 3017 & 1760 & 1091 & 1727 & 983 & 82 & 1655 & 602 & 78 & 1301 & 618 & 954 \\
+\hline
+\textbf{en Wiki} &  \\
+\hline
+\textbf{en 20K} & 2848 & 2788 & 904 & 3116 & 622 & 98 & 1091 & 461 & 162 & 1277 & 1370 & 352 \\
+TUPA & 56.1 & 75.7 & 52.7 & 73.8 & 70.1 & 7.4 & 50.6 & 64.3 & 75.9 & 65.7 & 84.4 & 20.1 \\
+\hline
+\textbf{fr 20K} & \\
+\hline
+\textbf{de 20K} & 
+\end{tabular}
+\caption{
+Fine-grained labeled $F_1$ according to UCCA categories,
+as well as the number of edges per category in the gold-standard.}
+\label{tab:fine_grained_ucca}
+\end{table}
+
+\begin{table*}[t]
+\centering
+\tiny
+\setlength\tabcolsep{2pt}
+\begin{tabular}{l|ccccccccccccccccccccccccccccccc}
+&  \\
+\hline
+\end{tabular}
+\caption{
+Fine-grained labeled $F_1$ according to gold UD relations (for EWT)
+or as parsed by UDPipe (for the other datasets),
+as well as the number of arcs per relation in UD,
+and the number of matched UCCA units in the gold-standard UCCA.
+Some relations omitted for brevity.}
+\label{tab:fine_grained_ud}
+\end{table*}
+
+
+
+%\section{Discussion}\label{sec:discussion}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work}\label{sec:related_work}
+
+\paragraph{AMR parsing.}
+
+\newcite{wang2015transition,wang-xue-pradhan:2015:ACL-IJCNLP,wang-EtAl:2016:SemEval,goodman2016noise,wang2017getting}
+presented a transition-based AMR parser, CAMR, which requires a
+syntactic dependency tree as input.
+It operates on the input tree, transforming it into an AMR graph
+by a sequence of transitions.
+The accuracy of the underlying syntactic dependency parser is important,
+as shown by \newcite{wang-xue-pradhan:2015:ACL-IJCNLP},
+who achieved the best results using the Charniak parser trained on a
+much larger and more diverse dataset---the full OntoNotes corpus,
+rather than the Stanford parser trained on the Penn TreeBank.
+
+\newcite{szubert2018structured} showed that when comparing AMR to Universal Dependencies (UD),
+97\% of AMR edges are evoked by words or syntactic relations.
+
+\newcite{damonte-17,szubert2018structured} suggested fine-grained evaluation measures
+for AMR parsing, using sub-tasks of the AMR parsing task or UD labels to evaluate on.
+Similarly, our conversion protocol allows fine-grained evaluation of UCCA parsing.
+
+\paragraph{Semantic role labeling.}
+
+\newcite{D18-1412} used multitask learning to improve semantic role labeling and coreference resolution
+by also learning unlabeled syntactic bracketing as an auxiliary task.
+
+Much effort has been devoted to joint learning of syntactic
+and semantic parsing, including
+two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll}.
+%on joint syntactic parsing and semantic role labeling.
+Despite their conceptual and practical appeal, such joint models rarely outperform
+the pipeline approach %of basing semantic parsing on the output of syntactic parsers
+\cite{lluis2008joint,henderson2013multilingual,D15-1169,swayamdipta-EtAl:2016:CoNLL,swayamdipta2017frame}.
+
+\paragraph{UCCA parsing.}
+
+\newcite{hershcovich2018multitask} improved UCCA parsing with multitask learning, sharing parameters
+between UCCA and other semantic parsing tasks, as well as Universal Dependency Parsing.
+We perform a similar experiment, but instead of a multitask model,
+we use UD data converted to UCCA and train on it with the same single-task model (\S\ref{sec:experiments}).
+%
+%
+%\section{Conclusion}\label{sec:conclusion}
+
+
+\bibliography{references}
+\bibliographystyle{acl_natbib}
+
+\end{document}
