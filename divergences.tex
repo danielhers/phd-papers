@@ -72,16 +72,19 @@
 \maketitle
 
 \begin{abstract}
-Syntactic parsers tend to outperform semantic ones in absolute terms,
-using similar evaluation metrics.
-We explore the commonalities and differences between them,
-taking Universal Dependencies (UD) and
-Universal Conceptual Cognitive Annotation (UCCA)
-as a test case.
-Our investigation targets the linguistic divergences between the schemes.
-The conversion protocol we develop as part of the analysis
-can be used for enriching the training data,
-which we utilize to achieve state-of-the-art UCCA parsing.
+Syntax can be used to inform semantic parsers, as demonstrated by
+methods such as syntactic features and multi-task learning.
+However, previously explored methods for such integration
+are almost invariably generic, and do not leverage any
+scheme-specific, language-specific, or
+construction-specific information.
+In this paper we compare and contrast syntactic and semantic schemes,
+taking Universal Dependencies (UD) and UCCA as a test case.
+We map their divergences and convergences in terms of content,
+and identify cases of refinement or qualitatively different generalizations.
+Our findings show that ... (FILL IN THE BLANK).
+Finally, based on our analysis, we develop a method for improving a UCCA parser
+by enriching its training data with automatically converted UD graphs.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
