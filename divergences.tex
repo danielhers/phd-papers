@@ -733,16 +733,19 @@ As these sentences are included in the Universal Dependencies \verb|English_EWT|
 we have both gold-standard UCCA and UD for them.
 We refer to this set as \textit{intersection} henceforth.
 
-\paragraph{Preprocessing.}
+\paragraph{Conversion of gold UD annotations.}
 
+We apply our conversion protocol (\S\ref{sec:conversion}) to
+the gold-standard UD trees of the English EWT intersection sentences,
+and evaluate on the gold-standard UCCA for the same sentences.
+We then apply the label mapping to get fully labeled converted UCCA graphs.
+
+\paragraph{Conversion of automatically parsed UD annotations.}
+
+To evaluate the conversion on the UCCA corpora that do not have gold-standard UD,
+we instead start from automatically parsed UD as the source.
 To parse text into UD, we use UDPipe v1.2 \cite{udpipe,udpipe:2017},
-which was used as the baseline model in the CoNLL 2018 shared task on
-Univesal Dependency Parsing \cite{zeman-EtAl:2018:K18-2},
-achieving 77.56\% LAS $F_1$ on English EWT using predicted POS tags.
-On French GSD it achieved 81.05\% and on German GSD 70.85\%.
-These are the largest treebanks in these languages
-used in the shared task, containing a total of 254K, 402K and 292K
-words, respectively.
+trained on the UD v2.3 treebanks.
 
 \paragraph{Using converted UD as ``silver-standard'' data.}
 
@@ -834,12 +837,6 @@ UD 2.3 is after conversion including label mapping.
 \label{tab:conversion_results_labeled}}
 \end{table}
 
-
-\paragraph{Conversion of gold UD annotations.}
-
-We applied our conversion protocol (\S\ref{sec:conversion}) to
-the gold-standard UD trees of the English EWT intersection sentences,
-and evaluated on the gold-standard UCCA for the same sentences.
 Table~\ref{tab:conversion_results_unlabeled} shows \textit{unlabeled} evaluation of the
 converted UD graphs as compared to gold-annotated UCCA graphs (\S\ref{sec:conversion}).
 Labeled evaluation results, after applying the label mapping,
@@ -849,13 +846,6 @@ Despite the simple conversion protocol, labeled scores are quite high.
 For comparison, the unlabeled evaluation (Table~\ref{tab:conversion_results_unlabeled})
 serves as an oracle experiment for the labeled conversion,
 and is an upper bound given a fixed structural conversion.
-
-\paragraph{Conversion of automatically parsed UD annotations.}
-
-To be able to evaluate the conversion on a larger corpus,
-such as the UCCA Wiki set, which does not have gold standard UD,
-we use an automatic UD parser: UDPipe.
-The results appear in Table~\ref{tab:conversion_results_labeled}.
 
 
 %\begin{table}[t]
