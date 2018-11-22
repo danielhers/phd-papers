@@ -733,6 +733,12 @@ As these sentences are included in the Universal Dependencies \verb|English_EWT|
 we have both gold-standard UCCA and UD for them.
 We refer to this set as \textit{intersection} henceforth.
 
+\paragraph{Baselines.}
+
+As a point of comparison, we evaluate TUPA \cite{hershcovich2017a} on the test sets,
+after training it on the UCCA training set for each language (Wiki for English,
+and 20K for French and German).
+
 \paragraph{Conversion of gold UD annotations.}
 
 We apply our conversion protocol (\S\ref{sec:conversion}) to
@@ -842,7 +848,13 @@ converted UD graphs as compared to gold-annotated UCCA graphs (\S\ref{sec:conver
 Labeled evaluation results, after applying the label mapping,
 appear in Table~\ref{tab:conversion_results_labeled}.
 
-Despite the simple conversion protocol, labeled scores are quite high.
+Despite the simple conversion protocol, the scores are quite high:
+strikingly, conversion from UD performs better on primary edges than
+TUPA, a parser trained specifically on UCCA parsing,
+for the English EWT and French 20K sets.
+TUPA underperforms on English EWT likely due to domain shift,
+and on French 20K it is trained just on 15 sentences.
+
 For comparison, the unlabeled evaluation (Table~\ref{tab:conversion_results_unlabeled})
 serves as an oracle experiment for the labeled conversion,
 and is an upper bound given a fixed structural conversion.
