@@ -72,44 +72,29 @@
 \maketitle
 
 \begin{abstract}
-Syntactic parsers tend to outperform semantic ones in absolute terms,
-using similar evaluation metrics.
-We explore the commonalities and differences between them,
-taking Universal Dependencies (UD) and
-Universal Conceptual Cognitive Annotation (UCCA)
-as a test case.
-Our investigation targets the linguistic divergences between the schemes.
-The conversion protocol we develop as part of the analysis
-can be used for enriching the training data,
-which we utilize to achieve state-of-the-art UCCA parsing.
+Syntax can be used to inform semantic parsers, as demonstrated by
+methods such as syntactic features and multi-task learning.
+However, previously explored methods for such integration
+are almost invariably generic, and do not leverage any
+scheme-specific, language-specific, or
+construction-specific information.
+In this paper we compare and contrast syntactic and semantic schemes,
+taking Universal Dependencies (UD) and UCCA as a test case.
+We map their divergences and convergences in terms of content,
+and identify cases of refinement or qualitatively different generalizations.
+Our findings show that ... (FILL IN THE BLANK).
+Finally, based on our analysis, we develop a method for improving a UCCA parser
+by enriching its training data with automatically converted UD graphs.
 \end{abstract}
 
 \section{Introduction}\label{sec:introduction}
 
-Parsing into meaning representation is generally seen as a harder task than
-syntactic parsing, as today's top parsers can attest:
-while in English in-domain parsing,
-\citet{P18-1249} reach 95.13 F1 when parsing the Wall-Street Journal (WST) into
-Penn Treebank syntactic constituency trees,
-the state-of-the-art in AMR parsing, \citet{lyu2018amr},
-achieve only 74.4 Smatch F1 on the LDC2016E25 test set.
-On the other hand, \citet{dozat2016deep,P18-2077}
-score 93.76 LAS when parsing the WST it into Stanford syntactic dependencies,
-and a very near 93.7 labeled F1 for semantic dependencies with the
-DM target representations \cite{oepen2016towards}.
-While of course the evaluation metrics are not identical,
-they do bear similarities.
-Clearly, all semantic representations are not the same in terms of their parsing difficulty.
-
-In this work we attempt to explain the common gap between syntactic and semantic parsing.
-We take Universal Dependencies \cite[UD; ][]{nivre2016universal} as a representative of the syntactic side,
-and Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal}
-as an instance of a semantic structure representation scheme.
-On v2.2 of the UD English EWT corpus \cite{11234/1-2837},
-the current state-of-the-art in UD parsing is 84.57 LAS F1 \cite{che-EtAl:2018:K18-2},
-whereas \citet{hershcovich2018multitask} achieve at most
-74.9 primary labeled F1 in UCCA parsing on the Wiki corpus
-\cite{hershcovich2017a}.
+In this work we carefully examine the differences and commonalities
+between syntactic and semantic parsing.
+We take Universal Dependencies \cite[UD; ][]{nivre2016universal},
+a syntactic annotation scheme,
+and Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal},
+a semantic one, as a test case.
 
 The motivation for parsing into semantic structural representation is that it can be used more readily
 by semantic applications to reason about the processed utterance and manipulate it to find the required
@@ -125,17 +110,7 @@ difficult as the representation becomes more semantic.
 Semantic representation schemes have seen major progress in recent years \cite{abend2017state}.
 At the same time, semantic considerations are taken into account in the design of syntactic annotation schemes
 \cite{przepiorkowski2018arguments}.
-However, looking at the absolute scores achieved in semantic parsing tasks
-as opposed to syntactic parsing,
-there is still a gap:
-UCCA parsers get just about 75\% F-score, whereas UD parsers get around 85\% LAS F1.
-One possible explanation is that
-UD has much more training data (UCCA: 5K, UD: about 17K for English).
-Inter-annotator agreement is also different: about 85\% for UCCA, and more than 95\% for UD,
-in addition to obvious difference in the actual task and the understanding it requires,
-we investigate other possible factors.
-Several questions naturally manifest themselves:
-how much of the difference is explained by
+
 \begin{itemize}
 \item Evaluation metric,
 \item Amount of training data,
@@ -435,7 +410,7 @@ Any \textit{enhanced}
 heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
 In the conversion process, we strip any language-specific relation subtypes,
 leaving only the universal relations.
-For example, the language-specific \verb|acl:relcl| is replaced by the universal relation \verb|acl|..
+For example, the language-specific \verb|acl:relcl| is replaced by the universal relation \verb|acl|.
 
 
 
