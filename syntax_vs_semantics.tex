@@ -89,45 +89,45 @@
 
 \section{Introduction}\label{sec:introduction}
 
-Parsing into meaning representation is generally seen as a harder task than
-syntactic parsing, as today's top parsers can attest:
-while in English in-domain parsing,
-\citet{P18-1249} reach 95.13 F1 when parsing the Wall-Street Journal (WST) into
-Penn Treebank syntactic constituency trees,
-the state-of-the-art in AMR parsing, \citet{lyu2018amr},
-achieve only 74.4 Smatch F1 on the LDC2016E25 test set.
-On the other hand, \citet{dozat2016deep,P18-2077}
-score 93.76 LAS when parsing the WST it into Stanford syntactic dependencies,
-and a very near 93.7 labeled F1 for semantic dependencies with the
-DM target representations \cite{oepen2016towards}.
-While of course the evaluation metrics are not identical,
-they do bear similarities.
-Clearly, all semantic representations are not the same in terms of their parsing difficulty.
+Parsing into semantic representations is generally seen as a harder task than
+syntactic parsing. Empirically, syntactic parsers outperform semantic parsers
+by 10-20 points, despite using conceptually similar measures, that measure
+the number of overlapping edges between the gold standard and predicted structures. 
+Indeed, in English, in-domain parsing reaches 95.13 F1 when constituency-parsing
+the Penn Treebank \citep{P18-1249}, and 93.76 Labeled Attachment Score (LAS)
+when parsing it into Stanford syntactic dependencies \citep{dozat2016deep},
+the best reported result in AMR (LDC2016E25 test set) is 74.4 Smatch F1 \citep{lyu2018amr},
+and the best for UCCA parsing in English is 74.9 F1 \citep{hershcovich2018multi}.
+The only exception to this performance gap between syntactic and semantic parsing we
+are aware of is \citep{P18-2077},
+who reported 93.7 labeled F1 for the DM target representations on English \cite{oepen2016towards}.
 
-In this work we attempt to explain the common gap between syntactic and semantic parsing.
-We take Universal Dependencies \cite[UD; ][]{nivre2016universal} as a representative of the syntactic side,
-and Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal}
-as an instance of a semantic structure representation scheme.
+This work sheds light on the reasons for this performance gap, by considering the performance
+of parsers on different constructions in isolation.
+We take Universal Dependencies \cite[UD; ][]{nivre2016universal} as a representative
+of the syntactic side, and Universal Conceptual Cognitive Annotation
+\cite[UCCA; ][]{abend2013universal} as an instance of a semantic structure representation scheme.
+
+In this case, the gap is less major
 On v2.2 of the UD English EWT corpus \cite{11234/1-2837},
 the current state-of-the-art in UD parsing is 84.57 LAS F1 \cite{che-EtAl:2018:K18-2},
-whereas \citet{hershcovich2018multitask} achieve at most
-74.9 primary labeled F1 in UCCA parsing on the Wiki corpus
-\cite{hershcovich2017a}.
+whereas \citet{hershcovich2018multitask} obtains up to 74.9 primary labeled F1
+in in-domain UCCA parsing on the Wiki corpus \cite{hershcovich2017a}.
+We note that UD parsing performance on English is roughly 85 LAS, whereas performance
+with English-specific dependency schemes are usually 90 LAS or higher. This difference
+stems from the more abstract nature of UD.\oa{do we attempt to explain this?}
 
-The motivation for parsing into semantic structural representation is that it can be used more readily
-by semantic applications to reason about the processed utterance and manipulate it to find the required
-result.
-For example, in machine translation, a common model is the Vauquois Pyramid 
-\cite{vauquois1968survey},
-according to which translation between languages will become easier and more direct as we use
-a more semantic representation for the source and target languages,
-ignoring language-specific distinctions and capturing only what is preserved in translation.
-Parsing the source language and generating the target language, on the other hand, becomes more
-difficult as the representation becomes more semantic.
+%The motivation for parsing into semantic structural representation is that it can be used more readily
+%by semantic applications to reason about the processed utterance and manipulate it to find the required
+%result.
+%For example, in machine translation, a common model is the Vauquois Pyramid 
+%\cite{vauquois1968survey},
+%according to which translation between languages will become easier and more direct as we use
+%a more semantic representation for the source and target languages,
+%ignoring language-specific distinctions and capturing only what is preserved in translation.
+%Parsing the source language and generating the target language, on the other hand, becomes more
+%difficult as the representation becomes more semantic.
 
-Semantic representation schemes have seen major progress in recent years \cite{abend2017state}.
-At the same time, semantic considerations are taken into account in the design of syntactic annotation schemes
-\cite{przepiorkowski2018arguments}.
 However, looking at the absolute scores achieved in semantic parsing tasks
 as opposed to syntactic parsing,
 there is still a gap:
@@ -139,6 +139,7 @@ in addition to obvious difference in the actual task and the understanding it re
 we investigate other possible factors.
 Several questions naturally manifest themselves:
 how much of the difference is explained by
+
 \begin{itemize}
 \item Evaluation metric,
 \item Amount of training data,
@@ -146,7 +147,8 @@ how much of the difference is explained by
 \item Learnability of the scheme.
 \end{itemize}
 
-Learnability, in turn, is affected by
+Learnability, in turn, is affected by:
+
 \begin{itemize}
 \item Formal annotation choices \cite{Schwartz:12},
 \item Actual content that the scheme attempts to capture.
