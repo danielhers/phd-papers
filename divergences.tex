@@ -761,31 +761,24 @@ and add it to the UCCA training set for training TUPA.
 & \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
 & \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
 \hline
-\multicolumn{4}{l|}{\small \bf EWT (gold-standard)} & \\
-\footnotesize UD
-&  \\
+\multicolumn{4}{l|}{\small \bf English EWT (intersection)} & \\
+\footnotesize UD 2.3
+& 81.5 & 88.2 & 84.7 & 21.2 & 19.6 & 20.4 \\
 \footnotesize TUPA
-& 84.3 & 84.2 & 84.3 & 39.5 & 30.9 & 34.7 \\
-\\
+& 83.4 & 82.6 & 83 & 46.4 & 18.6 & 26.6 \\
+\multicolumn{4}{l|}{\small \bf English Wiki test} & \\
+\footnotesize UDPipe
+& 76.5 & 81.2 & 78.8 & -- & -- & -- \\
+\footnotesize TUPA
+& 87.1 & 84.5 & 85.8 & 50.9 & 46.2 & 48.4 \\
 \end{tabular}
 \caption{
 Unlabeled precision, recall and $F_1$ (in~\%) for primary and remote edges.
+UD 2.3 is the gold-standard UD (v2.3) after conversion to UCCA by our protocol.
 For comparison, TUPA \protect\cite{hershcovich2017a} is trained on Wiki with features predicted by UDPipe
-and tested on EWT with gold POS and dependency features (above)
-or on EWT with gold POS and dependency features (below).
+and tested with predicted POS and dependency features.
 \label{tab:conversion_results_unlabeled}}
 \end{table}
-
-
-
-\paragraph{Conversion of gold UD annotations.}
-
-We performed our conversion protocol (\S\ref{sec:conversion}) on the gold-standard English EWT UD sentences,
-and evaluated on the gold-standard UCCA for same sentences.
-Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation of the
-structurally converted UD graphs as compared to gold-annotated UCCA graphs (\S\ref{sec:conversion}).
-Labeled evaluation results, after applying the label mapping,
-appear in Table~\ref{tab:conversion_results_labeled}.
 
 \begin{table}[t]
 \centering
@@ -794,21 +787,33 @@ appear in Table~\ref{tab:conversion_results_labeled}.
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
 \hline
-\multicolumn{4}{l|}{\small \bf EWT (gold-standard)} & \\
-\footnotesize UD
-&  \\
+\multicolumn{4}{l|}{\small \bf English EWT (intersection)} & \\
+\footnotesize UD 2.3
+& 59.6 & 64.5 & 62 & 21.2 & 19.6 & 20.4 \\
 \footnotesize TUPA
-&  \\
+& 61.4 & 60.8 & 61.1 & 46.4 & 18.6 & 26.6 \\
+\multicolumn{4}{l|}{\small \bf English Wiki test} & \\
+\footnotesize UDPipe
+& 59.1 & 62.6 & 60.8 & -- & -- & -- \\
+\footnotesize TUPA
+& 74.4 & 72.2 & 73.3 & 49.7 & 45.1 & 47.3 \\
 \end{tabular}
 \caption{
-Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
-of passages converted automatically from UD to UCCA,
-with mapped edge labels, as evaluated against gold UCCA.
-For comparison, TUPA \protect\cite{hershcovich2017a} is trained on Wikipedia with features predicted by UDPipe
-and tested on EWT with gold POS and dependency features (above)
-or on EWT with POS and dependency features predicted by UDPipe (below).
+Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges.
+UD 2.3 is after conversion including label mapping.
 \label{tab:conversion_results_labeled}}
 \end{table}
+
+
+\paragraph{Conversion of gold UD annotations.}
+
+We applied our conversion protocol (\S\ref{sec:conversion}) to
+the gold-standard UD trees of the English EWT intersection sentences,
+and evaluated on the gold-standard UCCA for the same sentences.
+Table~\ref{tab:conversion_results_unlabeled} shows \textit{unlabeled} evaluation of the
+converted UD graphs as compared to gold-annotated UCCA graphs (\S\ref{sec:conversion}).
+Labeled evaluation results, after applying the label mapping,
+appear in Table~\ref{tab:conversion_results_labeled}.
 
 Despite the simple conversion protocol, labeled scores are quite high.
 For comparison, the unlabeled evaluation (Table~\ref{tab:conversion_results_unlabeled})
