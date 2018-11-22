@@ -733,12 +733,6 @@ As these sentences are included in the Universal Dependencies \verb|English_EWT|
 we have both gold-standard UCCA and UD for them.
 We refer to this set as \textit{intersection} henceforth.
 
-\paragraph{Baselines.}
-
-As a point of comparison, we evaluate TUPA \cite{hershcovich2017a} on the test sets,
-after training it on the UCCA training set for each language (Wiki for English,
-and 20K for French and German).
-
 \paragraph{Conversion of gold UD annotations.}
 
 We apply our conversion protocol (\S\ref{sec:conversion}) to
@@ -752,6 +746,15 @@ To evaluate the conversion on the UCCA corpora that do not have gold-standard UD
 we instead start from automatically parsed UD as the source.
 To parse text into UD, we use UDPipe v1.2 \cite{udpipe,udpipe:2017},
 trained on the UD v2.3 treebanks.
+
+\paragraph{Baselines.}
+
+As a point of comparison, we evaluate TUPA \cite{hershcovich2017a} on the test sets,
+after training it on the UCCA training set for each language (Wiki for English,
+and 20K for French and German).
+For equal conditions,
+we train and test TUPA using features predicted by UDPipe,
+yielding slightly lower scores than previously reported using spaCy.%\footnote{\url{https://spacy.io}}
 
 \paragraph{Using converted UD as ``silver-standard'' data.}
 
