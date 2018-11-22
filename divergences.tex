@@ -690,10 +690,12 @@ Did a great job of removing my tree in Conyers.
 & \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
 & \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
 \hline
-Wiki & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
-20K &&& 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
-UD & \multicolumn{2}{l}{177345} && \multicolumn{2}{l}{13734} &&
-\multicolumn{2}{l}{293552} && \multicolumn{2}{l}{23377} && \multicolumn{2}{l}{228515} && 20692
+Wiki 1.2.3 & 124935 & 17784 & 15854 & 4113 & 514 & 515 &&&&&&&&&&&& \\
+Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
+20K 1.2.2/1.0.1 &&& 12574 &&& 492 & 618 & 6374 & 5962 & 15 & 238 & 239 & 119872 & 12334 & 12325 & 5211 & 651 & 652 \\
+20K 1.0.0/0.9.0 &&& 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
+UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
+\multicolumn{2}{l}{250658} && \multicolumn{2}{l}{14450} && \multicolumn{2}{l}{209131} && 13814
 \end{tabular}
 \caption{Number of tokens and sentences in the training, development and test sets
 we use for each corpus and language.\label{tab:corpora}}
@@ -701,24 +703,30 @@ we use for each corpus and language.\label{tab:corpora}}
 
 \paragraph{Data.}
 
-For UCCA, we use v1.2.3 of the English Wikipedia corpus \cite[\textit{Wiki}; ][]{abend2013universal},
+For UCCA, we use v1.2.3 of the English Wikipedia corpus (\textit{Wiki}),
 with the standard train/dev/test split (see Table~\ref{tab:corpora}),
-and the \textit{Twenty Thousand Leagues Under the Sea} corpora
-\cite[\textit{20K}; ][]{sulem2015conceptual},
+and the \textit{Twenty Thousand Leagues Under the Sea} corpora (\textit{20K}),
 annotated in English (v1.2.2), French (v1.2.2)
 and German (v1.0.1).\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation}}
+
+For comparability with previous work \cite{hershcovich2017a,hershcovich2018multitask},
+we also perform our experiments on Wiki v1.2.0 \cite{abend2013universal},
+on 20K v1.0.0 in English and French \cite{sulem2015conceptual},
+and on 20K v0.9.0 in German.
+As in previous work, we use English 20K only as an out-of-domain test set.
 
 For UD, we use the \verb|English_EWT|, \verb|French_GSD| and \verb|German_GSD|
 treebanks from Universal Dependencies v2.3
 \cite{11234/1-2895}.\footnote{\url{http://hdl.handle.net/11234/1-2895}}
+These are the largest freely-available UD treebanks for these languages.
 
 We also use 804 English sentences from the reviews section of the English Web Treebank
 \cite[EWT; ][]{bies2012english},
 annotated by two UCCA annotators and
 cross-reviewed.\footnote{The data will be publicly
 available upon publication.}
-This corpus has already been annotated in Universal Dependencies,
-and so we have both gold UCCA and gold UD for these sentences.
+As these sentences are included in the Universal Dependencies \verb|English_EWT| treebank,
+we have both gold-standard UCCA and UD for them.
 
 \paragraph{Preprocessing.}
 
