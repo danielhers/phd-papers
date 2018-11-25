@@ -587,7 +587,9 @@ parataxis & 2 & 0 & 0 & 1 & 0 & 2 & \textbf{64} & 0 & 0 & 1 & 0 & 4 \\
 vocative & \textbf{9} & 1 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
 xcomp & \textbf{15} & 0 & 0 & 0 & 0 & 0 & 5 & 0 & 0 & 3 & 0 & 0
 \end{tabular}
-\caption{UD-UCCA confusion matrix calculated from the EWT dataset (\S\ref{sec:experiments}).
+\caption{UD-UCCA confusion matrix calculated from EWT
+gold-standard annotations (\S\ref{sec:experiments})
+by comparing incoming edge labels for units with the same terminal yields.
 \label{tab:confusion_matrix}}
 \end{table}
 
@@ -752,10 +754,97 @@ Did services I asked them NOT to do.
 26315003:
 The prices were worth what I got.
 
-\paragraph{Flattening of scene structure.}
+\subsection{Flattening of scene structure.}
 
 26510000
 Did a great job of removing my tree in Conyers.
+
+\subsection{Similar Treatment}
+Same content more or less
+
+det, iobj, nsubj: match almost one-to-one. no need for discussion (maybe a brief comment on determiner)
+
+maybe also obj and expl are cases of almost one-to-one, but need to verify
+
+aux and cc. aux: split between F (auxilliary verbs) and D (modals). TUPA gets ~100\%; same with cc: split between N and L (mention that it's a convention difference that we fixed)
+
+mark: Split between R, L and F. A matter of convention. TUPA does perfectly on this.
+
+
+
+\subsection{Simply Mappable Categories}
+
+Different axes of generalization, but the divergence can be fairly straightforwardly defined.
+
+\paragraph{advcl and parataxis.}
+linkage is different
+
+\paragraph{advmod and obl.}
+A/D distinction is different
+
+\paragraph{amod.}
+Split between E, S and E|S
+
+\paragraph{compound.}
+Not a semantic category. We should add a few examples in the paper, but this is not surprising
+
+\paragraph{discourse.}
+H/L/G distinction
+
+\paragraph{fixed.}
+Unanalyzability is different (I would add an example or two)
+
+\paragraph{head.}
+about 17\% are unmatched, about 14\% are not P/S/H/C, which
+leaves about 70\% of cases where the notion of syntactic head matches
+that of a ``UCCA head''.
+
+
+
+\subsection{Complex Content Differences}
+
+\paragraph{acl.}
+
+\paragraph{xcomp}
+
+\paragraph{conj and list.}
+Distinction between Scene and non-Scene coordination (not very interesting)
+
+
+
+\subsection{Cases that require a deeper look into}
+
+\paragraph{appos.}
+why so many unmatched? (it makes sense that it's split between E/C)
+
+\paragraph{case.}
+mostly match (because it's usually one word), but prepositions can be several things in UCCA (relators which are similar to case markers, but also main relations, the borderline between analyzable and unanalyzable plays some role).
+
+\paragraph{ccomp.}
+why so many unmatched?
+
+\paragraph{nmod.}
+In UCCA, this is split across A, E, E|S. 
+
+\paragraph{nummod.}
+why so many unmatched. We need some examples.
+
+\paragraph{vocative.}
+probably just split between A and G+A, but we need a manual inspection of all of them.
+
+
+
+\subsection{Formalism Differences / Rare}
+
+\paragraph{root, punct and flat.}
+
+\paragraph{csubj, dep, goeswith and orphan}.
+$\leq 10$ samples, we don't analyze
+
+
+\subsection{Discussion by UCCA Labels}
+
+Going over each category is somewhat redundant, but we do discuss unmatched UCCA units, according to category (and put the histogram of units).
 
 
 \section{Experimental Setup}\label{sec:experiments}
