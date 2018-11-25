@@ -598,121 +598,6 @@ by comparing incoming edge labels for units with the same terminal yields.
 \section{Analysis of Divergences}\label{sec:analysis}
 
 
-
-As an example for divergence between the schemes, Figure~\ref{fig:wsj_0011.8} shows
-the same sentence after conversion and as manually annotated.
-This short sentence got an $F_1$ of 34.8\%.
-
-
-\begin{figure*}[!ht]
-\fbox{\begin{subfigure}{\textwidth}
-\begin{dependency}
-\begin{deptext}[column sep=2em]
-% sent_id = wsj_0011.8
-% text = Imports were at $ 50.38 billion , up 19 % .
-% doc_id = wsj_0011
-Imports \& were \& at  \& \$   \& 50.38 \& billion \& ,     \& up  \& 19  \& \%   \& .    \\
-%NOUN    \& AUX  \& ADP \& SYM \& NUM   \& NUM     \& PUNCT \& ADV \& NUM \& SYM \& PUNCT \\
-\end{deptext}
-\depedge{4}{1}{nsubj}
-\depedge{4}{2}{cop}
-\depedge{4}{3}{case}
-\deproot{4}{root}
-\depedge{6}{5}{compound}
-\depedge{4}{6}{nummod}
-\depedge{4}{7}{punct}
-\depedge{4}{8}{advmod}
-\depedge{10}{9}{nummod}
-\depedge{8}{10}{obl:npmod}
-\depedge{4}{11}{punct}
-\end{dependency}
-\caption{Original UD tree.\label{fig:wsj_0011.8_ud}}
-\end{subfigure}}
-\fbox{\begin{subfigure}{\textwidth}
-  \centering
-  \scalebox{.95}{
-\begin{tikzpicture}[->,level distance=1cm, sibling distance=22mm,
-  level 2/.style={level distance=2cm,
-  level 3/.style={level distance=1cm}},
-  every circle node/.append style={fill=black}]
-  \tikzstyle{word} = [font=\rmfamily,color=black]
-  \node (1_1) [circle] {}
-  {
-  child {node (1_2) [circle] {}
-    {
-    child {node (1_4) [word] {Imports}  edge from parent node[left]  {\scriptsize $A$}}
-    child {node (1_5) [word] {were}  edge from parent node[left]  {\scriptsize $F$}}
-    child {node (1_6) [word] {at}  edge from parent node[left]  {\scriptsize $R$}}
-    child {node (1_3) [word] {\$}  edge from parent node[left]  {\scriptsize $P$}}
-    child {node (1_7) [circle] {}
-      {
-      child {node (1_13) [word] {50.38}  edge from parent node[left]  {\scriptsize $E$}}
-      child {node (1_8) [word] {billion}  edge from parent node[auto]  {\scriptsize $C$}}
-      } edge from parent node[left]  {\scriptsize $E$}}
-    child {node (1_9) [word] {,}  edge from parent node[right]  {\scriptsize $U$}}
-    child {node (1_10) [circle] {}
-      {
-      child {node (1_14) [circle] {}
-        {
-        child {node (1_16) [word] {up}  edge from parent node[left]  {\scriptsize $D$}}
-        child {node (1_15) [word] {19}  edge from parent node[auto]  {\scriptsize $C$}}
-        } edge from parent node[left]  {\scriptsize $E$}}
-      child {node (1_11) [word] {\%}  edge from parent node[auto]  {\scriptsize $C$}}
-      child {node (1_12) [word] {.}  edge from parent node[auto]  {\scriptsize $U$}}
-      } edge from parent node[auto]  {\scriptsize $E$}}
-    } edge from parent node[auto]  {\scriptsize $H$}}
-  }
-;
-\end{tikzpicture}
-  }\caption{Converted from gold UD to UCCA.\label{fig:wsj_0011.8_converted}}
-\end{subfigure}}
-  
-\fbox{\begin{subfigure}{\textwidth}
-  \centering
-  \scalebox{.95}{
-\begin{tikzpicture}[->,level distance=2cm,
-  level 1/.style={sibling distance=45mm},
-  level 2/.style={sibling distance=2cm},
-  level 3/.style={sibling distance=2cm},
-  every circle node/.append style={fill=black}]
-  \tikzstyle{word} = [font=\rmfamily,color=black]
-  \node (1_1) [circle] {}
-  {
-  child {node (1_2) [circle] {}
-    {
-    child {node (1_3) [word] {Imports}  edge from parent node[auto]  {\scriptsize $A$}}
-    child {node (1_4) [word] {were}  edge from parent node[auto]  {\scriptsize $S$}}
-    child {node (1_5) [circle] {}
-      {
-      child {node (1_6) [word] {at}  edge from parent node[auto]  {\scriptsize $R$}}
-      child {node (1_14) [word] {\$}  edge from parent node[auto]  {\scriptsize $U$}}
-      child {node (1_8) [word] {50.38}  edge from parent node[auto]  {\scriptsize $E$}}
-      child {node (1_9) [word] {billion}  edge from parent node[auto]  {\scriptsize $C$}}
-      } edge from parent node[auto]  {\scriptsize $A$}}
-    } edge from parent node[auto]  {\scriptsize $H$}}
-  child {node (1_15) [word] {,}  edge from parent node[auto]  {\scriptsize $U$}}
-  child {node (1_10) [circle] {}
-    {
-    child {node (1_18) [word] {\textbf{IMPLICIT}}  edge from parent node[auto]  {\scriptsize $P$}}
-    child {node (1_11) [circle] {}
-      {
-      child {node (1_12) [word] {up}  edge from parent node[auto]  {\scriptsize $R$}}
-      child {node (1_13) [word] {19}  edge from parent node[auto]  {\scriptsize $C$}}
-      child {node (1_16) [word] {\%}  edge from parent node[auto]  {\scriptsize $U$}}
-      } edge from parent node[auto]  {\scriptsize $A$}}
-    } edge from parent node[auto]  {\scriptsize $H$}}
-  child {node (1_17) [word] {.}  edge from parent node[auto]  {\scriptsize $U$}}
-  };
-  \draw[dashed,->] (1_10) to node [auto] {\scriptsize $A$} (1_3);
-\end{tikzpicture}
-  }\caption{Manually annotated UCCA.\label{fig:wsj_0011.8_orig}}
-  
-\end{subfigure}}
-
-\caption{UCCA graphs for sentence \lstinline{wsj_0011.8}\label{fig:wsj_0011.8}}
-
-\end{figure*}
-
 More differences:
 \begin{itemize}
 \item Identity vs. set membership in copular constructions:
@@ -834,7 +719,7 @@ probably just split between A and G+A, but we need a manual inspection of all of
 
 \paragraph{root, punct and flat.}
 
-\paragraph{csubj, dep, goeswith and orphan}.
+\paragraph{csubj, dep, goeswith and orphan.}
 $\leq 10$ samples, we don't analyze
 
 
