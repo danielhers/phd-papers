@@ -730,7 +730,8 @@ Excluding punctuation, this gives 13293 yields in UCCA and
 Of these, 8416 are common, meaning that an oracle would get an $F_1$ score
 of 72.8\% if it had the gold label for each edge on conversion.
 
-In the following subsections, we inspect the differences and categorize them.
+In the following subsections, we categorize the UD relations according to their
+treatment in UCCA.
 
 
 \subsection{Similar Treatment}
@@ -1181,9 +1182,12 @@ the pipeline approach %of basing semantic parsing on the output of syntactic par
 between UCCA and other semantic parsing tasks, as well as Universal Dependency Parsing.
 We perform a similar experiment, but instead of a multitask model,
 we use UD data converted to UCCA and train on it with the same single-task model (\S\ref{sec:experiments}).
-%
-%
-%\section{Conclusion}\label{sec:conclusion}
+
+
+\section{Conclusion}\label{sec:conclusion}
+
+We carefully examine similarities and divergences between UD and UCCA,
+and develop a converter whose accuracy is on par with a UCCA parser.
 
 
 \bibliography{references}
