@@ -72,20 +72,113 @@
 \maketitle
 
 \begin{abstract}
-Syntax can be used to inform semantic parsers, as demonstrated by
-methods such as syntactic features and multi-task learning.
-However, previously explored methods for such integration
-are almost invariably generic, and do not leverage any
-scheme-specific, language-specific, or
-construction-specific information.
-In this paper we compare and contrast syntactic and semantic schemes,
-taking Universal Dependencies (UD) and UCCA as a test case.
-We map their divergences and convergences in terms of content,
-and identify cases of refinement or qualitatively different generalizations.
-Our findings show that ... (FILL IN THE BLANK).
-Finally, based on our analysis, we develop a method for improving a UCCA parser
-by enriching its training data with automatically converted UD graphs.
+  Syntax can be used to inform semantic parsers, as previously explored
+  by methods such as  multi-task learning, syntactic feature encoding and syntactic scaffolding.
+  However, these methods are almost invariably generic, and do not leverage any
+  scheme-specific, language-specific, or construction-specific information.
+  In this paper we compare and contrast syntactic and semantic schemes,
+  taking Universal Dependencies (UD) and UCCA as a test case.
+  We emprically evaluate in what cases the two schemes converge in content,
+  in which one scheme refines another, and in which they apply different axes
+  of categorization.
+  Our findings show that ... (FILL IN THE BLANK).
+  To demonstrate the utility of construction-specific protocols
+  for leverging syntax for semantic parsing,
+  we show that a simple UD to UCCA coverter can be used to imrpove 
+  UCCA parsing performance.
 \end{abstract}
+
+
+% After abstracting away from divergences that result from conventions or formalism differences, we discover
+% that most content divergences can ascribed to a few conceptual differences, that recur in many constructions:
+% 1. the fundamental distinction between a Scene and a non-Scene in UCCA, vs. the POS-based distinction of UD
+% 2. A/D distinction
+% 3. Inter-clause/inter-scene linkage
+% We further discuss two major constructions, where the schemes take markedly different approaches: xcomp and acl.
+
+
+% Similar Treatment
+%==================
+
+% Same content more or less
+
+% 3 det, iobj, nsubj: match almost one-to-one. no need for discussion (maybe a brief comment on determiner)
+
+% 2 maybe also obj and expl are cases of almost one-to-one, but need to verify
+
+% 2 aux and cc. aux: split between F (auxilliary verbs) and D (modals). TUPA gets ~100%; same with cc: split between N and L (mention that it's a convention difference that we fixed)
+
+% 1 mark: Split between R, L and F. A matter of convention. TUPA does perfectly on this.
+
+
+
+% Simply Mappable Categories
+%===========================
+
+% Different axes of generalization, but the divergence can be fairly straightforwardly defined.
+
+% 1 advcl, 1 parataxis: linkage is different
+
+% 2 advmod, obl: A/D distinction is different
+
+% 1 amod: Split between E, S and E|S
+
+% 1 compound: Not a semantic category. We should add a few examples in the paper, but this is not surprising
+
+% 1 discourse: H/L/G distinction
+
+% 1 fixed: Unanalyzability is different (I would add an example or two)
+
+% 1 head: about 17\% are unmatched, about 14\% are not P/S/H/C, which
+% leaves about 70\% of cases where the notion of syntactic head matches
+% that of a ``UCCA head''.
+
+
+
+% Complex Content Differences
+% ===========================
+
+% acl
+
+% xcomp
+
+% conj, list: Distinction between Scene and non-Scene coordination (not very interesting)
+
+
+
+% Cases that require a deeper look into
+% =======================================
+
+% 1 appos: why so many unmatched? (it makes sense that it's split between E/C)
+
+% 1 case: mostly match (because it's usually one word), but prepositions can be several things in UCCA (relators which are similar to case markers, but also main relations, the borderline between analyzable and unanalyzable plays some role).
+
+% 1 ccomp: why so many unmatched?
+
+% 1 nmod: In UCCA, this is split across A, E, E|S. 
+
+% 1 nummod: why so many unmatched. We need some examples.
+
+% 1 vocative: probably just split between A and G+A, but we need a manual inspection of all of them.
+
+
+
+% Formalism Differences / Rare
+% ============================
+
+% root, punct, flat
+
+% 4 csubj, dep, goeswith, orphan: <=10 samples, we don't analyze. just mention in the text
+% that we don't analyze
+
+
+% Discussion by UCCA Labels
+%===========================
+
+% Going over each category is somewhat redundant, but we do discuss unmatched UCCA units, according to category (and put the histogram of units).
+
+
+
 
 \section{Introduction}\label{sec:introduction}
 
