@@ -72,20 +72,23 @@
 \maketitle
 
 \begin{abstract}
-  Syntax can be used to inform semantic parsers, as previously explored
-  by methods such as  multi-task learning, syntactic feature encoding and syntactic scaffolding.
-  However, these methods are almost invariably generic, and do not leverage any
-  scheme-specific, language-specific, or construction-specific information.
+  Syntax can be used to inform semantic parsers,
+  as shown by various methods such as multi-task learning and syntactic features.
+  However, these methods are almost invariably generic,
+  and do not assume any scheme-specific, language-specific, or
+  construction-specific information.
   In this paper we compare and contrast syntactic and semantic schemes,
   taking Universal Dependencies (UD) and UCCA as a test case.
-  We emprically evaluate in what cases the two schemes converge in content,
-  in which one scheme refines another, and in which they apply different axes
-  of categorization.
-  Our findings show that ... (FILL IN THE BLANK).
-  To demonstrate the utility of construction-specific protocols
-  for leverging syntax for semantic parsing,
-  we show that a simple UD to UCCA coverter can be used to imrpove 
-  UCCA parsing performance.
+  %We emprically evaluate in what cases the two schemes converge and diverge in their content,
+  After abstracting away from differences of convention or formalism,
+  we find that most content divergences can ascribed to three fundamental differences: 
+  (1) UCCA's distinction between a Scene and a non-Scene vs. UD's POS-based distinctions;
+  (2) UCCA's distinction between particiapnts and secondary relations, which is not encoded in UD; 
+  (3) Differences in the treatment of inter-clause/inter-Scene linkage.
+  We further discuss two major constructions, where the schemes take markedly different approaches:
+  adjectival clauses and open clausal complements.
+  To demonstrate the utility of construction-specific protocols for leverging syntax for semantic parsing,
+  we show that a simple UD to UCCA coverter can be used to imrpove UCCA parsing performance.
 \end{abstract}
 
 
