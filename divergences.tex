@@ -599,7 +599,7 @@ with H when it has sibling H's (parallel scenes).
 We select P rather than S (state) as the main relation in the normalization because
 it is much more common (14,719 P's in the Wiki corpus as opposed to 3354 S's).
 
-\subsection{Local Modifications}
+\subsection{Local Modifications}\label{sec:local}
 
 In general, the conversion protocol attaches low,
 selecting for each terminal $t$ the lowest non-terminal of which $t$
@@ -687,13 +687,13 @@ treatment in UCCA.
 
 \subsection{Similar Treatment}
 These constructions are handled similarly in UD and UCCA,
-perhaps with differences of convention or formalism (but no content differences).
+perhaps with differences of convention or formalism (but no content differences):
 
 \paragraph{det, expl, iobj, nsubj, and obj.}
 With an almost perfect match to UCCA categories,
 these relations are syntactic refinements of
 Elaborator (det), Function (expl) and Participant (iobj, nsubj and obj).
-The exceptions are cases of unanalyzable multi-word expressions,
+The exceptions are mostly cases of unanalyzable multi-word expressions,
 which are analyzed in UD: ``a bit'', ``bites the dust'', ``when it comes to''.
 In addition, nsubj and obj are annotated as Process or State when they
 represent a (nominal) predicate,
@@ -703,14 +703,17 @@ are analyzed as expletives in UCCA (and annotated as Function),
 and some wh-pronouns (``which'', ``who'') as Linkers or Relators.
 
 \paragraph{aux and cc.}
-aux: split between F (auxilliary verbs) and D (modals). TUPA gets ~100\%; same with cc: split between N and L (mention that it's a convention difference that we fixed)
+aux is split between Function (auxiliary verbs) and aDverbial (modals),
+while cc is split between coNnector (between non-scenes) and Linker (between scenes).
 
 \paragraph{cop.}
-UCCA distinguishes identity vs. set membership in copular constructions:
-``Mr. Vinken is chairman of Elsevier N.V.'' vs. ``The morbidity rate is a striking finding''.
+UCCA distinguishes between copular constructions expressing
+identity (e.g. ``I am a college student'' where the copula is annotated as State)
+as opposed to attributes or set membership
+(e.g. ``Mercedes and Dan are very thorough'' where it is annotated as F).
 
 \paragraph{mark.}
-Split between R, L and F. A matter of convention. TUPA does perfectly on this.
+Split between R, L and F. A matter of convention.
 Infinitive vs. purpose ``to''. 
 
 
@@ -719,7 +722,11 @@ Infinitive vs. purpose ``to''.
 Different axes of generalization, but the divergence can be fairly straightforwardly defined.
 
 \paragraph{advcl and parataxis.}
-linkage is different
+linkage is different.
+While in advcl the dependent \verb|mark| is attached to the clause's predicate in UD,
+in UCCA inter-scene linkage is annotated as a flat structure.
+This is convention difference that we fixed with local modifications (\S\ref{sec:local}).
+Otherwise half of the advcl would be unmatched.
 
 \paragraph{advmod and obl.}
 A/D distinction is different
@@ -767,7 +774,11 @@ Did a great job of removing my tree in Conyers.
 \paragraph{xcomp}
 
 \paragraph{conj and list.}
-Distinction between Scene and non-Scene coordination (not very interesting)
+Distinction between Scene and non-Scene coordination (not very interesting).
+While in conj the dependent \verb|cc| is attached to the following conjunct in UD,
+in UCCA coordination is annotated as a flat structure.
+This is convention difference that we fixed with local modifications (\S\ref{sec:local}).
+Otherwise most conj would be unmatched.
 
 
 
