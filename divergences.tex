@@ -52,7 +52,7 @@
 \usetikzlibrary{shapes,shapes.misc}
 
 
-\title{Identifying Divergences between Syntactic and Semantic Parsing}
+\title{Identifying Content Differences between Syntactic and Semantic Parsing}
 
 \author{Daniel Hershcovich$^{1,2}$ \\
   \\\And
@@ -81,13 +81,13 @@
   taking Universal Dependencies (UD) and UCCA as a test case.
   %We emprically evaluate in what cases the two schemes converge and diverge in their content,
   After abstracting away from differences of convention or formalism,
-  we find that most content divergences can ascribed to three fundamental differences: 
-  (1) UCCA's distinction between a Scene and a non-Scene vs. UD's POS-based distinctions;
-  (2) UCCA's distinction between particiapnts and secondary relations, which is not encoded in UD; 
+  we find that most content divergences can ascribed to: 
+  (1) UCCA's distinction between a Scene and a non-Scene as opposed to UD's POS-based distinctions;
+  (2) UCCA's distinction between particiapnts and secondary relations, not accounted for by UD; 
   (3) Differences in the treatment of inter-clause/inter-Scene linkage.
   We further discuss two major constructions, where the schemes take markedly different approaches:
   adjectival clauses and open clausal complements.
-  To demonstrate the utility of construction-specific protocols for leverging syntax for semantic parsing,
+  To demonstrate the feasibility of taylored protocols for using syntax in semantic parsing,
   we show that a simple UD to UCCA coverter can be used to imrpove UCCA parsing performance.
 \end{abstract}
 
@@ -185,6 +185,9 @@
 
 \section{Introduction}\label{sec:introduction}
 
+
+One of the fundamental functions of syntax is to help semantics.
+
 In this work we carefully examine the differences and commonalities
 between syntactic and semantic parsing.
 We take Universal Dependencies \cite[UD; ][]{nivre2016universal},
@@ -207,12 +210,14 @@ Semantic representation schemes have seen major progress in recent years \cite{a
 At the same time, semantic considerations are taken into account in the design of syntactic annotation schemes
 \cite{przepiorkowski2018arguments}.
 
+
 \begin{itemize}
 \item Evaluation metric,
 \item Amount of training data,
 \item Maturity of technology dedicated to the scheme,
 \item Learnability of the scheme.
 \end{itemize}
+
 
 Learnability, in turn, is affected by
 \begin{itemize}
