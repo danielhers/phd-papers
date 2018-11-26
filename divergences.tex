@@ -587,19 +587,25 @@ with H when it has sibling H's (parallel scenes).
 We select P rather than S (state) as the main relation in the normalization because
 it is much more common (14,719 P's in the Wiki corpus as opposed to 3354 S's).
 
+\subsection{Local Modifications}
+
 In general, the conversion protocol attaches low,
 selecting for each terminal $t$ the lowest non-terminal of which $t$
 is the head terminal.
-We extend the conversion protocol by adding special rules for a few cases,
-where there is a systematic mapping between the UCCA and UD guidelines
-and it is different from the default low-attaching behavior,
-selecting a forward-attaching behavior instead:
-\begin{itemize}
-  \item Conjunctions (\verb|cc| in UD) attach to the following
-  conjuncts (word with an incoming \verb|conj| relation).
-  \item \verb|mark| is attached to the following \verb|advcl|.
-\end{itemize}
-These rules are applied to the bilexical graph after the conversion process.
+To abstract away from convention differences,
+we extend the conversion protocol by adding special rules
+promoting the dependents of \verb|cc| relations,
+and of \verb|mark| dependents with an \verb|advcl| head
+(e.g. ``when'', ``if'', ``after'', and purposive ``to''),
+as there is a systematic mapping between the UCCA and UD guidelines
+and it is different from the default low-attaching behavior.
+%Selecting a forward-attaching behavior instead:
+%\begin{itemize}
+%  \item Conjunctions (\verb|cc| in UD) attach to the following
+%  conjuncts (word with an incoming \verb|conj| relation).
+%  \item \verb|mark| is attached to the following \verb|advcl|.
+%\end{itemize}
+%These rules are applied to the bilexical graph after the conversion process.
 
 \begin{table}[t]
 \centering
@@ -689,7 +695,7 @@ represent a (nominal) predicate,
 and the determiner (det) ``no'' as an aDverbial when it modifies one.
 Some nsubj instances of ``it'' and ``that''
 are analyzed as expletives in UCCA (and annotated as Function),
-and some wh-pronouns as Linkers or Relators.
+and some wh-pronouns (``which'', ``who'') as Linkers or Relators.
 
 \paragraph{aux and cc.}
 aux: split between F (auxilliary verbs) and D (modals). TUPA gets ~100\%; same with cc: split between N and L (mention that it's a convention difference that we fixed)
