@@ -220,7 +220,10 @@
   originating from differences of convention.
   
   Section \ref{sec:analysis} discusses a detailed analysis of the extent to which UD structures can be mapped
-  to UCCA structures. We find that most content differences between the schemes are due to the following factors:
+  to UCCA structures. Our analysis focuses only on UCCA's primary edges, that form a tree, and ignore remote
+	edges, that allow expressing shared arguments, which 
+	We find that most content differences between the schemes are due to the following factors:\oa{daniel, we need
+	to add references to the appropriate places in the text}
   
   \begin{enumerate}
     \item 
@@ -233,13 +236,18 @@
       aspect or modality. Again, the distinction cuts across syntactic categories, where secondary relations can be aspectual verbs such
       as ``begin'' or ``fail'', prepositional phrases such as ``with disrespect'', as well as adjectives or adverbs. 
     \item
-      The treatment of multi-word expressions is another source of divergence
-    
+      Whereas UD analyzes multi-word expressions
+			according to their syntactic structure, even where they are semantically opaque (e.g., ``take a shower'' is analyzed
+			similarly to ``take a book''), UCCA tends to annotate such expressions as units. 
+		\item
+			UD categorizes clause linkage into coordination, subordination (e.g., adverbial clauses), argumenthood (complement clauses),
+			and parataxis (a residual category). UCCA generally only distinguishes between argumenthood (where one Scene is
+			a participant in another) and linkages, which largely coordination, subordination and parataxis. 
+			Other divergences stems from differences between UCCA's notions of argumenthood. See Section \ref{}.
+			See Section \ref{}.
   \end{enumerate}
   
-  
 
-  
   The motivation for parsing into semantic structural representation is that it can be used more readily
   by semantic applications to reason about the processed utterance and manipulate it to find the required
   result.
