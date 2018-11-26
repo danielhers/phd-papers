@@ -52,7 +52,7 @@
 \usetikzlibrary{shapes,shapes.misc}
 
 
-\title{Identifying Content Differences between Syntactic and Semantic Parsing}
+\title{Content Differences between Syntactic and Semantic Parsing}
 
 \author{Daniel Hershcovich$^{1,2}$ \\
   \\\And
@@ -72,23 +72,24 @@
 \maketitle
 
 \begin{abstract}
-  Syntax can be used to inform semantic parsers,
-  as shown by various methods such as multi-task learning and syntactic features.
+  Syntax can benefit semantic parsing,
+  as shown by methods such as multi-task learning and syntactic features.
   However, these methods are almost invariably generic,
-  and do not assume any scheme-specific, language-specific, or
-  construction-specific information.
+  and are not informed by the details of target schemes and constructions.
+  A comparative study of syntactic and semantic treebanks can enable
+  the development of more informed methods.
   In this paper we compare and contrast syntactic and semantic schemes,
   taking Universal Dependencies (UD) and UCCA as a test case.
   %We emprically evaluate in what cases the two schemes converge and diverge in their content,
   After abstracting away from differences of convention or formalism,
   we find that most content divergences can ascribed to: 
   (1) UCCA's distinction between a Scene and a non-Scene as opposed to UD's POS-based distinctions;
-  (2) UCCA's distinction between particiapnts and secondary relations, not accounted for by UD; 
+  (2) UCCA's distinction between particiapnts and secondary relations; %, not accounted for by UD; 
   (3) Differences in the treatment of inter-clause/inter-Scene linkage.
   We further discuss two major constructions, where the schemes take markedly different approaches:
   adjectival clauses and open clausal complements.
-  To demonstrate the feasibility of taylored protocols for using syntax in semantic parsing,
-  we show that a simple UD to UCCA coverter can be used to imrpove UCCA parsing performance.
+  To demonstrate the feasibility of informed protocols for using syntax in semantic parsing,
+  we show that a simple converter can be used to improve UCCA parsing performance.
 \end{abstract}
 
 
@@ -560,7 +561,7 @@ These rules are applied to the bilexical graph after the conversion process.
 \scriptsize
 \setlength\tabcolsep{2pt}
 \begin{tabular}{l|ccccccccccccc}
- & A & C & D & E & F & G & H & L & N & P & R & S & \emptyset \\
+ & A & C & D & E & F & G & H & L & N & P & R & S & $\emptyset$ \\
 \hline
 acl & 15 & 0 & 0 & \textbf{38} & 1 & 0 & 16 & 0 & 0 & 1 & 0 & 2 & 104 \\
 advcl & 2 & 3 & 0 & 0 & 0 & 0 & \textbf{97} & 1 & 0 & 9 & 0 & 0 & 99 \\
@@ -594,7 +595,7 @@ orphan & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
 parataxis & 2 & 0 & 0 & 1 & 0 & 2 & \textbf{64} & 0 & 0 & 1 & 0 & 4 & 54 \\
 vocative & \textbf{9} & 1 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 xcomp & \textbf{15} & 0 & 0 & 0 & 0 & 0 & 5 & 0 & 0 & 3 & 0 & 0 & 132 \\
-\emptyset & 391 & 159 & 51 & 61 & 4 & 8 & 693 & 23 & 0 & 139 & 5 & 102
+$\emptyset$ & 391 & 159 & 51 & 61 & 4 & 8 & 693 & 23 & 0 & 139 & 5 & 102
 \end{tabular}
 \caption{UD-UCCA confusion matrix calculated from EWT
 gold-standard annotations (\S\ref{sec:experiments})
