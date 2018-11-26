@@ -83,9 +83,10 @@
   %We emprically evaluate in what cases the two schemes converge and diverge in their content,
   After abstracting away from differences of convention or formalism,
   we find that most content divergences can ascribed to: 
-  (1) UCCA's distinction between a Scene and a non-Scene as opposed to UD's POS-based distinctions;
-  (2) UCCA's distinction between particiapnts and secondary relations; %, not accounted for by UD; 
-  (3) Differences in the treatment of inter-clause/inter-Scene linkage.
+  (1) UCCA's distinction between a Scene and a non-Scene; % as opposed to UD's POS-based distinctions;
+  (2) UCCA's distinction between participants and secondary relations; %, not accounted for by UD; 
+  (3) different treatment of multi-word expressions (e.g., light verbs), and
+  (4) different treatment of inter-clause linkage.
   We further discuss two major constructions, where the schemes take markedly different approaches:
   adjectival clauses and open clausal complements.
   To demonstrate the feasibility of informed protocols for using syntax in semantic parsing,
@@ -186,45 +187,83 @@
 
 \section{Introduction}\label{sec:introduction}
 
+  A central goal of syntactic anntoation in NLP, is to provide a proxy to the semantics of a sentence.
+  Indeed, syntactic parses have been leveraged by semantic parsing technology using a variety of methods,
+  including using syntactic trees to prune the space of possible semantic structures \cite{Xue:04}, encoding
+  syntactic structure as features in semantic parsing \cite{hershcovitch2017,}, joint syntactic and semantic
+  parsing \cite{}, multi-task learning \cite{}, . 
+  Some syntactic schemes have a theory of syntax-semantics interface, which yielded the development
+  of conversion protocols between syntax and semantics \cite{reddy2016,predpatt,mike_lewis_thesis,Basile:13}.
 
-One of the fundamental functions of syntax is to help semantics.
+  Nevertheless, despite the centrality of the use of syntax for semantics, few works attempted
+  to systematically compare what information or semantic content is encoded in syntactic parses that is
+  not encoded in semantic parses, and vice versa. Such a study will enable the development of better
+  methods for distilling the overlapping content in syntactic and semantic structures, thereby supporting
+  the construction of better syntax-for-semantics algorithms, as well as pointing at problems in semantic
+  parsing that cannot be addressed this way. Finally, developing a methodology for comparing syntactic
+  and semantic treebanks can be used for conducing fine-grained error analysis for semantic parsers, sliced
+  by construction \cite[cf.][]{szubert2018structured}.
 
-In this work we carefully examine the differences and commonalities
-between syntactic and semantic parsing.
-We take Universal Dependencies \cite[UD; ][]{nivre2016universal},
-a syntactic annotation scheme,
-and Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal},
-a semantic one, as a test case.
+  This paper aims to address this gap, taking the syntactic Universal Dependencies scheme
+  \cite[UD; ][]{nivre2016universal},
+  and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal} scheme
+  as a test case. The two schemes were selected due to their conceptual similarity: 
+  both are designed to be applicable across languages and domains, 
+  to support rapid annotation and to be suitable for downstream language understanding applications.
+  Moreover, in order to attain cross-linguistic applicability, UD's design conventions are 
+  often not dissimilar to those made by semantic schemes. A notable example is UD's preference
+  of forming dependencies between lexical heads, rather than functional ones.
+  Moreover, UD structures have been recently transduced into skeletal semantic 
+  structures \cite[e.g.,][]{reddy2016,predpatt}, underscoring UD's conceptual similarity to semantic treebanks.
+  Since the purpose of the paper is to compare {\it content} differences, i.e., differences in the information
+  encoded by the structures, rather than their form, taking UD already cleans out much structural divergence
+  originating from differences of convention.
+  
+  Section \ref{sec:analysis} discusses a detailed analysis of the extent to which UD structures can be mapped
+  to UCCA structures. We find that most content differences between the schemes are due to the following factors:
+  
+  \begin{enumerate}
+    \item 
+      UCCA distinguishes between Scene units (that describe an event, state or activity) and non-Scene units, whereas
+      UD does not. This distinction cuts across UD's categories, as a Scene may be evoked by a noun (``Mike's kick'' is analyzed
+      similarly to ``Mike kicks'', while the first is a noun phrase and the second a clause). 
+    \item
+      UCCA's distinction 
+  \end{enumerate}
+  
+  
 
-The motivation for parsing into semantic structural representation is that it can be used more readily
-by semantic applications to reason about the processed utterance and manipulate it to find the required
-result.
-For example, in machine translation, a common model is the Vauquois Pyramid 
-\cite{vauquois1968survey},
-according to which translation between languages will become easier and more direct as we use
-a more semantic representation for the source and target languages,
-ignoring language-specific distinctions and capturing only what is preserved in translation.
-Parsing the source language and generating the target language, on the other hand, becomes more
-difficult as the representation becomes more semantic.
+  
+  The motivation for parsing into semantic structural representation is that it can be used more readily
+  by semantic applications to reason about the processed utterance and manipulate it to find the required
+  result.
+  For example, in machine translation, a common model is the Vauquois Pyramid 
+  \cite{vauquois1968survey},
+  according to which translation between languages will become easier and more direct as we use
+  a more semantic representation for the source and target languages,
+  ignoring language-specific distinctions and capturing only what is preserved in translation.
+  Parsing the source language and generating the target language, on the other hand, becomes more
+  difficult as the representation becomes more semantic.
 
-Semantic representation schemes have seen major progress in recent years \cite{abend2017state}.
-At the same time, semantic considerations are taken into account in the design of syntactic annotation schemes
-\cite{przepiorkowski2018arguments}.
-
-
-\begin{itemize}
-\item Evaluation metric,
-\item Amount of training data,
-\item Maturity of technology dedicated to the scheme,
-\item Learnability of the scheme.
-\end{itemize}
+  Semantic representation schemes have seen major progress in recent years \cite{abend2017state}.
+  At the same time, semantic considerations are taken into account in the design of syntactic annotation schemes
+  \cite{przepiorkowski2018arguments}.
 
 
-Learnability, in turn, is affected by
-\begin{itemize}
-\item Formal annotation choices \cite{Schwartz:12},
-\item Actual content that the scheme attempts to capture.
-\end{itemize}
+  \begin{itemize}
+    \item Evaluation metric,
+    \item Amount of training data,
+    \item Maturity of technology dedicated to the scheme,
+    \item Learnability of the scheme.
+  \end{itemize}
+
+
+  Learnability, in turn, is affected by
+
+  \begin{itemize}
+    \item Formal annotation choices \cite{Schwartz:12},
+    \item Actual content that the scheme attempts to capture.
+  \end{itemize}
 
 
 \paragraph{Content.}
@@ -442,7 +481,7 @@ While converted UD graphs form trees, enhanced++ UD graphs may not.}\label{fig:u
 \end{figure}
 
 
-\section{Training Data Size}\label{sec:data_size}
+\section{Shared Gold Standard Corpus}\label{sec:data_size}
 
 Syntactic dependency parsers require many training examples to achieve
 state-of-the-art results.
@@ -483,7 +522,7 @@ trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki devel
 As can be seen, the primary labeled F1 continues improving substantially even from 90\% to 100\%
 of the training data. More training data is likely to yield even better performance.
 
-\section{Conversion}\label{sec:conversion}
+\section{Comparison Methodology}\label{sec:conversion}
 
 \subsection{Structural Conversion}\label{sec:structural}
 
@@ -739,7 +778,10 @@ $\leq 10$ samples, we don't analyze
 Going over each category is somewhat redundant, but we do discuss unmatched UCCA units, according to category (and put the histogram of units).
 
 
-\section{Experimental Setup}\label{sec:experiments}
+
+\section{Improving UCCA Parsing with UD}\label{}
+
+\subsection{Experimental Setup}\label{sec:experiments}
 
 \begin{table*}[t]
 \centering
@@ -836,7 +878,7 @@ we convert the gold-standard UD graphs into UCCA.
 We use the converted UD data as ``silver-standard'' data \cite{W17-7306,N18-1104}
 and add it to the UCCA training set for training TUPA.
 
-\section{Results}\label{sec:results}
+\subsection{Results}\label{sec:results}
 
 
 \begin{table}[t]
@@ -1035,6 +1077,11 @@ and is an upper bound given a fixed structural conversion.
 
 
 %\section{Discussion}\label{sec:discussion}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{UCCA Parsing Error Analysis by UD}\label{sec:parser_error}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
