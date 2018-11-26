@@ -595,60 +595,66 @@ with H when it has sibling H's (parallel scenes).
 We select P rather than S (state) as the main relation in the normalization because
 it is much more common (14,719 P's in the Wiki corpus as opposed to 3354 S's).
 
+\subsection{Local Modifications}
+
 In general, the conversion protocol attaches low,
 selecting for each terminal $t$ the lowest non-terminal of which $t$
 is the head terminal.
-We extend the conversion protocol by adding special rules for a few cases,
-where there is a systematic mapping between the UCCA and UD guidelines
-and it is different from the default low-attaching behavior,
-selecting a forward-attaching behavior instead:
-\begin{itemize}
-  \item Conjunctions (\verb|cc| in UD) attach to the following
-  conjuncts (word with an incoming \verb|conj| relation).
-  \item \verb|mark| is attached to the following \verb|advcl|/\verb|xcomp|.
-\end{itemize}
-These rules are applied to the bilexical graph after the conversion process.
+To abstract away from convention differences,
+we extend the conversion protocol by adding special rules
+promoting the dependents of \verb|cc| relations,
+and of \verb|mark| dependents with an \verb|advcl| head
+(e.g. ``when'', ``if'', ``after'', and purposive ``to''),
+as there is a systematic mapping between the UCCA and UD guidelines
+and it is different from the default low-attaching behavior.
+%Selecting a forward-attaching behavior instead:
+%\begin{itemize}
+%  \item Conjunctions (\verb|cc| in UD) attach to the following
+%  conjuncts (word with an incoming \verb|conj| relation).
+%  \item \verb|mark| is attached to the following \verb|advcl|.
+%\end{itemize}
+%These rules are applied to the bilexical graph after the conversion process.
 
 \begin{table}[t]
 \centering
 \scriptsize
 \setlength\tabcolsep{2pt}
 \begin{tabular}{l|ccccccccccccc}
- & A & C & D & E & F & G & H & L & N & P & R & S & $\emptyset$ \\
-\hline
-acl & 15 & 0 & 0 & \textbf{38} & 1 & 0 & 16 & 0 & 0 & 1 & 0 & 2 & 104 \\
-advcl & 2 & 3 & 0 & 0 & 0 & 0 & \textbf{97} & 1 & 0 & 9 & 0 & 0 & 99 \\
-advmod & 61 & 10 & \textbf{528} & 48 & 13 & 33 & 4 & 61 & 0 & 2 & 9 & 5 & 71 \\
-amod & 1 & 36 & 101 & \textbf{217} & 2 & 0 & 7 & 0 & 0 & 5 & 0 & 155 & 65 \\
-appos & 1 & 11 & 1 & \textbf{12} & 0 & 0 & 4 & 0 & 0 & 0 & 0 & 4 & 9\\
-aux & 0 & 0 & 95 & 0 & \textbf{284} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 4 \\
-case & 1 & 5 & 3 & 20 & 39 & 0 & 0 & 50 & 7 & 1 & \textbf{473} & 62 & 75 \\
-cc & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \textbf{305} & 69 & 0 & 2 & 0 & 12 \\
-ccomp & \textbf{73} & 0 & 0 & 0 & 0 & 0 & 7 & 0 & 0 & 0 & 0 & 1 & 46 \\
-compound & 18 & 23 & 12 & \textbf{181} & 7 & 0 & 0 & 0 & 0 & 24 & 3 & 5 & 161 \\
-conj & 10 & 84 & 1 & 0 & 0 & 0 & \textbf{255} & 0 & 0 & 16 & 1 & 47 & 94 \\
-cop & 0 & 0 & 1 & 0 & \textbf{332} & 0 & 0 & 1 & 0 & 3 & 1 & 22 & 4 \\
-csubj & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 8 \\
-dep & 0 & 0 & 0 & 0 & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-det & 4 & 1 & 22 & \textbf{773} & 1 & 1 & 0 & 0 & 0 & 0 & 2 & 0 & 30 \\
-discourse & 0 & 1 & 0 & 0 & 1 & 6 & \textbf{13} & 3 & 0 & 0 & 0 & 1 & 1 \\
-expl & 3 & 0 & 0 & 0 & \textbf{19} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
-fixed & 0 & \textbf{2} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 13 \\
-goeswith & 0 & 0 & 1 & \textbf{4} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 3 \\
-head & 168 & \textbf{1395} & 147 & 62 & 101 & 24 & 432 & 3 & 1 & 1050 & 12 & 398 & 761 \\
-iobj & \textbf{19} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-list & 0 & 2 & 0 & 0 & 0 & 0 & \textbf{8} & 0 & 0 & 0 & 0 & 2 & 2 \\
-mark & 0 & 0 & 5 & 1 & \textbf{155} & 1 & 0 & 134 & 1 & 0 & 83 & 1 & 20 \\
-nmod & 92 & 1 & 7 & \textbf{232} & 0 & 0 & 7 & 0 & 0 & 0 & 0 & 126 & 115 \\
-nsubj & \textbf{979} & 1 & 0 & 0 & 14 & 0 & 4 & 14 & 0 & 9 & 15 & 3 & 37 \\
-nummod & 9 & 4 & 4 & \textbf{58} & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 26 \\
-obj & \textbf{427} & 6 & 10 & 6 & 2 & 0 & 2 & 3 & 0 & 13 & 3 & 0 & 96 \\
-obl & \textbf{233} & 1 & 91 & 8 & 7 & 4 & 8 & 4 & 0 & 1 & 7 & 0 & 135 \\
-orphan & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
-parataxis & 2 & 0 & 0 & 1 & 0 & 2 & \textbf{64} & 0 & 0 & 1 & 0 & 4 & 54 \\
-vocative & \textbf{9} & 1 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-xcomp & \textbf{15} & 0 & 0 & 0 & 0 & 0 & 5 & 0 & 0 & 3 & 0 & 0 & 132 \\
-$\emptyset$ & 391 & 159 & 51 & 61 & 4 & 8 & 693 & 23 & 0 & 139 & 5 & 102
+ & A & C & D & E & F & G & H & L & N & P & R & S & \emptyset \\
+ \hline
+acl & 15 & 0 & 0 & 38 & 1 & 0 & 16 & 0 & 0 & 1 & 0 & 1 & 104 \\
+advcl & 2 & 3 & 0 & 0 & 0 & 0 & 100 & 1 & 0 & 4 & 0 & 0 & 99 \\
+advmod & 61 & 10 & 528 & 44 & 13 & 33 & 4 & 61 & 0 & 2 & 8 & 5 & 71 \\
+amod & 1 & 36 & 101 & 217 & 2 & 0 & 7 & 0 & 0 & 3 & 0 & 96 & 65 \\
+appos & 1 & 11 & 1 & 8 & 0 & 0 & 5 & 0 & 0 & 0 & 0 & 4 & 9 \\
+aux & 0 & 0 & 95 & 0 & 284 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 4 \\
+case & 1 & 5 & 3 & 20 & 39 & 0 & 0 & 50 & 7 & 1 & 472 & 53 & 75 \\
+cc & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 305 & 69 & 0 & 2 & 0 & 12 \\
+ccomp & 74 & 0 & 0 & 0 & 0 & 0 & 7 & 0 & 0 & 0 & 0 & 1 & 46 \\
+compound & 18 & 23 & 12 & 179 & 7 & 0 & 0 & 0 & 0 & 1 & 2 & 3 & 161 \\
+conj & 2 & 87 & 1 & 0 & 0 & 0 & 259 & 0 & 0 & 3 & 1 & 4 & 94 \\
+cop & 0 & 0 & 1 & 0 & 332 & 0 & 0 & 1 & 0 & 3 & 1 & 22 & 4 \\
+csubj & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 8 \\
+dep & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+det & 4 & 1 & 22 & 773 & 1 & 1 & 0 & 0 & 0 & 0 & 2 & 0 & 30 \\
+discourse & 0 & 1 & 0 & 0 & 1 & 6 & 13 & 3 & 0 & 0 & 0 & 1 & 1 \\
+expl & 3 & 0 & 0 & 0 & 19 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
+fixed & 0 & 2 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 13 \\
+goeswith & 0 & 0 & 1 & 4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 3 \\
+head & 148 & 1,393 & 142 & 52 & 99 & 23 & 435 & 3 & 1 & 954 & 11 & 355 & 761 \\
+iobj & 19 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+list & 0 & 2 & 0 & 0 & 0 & 0 & 8 & 0 & 0 & 0 & 0 & 0 & 2 \\
+mark & 0 & 0 & 5 & 0 & 155 & 1 & 0 & 134 & 1 & 0 & 83 & 1 & 20 \\
+nmod & 93 & 1 & 6 & 233 & 0 & 0 & 7 & 0 & 0 & 0 & 0 & 3 & 115 \\
+nsubj & 994 & 1 & 0 & 0 & 14 & 0 & 4 & 14 & 0 & 3 & 15 & 1 & 37 \\
+nummod & 6 & 4 & 4 & 51 & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 26 \\
+obj & 434 & 6 & 10 & 1 & 2 & 0 & 2 & 3 & 0 & 9 & 3 & 0 & 96 \\
+obl & 233 & 1 & 91 & 8 & 7 & 4 & 8 & 4 & 0 & 1 & 4 & 0 & 135 \\
+orphan & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+parataxis & 1 & 0 & 0 & 1 & 0 & 2 & 65 & 0 & 0 & 1 & 0 & 1 & 54 \\
+vocative & 9 & 1 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+xcomp & 43 & 1 & 3 & 1 & 0 & 0 & 3 & 0 & 0 & 6 & 0 & 6 & 115 \\
+\emptyset & 369 & 161 & 51 & 64 & 4 & 8 & 709 & 23 & 0 & 141 & 5 & 102 & 
 \end{tabular}
 \caption{UD-UCCA confusion matrix calculated from EWT
 gold-standard annotations (\S\ref{sec:experiments})
@@ -660,13 +666,6 @@ by comparing incoming edge labels for units with the same terminal yields.
 
 \section{Analysis of Divergences}\label{sec:analysis}
 
-
-More differences:
-\begin{itemize}
-\item Identity vs. set membership in copular constructions:
-    ``Mr. Vinken is chairman of Elsevier N.V.'' vs. ``The morbidity rate is a striking finding''.
-\item Infinitive vs. purpose ``to''. 
-\end{itemize}
 
 \subsection{Automatic identification of divergences}
 
@@ -690,13 +689,25 @@ perhaps with differences of convention or formalism (but no content differences)
 With an almost perfect match to UCCA categories,
 these relations are syntactic refinements of
 Elaborator (det), Function (expl) and Participant (iobj, nsubj and obj).
+The exceptions are cases of unanalyzable multi-word expressions,
+which are analyzed in UD: ``a bit'', ``bites the dust'', ``when it comes to''.
+In addition, nsubj and obj are annotated as Process or State when they
+represent a (nominal) predicate,
+and the determiner (det) ``no'' as an aDverbial when it modifies one.
+Some nsubj instances of ``it'' and ``that''
+are analyzed as expletives in UCCA (and annotated as Function),
+and some wh-pronouns (``which'', ``who'') as Linkers or Relators.
 
 \paragraph{aux and cc.}
 aux: split between F (auxilliary verbs) and D (modals). TUPA gets ~100\%; same with cc: split between N and L (mention that it's a convention difference that we fixed)
 
+\paragraph{cop.}
+UCCA distinguishes identity vs. set membership in copular constructions:
+``Mr. Vinken is chairman of Elsevier N.V.'' vs. ``The morbidity rate is a striking finding''.
+
 \paragraph{mark.}
 Split between R, L and F. A matter of convention. TUPA does perfectly on this.
-
+Infinitive vs. purpose ``to''. 
 
 
 \subsection{Simply Mappable Categories}
