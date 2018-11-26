@@ -559,43 +559,46 @@ These rules are applied to the bilexical graph after the conversion process.
 \centering
 \scriptsize
 \setlength\tabcolsep{2pt}
-\begin{tabular}{l|cccccccccccc}
- & A & C & D & E & F & G & H & L & N & P & R & S \\
+\begin{tabular}{l|ccccccccccccc}
+ & A & C & D & E & F & G & H & L & N & P & R & S & \emptyset \\
 \hline
-acl & 15 & 0 & 0 & \textbf{38} & 1 & 0 & 16 & 0 & 0 & 1 & 0 & 2 \\
-advcl & 2 & 3 & 0 & 0 & 0 & 0 & \textbf{97} & 1 & 0 & 9 & 0 & 0 \\
-advmod & 61 & 10 & \textbf{528} & 48 & 13 & 33 & 4 & 61 & 0 & 2 & 9 & 5 \\
-amod & 1 & 36 & 101 & \textbf{217} & 2 & 0 & 7 & 0 & 0 & 5 & 0 & 155 \\
-appos & 1 & 11 & 1 & \textbf{12} & 0 & 0 & 4 & 0 & 0 & 0 & 0 & 4 \\
-aux & 0 & 0 & 95 & 0 & \textbf{284} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-case & 1 & 5 & 3 & 20 & 39 & 0 & 0 & 50 & 7 & 1 & \textbf{473} & 62 \\
-cc & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \textbf{305} & 69 & 0 & 2 & 0 \\
-ccomp & \textbf{73} & 0 & 0 & 0 & 0 & 0 & 7 & 0 & 0 & 0 & 0 & 1 \\
-compound & 18 & 23 & 12 & \textbf{181} & 7 & 0 & 0 & 0 & 0 & 24 & 3 & 5 \\
-conj & 10 & 84 & 1 & 0 & 0 & 0 & \textbf{255} & 0 & 0 & 16 & 1 & 47 \\
-cop & 0 & 0 & 1 & 0 & \textbf{332} & 0 & 0 & 1 & 0 & 3 & 1 & 22 \\
-csubj & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-dep & 0 & 0 & 0 & 0 & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-det & 4 & 1 & 22 & \textbf{773} & 1 & 1 & 0 & 0 & 0 & 0 & 2 & 0 \\
-discourse & 0 & 1 & 0 & 0 & 1 & 6 & \textbf{13} & 3 & 0 & 0 & 0 & 1 \\
-expl & 3 & 0 & 0 & 0 & \textbf{19} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-fixed & 0 & \textbf{2} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
-goeswith & 0 & 0 & 1 & \textbf{4} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-head & 168 & \textbf{1395} & 147 & 62 & 101 & 24 & 432 & 3 & 1 & 1050 & 12 & 398 \\
-iobj & \textbf{19} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-list & 0 & 2 & 0 & 0 & 0 & 0 & \textbf{8} & 0 & 0 & 0 & 0 & 2 \\
-mark & 0 & 0 & 5 & 1 & \textbf{155} & 1 & 0 & 134 & 1 & 0 & 83 & 1 \\
-nmod & 92 & 1 & 7 & \textbf{232} & 0 & 0 & 7 & 0 & 0 & 0 & 0 & 126 \\
-nsubj & \textbf{979} & 1 & 0 & 0 & 14 & 0 & 4 & 14 & 0 & 9 & 15 & 3 \\
-nummod & 9 & 4 & 4 & \textbf{58} & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 \\
-obj & \textbf{427} & 6 & 10 & 6 & 2 & 0 & 2 & 3 & 0 & 13 & 3 & 0 \\
-obl & \textbf{233} & 1 & 91 & 8 & 7 & 4 & 8 & 4 & 0 & 1 & 7 & 0 \\
-orphan & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-parataxis & 2 & 0 & 0 & 1 & 0 & 2 & \textbf{64} & 0 & 0 & 1 & 0 & 4 \\
-vocative & \textbf{9} & 1 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 0 & 0 \\
-xcomp & \textbf{15} & 0 & 0 & 0 & 0 & 0 & 5 & 0 & 0 & 3 & 0 & 0
+acl & 15 & 0 & 0 & \textbf{38} & 1 & 0 & 16 & 0 & 0 & 1 & 0 & 2 & 104 \\
+advcl & 2 & 3 & 0 & 0 & 0 & 0 & \textbf{97} & 1 & 0 & 9 & 0 & 0 & 99 \\
+advmod & 61 & 10 & \textbf{528} & 48 & 13 & 33 & 4 & 61 & 0 & 2 & 9 & 5 & 71 \\
+amod & 1 & 36 & 101 & \textbf{217} & 2 & 0 & 7 & 0 & 0 & 5 & 0 & 155 & 65 \\
+appos & 1 & 11 & 1 & \textbf{12} & 0 & 0 & 4 & 0 & 0 & 0 & 0 & 4 & 9\\
+aux & 0 & 0 & 95 & 0 & \textbf{284} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 4 \\
+case & 1 & 5 & 3 & 20 & 39 & 0 & 0 & 50 & 7 & 1 & \textbf{473} & 62 & 75 \\
+cc & 0 & 0 & 1 & 0 & 0 & 1 & 0 & \textbf{305} & 69 & 0 & 2 & 0 & 12 \\
+ccomp & \textbf{73} & 0 & 0 & 0 & 0 & 0 & 7 & 0 & 0 & 0 & 0 & 1 & 46 \\
+compound & 18 & 23 & 12 & \textbf{181} & 7 & 0 & 0 & 0 & 0 & 24 & 3 & 5 & 161 \\
+conj & 10 & 84 & 1 & 0 & 0 & 0 & \textbf{255} & 0 & 0 & 16 & 1 & 47 & 94 \\
+cop & 0 & 0 & 1 & 0 & \textbf{332} & 0 & 0 & 1 & 0 & 3 & 1 & 22 & 4 \\
+csubj & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 8 \\
+dep & 0 & 0 & 0 & 0 & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+det & 4 & 1 & 22 & \textbf{773} & 1 & 1 & 0 & 0 & 0 & 0 & 2 & 0 & 30 \\
+discourse & 0 & 1 & 0 & 0 & 1 & 6 & \textbf{13} & 3 & 0 & 0 & 0 & 1 & 1 \\
+expl & 3 & 0 & 0 & 0 & \textbf{19} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
+fixed & 0 & \textbf{2} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 13 \\
+goeswith & 0 & 0 & 1 & \textbf{4} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 3 \\
+head & 168 & \textbf{1395} & 147 & 62 & 101 & 24 & 432 & 3 & 1 & 1050 & 12 & 398 & 761 \\
+iobj & \textbf{19} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+list & 0 & 2 & 0 & 0 & 0 & 0 & \textbf{8} & 0 & 0 & 0 & 0 & 2 & 2 \\
+mark & 0 & 0 & 5 & 1 & \textbf{155} & 1 & 0 & 134 & 1 & 0 & 83 & 1 & 20 \\
+nmod & 92 & 1 & 7 & \textbf{232} & 0 & 0 & 7 & 0 & 0 & 0 & 0 & 126 & 115 \\
+nsubj & \textbf{979} & 1 & 0 & 0 & 14 & 0 & 4 & 14 & 0 & 9 & 15 & 3 & 37 \\
+nummod & 9 & 4 & 4 & \textbf{58} & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 26 \\
+obj & \textbf{427} & 6 & 10 & 6 & 2 & 0 & 2 & 3 & 0 & 13 & 3 & 0 & 96 \\
+obl & \textbf{233} & 1 & 91 & 8 & 7 & 4 & 8 & 4 & 0 & 1 & 7 & 0 & 135 \\
+orphan & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+parataxis & 2 & 0 & 0 & 1 & 0 & 2 & \textbf{64} & 0 & 0 & 1 & 0 & 4 & 54 \\
+vocative & \textbf{9} & 1 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+xcomp & \textbf{15} & 0 & 0 & 0 & 0 & 0 & 5 & 0 & 0 & 3 & 0 & 0 & 132 \\
+\emptyset & 391 & 159 & 51 & 61 & 4 & 8 & 693 & 23 & 0 & 139 & 5 & 102
 \end{tabular}
-\caption{UD-UCCA confusion matrix calculated from the EWT dataset (\S\ref{sec:experiments}).
+\caption{UD-UCCA confusion matrix calculated from EWT
+gold-standard annotations (\S\ref{sec:experiments})
+by comparing incoming edge labels for units with the same terminal yields.
 \label{tab:confusion_matrix}}
 \end{table}
 
@@ -603,121 +606,6 @@ xcomp & \textbf{15} & 0 & 0 & 0 & 0 & 0 & 5 & 0 & 0 & 3 & 0 & 0
 
 \section{Analysis of Divergences}\label{sec:analysis}
 
-
-
-As an example for divergence between the schemes, Figure~\ref{fig:wsj_0011.8} shows
-the same sentence after conversion and as manually annotated.
-This short sentence got an $F_1$ of 34.8\%.
-
-
-\begin{figure*}[!ht]
-\fbox{\begin{subfigure}{\textwidth}
-\begin{dependency}
-\begin{deptext}[column sep=2em]
-% sent_id = wsj_0011.8
-% text = Imports were at $ 50.38 billion , up 19 % .
-% doc_id = wsj_0011
-Imports \& were \& at  \& \$   \& 50.38 \& billion \& ,     \& up  \& 19  \& \%   \& .    \\
-%NOUN    \& AUX  \& ADP \& SYM \& NUM   \& NUM     \& PUNCT \& ADV \& NUM \& SYM \& PUNCT \\
-\end{deptext}
-\depedge{4}{1}{nsubj}
-\depedge{4}{2}{cop}
-\depedge{4}{3}{case}
-\deproot{4}{root}
-\depedge{6}{5}{compound}
-\depedge{4}{6}{nummod}
-\depedge{4}{7}{punct}
-\depedge{4}{8}{advmod}
-\depedge{10}{9}{nummod}
-\depedge{8}{10}{obl:npmod}
-\depedge{4}{11}{punct}
-\end{dependency}
-\caption{Original UD tree.\label{fig:wsj_0011.8_ud}}
-\end{subfigure}}
-\fbox{\begin{subfigure}{\textwidth}
-  \centering
-  \scalebox{.95}{
-\begin{tikzpicture}[->,level distance=1cm, sibling distance=22mm,
-  level 2/.style={level distance=2cm,
-  level 3/.style={level distance=1cm}},
-  every circle node/.append style={fill=black}]
-  \tikzstyle{word} = [font=\rmfamily,color=black]
-  \node (1_1) [circle] {}
-  {
-  child {node (1_2) [circle] {}
-    {
-    child {node (1_4) [word] {Imports}  edge from parent node[left]  {\scriptsize $A$}}
-    child {node (1_5) [word] {were}  edge from parent node[left]  {\scriptsize $F$}}
-    child {node (1_6) [word] {at}  edge from parent node[left]  {\scriptsize $R$}}
-    child {node (1_3) [word] {\$}  edge from parent node[left]  {\scriptsize $P$}}
-    child {node (1_7) [circle] {}
-      {
-      child {node (1_13) [word] {50.38}  edge from parent node[left]  {\scriptsize $E$}}
-      child {node (1_8) [word] {billion}  edge from parent node[auto]  {\scriptsize $C$}}
-      } edge from parent node[left]  {\scriptsize $E$}}
-    child {node (1_9) [word] {,}  edge from parent node[right]  {\scriptsize $U$}}
-    child {node (1_10) [circle] {}
-      {
-      child {node (1_14) [circle] {}
-        {
-        child {node (1_16) [word] {up}  edge from parent node[left]  {\scriptsize $D$}}
-        child {node (1_15) [word] {19}  edge from parent node[auto]  {\scriptsize $C$}}
-        } edge from parent node[left]  {\scriptsize $E$}}
-      child {node (1_11) [word] {\%}  edge from parent node[auto]  {\scriptsize $C$}}
-      child {node (1_12) [word] {.}  edge from parent node[auto]  {\scriptsize $U$}}
-      } edge from parent node[auto]  {\scriptsize $E$}}
-    } edge from parent node[auto]  {\scriptsize $H$}}
-  }
-;
-\end{tikzpicture}
-  }\caption{Converted from gold UD to UCCA.\label{fig:wsj_0011.8_converted}}
-\end{subfigure}}
-  
-\fbox{\begin{subfigure}{\textwidth}
-  \centering
-  \scalebox{.95}{
-\begin{tikzpicture}[->,level distance=2cm,
-  level 1/.style={sibling distance=45mm},
-  level 2/.style={sibling distance=2cm},
-  level 3/.style={sibling distance=2cm},
-  every circle node/.append style={fill=black}]
-  \tikzstyle{word} = [font=\rmfamily,color=black]
-  \node (1_1) [circle] {}
-  {
-  child {node (1_2) [circle] {}
-    {
-    child {node (1_3) [word] {Imports}  edge from parent node[auto]  {\scriptsize $A$}}
-    child {node (1_4) [word] {were}  edge from parent node[auto]  {\scriptsize $S$}}
-    child {node (1_5) [circle] {}
-      {
-      child {node (1_6) [word] {at}  edge from parent node[auto]  {\scriptsize $R$}}
-      child {node (1_14) [word] {\$}  edge from parent node[auto]  {\scriptsize $U$}}
-      child {node (1_8) [word] {50.38}  edge from parent node[auto]  {\scriptsize $E$}}
-      child {node (1_9) [word] {billion}  edge from parent node[auto]  {\scriptsize $C$}}
-      } edge from parent node[auto]  {\scriptsize $A$}}
-    } edge from parent node[auto]  {\scriptsize $H$}}
-  child {node (1_15) [word] {,}  edge from parent node[auto]  {\scriptsize $U$}}
-  child {node (1_10) [circle] {}
-    {
-    child {node (1_18) [word] {\textbf{IMPLICIT}}  edge from parent node[auto]  {\scriptsize $P$}}
-    child {node (1_11) [circle] {}
-      {
-      child {node (1_12) [word] {up}  edge from parent node[auto]  {\scriptsize $R$}}
-      child {node (1_13) [word] {19}  edge from parent node[auto]  {\scriptsize $C$}}
-      child {node (1_16) [word] {\%}  edge from parent node[auto]  {\scriptsize $U$}}
-      } edge from parent node[auto]  {\scriptsize $A$}}
-    } edge from parent node[auto]  {\scriptsize $H$}}
-  child {node (1_17) [word] {.}  edge from parent node[auto]  {\scriptsize $U$}}
-  };
-  \draw[dashed,->] (1_10) to node [auto] {\scriptsize $A$} (1_3);
-\end{tikzpicture}
-  }\caption{Manually annotated UCCA.\label{fig:wsj_0011.8_orig}}
-  
-\end{subfigure}}
-
-\caption{UCCA graphs for sentence \lstinline{wsj_0011.8}\label{fig:wsj_0011.8}}
-
-\end{figure*}
 
 More differences:
 \begin{itemize}
@@ -736,34 +624,117 @@ Excluding punctuation, this gives 13293 yields in UCCA and
 Of these, 8416 are common, meaning that an oracle would get an $F_1$ score
 of 72.8\% if it had the gold label for each edge on conversion.
 
-In the following subsections, we inspect the differences and categorize them.
+In the following subsections, we categorize the UD relations according to their
+treatment in UCCA.
 
-\subsection{Coordination}
-Focusing on yields with a \verb|conj| UD label,
-we get 474 yields, out of which 391 have a corresponding UCCA yield (82.5\%).
 
-\subsection{Subordinate clauses}
-Focusing on yields with a \verb|acl| UD label,
-we get 200 yields, out of which 96 have a corresponding UCCA yield (48\%).
+\subsection{Similar Treatment}
+Same content more or less
 
-The 104 subordinate clause divergences can be subcategorized as follows:
+\paragraph{det, iobj and nsubj.}
+match almost one-to-one. no need for discussion (maybe a brief comment on determiner)
 
-\paragraph{Nominal predicates.}
+\paragraph{obj and expl.}
+maybe cases of almost one-to-one, but need to verify
+
+\paragraph{aux and cc.}
+aux: split between F (auxilliary verbs) and D (modals). TUPA gets ~100\%; same with cc: split between N and L (mention that it's a convention difference that we fixed)
+
+\paragraph{mark.}
+Split between R, L and F. A matter of convention. TUPA does perfectly on this.
+
+
+
+\subsection{Simply Mappable Categories}
+
+Different axes of generalization, but the divergence can be fairly straightforwardly defined.
+
+\paragraph{advcl and parataxis.}
+linkage is different
+
+\paragraph{advmod and obl.}
+A/D distinction is different
+
+\paragraph{amod.}
+Split between E, S and E|S
+
+\paragraph{compound.}
+Not a semantic category. We should add a few examples in the paper, but this is not surprising
+
+\paragraph{discourse.}
+H/L/G distinction
+
+\paragraph{fixed.}
+Unanalyzability is different (I would add an example or two)
+
+\paragraph{head.}
+about 17\% are unmatched, about 14\% are not P/S/H/C, which
+leaves about 70\% of cases where the notion of syntactic head matches
+that of a ``UCCA head''.
+
+
+
+\subsection{Complex Content Differences}
+
+\paragraph{acl.}
+
+Nominal predicates.
 
 A noun annotated as a process.
 
 26307003:
 Did services I asked them NOT to do.
 
-\paragraph{Free/fused relative clause.}
+Free/fused relative clause.
 
 26315003:
 The prices were worth what I got.
 
-\paragraph{Flattening of scene structure.}
+Flattening of scene structure.
 
 26510000
 Did a great job of removing my tree in Conyers.
+
+\paragraph{xcomp}
+
+\paragraph{conj and list.}
+Distinction between Scene and non-Scene coordination (not very interesting)
+
+
+
+\subsection{Cases that require a deeper look into}
+
+\paragraph{appos.}
+why so many unmatched? (it makes sense that it's split between E/C)
+
+\paragraph{case.}
+mostly match (because it's usually one word), but prepositions can be several things in UCCA (relators which are similar to case markers, but also main relations, the borderline between analyzable and unanalyzable plays some role).
+
+\paragraph{ccomp.}
+why so many unmatched?
+
+\paragraph{nmod.}
+In UCCA, this is split across A, E, E|S. 
+
+\paragraph{nummod.}
+why so many unmatched. We need some examples.
+
+\paragraph{vocative.}
+probably just split between A and G+A, but we need a manual inspection of all of them.
+
+
+
+\subsection{Formalism Differences / Rare}
+
+\paragraph{root, punct and flat.}
+
+\paragraph{csubj, dep, goeswith and orphan.}
+$\leq 10$ samples, we don't analyze
+
+
+\subsection{Discussion by UCCA Labels}
+
+Going over each category is somewhat redundant, but we do discuss unmatched UCCA units, according to category (and put the histogram of units).
 
 
 \section{Experimental Setup}\label{sec:experiments}
@@ -1105,9 +1076,12 @@ the pipeline approach %of basing semantic parsing on the output of syntactic par
 between UCCA and other semantic parsing tasks, as well as Universal Dependency Parsing.
 We perform a similar experiment, but instead of a multitask model,
 we use UD data converted to UCCA and train on it with the same single-task model (\S\ref{sec:experiments}).
-%
-%
-%\section{Conclusion}\label{sec:conclusion}
+
+
+\section{Conclusion}\label{sec:conclusion}
+
+We carefully examine similarities and divergences between UD and UCCA,
+and develop a converter whose accuracy is on par with a UCCA parser.
 
 
 \bibliography{references}
