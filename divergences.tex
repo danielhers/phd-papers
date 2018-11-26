@@ -659,13 +659,6 @@ by comparing incoming edge labels for units with the same terminal yields.
 \section{Analysis of Divergences}\label{sec:analysis}
 
 
-More differences:
-\begin{itemize}
-\item Identity vs. set membership in copular constructions:
-    ``Mr. Vinken is chairman of Elsevier N.V.'' vs. ``The morbidity rate is a striking finding''.
-\item Infinitive vs. purpose ``to''. 
-\end{itemize}
-
 \subsection{Automatic identification of divergences}
 
 In order to automatically detect divergences between UCCA and UD,
@@ -700,9 +693,13 @@ and some wh-pronouns (``which'', ``who'') as Linkers or Relators.
 \paragraph{aux and cc.}
 aux: split between F (auxilliary verbs) and D (modals). TUPA gets ~100\%; same with cc: split between N and L (mention that it's a convention difference that we fixed)
 
+\paragraph{cop.}
+UCCA distinguishes identity vs. set membership in copular constructions:
+``Mr. Vinken is chairman of Elsevier N.V.'' vs. ``The morbidity rate is a striking finding''.
+
 \paragraph{mark.}
 Split between R, L and F. A matter of convention. TUPA does perfectly on this.
-
+Infinitive vs. purpose ``to''. 
 
 
 \subsection{Simply Mappable Categories}
