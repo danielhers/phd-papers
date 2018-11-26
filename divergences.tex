@@ -683,13 +683,13 @@ treatment in UCCA.
 
 \subsection{Similar Treatment}
 These constructions are handled similarly in UD and UCCA,
-perhaps with differences of convention or formalism (but no content differences).
+perhaps with differences of convention or formalism (but no content differences):
 
 \paragraph{det, expl, iobj, nsubj, and obj.}
 With an almost perfect match to UCCA categories,
 these relations are syntactic refinements of
 Elaborator (det), Function (expl) and Participant (iobj, nsubj and obj).
-The exceptions are cases of unanalyzable multi-word expressions,
+The exceptions are mostly cases of unanalyzable multi-word expressions,
 which are analyzed in UD: ``a bit'', ``bites the dust'', ``when it comes to''.
 In addition, nsubj and obj are annotated as Process or State when they
 represent a (nominal) predicate,
@@ -703,8 +703,10 @@ aux is split between Function (auxiliary verbs) and aDverbial (modals),
 while cc is split between coNnector (between non-scenes) and Linker (between scenes).
 
 \paragraph{cop.}
-UCCA distinguishes identity vs. set membership in copular constructions:
-``Mr. Vinken is chairman of Elsevier N.V.'' vs. ``The morbidity rate is a striking finding''.
+UCCA distinguishes between copular constructions expressing
+identity (e.g. ``I am a college student'' where the copula is annotated as State)
+as opposed to attributes or set membership
+(e.g. ``Mercedes and Dan are very thorough'' where it is annotated as F).
 
 \paragraph{mark.}
 Split between R, L and F. A matter of convention.
