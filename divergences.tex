@@ -187,25 +187,29 @@
 
 \section{Introduction}\label{sec:introduction}
 
-  A central goal of syntactic anntoation in NLP, is to provide a proxy to the semantics of a sentence.
-  Indeed, syntactic parses have been leveraged by semantic parsing technology using a variety of methods,
-  including using syntactic trees to prune the space of possible semantic structures \cite{Xue:04}, encoding
-  syntactic structure as features in semantic parsing \cite{hershcovitch2017,}, joint syntactic and semantic
-  parsing \cite{}, multi-task learning \cite{}, . 
-  Some syntactic schemes have a theory of syntax-semantics interface, which yielded the development
-  of conversion protocols between syntax and semantics \cite{reddy2016,predpatt,mike_lewis_thesis,Basile:13}.
-
+  A central goal of syntactic parsing is to provide a proxy to the semantic structure.
+  Indeed, syntactic parses have been leveraged by semantic parsing technology in a variety of ways,
+  including pruning the space of possible semantic structures \cite{xue2004calibrating}, 
+  encoding syntactic structure as features in semantic parsing \cite{gildea2002automatic}, 
+  joint syntactic and semantic parsing \cite{surdeanu2008conll,hajivc2009conll},
+  multi-task learning \cite{swayamdipta2018syntactic}. 
+  Some syntactic schemes, such as CCG \cite{Steedman:00} and Universal Dependencies \cite[UD; ][]{nivre2016universal},
+  transparently reflect the underlying skeletal semantic structure, and can thus be used 
+  to transduce skeletal semantic forms \cite{Basile:12,white2016universal,reddy2017universal}.
+  
   Nevertheless, despite the centrality of the use of syntax for semantics, few works attempted
-  to systematically compare what information or semantic content is encoded in syntactic parses that is
-  not encoded in semantic parses, and vice versa. Such a study will enable the development of better
+  to systematically assess what content is encoded in semantic structures that is
+  not encoded in syntactic ones, and vice versa. Such a study will enable the development of better
   methods for distilling the overlapping content in syntactic and semantic structures, thereby supporting
   the construction of better syntax-for-semantics algorithms, as well as pointing at problems in semantic
   parsing that cannot be addressed this way. Finally, developing a methodology for comparing syntactic
   and semantic treebanks can be used for conducing fine-grained error analysis for semantic parsers, sliced
   by construction \cite[cf.][]{szubert2018structured}.
 
+
+
   This paper aims to address this gap, taking the syntactic Universal Dependencies scheme
-  \cite[UD; ][]{nivre2016universal},
+  ,
   and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal} scheme
   as a test case. The two schemes were selected due to their conceptual similarity: 
   both are designed to be applicable across languages and domains, 
@@ -223,7 +227,7 @@
   to UCCA structures. Our analysis focuses only on UCCA's primary edges, that form a tree, and ignore remote
 	edges, that allow expressing shared arguments, which 
 	We find that most content differences between the schemes are due to the following factors:\oa{daniel, we need
-	to add references to the appropriate places in the text}
+	to add references here to the appropriate places in the text}
   
   \begin{enumerate}
     \item 
@@ -620,7 +624,7 @@ and it is different from the default low-attaching behavior.
 \scriptsize
 \setlength\tabcolsep{2pt}
 \begin{tabular}{l|ccccccccccccc}
- & A & C & D & E & F & G & H & L & N & P & R & S & \emptyset \\
+ & A & C & D & E & F & G & H & L & N & P & R & S & $\emptyset$ \\
  \hline
 acl & 15 & 0 & 0 & 38 & 1 & 0 & 16 & 0 & 0 & 1 & 0 & 1 & 104 \\
 advcl & 2 & 3 & 0 & 0 & 0 & 0 & 100 & 1 & 0 & 4 & 0 & 0 & 99 \\
@@ -654,7 +658,7 @@ orphan & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
 parataxis & 1 & 0 & 0 & 1 & 0 & 2 & 65 & 0 & 0 & 1 & 0 & 1 & 54 \\
 vocative & 9 & 1 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 xcomp & 43 & 1 & 3 & 1 & 0 & 0 & 3 & 0 & 0 & 6 & 0 & 6 & 115 \\
-\emptyset & 369 & 161 & 51 & 64 & 4 & 8 & 709 & 23 & 0 & 141 & 5 & 102 & 
+$\emptyset$ & 369 & 161 & 51 & 64 & 4 & 8 & 709 & 23 & 0 & 141 & 5 & 102 & 
 \end{tabular}
 \caption{UD-UCCA confusion matrix calculated from EWT
 gold-standard annotations (\S\ref{sec:experiments})
@@ -1132,7 +1136,7 @@ Similarly, our conversion protocol allows fine-grained evaluation of UCCA parsin
 
 \paragraph{Semantic role labeling.}
 
-\newcite{D18-1412} used multitask learning to improve semantic role labeling and coreference resolution
+\newcite{swayamdipta2018syntactic} used multitask learning to improve semantic role labeling and coreference resolution
 by also learning unlabeled syntactic bracketing as an auxiliary task.
 
 Much effort has been devoted to joint learning of syntactic
