@@ -22,6 +22,7 @@
 
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
+\usepackage{enumitem}
 \usepackage{multirow}
 \usepackage{tikz}
 \usepackage{tikz-dependency}
@@ -191,29 +192,39 @@
   Indeed, syntactic parses have been leveraged by semantic parsing technology in a variety of ways,
   including pruning the space of possible semantic structures \cite{xue2004calibrating}, 
   encoding syntactic structure as features in semantic parsing \cite{gildea2002automatic}, 
-  joint syntactic and semantic parsing \cite{surdeanu2008conll,hajivc2009conll},
+  joint syntactic and semantic parsing \cite{surdeanu2008conll,hajivc2009conll} and
   multi-task learning \cite{swayamdipta2018syntactic}. 
-  Some syntactic schemes, such as CCG \cite{Steedman:00} and Universal Dependencies \cite[UD; ][]{nivre2016universal},
-  transparently reflect the underlying skeletal semantic structure, and can thus be used 
-  to transduce skeletal semantic forms \cite{Basile:12,white2016universal,reddy2017universal}.
+  Some syntactic representation approaches, such as CCG \cite{Steedman:00} and Universal Dependencies \cite[UD; ][]{nivre2016universal},
+  transparently reflect the underlying semantics, and have been used to
+  transduce skeletal semantic forms using rule-based systems \cite{Basile:12,white2016universal,reddy2017universal}.
   
-  Nevertheless, despite the centrality of the use of syntax for semantics, 
-	few works systematically assessed what content is encoded in semantic structures that is
-  not encoded in syntactic ones, and vice versa. 
-	Understanding such content differences will enable better use of the overlapping content between
-	semantic and syntactic parsing, for their mutual benefit, as well as point at semantic distinctions that
-	are unlikely to be resolved by syntax.
-	Comparing syntactic and semantic treebanks can also support fine-grained error analysis of semantic parsers, as proposed
-	by \citet{szubert2018structured} in the context of AMR parsing.
+  Nevertheless, despite the close link between syntactic and semantic representations,
+  and despite their centrality, few works attempted to map what content overlap and differences
+  are there between syntactic and semantic structures.
+	Understanding such content differences will support better ways to leverage content overlap
+	between schemes, as well as point at semantic distinctions that are unlikely to be resolved by syntax.
+	A methodology for comparing syntactic and semantic treebanks can also support fine-grained error analysis 
+	of semantic parsers, as implemented by \citet{szubert2018structured} for AMR parsing.
 	
 	This paper aims to address this gap, taking the syntactic Universal Dependencies scheme,
   and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal} scheme
-  as a test case. We select these two schemes due to their conceptual similarity, which
-	allows us to focus on principle differences between the schemes, and largely ignore differences
-	that stem from annotation convenetions. For instance, UD prefers lexical heads over functional ones. 
-	We view this preference largely as a notational variant (since converting between the two can
-	generally be done deterministically), but it does facilitate comparison as it 
-	results in structures that resemble semantic schemes.
+  as a test case. 
+  The paper focuses on {\it content} differences, i.e., differences that cannot be resolved by simple
+  conversion rules. Selecting two relatively similar schemes, such as UD and UCCA, allows
+  us to focus on content, and abstract away from differences of convention.
+  
+  For instance, UD strongly prefers lexical heads,
+	unlike other dependency schemes that prefer functional ones.
+  While the two approaches are largely inter-translatable
+	\cite{Schwartz:12}, lexical head schemes are more similar in form to semantic schemes,
+	such as UCCA and broad-coverage semantic dependencies \cite{oepen2015semeval},
+	which facilitates their comparison.\oa{is this paragraph clear?}
+	%Selecting more distant schemes for comparison could have potentially confounded our results.
+		
+	
+%	Comparing relatively similar schemes therefore 
+%	allows us to focus on principle differences between them, and abstract away from 
+%	divergences that can be resolved straightforwardly.
 		
   %Moreover, in order to attain cross-linguistic applicability, UD's design conventions are 
   %often not dissimilar to those made by semantic schemes. A notable example is UD's preference
@@ -224,36 +235,45 @@
   %encoded by the structures, rather than their form, taking UD already cleans out much structural divergence
   %originating from differences of convention.
   
-  Section \ref{sec:analysis} discusses a detailed analysis of the extent to which UD structures can be mapped
-  to UCCA structures. 
 	We find that most content differences between the schemes are due to the following factors:\oa{daniel, we need
 	to add references here to the appropriate places in the text}
-  
-  \begin{enumerate}
+
+  \setlength{\leftmargini}{15pt}
+
+  \begin{enumerate}[noitemsep]
     \item 
-      UCCA distinguishes between Scenes (units that describe an event, state or activity) and non-Scene units, whereas
-      UD does not. This distinction cuts across UD categories, as a Scene correspond to a noun phrase (``Mike's kick'')
-			or a clause (``Mike kicks''). Put differently, UCCA distinguishes between eventive and relational nouns,
-			and other types of nouns, whereas UD does not.
+      UCCA distinguishes between Scenes (descriptions of events, states or activities) and non-Scenes. 
+      This distinction cuts across UD categories, as a Scene can be evoked by a verb, an eventive or stative
+      noun (``negotiation'', ``fatigue''), an adjective or even a preposition (``this  is {\bf for} John'').
     \item
       UCCA distinguishes between participants (including locations and abstract entities), and secondary verbs, 
-			expressing such distinctions as manner, aspect or modality. Secondary relations can corresponding to various
-			syntactic units, including verbs, such as ``begin'' or ``fail'', prepositional phrases such as ``with disrespect'', 
-			as well as adjectives or adverbs. 
+			which covers for example manner, aspect and modality. Secondary relations can verbs (e.g., ``begin'', ``fail''),
+			prepositional phrases (``with disrespect''), as well as modals, adjectives and adverbs. 
     \item
-			UD and UCCA have different treatment of multi-word expressions (MWEs). MWEs in UD include names, and fixed expressions
-			that lack a clear syntactic structure (e.g., ``as well as''). UCCA takes a more inclusive approach, treating a variety
-			of semantically opaque constructions as units (e.g., light verbs and idioms).
+			UD and UCCA treat multi-word expressions (MWEs) differently. MWEs in UD include names, compounds and grammaticalized fixed 
+			expressions. UCCA also treats names and grammaticalized MWEs are units, but also treats 
+			a range of semantically opaque constructions as units (e.g., light verbs and idioms).
+			On the other hand, compounds are not necessarily treated as MWEs in UCCA, especially where they are compositional.			
 		\item
-			UD categorizes clause linkage into coordination, subordination (e.g., adverbial clauses), argumenthood (complement clauses),
-			and parataxis (a residual category). UCCA only distinguishes between argumenthood (where one Scene is
-			a participant in another) and largely conflates clausal coordination, subordination and parataxis. 
-			Other divergences stems from differences between UCCA's notions of argumenthood. See Section \ref{}.
-  \end{enumerate}
+			UD categorizes clause linkage into coordination, subordination, argumenthood (complementation),
+			and parataxis (a residual category). UCCA only distinguishes between argumenthood 
+			and largely conflates clausal coordination, subordination and parataxis. 
+			Other divergences stem from ...\oa{fill in}. 
+	  \end{enumerate}
 
 	UCCA uses DAGs so as to allow encoding shared argumenthood, by assigning multiple parents to the same node. 
 	As UD uses trees rather DAGs, shared argumenthood is largely ignored in UD, but is addressed in enhanced UD \cite{}.
-	
+  See \S\ref{sec:analysis}.	
+
+  \oa{a paragraph about the parsing experiments}
+  We use the analysis to build a converter. We show it's useful in generating silver standard training data for TUPA.
+  Results are ...
+  
+  \oa{a paragraph on error analysis}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Split between the Sections}
 
   The motivation for parsing into semantic structural representation is that it can be used more readily
   by semantic applications to reason about the processed utterance and manipulate it to find the required
