@@ -542,6 +542,11 @@ it is much more common (14,719 P's in the Wiki corpus as opposed to 3354 S's).
 
 \subsection{Local Modifications}\label{sec:local}
 
+Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
+In UD, each word after the first is attached to the previous word,
+with the \verb|flat|, \verb|fixed| or \verb|goeswith| relations.
+During conversion, we remove edges of both relations and group the corresponding terminals to one unit.
+
 In general, the conversion protocol attaches low,
 selecting for each terminal $t$ the lowest non-terminal of which $t$
 is the head terminal.
@@ -584,8 +589,6 @@ dep & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 det & 4 & 1 & 22 & 773 & 1 & 1 & 0 & 0 & 0 & 0 & 2 & 0 & 30 \\
 discourse & 0 & 1 & 0 & 0 & 1 & 6 & 13 & 3 & 0 & 0 & 0 & 1 & 1 \\
 expl & 3 & 0 & 0 & 0 & 19 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
-fixed & 0 & 2 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 13 \\
-goeswith & 0 & 0 & 1 & 4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 3 \\
 head & 148 & 1,393 & 142 & 52 & 99 & 23 & 435 & 3 & 1 & 954 & 11 & 355 & 761 \\
 iobj & 19 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 list & 0 & 2 & 0 & 0 & 0 & 0 & 8 & 0 & 0 & 0 & 0 & 0 & 2 \\
@@ -622,9 +625,9 @@ Excluding punctuation, this gives 13293 yields in UCCA and
 Of these, 8416 are common, meaning that an oracle would get an $F_1$ score
 of 72.8\% if it had the gold label for each edge on conversion.
 
-The analysis excludes the relation root, punct and flat due to formalism differences
+The analysis excludes the relation root, punct, and fixed and flat due to formalism differences
 
-and the relations csubj, dep, goeswith and orphan since they are rare
+and the relations csubj, dep and orphan since they are rare
 ($\leq 10$ samples)
 
 In the following subsections, we categorize the UD relations according to their
@@ -704,9 +707,6 @@ and is annotated as pArticipants (``food craving'').
 Interjections and discourse markers are annotated as H (parallel scene), Ground or Linker,
 if they are, respectively, a complete scene or part of a scene relating to the \textit{speech event},
 or simply relate one scene to another.
-
-\paragraph{fixed.}
-Unanalyzability is different (I would add an example or two)
 
 \paragraph{head.}
 about 17\% are unmatched, about 14\% are not P/S/H/C, which
