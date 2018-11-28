@@ -622,18 +622,24 @@ Excluding punctuation, this gives 13293 yields in UCCA and
 Of these, 8416 are common, meaning that an oracle would get an $F_1$ score
 of 72.8\% if it had the gold label for each edge on conversion.
 
+The analysis excludes the relation root, punct and flat due to formalism differences
+
+and the relations csubj, dep, goeswith and orphan since they are rare
+($\leq 10$ samples)
+
 In the following subsections, we categorize the UD relations according to their
 treatment in UCCA.
 
 
-\subsection{Similar Treatment}\label{sec:similar}
+
+\subsection{Largely Similar Treatment}\label{sec:similar}
 These constructions are handled similarly in UD and UCCA,
-perhaps with differences of convention or formalism (but no content differences):
+perhaps with differences of convention or formalism (but almost no content differences):
 
 \paragraph{det, expl, iobj, nsubj, and obj.}
 With an almost perfect match to UCCA categories,
 these relations are syntactic refinements of
-Elaborator (det), Function (expl) and Participant (iobj, nsubj and obj).
+Elaborator (det), Function (expl) and pArticipant (iobj, nsubj and obj).
 The exceptions are mostly cases of unanalyzable multi-word expressions,
 which are analyzed in UD: ``a bit'', ``bites the dust'', ``when it comes to''.
 In addition, nsubj and obj are annotated as Process or State when they
@@ -649,16 +655,20 @@ while cc is split between coNnector (between non-scenes) and Linker (between sce
 
 \paragraph{cop.}
 UCCA distinguishes between copular constructions expressing
-identity (e.g. ``It was an ingrown toenail'' where the copula is annotated as State)
+identity (e.g., ``It was an ingrown toenail'') where the copula is annotated as State
+(and the head is a pArticipant),
 as opposed to attributes or set membership
-(e.g. ``Mercedes and Dan are very thorough'' where it is annotated as F).
+(e.g., ``Mercedes and Dan are very thorough''), where it is annotated as Function
+(and the head is a State).
 
 \paragraph{mark.}
+UCCA distinguishes between the infinitive marker ``to'', annotated as Function,
+and the use of markers for inter-scene linkage (e.g., purposive ``to''), annotated as Linker.
 Split between R, L and F. A matter of convention.
-Infinitive vs. purpose ``to''. 
+Infinitive vs. purpose ``to''.
 
 
-\subsection{Simply Mappable Categories}
+\subsection{Refinement}
 
 Different axes of generalization, but the divergence can be fairly straightforwardly defined.
 
@@ -712,7 +722,7 @@ Flattening of scene structure.
 26510000
 Did a great job of removing my tree in Conyers.
 
-\paragraph{xcomp}
+\paragraph{xcomp.}
 
 \paragraph{conj and list.}
 Distinction between Scene and non-Scene coordination (not very interesting).
@@ -743,14 +753,6 @@ why so many unmatched. We need some examples.
 \paragraph{vocative.}
 probably just split between A and G+A, but we need a manual inspection of all of them.
 
-
-
-\subsection{Formalism Differences / Rare}
-
-\paragraph{root, punct and flat.}
-
-\paragraph{csubj, dep, goeswith and orphan.}
-$\leq 10$ samples, we don't analyze
 
 
 \subsection{Discussion by UCCA Labels}
