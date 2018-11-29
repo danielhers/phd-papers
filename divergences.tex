@@ -251,23 +251,20 @@ using a two-step protocol:
 %\label{fig:conjoined_verbs}}
 %\end{figure}
 
-
-\paragraph{Evaluation.}
-
-Apart from the set of distinctions each scheme makes,
-an important driver of the difference in scores is the proportion of each constructions
-in the evaluation.
-This implicitly determines what the scheme focuses on and what parser developers
-will spend a larger effort improving.
-
-For example, punctuation takes up 11.4\% of the edges in the English EWT UD treebank,
-and parsers typically achieve more than 90\% LAS F1 on punctuation.
-In UCCA, punctuation is excluded from the evaluation completely.
-
-A multi-word named entity is represented in UD by a \verb|flat| arc between
-each pair of consecutive words in the entity mention.
-In UCCA, a named entity is represented as one unanalyzable unit, and analyzing it
-incorrectly results in an incorrect edge with no partial credit.
+%Apart from the set of distinctions each scheme makes,
+%an important driver of the difference in scores is the proportion of each constructions
+%in the evaluation.
+%This implicitly determines what the scheme focuses on and what parser developers
+%will spend a larger effort improving.
+%
+%For example, punctuation takes up 11.4\% of the edges in the English EWT UD treebank,
+%and parsers typically achieve more than 90\% LAS F1 on punctuation.
+%In UCCA, punctuation is excluded from the evaluation completely.
+%
+%A multi-word named entity is represented in UD by a \verb|flat| arc between
+%each pair of consecutive words in the entity mention.
+%In UCCA, a named entity is represented as one unanalyzable unit, and analyzing it
+%incorrectly results in an incorrect edge with no partial credit.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
