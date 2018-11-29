@@ -144,6 +144,17 @@
   %encoded by the structures, rather than their form, taking UD already cleans out much structural divergence
   %originating from differences of convention.
   
+We begin by carefully examining the structures captured by each of the annotation schemes,
+to find distinctions made by one but not the other.
+To explore the difference in content, we experiment with converting UD to UCCA
+using a two-step protocol:
+\begin{enumerate}
+\item Structurally convert bilexical dependency graphs into constituency-like graphs by inserting
+  non-terminal nodes and \textit{head} edges (\S\ref{sec:conversion}).
+\item Translate UD relations into UCCA edge labels
+  by a deterministic mapping (\S\ref{sec:mapping}).
+\end{enumerate}
+  
    We find that most content differences between the schemes are due to the following
    factors:\daniel{add interesting example---scene-evoking noun or auxiliary verb}
 
@@ -169,99 +180,77 @@
   we perform fine-grained error analysis on UCCA parsing results
   according to UD relations (\S\ref{sec:fine_grained}).
 
+%  The motivation for parsing into semantic structural representation is that it can be used more readily
+%  by semantic applications to reason about the processed utterance and manipulate it to find the required
+%  result.
+%  For example, in machine translation, a common model is the Vauquois Pyramid 
+%  \cite{vauquois1968survey},
+%  according to which translation between languages will become easier and more direct as we use
+%  a more semantic representation for the source and target languages,
+%  ignoring language-specific distinctions and capturing only what is preserved in translation.
+%  Parsing the source language and generating the target language, on the other hand, becomes more
+%  difficult as the representation becomes more semantic.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Split between the Sections}\daniel{remove this section and move anything worthwhile to intro}
+%  Semantic representation schemes have seen major progress in recent years \cite{abend2017state}.
+%  At the same time, semantic considerations are taken into account in the design of syntactic annotation schemes
+%  \cite{przepiorkowski2018arguments}.
 
-  The motivation for parsing into semantic structural representation is that it can be used more readily
-  by semantic applications to reason about the processed utterance and manipulate it to find the required
-  result.
-  For example, in machine translation, a common model is the Vauquois Pyramid 
-  \cite{vauquois1968survey},
-  according to which translation between languages will become easier and more direct as we use
-  a more semantic representation for the source and target languages,
-  ignoring language-specific distinctions and capturing only what is preserved in translation.
-  Parsing the source language and generating the target language, on the other hand, becomes more
-  difficult as the representation becomes more semantic.
+%  \begin{itemize}
+%    \item Evaluation metric,
+%    \item Amount of training data,
+%    \item Maturity of technology dedicated to the scheme,
+%    \item Learnability of the scheme.
+%  \end{itemize}
+%  Learnability, in turn, is affected by
+%  \begin{itemize}
+%    \item Formal annotation choices \cite{Schwartz:12},
+%    \item Actual content that the scheme attempts to capture.
+%  \end{itemize}
 
-  Semantic representation schemes have seen major progress in recent years \cite{abend2017state}.
-  At the same time, semantic considerations are taken into account in the design of syntactic annotation schemes
-  \cite{przepiorkowski2018arguments}.
+%Different schemes capture different content.
+%For example, dependencies are ambiguous as to the arguments of conjoined verbs:
+%``the store buys and sells cameras'' and ``she was reading or watching a movie''
+%are analyzed similarly, even though in the first sentence ``cameras'' is an argument
+%of both ``buys'' and ``sells'', and in the second sentence ``movie'' is only an argument
+%of ``watching''.
+%The UCCA representation does make this distinction, as Figure~\ref{fig:conjoined_verbs} shows.
+%
+%\begin{figure}[!ht]
+%  \centering
+%    \begin{tikzpicture}[level distance=12mm, ->,
+%        level 1/.style={sibling distance=21mm},
+%        level 2/.style={sibling distance=11mm},
+%        every circle node/.append style={fill=black}]
+%      \tikzstyle{word} = [font=\rmfamily,color=black]
+%      \node (ROOT) [circle] {}
+%        child {node [circle] {}
+%        {
+%          child {node (She) [word] {She} edge from parent node[above] {\scriptsize $A$}}
+%          child {node (was) [word] {was} edge from parent node[left] {\scriptsize $F$}}
+%          child {node [word] {reading} edge from parent node[below] {\scriptsize $P$}}
+%        } edge from parent node[left] {\scriptsize $H$} }
+%        child {{}
+%        {
+%          child {node (or) [word] {or} edge from parent [draw=none]}
+%        } edge from parent [draw=none]}
+%        child {node (watchingamovie) [circle] {}
+%        {
+%          child {node [word] {watching} edge from parent node[left] {\scriptsize $P$}}
+%          child {node [circle] {}
+%          {
+%            child {node [word] {a} edge from parent node[left] {\scriptsize $E$}}
+%            child {node [word] {movie} edge from parent node[right] {\scriptsize $C$}}
+%          } edge from parent node[above] {\scriptsize $A$} }
+%        } edge from parent node[right] {\scriptsize $H$} }
+%        ;
+%      \draw[dashed,->,bend right=20] (watchingamovie) to node [above] {\scriptsize $A$} (She);
+%      \draw[dashed,->,bend right=10] (watchingamovie) to node [above] {\scriptsize $F$} (was);
+%      \draw(ROOT) to node [right] {\scriptsize $L$} (or);
+%    \end{tikzpicture}
+%\caption{Coordinated predicates in UCCA.
+%\label{fig:conjoined_verbs}}
+%\end{figure}
 
-
-  \begin{itemize}
-    \item Evaluation metric,
-    \item Amount of training data,
-    \item Maturity of technology dedicated to the scheme,
-    \item Learnability of the scheme.
-  \end{itemize}
-
-
-  Learnability, in turn, is affected by
-
-  \begin{itemize}
-    \item Formal annotation choices \cite{Schwartz:12},
-    \item Actual content that the scheme attempts to capture.
-  \end{itemize}
-
-
-\paragraph{Content.}
-
-Different schemes capture different content.
-For example, dependencies are ambiguous as to the arguments of conjoined verbs:
-``the store buys and sells cameras'' and ``she was reading or watching a movie''
-are analyzed similarly, even though in the first sentence ``cameras'' is an argument
-of both ``buys'' and ``sells'', and in the second sentence ``movie'' is only an argument
-of ``watching''.
-The UCCA representation does make this distinction, as Figure~\ref{fig:conjoined_verbs} shows.
-
-\begin{figure}[!ht]
-  \centering
-    \begin{tikzpicture}[level distance=12mm, ->,
-        level 1/.style={sibling distance=21mm},
-        level 2/.style={sibling distance=11mm},
-        every circle node/.append style={fill=black}]
-      \tikzstyle{word} = [font=\rmfamily,color=black]
-      \node (ROOT) [circle] {}
-        child {node [circle] {}
-        {
-          child {node (She) [word] {She} edge from parent node[above] {\scriptsize $A$}}
-          child {node (was) [word] {was} edge from parent node[left] {\scriptsize $F$}}
-          child {node [word] {reading} edge from parent node[below] {\scriptsize $P$}}
-        } edge from parent node[left] {\scriptsize $H$} }
-        child {{}
-        {
-          child {node (or) [word] {or} edge from parent [draw=none]}
-        } edge from parent [draw=none]}
-        child {node (watchingamovie) [circle] {}
-        {
-          child {node [word] {watching} edge from parent node[left] {\scriptsize $P$}}
-          child {node [circle] {}
-          {
-            child {node [word] {a} edge from parent node[left] {\scriptsize $E$}}
-            child {node [word] {movie} edge from parent node[right] {\scriptsize $C$}}
-          } edge from parent node[above] {\scriptsize $A$} }
-        } edge from parent node[right] {\scriptsize $H$} }
-        ;
-      \draw[dashed,->,bend right=20] (watchingamovie) to node [above] {\scriptsize $A$} (She);
-      \draw[dashed,->,bend right=10] (watchingamovie) to node [above] {\scriptsize $F$} (was);
-      \draw(ROOT) to node [right] {\scriptsize $L$} (or);
-    \end{tikzpicture}
-\caption{Coordinated predicates in UCCA.
-\label{fig:conjoined_verbs}}
-\end{figure}
-
-We begin by carefully examining the structures captured by each of the annotation schemes,
-to find distinctions made by one but not the other.
-To explore the difference in content, we experiment with converting UD to UCCA
-using a two-step protocol:
-\begin{enumerate}
-\item Structurally convert bilexical dependency graphs into constituency-like graphs by inserting
-  non-terminal nodes and \textit{head} edges (\S\ref{sec:conversion}).
-\item Translate UD relations into UCCA edge labels
-  by a deterministic mapping (\S\ref{sec:mapping}).
-%  or through learning (\S\ref{sec:learning}).
-\end{enumerate}
 
 \paragraph{Evaluation.}
 
