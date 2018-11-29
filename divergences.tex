@@ -427,10 +427,13 @@ We refer to this set as \textit{shared} henceforth.
 \section{Comparison Methodology}\label{sec:methodology}
 
 To facilitate comparison between UCCA and UD,
-we use a freely available converter between the
-schemes\footnote{\url{http://github.com/huji-nlp/semstr}}
-\cite{hershcovich2018multitask,hershcovich2018universal},
-after extending it to assimilate the graphs by abstracting away from formalism differences.
+we first assimilate the graphs by abstracting away from formalism differences.
+One obvious difference is that UD annotates bi-lexical dependency graphs,
+while UCCA graphs contain non-terminal nodes.
+To reach a common format,
+we use a freely available converter
+\footnote{\url{http://github.com/huji-nlp/semstr}}
+\cite{hershcovich2018multitask,hershcovich2018universal}.
 Given UD trees, the converter outputs graphs in a unified DAG format.
 The format consists of a rooted DAG, where the tokens are the terminal nodes.
 As in the UCCA format, edges are labeled (but not nodes),
@@ -455,6 +458,8 @@ leaving only the universal relations.
 For example, the language-specific \verb|acl:relcl| is replaced by the universal relation \verb|acl|.
 
 \subsection{Local Modifications}\label{sec:local}
+
+We extend the converter to remove further formalism differences.
 
 \paragraph{Unanalyzable units.}
 Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
