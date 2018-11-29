@@ -639,7 +639,7 @@ Elaborator (det), Function (expl) and pArticipant (iobj, nsubj and obj).
 The exceptions are mostly cases of unanalyzable multi-word expressions,
 which are analyzed in UD: ``a bit'', ``bites the dust'', ``when it comes to''.
 In addition, nsubj and obj are annotated as Process or State when they
-represent a (nominal) predicate,
+represent a (nominal) predicate (e.g., ``But \textit{service} is very poor''),
 and the determiner (det) ``no'' as an aDverbial when it modifies one.
 Some nsubj instances of ``it'' and ``that''
 are analyzed as expletives in UCCA (and annotated as Function),
@@ -703,15 +703,18 @@ a non-terminal node will be created in the converted graph, with a \textit{head}
 About 17\% of these edges are unmatched, mostly due to unanalyzable expressions and inter-scene linkage.
 About 70\% are Process, State, parallel scene or Center,
 where the notion of syntactic head matches that of a ``UCCA head''.
+In the remaining case there is a divergence, e.g., ``\textit{all} of Dallas''.
 
 \paragraph{acl and xcomp.}
 
 In most cases, adjectival clauses (acl) are annotated as Elaborator scenes,
 and open clausal complements (xcomp) as pArticipant scenes.
-However, many unmatched yields are due to:
+However, it may be the other way around if the head is a (nominal) predicate
+(e.g., ``Great job \textit{master-keying our building}'').
+Furthermore, many unmatched yields are due to:
 \begin{itemize}
 \item Fused relative clauses: ``The prices were worth \textit{what I got}.''
-\item Different treatment of modals: ``There should only be one person \textit{bringing you your food},''
+\item Different treatment of secondary verbs: ``There should only be one person \textit{bringing you your food},''
 ``seemed to want to help.''
 \item Linkage: ``Overall, Joe is a happy camper \textit{who has found a great spot}.''
 \end{itemize}
