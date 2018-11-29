@@ -150,9 +150,9 @@ To explore the difference in content, we experiment with converting UD to UCCA
 using a two-step protocol:
 \begin{enumerate}
 \item Structurally convert bilexical dependency graphs into constituency-like graphs by inserting
-  non-terminal nodes and \textit{head} edges (\S\ref{sec:conversion}).
+  non-terminal nodes and \textit{head} edges (\S\ref{sec:methodology}).
 \item Translate UD relations into UCCA edge labels
-  by a deterministic mapping (\S\ref{sec:mapping}).
+  by a deterministic mapping (\S\ref{sec:conversion}).
 \end{enumerate}
   
    We find that most content differences between the schemes are due to the following
@@ -342,7 +342,8 @@ case information, elided predicates,
 and shared arguments due to conjunction, control, raising and relative clauses.
 They provide richer information to downstream semantic applications,
 making UD better suited for text understanding.
-
+Enhanced UD has a more restricted notion of shared arguments than UCCA's.
+Future work will explore the differences and commonalities between enhanced UD edges and remote UCCA edges.
 
 \begin{figure}[!ht]
 
@@ -420,18 +421,18 @@ cross-reviewed.\footnote{The data will be publicly
 available upon publication.}
 As these sentences are included in the Universal Dependencies \verb|English_EWT| treebank,
 we have both gold-standard UCCA and UD for them.
-We refer to this set as \textit{Shared} henceforth.
+We refer to this set as \textit{shared} henceforth.
 
 
-\section{Comparison Methodology}\label{sec:conversion}
+\section{Comparison Methodology}\label{sec:methodology}
 
-\subsection{Structural Conversion}\label{sec:structural}
-
-We convert UD trees and graphs into a unified DAG format \cite{hershcovich2018multitask,hershcovich2018universal}.
-The format consists of a rooted DAG, where the tokens are the terminal
-nodes.\footnote{Our conversion code supports full conversion between UCCA and UD,
-among other representation schemes,
-and is publicly available at \url{http://github.com/danielhers/semstr/tree/master/semstr/conversion}.}
+To facilitate comparison between UCCA and UD,
+we use a freely available converter between the
+schemes\footnote{\url{http://github.com/huji-nlp/semstr}}
+\cite{hershcovich2018multitask,hershcovich2018universal},
+after extending it to assimilate the graphs by abstracting away from formalism differences.
+Given UD trees, the converter outputs graphs in a unified DAG format.
+The format consists of a rooted DAG, where the tokens are the terminal nodes.
 As in the UCCA format, edges are labeled (but not nodes),
 and are divided into \textit{primary} and \textit{remote} edges,
 where the primary edges form a tree (all nodes have at most one primary parent,
@@ -440,60 +441,30 @@ Remote edges enable reentrancy, and thus together with primary edges
 form a DAG.
 Figure~\ref{fig:converted_example_ud} shows an example for a converted graph.
 
-\footnote{Enhanced UD structures \cite{SCHUSTER16.779} use DAGs to encode
-      shared argumenthood, using a more restricted notion thereof than UCCA's. Future work
-      will explore the differences and commondalities between enhanced UD edges and remote UCCA edges.}
-
 To convert UD into the unified DAG format,
-we add a pre-terminal for each token,
-and attach the pre-terminals according to the original dependency edges:
-traversing the tree from the root down, for each head token we create a non-terminal
+the converter adds a pre-terminal for each token,
+and attaches the pre-terminals according to the original dependency edges:
+traversing the tree from the root down, for each head token it creates a non-terminal
 parent with the edge label {\it head},
-and add the node's dependents as children of the created non-terminal node
+and adds the node's dependents as children of the created non-terminal node
 (see Figure~\ref{fig:converted_example_ud}).
-Any \textit{enhanced}
-heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
-In the conversion process, we strip any language-specific relation subtypes,
+%Any \textit{enhanced}
+%heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
+In the conversion process, any language-specific relation subtypes are stripped,
 leaving only the universal relations.
 For example, the language-specific \verb|acl:relcl| is replaced by the universal relation \verb|acl|.
 
-
-
-\subsection{Label Mapping}\label{sec:mapping}
-
-Using the standard UCCA evaluation
-script,\footnote{\url{http://github.com/danielhers/ucca/blob/master/scripts/evaluate_standard.py}}
-we create a confusion matrix between the edge tags in converted UD graphs
-and the annotated UCCA graphs (see Table~\ref{tab:confusion_matrix}).
-We performed this analysis on gold UD and UCCA graphs from the EWT corpus (see \S\ref{sec:experiments}).
-Edges are matched by terminal yield.
-In this confusion matrix, we can see what is the most common UCCA edge label corresponding
-to each UD relation.
-To convert the UD graphs into fully labeled UCCA graphs,
-we replace each UD edge label with its most common UCCA counterpart.
-
-The \textit{head} edges introduced as part of the conversion do not have a single
-corresponding UCCA edge label---although C (center) is the most common corresponding label,
-other labels such as P (process) are also common.
-This is a difference between UD, which selects the most central token to be the head of a phrase,
-to UCCA, which also annotates the relation between that head and the unit it is part of.
-To overcome this limitation, we replace all \textit{head} labels with C, but then
-apply standard UCCA
-normalization\footnote{\url{https://github.com/danielhers/ucca/blob/master/scripts/normalize.py}}
-to the resulting graphs after conversion,
-replacing C with P when it has sibling A's (participants) or
-with H when it has sibling H's (parallel scenes).
-We select P rather than S (state) as the main relation in the normalization because
-it is much more common (14,719 P's in the Wiki corpus as opposed to 3354 S's).
-
 \subsection{Local Modifications}\label{sec:local}
 
+\paragraph{Unanalyzable units.}
 Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
 In UD, each word after the first is attached to the previous word,
-with the \verb|flat|, \verb|fixed| or \verb|goeswith| relations.
+with the \verb|flat|, \verb|fixed| or \verb|goeswith| relations
+(depending on whether the phrase is a name or a title, or whether it is one word split by error).
 During conversion, we remove edges of both relations and group the corresponding terminals to one unit.
 
-In general, the conversion protocol attaches low,
+\paragraph{Promotion of function words.}
+In general, the basic conversion protocol attaches low,
 selecting for each terminal $t$ the lowest non-terminal of which $t$
 is the head terminal.
 To abstract away from convention differences,
@@ -556,6 +527,14 @@ by comparing incoming edge labels for units with the same terminal yields.
 \label{tab:confusion_matrix}}
 \end{table}
 
+\subsection{Confusion Matrix}\label{sec:confusion}
+Using the standard UCCA evaluation
+script,\footnote{\url{http://github.com/huji-nlp/ucca/blob/master/scripts/evaluate_standard.py}}
+we create a confusion matrix between the edge tags in converted UD graphs
+and the annotated UCCA graphs (see Table~\ref{tab:confusion_matrix}).
+We perform this analysis on gold UD and UCCA graphs from the shared EWT corpus
+(see \S\ref{sec:shared}).
+Edges are matched by terminal yield.
 
 
 \section{Analysis of Divergences}\label{sec:analysis}
@@ -743,6 +722,41 @@ Vocatives are annotated as Ground, but also as pArticipants if they are argument
 \subsection{Discussion by UCCA Labels}
 
 Going over each category is somewhat redundant, but we do discuss unmatched UCCA units, according to category (and put the histogram of units).
+
+
+\section{Full Conversion}\label{sec:conversion}
+
+The conversion protocol introduced in \S\ref{sec:methodology} outputs graphs in a UCCA-like
+format, but with UD edge labels.
+In this section we describe a full conversion protocol,
+aiming at reaching ``native'' UCCA graphs.
+
+\paragraph{Label mapping.}
+The confusion matrix introduced in \S\ref{sec:confusion}
+provides a distribution of the possible UCCA categories
+corresponding to each UD relation.
+By finding the mode of this distribution,
+we get the most likely translation.
+To convert the UD trees into fully labeled UCCA graphs,
+we replace each UD relation with its most common UCCA counterpart.
+
+\paragraph{Postprocessing.}
+The \textit{head} edges introduced as part of the conversion (\S\ref{sec:conversion})
+do not have a single
+corresponding UCCA edge label---although C (center) is the most common corresponding label,
+other labels such as P (process) are also common.
+This is a difference between UD, which selects the most central token to be the head of a phrase,
+to UCCA, which also annotates the relation between that head and the unit it is part of.
+To overcome this limitation, we replace all \textit{head} labels with C, but then
+apply standard UCCA
+normalization\footnote{\url{https://github.com/huji-nlp/ucca/blob/master/scripts/normalize.py}}
+to the resulting graphs after conversion,
+replacing C with P when it has sibling A's (participants) or
+with H when it has sibling H's (parallel scenes).
+We select P rather than S (state) as the main relation in the normalization because
+it is much more common (14,719 P's in the Wiki corpus as opposed to 3354 S's).
+
+
 
 
 \section{Improving UCCA Parsing with UD}\label{sec:silver}
