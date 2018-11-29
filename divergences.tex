@@ -156,15 +156,18 @@
     stem from a different treatment of coordination, apposition and copulas.
      \end{enumerate}
 
-   UCCA uses DAGs so as to allow encoding shared argumenthood, by assigning multiple parents to the same node. 
-   As UD uses trees rather DAGs, shared argumenthood is largely ignored in UD, but is addressed in enhanced UD \cite{}.
+   UCCA graphs are DAGs rather than trees, so as to allow encoding shared argumenthood
+   by assigning multiple parents to the same node.
+   As basic UD uses trees rather than graphs, shared argumenthood is largely ignored in UD,
+   but is addressed in enhanced UD \cite{SCHUSTER16.779}.
   See \S\ref{sec:analysis}.
 
-  \oa{a paragraph about the parsing experiments}
-  We use the analysis to build a converter. We show it's useful in generating silver standard training data for TUPA.
-  Results are ...
+  We use the converter built as part of our analysis to generate silver standard
+  training data for a UCCA parser (\S\ref{sec:silver}).
   
-  \oa{a paragraph on error analysis}
+  As another use-case for our converter to support parsing,
+  we perform fine-grained error analysis on UCCA parsing results
+  according to UD relations (\S\ref{sec:fine_grained}).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -787,7 +790,7 @@ Going over each category is somewhat redundant, but we do discuss unmatched UCCA
 
 
 
-\section{Improving UCCA Parsing with UD}\label{}
+\section{Improving UCCA Parsing with UD}\label{sec:silver}
 
 \subsection{Experimental Setup}\label{sec:experiments}
 
@@ -1087,7 +1090,7 @@ and is an upper bound given a fixed structural conversion.
 %\section{Discussion}\label{sec:discussion}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{UCCA Parsing Error Analysis by UD}\label{sec:parser_error}
+\section{UCCA Parsing Error Analysis by UD}\label{sec:fine_grained}
 
 
 
