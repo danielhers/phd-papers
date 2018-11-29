@@ -411,46 +411,17 @@ While converted UD graphs form trees, enhanced++ UD graphs may not.}\label{fig:u
 \end{figure}
 
 
-\section{Shared Gold Standard Corpus}\label{sec:data_size}
+\section{Shared Gold Standard Corpus}\label{sec:shared}
 
-Syntactic dependency parsers require many training examples to achieve
-state-of-the-art results.
-Even after around 500K tokens, the learning curves do not seem to saturate
-\cite{de2017old,velldal2017joint}.
+We annotate 804 English sentences from the reviews section of the English Web Treebank
+\cite[EWT; ][]{bies2012english}.
+The sentences are annotated by two UCCA annotators and
+cross-reviewed.\footnote{The data will be publicly
+available upon publication.}
+As these sentences are included in the Universal Dependencies \verb|English_EWT| treebank,
+we have both gold-standard UCCA and UD for them.
+We refer to this set as \textit{Shared} henceforth.
 
-Whereas the largest UCCA training set (English Wiki) contains 128K tokens,
-The largest joined English UD training set (EWT) contains 177K tokens.
-In French UCCA has just 10K training tokens whereas UD has 295K,
-and in German UCCA has 80K and UD 228K.
-
-\begin{table}[t]
-\centering
-\begin{tabular}{l|lll|lll}
-& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
-& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
-& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
-\hline
-\footnotesize 10\% & 65.1 & 65.2 & 65.1 & 38.4 & 24.3 & 29.8\\
-\footnotesize 20\% & 68.9 & 68.3 & 68.6 & 47.1 & 28.0 & 35.2\\
-\footnotesize 30\% & 70.2 & 70.1 & 70.2 & 47.2 & 45.5 & 46.3\\
-\footnotesize 40\% & 71.5 & 71.3 & 71.4 & 52.5 & 46.1 & 49.1\\
-\footnotesize 50\% & 71.9 & 71.9 & 71.9 & 51.3 & 48.6 & 49.9\\
-\footnotesize 60\% & 71.3 & 72.4 & 71.9 & 52.9 & 45.5 & 48.9\\
-\footnotesize 70\% & 73.1 & 72.7 & 72.9 & 50.8 & 50.5 & 50.6\\
-\footnotesize 80\% & 73.5 & 72.6 & 73.0 & 52.8 & 47.0 & 49.8\\
-\footnotesize 90\% & 73.9 & 73.1 & 73.5 & 52.3 & 48.6 & 50.4\\
-\footnotesize 100\% & 74.7 & 74.8 & 74.8 & 48.5 & 51.2 & 49.8\\
-\end{tabular}
-\caption{
-Development scores for TUPA \protect\cite{hershcovich2017a} when trained on increasing amount of training data
-(English Wiki corpus).
-\label{tab:partial_data_results}}
-\end{table}
-
-Table~\ref{tab:partial_data_results} shows results for TUPA,
-trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki development set.
-As can be seen, the primary labeled F1 continues improving substantially even from 90\% to 100\%
-of the training data. More training data is likely to yield even better performance.
 
 \section{Comparison Methodology}\label{sec:conversion}
 
@@ -769,14 +740,51 @@ Vocatives are annotated as Ground, but also as pArticipants if they are argument
 (e.g., ``Thanks \textit{Mark}'').
 
 
-
 \subsection{Discussion by UCCA Labels}
 
 Going over each category is somewhat redundant, but we do discuss unmatched UCCA units, according to category (and put the histogram of units).
 
 
-
 \section{Improving UCCA Parsing with UD}\label{sec:silver}
+
+Syntactic dependency parsers require many training examples to achieve
+state-of-the-art results.
+Even after around 500K tokens, the learning curves do not seem to saturate
+\cite{de2017old,velldal2017joint}.
+
+Whereas the largest UCCA training set (English Wiki) contains 128K tokens,
+The largest joined English UD training set (EWT) contains 177K tokens.
+In French UCCA has just 10K training tokens whereas UD has 295K,
+and in German UCCA has 80K and UD 228K.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+\hline
+\footnotesize 10\% & 65.1 & 65.2 & 65.1 & 38.4 & 24.3 & 29.8\\
+\footnotesize 20\% & 68.9 & 68.3 & 68.6 & 47.1 & 28.0 & 35.2\\
+\footnotesize 30\% & 70.2 & 70.1 & 70.2 & 47.2 & 45.5 & 46.3\\
+\footnotesize 40\% & 71.5 & 71.3 & 71.4 & 52.5 & 46.1 & 49.1\\
+\footnotesize 50\% & 71.9 & 71.9 & 71.9 & 51.3 & 48.6 & 49.9\\
+\footnotesize 60\% & 71.3 & 72.4 & 71.9 & 52.9 & 45.5 & 48.9\\
+\footnotesize 70\% & 73.1 & 72.7 & 72.9 & 50.8 & 50.5 & 50.6\\
+\footnotesize 80\% & 73.5 & 72.6 & 73.0 & 52.8 & 47.0 & 49.8\\
+\footnotesize 90\% & 73.9 & 73.1 & 73.5 & 52.3 & 48.6 & 50.4\\
+\footnotesize 100\% & 74.7 & 74.8 & 74.8 & 48.5 & 51.2 & 49.8\\
+\end{tabular}
+\caption{
+Development scores for TUPA \protect\cite{hershcovich2017a} when trained on increasing amount of training data
+(English Wiki corpus).
+\label{tab:partial_data_results}}
+\end{table}
+
+Table~\ref{tab:partial_data_results} shows results for TUPA,
+trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki development set.
+As can be seen, the primary labeled F1 continues improving substantially even from 90\% to 100\%
+of the training data. More training data is likely to yield even better performance.
 
 \subsection{Experimental Setup}\label{sec:experiments}
 
@@ -811,7 +819,7 @@ Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
 UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
 \multicolumn{2}{l}{250658} && \multicolumn{2}{l}{14450} && \multicolumn{2}{l}{209131} && 13814 \\
 \hline
-Intersection &&& 11103 &&& 804 &&&&&&&&&&&&
+Shared &&& 11103 &&& 804 &&&&&&&&&&&&
 \end{tabular}
 \caption{Number of tokens and sentences in the training, development and test sets
 we use for each corpus and language.\label{tab:corpora}}
@@ -836,19 +844,11 @@ treebanks from Universal Dependencies v2.3
 \cite{11234/1-2895}.\footnote{\url{http://hdl.handle.net/11234/1-2895}}
 These are the largest freely-available UD treebanks for these languages.
 
-We also use 804 English sentences from the reviews section of the English Web Treebank
-\cite[EWT; ][]{bies2012english},
-annotated by two UCCA annotators and
-cross-reviewed.\footnote{The data will be publicly
-available upon publication.}
-As these sentences are included in the Universal Dependencies \verb|English_EWT| treebank,
-we have both gold-standard UCCA and UD for them.
-We refer to this set as \textit{intersection} henceforth.
 
 \paragraph{Conversion of gold UD annotations.}
 
 We apply our conversion protocol (\S\ref{sec:conversion}) to
-the gold-standard UD trees of the English EWT intersection sentences,
+the gold-standard UD trees of the English EWT shared sentences,
 and evaluate on the gold-standard UCCA for the same sentences.
 We then apply the label mapping to get fully labeled converted UCCA graphs.
 
@@ -885,7 +885,7 @@ and add it to the UCCA training set for training TUPA.
 & \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
 & \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
 \hline
-\multicolumn{4}{l|}{\small \bf English EWT (intersection)} & \\
+\multicolumn{4}{l|}{\small \bf English EWT (shared)} & \\
 \footnotesize UD 2.3
 & 81.5 & 88.2 & 84.7 & 21.2 & 19.6 & 20.4 \\
 \footnotesize TUPA
@@ -926,7 +926,7 @@ and tested with predicted POS and dependency features.
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
 & \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
 \hline
-\multicolumn{4}{l|}{\small \bf English EWT (intersection)} & \\
+\multicolumn{4}{l|}{\small \bf English EWT (shared)} & \\
 \footnotesize UD 2.3
 & 59.6 & 64.5 & 62 & 21.2 & 19.6 & 20.4 \\
 \footnotesize TUPA
