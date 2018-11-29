@@ -110,12 +110,12 @@
   Nevertheless, despite the close link between syntactic and semantic representations,
   and despite their centrality, few works attempted to map what content overlap and differences
   are there between syntactic and semantic structures.
-	Understanding such content differences will support better ways to leverage content overlap
-	between schemes, as well as point at semantic distinctions that are unlikely to be resolved by syntax.
-	A methodology for comparing syntactic and semantic treebanks can also support fine-grained error analysis 
-	of semantic parsers, as implemented by \citet{szubert2018structured} for AMR parsing.
-	
-	This paper aims to address this gap, taking the syntactic Universal Dependencies scheme,
+   Understanding such content differences will support better ways to leverage content overlap
+   between schemes, as well as point at semantic distinctions that are unlikely to be resolved by syntax.
+   A methodology for comparing syntactic and semantic treebanks can also support fine-grained error analysis 
+   of semantic parsers, as implemented by \citet{szubert2018structured} for AMR parsing.
+   
+   This paper aims to address this gap, taking the syntactic Universal Dependencies scheme,
   and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal} scheme
   as a test case. 
   The paper focuses on {\it content} differences, i.e., differences that cannot be resolved by simple
@@ -123,18 +123,17 @@
   us to focus on content, and abstract away from differences of convention.
   
   For instance, UD strongly prefers lexical heads,
-	unlike other dependency schemes that prefer functional ones.
+   unlike other dependency schemes that prefer functional ones.
   While the two approaches are largely inter-translatable
-	\cite{Schwartz:12}, lexical head schemes are more similar in form to semantic schemes,
-	such as UCCA and broad-coverage semantic dependencies \cite{oepen2015semeval},
-	which facilitates their comparison.\oa{is this paragraph clear?}
-	%Selecting more distant schemes for comparison could have potentially confounded our results.
-		
-	
-%	Comparing relatively similar schemes therefore 
-%	allows us to focus on principle differences between them, and abstract away from 
-%	divergences that can be resolved straightforwardly.
-		
+   \cite{Schwartz:12}, lexical head schemes are more similar in form to semantic schemes,
+   such as UCCA and broad-coverage semantic dependencies \cite{oepen2015semeval},
+   which facilitates their comparison.\oa{is this paragraph clear?}
+  %Selecting more distant schemes for comparison could have potentially confounded our results.
+
+%   Comparing relatively similar schemes therefore 
+%   allows us to focus on principle differences between them, and abstract away from 
+%   divergences that can be resolved straightforwardly.
+
   %Moreover, in order to attain cross-linguistic applicability, UD's design conventions are 
   %often not dissimilar to those made by semantic schemes. A notable example is UD's preference
   %of forming dependencies between lexical heads, rather than functional ones.
@@ -144,8 +143,8 @@
   %encoded by the structures, rather than their form, taking UD already cleans out much structural divergence
   %originating from differences of convention.
   
-	We find that most content differences between the schemes are due to the following factors:\oa{daniel, we need
-	to add references here to the appropriate places in the text}
+   We find that most content differences between the schemes are due to the following factors:\oa{daniel, we need
+   to add references here to the appropriate places in the text}
 
   \setlength{\leftmargini}{15pt}
 
@@ -156,22 +155,22 @@
       noun (``negotiation'', ``fatigue''), an adjective or even a preposition (``this  is {\bf for} John'').
     \item
       UCCA distinguishes between participants (including locations and abstract entities), and secondary verbs, 
-			which covers for example manner, aspect and modality. Secondary relations can verbs (e.g., ``begin'', ``fail''),
-			prepositional phrases (``with disrespect''), as well as modals, adjectives and adverbs. 
+      which covers for example manner, aspect and modality. Secondary relations can verbs (e.g., ``begin'', ``fail''),
+      prepositional phrases (``with disrespect''), as well as modals, adjectives and adverbs. 
     \item
-			UD and UCCA treat multi-word expressions (MWEs) differently. MWEs in UD include names, compounds and grammaticalized fixed 
-			expressions. UCCA also treats names and grammaticalized MWEs are units, but also treats 
-			a range of semantically opaque constructions as units (e.g., light verbs and idioms).
-			On the other hand, compounds are not necessarily treated as MWEs in UCCA, especially where they are compositional.			
-		\item
-			UD categorizes clause linkage into coordination, subordination, argumenthood (complementation),
-			and parataxis (a residual category). UCCA only distinguishes between argumenthood 
-			and largely conflates clausal coordination, subordination and parataxis. 
-			Other divergences stem from ...\oa{fill in}. 
-	  \end{enumerate}\daniel{add interesting example---scene-evoking noun or auxiliary verb}
+      UD and UCCA treat multi-word expressions (MWEs) differently. MWEs in UD include names, compounds and grammaticalized fixed 
+      expressions. UCCA also treats names and grammaticalized MWEs are units, but also treats 
+      a range of semantically opaque constructions as units (e.g., light verbs and idioms).
+      On the other hand, compounds are not necessarily treated as MWEs in UCCA, especially where they are compositional.      
+      \item
+      UD categorizes clause linkage into coordination, subordination, argumenthood (complementation),
+      and parataxis (a residual category). UCCA only distinguishes between argumenthood 
+      and largely conflates clausal coordination, subordination and parataxis. 
+      Other divergences stem from ...\oa{fill in}. 
+     \end{enumerate}\daniel{add interesting example---scene-evoking noun or auxiliary verb}
 
-	UCCA uses DAGs so as to allow encoding shared argumenthood, by assigning multiple parents to the same node. 
-	As UD uses trees rather DAGs, shared argumenthood is largely ignored in UD, but is addressed in enhanced UD \cite{}.
+   UCCA uses DAGs so as to allow encoding shared argumenthood, by assigning multiple parents to the same node. 
+   As UD uses trees rather DAGs, shared argumenthood is largely ignored in UD, but is addressed in enhanced UD \cite{}.
   See \S\ref{sec:analysis}.
 
   \oa{a paragraph about the parsing experiments}
@@ -495,8 +494,8 @@ form a DAG.
 Figure~\ref{fig:converted_example_ud} shows an example for a converted graph.
 
 \footnote{Enhanced UD structures \cite{schuster} use DAGs to encode
-		shared argumenthood, using a more restricted notion thereof than UCCA's. Future work
-		will explore the differences and commondalities between enhanced UD edges and remote UCCA edges.}
+      shared argumenthood, using a more restricted notion thereof than UCCA's. Future work
+      will explore the differences and commondalities between enhanced UD edges and remote UCCA edges.}
 
 To convert UD into the unified DAG format,
 we add a pre-terminal for each token,
@@ -571,38 +570,38 @@ and it is different from the default low-attaching behavior.
 \setlength\tabcolsep{2pt}
 \begin{tabular}{l|ccccccccccccc}
  & A & C & D & E & F & G & H & L & N & P & R & S & $\emptyset$ \\
- \hline
-acl & 15 & 0 & 0 & 38 & 1 & 0 & 16 & 0 & 0 & 1 & 0 & 1 & 104 \\
-advcl & 2 & 3 & 0 & 0 & 0 & 0 & 100 & 1 & 0 & 4 & 0 & 0 & 99 \\
-advmod & 61 & 10 & 528 & 44 & 13 & 33 & 4 & 61 & 0 & 2 & 8 & 5 & 71 \\
-amod & 1 & 36 & 101 & 217 & 2 & 0 & 7 & 0 & 0 & 3 & 0 & 96 & 65 \\
-appos & 1 & 11 & 1 & 8 & 0 & 0 & 5 & 0 & 0 & 0 & 0 & 4 & 9 \\
-aux & 0 & 0 & 95 & 0 & 284 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 4 \\
-case & 1 & 5 & 3 & 20 & 39 & 0 & 0 & 50 & 7 & 1 & 472 & 53 & 75 \\
-cc & 0 & 0 & 1 & 0 & 0 & 1 & 0 & 305 & 69 & 0 & 2 & 0 & 12 \\
-ccomp & 74 & 0 & 0 & 0 & 0 & 0 & 7 & 0 & 0 & 0 & 0 & 1 & 46 \\
-compound & 18 & 23 & 12 & 179 & 7 & 0 & 0 & 0 & 0 & 1 & 2 & 3 & 161 \\
-conj & 2 & 87 & 1 & 0 & 0 & 0 & 259 & 0 & 0 & 3 & 1 & 4 & 94 \\
-cop & 0 & 0 & 1 & 0 & 332 & 0 & 0 & 1 & 0 & 3 & 1 & 22 & 4 \\
+\hline
+acl & 8 & 0 & 0 & 101 & 2 & 0 & 15 & 0 & 0 & 0 & 0 & 1 & 49 \\
+advcl & 2 & 2 & 0 & 0 & 0 & 0 & 103 & 1 & 0 & 4 & 0 & 0 & 97 \\
+advmod & 61 & 9 & 524 & 53 & 12 & 33 & 3 & 61 & 0 & 2 & 6 & 5 & 71 \\
+amod & 1 & 33 & 106 & 218 & 2 & 0 & 7 & 0 & 0 & 3 & 0 & 97 & 61 \\
+appos & 1 & 10 & 1 & 8 & 0 & 0 & 5 & 0 & 0 & 0 & 0 & 4 & 10 \\
+aux & 0 & 0 & 96 & 0 & 285 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
+case & 1 & 5 & 2 & 15 & 34 & 0 & 0 & 48 & 6 & 1 & 489 & 50 & 75 \\
+cc & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 305 & 71 & 0 & 1 & 0 & 11 \\
+ccomp & 78 & 0 & 0 & 0 & 0 & 0 & 8 & 0 & 0 & 0 & 0 & 1 & 41 \\
+compound & 23 & 24 & 11 & 174 & 2 & 0 & 0 & 0 & 0 & 1 & 1 & 3 & 167 \\
+conj & 2 & 88 & 1 & 0 & 0 & 0 & 265 & 0 & 0 & 2 & 0 & 3 & 90 \\
+cop & 0 & 0 & 0 & 0 & 333 & 0 & 0 & 0 & 0 & 3 & 1 & 24 & 3 \\
 csubj & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 8 \\
-dep & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-det & 4 & 1 & 22 & 773 & 1 & 1 & 0 & 0 & 0 & 0 & 2 & 0 & 30 \\
+dep & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
+det & 2 & 1 & 23 & 778 & 1 & 1 & 0 & 0 & 0 & 0 & 2 & 0 & 26 \\
 discourse & 0 & 1 & 0 & 0 & 1 & 6 & 13 & 3 & 0 & 0 & 0 & 1 & 1 \\
-expl & 3 & 0 & 0 & 0 & 19 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
-head & 148 & 1,393 & 142 & 52 & 99 & 23 & 435 & 3 & 1 & 954 & 11 & 355 & 761 \\
+expl & 0 & 0 & 0 & 0 & 22 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
+head & 125 & 1,401 & 157 & 51 & 91 & 18 & 459 & 2 & 1 & 961 & 9 & 354 & 729 \\
 iobj & 19 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 list & 0 & 2 & 0 & 0 & 0 & 0 & 8 & 0 & 0 & 0 & 0 & 0 & 2 \\
-mark & 0 & 0 & 5 & 0 & 155 & 1 & 0 & 159 & 1 & 0 & 58 & 1 & 20 \\
-nmod & 93 & 1 & 6 & 233 & 0 & 0 & 7 & 0 & 0 & 0 & 0 & 3 & 115 \\
-nsubj & 994 & 1 & 0 & 0 & 14 & 0 & 4 & 14 & 0 & 3 & 15 & 1 & 37 \\
-nummod & 6 & 4 & 4 & 51 & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 26 \\
-obj & 434 & 6 & 10 & 1 & 2 & 0 & 2 & 3 & 0 & 9 & 3 & 0 & 96 \\
-obl & 233 & 1 & 91 & 8 & 7 & 4 & 8 & 4 & 0 & 1 & 4 & 0 & 135 \\
+mark & 0 & 2 & 4 & 0 & 161 & 1 & 0 & 134 & 1 & 0 & 78 & 1 & 18 \\
+nmod & 100 & 1 & 5 & 231 & 0 & 0 & 6 & 0 & 0 & 0 & 0 & 3 & 112 \\
+nsubj & 993 & 0 & 0 & 0 & 14 & 0 & 2 & 9 & 0 & 3 & 24 & 1 & 37 \\
+nummod & 4 & 7 & 3 & 53 & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 24 \\
+obj & 439 & 7 & 10 & 1 & 1 & 0 & 1 & 1 & 0 & 8 & 6 & 0 & 92 \\
+obl & 247 & 1 & 92 & 8 & 2 & 4 & 4 & 4 & 0 & 0 & 2 & 0 & 132 \\
 orphan & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
 parataxis & 1 & 0 & 0 & 1 & 0 & 2 & 65 & 0 & 0 & 1 & 0 & 1 & 54 \\
-vocative & 9 & 1 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-xcomp & 43 & 1 & 3 & 1 & 0 & 0 & 3 & 0 & 0 & 6 & 0 & 6 & 115 \\
-$\emptyset$ & 369 & 161 & 51 & 64 & 4 & 8 & 709 & 23 & 0 & 141 & 5 & 102 & 
+vocative & 9 & 0 & 0 & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+xcomp & 44 & 1 & 2 & 2 & 0 & 0 & 1 & 0 & 0 & 5 & 0 & 7 & 116 \\
+$\emptyset$ & 329 & 173 & 53 & 73 & 6 & 5 & 673 & 29 & 0 & 141 & 7 & 98
 \end{tabular}
 \caption{UD-UCCA confusion matrix calculated from EWT
 gold-standard annotations (\S\ref{sec:experiments})
@@ -709,6 +708,9 @@ if they are, respectively, a complete scene or part of a scene relating to the \
 or simply relate one scene to another.
 
 \paragraph{head.}
+While not a UD relation, this label is introduced on the conversion from dependency graphs
+\cite{hershcovich2018multitask}: for any word with at least one dependent,
+a non-terminal node will be created in the converted graph, with a \textit{head} edge.
 about 17\% are unmatched, about 14\% are not P/S/H/C, which
 leaves about 70\% of cases where the notion of syntactic head matches
 that of a ``UCCA head''.
