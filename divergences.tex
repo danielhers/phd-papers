@@ -651,10 +651,10 @@ while cc is split between coNnector (between non-scenes) and Linker (between sce
 
 \paragraph{cop.}
 UCCA distinguishes between copular constructions expressing
-identity (e.g., ``It was an ingrown toenail'') where the copula is annotated as State
+identity (e.g., ``It \textit{was} an ingrown toenail'') where the copula is annotated as State
 (and the head is a pArticipant),
 as opposed to attributes or set membership
-(e.g., ``Mercedes and Dan are very thorough''), where it is annotated as Function
+(e.g., ``Mercedes and Dan \textit{are} very thorough''), where it is annotated as Function
 (and the head is a State).
 
 \paragraph{mark.}
@@ -675,21 +675,21 @@ While in the majority of cases adverbial modifiers correspond to aDverbials,
 they may be annotated as pArticipants in the case of semantic arguments describing location.
 Obliques, on the other hand, mostly correspond to pArticipants, but may be
 annotated as aDverbials in case of adjuncts describing time.
-In ``went there yesterday'', the advmod ``there'' is annotated as a pArticipant,
-while the oblique ``yesterday'' as an aDverbial.
+In ``went there yesterday'', the advmod ``\textit{there}'' is annotated as a pArticipant,
+while the oblique ``\textit{yesterday}'' as an aDverbial.
 
 \paragraph{amod.}
 Adjectives are annotated as aDverbials, Elaborators or States,
 depending on whether they modify scene or non-scene nouns
-(``romantic dinner'' vs. ``medical school''), or
-they are evoking scenes on their own (``beautiful hotel'').
+(``\textit{romantic} dinner'' vs. ``\textit{medical} school''), or
+they are evoking scenes on their own (``\textit{beautiful} hotel'').
 
 \paragraph{compound.}
-While most compounds correspond to Elaborators (e.g., ``industry standard''),
-many are unanalyzable expressions (e.g., ``figure out'').
+While most compounds correspond to Elaborators (e.g., ``\textit{industry} standard''),
+many are unanalyzable expressions (e.g., ``\textit{figure out}'').
 However, this is not a semantic category.
 For example, in many cases a compound represent an argument,
-and is annotated as pArticipants (``food craving'').
+and is annotated as pArticipants (``\textit{food} craving'').
 
 \paragraph{discourse.}
 Interjections and discourse markers are annotated as H (parallel scene), Ground or Linker,
@@ -710,10 +710,10 @@ In most cases, adjectival clauses (acl) are annotated as Elaborator scenes,
 and open clausal complements (xcomp) as pArticipant scenes.
 However, many unmatched yields are due to:
 \begin{itemize}
-\item Fused relative clauses: ``The prices were worth what I got.''
-\item Different treatment of modals: ``There should only be one person bringing you your food,''
+\item Fused relative clauses: ``The prices were worth \textit{what I got}.''
+\item Different treatment of modals: ``There should only be one person \textit{bringing you your food},''
 ``seemed to want to help.''
-\item Linkage: ``Overall, Joe is a happy camper who has found a great spot.''
+\item Linkage: ``Overall, Joe is a happy camper \textit{who has found a great spot}.''
 \end{itemize}
 
 \paragraph{conj and list.}
@@ -725,13 +725,18 @@ This is convention difference that we fixed with local modifications
 (\S\ref{sec:local})---otherwise most \verb|conj| instances would be unmatched.
 
 \paragraph{appos.}
-Split between Center (``its sister store Peking Garden'')
-and Elaborator (``Kevin, the manager''):
+Split between Center (``its sister store \textit{Peking Garden}'')
+and Elaborator (``Kevin, \textit{the manager}''):
 whereas UD always annotates the first phrase as the head and any subsequent one as apposition,
 in UCCA a named entity will be annotated as the center if it is one of the phrases.
 
 \paragraph{case.}
-mostly match (because it's usually one word), but prepositions can be several things in UCCA (relators which are similar to case markers, but also main relations, the borderline between analyzable and unanalyzable plays some role).
+While most adpositions are annotated as Relators (e.g., ``the team \textit{at} Bradley Chevron''),
+many cases are unanalyzable due to UCCA's stronger tendency to group multi-word expressions
+(as in ``lots of'').
+Furthermore, they may be semantically vacuous and annotated as Functions
+(e.g., ``another reversal \textit{of} \$160.00''),
+or even relations (State, e.g., ``not at all \textit{like} the junk you get at the grocery stores'').
 
 \paragraph{ccomp.}
 why so many unmatched?
