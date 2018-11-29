@@ -704,33 +704,25 @@ About 17\% of these edges are unmatched, mostly due to unanalyzable expressions 
 About 70\% are Process, State, parallel scene or Center,
 where the notion of syntactic head matches that of a ``UCCA head''.
 
-\paragraph{acl.}
+\paragraph{acl and xcomp.}
 
-Nominal predicates.
-
-A noun annotated as a process.
-
-26307003:
-Did services I asked them NOT to do.
-
-Free/fused relative clause.
-
-26315003:
-The prices were worth what I got.
-
-Flattening of scene structure.
-
-26510000
-Did a great job of removing my tree in Conyers.
-
-\paragraph{xcomp.}
+In most cases, adjectival clauses (acl) are annotated as Elaborator scenes,
+and open clausal complements (xcomp) as pArticipant scenes.
+However, many unmatched yields are due to:
+\begin{itemize}
+\item Fused relative clauses: ``The prices were worth what I got.''
+\item Different treatment of modals: ``There should only be one person bringing you your food,''
+``seemed to want to help.''
+\item Linkage: ``Overall, Joe is a happy camper who has found a great spot.''
+\end{itemize}
 
 \paragraph{conj and list.}
-Distinction between Scene and non-Scene coordination (not very interesting).
-While in conj the dependent \verb|cc| is attached to the following conjunct in UD,
+Split between Center and H (parallel scene), due to the
+distinction between scene and non-scene coordination.
+Note that while in UD the dependent \verb|cc| is attached to the following conjunct in UD,
 in UCCA coordination is annotated as a flat structure.
-This is convention difference that we fixed with local modifications (\S\ref{sec:local}).
-Otherwise most conj would be unmatched.
+This is convention difference that we fixed with local modifications
+(\S\ref{sec:local})---otherwise most \verb|conj| instances would be unmatched.
 
 
 
