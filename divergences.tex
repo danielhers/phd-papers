@@ -577,6 +577,24 @@ treatment in UCCA, examining the main distinctions different between the schemes
       UCCA distinguishes between Scenes (descriptions of events, states or activities) and non-Scenes. 
       This distinction cuts across UD categories, as a Scene can be evoked by a verb, an eventive or stative
       noun (``negotiation'', ``fatigue''), an adjective or even a preposition (``this is \textit{for} John'').
+      
+\begin{description}
+	\item[iobj, nsubj, and obj.]
+	Annotated as pArticipant (e.g., ``\textit{Wine} was excellent'')
+	or Process/State
+	(e.g., ``But \textit{service} is very poor''),
+	depending on whether the unit is a scene.
+	
+	\item[cc, conj and list.]
+	\verb|cc| is split between coNnector (between non-scenes) and Linker (between scenes),
+	while \verb|conj| and \verb|list| are split between Center and H (parallel scene), due to the
+	distinction between scene and non-scene coordination.
+	Note that while in UD the dependent \verb|cc| is attached to the following conjunct in UD,
+	in UCCA coordination is annotated as a flat structure.
+	This is a convention difference that we fixed with local modifications
+	(\S\ref{sec:local})---otherwise most \verb|conj| instances would be unmatched.
+	
+\end{description}
 
 \subsection{Arguments/Adjuncts}\label{sec:arguments}
 
@@ -603,21 +621,18 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	\item[det, expl, iobj, nsubj, and obj.]
 	With an almost perfect match to UCCA categories,
 	these relations are syntactic refinements of
-	Elaborator (det), Function (expl) and pArticipant (iobj, nsubj and obj).
+	Elaborator (det), Function (expl).
 	The exceptions are mostly cases of unanalyzable multi-word expressions,
 	which are analyzed in UD: ``a bit'', ``bites the dust'', ``when it comes to''.
-	In addition, nsubj and obj are annotated as Process or State when they
-	represent a (nominal) predicate (e.g., ``But \textit{service} is very poor''),
-	and the determiner (det) ``no'' as an aDverbial when it modifies one.
+	The determiner (det) ``no'' as an aDverbial when it modifies a scene.
 	Some nsubj instances of ``it'' and ``that''
 	are analyzed as expletives in UCCA (and annotated as Function),
 	and some wh-pronouns (``which'', ``who'') as Linkers or Relators.
 	
-	\item[aux and cc.]
-	aux is split between Function (auxiliary verbs) and aDverbial (modals),
-	while cc is split between coNnector (between non-scenes) and Linker (between scenes).
-
-	\item[cop.]
+	\item[aux.]
+	aux is split between Function (auxiliary verbs) and aDverbial (modals).	
+	
+    \item[cop.]
 	UCCA distinguishes between copular constructions expressing
 	identity (e.g., ``It \textit{was} an ingrown toenail'') where the copula is annotated as State
 	(and the head is a pArticipant),
@@ -685,14 +700,6 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	``seemed to want to help.''
 	\item Linkage: ``Overall, Joe is a happy camper \textit{who has found a great spot}.''
 	\end{itemize}
-	
-	\item[conj and list.]
-	Split between Center and H (parallel scene), due to the
-	distinction between scene and non-scene coordination.
-	Note that while in UD the dependent \verb|cc| is attached to the following conjunct in UD,
-	in UCCA coordination is annotated as a flat structure.
-	This is convention difference that we fixed with local modifications
-	(\S\ref{sec:local})---otherwise most \verb|conj| instances would be unmatched.
 	
 	\item[appos.]
 	Split between Center (``its sister store \textit{Peking Garden}'')
