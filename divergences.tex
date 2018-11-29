@@ -143,31 +143,17 @@
   %encoded by the structures, rather than their form, taking UD already cleans out much structural divergence
   %originating from differences of convention.
   
-   We find that most content differences between the schemes are due to the following factors:\oa{daniel, we need
-   to add references here to the appropriate places in the text}
-
-  \setlength{\leftmargini}{15pt}
+   We find that most content differences between the schemes are due to the following
+   factors:\daniel{add interesting example---scene-evoking noun or auxiliary verb}
 
   \begin{enumerate}[noitemsep]
-    \item 
-      UCCA distinguishes between Scenes (descriptions of events, states or activities) and non-Scenes. 
-      This distinction cuts across UD categories, as a Scene can be evoked by a verb, an eventive or stative
-      noun (``negotiation'', ``fatigue''), an adjective or even a preposition (``this  is {\bf for} John'').
-    \item
-      UCCA distinguishes between participants (including locations and abstract entities), and secondary verbs, 
-      which covers for example manner, aspect and modality. Secondary relations can verbs (e.g., ``begin'', ``fail''),
-      prepositional phrases (``with disrespect''), as well as modals, adjectives and adverbs. 
-    \item
-      UD and UCCA treat multi-word expressions (MWEs) differently. MWEs in UD include names, compounds and grammaticalized fixed 
-      expressions. UCCA also treats names and grammaticalized MWEs are units, but also treats 
-      a range of semantically opaque constructions as units (e.g., light verbs and idioms).
-      On the other hand, compounds are not necessarily treated as MWEs in UCCA, especially where they are compositional.      
-      \item
-      UD categorizes clause linkage into coordination, subordination, argumenthood (complementation),
-      and parataxis (a residual category). UCCA only distinguishes between argumenthood 
-      and largely conflates clausal coordination, subordination and parataxis. 
-      Other divergences stem from ...\oa{fill in}. 
-     \end{enumerate}\daniel{add interesting example---scene-evoking noun or auxiliary verb}
+    \item Scene/non-Scene (\S\ref{sec:scenes}).
+    \item Argument/Adjunct (\S\ref{sec:arguments}).
+    \item Multi-word expressions (\S\ref{sec:mwe}).
+    \item Linkage (\S\ref{sec:linkage}).
+    \item Other divergences (\S\ref{sec:misc})
+    stem from a different treatment of coordination, apposition and copulas.
+     \end{enumerate}
 
    UCCA uses DAGs so as to allow encoding shared argumenthood, by assigning multiple parents to the same node. 
    As UD uses trees rather DAGs, shared argumenthood is largely ignored in UD, but is addressed in enhanced UD \cite{}.
@@ -613,6 +599,7 @@ by comparing incoming edge labels for units with the same terminal yields.
 
 \section{Analysis of Divergences}\label{sec:analysis}
 
+In this section, we analyze in detail the content differences between UCCA and UD.
 
 \subsection{Automatic identification of divergences}
 
@@ -632,15 +619,32 @@ and the relations csubj, dep and orphan since they are rare
 In the following subsections, we categorize the UD relations according to their
 treatment in UCCA.
 
-\subsection{Scenes/non-Scenes}
+\subsection{Scenes/non-Scenes}\label{sec:scenes}
 
-\subsection{Arguments/Adjuncts}
+      UCCA distinguishes between Scenes (descriptions of events, states or activities) and non-Scenes. 
+      This distinction cuts across UD categories, as a Scene can be evoked by a verb, an eventive or stative
+      noun (``negotiation'', ``fatigue''), an adjective or even a preposition (``this is \textit{for} John'').
 
-\subsection{Multi-Word Expressions}
+\subsection{Arguments/Adjuncts}\label{sec:arguments}
 
-\subsection{Linkage}
+      UCCA distinguishes between participants (including locations and abstract entities), and secondary verbs, 
+      which covers for example manner, aspect and modality. Secondary relations can verbs (e.g., ``begin'', ``fail''),
+      prepositional phrases (``with disrespect''), as well as modals, adjectives and adverbs.
 
-\subsection{Miscellaneous}
+\subsection{Multi-Word Expressions}\label{sec:mwe}
+
+      UD and UCCA treat multi-word expressions (MWEs) differently. MWEs in UD include names, compounds and grammaticalized fixed 
+      expressions. UCCA also treats names and grammaticalized MWEs are units, but also treats 
+      a range of semantically opaque constructions as units (e.g., light verbs and idioms).
+      On the other hand, compounds are not necessarily treated as MWEs in UCCA, especially where they are compositional.
+
+\subsection{Linkage}\label{sec:linkage}
+
+      UD categorizes clause linkage into coordination, subordination, argumenthood (complementation),
+      and parataxis (a residual category). UCCA only distinguishes between argumenthood 
+      and largely conflates clausal coordination, subordination and parataxis. 
+
+\subsection{Miscellaneous}\label{sec:misc}
 
 \paragraph{det, expl, iobj, nsubj, and obj.}
 With an almost perfect match to UCCA categories,
