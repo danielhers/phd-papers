@@ -530,8 +530,10 @@ xcomp & 44 & 1 & 2 & 2 & 0 & 0 & 1 & 0 & 0 & 5 & 0 & 7 & 116 \\
 $\emptyset$ & 329 & 173 & 53 & 73 & 6 & 5 & 673 & 29 & 0 & 141 & 7 & 98
 \end{tabular}
 \caption{UD-UCCA confusion matrix calculated from EWT
-gold-standard annotations (\S\ref{sec:experiments})
+gold-standard annotations (\S\ref{sec:shared}),
+after converting UD to the unified DAG format,
 by comparing incoming edge labels for units with the same terminal yields.
+The last column and row represent the case where no unit matched.
 \label{tab:confusion_matrix}}
 \end{table}
 
@@ -559,8 +561,7 @@ The analysis excludes the following relations,
 as they are irrelevant to the evaluation of content differences:
 
 \begin{description}
-  \item[root.] Matches the whole sentence except when multiple scenes are present,
-              in which case UD annotates one as a dependent of the other.
+  \item[root.] Always matches the whole sentence.
   \item[punct.] Not evaluated in UCCA, as punctuation is non-content-bearing.
   \item[fixed, flat and goeswith.] Correspond to parts of unanalyzable units in UCCA,
                                   and so not represented as units on their own.
