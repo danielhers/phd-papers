@@ -585,6 +585,23 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	(e.g., ``But \textit{service} is very poor''),
 	depending on whether the unit is a scene.
 	
+	\item[amod and nmod.]
+	Adjectival modifiers are annotated as aDverbials or Elaborators,
+	depending on whether they modify scene or non-scene phrases, respectively
+	(``\textit{romantic} dinner'' vs. ``\textit{medical} school''), or
+	as States when
+	they evoke scenes on their own (``\textit{beautiful} hotel'').
+	Similarly,
+	noun modifiers are generally split between pArticipants and Elaborators,
+	depending on whether they modify a scene (e.g., ``discount \textit{on services}'')
+	or non-scene (e.g., ``\textit{my car's} gears and brakes'') units.
+	
+	\item[acl and xcomp.]
+	In most cases, adjectival clauses (acl) are annotated as Elaborator scenes,
+	and open clausal complements (xcomp) as pArticipant scenes.
+	However, it may be the other way around if they modify a scene
+	(e.g., ``Great job \textit{master-keying our building}'').
+	
 	\item[cc, conj and list.]
 	\verb|cc| is split between coNnector (between non-scenes) and Linker (between scenes),
 	while \verb|conj| and \verb|list| are split between Center and H (parallel scene), due to the
@@ -661,12 +678,6 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	In ``went there yesterday'', the advmod ``\textit{there}'' is annotated as a pArticipant,
 	while the oblique ``\textit{yesterday}'' as an aDverbial.
 	
-	\item[amod.]
-	Adjectives are annotated as aDverbials, Elaborators or States,
-	depending on whether they modify scene or non-scene nouns
-	(``\textit{romantic} dinner'' vs. ``\textit{medical} school''), or
-	they are evoking scenes on their own (``\textit{beautiful} hotel'').
-	
 	\item[compound.]
 	While most compounds correspond to Elaborators (e.g., ``\textit{industry} standard''),
 	many are unanalyzable expressions (e.g., ``\textit{figure out}'').
@@ -689,11 +700,7 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	In the remaining case there is a divergence, e.g., ``\textit{all} of Dallas''.
 	
 	\item[acl and xcomp.]
-	In most cases, adjectival clauses (acl) are annotated as Elaborator scenes,
-	and open clausal complements (xcomp) as pArticipant scenes.
-	However, it may be the other way around if the head is a (nominal) predicate
-	(e.g., ``Great job \textit{master-keying our building}'').
-	Furthermore, many unmatched yields are due to:
+	Many unmatched yields are due to:
 	\begin{itemize}
 	\item Fused relative clauses: ``The prices were worth \textit{what I got}.''
 	\item Different treatment of secondary verbs: ``There should only be one person \textit{bringing you your food},''
@@ -724,11 +731,6 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	except where they contain a secondary verb
 	(e.g., ``She makes \textit{every item fit you perfectly}''),
 	where the scene is flattened in UCCA (and so the complement clause is not a whole unit).
-	
-	\item[nmod.]
-	Noun modifiers are generally split between pArticipants and Elaborators,
-	depending on whether they modify a scene (e.g., ``discount \textit{on services}'')
-	or non-scene (e.g., ``\textit{my car's} gears and brakes'') units.
 	
 	\item[nummod.]
 	Numeric modifiers are mostly Elaborators, but often do not correspond to a whole UCCA unit
