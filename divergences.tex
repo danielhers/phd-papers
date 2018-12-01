@@ -261,7 +261,7 @@ using a two-step protocol:
 %and parsers typically achieve more than 90\% LAS F1 on punctuation.
 %In UCCA, punctuation is excluded from the evaluation completely.
 %
-%A multi-word named entity is represented in UD by a \verb|flat| arc between
+%A multi-word named entity is represented in UD by a \texttt{flat} arc between
 %each pair of consecutive words in the entity mention.
 %In UCCA, a named entity is represented as one unanalyzable unit, and analyzing it
 %incorrectly results in an incorrect edge with no partial credit.
@@ -418,7 +418,7 @@ We annotate 804 English sentences from the reviews section of the English Web Tr
 \cite[EWT; ][]{bies2012english}.
 The sentences are annotated by two UCCA annotators and
 cross-reviewed.\footnote{The data will be released upon publication.}
-As these sentences are included in the Universal Dependencies \verb|English_EWT| treebank,
+As these sentences are included in the Universal Dependencies \texttt{English\_EWT} treebank,
 we have both gold-standard UCCA and UD for them.
 We refer to this set as \textit{shared} henceforth.
 
@@ -458,7 +458,7 @@ and adds the node's dependents as children of the created non-terminal node
 %heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
 In the conversion process, any language-specific relation subtypes are stripped,
 leaving only the universal relations.
-For example, the language-specific \verb|acl:relcl| is replaced by the universal relation \verb|acl|.
+For example, the language-specific \texttt{acl:relcl} is replaced by the universal relation \texttt{acl}.
 
 \subsection{Local Modifications}\label{sec:local}
 
@@ -467,7 +467,7 @@ We extend the converter to remove further formalism differences.
 \paragraph{Unanalyzable units.}
 Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
 In UD, each word after the first is attached to the previous word,
-with the \verb|flat|, \verb|fixed| or \verb|goeswith| relations
+with the \texttt{flat}, \texttt{fixed} or \texttt{goeswith} relations
 (depending on whether the phrase is a name or a title, or whether it is one word split by error).
 During conversion, we remove edges of both relations and group the corresponding terminals to one unit.
 
@@ -477,16 +477,16 @@ selecting for each terminal $t$ the lowest non-terminal of which $t$
 is the head terminal.
 To abstract away from convention differences,
 we extend the conversion protocol by adding special rules
-promoting the dependents of \verb|cc| relations,
-and of \verb|mark| dependents with an \verb|advcl| head
+promoting the dependents of \texttt{cc} relations,
+and of \texttt{mark} dependents with an \texttt{advcl} head
 (e.g. ``when'', ``if'', ``after'', and purposive ``to''),
 as there is a systematic mapping between the UCCA and UD guidelines
 and it is different from the default low-attaching behavior.
 %Selecting a forward-attaching behavior instead:
 %\begin{itemize}
-%  \item Conjunctions (\verb|cc| in UD) attach to the following
-%  conjuncts (word with an incoming \verb|conj| relation).
-%  \item \verb|mark| is attached to the following \verb|advcl|.
+%  \item Conjunctions (\texttt{cc} in UD) attach to the following
+%  conjuncts (word with an incoming \texttt{conj} relation).
+%  \item \texttt{mark} is attached to the following \texttt{advcl}.
 %\end{itemize}
 %These rules are applied to the bilexical graph after the conversion process.
 
@@ -613,13 +613,17 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	or Processes/States
 	(e.g., ``not at all \textit{like} the junk you get at the grocery stores'').
 	\item[cc, conj and list.]
-	\verb|cc| is split between coNnector (between non-scenes) and Linker (between scenes),
-	while \verb|conj| and \verb|list| are split between Center and H (parallel scene), due to the
-	distinction between scene and non-scene coordination.
-	Note that while in UD the dependent \verb|cc| is attached to the following conjunct in UD,
+	Coordinating conjunctions are either coNnectors, between non-scenes
+	(e.g., ``Mercedes \textit{and} Dan'')
+	or Linkers, between scenes
+	(e.g., ``outdated \textit{but} not bad'').
+	Correspondingly, conjuncts (and list elements)
+	are Centers or Parallel Scenes (H).\footnote{Note
+    that while in UD the dependent \texttt{cc} is attached to the following conjunct,
 	in UCCA coordination is annotated as a flat structure.
 	This is a convention difference that we fixed with local modifications
-	(\S\ref{sec:local})---otherwise most \verb|conj| instances would be unmatched.
+	(\S\ref{sec:local})---otherwise most \texttt{conj} instances would be unmatched,
+	containing the coordinating conjunction which is outside the unit in UCCA.}
 	\item[det.]
 	While determiners are usually Elaborators,
 	the determiner ``no'' is an aDverbial when it modifies a scene.
@@ -891,7 +895,7 @@ on 20K v1.0.0 in English and French \cite{sulem2015conceptual},
 and on 20K v0.9.0 in German.
 As in previous work, we use English 20K only as an out-of-domain test set.
 
-For UD, we use the \verb|English_EWT|, \verb|French_GSD| and \verb|German_GSD|
+For UD, we use the \texttt{English\_EWT}, \texttt{French\_GSD} and \texttt{German\_GSD}
 treebanks from Universal Dependencies v2.3
 \cite{11234/1-2895}.\footnote{\url{http://hdl.handle.net/11234/1-2895}}
 These are the largest freely-available UD treebanks for these languages.
