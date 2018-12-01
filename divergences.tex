@@ -743,7 +743,14 @@ and largely conflates clausal coordination, subordination and parataxis.
 
 \subsection{Other Distinctions}\label{sec:misc}
 
-\begin{description}	
+\begin{description}
+	\item[appos.]
+	Appositional modifiers are always analyzed in UD such that
+	the modifier nominal follows the modified noun.
+	In UCCA, these are split between Center
+	(``its sister store \textit{Peking Garden}'')
+	and Elaborator (``Kevin, \textit{the manager}''),
+	as a named entity will be the Center regardless of the order.
     \item[cop.]
 	UCCA distinguishes between copular constructions expressing
 	identity (e.g., ``It \textit{was} an ingrown toenail'') where the copula is annotated as State
@@ -781,12 +788,6 @@ and largely conflates clausal coordination, subordination and parataxis.
 	``seemed to want to help.''
 	\item Linkage: 
 	\end{itemize}
-	
-	\item[appos.]
-	Split between Center (``its sister store \textit{Peking Garden}'')
-	and Elaborator (``Kevin, \textit{the manager}''):
-	whereas UD always annotates the first phrase as the head and any subsequent one as apposition,
-	in UCCA a named entity will be the Center if it is one of the phrases.
 \end{description}
 
 
