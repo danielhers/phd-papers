@@ -577,14 +577,12 @@ treatment in UCCA, examining the main distinctions different between the schemes
       UCCA distinguishes between Scenes (descriptions of events, states or activities) and non-Scenes. 
       This distinction cuts across UD categories, as a Scene can be evoked by a verb, an eventive or stative
       noun (``negotiation'', ``fatigue''), an adjective or even a preposition (``this is \textit{for} John'').
-      
 \begin{description}
 	\item[iobj, nsubj, and obj.]
 	Annotated as pArticipant (e.g., ``\textit{Wine} was excellent'')
 	or Process/State
 	(e.g., ``But \textit{service} is very poor''),
 	depending on whether the unit is a scene.
-	
 	\item[amod and nmod.]
 	Adjectival modifiers are annotated as aDverbials or Elaborators,
 	depending on whether they modify scene or non-scene phrases, respectively
@@ -595,13 +593,11 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	noun modifiers are generally split between pArticipants and Elaborators,
 	depending on whether they modify a scene (e.g., ``discount \textit{on services}'')
 	or non-scene (e.g., ``\textit{my car's} gears and brakes'') units.
-	
 	\item[acl and xcomp.]
 	In most cases, adjectival clauses (acl) are annotated as Elaborator scenes,
 	and open clausal complements (xcomp) as pArticipant scenes.
 	However, it may be the other way around if they modify a scene
 	(e.g., ``Great job \textit{master-keying our building}'').
-	
 	\item[cc, conj and list.]
 	\verb|cc| is split between coNnector (between non-scenes) and Linker (between scenes),
 	while \verb|conj| and \verb|list| are split between Center and H (parallel scene), due to the
@@ -610,68 +606,23 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	in UCCA coordination is annotated as a flat structure.
 	This is a convention difference that we fixed with local modifications
 	(\S\ref{sec:local})---otherwise most \verb|conj| instances would be unmatched.
-	
 	\item[det.]
 	While determiners are usually Elaborators,
 	the determiner ``no'' is an aDverbial when it modifies a scene.
-	
-	
 \end{description}
 
 \subsection{Arguments/Adjuncts}\label{sec:arguments}
 
-      UCCA distinguishes between pArticipants (including locations and abstract entities), and secondary relations (aDverbials), 
-      which cover manner, aspect and modality. Secondary relations can be verbs (e.g., ``begin'', ``fail''),
-      prepositional phrases (``with disrespect''), as well as modals, adjectives and adverbs.
-
-\subsection{Multi-Word Expressions}\label{sec:mwe}
-
-      UD and UCCA treat multi-word expressions (MWEs) differently. MWEs in UD include names, compounds and grammaticalized fixed 
-      expressions. UCCA also treats names and grammaticalized MWEs are units, but also treats 
-      a range of semantically opaque constructions as units (e.g., light verbs and idioms).
-      On the other hand, compounds are not necessarily treated as MWEs in UCCA, especially where they are compositional.
-
-\subsection{Linkage}\label{sec:linkage}
-
-      UD categorizes clause linkage into coordination, subordination, argumenthood (complementation),
-      and parataxis (a residual category). UCCA only distinguishes between argumenthood 
-      and largely conflates clausal coordination, subordination and parataxis. 
-
-\subsection{Other Distinctions}\label{sec:misc}
-
+      UCCA distinguishes between pArticipant,
+      including locations and abstract entities,
+      and secondary relations (aDverbials), 
+      which cover manner, aspect and modality.
+      Secondary relations can be verbs (e.g., ``begin'', ``fail''),
+      prepositional phrases (``with disrespect''),
+      as well as modals, adjectives and adverbs.
 \begin{description}
-	\item[det, expl, iobj, nsubj, and obj.]
-	With an almost perfect match to UCCA categories,
-	these relations are syntactic refinements of
-	Elaborator (det), Function (expl).
-	The exceptions are mostly cases of unanalyzable multi-word expressions,
-	which are analyzed in UD: ``a bit'', ``bites the dust'', ``when it comes to''.
-	Some nsubj instances of ``it'' and ``that''
-	are analyzed as expletives in UCCA (and annotated as Function),
-	and some wh-pronouns (``which'', ``who'') as Linkers or Relators.
-	
 	\item[aux.]
-	aux is split between Function (auxiliary verbs) and aDverbial (secondary verbs).	
-	
-    \item[cop.]
-	UCCA distinguishes between copular constructions expressing
-	identity (e.g., ``It \textit{was} an ingrown toenail'') where the copula is annotated as State
-	(and the head is a pArticipant),
-	as opposed to attributes or set membership
-	(e.g., ``Mercedes and Dan \textit{are} very thorough''), where it is annotated as Function
-	(and the head is a State).
-	
-	\item[mark.]
-	UCCA distinguishes between the infinitive marker ``to'', annotated as Function,
-	and the use of markers for inter-scene linkage (e.g., purposive ``to''), annotated as Linker.
-	\daniel{still struggling to find an R mark that shouldn't actually be an L}
-	
-	\item[advcl and parataxis.]
-	Apart for some convention differences regarding the attachment of subordinate clause markers,
-	both advcl and parataxis almost exactly correspond to H (Parallel Scene).
-	However, inter-scene linkage gets a flat structure in UCCA,
-	so any coordinates scenes nested inside parataxis in UD do not match any one scene.
-	
+	aux is split between Function (auxiliary verbs) and aDverbial (secondary verbs).
 	\item[advmod and obl.]
 	Rather than the core/oblique distinction in UD,
 	in UCCA pArticipants (arguments) are distinguished from aDverbials (adjuncts).
@@ -681,13 +632,84 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	annotated as aDverbials in case of adjuncts describing time.
 	In ``went there yesterday'', the advmod ``\textit{there}'' is annotated as a pArticipant,
 	while the oblique ``\textit{yesterday}'' as an aDverbial.
+	\item[ccomp.]
+	Clausal complements are annotated as pArticipant scenes
+	(e.g., ``did not really know \textit{what I wanted}''),
+	except where they contain a secondary verb
+	(e.g., ``She makes \textit{every item fit you perfectly}''),
+	where the scene is flattened in UCCA
+	(and so the complement clause is not a whole unit).
+	\item[vocative.]
+	Vocatives are annotated as Ground,
+	but also as pArticipants if they are arguments in a scene
+	(e.g., ``Thanks \textit{Mark}'').
+\end{description}	
 	
+
+\subsection{Multi-Word Expressions}\label{sec:mwe}
+
+      UD and UCCA treat multi-word expressions (MWEs) differently.
+      MWEs in UD include names, compounds and grammaticalized fixed expressions.
+      UCCA also treats names and grammaticalized MWEs are units,
+      but also treats a range of semantically opaque constructions as units
+      (e.g., light verbs and idioms).
+      On the other hand, compounds are not necessarily treated as MWEs in UCCA,
+      especially where they are compositional.
+\begin{description}
 	\item[compound.]
 	While most compounds correspond to Elaborators (e.g., ``\textit{industry} standard''),
 	many are unanalyzable expressions (e.g., ``\textit{figure out}'').
 	However, this is not a semantic category.
 	For example, in many cases a compound represent an argument,
 	and is annotated as pArticipants (``\textit{food} craving'').
+	\item[nummod.]
+	Numeric modifiers are mostly Elaborators, but often do not correspond to a whole UCCA unit
+	due to aDverbials included in the flat structure (e.g., ``about \textit{50}\%'').
+	\item[iobj, nsubj, and obj.]
+	With an almost perfect match to UCCA categories,
+	these relations are syntactic refinements of
+	Elaborator (det), Function (expl).
+	The exceptions are mostly cases of unanalyzable multi-word expressions,
+	which are analyzed in UD: ``a bit'', ``bites the dust'', ``when it comes to''.
+\end{description}
+
+\subsection{Linkage}\label{sec:linkage}
+
+      UD categorizes clause linkage into coordination,
+      subordination, argumenthood (complementation),
+      and parataxis (a residual category).
+      UCCA only distinguishes between argumenthood 
+      and largely conflates clausal coordination, subordination and parataxis.
+\begin{description}
+	\item[mark.]
+	UCCA distinguishes between the infinitive marker ``to'', annotated as Function,
+	and the use of markers for inter-scene linkage (e.g., purposive ``to''),
+	annotated as Linker.\daniel{still struggling to find an R mark that shouldn't actually be an L}
+	\item[advcl and parataxis.]
+	Apart for some convention differences regarding the attachment of subordinate clause markers,
+	both advcl and parataxis almost exactly correspond to H (Parallel Scene).
+	However, inter-scene linkage gets a flat structure in UCCA,
+	so any coordinates scenes nested inside parataxis in UD do not match any one scene.
+	\item[nsubj and obj.]
+	Some wh-pronouns (``which'', ``who'') are analyzed as Linkers or Relators.
+\end{description}
+	
+
+\subsection{Other Distinctions}\label{sec:misc}
+
+\begin{description}
+	\item[expl and nsubj.]
+	Expletives are annotated as Function in UCCA.
+	Some nsubj instances of ``it'' and ``that''
+	are analyzed as expletives in UCCA (and annotated as Function).
+	
+    \item[cop.]
+	UCCA distinguishes between copular constructions expressing
+	identity (e.g., ``It \textit{was} an ingrown toenail'') where the copula is annotated as State
+	(and the head is a pArticipant),
+	as opposed to attributes or set membership
+	(e.g., ``Mercedes and Dan \textit{are} very thorough''), where it is annotated as Function
+	(and the head is a State).
 	
 	\item[discourse.]
 	Interjections and discourse markers are annotated as H (parallel scene), Ground or Linker,
@@ -728,21 +750,6 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	(e.g., ``Very informative website \textit{with} a lot of good work''),
 	Elaborator (e.g., ``\textit{over} a year''),
 	or main relations (State, e.g., ``not at all \textit{like} the junk you get at the grocery stores'').
-	
-	\item[ccomp.]
-	Clausal complements are annotated as pArticipant scenes
-	(e.g., ``did not really know \textit{what I wanted}''),
-	except where they contain a secondary verb
-	(e.g., ``She makes \textit{every item fit you perfectly}''),
-	where the scene is flattened in UCCA (and so the complement clause is not a whole unit).
-	
-	\item[nummod.]
-	Numeric modifiers are mostly Elaborators, but often do not correspond to a whole UCCA unit
-	due to aDverbials included in the flat structure (e.g., ``about \textit{50}\%'').
-	
-	\item[vocative.]
-	Vocatives are annotated as Ground, but also as pArticipants if they are arguments in a scene
-	(e.g., ``Thanks \textit{Mark}'').
 \end{description}
 
 
