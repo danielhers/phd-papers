@@ -590,6 +590,11 @@ an adjective or even a preposition (``this is \textit{for} John'').
     i.e., Participants (e.g., ``\textit{Wine} was excellent'').
 	However, when describing a scene, such a phrase is a Process/State
 	(e.g., ``But \textit{service} is very poor'').
+	Some wh-pronouns are the subject or object of a relative clause, and
+	are analyzed as Linkers or Relators,
+	depending on whether they modify a scene or non-scene, respectively
+	(e.g., ``Overall, Joe is a happy camper \textit{who} has found a great spot''
+	and ``one of the staff \textit{who} was very pleasant and professional'').
 	\item[amod.]
 	Adjectival modifiers of nominals are Adverbials or Elaborators,
 	depending on whether they modify scenes or non-scenes, respectively
@@ -724,36 +729,41 @@ and largely conflates clausal coordination, subordination and parataxis.
 	the first \textit{to} is a Function and the second is a Linker).\daniel{still
 	struggling to find an R mark that shouldn't actually be an L}
 	\item[advcl and parataxis.]
-	Apart for some convention differences regarding the attachment of subordinate clause markers,
-	both advcl and parataxis almost exactly correspond to Linked Scene.
-	However, inter-scene linkage gets a flat structure in UCCA,
-	so any coordinates scenes nested inside parataxis in UD do not match any one scene.
-	\item[nsubj and obj.]
-	Some wh-pronouns (``which'', ``who'') are analyzed as Linkers or Relators.
+	Both adverbial clauses and parataxis almost exclusively Linked Scene
+	(e.g., ``We called few companies before \textit{we decided to hire them}''
+	and ``Check out The Willow Lounge, \textit{you'll be happy}'')\footnote{Note
+    that while in UD the dependent \texttt{mark}, e.g. ``before'',
+    is attached to the following adverbial clause,
+	in UCCA linkage is a flat structure.
+	This is a convention difference that we fixed with local modifications
+	(\S\ref{sec:local})---otherwise most \texttt{advcl} instances would be unmatched,
+	containing the linker which is outside the scene in UCCA.}.
 \end{description}
 	
 
 \subsection{Other Distinctions}\label{sec:misc}
 
-\begin{description}
-	\item[expl and nsubj.]
-	Expletives are Function in UCCA.
-	Some nsubj instances of ``it'' and ``that''
-	are analyzed as expletives in UCCA (and annotated as Function).
-	
+\begin{description}	
     \item[cop.]
 	UCCA distinguishes between copular constructions expressing
 	identity (e.g., ``It \textit{was} an ingrown toenail'') where the copula is annotated as State
 	(and the head is a Participant),
 	as opposed to attributes or set membership
 	(e.g., ``Mercedes and Dan \textit{are} very thorough''), where it is annotated as Function
-	(and the head is a State).
-	
+	(and the head is a State).	
 	\item[discourse.]
-	Interjections and discourse markers are Linked Scene, Ground or Linker,
-	if they are, respectively, a complete scene or part of a scene relating to the \textit{speech event},
-	or simply relate one scene to another.
-	
+	Interjections and discourse markers are given the categories of
+	Linked Scene, Ground or Linker,
+	if they are, respectively, a complete scene or part of a scene relating to the \textit{speech event}
+	(e.g., ``\textit{no}, Warwick in New Jersey'' and
+	``\textit{Please} visit my website''),
+	or simply relate one scene to another
+	(e.g., ``I am sure, \textit{well}, she says'').
+	\item[expl and nsubj.]
+	Expletives are Functions in UCCA, lacking semantic content.
+	Some instances of ``it'' and ``that'', analyzed as subjects in UD,
+	are analyzed as expletives in UCCA, and annotated as Function
+	(e.g., ``\textit{it}'s like driving a new car'').	
 	\item[head.]
 	While not a UD relation, this label is introduced on the conversion from dependency graphs
 	\cite{hershcovich2018multitask}: for any word with at least one dependent,
@@ -769,7 +779,7 @@ and largely conflates clausal coordination, subordination and parataxis.
 	\item Fused relative clauses: ``The prices were worth \textit{what I got}.''
 	\item Different treatment of secondary verbs: ``There should only be one person \textit{bringing you your food},''
 	``seemed to want to help.''
-	\item Linkage: ``Overall, Joe is a happy camper \textit{who has found a great spot}.''
+	\item Linkage: 
 	\end{itemize}
 	
 	\item[appos.]
