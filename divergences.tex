@@ -576,30 +576,42 @@ treatment in UCCA, examining the main distinctions different between the schemes
 
 \subsection{Scenes/non-Scenes}\label{sec:scenes}
 
-      UCCA distinguishes between Scenes (descriptions of events, states or activities) and non-Scenes. 
-      This distinction cuts across UD categories, as a Scene can be evoked by a verb, an eventive or stative
-      noun (``negotiation'', ``fatigue''), an adjective or even a preposition (``this is \textit{for} John'').
+      UCCA distinguishes between Scenes (descriptions of events, states or activities)
+      and non-Scenes. 
+      This distinction cuts across UD categories,
+      as a Scene can be evoked by a verb, an eventive or stative
+      noun (``negotiation'', ``fatigue''),
+      an adjective or even a preposition (``this is \textit{for} John'').
 \begin{description}
 	\item[iobj, nsubj, and obj.]
-	Annotated as pArticipant (e.g., ``\textit{Wine} was excellent'')
-	or Process/State
-	(e.g., ``But \textit{service} is very poor''),
-	depending on whether the unit is a scene.
-	\item[amod and nmod.]
+	Core syntactic dependents are usually semantic arguments,
+    i.e., pArticipants (e.g., ``\textit{Wine} was excellent'').
+	However, when describing a scene, such a phrase is a Process/State
+	(e.g., ``But \textit{service} is very poor'').
+	\item[amod.]
 	Adjectival modifiers are annotated as aDverbials or Elaborators,
-	depending on whether they modify scene or non-scene phrases, respectively
+	depending on whether they modify scene or non-scene noun phrases, respectively
 	(``\textit{romantic} dinner'' vs. ``\textit{medical} school''), or
 	as States when
 	they evoke scenes on their own (``\textit{beautiful} hotel'').
-	Similarly,
-	noun modifiers are generally split between pArticipants and Elaborators,
-	depending on whether they modify a scene (e.g., ``discount \textit{on services}'')
-	or non-scene (e.g., ``\textit{my car's} gears and brakes'') units.
-	\item[acl and xcomp.]
-	In most cases, adjectival clauses (acl) are annotated as Elaborator scenes,
-	and open clausal complements (xcomp) as pArticipant scenes.
-	However, it may be the other way around if they modify a scene
-	(e.g., ``Great job \textit{master-keying our building}'').
+	\item[nmod and acl.]
+	Noun modifiers and adjectival clauses also modify noun phrases, and
+	are generally split between pArticipants and Elaborators,
+	depending on whether they modify a scene
+	(e.g., ``discount \textit{on services}'' or
+	``Great job \textit{master-keying our building}'')
+	or non-scene (e.g., ``\textit{my car's} gears and brakes'' or
+	``Some of the younger kids \textit{that work there}'') units.
+	\item[case.]
+	While most adpositions are annotated as Relators (e.g., ``the team \textit{at} Bradley Chevron''),
+	many cases are unanalyzable due to UCCA's stronger tendency to group multi-word expressions
+	(as in ``lots of'').
+	Furthermore, they may be semantically vacuous and annotated as Functions
+	(e.g., ``another reversal \textit{of} \$160.00''),
+	annotated as Linkers when the head noun is a scene
+	(e.g., ``Very informative website \textit{with} a lot of good work''),
+	Elaborator (e.g., ``\textit{over} a year''),
+	or main relations (State, e.g., ``not at all \textit{like} the junk you get at the grocery stores'').
 	\item[cc, conj and list.]
 	\verb|cc| is split between coNnector (between non-scenes) and Linker (between scenes),
 	while \verb|conj| and \verb|list| are split between Center and H (parallel scene), due to the
@@ -641,6 +653,10 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	(e.g., ``She makes \textit{every item fit you perfectly}''),
 	where the scene is flattened in UCCA
 	(and so the complement clause is not a whole unit).
+	\item[xcomp.]
+	As they are dependents of verbs,
+	in most cases, open clausal complements are pArticipant scenes
+	(e.g., ``I asked them \textit{to change it}'').
 	\item[vocative.]
 	Vocatives are annotated as Ground,
 	but also as pArticipants if they are arguments in a scene
@@ -741,17 +757,6 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	and Elaborator (``Kevin, \textit{the manager}''):
 	whereas UD always annotates the first phrase as the head and any subsequent one as apposition,
 	in UCCA a named entity will be annotated as the center if it is one of the phrases.
-	
-	\item[case.]
-	While most adpositions are annotated as Relators (e.g., ``the team \textit{at} Bradley Chevron''),
-	many cases are unanalyzable due to UCCA's stronger tendency to group multi-word expressions
-	(as in ``lots of'').
-	Furthermore, they may be semantically vacuous and annotated as Functions
-	(e.g., ``another reversal \textit{of} \$160.00''),
-	annotated as Linkers when the head noun is a scene
-	(e.g., ``Very informative website \textit{with} a lot of good work''),
-	Elaborator (e.g., ``\textit{over} a year''),
-	or main relations (State, e.g., ``not at all \textit{like} the junk you get at the grocery stores'').
 \end{description}
 
 
