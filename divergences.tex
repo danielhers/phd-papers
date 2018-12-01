@@ -495,7 +495,12 @@ and it is different from the default low-attaching behavior.
 \scriptsize
 \setlength\tabcolsep{2pt}
 \begin{tabular}{l|ccccccccccccc}
- & A & C & D & E & F & G & H & L & N & P & R & S & $\emptyset$ \\
+ & \rotatebox{90}{Participant (A)} & \rotatebox{90}{Center (C)}
+ & \rotatebox{90}{Adverbial (D)} & \rotatebox{90}{Elaborator (E)}
+ & \rotatebox{90}{Function (F)} & \rotatebox{90}{Ground (G)}
+ & \rotatebox{90}{Linked Scene (H)} & \rotatebox{90}{Linker (L)}
+ & \rotatebox{90}{Connector (N)} & \rotatebox{90}{Process (P)}
+ & \rotatebox{90}{Relator (R)} & \rotatebox{90}{State (S)} & $\emptyset$ \\
 \hline
 acl & 8 & 0 & 0 & 101 & 2 & 0 & 15 & 0 & 0 & 0 & 0 & 1 & 49 \\
 advcl & 2 & 2 & 0 & 0 & 0 & 0 & 103 & 1 & 0 & 4 & 0 & 0 & 97 \\
@@ -582,18 +587,18 @@ treatment in UCCA, examining the main distinctions different between the schemes
 \begin{description}
 	\item[iobj, nsubj, and obj.]
 	Core syntactic arguments are usually semantic arguments,
-    i.e., pArticipants (e.g., ``\textit{Wine} was excellent'').
+    i.e., Participants (e.g., ``\textit{Wine} was excellent'').
 	However, when describing a scene, such a phrase is a Process/State
 	(e.g., ``But \textit{service} is very poor'').
 	\item[amod.]
-	Adjectival modifiers of nouns are annotated as aDverbials or Elaborators,
+	Adjectival modifiers of nouns are annotated as Adverbials or Elaborators,
 	depending on whether they modify scenes or non-scenes, respectively
 	(``\textit{romantic} dinner'' vs. ``\textit{medical} school''), or
 	as States when
 	they evoke scenes on their own (``\textit{beautiful} hotel'').
 	\item[nmod and acl.]
 	Nominal and clausal modifiers of nouns
-	are generally split between pArticipants and Elaborators,
+	are generally split between Participants and Elaborators,
 	depending on whether they modify scenes
 	(e.g., ``discount \textit{on services}'' and
 	``our decision \textit{to buy when we did}'')
@@ -610,12 +615,12 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	or Processes/States
 	(e.g., ``not at all \textit{like} the junk you get at the grocery stores'').
 	\item[cc, conj and list.]
-	Coordinating conjunctions are either coNnectors, between non-scenes
+	Coordinating conjunctions are either Connectors, between non-scenes
 	(e.g., ``Mercedes \textit{and} Dan'')
 	or Linkers, between scenes
 	(e.g., ``outdated \textit{but} not bad'').
 	Correspondingly, conjuncts (and list elements)
-	are Centers or Parallel Scenes (H).\footnote{Note
+	are Centers or Linked Scenes (H).\footnote{Note
     that while in UD the dependent \texttt{cc} is attached to the following conjunct,
 	in UCCA coordination is annotated as a flat structure.
 	This is a convention difference that we fixed with local modifications
@@ -623,15 +628,15 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	containing the coordinating conjunction which is outside the unit in UCCA.}
 	\item[det.]
 	While usually Elaborators,
-	determiners are aDverbials when modifying a scene
+	determiners are Adverbials when modifying a scene
 	(e.g., ``\textit{no} feathers in stock'').
 \end{description}
 
 \subsection{Arguments/Adjuncts}\label{sec:arguments}
 
-      UCCA distinguishes between pArticipant,
+      UCCA distinguishes between Participants,
       including locations and abstract entities,
-      and secondary relations (aDverbials), 
+      and secondary relations (Adverbials), 
       which cover manner, aspect and modality.
       Secondary relations can be verbs (e.g., ``begin'', ``fail''),
       prepositional phrases (``with disrespect''),
@@ -639,30 +644,30 @@ treatment in UCCA, examining the main distinctions different between the schemes
 \begin{description}
 	\item[aux.]
 	Auxiliary verbs are Functions (e.g., ``\textit{do} not forget''),
-	or aDverbials when they semantically modify a scene (e.g., ``you can graduate'').
+	or Adverbials when they semantically modify a scene (e.g., ``you can graduate'').
 	\item[advmod and obl.]
 	Rather than the core/oblique distinction in UD,
-	in UCCA pArticipants (arguments) are distinguished from aDverbials (adjuncts).
-	While in the majority of cases adverbial modifiers correspond to aDverbials,
-	they may be annotated as pArticipants in the case of semantic arguments describing location.
-	Obliques, on the other hand, mostly correspond to pArticipants, but may be
-	annotated as aDverbials in case of adjuncts describing time.
-	In ``went there yesterday'', the advmod ``\textit{there}'' is annotated as a pArticipant,
-	while the oblique ``\textit{yesterday}'' as an aDverbial.
+	in UCCA Participants (arguments) are distinguished from Adverbials (adjuncts).
+	While in the majority of cases adverbial modifiers correspond to Adverbials,
+	they may be annotated as Participants in the case of semantic arguments describing location.
+	Obliques, on the other hand, mostly correspond to Participants, but may be
+	annotated as Adverbials in case of adjuncts describing time.
+	In ``went there yesterday'', the advmod ``\textit{there}'' is annotated as a Participant,
+	while the oblique ``\textit{yesterday}'' as an Adverbial.
 	\item[csubj, ccomp and xcomp.]
 	As they are core arguments of verbs,
-	in most cases, (open) clausal complements are pArticipant scenes
+	in most cases, (open) clausal complements are Participant scenes
 	(e.g., ``it was great \textit{that they did not charge a service fee}'',
 	``did not really know \textit{what I wanted}'' or
 	``I asked them \textit{to change it}'').
-	However, when modifying a secondary verb (which is an aDverbial),
+	However, when modifying a secondary verb (which is an Adverbial),
 	they may not correspond to a whole unit, or if the clause is a single word,
 	correspond to Process/State
 	(e.g., ``She makes \textit{every item fit you perfectly}'' or
 	``this seems \textit{great}'').
 	\item[vocative.]
 	Vocatives are annotated as Ground,
-	but also as pArticipants if they are arguments in a scene
+	but also as Participants if they are arguments in a scene
 	(e.g., ``Thanks \textit{Mark}'').
 \end{description}	
 	
@@ -682,10 +687,10 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	many are unanalyzable expressions (e.g., ``\textit{figure out}'').
 	However, this is not a semantic category.
 	For example, in many cases a compound represent an argument,
-	and is annotated as pArticipants (``\textit{food} craving'').
+	and is annotated as Participants (``\textit{food} craving'').
 	\item[nummod.]
 	Numeric modifiers are mostly Elaborators, but often do not correspond to a whole UCCA unit
-	due to aDverbials included in the flat structure (e.g., ``about \textit{50}\%'').
+	due to Adverbials included in the flat structure (e.g., ``about \textit{50}\%'').
 	\item[case.]
 	Many case markers are unanalyzable due to UCCA's stronger tendency to group
 	multi-word expressions (as in ``lots of'').
@@ -711,7 +716,7 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	annotated as Linker.\daniel{still struggling to find an R mark that shouldn't actually be an L}
 	\item[advcl and parataxis.]
 	Apart for some convention differences regarding the attachment of subordinate clause markers,
-	both advcl and parataxis almost exactly correspond to H (Parallel Scene).
+	both advcl and parataxis almost exactly correspond to Linked Scene.
 	However, inter-scene linkage gets a flat structure in UCCA,
 	so any coordinates scenes nested inside parataxis in UD do not match any one scene.
 	\item[nsubj and obj.]
@@ -730,13 +735,13 @@ treatment in UCCA, examining the main distinctions different between the schemes
     \item[cop.]
 	UCCA distinguishes between copular constructions expressing
 	identity (e.g., ``It \textit{was} an ingrown toenail'') where the copula is annotated as State
-	(and the head is a pArticipant),
+	(and the head is a Participant),
 	as opposed to attributes or set membership
 	(e.g., ``Mercedes and Dan \textit{are} very thorough''), where it is annotated as Function
 	(and the head is a State).
 	
 	\item[discourse.]
-	Interjections and discourse markers are annotated as H (parallel scene), Ground or Linker,
+	Interjections and discourse markers are annotated as Linked Scene, Ground or Linker,
 	if they are, respectively, a complete scene or part of a scene relating to the \textit{speech event},
 	or simply relate one scene to another.
 	
@@ -745,7 +750,7 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	\cite{hershcovich2018multitask}: for any word with at least one dependent,
 	a non-terminal node will be created in the converted graph, with a \textit{head} edge.
 	About 17\% of these edges are unmatched, mostly due to unanalyzable expressions and inter-scene linkage.
-	About 70\% are Process, State, parallel scene or Center,
+	About 70\% are Process, State, Linked Scene or Center,
 	where the notion of syntactic head matches that of a ``UCCA head''.
 	In the remaining case there is a divergence, e.g., ``\textit{all} of Dallas''.
 	
@@ -785,18 +790,18 @@ we replace each UD relation with its most common UCCA counterpart.
 \paragraph{Postprocessing.}
 The \textit{head} edges introduced as part of the conversion (\S\ref{sec:conversion})
 do not have a single
-corresponding UCCA edge label---although C (center) is the most common corresponding label,
-other labels such as P (process) are also common.
+corresponding UCCA edge label---although Center is the most common corresponding label,
+other labels such as Process are also common.
 This is a difference between UD, which selects the most central token to be the head of a phrase,
 to UCCA, which also annotates the relation between that head and the unit it is part of.
 To overcome this limitation, we replace all \textit{head} labels with C, but then
 apply standard UCCA
 normalization\footnote{\url{https://github.com/huji-nlp/ucca/blob/master/scripts/normalize.py}}
 to the resulting graphs after conversion,
-replacing C with P when it has sibling A's (participants) or
-with H when it has sibling H's (parallel scenes).
-We select P rather than S (state) as the main relation in the normalization because
-it is much more common (14,719 P's in the Wiki corpus as opposed to 3354 S's).
+replacing Center with Process when it has sibling Participants or
+with Linked Scene when it has sibling Linked Scenes.
+We select Process rather than State as the main relation in the normalization because
+it is much more common (14,719 Processess in the Wiki corpus as opposed to 3354 States).
 
 
 
