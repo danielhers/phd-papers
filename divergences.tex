@@ -773,12 +773,15 @@ and largely conflates clausal coordination, subordination and parataxis.
 	(e.g., ``\textit{it}'s like driving a new car'').	
 	\item[head.]
 	While not a UD relation, this label is introduced on the conversion from dependency graphs
-	\cite{hershcovich2018multitask}: for any word with at least one dependent,
+	\cite{hershcovich2018multitask}.
+	For any word with at least one dependent,
 	a non-terminal node will be created in the converted graph, with a \textit{head} edge.
 	About 17\% of these edges are unmatched, mostly due to unanalyzable expressions and inter-scene linkage.
 	About 70\% are Process, State, Linked Scene or Center,
 	where the notion of syntactic head matches that of a ``UCCA head''.
-	In the remaining case there is a divergence, e.g., ``\textit{all} of Dallas''.
+	In the remaining case there is a content difference between the schemes
+	(e.g., ``\textit{all} of Dallas'', where \textit{all} is an Elaborator
+	in UCCA but is the syntactic head in UD).
 	
 	\item[acl and xcomp.]
 	Many unmatched yields are due to:
