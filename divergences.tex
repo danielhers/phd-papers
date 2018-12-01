@@ -116,14 +116,15 @@
   conversion rules. Selecting two relatively similar schemes, such as UD and UCCA, allows
   us to focus on content, and abstract away from differences of convention.
   
-  \oa{UNTIL HERE}
-  For instance, UD strongly prefers lexical heads,
+  For instance, UD strongly prefers lexical heads 
    unlike other dependency schemes that prefer functional ones.
+   For example, where auxiliary verbs are present (e.g., ``is eating''), UD
+   marks the lexical verb ``eating'' as the head, while other schemes
+   may select the inflected ``is'' as the head instead.
   While the two approaches are largely inter-translatable
    \cite{Schwartz:12}, lexical head schemes are more similar in form to semantic schemes,
-   such as UCCA and broad-coverage semantic dependencies \cite{oepen2016towards},
-   which facilitates their comparison.\daniel{This paragraph is only clear if you assume acquaintance
-   with the issue of lexical/functional heads in dependency analysis, but many readers will not be.}
+   such as UCCA and broad-coverage semantic dependencies \cite{oepen2015semeval},
+   which facilitates their comparison.\daniel{This paragraph is only clear if you assume acquaintance with the issue of lexical/functional heads in dependency analysis, but many readers will not be.}\oa{is this better?}
   %Selecting more distant schemes for comparison could have potentially confounded our results.
 
 %   Comparing relatively similar schemes therefore 
@@ -139,35 +140,32 @@
   %encoded by the structures, rather than their form, taking UD already cleans out much structural divergence
   %originating from differences of convention.
   
-We begin by carefully examining the structures captured by each of the annotation schemes,
-to find distinctions made by one but not the other.
-To explore the difference in content, we experiment with converting UD to UCCA
-using a two-step protocol:
-\begin{enumerate}
-\item Structurally convert bilexical dependency graphs into constituency-like graphs by inserting
-  non-terminal nodes and \textit{head} edges (\S\ref{sec:methodology}).
-\item Translate UD relations into UCCA edge labels
-  by a deterministic mapping (\S\ref{sec:conversion}).
-\end{enumerate}
+
+  We begin by carefully examining the structures captured by each of the annotation schemes, to find distinctions made by one but not the other. As UD uses bilexical trees (i.e., nodes correspond to tokens) and UCCA uses constituency-like DAGs (i.e., leaves
+  correspond to tokens), we losslessly convert the UD structures into constituency-like
+  graphs by inserting non-terminal nodes (\S\ref{sec:methodology}). 
+  
+  Using the shared formalism, we align the nodes of the UD and UCCA trees, and identify which nodes have no match on the other side. For the aligned nodes, we construct a ``confusion matrix'' to identify which UCCA categories are aligned with each UD category and vice versa. 
+  
+%   \begin{enumerate}
+%     \item 
+%         Structurally convert bilexical dependency graphs into constituency-like graphs by inserting non-terminal nodes and \textit{head} edges .
+%     \item 
+%         Translate UD relations into UCCA edge labels by a deterministic mapping (\S\ref{sec:conversion}).
+%   \end{enumerate}
   
    We find that most content differences between the schemes are due to the following
-   factors:\daniel{add interesting example---scene-evoking noun or auxiliary verb}
+   factors:\daniel{add interesting example---scene-evoking noun or auxiliary verb}\oa{Daniel, this is telegraphic. We need to give the reader some sense of what these titles mean.}
 
   \begin{enumerate}[noitemsep]
-    \item Scene/non-Scene (\S\ref{sec:scenes}).
-    \item Argument/Adjunct (\S\ref{sec:arguments}).
-    \item Multi-word expressions (\S\ref{sec:mwe}).
-    \item Linkage (\S\ref{sec:linkage}).
-    \item Other divergences (\S\ref{sec:misc})
-    stem from a different treatment of coordination, apposition and copulas.
-     \end{enumerate}
-
-   UCCA graphs are DAGs rather than trees, so as to allow encoding shared argumenthood
-   by assigning multiple parents to the same node.
-   As basic UD uses trees rather than graphs, shared argumenthood is largely ignored in UD,
-   but is addressed in enhanced UD \cite{SCHUSTER16.779}.
-  See \S\ref{sec:analysis}.
-
+        \item Scene/non-Scene (\S\ref{sec:scenes}).
+        \item Argument/Adjunct (\S\ref{sec:arguments}).
+        \item Multi-word expressions (\S\ref{sec:mwe}).
+        \item Linkage (\S\ref{sec:linkage}).
+   \end{enumerate}
+    
+   Other divergences stem from a different treatment of coordination, apposition and copulas. See \S\ref{sec:misc} for a detailed analysis.
+     
   We use the converter built as part of our analysis to generate silver standard
   training data for a UCCA parser (\S\ref{sec:silver}).
   
@@ -454,6 +452,11 @@ and adds the node's dependents as children of the created non-terminal node
 In the conversion process, any language-specific relation subtypes are stripped,
 leaving only the universal relations.
 For example, the language-specific \texttt{acl:relcl} is replaced by the universal relation \texttt{acl}.
+
+\oa{move this paragraph some place else}
+  UCCA graphs are converted into trees by removing ``remote edges''.
+  Remote edges in UCCA encode shared argumenthood by assigning multiple parents to the same node. Such phenomena are largely ignored in UD, which uses trees.\footnote{Reentracy is supported by enhanced UD \cite{SCHUSTER16.779}.} See \S\ref{sec:analysis}.
+
 
 \subsection{Local Modifications}\label{sec:local}
 
