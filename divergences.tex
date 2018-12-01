@@ -510,7 +510,6 @@ compound & 23 & 24 & 11 & 174 & 2 & 0 & 0 & 0 & 0 & 1 & 1 & 3 & 167 \\
 conj & 2 & 88 & 1 & 0 & 0 & 0 & 265 & 0 & 0 & 2 & 0 & 3 & 90 \\
 cop & 0 & 0 & 0 & 0 & 333 & 0 & 0 & 0 & 0 & 3 & 1 & 24 & 3 \\
 csubj & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 8 \\
-dep & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
 det & 2 & 1 & 23 & 778 & 1 & 1 & 0 & 0 & 0 & 0 & 2 & 0 & 26 \\
 discourse & 0 & 1 & 0 & 0 & 1 & 6 & 13 & 3 & 0 & 0 & 0 & 1 & 1 \\
 expl & 0 & 0 & 0 & 0 & 22 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
@@ -523,7 +522,6 @@ nsubj & 993 & 0 & 0 & 0 & 14 & 0 & 2 & 9 & 0 & 3 & 24 & 1 & 37 \\
 nummod & 4 & 7 & 3 & 53 & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 24 \\
 obj & 439 & 7 & 10 & 1 & 1 & 0 & 1 & 1 & 0 & 8 & 6 & 0 & 92 \\
 obl & 247 & 1 & 92 & 8 & 2 & 4 & 4 & 4 & 0 & 0 & 2 & 0 & 132 \\
-orphan & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
 parataxis & 1 & 0 & 0 & 1 & 0 & 2 & 65 & 0 & 0 & 1 & 0 & 1 & 54 \\
 vocative & 9 & 0 & 0 & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 xcomp & 44 & 1 & 2 & 2 & 0 & 0 & 1 & 0 & 0 & 5 & 0 & 7 & 116 \\
@@ -567,8 +565,7 @@ as they are irrelevant to the evaluation of content differences:
   and so not represented as units on their own.
   The UD distinction is between, respectively, fixed grammatical expressions,
   semi-fixed MWEs like names, titles or dates, and erroneously separated words.
-  \item[csubj, dep and orphan.] Appear less than 10 times, and thus too rare to reach
-  meaningful conclusions.
+  \item[dep and orphan.] Rare; no consistent relation.
 \end{description}
 
 In the following subsections, we categorize the UD relations according to their
@@ -584,7 +581,7 @@ treatment in UCCA, examining the main distinctions different between the schemes
       an adjective or even a preposition (``this is \textit{for} John'').
 \begin{description}
 	\item[iobj, nsubj, and obj.]
-	Core syntactic dependents are usually semantic arguments,
+	Core syntactic arguments are usually semantic arguments,
     i.e., pArticipants (e.g., ``\textit{Wine} was excellent'').
 	However, when describing a scene, such a phrase is a Process/State
 	(e.g., ``But \textit{service} is very poor'').
@@ -650,10 +647,11 @@ treatment in UCCA, examining the main distinctions different between the schemes
 	annotated as aDverbials in case of adjuncts describing time.
 	In ``went there yesterday'', the advmod ``\textit{there}'' is annotated as a pArticipant,
 	while the oblique ``\textit{yesterday}'' as an aDverbial.
-	\item[ccomp and xcomp.]
-	As they are dependents of verbs,
+	\item[csubj, ccomp and xcomp.]
+	As they are core arguments of verbs,
 	in most cases, (open) clausal complements are pArticipant scenes
-	(e.g., ``did not really know \textit{what I wanted}'' or
+	(e.g., ``it was great \textit{that they did not charge a service fee}'',
+	``did not really know \textit{what I wanted}'' or
 	``I asked them \textit{to change it}'').
 	However, when modifying a secondary verb (which is an aDverbial),
 	they may not correspond to a whole unit, or if the clause is a single word,
