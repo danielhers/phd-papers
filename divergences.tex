@@ -561,7 +561,7 @@ nsubj & 993 & 0 & 0 & 0 & 14 & 0 & 2 & 9 & 0 & 3 & 24 & 1 & 37 \\
 nummod & 4 & 7 & 3 & 53 & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 24 \\
 obj & 439 & 7 & 10 & 1 & 1 & 0 & 1 & 1 & 0 & 8 & 6 & 0 & 92 \\
 obl & 247 & 1 & 92 & 8 & 2 & 4 & 4 & 4 & 0 & 0 & 2 & 0 & 132 \\
-parataxis & 1 & 0 & 0 & 1 & 0 & 2 & 65 & 0 & 0 & 1 & 0 & 1 & 54 \\
+parataxis & 1 & 0 & 0 & 1 & 0 & 2 & 79 & 0 & 0 & 1 & 0 & 2 & 39 \\
 vocative & 9 & 0 & 0 & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 xcomp & 44 & 1 & 2 & 2 & 0 & 0 & 1 & 0 & 0 & 5 & 0 & 7 & 116 \\
 head & 125 & 1,401 & 157 & 51 & 91 & 18 & 459 & 2 & 1 & 961 & 9 & 354 & 729 \\
@@ -602,61 +602,61 @@ as a Scene can be evoked by a verb, an eventive or stative
 noun (``negotiation'', ``fatigue''),
 an adjective or even a preposition (``this is \textit{for} John'').
 \begin{description}
-	\item[iobj, nsubj, and obj.]
-	Core syntactic arguments are usually semantic arguments,
+    \item[iobj, nsubj, and obj.]
+    Core syntactic arguments are usually semantic arguments,
     i.e., Participants (e.g., ``\textit{Wine} was excellent'').
-	However, when describing a scene, such a phrase is a Process/State
-	(e.g., ``But \textit{service} is very poor'').
-	Some wh-pronouns are the subject or object of a relative clause, and
-	are analyzed as Linkers or Relators,
-	depending on whether they modify a scene or non-scene, respectively
-	(e.g., ``Overall, Joe is a happy camper \textit{who} has found a great spot''
-	and ``one of the staff \textit{who} was very pleasant and professional'').
-	\item[amod.]
-	Adjectival modifiers of nominals are Adverbials or Elaborators,
-	depending on whether they modify scenes or non-scenes, respectively
-	(``\textit{romantic} dinner'' vs. ``\textit{medical} school''), or
-	as States when
-	they evoke scenes on their own (``\textit{beautiful} hotel'').
-	\item[nmod and acl.]
-	Nominal and clausal modifiers of nominals
-	are generally split between Participants and Elaborators,
-	depending on whether they modify scenes
-	(e.g., ``discount \textit{on services}'' and
-	``our decision \textit{to buy when we did}'')
-	or non-scenes (e.g., ``\textit{my car's} gears and brakes'' and
-	``Some of the younger kids \textit{that work there}'').
-	Many unmatched adjectival clauses are
-	\textit{fused relative clauses},
-	(e.g., ``The prices were worth what \textit{I got}'',
-	where \textit{what} is the object of \textit{worth} in UD but
-	is a Participant of \textit{I got} in UCCA).
-	\item[case.]
-	While most case markers are Relators,
-	modifying non-scene units (e.g., ``the team \textit{at} Bradley Chevron''),
-	some are Linkers as they modify a scene
-	(e.g., ``Very informative website \textit{with} a lot of good work'').
-	Some are semantically vacuous and annotated as Functions
-	(e.g., ``a large group \textit{of} my friends''),
-	while others are Elaborators (e.g., ``\textit{over} a year''),
-	or Processes/States
-	(e.g., ``not at all \textit{like} the junk you get at the grocery stores'').
-	\item[cc, conj and list.]
-	Coordinating conjunctions are either Connectors, between non-scenes
-	(e.g., ``Mercedes \textit{and} Dan'')
-	or Linkers, between scenes
-	(e.g., ``outdated \textit{but} not bad'').
-	Correspondingly, conjuncts (and list elements)
-	are Centers or Linked Scenes (H).\footnote{Note
+    However, when describing a scene, such a phrase is a Process/State
+    (e.g., ``But \textit{service} is very poor'').
+    Some wh-pronouns are the subject or object of a relative clause, and
+    are analyzed as Linkers or Relators,
+    depending on whether they modify a scene or non-scene, respectively
+    (e.g., ``Overall, Joe is a happy camper \textit{who} has found a great spot''
+    and ``one of the staff \textit{who} was very pleasant and professional'').
+    \item[amod.]
+    Adjectival modifiers of nominals are Adverbials or Elaborators,
+    depending on whether they modify scenes or non-scenes, respectively
+    (``\textit{romantic} dinner'' vs. ``\textit{medical} school''), or
+    as States when
+    they evoke scenes on their own (``\textit{beautiful} hotel'').
+    \item[nmod and acl.]
+    Nominal and clausal modifiers of nominals
+    are generally split between Participants and Elaborators,
+    depending on whether they modify scenes
+    (e.g., ``discount \textit{on services}'' and
+    ``our decision \textit{to buy when we did}'')
+    or non-scenes (e.g., ``\textit{my car's} gears and brakes'' and
+    ``Some of the younger kids \textit{that work there}'').
+    Many unmatched adjectival clauses are
+    \textit{fused relative clauses},
+    (e.g., ``The prices were worth what \textit{I got}'',
+    where \textit{what} is the object of \textit{worth} in UD but
+    is a Participant of \textit{I got} in UCCA).
+    \item[case.]
+    While most case markers are Relators,
+    modifying non-scene units (e.g., ``the team \textit{at} Bradley Chevron''),
+    some are Linkers as they modify a scene
+    (e.g., ``Very informative website \textit{with} a lot of good work'').
+    Some are semantically vacuous and annotated as Functions
+    (e.g., ``a large group \textit{of} my friends''),
+    while others are Elaborators (e.g., ``\textit{over} a year''),
+    or Processes/States
+    (e.g., ``not at all \textit{like} the junk you get at the grocery stores'').
+    \item[cc, conj and list.]
+    Coordinating conjunctions are either Connectors, between non-scenes
+    (e.g., ``Mercedes \textit{and} Dan'')
+    or Linkers, between scenes
+    (e.g., ``outdated \textit{but} not bad'').
+    Correspondingly, conjuncts (and list elements)
+    are Centers or Linked Scenes (H).\footnote{Note
     that while in UD the dependent \texttt{cc} is attached to the following conjunct,
-	in UCCA coordination is a flat structure.
-	This is a convention difference that we fixed with local modifications
-	(\S\ref{sec:local})---otherwise most \texttt{conj} instances would be unmatched,
-	containing the coordinating conjunction which is outside the unit in UCCA.}
-	\item[det.]
-	While usually Elaborators,
-	determiners are Adverbials when modifying a scene
-	(e.g., ``\textit{no} feathers in stock'').
+    in UCCA coordination is a flat structure.
+    This is a convention difference that we fixed with local modifications
+    (\S\ref{sec:local})---otherwise most \texttt{conj} instances would be unmatched,
+    containing the coordinating conjunction which is outside the unit in UCCA.}
+    \item[det.]
+    While usually Elaborators,
+    determiners are Adverbials when modifying a scene
+    (e.g., ``\textit{no} feathers in stock'').
 \end{description}
 
 \subsection{Arguments/Adjuncts}\label{sec:arguments}
@@ -670,39 +670,39 @@ Secondary relations can be verbs (e.g., ``begin'', ``fail''),
 prepositional phrases (``with disrespect''),
 as well as modals, adjectives and adverbs.
 \begin{description}
-	\item[aux.]
-	Auxiliary verbs are Functions (e.g., ``\textit{do} not forget''),
-	or Adverbials when they semantically modify a scene
-	(e.g., ``you \textit{can} graduate'').
-	\item[advmod and obl.]
-	While in the majority of cases,
-	adverbial modifiers correspond to semantic Adverbials
-	(e.g., ``I \textit{sometimes} go''),
-	they may be Participants,
-	mostly in the case of semantic arguments describing location.
-	Oblique nominals, on the other hand, mostly correspond to Participants
-	(e.g., ``wait \textit{for Nick}), but may be
-	Adverbials, mostly in case of adjuncts describing time.
-	In ``went \textit{there yesterday}'',
-	the adverbial modifier ``\textit{there}'' is a Participant,
-	while the oblique ``\textit{yesterday}'' as an Adverbial.
-	\item[csubj, ccomp and xcomp.]
-	As they are core arguments of predicates,
-	in most cases, (open) clausal subjects and complements are Participant scenes
-	(e.g., ``it was great \textit{that they did not charge a service fee}'',
-	``did not really know \textit{what I wanted}'' or
-	``I asked them \textit{to change it}'').
-	However, when modifying a secondary verb (which would be an Adverbial),
-	they may not correspond to a whole unit, or if the clause is a single word,
-	correspond to Process/State
-	(e.g., ``She makes \textit{every item fit you perfectly}'' or
-	``this seems \textit{great}'').
-	\item[vocative.]
-	Vocatives are annotated as Ground,
-	but also as Participants if they are arguments in a scene
-	(e.g., ``Thanks \textit{Mark}'').
-\end{description}	
-	
+    \item[aux.]
+    Auxiliary verbs are Functions (e.g., ``\textit{do} not forget''),
+    or Adverbials when they semantically modify a scene
+    (e.g., ``you \textit{can} graduate'').
+    \item[advmod and obl.]
+    While in the majority of cases,
+    adverbial modifiers correspond to semantic Adverbials
+    (e.g., ``I \textit{sometimes} go''),
+    they may be Participants,
+    mostly in the case of semantic arguments describing location.
+    Oblique nominals, on the other hand, mostly correspond to Participants
+    (e.g., ``wait \textit{for Nick}), but may be
+    Adverbials, mostly in case of adjuncts describing time.
+    In ``went \textit{there yesterday}'',
+    the adverbial modifier ``\textit{there}'' is a Participant,
+    while the oblique ``\textit{yesterday}'' as an Adverbial.
+    \item[csubj, ccomp and xcomp.]
+    As they are core arguments of predicates,
+    in most cases, (open) clausal subjects and complements are Participant scenes
+    (e.g., ``it was great \textit{that they did not charge a service fee}'',
+    ``did not really know \textit{what I wanted}'' or
+    ``I asked them \textit{to change it}'').
+    However, when modifying a secondary verb (which would be an Adverbial),
+    they may not correspond to a whole unit, or if the clause is a single word,
+    correspond to Process/State
+    (e.g., ``She makes \textit{every item fit you perfectly}'' or
+    ``this seems \textit{great}'').
+    \item[vocative.]
+    Vocatives are annotated as Ground,
+    but also as Participants if they are arguments in a scene
+    (e.g., ``Thanks \textit{Mark}'').
+\end{description}    
+    
 
 \subsection{Multi-Word Expressions}\label{sec:mwe}
 
@@ -714,25 +714,25 @@ but also a range of semantically opaque constructions
 On the other hand, compounds are not necessarily unanalyzable in UCCA,
 especially where they are compositional.
 \begin{description}
-	\item[compound.]
-	This is a very heterogenous category.
-	Most compounds correspond to Elaborators (e.g., ``\textit{industry} standard''),
-	and many are unanalyzable expressions (e.g., ``figure \textit{out}'').
-	In many cases, a compound represent an argument,
-	and is annotated as a Participant (e.g., ``\textit{food} craving'')
-	or it may be a State (e.g., ``\textit{out-of-place} flat-screen TV''),
-	while in other cases it is an Adverbial (e.g., ``\textit{first time} buyers'').
-	In nested compounds, a dependent may be itself a co-Center
-	within an Elaborator
-	(e.g., ``\textit{sweet potato} tempura roll'').
-	\item[case, det, nsubj, and obj.]
-	Many of these are unanalyzable due to UCCA's stronger tendency to group
-	multi-word expressions (e.g., ``lots \textit{of}'',
-	``\textit{a} bit'', ``when \textit{it} comes to'', ``bites \textit{the dust}'',
-	respectively).
-	\item[nummod.]
-	Numeric modifiers are mostly Elaborators, but often do not correspond to a whole UCCA unit
-	due to Adverbials in a flat structure (e.g., ``about \textit{50}\%'').
+    \item[compound.]
+    This is a very heterogenous category.
+    Most compounds correspond to Elaborators (e.g., ``\textit{industry} standard''),
+    and many are unanalyzable expressions (e.g., ``figure \textit{out}'').
+    In many cases, a compound represent an argument,
+    and is annotated as a Participant (e.g., ``\textit{food} craving'')
+    or it may be a State (e.g., ``\textit{out-of-place} flat-screen TV''),
+    while in other cases it is an Adverbial (e.g., ``\textit{first time} buyers'').
+    In nested compounds, a dependent may be itself a co-Center
+    within an Elaborator
+    (e.g., ``\textit{sweet potato} tempura roll'').
+    \item[case, det, nsubj, and obj.]
+    Many of these are unanalyzable due to UCCA's stronger tendency to group
+    multi-word expressions (e.g., ``lots \textit{of}'',
+    ``\textit{a} bit'', ``when \textit{it} comes to'', ``bites \textit{the dust}'',
+    respectively).
+    \item[nummod.]
+    Numeric modifiers are mostly Elaborators, but often do not correspond to a whole UCCA unit
+    due to Adverbials in a flat structure (e.g., ``about \textit{50}\%'').
 \end{description}
 
 \subsection{Linkage}\label{sec:linkage}
@@ -743,67 +743,67 @@ and parataxis (a residual category).
 UCCA only distinguishes between argumenthood 
 and largely conflates clausal coordination, subordination and parataxis.
 \begin{description}
-	\item[mark.]
-	UCCA distinguishes between the infinitive marker ``to'', annotated as Function,
-	and the use of markers for inter-scene linkage, such as purposive ``to'',
-	annotated as Linker
-	(e.g., in ``how much they want me \textit{to} pay \textit{to} fix this thing'',
-	the first \textit{to} is a Function and the second is a Linker).\daniel{still
-	struggling to find an R mark that shouldn't actually be an L}
-	\item[advcl and parataxis.]
-	Both adverbial clauses and parataxis almost exclusively Linked Scene
-	(e.g., ``We called few companies before \textit{we decided to hire them}''
-	and ``Check out The Willow Lounge, \textit{you'll be happy}'')\footnote{Note
+    \item[mark.]
+    UCCA distinguishes between the infinitive marker ``to'', annotated as Function,
+    and the use of markers for inter-scene linkage, such as purposive ``to'',
+    annotated as Linker
+    (e.g., in ``how much they want me \textit{to} pay \textit{to} fix this thing'',
+    the first \textit{to} is a Function and the second is a Linker).\daniel{still
+    struggling to find an R mark that shouldn't actually be an L}
+    \item[advcl and parataxis.]
+    Both adverbial clauses and parataxis almost exclusively Linked Scene
+    (e.g., ``We called few companies before \textit{we decided to hire them}''
+    and ``Check out The Willow Lounge, \textit{you'll be happy}'')\footnote{Note
     that while in UD the dependent \texttt{mark}, e.g. ``before'',
     is attached to the following adverbial clause,
-	in UCCA linkage is a flat structure.
-	This is a convention difference that we fixed with local modifications
-	(\S\ref{sec:local})---otherwise most \texttt{advcl} instances would be unmatched,
-	containing the linker which is outside the scene in UCCA.}.
+    in UCCA linkage is a flat structure.
+    This is a convention difference that we fixed with local modifications
+    (\S\ref{sec:local})---otherwise most \texttt{advcl} instances would be unmatched,
+    containing the linker which is outside the scene in UCCA.}.
 \end{description}
-	
+    
 
 \subsection{Other Distinctions}\label{sec:misc}
 
 \begin{description}
-	\item[appos.]
-	Appositional modifiers are always analyzed in UD such that
-	the modifier nominal follows the modified noun.
-	In UCCA, these are split between Center
-	(``its sister store \textit{Peking Garden}'')
-	and Elaborator (``Kevin, \textit{the manager}''),
-	as a named entity will be the Center regardless of the order.
+    \item[appos.]
+    Appositional modifiers are always analyzed in UD such that
+    the modifier nominal follows the modified noun.
+    In UCCA, these are split between Center
+    (``its sister store \textit{Peking Garden}'')
+    and Elaborator (``Kevin, \textit{the manager}''),
+    as a named entity will be the Center regardless of the order.
     \item[cop.]
-	UCCA distinguishes between copular constructions expressing
-	identity (e.g., ``It \textit{was} an ingrown toenail'') where the copula is annotated as State
-	(and the head is a Participant),
-	as opposed to attributes or set membership
-	(e.g., ``Mercedes and Dan \textit{are} very thorough''), where it is annotated as Function
-	(and the head is a State).	
-	\item[discourse.]
-	Interjections and discourse markers are given the categories of
-	Linked Scene, Ground or Linker,
-	if they are, respectively, a complete scene or part of a scene relating to the \textit{speech event}
-	(e.g., ``\textit{no}, Warwick in New Jersey'' and
-	``\textit{Please} visit my website''),
-	or simply relate one scene to another
-	(e.g., ``I am sure, \textit{well}, she says'').
-	\item[expl and nsubj.]
-	Expletives are Functions in UCCA, lacking semantic content.
-	Some instances of ``it'' and ``that'', analyzed as subjects in UD,
-	are analyzed as expletives in UCCA, and annotated as Function
-	(e.g., ``\textit{it}'s like driving a new car'').	
-	\item[head.]
-	While not a UD relation, this label is introduced on the conversion from dependency graphs
-	\cite{hershcovich2018multitask}.
-	For any word with at least one dependent,
-	a non-terminal node will be created in the converted graph, with a \textit{head} edge.
-	About 17\% of these edges are unmatched, mostly due to unanalyzable expressions and inter-scene linkage.
-	About 70\% are Process, State, Linked Scene or Center,
-	where the notion of syntactic head matches that of a ``UCCA head''.
-	In the remaining case there is a content difference between the schemes
-	(e.g., ``\textit{all} of Dallas'', where \textit{all} is an Elaborator
-	in UCCA but is the syntactic head in UD).
+    UCCA distinguishes between copular constructions expressing
+    identity (e.g., ``It \textit{was} an ingrown toenail'') where the copula is annotated as State
+    (and the head is a Participant),
+    as opposed to attributes or set membership
+    (e.g., ``Mercedes and Dan \textit{are} very thorough''), where it is annotated as Function
+    (and the head is a State).    
+    \item[discourse.]
+    Interjections and discourse markers are given the categories of
+    Linked Scene, Ground or Linker,
+    if they are, respectively, a complete scene or part of a scene relating to the \textit{speech event}
+    (e.g., ``\textit{no}, Warwick in New Jersey'' and
+    ``\textit{Please} visit my website''),
+    or simply relate one scene to another
+    (e.g., ``I am sure, \textit{well}, she says'').
+    \item[expl and nsubj.]
+    Expletives are Functions in UCCA, lacking semantic content.
+    Some instances of ``it'' and ``that'', analyzed as subjects in UD,
+    are analyzed as expletives in UCCA, and annotated as Function
+    (e.g., ``\textit{it}'s like driving a new car'').    
+    \item[head.]
+    While not a UD relation, this label is introduced on the conversion from dependency graphs
+    \cite{hershcovich2018multitask}.
+    For any word with at least one dependent,
+    a non-terminal node will be created in the converted graph, with a \textit{head} edge.
+    About 17\% of these edges are unmatched, mostly due to unanalyzable expressions and inter-scene linkage.
+    About 70\% are Process, State, Linked Scene or Center,
+    where the notion of syntactic head matches that of a ``UCCA head''.
+    In the remaining case there is a content difference between the schemes
+    (e.g., ``\textit{all} of Dallas'', where \textit{all} is an Elaborator
+    in UCCA but is the syntactic head in UD).
 \end{description}
 
 
