@@ -993,18 +993,30 @@ As a point of comparison, we train a UCCA parser,
 TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
 on the English \textit{Wiki} training set, using the development set for validation,
 and show unlabeled evaluation for it on the EWT dataset.
-Following standard practice in UCCA evaluation,
+
+
+\paragraph{UCCA evaluation by gold-standard UD.}
+
+In the standard UCCA evaluation,
 remote edges (\S\ref{sec:remote}) are evaluated separately from primary edges.
+We extend it to perform a fine-grained split,
+dividing UCCA edges into subsets according to the relations of the UD edges
+they match by terminal yield.
+This allows error analysis of UCCA parsing according to syntactic phenomena.
+
+We apply this fine-grained evaluation to TUPA on the EWT dataset,
+using the gold-standard UD for matched relations.
 
 
-\paragraph{Evaluation by gold-standard UD.}
+\paragraph{UCCA evaluation by automatically parsed UD.}
 
+To demonstrate the applicability of fine-grained analysis on UCCA data
+without gold-standard UD,
+we use UDPipe v1.2 \cite{udpipe,udpipe:2017}, trained on the UD v2.3 treebanks,
+to parse the \textit{Wiki} and 20K test sets in English, French and German.
+We use the UDPipe models trained on the English\_EWT, French\_GSD and German\_GSD
+treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 
-
-\paragraph{Evaluation by automatically parsed UD.}
-
-To perform fine-grained analysis on the UCCA corpora that do not have gold-standard UD,
-we use UDPipe v1.2 \cite{udpipe,udpipe:2017}, trained on the UD v2.3 treebanks.
 
 %\paragraph{Baselines.}
 %
