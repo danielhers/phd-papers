@@ -405,59 +405,61 @@ While converted UD graphs form trees, enhanced++ UD graphs may not.}\label{fig:u
 \end{figure}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \section{Shared Gold Standard Corpus}\label{sec:shared}
 
-We annotate 804 English sentences from the reviews section of the English Web Treebank
-\cite[EWT; ][]{bies2012english}.
+We annotate 804 English sentences from the reviews section of the 
+English Web Treebank \cite[EWT; ][]{bies2012english}.
 The sentences are annotated by two UCCA annotators and
 cross-reviewed.\footnote{The data will be released upon publication.}
-As these sentences are included in the Universal Dependencies \texttt{English\_EWT} treebank,
-we have both gold-standard UCCA and UD for them.
+As these sentences are included in the Universal Dependencies 
+\texttt{English\_EWT} treebank, we have both gold-standard UCCA and UD for them. 
 We refer to this set as \textit{shared} henceforth.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \section{Comparison Methodology}\label{sec:methodology}
 
 To facilitate comparison between UCCA and UD,
 we first assimilate the graphs by abstracting away from formalism differences,
 obtaining a similar graph format for both schemes,
-over the words of the sentence.
-We then match pairs of nodes in the graphs for the same sentence,
-by the set of terminals in their yields.
+over the tokens of the sentence.
+We then match pairs of nodes in the converted UD and UCCA trees
+if they share the same set of terminals in their yields.
 
 One obvious difference is that UD annotates bi-lexical dependency graphs,
 while UCCA graphs contain non-terminal nodes.
-To reach a common format, we use a freely available
-converter\footnote{\url{http://github.com/huji-nlp/semstr}}
-\cite{hershcovich2018multitask,hershcovich2018universal}.
-Given UD trees, the converter outputs graphs in a unified DAG format.
-The format consists of a rooted DAG, where the tokens are the terminal nodes.
-As in the UCCA format, edges are labeled (but not nodes),
-and are divided into \textit{primary} and \textit{remote} edges,
-where the primary edges form a tree (all nodes have at most one primary parent,
-and the root has none).
-Remote edges enable reentrancy, and thus together with primary edges
-form a DAG.
-Figure~\ref{fig:converted_example_ud} shows an example for a converted graph.
+To reach a common format, we use the unified DAG format by
+\citet{hershcovich2018multitask}.\footnote{\url{http://github.com/huji-nlp/semstr}}
 
-To convert UD into the unified DAG format,
-the converter adds a pre-terminal for each token,
+Figure~\ref{fig:converted_example_ud} presents an example UD tree conversion.
+Given a UD tree, the converter adds a pre-terminal for each token,
 and attaches the pre-terminals according to the original dependency edges:
 traversing the tree from the root down, for each head token it creates a non-terminal
-parent with the edge label {\it head},
-and adds the node's dependents as children of the created non-terminal node
-(see Figure~\ref{fig:converted_example_ud}).
+parent with the edge label {\it head}, and adds the node's dependents as children of 
+the created non-terminal node.
 %Any \textit{enhanced}
 %heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
 In the conversion process, any language-specific relation subtypes are stripped,
 leaving only the universal relations.
-For example, the language-specific \texttt{acl:relcl} is replaced by the universal relation \texttt{acl}.
+For example, the language-specific label for definite artciles
+\texttt{det:def} is replaced by the universal relation \texttt{det}.
 
-\oa{move this paragraph some place else}
-  UCCA graphs are converted into trees by removing ``remote edges''.
-  Remote edges in UCCA encode shared argumenthood by assigning multiple parents to the same node. Such phenomena are largely ignored in UD, which uses trees.\footnote{Reentracy is supported by enhanced UD \cite{SCHUSTER16.779}.} See \S\ref{sec:analysis}.
+In the UCCA format, edges are labeled (but not nodes),
+and are divided into \textit{primary} and \textit{remote} edges,
+where the primary edges form a tree (all nodes have at most one primary parent,
+and the root has none). Remote edges enable reentrancy, and thus together with primary edges
+form a DAG. In order to facilitate comparison, and as UD does not support reentrancy,\footnote{Reentracy is supported by enhanced UD \cite{SCHUSTER16.779}.} We remove remote edges in the conversion process.
+%Figure~\ref{fig:converted_example_ud} shows an example for a converted graph.
 
 
+
+%\oa{move this paragraph some place else}
+%  UCCA graphs are converted into trees by removing ``remote edges''.
+%  Remote edges in UCCA encode shared argumenthood by assigning multiple parents to the same node. Such phenomena are largely ignored in UD, %which uses trees. See \S\ref{sec:analysis}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local Modifications}\label{sec:local}
 
 We extend the converter to remove further formalism differences.
@@ -498,7 +500,7 @@ and it is different from the default low-attaching behavior.
  & \rotatebox{90}{Function (F)} & \rotatebox{90}{Ground (G)}
  & \rotatebox{90}{Linked Scene (H)} & \rotatebox{90}{Linker (L)}
  & \rotatebox{90}{Connector (N)} & \rotatebox{90}{Process (P)}
- & \rotatebox{90}{Relator (R)} & \rotatebox{90}{State (S)} & $\emptyset$ \\
+ & \rotatebox{90}{Relator (R)} & \rotatebox{90}{State (S)} & \rotatebox{90}{{\sc NoMatch}} \\
 \hline
 acl & 8 & 0 & 0 & 101 & 2 & 0 & 15 & 0 & 0 & 0 & 0 & 1 & 49 \\
 advcl & 2 & 2 & 0 & 0 & 0 & 0 & 103 & 1 & 0 & 4 & 0 & 0 & 97 \\
@@ -516,7 +518,6 @@ csubj & 2 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 8 \\
 det & 2 & 1 & 23 & 778 & 1 & 1 & 0 & 0 & 0 & 0 & 2 & 0 & 26 \\
 discourse & 0 & 1 & 0 & 0 & 1 & 6 & 13 & 3 & 0 & 0 & 0 & 1 & 1 \\
 expl & 0 & 0 & 0 & 0 & 22 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2 \\
-head & 125 & 1,401 & 157 & 51 & 91 & 18 & 459 & 2 & 1 & 961 & 9 & 354 & 729 \\
 iobj & 19 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 list & 0 & 2 & 0 & 0 & 0 & 0 & 8 & 0 & 0 & 0 & 0 & 0 & 2 \\
 mark & 0 & 2 & 4 & 0 & 161 & 1 & 0 & 159 & 1 & 0 & 53 & 1 & 18 \\
@@ -528,18 +529,21 @@ obl & 247 & 1 & 92 & 8 & 2 & 4 & 4 & 4 & 0 & 0 & 2 & 0 & 132 \\
 parataxis & 1 & 0 & 0 & 1 & 0 & 2 & 65 & 0 & 0 & 1 & 0 & 1 & 54 \\
 vocative & 9 & 0 & 0 & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 xcomp & 44 & 1 & 2 & 2 & 0 & 0 & 1 & 0 & 0 & 5 & 0 & 7 & 116 \\
-$\emptyset$ & 329 & 173 & 53 & 73 & 6 & 5 & 673 & 29 & 0 & 141 & 7 & 98
+head & 125 & 1,401 & 157 & 51 & 91 & 18 & 459 & 2 & 1 & 961 & 9 & 354 & 729 \\
+{\sc NoMatch} & 329 & 173 & 53 & 73 & 6 & 5 & 673 & 29 & 0 & 141 & 7 & 98
 \end{tabular}
 \caption{UD-UCCA confusion matrix calculated from EWT
 gold-standard annotations (\S\ref{sec:shared}),
 after converting UD to the unified DAG format,
 by comparing incoming edge labels for units with the same terminal yields.
-The last column and row represent the case where no unit matched.
+The last column (row) show the number of edges of each UD (UCCA) category
+that do not match any UCCA (UD) unit.
 \label{tab:confusion_matrix}}
 \end{table}
 
 \subsection{Confusion Matrix}\label{sec:confusion}
 
+\oa{I would move the confusion matrix to the next section. It's more customary to split setup and results into different sections.}
 Using the standard UCCA evaluation
 script,\footnote{\url{http://github.com/huji-nlp/ucca/blob/master/scripts/evaluate_standard.py}}
 we create a confusion matrix between the edge tags in converted UD graphs
