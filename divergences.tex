@@ -506,6 +506,25 @@ and it is different from the default low-attaching behavior.
 %\end{itemize}
 %These rules are applied to the bilexical graph after the conversion process.
 
+
+\section{Analysis of Divergences}\label{sec:analysis}
+
+In this section, we analyze in detail the content differences between UCCA and UD,
+as quantified in a \textit{confusion matrix} between the schemes (\S\ref{sec:confusion}).
+
+The analysis excludes the following relations,
+as they are irrelevant to the evaluation of content differences:
+
+\begin{description}
+  \item[root.] Always matches the whole sentence.
+  \item[punct.] No semantic content; excluded from UCCA evaluation.
+  \item[fixed, flat and goeswith.] Correspond to parts of unanalyzable units in UCCA,
+  and so not represented as units on their own.
+  The UD distinction is between, respectively, fixed grammatical expressions,
+  semi-fixed MWEs like names, titles or dates, and erroneously separated words.
+  \item[dep and orphan.] Rare; no consistent relation.
+\end{description}
+
 \begin{table}[t]
 \centering
 \scriptsize
@@ -559,7 +578,6 @@ that do not match any UCCA (UD) unit.
 
 \subsection{Confusion Matrix}\label{sec:confusion}
 
-\oa{I would move the confusion matrix to the next section. It's more customary to split setup and results into different sections.}
 Using the standard UCCA evaluation
 script,\footnote{\url{http://github.com/huji-nlp/ucca/blob/master/scripts/evaluate_standard.py}}
 we create a confusion matrix between the edge tags in converted UD graphs
@@ -571,25 +589,6 @@ Excluding punctuation, this gives 13293 yields in UCCA and
 9817 in UD.
 Of these, 8416 are common, meaning that an oracle would get an $F_1$ score
 of 72.8\% if it had the gold label for each edge on conversion.
-
-
-\section{Analysis of Divergences}\label{sec:analysis}
-
-In this section, we analyze in detail the content differences between UCCA and UD,
-as quantified in the confusion matrix in \S\ref{sec:confusion}.
-
-The analysis excludes the following relations,
-as they are irrelevant to the evaluation of content differences:
-
-\begin{description}
-  \item[root.] Always matches the whole sentence.
-  \item[punct.] No semantic content; excluded from UCCA evaluation.
-  \item[fixed, flat and goeswith.] Correspond to parts of unanalyzable units in UCCA,
-  and so not represented as units on their own.
-  The UD distinction is between, respectively, fixed grammatical expressions,
-  semi-fixed MWEs like names, titles or dates, and erroneously separated words.
-  \item[dep and orphan.] Rare; no consistent relation.
-\end{description}
 
 In the following subsections, we categorize the UD relations according to their
 treatment in UCCA, examining the main distinctions different between the schemes.
