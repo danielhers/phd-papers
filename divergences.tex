@@ -45,6 +45,9 @@
 \newcommand{\daniel}[1]{\footnote{\color{blue}DH: #1}}
 
 \hyphenation{SemEval}
+\hyphenation{English}
+\hyphenation{French}
+\hyphenation{German}
 
 
 %\lstset{basicstyle=\ttfamily}
@@ -412,13 +415,16 @@ Intermediate non-terminals and \textit{head} edges are introduced.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \section{Shared Gold Standard Corpus}\label{sec:shared}
 
-We annotate 804 English sentences from the reviews section of the 
+We annotate 804 English sentences from the \textit{reviews} section of the 
 English Web Treebank \cite[EWT; ][]{bies2012english}.
 The sentences are annotated by two UCCA annotators and
 cross-reviewed.\footnote{The data will be released upon publication.}
 As these sentences are included in the Universal Dependencies 
-\texttt{English\_EWT} treebank, we have both gold-standard UCCA and UD for them. 
+English\_EWT treebank, we have both gold-standard UCCA and UD for them. 
 We refer to this set as \textit{shared} henceforth.
+The data contains 11,103 tokens, constituting 4\% of the full UD English\_EWT treebank,
+and 20\% of its \textit{reviews} section
+(see Table~\ref{tab:corpora}).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
@@ -429,14 +435,14 @@ we first assimilate the graphs by abstracting away from formalism differences,
 obtaining a similar graph format for both schemes,
 over the tokens of the sentence.
 We then match pairs of nodes in the converted UD and UCCA trees
-if they share the same set of terminals in their yields.
+if they share the same set of terminals in their yields (\S\ref{sec:analysis}).
 
 One obvious difference is that UD annotates bi-lexical dependency graphs,
 while UCCA graphs contain non-terminal nodes.
 To reach a common format, we use the unified DAG format by
-\citet{hershcovich2018multitask}.\footnote{\url{http://github.com/huji-nlp/semstr}}
-\S\ref{sec:conversion} describes the basic conversion protocol.
-In \S\ref{sec:local}, we describe our extended converter,
+\citet{hershcovich2018multitask},\footnote{\url{http://github.com/huji-nlp/semstr}}
+outlined in \S\ref{sec:conversion}.
+Then, in \S\ref{sec:local}, we describe our extended converter,
 developed following inspection of the formal differences between
 UCCA and the basic converted UD trees,
 to remove non-content differences.
@@ -951,7 +957,7 @@ and German (v1.0.1).\footnote{\url{http://github.com/UniversalConceptualCognitiv
 %and on 20K v0.9.0 in German.
 %As in previous work, we use English 20K only as an out-of-domain test set.
 
-%For UD, we use the \texttt{English\_EWT}, \texttt{French\_GSD} and \texttt{German\_GSD}
+%For UD, we use the English\_EWT, French\_GSD and German\_GSD
 %treebanks from Universal Dependencies v2.3
 %\cite{11234/1-2895}.\footnote{\url{http://hdl.handle.net/11234/1-2895}}
 %These are the largest freely-available UD treebanks for these languages.
