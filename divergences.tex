@@ -88,8 +88,9 @@
   (3) different treatment of multi-word expressions, and
   (4) different treatment of inter-clause linkage.
   We further discuss the long-tail of cases where the two schemes take markedly
-  different approaches. To demonstrate the feasibility of informed protocols for using syntax in semantic parsing,
-  we show that a simple converter can be used to improve UCCA parsing performance.
+  different approaches.
+  Finally, we show that the proposed comparison methodology can be used
+  for fine-grained evaluation of UCCA parsing.
 \end{abstract}
 
 
@@ -171,11 +172,12 @@
     
    Other divergences stem from a different treatment of coordination, apposition and copulas (\S\ref{sec:misc}).
   
-  We further extend the structural converter built as part of our analysis to
-  get a full labeled converter (\S\ref{sec:conversion}),
-  and use it to generate silver standard training data for a UCCA parser (\S\ref{sec:silver}).
+%  We further extend the structural converter built as part of our analysis to
+%  get a full labeled converter (\S\ref{sec:conversion}),
+%  and use it to generate silver standard training data for a UCCA parser (\S\ref{sec:silver}).
   
-  As another use-case for our converter to support parsing,
+%  As another use-case for our converter to support parsing,
+  To demonstrate the utility of our comparison methodology,
   we perform fine-grained error analysis on UCCA parsing results
   according to UD relations (\S\ref{sec:fine_grained}).
 
@@ -807,81 +809,84 @@ and largely conflates clausal coordination, subordination and parataxis.
 \end{description}
 
 
-\section{Full Conversion}\label{sec:conversion}
-
-The conversion protocol introduced in \S\ref{sec:methodology} outputs graphs in a UCCA-like
-format, but with UD edge labels.
-In this section we describe a full conversion protocol,
-aiming at reaching ``native'' UCCA graphs.
-
-\paragraph{Label mapping.}
-The confusion matrix introduced in \S\ref{sec:confusion}
-provides a distribution of the possible UCCA categories
-corresponding to each UD relation.
-By finding the mode of this distribution,
-we get the most likely translation.
-To convert the UD trees into fully labeled UCCA graphs,
-we replace each UD relation with its most common UCCA counterpart.
-
-\paragraph{Postprocessing.}
-The \textit{head} edges introduced as part of the conversion (\S\ref{sec:conversion})
-do not have a single
-corresponding UCCA edge label---although Center is the most common corresponding label,
-other labels such as Process are also common.
-This is a difference between UD, which selects the most central token to be the head of a phrase,
-to UCCA, which also annotates the relation between that head and the unit it is part of.
-To overcome this limitation, we replace all \textit{head} labels with C, but then
-apply standard UCCA
-normalization\footnote{\url{https://github.com/huji-nlp/ucca/blob/master/scripts/normalize.py}}
-to the resulting graphs after conversion,
-replacing Center with Process when it has sibling Participants or
-with Linked Scene when it has sibling Linked Scenes.
-We select Process rather than State as the main relation in the normalization because
-it is much more common (14,719 Processess in the Wiki corpus as opposed to 3354 States).
-
-
+%\section{Full Conversion}\label{sec:conversion}
+%
+%The conversion protocol introduced in \S\ref{sec:methodology} outputs graphs in a UCCA-like
+%format, but with UD edge labels.
+%In this section we describe a full conversion protocol,
+%aiming at reaching ``native'' UCCA graphs.
+%
+%\paragraph{Label mapping.}
+%The confusion matrix introduced in \S\ref{sec:confusion}
+%provides a distribution of the possible UCCA categories
+%corresponding to each UD relation.
+%By finding the mode of this distribution,
+%we get the most likely translation.
+%To convert the UD trees into fully labeled UCCA graphs,
+%we replace each UD relation with its most common UCCA counterpart.
+%
+%\paragraph{Postprocessing.}
+%The \textit{head} edges introduced as part of the conversion (\S\ref{sec:conversion})
+%do not have a single
+%corresponding UCCA edge label---although Center is the most common corresponding label,
+%other labels such as Process are also common.
+%This is a difference between UD, which selects the most central token to be the head of a phrase,
+%to UCCA, which also annotates the relation between that head and the unit it is part of.
+%To overcome this limitation, we replace all \textit{head} labels with C, but then
+%apply standard UCCA
+%normalization\footnote{\url{https://github.com/huji-nlp/ucca/blob/master/scripts/normalize.py}}
+%to the resulting graphs after conversion,
+%replacing Center with Process when it has sibling Participants or
+%with Linked Scene when it has sibling Linked Scenes.
+%We select Process rather than State as the main relation in the normalization because
+%it is much more common (14,719 Processess in the Wiki corpus as opposed to 3354 States).
 
 
-\section{Improving UCCA Parsing with UD}\label{sec:silver}
 
-Syntactic dependency parsers require many training examples to achieve
-state-of-the-art results.
-Even after around 500K tokens, the learning curves do not seem to saturate
-\cite{de2017old,velldal2017joint}.
 
-Whereas the largest UCCA training set (English Wiki) contains 128K tokens,
-The largest joined English UD training set (EWT) contains 177K tokens.
-In French UCCA has just 10K training tokens whereas UD has 295K,
-and in German UCCA has 80K and UD 228K.
+%\section{Improving UCCA Parsing with UD}\label{sec:silver}
 
-\begin{table}[t]
-\centering
-\begin{tabular}{l|lll|lll}
-& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
-& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
-& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
-\hline
-\footnotesize 10\% & 65.1 & 65.2 & 65.1 & 38.4 & 24.3 & 29.8\\
-\footnotesize 20\% & 68.9 & 68.3 & 68.6 & 47.1 & 28.0 & 35.2\\
-\footnotesize 30\% & 70.2 & 70.1 & 70.2 & 47.2 & 45.5 & 46.3\\
-\footnotesize 40\% & 71.5 & 71.3 & 71.4 & 52.5 & 46.1 & 49.1\\
-\footnotesize 50\% & 71.9 & 71.9 & 71.9 & 51.3 & 48.6 & 49.9\\
-\footnotesize 60\% & 71.3 & 72.4 & 71.9 & 52.9 & 45.5 & 48.9\\
-\footnotesize 70\% & 73.1 & 72.7 & 72.9 & 50.8 & 50.5 & 50.6\\
-\footnotesize 80\% & 73.5 & 72.6 & 73.0 & 52.8 & 47.0 & 49.8\\
-\footnotesize 90\% & 73.9 & 73.1 & 73.5 & 52.3 & 48.6 & 50.4\\
-\footnotesize 100\% & 74.7 & 74.8 & 74.8 & 48.5 & 51.2 & 49.8\\
-\end{tabular}
-\caption{
-Development scores for TUPA \protect\cite{hershcovich2017a} when trained on increasing amount of training data
-(English Wiki corpus).
-\label{tab:partial_data_results}}
-\end{table}
+%Syntactic dependency parsers require many training examples to achieve
+%state-of-the-art results.
+%Even after around 500K tokens, the learning curves do not seem to saturate
+%\cite{de2017old,velldal2017joint}.
+%
+%Whereas the largest UCCA training set (English Wiki) contains 128K tokens,
+%The largest joined English UD training set (EWT) contains 177K tokens.
+%In French UCCA has just 10K training tokens whereas UD has 295K,
+%and in German UCCA has 80K and UD 228K.
+%
+%\begin{table}[t]
+%\centering
+%\begin{tabular}{l|lll|lll}
+%& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+%& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+%& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+%\hline
+%\footnotesize 10\% & 65.1 & 65.2 & 65.1 & 38.4 & 24.3 & 29.8\\
+%\footnotesize 20\% & 68.9 & 68.3 & 68.6 & 47.1 & 28.0 & 35.2\\
+%\footnotesize 30\% & 70.2 & 70.1 & 70.2 & 47.2 & 45.5 & 46.3\\
+%\footnotesize 40\% & 71.5 & 71.3 & 71.4 & 52.5 & 46.1 & 49.1\\
+%\footnotesize 50\% & 71.9 & 71.9 & 71.9 & 51.3 & 48.6 & 49.9\\
+%\footnotesize 60\% & 71.3 & 72.4 & 71.9 & 52.9 & 45.5 & 48.9\\
+%\footnotesize 70\% & 73.1 & 72.7 & 72.9 & 50.8 & 50.5 & 50.6\\
+%\footnotesize 80\% & 73.5 & 72.6 & 73.0 & 52.8 & 47.0 & 49.8\\
+%\footnotesize 90\% & 73.9 & 73.1 & 73.5 & 52.3 & 48.6 & 50.4\\
+%\footnotesize 100\% & 74.7 & 74.8 & 74.8 & 48.5 & 51.2 & 49.8\\
+%\end{tabular}
+%\caption{
+%Development scores for TUPA \protect\cite{hershcovich2017a} when trained on increasing amount of training data
+%(English Wiki corpus).
+%\label{tab:partial_data_results}}
+%\end{table}
+%
+%Table~\ref{tab:partial_data_results} shows results for TUPA,
+%trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki development set.
+%As can be seen, the primary labeled F1 continues improving substantially even from 90\% to 100\%
+%of the training data. More training data is likely to yield even better performance.
 
-Table~\ref{tab:partial_data_results} shows results for TUPA,
-trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki development set.
-As can be seen, the primary labeled F1 continues improving substantially even from 90\% to 100\%
-of the training data. More training data is likely to yield even better performance.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fine-Grained UCCA Evaluation}\label{sec:fine_grained}
 
 \subsection{Experimental Setup}\label{sec:experiments}
 
@@ -907,16 +912,16 @@ of the training data. More training data is likely to yield even better performa
 & \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
 & \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
 \hline
-UCCA &&&&&&&&&&&&&&&&&& \\
-Wiki 1.2.3 & 124935 & 17784 & 15854 & 4113 & 514 & 515 &&&&&&&&&&&& \\
-Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
-\multicolumn{2}{l}{20K 1.2.2/1.0.1} && 12574 &&& 492 & 618 & 6374 & 5962 & 15 & 238 & 239 & 119872 & 12334 & 12325 & 5211 & 651 & 652 \\
-\multicolumn{2}{l}{20K 1.0.0/0.9.0} && 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
-\hline
-UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
-\multicolumn{2}{l}{250658} && \multicolumn{2}{l}{14450} && \multicolumn{2}{l}{209131} && 13814 \\
-\hline
-Shared &&& 11103 &&& 804 &&&&&&&&&&&&
+%UCCA &&&&&&&&&&&&&&&&&& \\
+Wiki & 124935 & 17784 & 15854 & 4113 & 514 & 515 &&&&&&&&&&&& \\
+%Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
+20K && 12574 &&& 492 & 618 & 6374 & 5962 & 15 & 238 & 239 & 119872 & 12334 & 12325 & 5211 & 651 & 652 \\
+%\multicolumn{2}{l}{20K 1.0.0/0.9.0} && 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
+%\hline
+%UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
+%\multicolumn{2}{l}{250658} && \multicolumn{2}{l}{14450} && \multicolumn{2}{l}{209131} && 13814 \\
+%\hline
+EWT &&& 11103 &&& 804 &&&&&&&&&&&&
 \end{tabular}
 \caption{Number of tokens and sentences in the training, development and test sets
 we use for each corpus and language.\label{tab:corpora}}
@@ -924,53 +929,51 @@ we use for each corpus and language.\label{tab:corpora}}
 
 \paragraph{Data.}
 
-For UCCA, we use v1.2.3 of the English Wikipedia corpus (\textit{Wiki}),
+We use v1.2.3 of the UCCA English Wikipedia corpus (\textit{Wiki}),
 with the standard train/dev/test split (see Table~\ref{tab:corpora}),
 and the \textit{Twenty Thousand Leagues Under the Sea} corpora (\textit{20K}),
 annotated in English (v1.2.2), French (v1.2.2)
 and German (v1.0.1).\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation}}
 
-For comparability with previous work \cite{hershcovich2017a,hershcovich2018multitask},
-we also perform our experiments on Wiki v1.2.0 \cite{abend2013universal},
-on 20K v1.0.0 in English and French \cite{sulem2015conceptual},
-and on 20K v0.9.0 in German.
-As in previous work, we use English 20K only as an out-of-domain test set.
+%For comparability with previous work \cite{hershcovich2017a,hershcovich2018multitask},
+%we also perform our experiments on Wiki v1.2.0 \cite{abend2013universal},
+%on 20K v1.0.0 in English and French \cite{sulem2015conceptual},
+%and on 20K v0.9.0 in German.
+%As in previous work, we use English 20K only as an out-of-domain test set.
 
-For UD, we use the \texttt{English\_EWT}, \texttt{French\_GSD} and \texttt{German\_GSD}
-treebanks from Universal Dependencies v2.3
-\cite{11234/1-2895}.\footnote{\url{http://hdl.handle.net/11234/1-2895}}
-These are the largest freely-available UD treebanks for these languages.
+%For UD, we use the \texttt{English\_EWT}, \texttt{French\_GSD} and \texttt{German\_GSD}
+%treebanks from Universal Dependencies v2.3
+%\cite{11234/1-2895}.\footnote{\url{http://hdl.handle.net/11234/1-2895}}
+%These are the largest freely-available UD treebanks for these languages.
 
 
-\paragraph{Conversion of gold UD annotations.}
+%\paragraph{Evaluation of gold UD annotations.}
+%
+%We apply our conversion protocol (\S\ref{sec:methodology}) to
+%the gold-standard UD trees of the English EWT shared sentences,
+%and evaluate on the gold-standard UCCA for the same sentences.
+%We then apply the label mapping to get fully labeled converted UCCA graphs.
 
-We apply our conversion protocol (\S\ref{sec:conversion}) to
-the gold-standard UD trees of the English EWT shared sentences,
-and evaluate on the gold-standard UCCA for the same sentences.
-We then apply the label mapping to get fully labeled converted UCCA graphs.
+\paragraph{Evaluation by automatically parsed UD.}
 
-\paragraph{Conversion of automatically parsed UD annotations.}
+To perform fine-grained analysis on the UCCA corpora that do not have gold-standard UD,
+we use UDPipe v1.2 \cite{udpipe,udpipe:2017}, trained on the UD v2.3 treebanks.
 
-To evaluate the conversion on the UCCA corpora that do not have gold-standard UD,
-we instead start from automatically parsed UD as the source.
-To parse text into UD, we use UDPipe v1.2 \cite{udpipe,udpipe:2017},
-trained on the UD v2.3 treebanks.
+%\paragraph{Baselines.}
+%
+%As a point of comparison, we evaluate TUPA \cite{hershcovich2017a} on the test sets,
+%after training it on the UCCA training set for each language (Wiki for English,
+%and 20K for French and German).
+%For equal conditions,
+%we train and test TUPA using features predicted by UDPipe,
+%yielding slightly lower scores than previously reported using spaCy.%\footnote{\url{https://spacy.io}}
 
-\paragraph{Baselines.}
-
-As a point of comparison, we evaluate TUPA \cite{hershcovich2017a} on the test sets,
-after training it on the UCCA training set for each language (Wiki for English,
-and 20K for French and German).
-For equal conditions,
-we train and test TUPA using features predicted by UDPipe,
-yielding slightly lower scores than previously reported using spaCy.%\footnote{\url{https://spacy.io}}
-
-\paragraph{Using converted UD as ``silver-standard'' data.}
-
-Using our conversion protocol (\S\ref{sec:conversion}),
-we convert the gold-standard UD graphs into UCCA.
-We use the converted UD data as ``silver-standard'' data \cite{W17-7306,N18-1104}
-and add it to the UCCA training set for training TUPA.
+%\paragraph{Using converted UD as ``silver-standard'' data.}
+%
+%Using our conversion protocol (\S\ref{sec:conversion}),
+%we convert the gold-standard UD graphs into UCCA.
+%We use the converted UD data as ``silver-standard'' data \cite{W17-7306,N18-1104}
+%and add it to the UCCA training set for training TUPA.
 
 \subsection{Results}\label{sec:results}
 
@@ -1016,60 +1019,60 @@ and tested with predicted POS and dependency features.
 \label{tab:conversion_results_unlabeled}}
 \end{table}
 
-\begin{table}[t]
-\centering
-\begin{tabular}{l|lll|lll}
-& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
-& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
-& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
-\hline
-\multicolumn{4}{l|}{\small \bf English EWT (shared)} & \\
-\footnotesize UD 2.3
-& 59.6 & 64.5 & 62 & 21.2 & 19.6 & 20.4 \\
-\footnotesize TUPA
-& 61.4 & 60.8 & 61.1 & 46.4 & 18.6 & 26.6 \\
-\multicolumn{4}{l|}{\small \bf English Wiki test} & \\
-\footnotesize UDPipe
-& 59.1 & 62.6 & 60.8 & -- & -- & -- \\
-\footnotesize TUPA
-& 74.4 & 72.2 & 73.3 & 49.7 & 45.1 & 47.3 \\
-\multicolumn{4}{l|}{\small \bf English 20K} & \\
-\footnotesize UDPipe
-& 61.1 & 65.6 & 63.3 & -- & -- & -- \\
-\footnotesize TUPA
-& 68 & 68.5 & 68.2 & 45.5 & 16.1 & 23.7 \\
-\multicolumn{4}{l|}{\small \bf French 20K test} & \\
-\footnotesize UDPipe
-& 59.3 & 63.4 & 61.3 & -- & -- & -- \\
-\footnotesize TUPA
-& 49.7 & 49.5 & 49.6 & 17.6 & 1.3 & 2.4 \\
-\multicolumn{4}{l|}{\small \bf German 20K test} & \\
-\footnotesize UDPipe
-& 58.1 & 61.5 & 59.7 & -- & -- & -- \\
-\footnotesize TUPA
-& 79.7 & 79.5 & 79.6 & 67.3 & 53.9 & 59.9
-\end{tabular}
-\caption{
-Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges.
-UD 2.3 is after conversion including label mapping.
-\label{tab:conversion_results_labeled}}
-\end{table}
+%\begin{table}[t]
+%\centering
+%\begin{tabular}{l|lll|lll}
+%& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+%& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+%& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+%\hline
+%\multicolumn{4}{l|}{\small \bf English EWT (shared)} & \\
+%\footnotesize UD 2.3
+%& 59.6 & 64.5 & 62 & 21.2 & 19.6 & 20.4 \\
+%\footnotesize TUPA
+%& 61.4 & 60.8 & 61.1 & 46.4 & 18.6 & 26.6 \\
+%\multicolumn{4}{l|}{\small \bf English Wiki test} & \\
+%\footnotesize UDPipe
+%& 59.1 & 62.6 & 60.8 & -- & -- & -- \\
+%\footnotesize TUPA
+%& 74.4 & 72.2 & 73.3 & 49.7 & 45.1 & 47.3 \\
+%\multicolumn{4}{l|}{\small \bf English 20K} & \\
+%\footnotesize UDPipe
+%& 61.1 & 65.6 & 63.3 & -- & -- & -- \\
+%\footnotesize TUPA
+%& 68 & 68.5 & 68.2 & 45.5 & 16.1 & 23.7 \\
+%\multicolumn{4}{l|}{\small \bf French 20K test} & \\
+%\footnotesize UDPipe
+%& 59.3 & 63.4 & 61.3 & -- & -- & -- \\
+%\footnotesize TUPA
+%& 49.7 & 49.5 & 49.6 & 17.6 & 1.3 & 2.4 \\
+%\multicolumn{4}{l|}{\small \bf German 20K test} & \\
+%\footnotesize UDPipe
+%& 58.1 & 61.5 & 59.7 & -- & -- & -- \\
+%\footnotesize TUPA
+%& 79.7 & 79.5 & 79.6 & 67.3 & 53.9 & 59.9
+%\end{tabular}
+%\caption{
+%Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges.
+%UD 2.3 is after conversion including label mapping.
+%\label{tab:conversion_results_labeled}}
+%\end{table}
 
 Table~\ref{tab:conversion_results_unlabeled} shows \textit{unlabeled} evaluation of the
-converted UD graphs as compared to gold-annotated UCCA graphs (\S\ref{sec:conversion}).
-Labeled evaluation results, after applying the label mapping,
-appear in Table~\ref{tab:conversion_results_labeled}.
+converted UD graphs as compared to gold-annotated UCCA graphs (\S\ref{sec:methodology}).
+%Labeled evaluation results, after applying the label mapping,
+%appear in Table~\ref{tab:conversion_results_labeled}.
 
-Despite the simple conversion protocol, the scores are quite high:
-strikingly, conversion from UD performs better on primary edges than
-TUPA, a parser trained specifically on UCCA parsing,
-for the English EWT and French 20K sets.
-TUPA underperforms on English EWT likely due to domain shift,
-and on French 20K it is trained just on 15 sentences.
-
-For comparison, the unlabeled evaluation (Table~\ref{tab:conversion_results_unlabeled})
-serves as an oracle experiment for the labeled conversion,
-and is an upper bound given a fixed structural conversion.
+%Despite the simple conversion protocol, the scores are quite high:
+%strikingly, conversion from UD performs better on primary edges than
+%TUPA, a parser trained specifically on UCCA parsing,
+%for the English EWT and French 20K sets.
+%TUPA underperforms on English EWT likely due to domain shift,
+%and on French 20K it is trained just on 15 sentences.
+%
+%For comparison, the unlabeled evaluation (Table~\ref{tab:conversion_results_unlabeled})
+%serves as an oracle experiment for the labeled conversion,
+%and is an upper bound given a fixed structural conversion.
 
 
 %\begin{table}[t]
@@ -1171,9 +1174,6 @@ and is an upper bound given a fixed structural conversion.
 
 
 %\section{Discussion}\label{sec:discussion}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{UCCA Parsing Error Analysis by UD}\label{sec:fine_grained}
 
 
 
