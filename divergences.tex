@@ -961,7 +961,7 @@ we use for each corpus.
 \paragraph{Data.}
 
 In addition to the shared gold-standard English\_EWT corpus (\S\ref{sec:shared}),
-we use v1.2.3 of the UCCA English Wikipedia corpus (\textit{Wiki}),
+we use v1.2.3 of the UCCA English Wikipedia corpus (Wiki),
 with the standard train/dev/test split (see Table~\ref{tab:corpora}),
 and the \textit{Twenty Thousand Leagues Under the Sea} corpora (\textit{20K}),
 annotated in English (v1.2.2), French (v1.2.2)
@@ -995,7 +995,7 @@ We use standard UCCA evaluation, matching units by their terminal yields.
 
 As a point of comparison, we train a UCCA parser,
 TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
-on the English \textit{Wiki} training set, using the development set for validation,
+on the English Wiki training set, using the development set for validation,
 and show unlabeled evaluation for it on the EWT dataset.
 
 
@@ -1017,7 +1017,7 @@ using the gold-standard UD for matched relations.
 To demonstrate the applicability of fine-grained analysis on UCCA data
 without gold-standard UD,
 we use UDPipe v1.2 \cite{udpipe,udpipe:2017}, trained on the UD v2.3 treebanks,
-to parse the \textit{Wiki} and 20K test sets in English, French and German.
+to parse the Wiki and 20K test sets in English, French and German.
 We use the official UDPipe models trained on the English\_EWT, French\_GSD and German\_GSD
 treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 
@@ -1086,8 +1086,10 @@ Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
 against gold-annotated UCCA graphs, of converted gold-standard and parsed UD.
 When comparing the performance on primary edges to the corresponding TUPA outputs,
 the converted trees are more similar to gold UCCA graphs
-in EWT, which is an out-of-domain situation for TUPA (trained on \textit{Wiki}),
+in EWT, which is an out-of-domain situation for TUPA (trained on Wiki),
 and in French 20K, where TUPA is trained only on 15 sentences.
+The Wiki and 20K test sets are out-of-domain for UDPipe too,
+and gold-standard UD or a more accurate parser are expected to yield even more similar graphs.
 
 %\begin{table}[t]
 %\centering
