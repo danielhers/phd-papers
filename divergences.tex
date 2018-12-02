@@ -415,16 +415,22 @@ Intermediate non-terminals and \textit{head} edges are introduced.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \section{Shared Gold Standard Corpus}\label{sec:shared}
 
-We annotate 804 English sentences from the \textit{reviews} section of the 
+We annotate 163 English passages, containing 804 sentences,
+drawn randomly\daniel{Omri, is that correct?} from the \textit{reviews} section of the 
 English Web Treebank \cite[EWT; ][]{bies2012english}.
-The sentences are annotated by two UCCA annotators and
-cross-reviewed.\footnote{The data will be released upon publication.}
+The sentences are annotated by two UCCA annotators
+according to v2.0 of the UCCA
+guidelines\footnote{\url{https://github.com/UniversalConceptualCognitiveAnnotation/docs}}
+and cross-reviewed.\footnote{The data will be released upon publication.}
 As these sentences are included in the Universal Dependencies 
 English\_EWT treebank, we have both gold-standard UCCA and UD for them. 
 We refer to this set as \textit{shared} henceforth.
+
 The data contains 11,103 tokens, constituting 4\% of the full UD English\_EWT treebank,
 and 20\% of its \textit{reviews} section
 (see Table~\ref{tab:corpora}).
+Of the UCCA-annotated sentences, 622 belong to the UD training set,
+192 to the development set and 153 to the test set.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
