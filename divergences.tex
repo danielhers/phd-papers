@@ -459,7 +459,9 @@ form a DAG. In order to facilitate comparison, and as UD does not support reentr
 %  Remote edges in UCCA encode shared argumenthood by assigning multiple parents to the same node. Such phenomena are largely ignored in UD, %which uses trees. See \S\ref{sec:analysis}.
 
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% OMRI: until here
 \subsection{Local Modifications}\label{sec:local}
 
 We extend the converter to remove further formalism differences.
@@ -468,13 +470,17 @@ We extend the converter to remove further formalism differences.
 Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
 In UD, each word after the first is attached to the previous word,
 with the \texttt{flat}, \texttt{fixed} or \texttt{goeswith} relations
-(depending on whether the phrase is a name or a title, or whether it is one word split by error).
+(depending on whether the phrase is a name or a title, a fixed grammaticalized MWE
+or whether it is one word split by error).
 During conversion, we remove edges of both relations and group the corresponding terminals to one unit.
 
 \paragraph{Promotion of function words.}
+UD and UCCA differ in their treatment of function words, but as these differ
+
+
 In general, the basic conversion protocol attaches low,
 selecting for each terminal $t$ the lowest non-terminal of which $t$
-is the head terminal.
+is the head terminal.\oa{difficult following; rephrase or elaborate.}
 To abstract away from convention differences,
 we extend the conversion protocol by adding special rules
 promoting the dependents of \texttt{cc} relations,
