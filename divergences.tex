@@ -1018,7 +1018,7 @@ To demonstrate the applicability of fine-grained analysis on UCCA data
 without gold-standard UD,
 we use UDPipe v1.2 \cite{udpipe,udpipe:2017}, trained on the UD v2.3 treebanks,
 to parse the \textit{Wiki} and 20K test sets in English, French and German.
-We use the UDPipe models trained on the English\_EWT, French\_GSD and German\_GSD
+We use the official UDPipe models trained on the English\_EWT, French\_GSD and German\_GSD
 treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 
 
@@ -1082,6 +1082,13 @@ or directly parsed UCCA (TUPA).
 \label{tab:conversion_results_unlabeled}}
 \end{table}
 
+Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
+against gold-annotated UCCA graphs, of converted gold-standard and parsed UD.
+When comparing the performance on primary edges to the corresponding TUPA outputs,
+the converted trees are more similar to gold UCCA graphs
+in EWT, which is an out-of-domain situation for TUPA (trained on \textit{Wiki}),
+and in French 20K, where TUPA is trained only on 15 sentences.
+
 %\begin{table}[t]
 %\centering
 %\begin{tabular}{l|lll|lll}
@@ -1121,8 +1128,6 @@ or directly parsed UCCA (TUPA).
 %\label{tab:conversion_results_labeled}}
 %\end{table}
 
-Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation of
-converted gold-standard and parsed UD as compared to gold-annotated UCCA graphs.
 %Labeled evaluation results, after applying the label mapping,
 %appear in Table~\ref{tab:conversion_results_labeled}.
 
