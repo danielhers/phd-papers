@@ -290,11 +290,11 @@ to a ``module'' of semantic distinctions.
 UCCA's \textit{foundational layer} (the only layer for which annotated data exists)
 mostly covers predicate-argument structure, semantic heads and inter-Scene relations.
 
-UCCA distinguishes \textit{primary} edges, corresponding 
-to explicit relations, from \textit{remote} edges (appear dashed in
-Figure~\ref{fig:example_ucca}) that allow for a unit to participate
-in several super-ordinate relations.
-Primary edges form a tree in each layer, whereas remote edges enable reentrancy, forming a DAG.
+%UCCA distinguishes \textit{primary} edges, corresponding 
+%to explicit relations, from \textit{remote} edges (appear dashed in
+%Figure~\ref{fig:example_ucca}) that allow for a unit to participate
+%in several super-ordinate relations.
+%Primary edges form a tree in each layer, whereas remote edges enable reentrancy, forming a DAG.
 
 
 \begin{figure}[!ht]
@@ -338,14 +338,6 @@ annotation. Formally, UD uses bilexical trees, with edge labels
 representing syntactic relations between words.
 Figure~\ref{fig:original_example_ud} shows an example UD tree.
 
-UD includes \textit{enhanced dependencies}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
-as part of the dependency graph, representing
-case information, elided predicates,
-and shared arguments due to conjunction, control, raising and relative clauses.
-They provide richer information to downstream semantic applications,
-making UD better suited for text understanding.
-Enhanced UD has a more restricted notion of shared arguments than UCCA's.
-Future work will explore the differences and commonalities between enhanced UD edges and remote UCCA edges.
 
 \begin{figure}[!ht]
 
@@ -456,12 +448,25 @@ For example, the language-specific label for definite artciles
 \texttt{det:def} is replaced by the universal relation \texttt{det}.
 
 In the UCCA format, edges are labeled (but not nodes),
-and are divided into \textit{primary} and \textit{remote} edges,
+and are divided into \textit{primary} and \textit{remote} edges
+(e.g., the dashed edge in Figure~\ref{fig:example_ucca}),
 where the primary edges form a tree (all nodes have at most one primary parent,
-and the root has none). Remote edges enable reentrancy, and thus together with primary edges
-form a DAG. In order to facilitate comparison, and as UD does not support reentrancy,\footnote{Reentracy is supported by enhanced UD \cite{SCHUSTER16.779}.} We remove remote edges in the conversion process.
-%Figure~\ref{fig:converted_example_ud} shows an example for a converted graph.
+and the root has none).
+Remote edges enable reentrancy, and thus together with primary edges form a DAG.
 
+UD includes
+\textit{enhanced dependencies}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
+\cite{SCHUSTER16.779}
+%as part of the dependency graph,
+representing case information, elided predicates,
+and shared arguments due to conjunction, control, raising and relative clauses.
+%They provide richer information to downstream semantic applications,
+%making UD better suited for text understanding.
+Enhanced UD has a more restricted notion of shared arguments than UCCA's.
+In order to facilitate comparison,
+%and as UD does not support reentrancy,\footnote{Reentracy is supported by enhanced UD .}
+we remove remote edges in the conversion process.
+Future work will explore the differences and commonalities between enhanced UD edges and remote UCCA edges.
 
 
 %\oa{move this paragraph some place else}
