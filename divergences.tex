@@ -435,19 +435,13 @@ One obvious difference is that UD annotates bi-lexical dependency graphs,
 while UCCA graphs contain non-terminal nodes.
 To reach a common format, we use the unified DAG format by
 \citet{hershcovich2018multitask}.\footnote{\url{http://github.com/huji-nlp/semstr}}
+\S\ref{sec:conversion} describes the basic conversion protocol.
+In \S\ref{sec:local}, we describe our extended converter,
+developed following inspection of the formal differences between
+UCCA and the basic converted UD trees,
+to remove non-content differences.
 
-Figure~\ref{fig:converted_example_ud} presents an example UD tree conversion.
-Given a UD tree, the converter adds a pre-terminal for each token,
-and attaches the pre-terminals according to the original dependency edges:
-traversing the tree from the root down, for each head token it creates a non-terminal
-parent with the edge label {\it head}, and adds the node's dependents as children of 
-the created non-terminal node.
-%Any \textit{enhanced}
-%heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
-In the conversion process, any language-specific relation subtypes are stripped,
-leaving only the universal relations.
-For example, the language-specific label for definite artciles
-\texttt{det:def} is replaced by the universal relation \texttt{det}.
+\subsection{Remotes and Enhanced Dependencies}\label{sec:remote}
 
 In the UCCA format, edges are labeled (but not nodes),
 and are divided into \textit{primary} and \textit{remote} edges
@@ -465,16 +459,32 @@ and shared arguments due to conjunction, control, raising and relative clauses.
 %They provide richer information to downstream semantic applications,
 %making UD better suited for text understanding.
 Enhanced UD has a more restricted notion of shared arguments than UCCA's.
+
 In order to facilitate comparison,
 %and as UD does not support reentrancy,\footnote{Reentracy is supported by enhanced UD .}
-we remove remote edges in the conversion process.
-Future work will explore the differences and commonalities between enhanced UD edges and remote UCCA edges.
+we remove remote edges and enhanced dependencies in the conversion process.
+Future work will explore the differences and commonalities between them.
 
 
 %\oa{move this paragraph some place else}
 %  UCCA graphs are converted into trees by removing ``remote edges''.
 %  Remote edges in UCCA encode shared argumenthood by assigning multiple parents to the same node. Such phenomena are largely ignored in UD, %which uses trees. See \S\ref{sec:analysis}.
 
+
+\subsection{Basic Conversion}\label{sec:conversion}
+
+Figure~\ref{fig:converted_example_ud} presents an example UD tree conversion.
+Given a UD tree, the converter adds a pre-terminal for each token,
+and attaches the pre-terminals according to the original dependency edges:
+traversing the tree from the root down, for each head token it creates a non-terminal
+parent with the edge label {\it head}, and adds the node's dependents as children of 
+the created non-terminal node.
+%Any \textit{enhanced}
+%heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
+In the conversion process, any language-specific relation subtypes are stripped,
+leaving only the universal relations.
+For example, the language-specific label for definite artciles
+\texttt{det:def} is replaced by the universal relation \texttt{det}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local Modifications}\label{sec:local}
