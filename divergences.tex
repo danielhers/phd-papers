@@ -146,7 +146,7 @@
   correspond to tokens), we losslessly convert the UD structures into constituency-like
   graphs by inserting non-terminal nodes (\S\ref{sec:methodology}). 
   
-  Using the shared formalism, we align the nodes of the UD and UCCA trees, and identify which nodes have no match on the other side. For the aligned nodes, we construct a ``confusion matrix'' to identify which UCCA categories are aligned with each UD category and vice versa. 
+  Using the shared formalism, we align the nodes of the UD and UCCA trees, and identify which nodes have no match on the other side. For the aligned nodes, we construct a ``confusion matrix'' to identify which UCCA categories are aligned with each UD relation and vice versa. 
   
 %   \begin{enumerate}
 %     \item 
@@ -156,13 +156,17 @@
 %   \end{enumerate}
   
    We find that most content differences between the schemes are due to the following
-   factors:\daniel{add interesting example---scene-evoking noun or auxiliary verb}\oa{Daniel, this is telegraphic. We need to give the reader some sense of what these titles mean.}
+   factors:\daniel{add interesting example---scene-evoking noun or auxiliary verb}
 
   \begin{enumerate}[noitemsep]
-        \item Scene/non-Scene (\S\ref{sec:scenes}).
-        \item Argument/Adjunct (\S\ref{sec:arguments}).
-        \item Multi-word expressions (\S\ref{sec:mwe}).
-        \item Linkage (\S\ref{sec:linkage}).
+        \item UCCA's central distinction is whether a phrase evoke a Scene (event),
+        whereas UD's is based on part of speech (\S\ref{sec:scenes}).
+        \item UCCA distinguishes predicate arguments from adjuncts,
+        as opposed to UD's core/non-core distinction (\S\ref{sec:arguments}).
+        \item Multi-word expressions are handled differently,
+        where UCCA has a stronger tendency to group multiple words into a single unit (\S\ref{sec:mwe}).
+        \item UCCA conflates several syntactic realizations of inter-clause linkage that UD sets apart
+        (\S\ref{sec:linkage}), treating them as one semantic phenomenon.
    \end{enumerate}
     
    Other divergences stem from a different treatment of coordination, apposition and copulas. See \S\ref{sec:misc} for a detailed analysis.
