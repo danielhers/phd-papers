@@ -595,7 +595,7 @@ head & 125 & 1,401 & 157 & 51 & 91 & 18 & 459 & 2 & 1 & 961 & 9 & 354 & 729 \\
 gold-standard annotations (\S\ref{sec:shared}),
 after converting UD to the unified DAG format,
 by comparing incoming edge labels for units with the same terminal yields.
-The last column (row) show the number of edges of each UD (UCCA) category
+The last column (row), labeled {\sc NoMatch}, shows the number of edges of each UD (UCCA) category
 that do not match any UCCA (UD) unit.
 \label{tab:confusion_matrix}}
 \end{table}
@@ -604,15 +604,17 @@ that do not match any UCCA (UD) unit.
 
 Using the standard UCCA evaluation
 script,\footnote{\url{http://github.com/huji-nlp/ucca/blob/master/scripts/evaluate_standard.py}}
-we create a confusion matrix between the edge tags in converted UD graphs
+we create a confusion matrix between the edge tags in converted UD trees
 and the annotated UCCA graphs (see Table~\ref{tab:confusion_matrix}).
-We perform this analysis on gold UD and UCCA graphs from the shared EWT corpus
+We perform this analysis on gold-standard UD and UCCA from the shared EWT corpus
 (see \S\ref{sec:shared}),
 after conversion to the unified DAG format.
-Excluding punctuation, this gives 13293 yields in UCCA and
-9817 in UD.
-Of these, 8416 are common, meaning that an oracle would get an $F_1$ score
-of 72.8\% if it had the gold label for each edge on conversion.
+Excluding punctuation, this gives 12,894 yields in UCCA and
+13,337 in UD.
+Of these, 11,321 are common, meaning that an oracle UCCA ``parser'' developed this way
+would get an very high F1 score
+of 86.3\% if it had the gold UCCA label for every edge on conversion
+(see \S\ref{sec:fine_grained}).
 
 In the following subsections, we categorize the UD relations according to their
 treatment in UCCA, examining the main distinctions different between the schemes.
@@ -1072,9 +1074,9 @@ treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 \end{tabular}
 \caption{
 Unlabeled precision, recall and $F_1$ (in~\%) for primary and remote edges.
-UD 2.3 is the gold-standard UD (v2.3) after conversion to UCCA by our protocol.
-For comparison, TUPA \protect\cite{hershcovich2017a} is trained on Wiki with features predicted by UDPipe
-and tested with predicted POS and dependency features.
+UD 2.3 is the gold-standard UD after conversion to the unified DAG format,
+and other rows correspond to automatically parsed UD after conversion (UDPipe)
+or directly parsed UCCA (TUPA).
 \label{tab:conversion_results_unlabeled}}
 \end{table}
 
@@ -1117,8 +1119,8 @@ and tested with predicted POS and dependency features.
 %\label{tab:conversion_results_labeled}}
 %\end{table}
 
-Table~\ref{tab:conversion_results_unlabeled} shows \textit{unlabeled} evaluation of the
-converted UD graphs as compared to gold-annotated UCCA graphs (\S\ref{sec:methodology}).
+Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation of
+converted gold-standard and parsed UD as compared to gold-annotated UCCA graphs.
 %Labeled evaluation results, after applying the label mapping,
 %appear in Table~\ref{tab:conversion_results_labeled}.
 
