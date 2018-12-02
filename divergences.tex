@@ -156,7 +156,7 @@
 %   \end{enumerate}
   
    We find that most content differences between the schemes are due to the following
-   factors:\daniel{add interesting example---scene-evoking noun or auxiliary verb}
+   factors (\S\ref{sec:analysis}):\daniel{add interesting example---scene-evoking noun or auxiliary verb}
 
   \begin{enumerate}[noitemsep]
         \item UCCA's central distinction is whether a phrase evoke a Scene (event),
@@ -165,14 +165,15 @@
         as opposed to UD's core/non-core distinction (\S\ref{sec:arguments}).
         \item Multi-word expressions are handled differently,
         where UCCA has a stronger tendency to group multiple words into a single unit (\S\ref{sec:mwe}).
-        \item UCCA conflates several syntactic realizations of inter-clause linkage that UD sets apart
-        (\S\ref{sec:linkage}), treating them as one semantic phenomenon.
+        \item UCCA conflates several syntactic realizations of inter-clause linkage that UD sets apart,
+        treating them as one semantic phenomenon (\S\ref{sec:linkage}).
    \end{enumerate}
     
-   Other divergences stem from a different treatment of coordination, apposition and copulas. See \S\ref{sec:misc} for a detailed analysis.
-     
-  We use the converter built as part of our analysis to generate silver standard
-  training data for a UCCA parser (\S\ref{sec:silver}).
+   Other divergences stem from a different treatment of coordination, apposition and copulas (\S\ref{sec:misc}).
+  
+  We further extend the structural converter built as part of our analysis to
+  get a full labeled converter (\S\ref{sec:conversion}),
+  and use it to generate silver standard training data for a UCCA parser (\S\ref{sec:silver}).
   
   As another use-case for our converter to support parsing,
   we perform fine-grained error analysis on UCCA parsing results
