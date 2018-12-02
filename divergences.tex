@@ -942,15 +942,15 @@ In this section we apply the same methodology to parser outputs.
 & \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
 \hline
 %UCCA &&&&&&&&&&&&&&&&&& \\
+EWT &&& 11103 &&& 804 &&&&&&&&&&&& \\
 Wiki & 124935 & 17784 & 15854 & 4113 & 514 & 515 &&&&&&&&&&&& \\
 %Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
-20K &&& 12574 &&& 492 & 618 & 6374 & 5962 & 15 & 238 & 239 & 119872 & 12334 & 12325 & 5211 & 651 & 652 \\
+20K &&& 12574 &&& 492 & 618 & 6374 & 5962 & 15 & 238 & 239 & 119872 & 12334 & 12325 & 5211 & 651 & 652
 %\multicolumn{2}{l}{20K 1.0.0/0.9.0} && 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
 %\hline
 %UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
 %\multicolumn{2}{l}{250658} && \multicolumn{2}{l}{14450} && \multicolumn{2}{l}{209131} && 13814 \\
 %\hline
-EWT &&& 11103 &&& 804 &&&&&&&&&&&&
 \end{tabular}
 \caption{Number of tokens and sentences in the training, development and test sets
 we use for each corpus.
@@ -1075,7 +1075,7 @@ treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 & 88.2 & 85.3 & 86.7 & 68.3 & 37.2 & 48.2
 \end{tabular}
 \caption{
-Unlabeled precision, recall and $F_1$ (in~\%) for primary and remote edges.
+Unlabeled precision, recall and F1 (in~\%) for primary and remote edges.
 UD 2.3 is the gold-standard UD after conversion to the unified DAG format,
 and other rows correspond to automatically parsed UD after conversion (UDPipe)
 or directly parsed UCCA (TUPA).
@@ -1090,6 +1090,27 @@ in EWT, which is an out-of-domain situation for TUPA (trained on Wiki),
 and in French 20K, where TUPA is trained only on 15 sentences.
 The Wiki and 20K test sets are out-of-domain for UDPipe too,
 and gold-standard UD or a more accurate parser are expected to yield even more similar graphs.
+
+\begin{table*}[t]
+\centering
+\begin{tabular}{l|ll|}
+& \footnotesize \bf Primary & \footnotesize \bf Remote \\
+\hline
+\small \bf English EWT & 61.1 & 26.6 \\
+\small \bf English Wiki & 73.3 & 47.3 \\
+\small \bf English 20K & 68.2 & 23.7 \\
+\small \bf French 20K & 49.6 & 2.4 \\
+\small \bf German 20K & 79.6 & 59.9
+\end{tabular}
+\caption{
+Labeled F1 (in~\%) for TUPA according on primary and remote edges,
+on fine-grained splits by UD relations.
+\label{tab:fine_grained_results}}
+\end{table*}
+
+Finally, Table~\ref{tab:fine_grained_results} shows \textit{labeled} evaluation for TUPA
+on the UCCA test sets,
+using both the standard primary/remote evaluation and the fine-grained evaluation by UD relations.
 
 %\begin{table}[t]
 %\centering
@@ -1125,7 +1146,7 @@ and gold-standard UD or a more accurate parser are expected to yield even more s
 %& 79.7 & 79.5 & 79.6 & 67.3 & 53.9 & 59.9
 %\end{tabular}
 %\caption{
-%Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges.
+%Labeled precision, recall and F1 (in~\%) for primary and remote edges.
 %UD 2.3 is after conversion including label mapping.
 %\label{tab:conversion_results_labeled}}
 %\end{table}
@@ -1183,7 +1204,7 @@ and gold-standard UD or a more accurate parser are expected to yield even more s
 %\\
 %\end{tabular}
 %\caption{
-%Labeled precision, recall and $F_1$ (in~\%) for primary and remote edges,
+%Labeled precision, recall and F1 (in~\%) for primary and remote edges,
 %on the Wiki and 20K test sets.
 %HAR18: \protect\newcite{hershcovich2018multitask}.}\label{tab:aux_results}
 %\end{table}
@@ -1219,7 +1240,7 @@ and gold-standard UD or a more accurate parser are expected to yield even more s
 %\textbf{de 20K} & 
 %\end{tabular}
 %\caption{
-%Fine-grained labeled $F_1$ according to UCCA categories,
+%Fine-grained labeled F1 according to UCCA categories,
 %as well as the number of edges per category in the gold-standard.}
 %\label{tab:fine_grained_ucca}
 %\end{table}
@@ -1233,7 +1254,7 @@ and gold-standard UD or a more accurate parser are expected to yield even more s
 %\hline
 %\end{tabular}
 %\caption{
-%Fine-grained labeled $F_1$ according to gold UD relations (for EWT)
+%Fine-grained labeled F1 according to gold UD relations (for EWT)
 %or as parsed by UDPipe (for the other datasets),
 %as well as the number of arcs per relation in UD,
 %and the number of matched UCCA units in the gold-standard UCCA.
