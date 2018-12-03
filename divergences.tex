@@ -1322,11 +1322,20 @@ using both the standard primary/remote split and the fine-grained evaluation by 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
 
-\newcite{reddy2016transforming}
+\newcite{reddy2016transforming} introduce a method for converting dependency
+structures to logical forms using lambda calculus.
+They map syntactic dependency relations directly to logical relations,
+assuming the predicate-argument structure is isomorphic to the dependency structure,
+but handling exceptions by rules relating to specific linguistic constructions,
+namely prepositional phrases, conjunction, relatives clauses, and wh-questions.
 
 \newcite{zhang2017evaluation} evaluate PreddPatt \cite{white2016universal},
 a pattern-based framework for predicate-argument extraction from UD,
 on a large set of high-quality annotations converted from PropBank.
+They evaluate the extracted predicate-argument relations using both
+gold-standard and parsed UD.
+
+\newcite{stanovsky2016getting}
 
 \paragraph{AMR parsing.}
 
