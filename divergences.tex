@@ -657,23 +657,23 @@ and the annotated UCCA graphs (see Table~\ref{tab:confusion_matrix}).
 We perform this analysis on gold-standard UD and UCCA from the shared EWT corpus
 (see \S\ref{sec:shared}),
 after conversion to the unified DAG format.
-Excluding punctuation, this gives 12,894 yields in UCCA and
-13,337 in UD.
-Of these, 11,321 are common, meaning that an oracle UCCA ``parser'' developed this way
+Excluding punctuation, this gives 12,893 yields in UCCA and
+13,294 in UD.
+Of these, 11,541 are common, meaning that an oracle UCCA ``parser'' developed this way
 would get a very high F1 score
-of 86.3\% if it had the gold UCCA label for every edge on conversion
+of 88.1\% if it had the gold UCCA label for every edge on conversion
 (see \S\ref{sec:fine_grained}).
 
 Examining the {\it head} row in Table \ref{tab:confusion_matrix} allows
 us to contrast UCCA's and UD's notions of a head. 
-{\it head} is not a UD relation per se, but is rather a single-token unit
+{\it head} is not a UD relation per se, but is rather a non-terminal unit
 added by the converter for any word with at least one dependent.
 About 70\% of them correspond to UCCA Processes, States, Linked Scenes or Centers,
 which can be thought of as UCCA heads (although, this notion is not organic in UCCA).
 In the remaining case there is a content difference between the schemes,
 either in the form of a head swap (e.g., ``\textit{all} of Dallas'', where \textit{all} 
 is an Elaborator of ``Dallas'' in UCCA, but is the syntactic head in UD).
-About 17\% of the {\it units} are left unmatched, mostly due to MWEs analyzed in 
+About 17\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
 UD but not in UCCA, and inter-scene linkage.\oa{could you give an example for the latter?} 
 
 In the following subsections, we categorize the UD relations according to their
