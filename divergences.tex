@@ -541,17 +541,22 @@ We extend the converter to remove further non-content differences.
 
 \paragraph{Unanalyzable units.}
 Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
-In UD, each word after the first is attached to the previous word,
+As for multi-word expressions (MWEs) in UD, each word after the first is attached to the previous word,
 with the \texttt{flat}, \texttt{fixed} or \texttt{goeswith} relations
 (depending on whether the phrase is a name or a title, a fixed grammaticalized MWE
 or whether it is one word split by error).
 During conversion, we remove edges of both relations and group the corresponding terminals to one unit.
 %Multi-word expressions also include compounds, discussed in \S\ref{sec:mwe}.
 
-\paragraph{Promotion of function words.}
-The basic conversion protocol generally attaches low,
-selecting for each terminal $t$ the lowest non-terminal of which $t$
-is the head terminal to be its parent.\oa{is this correct?}
+\paragraph{Promotion of conjunctions.}
+The basic conversion protocol generally attaches low so as to preserve terminal yields:
+the set of terminals spanned by a non-terminal is the same
+as the original dependency yield of its head terminal
+(e.g., in Figure~\ref{fig:converted_example_ud}, the yield of the non-terminal
+headed by ``graduation'' is ``After graduation'', the same as the yield of ``graduation''
+in Figure~\ref{fig:original_example_ud}).
+%selecting for each terminal $t$ the lowest non-terminal of which $t$
+%is the head terminal to be its parent.
 This results in subordinating and coordinating conjunctions being positioned as part
 of the conjuncts they relate (e.g., ``and'' will be included in the second conjunct in ``John and Mary''; 
 ``after'' will be included in the first conjunct in ``After arriving home, John went to sleep'').
