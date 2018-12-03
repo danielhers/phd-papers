@@ -627,6 +627,7 @@ obl & 247 & 1 & 92 & 8 & 2 & 4 & 4 & 4 & 0 & 0 & 2 & 0 & 132 \\
 parataxis & 1 & 0 & 0 & 1 & 0 & 2 & 79 & 0 & 0 & 1 & 0 & 2 & 39 \\
 vocative & 9 & 0 & 0 & 0 & 0 & 3 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 xcomp & 44 & 1 & 2 & 2 & 0 & 0 & 1 & 0 & 0 & 5 & 0 & 7 & 116 \\
+\hline
 head & 125 & 1,401 & 157 & 51 & 91 & 18 & 459 & 2 & 1 & 961 & 9 & 354 & 729 \\
 {\sc NoMatch} & 329 & 173 & 53 & 73 & 6 & 5 & 673 & 29 & 0 & 141 & 7 & 98
 \end{tabular}
@@ -655,8 +656,20 @@ would get an very high F1 score
 of 86.3\% if it had the gold UCCA label for every edge on conversion
 (see \S\ref{sec:fine_grained}).
 
+Examining the {\it head} row in Table \ref{tab:confusion_matrix} allows
+us to contrast UCCA's and UD's notions of a head. 
+{\it head} is not a UD relation per se, but is rather a single-token unit
+added by the converter for any word with at least one dependent.
+About 70\% of them correspond to UCCA Processes, States, Linked Scenes or Centers,
+which can be thought of as UCCA heads (although, this notion is not organic in UCCA).
+In the remaining case there is a content difference between the schemes,
+either in the form of a head swap (e.g., ``\textit{all} of Dallas'', where \textit{all} 
+is an Elaborator of ``Dallas'' in UCCA, but is the syntactic head in UD).
+About 17\% of the {\it units} are left unmatched, mostly due to MWEs analyzed in 
+UD but not in UCCA, and inter-scene linkage.\oa{could you give an example for the latter?} 
+
 In the following subsections, we categorize the UD relations according to their
-treatment in UCCA, examining the main distinctions different between the schemes.
+treatment in UCCA, focusing of the main content differences between the schemes.
 
 \subsection{Scenes/non-Scenes}\label{sec:scenes}
 
@@ -667,23 +680,23 @@ as a Scene can be evoked by a verb, an eventive or stative
 noun (``negotiation'', ``fatigue''),
 an adjective or even a preposition (``this is \textit{for} John'').
 \begin{description}
-    \item[iobj, nsubj, and obj.]
+    \item[Core Arguments.] (iobj, nsubj, and obj)
     Core syntactic arguments are usually semantic arguments,
     i.e., Participants (e.g., ``\textit{Wine} was excellent'').
-    However, when describing a scene, such a phrase is a Process/State
+    However, when describing a scene\oa{are scenes always capitalized?}, such a phrase is a Process/State
     (e.g., ``But \textit{service} is very poor'').
     Some wh-pronouns are the subject or object of a relative clause, and
     are analyzed as Linkers or Relators,
     depending on whether they modify a scene or non-scene, respectively
     (e.g., ``Overall, Joe is a happy camper \textit{who} has found a great spot''
     and ``one of the staff \textit{who} was very pleasant and professional'').
-    \item[amod.]
+    \item[Adjectival Modifiers.] (amod) 
     Adjectival modifiers of nominals are Adverbials or Elaborators,
     depending on whether they modify scenes or non-scenes, respectively
     (``\textit{romantic} dinner'' vs. ``\textit{medical} school''), or
     as States when
     they evoke scenes on their own (``\textit{beautiful} hotel'').
-    \item[nmod and acl.]
+    \item[Nominal and Clausal Modifiers.] (nmod, acl)
     Nominal and clausal modifiers of nominals
     are generally split between Participants and Elaborators,
     depending on whether they modify scenes
@@ -696,16 +709,16 @@ an adjective or even a preposition (``this is \textit{for} John'').
     (e.g., ``The prices were worth what \textit{I got}'',
     where \textit{what} is the object of \textit{worth} in UD but
     is a Participant of \textit{I got} in UCCA).
-    \item[case.]
+    \item[Case Markers.]
     While most case markers are Relators,
     modifying non-scene units (e.g., ``the team \textit{at} Bradley Chevron''),
     some are Linkers as they modify a scene
     (e.g., ``Very informative website \textit{with} a lot of good work'').
-    Some are semantically vacuous and annotated as Functions
-    (e.g., ``a large group \textit{of} my friends''),
-    while others are Elaborators (e.g., ``\textit{over} a year''),
-    or Processes/States
-    (e.g., ``not at all \textit{like} the junk you get at the grocery stores'').
+    %Some are semantically vacuous and annotated as Functions
+    %(e.g., ``a large group \textit{of} my friends''),
+    Others are Elaborators (e.g., ``\textit{over} a year'') or Processes and States
+    (e.g., ``not at all \textit{like} the junk you get at the grocery stores'').\oa{can we switch an example? ``like'' is problematic.}
+    
     \item[cc, conj and list.]
     Coordinating conjunctions are either Connectors, between non-scenes
     (e.g., ``Mercedes \textit{and} Dan'')
@@ -718,12 +731,15 @@ an adjective or even a preposition (``this is \textit{for} John'').
     This is a convention difference that we fixed with local modifications
     (\S\ref{sec:local})---otherwise most \texttt{conj} instances would be unmatched,
     containing the coordinating conjunction which is outside the unit in UCCA.}
-    \item[det.]
-    While usually Elaborators,
-    determiners are Adverbials when modifying a scene
-    (e.g., ``\textit{no} feathers in stock'').
+
+    \oa{removed something here, since I think it's a mistake; maybe we can fix the chart?}
+    %\item[det.]
+    %While usually Elaborators,
+    %determiners are Adverbials when modifying a scene
+    %(e.g., ``\textit{no} feathers in stock'').
 \end{description}
 
+%% Omri: UNTIL HERE
 \subsection{Arguments/Adjuncts}\label{sec:arguments}
 
 While UD distinguishes core arguments and non-core dependents of clausal predicates,
@@ -858,20 +874,9 @@ and largely conflates clausal coordination, subordination and parataxis.
     Some instances of ``it'' and ``that'', analyzed as subjects in UD,
     are analyzed as expletives in UCCA, and annotated as Function
     (e.g., ``\textit{it}'s like driving a new car'').    
-    \item[head.]
-    While not a UD relation, this label is introduced on the conversion from dependency graphs
-    \cite{hershcovich2018multitask}.
-    For any word with at least one dependent,
-    a non-terminal node will be created in the converted graph, with a \textit{head} edge.
-    About 17\% of these edges are unmatched, mostly due to unanalyzable expressions and inter-scene linkage.
-    About 70\% are Process, State, Linked Scene or Center,
-    where the notion of syntactic head matches that of a ``UCCA head''.
-    In the remaining case there is a content difference between the schemes
-    (e.g., ``\textit{all} of Dallas'', where \textit{all} is an Elaborator
-    in UCCA but is the syntactic head in UD).
 \end{description}
 
-The analysis excludes the following UD labels,
+We exclude the following UD labels,
 as they are irrelevant to the evaluation of content differences:
 
 \begin{description}
