@@ -1087,29 +1087,29 @@ treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 \hline
 \multicolumn{4}{l|}{\small \bf English EWT (shared)} & \\
 \footnotesize UD 2.3
-& 81.5 & 88.2 & 84.7 & 21.2 & 19.6 & 20.4 \\
+& 82.8 & 88.4 & 85.5 & 21 & 17.8 & 19.3 \\
 \footnotesize TUPA
-& 83.4 & 82.6 & 83 & 46.4 & 18.6 & 26.6 \\
+& 80.8 & 77.8 & 79.3 & 10.2 & 18.6 & 13.2 \\
 \multicolumn{4}{l|}{\small \bf English Wiki test} & \\
 \footnotesize UDPipe
-& 76.5 & 81.2 & 78.8 & -- & -- & -- \\
+& 76.6 & 80.9 & 78.7 & -- & -- & -- \\
 \footnotesize TUPA
-& 87.1 & 84.5 & 85.8 & 50.9 & 46.2 & 48.4 \\
+& 87 & 83.7 & 85.3 & 56 & 55.2 & 55.6 \\
 \multicolumn{4}{l|}{\small \bf English 20K} & \\
 \footnotesize UDPipe
-& 79.2 & 85.1 & 82.1 & -- & -- & -- \\
+& 79.9 & 84.7 & 82.3 & -- & -- & -- \\
 \footnotesize TUPA
-& 83.2 & 83.8 & 83.5 & 46.6 & 16.5 & 24.3 \\
+& 82.7 & 83.4 & 83 & 46.9 & 21.4 & 29.4 \\
 \multicolumn{4}{l|}{\small \bf French 20K test} & \\
 \footnotesize UDPipe
-& 78.8 & 84.3 & 81.5 & -- & -- & -- \\
+& 78.5 & 83.4 & 80.9 & -- & -- & -- \\
 \footnotesize TUPA
-& 72.8 & 65.4 & 68.9 & 23.5 & 3.5 & 6 \\
+& 72.1 & 72 & 72.1 & 16.7 & 1.7 & 3.1 \\
 \multicolumn{4}{l|}{\small \bf German 20K test} & \\
 \footnotesize UDPipe
-& 80.5 & 85.2 & 82.8 & -- & -- & -- \\
+& 81.5 & 85.3 & 83.4 & -- & -- & -- \\
 \footnotesize TUPA
-& 88.2 & 85.3 & 86.7 & 68.3 & 37.2 & 48.2
+& 89.6 & 88.1 & 88.9 & 65.7 & 45 & 53.4
 \end{tabular}
 \caption{
 Unlabeled precision, recall and F1 (in~\%) for primary and remote edges.
@@ -1130,8 +1130,20 @@ and gold-standard UD or a more accurate parser are expected to yield even more s
 
 \begin{table*}[t]
 \centering
-\begin{tabular}{l|ll|}
-& \footnotesize \bf Primary & \footnotesize \bf Remote \\
+\setlength\tabcolsep{2pt}
+% \scriptsize \bf \rotatebox{90}{Primary}
+\begin{tabular}{l|ll|llllllllllllllllllllllllllll}
+& \tiny \bf Primary & \tiny \bf Remote
+& \tiny \bf acl & \tiny \bf advcl & \tiny \bf advmod
+& \tiny \bf amod & \tiny \bf appos & \tiny \bf aux
+& \tiny \bf case & \tiny \bf cc & \tiny \bf ccomp
+& \tiny \bf compound & \tiny \bf conj & \tiny \bf cop
+& \tiny \bf csubj & \tiny \bf det & \tiny \bf discourse
+& \tiny \bf expl & \tiny \bf iobj & \tiny \bf list
+& \tiny \bf mark & \tiny \bf nmod & \tiny \bf nsubj
+& \tiny \bf nummod & \tiny \bf obj & \tiny \bf obl
+& \tiny \bf parataxis & \tiny \bf root & \tiny \bf vocative
+& \tiny \bf xcomp \\
 \hline
 \small \bf English EWT & 61.1 & 26.6 \\
 \small \bf English Wiki & 73.3 & 47.3 \\
