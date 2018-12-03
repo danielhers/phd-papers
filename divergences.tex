@@ -587,18 +587,6 @@ as ``when'', ``if'', ``after'') as siblings to their conjuncts.
 In this section, we analyze in detail the content differences between UCCA and UD,
 as quantified in a \textit{confusion matrix} between the schemes (\S\ref{sec:confusion}).
 
-The analysis excludes the following relations,
-as they are irrelevant to the evaluation of content differences:
-
-\begin{description}
-  \item[root.] Always matches the whole sentence.
-  \item[punct.] No semantic content; excluded from UCCA evaluation.
-  \item[fixed, flat and goeswith.] Correspond to parts of unanalyzable units in UCCA,
-  and so not represented as units on their own.
-  The UD distinction is between, respectively, fixed grammatical expressions,
-  semi-fixed MWEs like names, titles or dates, and erroneously separated words (see \S\ref{sec:local}).
-  \item[dep and orphan.] Rare; no consistent relation.
-\end{description}
 
 \begin{table}[t]
 \centering
@@ -882,6 +870,19 @@ and largely conflates clausal coordination, subordination and parataxis.
     (e.g., ``\textit{all} of Dallas'', where \textit{all} is an Elaborator
     in UCCA but is the syntactic head in UD).
 \end{description}
+
+The analysis excludes the following UD labels,
+as they are irrelevant to the evaluation of content differences:
+
+\begin{description}
+  \item[root.] Always matches the entire sentence.
+  \item[punct.] As punctuation is not annotated in UCCA.
+  \item[fixed, flat and goeswith.] Correspond to parts of unanalyzable units in UCCA,
+    and so do not represent units on their own. See \S\ref{sec:local}.
+  \item[dep.] Rare and heterogeneous.
+  \item[orphan.] Used for representing gapping, which is represented using remote edges in UCCA. See \S\ref{sec:conversion}.
+\end{description}
+
 
 
 %\section{Full Conversion}\label{sec:conversion}
