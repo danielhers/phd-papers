@@ -677,6 +677,14 @@ About 17\% of the {\it head} units are left unmatched, mostly due to MWEs analyz
 UD but not in UCCA.
 Another source of unmatched units is inter-scene linkage realized by syntactic
 constructions not handled by our extensions in \S\ref{sec:local}.
+For example, the sentence
+``According to news accounts, the company is struggling''
+is analyzed in UCCA as two Linked Scenes,
+``news accounts'' and ``the company is struggling'', where ``According to'' is a Linker.
+Since there is no syntactic conjunction, no promotion rule is applied and the whole
+sentence is converted to one \textit{head} unit, which does not match any UCCA unit
+(since there is no one scene covering the whole sentence).
+This mismatch is due to the distinction between Scenes and non-Scenes (\S\ref{sec:scenes}).
 
 In the following subsections, we categorize the UD relations according to their
 treatment in UCCA, focusing of the main content differences between the schemes.
