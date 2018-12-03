@@ -12,7 +12,7 @@
 \usepackage{url}
 
 %\aclfinalcopy % Uncomment this line for the final submission
-%\def\aclpaperid{***} %  Enter the acl Paper ID here
+\def\aclpaperid{287} %  Enter the acl Paper ID here
 
 %\setlength\titlebox{5cm}
 % You can expand the titlebox if you need extra space
@@ -465,14 +465,27 @@ Remote edges enable reentrancy, and thus together with primary edges form a DAG.
 
 UD includes 
 \textit{enhanced dependencies}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
-\cite{SCHUSTER16.779} representing case information, elided predicates,
-and shared argumenthood due to coordination, control, raising and relative clauses.
+\cite{SCHUSTER16.779}
+%<<<<<<< HEAD
+%\cite{SCHUSTER16.779} representing case information, elided predicates,
+%and shared argumenthood due to coordination, control, raising and relative clauses.
 %They provide richer information to downstream semantic applications,
 %making UD better suited for text understanding.
-Enhanced UD has a more restricted notion of shared arguments than UCCA's,
-which includes the class of implicit arguments termed {\it Constructional
-Null Instantiation} in FrameNet. For instance, in ``to win, you have to find the key'',
-UCCA would add a remote 
+%Enhanced UD has a more restricted notion of shared arguments than UCCA's,
+%which includes the class of implicit arguments termed {\it Constructional
+%Null Instantiation} in FrameNet. For instance, in ``to win, you have to find the key'',
+%UCCA would add a remote 
+%=======
+%as part of the dependency graph,
+representing elided predicates,
+and shared arguments due to coordination, control, raising and relative clauses.
+% case information
+%They provide richer information to downstream semantic applications,
+%making UD better suited for text understanding.
+Enhanced UD has a more restricted notion of shared arguments than UCCA's.
+\daniel{reviews-220214-0002: ``First of all, if you call for an appointment they won't tell you to call back a month later so you can then make one'',
+weblog-blogspot.com\_rigorousintuition\_20060511134300\_ENG\_20060511\_134300-0106:
+``The Pentagon is bypassing official US intelligence channels and turning to a dangerous and unruly cast of characters in order to create strife in Iran in preparation for any possible attack, former and current intelligence officials say...''.}
 
 In order to facilitate comparison,
 %and as UD does not support reentrancy,\footnote{Reentracy is supported by enhanced UD .}
@@ -938,7 +951,8 @@ and largely conflates clausal coordination, subordination and parataxis.
 In \S\ref{sec:analysis} we used our comparison methodology,
 consisting of the conversion to a shared format and matching units by terminal yield,
 to compare gold-standard UD and UCCA.
-In this section we apply the same methodology to parser outputs.
+In this section we apply the same methodology to parser outputs,
+using both gold-standard and parsed UD for fine-grained evaluation.
 
 \subsection{Experimental Setup}\label{sec:experiments}
 
@@ -965,10 +979,10 @@ In this section we apply the same methodology to parser outputs.
 & \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
 \hline
 %UCCA &&&&&&&&&&&&&&&&&& \\
-EWT &&& 11103 &&& 804 &&&&&&&&&&&& \\
-Wiki & 124935 & 17784 & 15854 & 4113 & 514 & 515 &&&&&&&&&&&& \\
+EWT &&& 11,103 &&& 804 &&&&&&&&&&&& \\
+Wiki & 124,935 & 17,784 & 15,854 & 4,113 & 514 & 515 &&&&&&&&&&&& \\
 %Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
-20K &&& 12574 &&& 492 & 618 & 6374 & 5962 & 15 & 238 & 239 & 119872 & 12334 & 12325 & 5211 & 651 & 652
+20K &&& 12,574 &&& 492 & 618 & 6,374 & 5,962 & 15 & 238 & 239 & 119,872 & 12,334 & 12,325 & 5,211 & 651 & 652
 %\multicolumn{2}{l}{20K 1.0.0/0.9.0} && 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
 %\hline
 %UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
@@ -1133,7 +1147,8 @@ on fine-grained splits by UD relations.
 
 Finally, Table~\ref{tab:fine_grained_results} shows \textit{labeled} evaluation for TUPA
 on the UCCA test sets,
-using both the standard primary/remote evaluation and the fine-grained evaluation by UD relations.
+using both the standard primary/remote evaluation and the fine-grained evaluation by UD relations
+(gold-standard UD for English EWT, and parsed by UDPipe for the other test sets).
 
 %\begin{table}[t]
 %\centering
