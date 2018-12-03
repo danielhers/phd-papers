@@ -1177,7 +1177,8 @@ or directly parsed UCCA (TUPA).
 \end{tabular}
 \caption{
 Labeled F1 (in~\%) for TUPA according on primary and remote edges,
-on fine-grained splits by UD relations.
+and on fine-grained splits by UD relations
+(the latter rounded down to the nearest integer for brevity).
 \label{tab:fine_grained_results}}
 \end{table*}
 
@@ -1190,10 +1191,15 @@ and in French 20K, where TUPA is trained only on 15 sentences.
 The Wiki and 20K test sets are out-of-domain for UDPipe too,
 and gold-standard UD or a more accurate parser are expected to yield even more similar graphs.
 
-Finally, Table~\ref{tab:fine_grained_results} shows \textit{labeled} evaluation for TUPA
+Finally, Table~\ref{tab:fine_grained_results} shows the \textit{labeled} F1 score for TUPA
 on the UCCA test sets,
-using both the standard primary/remote split and the fine-grained evaluation by UD relations
+using both the standard primary/remote
+split\footnote{Note that the primary and remote scores are not directly comparable to previous work
+on UCCA parsing \cite{hershcovich2017a,hershcovich2018multitask},
+as they used older versions of the annotated corpora.}
+and the fine-grained evaluation by UD relations
 (gold-standard UD for English EWT, and parsed by UDPipe for the other test sets).
+
 
 %\begin{table}[t]
 %\centering
