@@ -1033,47 +1033,6 @@ For UD, we use the English\_EWT treebank from Universal Dependencies v2.3
 filtering it to get only the 804 sentences that were also annotated in UCCA.
 
 
-\begin{table}[t]
-\centering
-\begin{tabular}{l|lll|lll}
-& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
-& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
-& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
-\hline
-\multicolumn{4}{l|}{\small \bf English EWT (shared)} & \\
-\footnotesize UD 2.3
-& 82.8 & 88.4 & 85.5 & 21 & 17.8 & 19.3 \\
-\footnotesize TUPA
-& 80.8 & 77.8 & 79.3 & 10.2 & 18.6 & 13.2 \\
-\multicolumn{4}{l|}{\small \bf English Wiki test} & \\
-\footnotesize UDPipe
-& 76.7 & 81 & 78.8 & -- & -- & -- \\
-\footnotesize TUPA
-& 87.6 & 84.9 & 86.2 & 50.9 & 52.7 & 51.8 \\
-\multicolumn{4}{l|}{\small \bf English 20K} & \\
-\footnotesize UDPipe
-& 79.9 & 84.7 & 82.3 & -- & -- & -- \\
-\footnotesize TUPA
-& 83.4 & 84.4 & 83.9 & 50.8 & 24 & 32.7 \\
-\multicolumn{4}{l|}{\small \bf French 20K test} & \\
-\footnotesize UDPipe
-& 78.5 & 83.4 & 80.9 & -- & -- & -- \\
-\footnotesize TUPA
-& 72 & 72.5 & 72.2 & 21.9 & 3 & 5.3 \\
-\multicolumn{4}{l|}{\small \bf German 20K test} & \\
-\footnotesize UDPipe
-& 81.5 & 85.3 & 83.4 & -- & -- & -- \\
-\footnotesize TUPA
-& 90.8 & 89.7 & 90.2 & 69.4 & 52.6 & 59.8
-\end{tabular}
-\caption{
-Unlabeled precision, recall and F1 (in~\%) for primary and remote edges.
-UD 2.3 is the gold-standard UD after conversion to the unified DAG format,
-and other rows correspond to automatically parsed UD after conversion (UDPipe)
-or directly parsed UCCA (TUPA).
-\label{tab:conversion_results_unlabeled}}
-\end{table}
-
 
 \paragraph{Evaluation of the comparison methodology.}
 
@@ -1132,16 +1091,48 @@ treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 
 \subsection{Results}\label{sec:results}
 
-Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
-against gold-annotated UCCA graphs, of converted gold-standard and parsed UD.
-When comparing the performance on primary edges to the corresponding TUPA outputs,
-the converted trees are more similar to gold UCCA graphs
-in EWT, which is an out-of-domain situation for TUPA (trained on Wiki),
-and in French 20K, where TUPA is trained only on 15 sentences.
-The Wiki and 20K test sets are out-of-domain for UDPipe too,
-and gold-standard UD or a more accurate parser are expected to yield even more similar graphs.
+\begin{table}[t]
+\centering
+\begin{tabular}{l|lll|lll}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
+& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
+\hline
+\multicolumn{4}{l|}{\small \bf English EWT (shared)} & \\
+\footnotesize UD 2.3
+& 82.8 & 88.4 & 85.5 & 21 & 17.8 & 19.3 \\
+\footnotesize TUPA
+& 80.8 & 77.8 & 79.3 & 10.2 & 18.6 & 13.2 \\
+\multicolumn{4}{l|}{\small \bf English Wiki test} & \\
+\footnotesize UDPipe
+& 76.7 & 81 & 78.8 & -- & -- & -- \\
+\footnotesize TUPA
+& 87.6 & 84.9 & 86.2 & 50.9 & 52.7 & 51.8 \\
+\multicolumn{4}{l|}{\small \bf English 20K} & \\
+\footnotesize UDPipe
+& 79.9 & 84.7 & 82.3 & -- & -- & -- \\
+\footnotesize TUPA
+& 83.4 & 84.4 & 83.9 & 50.8 & 24 & 32.7 \\
+\multicolumn{4}{l|}{\small \bf French 20K test} & \\
+\footnotesize UDPipe
+& 78.5 & 83.4 & 80.9 & -- & -- & -- \\
+\footnotesize TUPA
+& 72 & 72.5 & 72.2 & 21.9 & 3 & 5.3 \\
+\multicolumn{4}{l|}{\small \bf German 20K test} & \\
+\footnotesize UDPipe
+& 81.5 & 85.3 & 83.4 & -- & -- & -- \\
+\footnotesize TUPA
+& 90.8 & 89.7 & 90.2 & 69.4 & 52.6 & 59.8
+\end{tabular}
+\caption{
+Unlabeled precision, recall and F1 (in~\%) for primary and remote edges.
+UD 2.3 is the gold-standard UD after conversion to the unified DAG format,
+and other rows correspond to automatically parsed UD after conversion (UDPipe)
+or directly parsed UCCA (TUPA).
+\label{tab:conversion_results_unlabeled}}
+\end{table}
 
-\begin{table*}[t]
+\begin{table*}[th]
 \centering
 \small
 \setlength\tabcolsep{3pt}
@@ -1184,6 +1175,15 @@ Labeled F1 (in~\%) for TUPA according on primary and remote edges,
 on fine-grained splits by UD relations.
 \label{tab:fine_grained_results}}
 \end{table*}
+
+Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
+against gold-annotated UCCA graphs, of converted gold-standard and parsed UD.
+When comparing the performance on primary edges to the corresponding TUPA outputs,
+the converted trees are more similar to gold UCCA graphs
+in EWT, which is an out-of-domain situation for TUPA (trained on Wiki),
+and in French 20K, where TUPA is trained only on 15 sentences.
+The Wiki and 20K test sets are out-of-domain for UDPipe too,
+and gold-standard UD or a more accurate parser are expected to yield even more similar graphs.
 
 Finally, Table~\ref{tab:fine_grained_results} shows \textit{labeled} evaluation for TUPA
 on the UCCA test sets,
