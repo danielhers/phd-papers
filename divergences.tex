@@ -441,31 +441,21 @@ we first assimilate the graphs by abstracting away from formalism differences,
 obtaining a similar graph format for both schemes,
 over the tokens of the sentence.
 We then match pairs of nodes in the converted UD and UCCA trees
-if they share the same set of terminals in their yields (\S\ref{sec:analysis}).
+if they share the same set of terminals in their yields. % (\S\ref{sec:analysis}).
 
 One obvious difference is that UD annotates bi-lexical dependency graphs,
 while UCCA graphs contain non-terminal nodes.
 To reach a common format, we use the unified DAG converter by
 \citet{hershcovich2018multitask,hershcovich2018universal},\footnote{\url{http://github.com/huji-nlp/semstr}}
-outlined in \S\ref{sec:conversion}.\footnote{why is it not outlined here?}
-Then, in \S\ref{sec:local}, we describe our extended converter,
-developed following inspection of the formal differences between
-UCCA and the basic converted UD trees,
-to remove non-content differences.
+outlined in \S\ref{sec:conversion}.
+Then, in \S\ref{sec:local}, we describe a number of extensions
+to the converter, which abstract away from further non-content differences between the converted
+UD and UCCA graphs.
 
 
-\subsection{Remotes and Enhanced UD}\label{sec:remote}
 
-In the UCCA format, edges are labeled (but not nodes),
-and are divided into \textit{primary} and \textit{remote} edges
-(e.g., the dashed edge in Figure~\ref{fig:example_ucca}),
-where the primary edges form a tree (all nodes have at most one primary parent,
-and the root has none).
-Remote edges enable reentrancy, and thus together with primary edges form a DAG.
 
-UD includes 
-\textit{enhanced dependencies}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
-\cite{SCHUSTER16.779}
+
 %<<<<<<< HEAD
 %\cite{SCHUSTER16.779} representing case information, elided predicates,
 %and shared argumenthood due to coordination, control, raising and relative clauses.
@@ -477,25 +467,18 @@ UD includes
 %UCCA would add a remote 
 %=======
 %as part of the dependency graph,
-representing elided predicates,
-and shared arguments due to coordination, control, raising and relative clauses.
+%representing elided predicates,
+%and shared arguments due to coordination, control, raising and relative clauses.
 % case information
 %They provide richer information to downstream semantic applications,
 %making UD better suited for text understanding.
-Enhanced UD has a more restricted notion of shared arguments than UCCA's.
-\daniel{reviews-220214-0002: ``First of all, if you call for an appointment they won't tell you to call back a month later so you can then make one'',
-weblog-blogspot.com\_rigorousintuition\_20060511134300\_ENG\_20060511\_134300-0106:
-``The Pentagon is bypassing official US intelligence channels and turning to a dangerous and unruly cast of characters in order to create strife in Iran in preparation for any possible attack, former and current intelligence officials say...''.}
-
-In order to facilitate comparison,
-%and as UD does not support reentrancy,\footnote{Reentracy is supported by enhanced UD .}
-we remove remote edges and enhanced dependencies in the conversion process.
-Future work will explore the differences and commonalities between them.
+%Enhanced UD has a more restricted notion of shared arguments than UCCA's.
+%\daniel{reviews-220214-0002: ``First of all, if you call for an appointment they won't tell you to call back a month later so you can then make one'',
+%weblog-blogspot.com\_rigorousintuition\_20060511134300\_ENG\_20060511\_134300-0106:
+%``The Pentagon is bypassing official US intelligence channels and turning to a dangerous and unruly cast of characters in order to create strife in Iran in preparation for any possible attack, former and current intelligence officials say...''.}
 
 
-%\oa{move this paragraph some place else}
-%  UCCA graphs are converted into trees by removing ``remote edges''.
-%  Remote edges in UCCA encode shared argumenthood by assigning multiple parents to the same node. Such phenomena are largely ignored in UD, %which uses trees. See \S\ref{sec:analysis}.
+
 
 
 \subsection{Basic Conversion}\label{sec:conversion}
@@ -513,12 +496,34 @@ leaving only the universal relations.
 For example, the language-specific label for definite artciles
 \texttt{det:def} is replaced by the universal relation \texttt{det}.
 
-\oa{commented out section here}
 In the UCCA format, edges are labeled (but not nodes),
-and are divided into \textit{primary} and \textit{remote} edges,
+and are divided into \textit{primary} and \textit{remote} edges
+(e.g., the dashed edge in Figure~\ref{fig:example_ucca}),
 where the primary edges form a tree (all nodes have at most one primary parent,
-and the root has none). Remote edges enable reentrancy, and thus together with primary edges
-form a DAG. In order to facilitate comparison, and as UD does not support reentrancy,\footnote{Reentracy is supported by enhanced UD \cite{SCHUSTER16.779}.} We remove remote edges in the conversion process.
+and the root has none).
+Remote edges enable reentrancy, and thus together with primary edges form a DAG.
+UD includes \textit{enhanced dependencies}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
+\cite{SCHUSTER16.779}, which form (bi-lexical) DAG structures, representing phenomena
+such as predicate ellipsis (e.g., gapping),
+and shared arguments due to coordination, control, raising and relative clauses.
+
+UCCA is more inclusive in its use of remote edges, and accounts for 
+the entire class of implicit arguments termed {\it Constructional Null Instantiation} in FrameNet \citep{Ruppenhofer:16}.
+For example, UCCA adds a remote edge to mark the shared argumenthood of ``bypassing'' and
+``create'' in ``The Pentagon is bypassing official US intelligence channels ... in order to create strife ...'' (from EWT). 
+Another example is ``... if you call for an appointment they won't tell you to call back a month later so you can then make one'',
+where UCCA will use a remote edge to indicate that ``one'' refers to appointment.
+Both cases are not covered by enhanced UD.
+
+In order to facilitate comparison, we remove remote edges and enhanced dependencies in the conversion process.
+We thus compare UD and UCCA trees. We defer a more complete comparison of UCCA and enhanced UD to future work.
+
+
+%In the UCCA format, edges are labeled (but not nodes),
+%and are divided into \textit{primary} and \textit{remote} edges,
+%where the primary edges form a tree (all nodes have at most one primary parent,
+%and the root has none). Remote edges enable reentrancy, and thus together with primary edges
+%form a DAG. In order to facilitate comparison, and as UD does not support reentrancy,\footnote{Reentracy is supported by enhanced UD \cite{SCHUSTER16.779}.} We remove remote edges in the conversion process.
 %Figure~\ref{fig:converted_example_ud} shows an example for a converted graph.
 
 
@@ -529,11 +534,9 @@ form a DAG. In order to facilitate comparison, and as UD does not support reentr
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% OMRI: until here
-\subsection{Local Modifications}\label{sec:local}
+\subsection{Extentions to the Converter}\label{sec:local}
 
-We extend the converter to remove further formalism differences.
+We extend the converter to remove further non-content differences.
 
 \paragraph{Unanalyzable units.}
 Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
@@ -542,22 +545,30 @@ with the \texttt{flat}, \texttt{fixed} or \texttt{goeswith} relations
 (depending on whether the phrase is a name or a title, a fixed grammaticalized MWE
 or whether it is one word split by error).
 During conversion, we remove edges of both relations and group the corresponding terminals to one unit.
-Multi-word expressions also include compounds, discussed in \S\ref{sec:mwe}.
+%Multi-word expressions also include compounds, discussed in \S\ref{sec:mwe}.
 
 \paragraph{Promotion of function words.}
-UD and UCCA differ in their treatment of function words, but as these differ
-
-
-In general, the basic conversion protocol attaches low,
+The basic conversion protocol generally attaches low,
 selecting for each terminal $t$ the lowest non-terminal of which $t$
-is the head terminal.\oa{difficult following; rephrase or elaborate.}
-To abstract away from convention differences,
-we extend the conversion protocol by adding special rules
-promoting the dependents of \texttt{cc} relations,
-and of \texttt{mark} dependents with an \texttt{advcl} head
-(e.g. ``when'', ``if'', ``after'', and purposive ``to''),
-as there is a systematic mapping between the UCCA and UD guidelines
-and it is different from the default low-attaching behavior.
+is the head terminal to be its parent.\oa{is this correct?}
+This results in subordinating and coordinating conjunctions being positioned as part
+of the conjuncts they relate (e.g., ``and'' will be included in the second conjunct in ``John and Mary''; 
+``after'' will be included in the first conjunct in ``After arriving home, John went to sleep'').
+In contrast, UCCA places conjunctions as siblings to their conjuncts (e.g., ``[John] [and] [Mary]'' or
+``[After] [arriving home], [John went to sleep''). 
+
+To abstract away from these convention differences,
+we extend the conversion protocol to place 
+the dependents of coordinating and subordinating conjunctions 
+(i.e., \texttt{cc}-labeled units, and \texttt{mark}-labeled units with an \texttt{advcl} head such 
+as ``when'', ``if'', ``after'') as siblings to their conjuncts.
+%as there is a systematic mapping between the UCCA and UD guidelines
+%and it is different from the default low-attaching behavior.
+
+
+%Some conjunctions are placed in UCCA as siblings of the units they link,
+%while in UD they are dependents of the dependent unit. For instance, coordinating
+%conjunctions (e.g., ``and'' in ``John and Mary'') are in UCCA siblings of the conjuncts 
 %Selecting a forward-attaching behavior instead:
 %\begin{itemize}
 %  \item Conjunctions (\texttt{cc} in UD) attach to the following
@@ -567,6 +578,9 @@ and it is different from the default low-attaching behavior.
 %These rules are applied to the bilexical graph after the conversion process.
 
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Analysis of Divergences}\label{sec:analysis}
 
 In this section, we analyze in detail the content differences between UCCA and UD,
