@@ -128,7 +128,7 @@
    may select the inflected ``is'' as the head instead.
   While the two approaches are largely inter-translatable
    \cite{Schwartz:12}, lexical head schemes are more similar in form to semantic schemes,
-   such as UCCA and broad-coverage semantic dependencies \cite{oepen2015semeval},
+   such as UCCA and broad-coverage semantic dependencies \cite{oepen2016towards},
    which facilitates their comparison.
   %Selecting more distant schemes for comparison could have potentially confounded our results.
 
@@ -416,8 +416,8 @@ Intermediate non-terminals and \textit{head} edges are introduced.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 \section{Shared Gold Standard Corpus}\label{sec:shared}
 
-We annotate 163 English passages, containing 804 sentences,
-drawn randomly\daniel{Omri, is that correct?}\oa{I don't know I think it's random in the sense that there isn't any order in it, but it's not a random sample per se} from the \textit{reviews} section of the 
+We annotate 163 English passages, containing 804 sentences
+from the \textit{reviews} section of the 
 English Web Treebank \cite[EWT; ][]{bies2012english}.
 The sentences are annotated by two UCCA annotators
 according to v2.0 of the UCCA
@@ -541,18 +541,25 @@ We extend the converter to remove further non-content differences.
 
 \paragraph{Unanalyzable units.}
 Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
-In UD, each word after the first is attached to the previous word,
+As for multi-word expressions (MWEs) in UD, each word after the first is attached to the previous word,
 with the \texttt{flat}, \texttt{fixed} or \texttt{goeswith} relations
 (depending on whether the phrase is a name or a title, a fixed grammaticalized MWE
 or whether it is one word split by error).
 During conversion, we remove edges of both relations and group the corresponding terminals to one unit.
 %Multi-word expressions also include compounds, discussed in \S\ref{sec:mwe}.
 
-\paragraph{Promotion of function words.}
-The basic conversion protocol generally attaches low,
-selecting for each terminal $t$ the lowest non-terminal of which $t$
-is the head terminal to be its parent.\oa{is this correct?}
-This results in subordinating and coordinating conjunctions being positioned as part
+\paragraph{Promotion of conjunctions.}
+The basic conversion protocol generally attaches low so as to preserve terminal yields:
+the set of terminals spanned by a non-terminal is the same
+as the original dependency yield of its head terminal
+(e.g., in Figure~\ref{fig:converted_example_ud}, the yield of the non-terminal
+headed by ``graduation'' is ``After graduation'', the same as the yield of ``graduation''
+in Figure~\ref{fig:original_example_ud}).
+%selecting for each terminal $t$ the lowest non-terminal of which $t$
+%is the head terminal to be its parent.
+
+Since UD attaches subordinating and coordinating conjunctions to the following conjunct,
+this results in them being positioned as part
 of the conjuncts they relate (e.g., ``and'' will be included in the second conjunct in ``John and Mary''; 
 ``after'' will be included in the first conjunct in ``After arriving home, John went to sleep'').
 In contrast, UCCA places conjunctions as siblings to their conjuncts (e.g., ``[John] [and] [Mary]'' or
@@ -652,7 +659,7 @@ after conversion to the unified DAG format.
 Excluding punctuation, this gives 12,894 yields in UCCA and
 13,337 in UD.
 Of these, 11,321 are common, meaning that an oracle UCCA ``parser'' developed this way
-would get an very high F1 score
+would get a very high F1 score
 of 86.3\% if it had the gold UCCA label for every edge on conversion
 (see \S\ref{sec:fine_grained}).
 
@@ -977,33 +984,23 @@ using both gold-standard and parsed UD for fine-grained evaluation.
 
 \subsection{Experimental Setup}\label{sec:experiments}
 
-\begin{table*}[t]
+\begin{table}[t]
 \centering
 \small
 \setlength\tabcolsep{2pt}
-\begin{tabular}{l|ccc|ccc||ccc|ccc||ccc|ccc}
-& \multicolumn{6}{c||}{\footnotesize \bf English}
-& \multicolumn{6}{c||}{\footnotesize \bf French}
-& \multicolumn{6}{c}{\footnotesize \bf German} \\
-\hline
-& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
-& \multicolumn{3}{c||}{\footnotesize \bf {\#} sentences}
-& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
-& \multicolumn{3}{c||}{\footnotesize \bf {\#} sentences}
+\begin{tabular}{l|ccc|ccc}
 & \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
 & \multicolumn{3}{c}{\footnotesize \bf {\#} sentences} \\
-& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
-& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
-& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test 
-& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
 & \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
 & \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
 \hline
 %UCCA &&&&&&&&&&&&&&&&&& \\
-EWT &&& 11,103 &&& 804 &&&&&&&&&&&& \\
-Wiki & 124,935 & 17,784 & 15,854 & 4,113 & 514 & 515 &&&&&&&&&&&& \\
+\bf English EWT &&& 11,103 &&& 804 \\
+\bf English Wiki & 124,935 & 17,784 & 15,854 & 4,113 & 514 & 515 \\
 %Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
-20K &&& 12,574 &&& 492 & 618 & 6,374 & 5,962 & 15 & 238 & 239 & 119,872 & 12,334 & 12,325 & 5,211 & 651 & 652
+\bf English 20K &&& 12,574 &&& 492 \\
+\bf French 20K & 618 & 6,374 & 5,962 & 15 & 238 & 239 \\
+\bf German 20K & 119,872 & 12,334 & 12,325 & 5,211 & 651 & 652
 %\multicolumn{2}{l}{20K 1.0.0/0.9.0} && 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
 %\hline
 %UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
@@ -1014,7 +1011,7 @@ Wiki & 124,935 & 17,784 & 15,854 & 4,113 & 514 & 515 &&&&&&&&&&&& \\
 we use for each corpus.
 % and language.
 \label{tab:corpora}}
-\end{table*}
+\end{table}
 
 \paragraph{Data.}
 
@@ -1041,6 +1038,7 @@ For UD, we use the English\_EWT treebank from Universal Dependencies v2.3
 filtering it to get only the 804 sentences that were also annotated in UCCA.
 
 
+
 \paragraph{Evaluation of the comparison methodology.}
 
 To quantitatively assess our conversion protocol (\S\ref{sec:methodology}),
@@ -1060,7 +1058,7 @@ and show unlabeled evaluation for it on the EWT dataset.
 \paragraph{UCCA evaluation by gold-standard UD.}
 
 In the standard UCCA evaluation,
-remote edges (\S\ref{sec:remote}) are evaluated separately from primary edges.
+remote edges (see~\S\ref{sec:conversion}) are evaluated separately from primary edges.
 We extend it to perform a fine-grained split,
 dividing UCCA edges into subsets according to the relations of the UD edges
 they match by terminal yield.
@@ -1097,7 +1095,6 @@ treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 %and add it to the UCCA training set for training TUPA.
 
 \subsection{Results}\label{sec:results}
-
 
 \begin{table}[t]
 \centering
@@ -1140,19 +1137,10 @@ or directly parsed UCCA (TUPA).
 \label{tab:conversion_results_unlabeled}}
 \end{table}
 
-Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
-against gold-annotated UCCA graphs, of converted gold-standard and parsed UD.
-When comparing the performance on primary edges to the corresponding TUPA outputs,
-the converted trees are more similar to gold UCCA graphs
-in EWT, which is an out-of-domain situation for TUPA (trained on Wiki),
-and in French 20K, where TUPA is trained only on 15 sentences.
-The Wiki and 20K test sets are out-of-domain for UDPipe too,
-and gold-standard UD or a more accurate parser are expected to yield even more similar graphs.
-
-\begin{table*}[t]
+\begin{table*}[th]
 \centering
 \small
-\setlength\tabcolsep{2.5pt}
+\setlength\tabcolsep{3pt}
 % \scriptsize \bf \rotatebox{90}{Primary}
 \begin{tabular}{l|cc|cccccccccccccccccccccccc}
 & \footnotesize \bf \rotatebox{90}{Primary}
@@ -1192,6 +1180,15 @@ Labeled F1 (in~\%) for TUPA according on primary and remote edges,
 on fine-grained splits by UD relations.
 \label{tab:fine_grained_results}}
 \end{table*}
+
+Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
+against gold-annotated UCCA graphs, of converted gold-standard and parsed UD.
+When comparing the performance on primary edges to the corresponding TUPA outputs,
+the converted trees are more similar to gold UCCA graphs
+in EWT, which is an out-of-domain situation for TUPA (trained on Wiki),
+and in French 20K, where TUPA is trained only on 15 sentences.
+The Wiki and 20K test sets are out-of-domain for UDPipe too,
+and gold-standard UD or a more accurate parser are expected to yield even more similar graphs.
 
 Finally, Table~\ref{tab:fine_grained_results} shows \textit{labeled} evaluation for TUPA
 on the UCCA test sets,
