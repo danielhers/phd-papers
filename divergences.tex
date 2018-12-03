@@ -1145,26 +1145,41 @@ and gold-standard UD or a more accurate parser are expected to yield even more s
 
 \begin{table*}[t]
 \centering
-\setlength\tabcolsep{2pt}
+\small
+\setlength\tabcolsep{2.5pt}
 % \scriptsize \bf \rotatebox{90}{Primary}
-\begin{tabular}{l|ll|llllllllllllllllllllllllllll}
-& \tiny \bf Primary & \tiny \bf Remote
-& \tiny \bf acl & \tiny \bf advcl & \tiny \bf advmod
-& \tiny \bf amod & \tiny \bf appos & \tiny \bf aux
-& \tiny \bf case & \tiny \bf cc & \tiny \bf ccomp
-& \tiny \bf compound & \tiny \bf conj & \tiny \bf cop
-& \tiny \bf csubj & \tiny \bf det & \tiny \bf discourse
-& \tiny \bf expl & \tiny \bf iobj & \tiny \bf list
-& \tiny \bf mark & \tiny \bf nmod & \tiny \bf nsubj
-& \tiny \bf nummod & \tiny \bf obj & \tiny \bf obl
-& \tiny \bf parataxis & \tiny \bf root & \tiny \bf vocative
-& \tiny \bf xcomp \\
+\begin{tabular}{l|cc|cccccccccccccccccccccccc}
+& \footnotesize \bf \rotatebox{90}{Primary}
+& \footnotesize \bf \rotatebox{90}{Remote}
+& \footnotesize \bf \rotatebox{90}{acl}
+& \footnotesize \bf \rotatebox{90}{advcl}
+& \footnotesize \bf \rotatebox{90}{advmod}
+& \footnotesize \bf \rotatebox{90}{amod}
+& \footnotesize \bf \rotatebox{90}{appos}
+& \footnotesize \bf \rotatebox{90}{aux}
+& \footnotesize \bf \rotatebox{90}{case}
+& \footnotesize \bf \rotatebox{90}{cc}
+& \footnotesize \bf \rotatebox{90}{ccomp}
+& \footnotesize \bf \rotatebox{90}{compound} 
+& \footnotesize \bf \rotatebox{90}{conj}
+& \footnotesize \bf \rotatebox{90}{cop}
+& \footnotesize \bf \rotatebox{90}{det}
+& \footnotesize \bf \rotatebox{90}{expl}
+& \footnotesize \bf \rotatebox{90}{iobj}
+& \footnotesize \bf \rotatebox{90}{mark}
+& \footnotesize \bf \rotatebox{90}{nmod}
+& \footnotesize \bf \rotatebox{90}{nsubj}
+& \footnotesize \bf \rotatebox{90}{nummod}
+& \footnotesize \bf \rotatebox{90}{obj}
+& \footnotesize \bf \rotatebox{90}{obl}
+& \footnotesize \bf \rotatebox{90}{parataxis}
+& \footnotesize \bf \rotatebox{90}{xcomp} \\
 \hline
-\small \bf English EWT & 56.4 & 13.2 \\
-\small \bf English Wiki & 74.4 & 51.3 \\
-\small \bf English 20K & 68.5 & 31.8 \\
-\small \bf French 20K & 43.5 & 4.6 \\
-\small \bf German 20K & 79.3 & 59.5
+\small \bf English EWT & 56.4 & 13.2 & 32 & 37 & 62 & 40 & 31 & 78 & 70 & 50 & 43 & 51 & 33 & 67 & 92 & 61 & 63 & 61 & 56 & 82 & 67 & 58 & 41 & 11 & 24 \\
+\small \bf English Wiki & 74.4 & 51.3 & 50 & 93 & 84 & 85 & 82 & 87 & 85 & 82 & 100 & 88 & 83 & 82 & 86 & 0 & 86 & 82 & 83 & 86 & 79 & 80 & 65 & 100 & 85 \\
+\small \bf English 20K & 68.5 & 31.8 & 55 & 61 & 60 & 78 & 22 & 76 & 86 & 80 & 47 & 69 & 64 & 65 & 90 & 67 & 75 & 66 & 66 & 77 & 84 & 74 & 57 & 54 & 38 \\
+\small \bf French 20K & 43.5 & 4.6 & 16 & 0 & 19 & 46 & 37 & 53 & 78 & 37 & 19 & 29 & 26 & 19 & 87 & 29 & 9 & 25 & 37 & 25 & 39 & 23 & 28 & 33 & 24 \\
+\small \bf German 20K & 79.3 & 59.5 & 73 & 83 & 74 & 77 & 69 & 91 & 91 & 87 & 67 & 60 & 73 & 81 & 96 & 61 & 90 & 87 & 62 & 91 & 75 & 80 & 82 & 77 & 65
 \end{tabular}
 \caption{
 Labeled F1 (in~\%) for TUPA according on primary and remote edges,
