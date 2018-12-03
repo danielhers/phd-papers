@@ -535,7 +535,7 @@ We thus compare UD and UCCA trees. We defer a more complete comparison of UCCA a
 
 
 
-\subsection{Extentions to the Converter}\label{sec:local}
+\subsection{Extensions to the Converter}\label{sec:local}
 
 We extend the converter to remove further non-content differences.
 
@@ -674,7 +674,9 @@ In the remaining case there is a content difference between the schemes,
 either in the form of a head swap (e.g., ``\textit{all} of Dallas'', where \textit{all} 
 is an Elaborator of ``Dallas'' in UCCA, but is the syntactic head in UD).
 About 17\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
-UD but not in UCCA, and inter-scene linkage.\oa{could you give an example for the latter?} 
+UD but not in UCCA.
+Another source of unmatched units is inter-scene linkage realized by syntactic
+constructions not handled by our extensions in \S\ref{sec:local}.
 
 In the following subsections, we categorize the UD relations according to their
 treatment in UCCA, focusing of the main content differences between the schemes.
