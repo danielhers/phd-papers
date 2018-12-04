@@ -93,7 +93,7 @@
   %We emprically evaluate in what cases the two schemes converge and diverge in their content,
   After abstracting away from differences of convention or formalism,
   we find that most content divergences can ascribed to: 
-  (1) UCCA's distinction between a Scene and a non-Scene; % as opposed to UD's POS-based distinctions;
+  (1) UCCA's distinction between a scene and a non-scene; % as opposed to UD's POS-based distinctions;
   (2) UCCA's distinction between participants and secondary relations; %, not accounted for by UD; 
   (3) different treatment of multi-word expressions, and
   (4) different treatment of inter-clause linkage.
@@ -600,6 +600,8 @@ as ``when'', ``if'', ``after'') as siblings to their conjuncts.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Analysis of Divergences}\label{sec:analysis}
 
+\oa{what about a different font for UD labels and UCCA labels?}
+
 In this section, we analyze in detail the content differences between UCCA and UD,
 as quantified in a \textit{confusion matrix} between the schemes (\S\ref{sec:confusion}).
 
@@ -670,35 +672,26 @@ Excluding punctuation, this gives 12,893 yields in UCCA and
 13,294 in UD.
 Of these, 11,541 are common, meaning that an oracle UCCA ``parser'' developed this way
 would get a very high F1 score
-of 88.1\% if it had the gold UCCA label for every edge on conversion
-(see \S\ref{sec:fine_grained}).
+of 88.1\% if it had the gold UCCA label for every edge on conversion.
 
 Examining the {\it head} row in Table \ref{tab:confusion_matrix} allows
 us to contrast UCCA's and UD's notions of a head. 
-{\it head} is not a UD relation per se, but is rather a non-terminal unit
-added by the converter for any word with at least one dependent.
+{\it head}-labeled units cover units that have at least
+one dependent in UD (technically, they are non-terminals added by the converter).
 About 70\% of them correspond to UCCA Processes, States, Linked Scenes or Centers,
-which can be thought of as UCCA heads (although, this notion is not organic in UCCA).
-In the remaining case there is a content difference between the schemes,
-either in the form of a head swap (e.g., ``\textit{all} of Dallas'', where \textit{all} 
-is an Elaborator of ``Dallas'' in UCCA, but is the syntactic head in UD).
+which are UCCA's notions of semantic heads.
+
 About 17\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
 UD but not in UCCA.
-Another source of unmatched units is inter-scene linkage realized by syntactic
-constructions not handled by our extensions in \S\ref{sec:local}.
-For example, the sentence
-``According to news accounts, the company is struggling''
-is analyzed in UCCA as two Linked Scenes,
-``news accounts'' and ``the company is struggling'', where ``According to'' is a Linker.
-Since there is no syntactic conjunction, no promotion rule is applied and the whole
-sentence is converted to one \textit{head} unit, which does not match any UCCA unit
-(since there is no one scene covering the whole sentence).
-This mismatch is due to the distinction between Scenes and non-Scenes (\S\ref{sec:scenes}).
+Another source of unmatched units is inter-scene linkage, which tend to be flatter in
+UCCA (see \S\ref{}).
+The remaining cases are mostly due to a head swap (e.g., ``\textit{all} of Dallas'', where \textit{all} 
+is an Elaborator of ``Dallas'' in UCCA, but is the syntactic head in UD).
 
 In the following subsections, we categorize the UD relations according to their
 treatment in UCCA, focusing of the main content differences between the schemes.
 
-\subsection{Scenes/non-Scenes}\label{sec:scenes}
+\subsection{Scenes vs. Non-scenes}\label{sec:scenes}
 
 UCCA distinguishes between Scenes (descriptions of events, states or activities)
 and non-Scenes. 
@@ -706,17 +699,17 @@ This distinction cuts across UD categories,
 as a Scene can be evoked by a verb, an eventive or stative
 noun (``negotiation'', ``fatigue''),
 an adjective or even a preposition (``this is \textit{for} John'').
+
 \begin{description}
-    \item[Core Arguments.] (iobj, nsubj, and obj)
-    Core syntactic arguments are usually semantic arguments,
-    i.e., Participants (e.g., ``\textit{Wine} was excellent'').
+    \item[Core Arguments (iobj, nsubj, and obj).] 
+    Core syntactic arguments are usually UCCA Participants (e.g., ``\textit{Wine} was excellent'').
     However, when describing a scene\oa{are scenes always capitalized?}, such a phrase is a Process/State
     (e.g., ``But \textit{service} is very poor'').
-    Some wh-pronouns are the subject or object of a relative clause, and
-    are analyzed as Linkers or Relators,
+    Some wh-pronouns are the subject or object of a relative clause, but
+    are UCCA Linkers or Relators,
     depending on whether they modify a scene or non-scene, respectively
-    (e.g., ``Overall, Joe is a happy camper \textit{who} has found a great spot''
-    and ``one of the staff \textit{who} was very pleasant and professional'').
+    (e.g., %``Overall, Joe is a happy camper \textit{who} has found a great spot'' and
+    ``one of the staff \textit{who} was very pleasant and professional'').
     \item[Adjectival Modifiers.] (amod) 
     Adjectival modifiers of nominals are Adverbials or Elaborators,
     depending on whether they modify scenes or non-scenes, respectively
@@ -725,66 +718,73 @@ an adjective or even a preposition (``this is \textit{for} John'').
     they evoke scenes on their own (``\textit{beautiful} hotel'').
     \item[Nominal and Clausal Modifiers.] (nmod, acl)
     Nominal and clausal modifiers of nominals
-    are generally split between Participants and Elaborators,
-    depending on whether they modify scenes
-    (e.g., ``discount \textit{on services}'' and
-    ``our decision \textit{to buy when we did}'')
-    or non-scenes (e.g., ``\textit{my car's} gears and brakes'' and
-    ``Some of the younger kids \textit{that work there}'').
+    are generally split between UCCA Participants and Elaborators,
+    depending on whether they modify scenes. For instance, 
+    ``discount \textit{on services}'' and
+    ``our decision \textit{to buy when we did}'' (Participants),
+    as opposed to ``\textit{my car's} gears and brakes'' and
+    ``Some of the younger kids \textit{that work there}'' (Elaborators).
     Many unmatched adjectival clauses are
-    \textit{fused relative clauses},
-    (e.g., ``The prices were worth what \textit{I got}'',
-    where \textit{what} is the object of \textit{worth} in UD but
-    is a Participant of \textit{I got} in UCCA).
+    free relative clauses, e.g., in ``The prices were worth what \textit{I got}'',
+    \textit{what} is the UD object of \textit{worth} but
+    is a UCCA Participant of \textit{I got}.
+
     \item[Case Markers.]
     While most case markers are Relators,
     modifying non-scene units (e.g., ``the team \textit{at} Bradley Chevron''),
-    some are Linkers as they modify a scene
+    some are Linkers as they linker two scenes together 
     (e.g., ``Very informative website \textit{with} a lot of good work'').
-    %Some are semantically vacuous and annotated as Functions
-    %(e.g., ``a large group \textit{of} my friends''),
     Others are Elaborators (e.g., ``\textit{over} a year'') or Processes and States
     (e.g., ``It is right \textit{on} the hustle and bustle of Wisconsin Ave'').
     
-    \item[cc, conj and list.]
-    Coordinating conjunctions are either Connectors, between non-scenes
+    %We handle a few major such cases by our extended conversion; \S\ref{sec:local}, but 
+    %as Scenes in UCCA can be marked by UD case markers.
+    %For example, UD distinguishes between conjuncts ({\it mark}) that apply to clauses (``{\bf after} he graduated ...'') 
+    %and case markers ({\it case}) that apply to nouns (``{\bf after graduation ...''). UCCA
+    %on the other hand distinguishes between Linkers that link Scenes and Relators, which mark participants
+    %in a Scene. 
+    %Some are semantically vacuous and annotated as Functions
+    %(e.g., ``a large group \textit{of} my friends''),
+    
+    \item[Coordination.]
+    Coordinating conjunctions are UCCA Connectors where they coordinate non-scenes
     (e.g., ``Mercedes \textit{and} Dan'')
-    or Linkers, between scenes
-    (e.g., ``outdated \textit{but} not bad'').
+    or UCCA Linkers where they coordinate scenes (e.g., ``outdated \textit{but} not bad'').
     Correspondingly, conjuncts (and list elements)
     are Centers or Linked Scenes (H).\footnote{Note
     that while in UD the dependent \texttt{cc} is attached to the following conjunct,
     in UCCA coordination is a flat structure.
-    This is a convention difference that we fixed with local modifications
-    (\S\ref{sec:local})---otherwise most \texttt{conj} instances would be unmatched,
+    This is a convention difference that we normalized (\S\ref{sec:local}).
+    Had we not done so, most \texttt{conj} instances would be unmatched,
     containing the coordinating conjunction which is outside the unit in UCCA.}
 
-    \item [Quantification and negation.] (det)
-    While usually Elaborators, when modifying non-Scenes
-    (e.g., ``I will never recommend this gym to \textit{any} woman''),
-    these are Adverbials when modifying Scenes
-    (e.g., ``\textit{no} feathers in stock'', ``\textit{what} a mistake'',
-    ``the rear window had \textit{some} leakage'').
+    \item [Determiners.] (det)
+    Articles are in UCCA Elabarators, and so are determiners that modify non-Scenes 
+    (e.g., ``I will never recommend this gym to \textit{any} woman'').
+    However, where the determiner modifies a Scene (mostly negation),
+    it is annotated as an Adverbial. For example, ``\textit{no} feathers in stock'', ``\textit{what} a mistake'',
+    and ``the rear window had \textit{some} leakage'' are all Adberbials.
 \end{description}
 
-%% Omri: UNTIL HERE
-\subsection{Arguments/Adjuncts}\label{sec:arguments}
 
-While UD distinguishes core arguments and non-core dependents of clausal predicates,
-UCCA distinguishes Participants,
-including locations and abstract entities,
+
+\subsection{Arguments vs. Adjuncts}\label{sec:arguments}
+
+UD distinguishes core arguments, adverbial modifiers,
+and obliques, which in English UD correspond to prepositional arguemnts.
+UCCA distinguishes Participants, including locations and abstract entities,
 from secondary relations (Adverbials), 
 which cover manner, aspect and modality.
 Secondary relations can be verbs (e.g., ``begin'', ``fail''),
 prepositional phrases (``with disrespect''),
 as well as modals, adjectives and adverbs.
+
 \begin{description}
-    \item[aux.]
-    Auxiliary verbs are Functions (e.g., ``\textit{do} not forget''),
+    \item[Auxiliary Verbs] are Functions (e.g., ``\textit{do} not forget''),
     or Adverbials when they semantically modify a scene
     (e.g., ``you \textit{can} graduate'').
     \item[advmod and obl.]
-    While in the majority of cases,
+    While in the majority of cases
     adverbial modifiers correspond to semantic Adverbials
     (e.g., ``I \textit{sometimes} go''),
     they may be Participants,
@@ -838,7 +838,7 @@ especially where they are compositional.
     Many of these are unanalyzable due to UCCA's stronger tendency to group
     multi-word expressions (e.g., ``lots \textit{of}'',
     ``\textit{a} bit'', ``when \textit{it} comes to'', ``bites \textit{the dust}'',
-    respectively).
+    respectively). ``According to''
     \item[nummod.]
     Numeric modifiers are mostly Elaborators, but often do not correspond to a whole UCCA unit
     due to Adverbials in a flat structure (e.g., ``about \textit{50}\%'').
