@@ -288,31 +288,69 @@
 
 \section{Representations}\label{sec:representations}
 
+  The conceptual and formal similarity between UD and UCCA can be traced back
+  to their shared design principles.
   Both schemes are designed to be applicable across languages and domains, 
-  to support rapid\daniel{Citation needed: UD rapid annotation}
-  annotation and to be suitable for downstream language understanding
-  applications.\oa{start by saying something about their conceptual similarity}
+  to support rapid annotation and to be suitable for downstream language understanding
+  applications. This section provides a brief introduction to each of the schemes, whereas
+  the next sections discuss their content in further detail.
+  
+
+
+\paragraph{UCCA}\label{sec:ucca}
+  \citep[Universal Cognitive Conceptual Annotation;][]{abend2013universal} is a semantic annotation scheme rooted in typological 
+  and cognitive linguistic theory.
+  It aims to represent the main semantic phenomena in the text, abstracting away from syntactic forms.
+  UCCA has been shown to be preserved remarkably well across translations \citep{sulem2015conceptual} and has also been applied to
+  improve text simplification \citep{sulem2018simple} used text-to-text generation evaluation \citep{birch2016hume,choshen2018usim,sulem2018samsa}.
+
+  Formally, UCCA structures are directed acyclic graphs whose nodes (or {\it units}) correspond either to the leaves of the graph %(including the words of the text)%
+  or to several elements viewed as a single entity according to some semantic or cognitive consideration.
+  Edges are labeled, indicating the role of a child in the relation the parent represents.
+  A {\it Scene} is UCCA's notion of an event or a frame, and is a description of a movement, an action or a state which persists in time. 
+  Every Scene contains one main relation, which can be either a Process or a State. 
+  Scenes may contain any number of Participants, a category which also includes abstract participants and locations.
+  They may also contain secondary relations (Adverbials), which cover semantic distinctions such as manner, modality and aspect,
+  and temporal relations (Time).
+
+  Scenes may be linked to one another in several ways. First, a Scene can provide additional information about some entity,
+  in which case it will be mared as an Elaborator. This often occurs in the case of participles or relative clauses.
+  For example, ``(child) who went to school'' is an Elaborator (Scene)
+  in ``The child who went to school is John''.
+  A Scene may also be a Participant in another Scene. For example, ``John went to school'' in the sentence: ``He said John went to school''. 
+  In other cases, Scenes are annotated as Parallel Scenes (H), which are flat structures and may include a Linker (L), 
+  as in:  ``When$_L$ [he arrives]$_H$, [he will call them]$_H$''.
+
+  With respect to non-Scene units, the category Center denotes their semantic head, which determine their type. 
+  Other elements in non-Scene units include Quantifiers (such as ``{\bf dozens} of people''), Connectors (mostly
+  coordinating conjunctions, and Relators, that in English correspond to prepositions.
+  Other modifiers to the Center are marked as Elaborators.
+  
+  UCCA distinguishes \textit{primary} edges, corresponding 
+  to explicit relations, from \textit{remote} edges (appear dashed in
+  Figure~\ref{fig:example_ucca}) that allow for a unit to participate
+  in several super-ordinate relations.
+  Primary edges form a tree, whereas remote edges enable reentrancy, forming a DAG.
 
 
 
-\paragraph{Universal Conceptual Cognitive Annotation.}\label{sec:ucca}
-UCCA \cite{abend2013universal} is a semantic representation whose main design principles
-are ease of annotation, cross-linguistic applicability, and a modular architecture.
-UCCA represents the semantics of linguistic utterances
-as directed acyclic graphs (DAGs), where terminal (childless) nodes
-correspond to the text tokens, and non-terminal nodes to semantic units that participate
-in some super-ordinate relation.
-Edges are labeled, indicating the role of a child in the relation the parent represents.
-Nodes and edges belong to one of several \textit{layers}, each corresponding
-to a ``module'' of semantic distinctions.
-UCCA's \textit{foundational layer} (the only layer for which annotated data exists)
-mostly covers predicate-argument structure, semantic heads and inter-Scene relations.
 
-%UCCA distinguishes \textit{primary} edges, corresponding 
-%to explicit relations, from \textit{remote} edges (appear dashed in
-%Figure~\ref{fig:example_ucca}) that allow for a unit to participate
-%in several super-ordinate relations.
-%Primary edges form a tree in each layer, whereas remote edges enable reentrancy, forming a DAG.
+
+  %UCCA's foundational layer \cite{abend2013universal} (UCCA, for brevity) 
+  %is a coarse-grained semantic annotation scheme, which focuses
+  %on predicate argument structures, the linkage between them, and the notion of a semantic head.
+  %UCCA structures as directed acyclic graphs (DAGs), where terminal (childless) nodes
+  %correspond to the text tokens, and non-terminal nodes to semantic units that participate
+  %in some super-ordinate relation.
+  
+
+  %Nodes and edges belong to one of several \textit{layers}, each corresponding
+  %to a ``module'' of semantic distinctions.
+  %UCCA's \textit{foundational layer} (the only layer for which annotated data exists)
+  %mostly covers predicate-argument structure, semantic heads and inter-Scene relations.
+  
+  
+
 
 
 \begin{figure}[!ht]
@@ -341,7 +379,7 @@ mostly covers predicate-argument structure, semantic heads and inter-Scene relat
       \draw[dashed,->] (graduation) to node [above] {\scriptsize $A$} (John);
     \end{tikzpicture}
 \caption{\label{fig:example_ucca}
- Example UCCA graph. The dashed edge is remote.
+ Example UCCA graph. Dashed: a remote edge.
 %  Pre-terminal nodes and edges are omitted for brevity.
   }
 \end{figure}
@@ -354,7 +392,7 @@ syntactic  annotation in many languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
 annotation. Formally, UD uses bilexical trees, with edge labels 
 representing syntactic relations between words.
-Figure~\ref{fig:original_example_ud} shows an example UD tree.
+Figure~\ref{fig:original_example_ud} shows an example UD tree.\oa{should we add a table for UD labels?}
 
 
 \begin{figure}[!ht]
