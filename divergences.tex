@@ -478,8 +478,8 @@ English\_EWT treebank, we have both gold-standard UCCA and UD for them.
 We refer to this set as \textit{shared} henceforth.
 
 The data contains 11,103 tokens, constituting 4\% of the full UD English\_EWT treebank,
-and 20\% of its \textit{reviews} section
-(see Table~\ref{tab:corpora}).
+and 20\% of its \textit{reviews} section.
+%(see Table~\ref{tab:corpora}).
 Of the UCCA-annotated sentences, 622 belong to the UD training set,
 192 to the development set and 153 to the test set.\daniel{Add inter-annotator agreement}
 
@@ -962,6 +962,7 @@ as they are irrelevant to the evaluation of content differences:
     and so do not represent units on their own. See \S\ref{sec:local}.
   \item[dep.] Rare and heterogeneous.
   \item[orphan.] Used for representing gapping, which is represented using remote edges in UCCA. See \S\ref{sec:conversion}.
+  \item[clf, dislocated, reparandum.] Do not occur in EWT.
 \end{description}
 
 
@@ -1049,7 +1050,8 @@ In \S\ref{sec:analysis} we used our comparison methodology,
 consisting of the conversion to a shared format and matching units by terminal yield,
 to compare gold-standard UD and UCCA.
 In this section we apply the same methodology to parser outputs,
-using both gold-standard and parsed UD for fine-grained evaluation.
+using gold-standard UD for fine-grained evaluation.
+%using both gold-standard and parsed UD for fine-grained evaluation.
 
 \subsection{Experimental Setup}\label{sec:experiments}
 
@@ -1065,11 +1067,12 @@ using both gold-standard and parsed UD for fine-grained evaluation.
 \hline
 %UCCA &&&&&&&&&&&&&&&&&& \\
 \bf English EWT &&& 11,103 &&& 804 \\
-\bf English Wiki & 124,935 & 17,784 & 15,854 & 4,113 & 514 & 515 \\
+\bf English Wiki & 124,935 & 17,784 & & 4,113 & 514 & \\
+%\bf English Wiki & 124,935 & 17,784 & 15,854 & 4,113 & 514 & 515 \\
 %Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
-\bf English 20K &&& 12,574 &&& 492 \\
-\bf French 20K & 618 & 6,374 & 5,962 & 15 & 238 & 239 \\
-\bf German 20K & 119,872 & 12,334 & 12,325 & 5,211 & 651 & 652
+%\bf English 20K &&& 12,574 &&& 492 \\
+%\bf French 20K & 618 & 6,374 & 5,962 & 15 & 238 & 239 \\
+%\bf German 20K & 119,872 & 12,334 & 12,325 & 5,211 & 651 & 652
 %\multicolumn{2}{l}{20K 1.0.0/0.9.0} && 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
 %\hline
 %UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
@@ -1086,23 +1089,21 @@ we use for each corpus.
 
 In addition to the shared gold-standard English\_EWT corpus (\S\ref{sec:shared}),
 we use v1.2.3 of the UCCA English Wikipedia corpus (Wiki),
-with the standard train/dev/test split (see Table~\ref{tab:corpora}),
-and the \textit{Twenty Thousand Leagues Under the Sea} corpora (\textit{20K}),
-annotated in English (v1.2.2), French (v1.2.2)
-and German (v1.0.1).\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation}}
-
+with the standard train/dev/test split (see Table~\ref{tab:corpora}).
+%and the \textit{Twenty Thousand Leagues Under the Sea} corpora (\textit{20K}),
+%annotated in English (v1.2.2), French (v1.2.2)
+%and German (v1.0.1).\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation}}
+%As in previous work, we use English 20K only as an out-of-domain test set.
 %For comparability with previous work \cite{hershcovich2017a,hershcovich2018multitask},
 %we also perform our experiments on Wiki v1.2.0 \cite{abend2013universal},
 %on 20K v1.0.0 in English and French \cite{sulem2015conceptual},
 %and on 20K v0.9.0 in German.
-As in previous work, we use English 20K only as an out-of-domain test set.
-
 %For UD, we use the English\_EWT, French\_GSD and German\_GSD
 %treebanks from Universal Dependencies v2.3
 %\cite{11234/1-2895}.\footnote{\url{http://hdl.handle.net/11234/1-2895}}
 %These are the largest freely-available UD treebanks for these languages.
-
-For UD, we use the English\_EWT treebank from Universal Dependencies v2.3
+For UD,
+we use the English\_EWT treebank from Universal Dependencies v2.3
 \cite{11234/1-2895},\footnote{\url{http://hdl.handle.net/11234/1-2895}}
 filtering it to get only the 804 sentences that were also annotated in UCCA.
 
@@ -1117,11 +1118,6 @@ filtering it to get only the 804 sentences that were also annotated in UCCA.
 %with the gold-standard UCCA for the same sentences.
 %We use standard UCCA evaluation, matching units by their terminal yields.
 %%We then apply the label mapping to get fully labeled converted UCCA graphs.
-%
-%As a point of comparison, we train a UCCA parser,
-%TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
-%on the English Wiki training set, using the development set for validation,
-%and show unlabeled evaluation for it on the EWT dataset.
 
 
 \paragraph{UCCA evaluation by gold-standard UD.}
@@ -1133,18 +1129,21 @@ dividing UCCA edges into subsets according to the relations of the UD edges
 they match by terminal yield.
 This allows error analysis of UCCA parsing according to syntactic phenomena.
 
-We apply this fine-grained evaluation to TUPA on the EWT dataset,
+We train a UCCA parser,
+TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
+on the English Wiki training set, using the development set for validation.
+We apply the fine-grained evaluation to TUPA on the EWT dataset,
 using the gold-standard UD for matched relations.
 
 
-\paragraph{UCCA evaluation by automatically parsed UD.}
-
-To demonstrate the applicability of fine-grained analysis on UCCA data
-without gold-standard UD,
-we use UDPipe v1.2 \cite{udpipe,udpipe:2017}, trained on the UD v2.3 treebanks,
-to parse the Wiki and 20K test sets in English, French and German.
-We use the official UDPipe models trained on the English\_EWT, French\_GSD and German\_GSD
-treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
+%\paragraph{UCCA evaluation by automatically parsed UD.}
+%
+%To demonstrate the applicability of fine-grained analysis on UCCA data
+%without gold-standard UD,
+%we use UDPipe v1.2 \cite{udpipe,udpipe:2017}, trained on the UD v2.3 treebanks,
+%to parse the Wiki and 20K test sets in English, French and German.
+%We use the official UDPipe models trained on the English\_EWT, French\_GSD and German\_GSD
+%treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 
 
 %\paragraph{Baselines.}
@@ -1212,48 +1211,51 @@ treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 \setlength\tabcolsep{1.5pt}
 % \scriptsize \bf \rotatebox{90}{Primary}
 \begin{tabular}{l|ccccccccccccccccccccccccccc}
-& \footnotesize \bf \rotatebox{90}{acl}
-& \footnotesize \bf \rotatebox{90}{advcl}
-& \footnotesize \bf \rotatebox{90}{advmod}
-& \footnotesize \bf \rotatebox{90}{amod}
-& \footnotesize \bf \rotatebox{90}{appos}
-& \footnotesize \bf \rotatebox{90}{aux}
-& \footnotesize \bf \rotatebox{90}{case}
-& \footnotesize \bf \rotatebox{90}{cc}
-& \footnotesize \bf \rotatebox{90}{ccomp}
-& \footnotesize \bf \rotatebox{90}{compound} 
-& \footnotesize \bf \rotatebox{90}{conj}
-& \footnotesize \bf \rotatebox{90}{cop}
-& \footnotesize \bf \rotatebox{90}{csubj}
-& \footnotesize \bf \rotatebox{90}{det}
-& \footnotesize \bf \rotatebox{90}{discourse}
-& \footnotesize \bf \rotatebox{90}{expl}
-& \footnotesize \bf \rotatebox{90}{iobj}
-& \footnotesize \bf \rotatebox{90}{list}
-& \footnotesize \bf \rotatebox{90}{mark}
-& \footnotesize \bf \rotatebox{90}{nmod}
-& \footnotesize \bf \rotatebox{90}{nsubj}
-& \footnotesize \bf \rotatebox{90}{nummod}
-& \footnotesize \bf \rotatebox{90}{obj}
-& \footnotesize \bf \rotatebox{90}{obl}
-& \footnotesize \bf \rotatebox{90}{parataxis}
-& \footnotesize \bf \rotatebox{90}{vocative}
-& \footnotesize \bf \rotatebox{90}{xcomp} \\
+& \footnotesize \bf \rotatebox{90}{\texttt{acl}}
+& \footnotesize \bf \rotatebox{90}{\texttt{advcl}}
+& \footnotesize \bf \rotatebox{90}{\texttt{advmod}}
+& \footnotesize \bf \rotatebox{90}{\texttt{amod}}
+& \footnotesize \bf \rotatebox{90}{\texttt{appos}}
+& \footnotesize \bf \rotatebox{90}{\texttt{aux}}
+& \footnotesize \bf \rotatebox{90}{\texttt{case}}
+& \footnotesize \bf \rotatebox{90}{\texttt{cc}}
+& \footnotesize \bf \rotatebox{90}{\texttt{ccomp}}
+& \footnotesize \bf \rotatebox{90}{\texttt{compound}}
+& \footnotesize \bf \rotatebox{90}{\texttt{conj}}
+& \footnotesize \bf \rotatebox{90}{\texttt{cop}}
+& \footnotesize \bf \rotatebox{90}{\texttt{csubj}}
+& \footnotesize \bf \rotatebox{90}{\texttt{det}}
+& \footnotesize \bf \rotatebox{90}{\texttt{discourse}}
+& \footnotesize \bf \rotatebox{90}{\texttt{expl}}
+& \footnotesize \bf \rotatebox{90}{\texttt{iobj}}
+& \footnotesize \bf \rotatebox{90}{\texttt{list}}
+& \footnotesize \bf \rotatebox{90}{\texttt{mark}}
+& \footnotesize \bf \rotatebox{90}{\texttt{nmod}}
+& \footnotesize \bf \rotatebox{90}{\texttt{nsubj}}
+& \footnotesize \bf \rotatebox{90}{\texttt{nummod}}
+& \footnotesize \bf \rotatebox{90}{\texttt{obj}}
+& \footnotesize \bf \rotatebox{90}{\texttt{obl}}
+& \footnotesize \bf \rotatebox{90}{\texttt{parataxis}}
+& \footnotesize \bf \rotatebox{90}{\texttt{vocative}}
+& \footnotesize \bf \rotatebox{90}{\texttt{xcomp}} \\
 \hline
-\small \bf English EWT &  \\
-gold & 127 & 112 & 769 & 467 & 29 & 381 & 652 & 388 & 87 & 239 & 361 & 361 & 2 & 808 & 25 & 22 & 19 & 10 & 382 & 346 & 1046 & 70 & 474 & 364 & 86 & 12 & 62 \\
-predicted & 70 & 51 & 697 & 435 & 19 & 363 & 680 & 358 & 61 & 238 & 265 & 354 & 5 & 778 & 25 & 21 & 13 & 5 & 375 & 303 & 959 & 61 & 335 & 234 & 45 & 4 & 60 \\
-matched & 38 & 27 & 454 & 180 & 7 & 291 & 465 & 187 & 37 & 122 & 106 & 239 & 0 & 728 & 3 & 13 & 10 & 0 & 230 & 181 & 815 & 44 & 233 & 122 & 8 & 1 & 19 \\
-\small \bf English Wiki &  \\
-\small \bf English 20K &  \\
-\small \bf French 20K &  \\
-\small \bf German 20K & 
+%\small \bf English EWT &  \\
+total in UD \\
+matched gold & 127 & 112 & 769 & 467 & 29 & 381 & 652 & 388 & 87 & 239 & 361 & 361 & 2 & 808 & 25 & 22 & 19 & 10 & 382 & 346 & 1046 & 70 & 474 & 364 & 86 & 12 & 62 \\
+matched pred. & 70 & 51 & 697 & 435 & 19 & 363 & 680 & 358 & 61 & 238 & 265 & 354 & 5 & 778 & 25 & 21 & 13 & 5 & 375 & 303 & 959 & 61 & 335 & 234 & 45 & 4 & 60 \\
+matched corr. & 38 & 27 & 454 & 180 & 7 & 291 & 465 & 187 & 37 & 122 & 106 & 239 & 0 & 728 & 3 & 13 & 10 & 0 & 230 & 181 & 815 & 44 & 233 & 122 & 8 & 1 & 19 \\
+``--'' unlabeled
+%\small \bf English Wiki &  \\
+%\small \bf English 20K &  \\
+%\small \bf French 20K &  \\
+%\small \bf German 20K & 
 \end{tabular}
-\caption{
-Labeled F1 (in~\%) for TUPA according on primary and remote edges,
-and on fine-grained splits by UD relations
-(the latter rounded down to the nearest integer for brevity).
-{\bf ADD HERE THE PERCENTAGE OF MATCHED UCCA UNITS 89.5, AND WHICH CATEGORIES WERE OMITTED}
+\caption{Fine-grained error analysis by all UD relations, excluding
+\texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
+\texttt{fixed}, \texttt{flat}, \texttt{goeswith},
+\texttt{dep}, \texttt{orphan}, and \texttt{root}.
+A total of 89.5\% of all UD relations matched gold-standard UCCA units
+(see \S\ref{sec:analysis}).
 \label{tab:fine_grained_results}}
 \end{table*}
 
@@ -1267,14 +1269,16 @@ and on fine-grained splits by UD relations
 %and gold-standard UD or a more accurate parser are expected to yield even more similar graphs.
 %
 %Finally,
-Table~\ref{tab:fine_grained_results} displays \textit{labeled} F1 score for TUPA
-on the UCCA test sets,
-using both the standard primary/remote
-split\footnote{Note that the primary and remote scores are not directly comparable to previous work
-on UCCA parsing \cite{hershcovich2017a,hershcovich2018multitask},
-as we used newer versions of the annotated corpora.}
-and the fine-grained evaluation by UD relations
-(gold-standard UD for English EWT, and parsed by UDPipe for the other test sets).
+Table~\ref{tab:fine_grained_results} displays
+%\textit{labeled} F1 score for TUPA
+%on the UCCA test sets,
+%using both the standard primary/remote
+%split\footnote{Note that the primary and remote scores are not directly comparable to previous work
+%on UCCA parsing \cite{hershcovich2017a,hershcovich2018multitask},
+%as we used newer versions of the annotated corpora.}
+%and the
+fine-grained evaluation by UD relations.
+%(gold-standard UD for English EWT, and parsed by UDPipe for the other test sets).
 
 
 %\begin{table}[t]
