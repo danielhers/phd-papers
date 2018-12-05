@@ -1017,40 +1017,41 @@ using gold-standard UD for fine-grained evaluation.
 
 \subsection{Experimental Setup}\label{sec:experiments}
 
-%\begin{table}[t]
-%\centering
-%\small
-%\setlength\tabcolsep{2pt}
-%\begin{tabular}{l|ccc|ccc}
-%& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
-%& \multicolumn{3}{c}{\footnotesize \bf {\#} sentences} \\
-%& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
-%& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
-%\hline
-%%UCCA &&&&&&&&&&&&&&&&&& \\
-%\bf English EWT &&& 11,103 &&& 804 \\
+\begin{table}[t]
+\centering
+\small
+\setlength\tabcolsep{2pt}
+\begin{tabular}{l|ccc|ccc}
+& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
+& \multicolumn{3}{c}{\footnotesize \bf {\#} sentences} \\
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
+\hline
+%UCCA &&&&&&&&&&&&&&&&&& \\
+\bf English EWT &&& 11,103 &&& 804 \\
+\bf English Wiki & 124,935 & 17,784 & & 4,113 & 514 & \\
 %\bf English Wiki & 124,935 & 17,784 & 15,854 & 4,113 & 514 & 515 \\
-%%Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
+%Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
 %\bf English 20K &&& 12,574 &&& 492 \\
 %\bf French 20K & 618 & 6,374 & 5,962 & 15 & 238 & 239 \\
 %\bf German 20K & 119,872 & 12,334 & 12,325 & 5,211 & 651 & 652
-%%\multicolumn{2}{l}{20K 1.0.0/0.9.0} && 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
-%%\hline
-%%UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
-%%\multicolumn{2}{l}{250658} && \multicolumn{2}{l}{14450} && \multicolumn{2}{l}{209131} && 13814 \\
-%%\hline
-%\end{tabular}
-%\caption{Number of tokens and sentences in the training, development and test sets
-%we use for each corpus.
-%% and language.
-%\label{tab:corpora}}
-%\end{table}
+%\multicolumn{2}{l}{20K 1.0.0/0.9.0} && 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
+%\hline
+%UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
+%\multicolumn{2}{l}{250658} && \multicolumn{2}{l}{14450} && \multicolumn{2}{l}{209131} && 13814 \\
+%\hline
+\end{tabular}
+\caption{Number of tokens and sentences in the training, development and test sets
+we use for each corpus.
+% and language.
+\label{tab:corpora}}
+\end{table}
 
 \paragraph{Data.}
 
 In addition to the shared gold-standard English\_EWT corpus (\S\ref{sec:shared}),
-%we use v1.2.3 of the UCCA English Wikipedia corpus (Wiki),
-%with the standard train/dev/test split (see Table~\ref{tab:corpora}),
+we use v1.2.3 of the UCCA English Wikipedia corpus (Wiki),
+with the standard train/dev/test split (see Table~\ref{tab:corpora}).
 %and the \textit{Twenty Thousand Leagues Under the Sea} corpora (\textit{20K}),
 %annotated in English (v1.2.2), French (v1.2.2)
 %and German (v1.0.1).\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation}}
@@ -1063,7 +1064,7 @@ In addition to the shared gold-standard English\_EWT corpus (\S\ref{sec:shared})
 %treebanks from Universal Dependencies v2.3
 %\cite{11234/1-2895}.\footnote{\url{http://hdl.handle.net/11234/1-2895}}
 %These are the largest freely-available UD treebanks for these languages.
-%For UD,
+For UD,
 we use the English\_EWT treebank from Universal Dependencies v2.3
 \cite{11234/1-2895},\footnote{\url{http://hdl.handle.net/11234/1-2895}}
 filtering it to get only the 804 sentences that were also annotated in UCCA.
@@ -1079,11 +1080,6 @@ filtering it to get only the 804 sentences that were also annotated in UCCA.
 %with the gold-standard UCCA for the same sentences.
 %We use standard UCCA evaluation, matching units by their terminal yields.
 %%We then apply the label mapping to get fully labeled converted UCCA graphs.
-%
-%As a point of comparison, we train a UCCA parser,
-%TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
-%on the English Wiki training set, using the development set for validation,
-%and show unlabeled evaluation for it on the EWT dataset.
 
 
 \paragraph{UCCA evaluation by gold-standard UD.}
@@ -1095,7 +1091,10 @@ dividing UCCA edges into subsets according to the relations of the UD edges
 they match by terminal yield.
 This allows error analysis of UCCA parsing according to syntactic phenomena.
 
-We apply this fine-grained evaluation to TUPA on the EWT dataset,
+We train a UCCA parser,
+TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
+on the English Wiki training set, using the development set for validation.
+We apply the fine-grained evaluation to TUPA on the EWT dataset,
 using the gold-standard UD for matched relations.
 
 
@@ -1232,14 +1231,16 @@ A total of 89.5\% of all UD relations matched gold-standard UCCA units
 %and gold-standard UD or a more accurate parser are expected to yield even more similar graphs.
 %
 %Finally,
-Table~\ref{tab:fine_grained_results} displays \textit{labeled} F1 score for TUPA
-on the UCCA test sets,
-using both the standard primary/remote
-split\footnote{Note that the primary and remote scores are not directly comparable to previous work
-on UCCA parsing \cite{hershcovich2017a,hershcovich2018multitask},
-as we used newer versions of the annotated corpora.}
-and the fine-grained evaluation by UD relations
-(gold-standard UD for English EWT, and parsed by UDPipe for the other test sets).
+Table~\ref{tab:fine_grained_results} displays
+%\textit{labeled} F1 score for TUPA
+%on the UCCA test sets,
+%using both the standard primary/remote
+%split\footnote{Note that the primary and remote scores are not directly comparable to previous work
+%on UCCA parsing \cite{hershcovich2017a,hershcovich2018multitask},
+%as we used newer versions of the annotated corpora.}
+%and the
+fine-grained evaluation by UD relations.
+%(gold-standard UD for English EWT, and parsed by UDPipe for the other test sets).
 
 
 %\begin{table}[t]
