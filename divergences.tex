@@ -1012,7 +1012,8 @@ In \S\ref{sec:analysis} we used our comparison methodology,
 consisting of the conversion to a shared format and matching units by terminal yield,
 to compare gold-standard UD and UCCA.
 In this section we apply the same methodology to parser outputs,
-using both gold-standard and parsed UD for fine-grained evaluation.
+using gold-standard UD for fine-grained evaluation.
+%using both gold-standard and parsed UD for fine-grained evaluation.
 
 \subsection{Experimental Setup}\label{sec:experiments}
 
@@ -1048,24 +1049,22 @@ we use for each corpus.
 \paragraph{Data.}
 
 In addition to the shared gold-standard English\_EWT corpus (\S\ref{sec:shared}),
-we use v1.2.3 of the UCCA English Wikipedia corpus (Wiki),
-with the standard train/dev/test split (see Table~\ref{tab:corpora}),
-and the \textit{Twenty Thousand Leagues Under the Sea} corpora (\textit{20K}),
-annotated in English (v1.2.2), French (v1.2.2)
-and German (v1.0.1).\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation}}
-
+%we use v1.2.3 of the UCCA English Wikipedia corpus (Wiki),
+%with the standard train/dev/test split (see Table~\ref{tab:corpora}),
+%and the \textit{Twenty Thousand Leagues Under the Sea} corpora (\textit{20K}),
+%annotated in English (v1.2.2), French (v1.2.2)
+%and German (v1.0.1).\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation}}
+%As in previous work, we use English 20K only as an out-of-domain test set.
 %For comparability with previous work \cite{hershcovich2017a,hershcovich2018multitask},
 %we also perform our experiments on Wiki v1.2.0 \cite{abend2013universal},
 %on 20K v1.0.0 in English and French \cite{sulem2015conceptual},
 %and on 20K v0.9.0 in German.
-As in previous work, we use English 20K only as an out-of-domain test set.
-
 %For UD, we use the English\_EWT, French\_GSD and German\_GSD
 %treebanks from Universal Dependencies v2.3
 %\cite{11234/1-2895}.\footnote{\url{http://hdl.handle.net/11234/1-2895}}
 %These are the largest freely-available UD treebanks for these languages.
-
-For UD, we use the English\_EWT treebank from Universal Dependencies v2.3
+%For UD,
+we use the English\_EWT treebank from Universal Dependencies v2.3
 \cite{11234/1-2895},\footnote{\url{http://hdl.handle.net/11234/1-2895}}
 filtering it to get only the 804 sentences that were also annotated in UCCA.
 
@@ -1100,14 +1099,14 @@ We apply this fine-grained evaluation to TUPA on the EWT dataset,
 using the gold-standard UD for matched relations.
 
 
-\paragraph{UCCA evaluation by automatically parsed UD.}
-
-To demonstrate the applicability of fine-grained analysis on UCCA data
-without gold-standard UD,
-we use UDPipe v1.2 \cite{udpipe,udpipe:2017}, trained on the UD v2.3 treebanks,
-to parse the Wiki and 20K test sets in English, French and German.
-We use the official UDPipe models trained on the English\_EWT, French\_GSD and German\_GSD
-treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
+%\paragraph{UCCA evaluation by automatically parsed UD.}
+%
+%To demonstrate the applicability of fine-grained analysis on UCCA data
+%without gold-standard UD,
+%we use UDPipe v1.2 \cite{udpipe,udpipe:2017}, trained on the UD v2.3 treebanks,
+%to parse the Wiki and 20K test sets in English, French and German.
+%We use the official UDPipe models trained on the English\_EWT, French\_GSD and German\_GSD
+%treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 
 
 %\paragraph{Baselines.}
@@ -1203,14 +1202,16 @@ treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 & \footnotesize \bf \rotatebox{90}{\texttt{vocative}}
 & \footnotesize \bf \rotatebox{90}{\texttt{xcomp}} \\
 \hline
-\small \bf English EWT &  \\
-gold & 127 & 112 & 769 & 467 & 29 & 381 & 652 & 388 & 87 & 239 & 361 & 361 & 2 & 808 & 25 & 22 & 19 & 10 & 382 & 346 & 1046 & 70 & 474 & 364 & 86 & 12 & 62 \\
-predicted & 70 & 51 & 697 & 435 & 19 & 363 & 680 & 358 & 61 & 238 & 265 & 354 & 5 & 778 & 25 & 21 & 13 & 5 & 375 & 303 & 959 & 61 & 335 & 234 & 45 & 4 & 60 \\
-matched & 38 & 27 & 454 & 180 & 7 & 291 & 465 & 187 & 37 & 122 & 106 & 239 & 0 & 728 & 3 & 13 & 10 & 0 & 230 & 181 & 815 & 44 & 233 & 122 & 8 & 1 & 19 \\
-\small \bf English Wiki &  \\
-\small \bf English 20K &  \\
-\small \bf French 20K &  \\
-\small \bf German 20K & 
+%\small \bf English EWT &  \\
+total in UD \\
+matched gold & 127 & 112 & 769 & 467 & 29 & 381 & 652 & 388 & 87 & 239 & 361 & 361 & 2 & 808 & 25 & 22 & 19 & 10 & 382 & 346 & 1046 & 70 & 474 & 364 & 86 & 12 & 62 \\
+matched pred. & 70 & 51 & 697 & 435 & 19 & 363 & 680 & 358 & 61 & 238 & 265 & 354 & 5 & 778 & 25 & 21 & 13 & 5 & 375 & 303 & 959 & 61 & 335 & 234 & 45 & 4 & 60 \\
+matched corr. & 38 & 27 & 454 & 180 & 7 & 291 & 465 & 187 & 37 & 122 & 106 & 239 & 0 & 728 & 3 & 13 & 10 & 0 & 230 & 181 & 815 & 44 & 233 & 122 & 8 & 1 & 19 \\
+``--'' unlabeled
+%\small \bf English Wiki &  \\
+%\small \bf English 20K &  \\
+%\small \bf French 20K &  \\
+%\small \bf German 20K & 
 \end{tabular}
 \caption{Fine-grained error analysis by all UD relations, excluding
 \texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
