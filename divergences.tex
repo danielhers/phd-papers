@@ -924,6 +924,7 @@ as they are irrelevant to the evaluation of content differences:
     and so do not represent units on their own. See \S\ref{sec:local}.
   \item[dep.] Rare and heterogeneous.
   \item[orphan.] Used for representing gapping, which is represented using remote edges in UCCA. See \S\ref{sec:conversion}.
+  \item[clf, dislocated, reparandum.] Do not occur in EWT.
 \end{description}
 
 
@@ -1174,33 +1175,33 @@ treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
 \setlength\tabcolsep{1.5pt}
 % \scriptsize \bf \rotatebox{90}{Primary}
 \begin{tabular}{l|ccccccccccccccccccccccccccc}
-& \footnotesize \bf \rotatebox{90}{acl}
-& \footnotesize \bf \rotatebox{90}{advcl}
-& \footnotesize \bf \rotatebox{90}{advmod}
-& \footnotesize \bf \rotatebox{90}{amod}
-& \footnotesize \bf \rotatebox{90}{appos}
-& \footnotesize \bf \rotatebox{90}{aux}
-& \footnotesize \bf \rotatebox{90}{case}
-& \footnotesize \bf \rotatebox{90}{cc}
-& \footnotesize \bf \rotatebox{90}{ccomp}
-& \footnotesize \bf \rotatebox{90}{compound} 
-& \footnotesize \bf \rotatebox{90}{conj}
-& \footnotesize \bf \rotatebox{90}{cop}
-& \footnotesize \bf \rotatebox{90}{csubj}
-& \footnotesize \bf \rotatebox{90}{det}
-& \footnotesize \bf \rotatebox{90}{discourse}
-& \footnotesize \bf \rotatebox{90}{expl}
-& \footnotesize \bf \rotatebox{90}{iobj}
-& \footnotesize \bf \rotatebox{90}{list}
-& \footnotesize \bf \rotatebox{90}{mark}
-& \footnotesize \bf \rotatebox{90}{nmod}
-& \footnotesize \bf \rotatebox{90}{nsubj}
-& \footnotesize \bf \rotatebox{90}{nummod}
-& \footnotesize \bf \rotatebox{90}{obj}
-& \footnotesize \bf \rotatebox{90}{obl}
-& \footnotesize \bf \rotatebox{90}{parataxis}
-& \footnotesize \bf \rotatebox{90}{vocative}
-& \footnotesize \bf \rotatebox{90}{xcomp} \\
+& \footnotesize \bf \rotatebox{90}{\texttt{acl}}
+& \footnotesize \bf \rotatebox{90}{\texttt{advcl}}
+& \footnotesize \bf \rotatebox{90}{\texttt{advmod}}
+& \footnotesize \bf \rotatebox{90}{\texttt{amod}}
+& \footnotesize \bf \rotatebox{90}{\texttt{appos}}
+& \footnotesize \bf \rotatebox{90}{\texttt{aux}}
+& \footnotesize \bf \rotatebox{90}{\texttt{case}}
+& \footnotesize \bf \rotatebox{90}{\texttt{cc}}
+& \footnotesize \bf \rotatebox{90}{\texttt{ccomp}}
+& \footnotesize \bf \rotatebox{90}{\texttt{compound}}
+& \footnotesize \bf \rotatebox{90}{\texttt{conj}}
+& \footnotesize \bf \rotatebox{90}{\texttt{cop}}
+& \footnotesize \bf \rotatebox{90}{\texttt{csubj}}
+& \footnotesize \bf \rotatebox{90}{\texttt{det}}
+& \footnotesize \bf \rotatebox{90}{\texttt{discourse}}
+& \footnotesize \bf \rotatebox{90}{\texttt{expl}}
+& \footnotesize \bf \rotatebox{90}{\texttt{iobj}}
+& \footnotesize \bf \rotatebox{90}{\texttt{list}}
+& \footnotesize \bf \rotatebox{90}{\texttt{mark}}
+& \footnotesize \bf \rotatebox{90}{\texttt{nmod}}
+& \footnotesize \bf \rotatebox{90}{\texttt{nsubj}}
+& \footnotesize \bf \rotatebox{90}{\texttt{nummod}}
+& \footnotesize \bf \rotatebox{90}{\texttt{obj}}
+& \footnotesize \bf \rotatebox{90}{\texttt{obl}}
+& \footnotesize \bf \rotatebox{90}{\texttt{parataxis}}
+& \footnotesize \bf \rotatebox{90}{\texttt{vocative}}
+& \footnotesize \bf \rotatebox{90}{\texttt{xcomp}} \\
 \hline
 \small \bf English EWT &  \\
 gold & 127 & 112 & 769 & 467 & 29 & 381 & 652 & 388 & 87 & 239 & 361 & 361 & 2 & 808 & 25 & 22 & 19 & 10 & 382 & 346 & 1046 & 70 & 474 & 364 & 86 & 12 & 62 \\
@@ -1211,11 +1212,12 @@ matched & 38 & 27 & 454 & 180 & 7 & 291 & 465 & 187 & 37 & 122 & 106 & 239 & 0 &
 \small \bf French 20K &  \\
 \small \bf German 20K & 
 \end{tabular}
-\caption{
-Labeled F1 (in~\%) for TUPA according on primary and remote edges,
-and on fine-grained splits by UD relations
-(the latter rounded down to the nearest integer for brevity).
-{\bf ADD HERE THE PERCENTAGE OF MATCHED UCCA UNITS 89.5, AND WHICH CATEGORIES WERE OMITTED}
+\caption{Fine-grained error analysis by all UD relations, excluding
+\texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
+\texttt{fixed}, \texttt{flat}, \texttt{goeswith},
+\texttt{dep}, \texttt{orphan}, and \texttt{root}.
+A total of 89.5\% of all UD relations matched gold-standard UCCA units
+(see \S\ref{sec:analysis}).
 \label{tab:fine_grained_results}}
 \end{table*}
 
