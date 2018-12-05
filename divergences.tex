@@ -656,7 +656,7 @@ as quantified in a \textit{confusion matrix} between the schemes (\S\ref{sec:con
  & \bf \rotatebox{90}{Participant (A)} & \bf \rotatebox{90}{Center (C)}
  & \bf \rotatebox{90}{Adverbial (D)} & \bf \rotatebox{90}{Elaborator (E)}
  & \bf \rotatebox{90}{Function (F)} & \bf \rotatebox{90}{Ground (G)}
- & \bf \rotatebox{90}{Linked Scene (H)} & \bf \rotatebox{90}{Linker (L)}
+ & \bf \rotatebox{90}{ Parallel Scene (H)} & \bf \rotatebox{90}{Linker (L)}
  & \bf \rotatebox{90}{Connector (N)} & \bf \rotatebox{90}{Process (P)}
  & \bf \rotatebox{90}{Relator (R)} & \bf \rotatebox{90}{State (S)}
  & \rotatebox{90}{{\sc NoMatch}} \\
@@ -707,6 +707,8 @@ Using the standard UCCA evaluation
 script,\footnote{\url{http://github.com/huji-nlp/ucca/blob/master/scripts/evaluate_standard.py}}
 we create a confusion matrix between the edge tags in converted UD trees
 and the annotated UCCA graphs (see Table~\ref{tab:confusion_matrix}).
+In case of multiple units with the same terminal yield (i.e., any unit with a single non-remote child),
+we take the top category only to avoid double-counting.
 We perform this analysis on gold-standard UD and UCCA from the shared EWT corpus
 (see \S\ref{sec:shared}),
 after conversion to the unified DAG format.
@@ -720,7 +722,7 @@ Examining the {\it head} row in Table \ref{tab:confusion_matrix} allows
 us to contrast UCCA's and UD's notions of a head. 
 {\it head}-labeled units cover units that have at least
 one dependent in UD (technically, they are non-terminals added by the converter).
-About 70\% of them correspond to UCCA Processes, States, Linked Scenes or Centers,
+About 70\% of them correspond to UCCA Processes, States,  Parallel Scenes or Centers,
 which are UCCA's notions of semantic heads.
 
 About 17\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
@@ -793,7 +795,7 @@ an adjective or even a preposition (``this is \textit{for} John'').
     (e.g., ``Mercedes \textit{and} Dan'')
     or UCCA Linkers where they coordinate scenes (e.g., ``outdated \textit{but} not bad'').
     Correspondingly, conjuncts (and list elements)
-    are Centers or Linked Scenes (H).\footnote{Note
+    are Centers or  Parallel Scenes (H).\footnote{Note
     that while in UD the dependent \texttt{cc} is attached to the following conjunct,
     in UCCA coordination is a flat structure.
     This is a convention difference that we normalized (\S\ref{sec:local}).
@@ -901,7 +903,7 @@ and largely conflates clausal coordination, subordination and parataxis.
     the first \textit{to} is a Function and the second is a Linker).\daniel{still
     struggling to find an R mark that shouldn't actually be an L}
     \item[advcl and parataxis.]
-    Both adverbial clauses and parataxis almost exclusively Linked Scene
+    Both adverbial clauses and parataxis almost exclusively  Parallel Scene
     (e.g., ``We called few companies before \textit{we decided to hire them}''
     and ``Check out The Willow Lounge, \textit{you'll be happy}'')\footnote{Note
     that while in UD the dependent \texttt{mark}, e.g. ``before'',
@@ -996,7 +998,7 @@ as they are irrelevant to the evaluation of content differences:
 %normalization\footnote{\url{https://github.com/huji-nlp/ucca/blob/master/scripts/normalize.py}}
 %to the resulting graphs after conversion,
 %replacing Center with Process when it has sibling Participants or
-%with Linked Scene when it has sibling Linked Scenes.
+%with  Parallel Scene when it has sibling  Parallel Scenes.
 %We select Process rather than State as the main relation in the normalization because
 %it is much more common (14,719 Processess in the Wiki corpus as opposed to 3354 States).
 
@@ -1241,11 +1243,14 @@ using the gold-standard UD for matched relations.
 & \footnotesize \bf \rotatebox{90}{\texttt{xcomp}} \\
 \hline
 %\small \bf English EWT &  \\
-total in UD \\
+total in UD & 176 & 209 & 840 & 528 & 39 & 383 & 727 & 400 & 128 & 406 & 451 & 364 & 10 & 834 & 26 & 24 & 19 & 12 & 400 & 458 & 1083 & 94 & 566 & 496 & 125 & 12 & 178 \\
 matched gold & 127 & 112 & 769 & 467 & 29 & 381 & 652 & 388 & 87 & 239 & 361 & 361 & 2 & 808 & 25 & 22 & 19 & 10 & 382 & 346 & 1046 & 70 & 474 & 364 & 86 & 12 & 62 \\
 matched pred. & 70 & 51 & 697 & 435 & 19 & 363 & 680 & 358 & 61 & 238 & 265 & 354 & 5 & 778 & 25 & 21 & 13 & 5 & 375 & 303 & 959 & 61 & 335 & 234 & 45 & 4 & 60 \\
-matched corr. & 38 & 27 & 454 & 180 & 7 & 291 & 465 & 187 & 37 & 122 & 106 & 239 & 0 & 728 & 3 & 13 & 10 & 0 & 230 & 181 & 815 & 44 & 233 & 122 & 8 & 1 & 19 \\
-``--'' unlabeled
+unlabeled & 52 & 40 & 670 & 408 & 15 & 361 & 616 & 347 & 44 & 188 & 234 & 351 & 1 & 759 & 24 & 19 & 13 & 5 & 363 & 266 & 941 & 53 & 296 & 194 & 36 & 4 & 34 \\
+labeled & 38 & 27 & 454 & 180 & 7 & 291 & 465 & 187 & 37 & 122 & 106 & 239 & 0 & 728 & 3 & 13 & 10 & 0 & 230 & 181 & 815 & 44 & 233 & 122 & 8 & 1 & 19 \\
+\hline
+$\dfrac{\text{labeled}}{\text{unlabeled}}$ & \\
+mode &  \\
 %\small \bf English Wiki &  \\
 %\small \bf English 20K &  \\
 %\small \bf French 20K &  \\
