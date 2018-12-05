@@ -728,13 +728,13 @@ us to contrast UCCA's and UD's notions of a head.
 one dependent in UD (technically, they are non-terminals added by the converter).
 %About 70\% of them correspond to UCCA Processes, States,  Parallel Scenes or Centers,
 %which are UCCA's notions of semantic heads.
-About 17\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
-UD but not in UCCA (\S\ref{}).
+77.5\% correspond to UCCA Processes, States, Linked Scenes or Centers,
+which are UCCA's notions of semantic heads.
+12.1\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
+UD but not in UCCA (\S\ref{sec:mwe}).
 Another source of unmatched units is inter-scene linkage, which tends to be flatter in
 UCCA (see \S\ref{sec:linkage}).
-Of the matched heads, about 70\%\oa{is this true?} correspond to UCCA Processes, States, Linked Scenes or Centers,
-which are UCCA's notions of semantic heads.
-The remaining cases are mostly due to a head swap (e.g., ``\textit{all} of Dallas'', where \textit{all} 
+The remaining cases (10.4\%) are mostly due to a head swap (e.g., ``\textit{all} of Dallas'', where \textit{all} 
 is an Elaborator of ``Dallas'' in UCCA, but the syntactic head in UD).
 
 In the following subsections, we review the main content differences between the schemes,
@@ -823,7 +823,7 @@ an adjective or even a preposition (``this is \textit{for} John'').
 
 
 
-\subsection{Arguments vs. Adjuncts}\label{sec:arguments}
+\subsection{Primary and Secondary Relations}\label{sec:arguments}
 
 UD distinguishes core arguments, adverbial modifiers,
 and obliques, which in English UD correspond to prepositional arguments.
@@ -851,9 +851,15 @@ as well as modals, adjectives and adverbs.
     will not match any UCCA unit, as UCCA places secondary verbs on the 
     same level as their primary relation. 
     For example, ``to pay'' is an xcomp in ``they have to pay'', while in UCCA
-    this corresponds to a flat structure: ``[they]$_A$ [have to]$_D$ pay$_P$''.\oa{we need to add abbreviations for the cateogries}
+    this corresponds to a flat structure, where ``have to'' is an Adverbial and ``pay'' a Process.
     Clausal arguments may correspond to a UCCA State or Process where
     they are single-worded, as in ``this seems \textit{great}''.
+
+    \item[Auxiliary Verbs] (aux) are Functions (e.g., ``\textit{do} not forget''),
+    or Adverbials when they are modals (e.g., ``you \textit{can} graduate''). Semi-modals 
+    in UD are treated as clausal heads, which take a clausal complement. 
+    For example, in ``able to do well'', UD treats ``able'' as the head, which takes ``do well'' as an xcomp. UCCA, on the other hand, treats it as an Adverbial, which creates a mismatch for the xcomp.
+    
 \end{description}    
     
 
@@ -869,16 +875,16 @@ especially where they are compositional.
 
 \begin{description}
     \item[Compounds] in English are mostly noun compounds,
-    and are a very heterogenous category.
-    Most compounds correspond to Elaborators (e.g., ``\textit{industry} standard''),
-    or Elaborator scenes (e.g., ``\textit{out-of-place} flat-screen TV''),
-    and many are unanalyzable expressions (e.g., ``\textit{mark} up'').
-    Where the head noun evokes a scene, the dependent is often a Participant
-    (e.g., ``\textit{food} craving''), but can also be an Adverbial 
-    (e.g., ``\textit{first time} buyers'') depending on its semantic category.
-    %In cases where t UCCA annotates both parts  may be a co-Center (e.g., ``\textit{sweet potato} tempura'').
-    Other compounds in UD are phrasal verbs (e.g., ``figure out'', ``cleaned up''), which UCCA treats as unanalyzable (leading to an unmatched 
-    unit). 
+        and are a very heterogenous category.
+        Most compounds correspond to Elaborators (e.g., ``\textit{industry} standard''),
+        or Elaborator scenes (e.g., ``\textit{out-of-place} flat-screen TV''),
+        and many are unanalyzable expressions (e.g., ``\textit{mark} up'').
+        Where the head noun evokes a scene, the dependent is often a Participant
+        (e.g., ``\textit{food} craving''), but can also be an Adverbial 
+        (e.g., ``\textit{first time} buyers'') depending on its semantic category.
+        %In cases where t UCCA annotates both parts  may be a co-Center (e.g., ``\textit{sweet potato} tempura'').
+        Other compounds in UD are phrasal verbs (e.g., ``figure out'', ``cleaned up''), which UCCA treats as unanalyzable (leading to an unmatched 
+        unit). 
             
     \item[Subjects and Objects.]
       A significant number of subjects and objects are left unmatched as they
@@ -888,8 +894,7 @@ especially where they are compositional.
       idioms (``bites {\it the dust}''), and figures of speech (e.g., ``when \textit{it} comes to''),
       which are all treated as single units in UCCA.
       
-    \item[Complex Prepositions.] Some complex prepositions, such as ``according to'' or ``on top of''\oa{do such things
-    appear in our corpus? I know they appear in EWT}
+    \item[Complex Prepositions.] Some complex prepositions, such as ``according to'' or ``on top of''
       are unanlyzable in UCCA, but are not encoded as MWEs in UD.
 
 %       Many of these are unanalyzable due to UCCA's stronger tendency to group
@@ -937,9 +942,6 @@ and largely conflates clausal coordination, subordination and parataxis.
 \subsection{Other Differences}\label{sec:misc}
 
 \begin{description}
-    \item[Auxiliary Verbs] (aux) are Functions (e.g., ``\textit{do} not forget''),
-    or Adverbials when they semantically modify a scene
-    (e.g., ``you \textit{can} graduate''). Semi-modals 
 
     \item[Appositions.] (appos)
     Appositions in UD are always analyzed so that the first
@@ -947,18 +949,23 @@ and largely conflates clausal coordination, subordination and parataxis.
     In UCCA, appositions are split between Center
     (``its sister store \textit{Peking Garden}'')
     and Elaborator (``Kevin, \textit{the manager}''),
-    as named entities are always selected to be the Center.
+    as named entities are marked Centers regardless of their position.
 
     \item[Copulas.] (cop)
-    UCCA distinguishes between copular constructions expressing
-    identity (e.g., ``It \textit{was} an ingrown toenail'') where the copula is annotated as State,
-    and cases of attribution or set membership
-    (e.g., ``Mercedes and Dan \textit{are} very thorough''),\oa{could you add a case with a nominal head?} where the copula is annotated as Function.
+    UCCA distinguishes copular constructions expressing
+    identity (e.g., ``This \textit{is} the original Ham's restaurant'') where the copula is annotated as State,
+    and cases of attribution 
+    (e.g., ``Mercedes and Dan \textit{are} very thorough'')
+    or location (e.g., ``Excellent chefs \textit{are} in the kitchen''),
+    where the copula is a Function.
+    
+   %,\oa{could you add a case with a nominal head?} where the copula is annotated as Function.
 
     \item[Discourse Markers and Interjections (discourse).] 
-    UCCA marks as Ground discourse markers and interjections that relate the scene 
-    to the speech event, or to the opinion of the speaker (e.g., ``\textit{no}, Warwick in New Jersey'' and ``\textit{Please} visit my website'').
-    On the other hand, discourse elements that relate one Scene to the other will be marked as Linkers     (e.g., ``I am sure, \textit{well}, she says'').
+    UCCA marks discourse markers and interjections as Ground, i.e., units that relate the scene 
+    to the speech event or to the opinion of the speaker. Examples include ``\textit{no}, Warwick in New Jersey'' and ``\textit{Please} visit my website''.
+    On the other hand, discourse elements that relate one Scene to the other 
+    are as Linkers (e.g., ``I am sure, \textit{well}, she says'').
     \oa{add an example for a complete scene}
 
     \item[Vocatives.] (vocative)
