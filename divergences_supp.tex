@@ -1,0 +1,169 @@
+
+%
+% File divergences_supp.tex
+
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[draft]{hyperref}  % removing this line sometimes causes errors, but we should remove it still
+\usepackage[hyperref]{acl-onecolumn}
+\usepackage{times}
+\usepackage{latexsym}
+
+\usepackage{url}
+
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{tikz}
+\usepackage{tikz-dependency}
+\usepackage[warn]{textcomp}
+\usepackage[font=small]{caption}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{etoolbox}
+\usepackage{xr}
+
+\makeatletter
+\renewcommand{\@BIBLABEL}{\@emptybiblabel}
+\newcommand{\@emptybiblabel}[1]{}
+\makeatother
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcommand{\com}[1]{}
+\newcommand{\oa}[1]{\footnote{\color{red}OA: #1}}
+\newcommand{\daniel}[1]{\footnote{\color{blue}DH: #1}}
+
+
+\usetikzlibrary{shapes,shapes.misc}
+
+
+\title{Content Differences in Syntactic and Semantic Representation \\ Supplementary Material}
+
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Category Definitions}\label{sec:definitions}
+
+\subsection{UCCA}
+
+Table~\ref{tab:ucca} provides a concise description of the
+categories used by the UCCA foundational layer.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin {tabular}{|c|p{1.6cm}|p{12.5cm}|}
+\hline
+Abb. & Category & Short Definition\\
+\hline
+\hline
+\multicolumn{3}{|c|}{{\bf Scene Elements}}\\
+\hline
+P & {\bf Process} & The main relation of a Scene that evolves in time (usually an action or movement).\\
+\hline
+S & {\bf State} & The main relation of a Scene that does not evolve in time.\\
+\hline
+A & {\bf Participant} & A participant in a Scene in a broad sense (including locations, abstract entities and Scenes serving as arguments).\\
+\hline
+D & {\bf Adverbial} & A secondary relation in a Scene.\\
+\hline
+D & {\bf Time} & A temporal relation in a Scene.\\
+\hline
+\hline
+\multicolumn{3}{|c|}{{\bf Elements of Non-Scene Units}}\\
+\hline
+C & {\bf Center} & Necessary for the conceptualization of the parent unit.\\
+\hline
+E & {\bf Elaborator} & A non-Scene relation which applies to a single Center.\\
+\hline
+N & {\bf Connector} & A non-Scene relation which applies to two or more Centers, highlighting a common feature.\\
+\hline
+R & {\bf Relator} & All other types of non-Scene relations. Two varieties: (1) Rs that relate a C to some super-ordinate relation, and
+(2) Rs that relate two Cs pertaining to different aspects of the parent unit. \\
+\hline
+Q & {\bf Quantifier} & Describing the quantity or magnitude of something, or defines an entity as a group or a set (e.g., ``two'' or ``a group of'').\\
+\hline
+\hline
+\multicolumn{3}{|c|}{{\bf Inter-Scene Relations}}\\
+\hline
+H & {\bf Parallel Scene} & A Scene linked to other Scenes by regular linkage (e.g., temporal, logical, purposive).\\
+\hline
+L & {\bf Linker} & A relation between two or more Hs (e.g., ``when'', ``if'', ``in order to'').\\
+\hline
+G & {\bf Ground} & A relation between the speech event and the uttered Scene (e.g., ``surprisingly'', ``in my opinion'').\\
+\hline
+\hline
+\multicolumn{3}{|c|}{{\bf Other}}\\
+\hline
+F & {\bf Function} & Does not introduce a relation or participant. Required by the structural pattern it appears in.\\
+\hline
+\end{tabular}
+\vspace{-0.1cm}
+\caption {\small \label{tab:ucca}
+The complete set of categories in UCCA's foundational layer.
+}
+\vspace{-0.2cm}
+\end{table}
+
+\subsection{Universal Dependencies}
+
+Table~\ref{tab:ud} lists the full names of the
+relation labels used by Universal Dependencies v2.
+
+\begin{table}[h]
+\begin{tabular}{ll|}
+\texttt{acl} & clausal modifier of noun (adjectival clause) \\
+\texttt{advcl} & adverbial clause modifier \\
+\texttt{advmod} & adverbial modifier \\
+\texttt{amod} & adjectival modifier \\
+\texttt{appos} & appositional modifier \\
+\texttt{aux} & auxiliary \\
+\texttt{case} & case marking \\
+\texttt{cc} & coordinating conjunction \\
+\texttt{ccomp} & clausal complement \\
+\texttt{clf} & classifier \\
+\texttt{compound} & compound \\
+\texttt{conj} & conjunct \\
+\texttt{cop} & copula \\
+\texttt{csubj} & clausal subject \\
+\texttt{dep} & unspecified dependency \\
+\texttt{det} & determiner \\
+\texttt{discourse} & discourse element \\
+\texttt{dislocated} & dislocated elements \\
+\texttt{expl} & expletive
+\end{tabular}
+\begin{tabular}{ll}
+\texttt{fixed} & fixed multiword expression \\
+\texttt{flat} & flat multiword expression \\
+\texttt{goeswith} & goes with \\
+\texttt{iobj} & indirect object \\
+\texttt{list} & list \\
+\texttt{mark} & marker \\
+\texttt{nmod} & nominal modifier \\
+\texttt{nsubj} & nominal subject \\
+\texttt{nummod} & numeric modifier \\
+\texttt{obj} & object \\
+\texttt{obl} & oblique nominal \\
+\texttt{orphan} & orphan \\
+\texttt{parataxis} & parataxis \\
+\texttt{punct} & punctuation \\
+\texttt{reparandum} & overridden disfluency \\
+\texttt{root} & root \\
+\texttt{vocative} & vocative \\
+\texttt{xcomp} & open clausal complement
+\end{tabular}
+\caption{UD v2 relations.\label{tab:ud}}
+\end{table}
+
+
+
+\bibliography{references}
+\bibliographystyle{acl_natbib}
+
+\end{document}
