@@ -1196,20 +1196,21 @@ to parse the Wiki corpus to UD.
 
 \paragraph{UCCA evaluation by gold-standard UD.}
 
-In the standard UCCA evaluation,
-remote edges (see~\S\ref{sec:conversion}) are evaluated separately from primary edges.
-We extend it to perform a fine-grained split,
-dividing UCCA edges into subsets according to the relations of the UD edges
-they match by terminal yield.
+We extend the standard UCCA evaluation to perform a fine-grained division
+of both gold-standard and predicted edges,
+according to the relations of the UD edges they match by terminal yield
+(using converted UD with our extended converter; see \S\ref{sec:local}).
 This allows error analysis of UCCA parsing according to syntactic phenomena.
 
 We train a UCCA parser,
 TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
 on the English Wiki training set, using the development set for validation.
-We apply the fine-grained evaluation to TUPA on the EWT dataset,
+We then apply it to the EWT dataset,
+and perform fine-grained evaluation
 using the gold-standard UD for matched relations.
 While this is an out-of-domain evaluation scenario for TUPA,
-the shared annotation allows accurate evaluation by syntactic
+we believe it is valuable,
+as the shared annotation allows accurate evaluation by syntactic
 relations.\footnote{By default, TUPA is trained and tested using syntactic features
 predicted by spaCy (\url{http://spacy.io}).
 However, using UDPipe in training and gold UD in testing yielded very similar
