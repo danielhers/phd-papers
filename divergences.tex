@@ -1182,6 +1182,8 @@ TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
 on the English Wiki training set, using the development set for validation.
 We apply the fine-grained evaluation to TUPA on the EWT dataset,
 using the gold-standard UD for matched relations.
+While this is an out-of-domain evaluation scenario for TUPA,
+the shared annotation allows accurate evaluation by syntactic relations.
 
 
 %\paragraph{UCCA evaluation by automatically parsed UD.}
@@ -1209,8 +1211,6 @@ using the gold-standard UD for matched relations.
 %we convert the gold-standard UD graphs into UCCA.
 %We use the converted UD data as ``silver-standard'' data \cite{W17-7306,N18-1104}
 %and add it to the UCCA training set for training TUPA.
-
-\subsection{Results}\label{sec:results}
 
 %\begin{table}[t]
 %\centering
@@ -1252,6 +1252,8 @@ using the gold-standard UD for matched relations.
 %or directly parsed UCCA (TUPA).
 %\label{tab:conversion_results_unlabeled}}
 %\end{table}
+
+\subsection{Results}\label{sec:results}
 
 \begin{table*}[th]
 \centering
@@ -1297,20 +1299,33 @@ using the gold-standard UD for matched relations.
 \hline
 \footnotesize \bf $\sfrac{\text{Labeled}}{\text{Unlabeled}}\%$ & 73 & 68 & 68 & 44 & 47 & 81 & 75 & 54 & 84 & 65 & 45 & 68 & 0 & 96 & 13 & 68 & 77 & 0 & 63 & 68 & 87 & 83 & 79 & 63 & 22 & 25 & 56 \\
 %mode & 101 & 103 & 524 & 218 & 10 & 285 & 489 & 305 & 78 & 174 & 265 & 333 & 2 & 1 & 13 & 22 & 19 & 8 & 161 & 231 & 993 & 53 & 439 & 247 & 79 & 9 & 44 \\
-\footnotesize \bf $\sfrac{\text{Mode}}{\text{Matched gold}}\%$ & 80 & 92 & 68 & 47 & 34 & 75 & 75 & 79 & 90 & 73 & 73 & 92 & 100 & 0 & 52 & 100 & 100 & 80 & 42 & 67 & 95 & 76 & 93 & 68 & 92 & 75 & 71 \\
+\footnotesize \bf $\sfrac{\text{Mode}}{\text{Matched gold}}\%$ & 80 & 92 & 68 & 47 & 34 & 75 & 75 & 79 & 90 & 73 & 73 & 92 & 100 & 96 & 52 & 100 & 100 & 80 & 42 & 67 & 95 & 76 & 93 & 68 & 92 & 75 & 71
 %\small \bf English Wiki &  \\
 %\small \bf English 20K &  \\
 %\small \bf French 20K &  \\
 %\small \bf German 20K & 
 \end{tabular}
-\caption{Fine-grained error analysis by all UD relations, excluding
+\caption{Fine-grained error analysis on the shared EWT annotated corpus.
+UD relations exclude
 \texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
 \texttt{fixed}, \texttt{flat}, \texttt{goeswith},
 \texttt{dep}, \texttt{orphan}, and \texttt{root}.
 A total of 89.5\% of all UD relations matched gold-standard UCCA units
 (see \S\ref{sec:analysis}).
+\textit{Matched gold} is the number of gold-standard UCCA units matching the UD relation units,
+which is the sum of the corresponding row (without \textsc{NoMatch}) from Table~\ref{tab:confusion_matrix}.
+\textit{Matched pred.} is the number of matching UCCA units in the graphs predicted by TUPA.
+\textit{Unlabeled} are the matched units in the intersection between the gold-standard and prediction,
+where edge categories are ignored;
+in \textit{Labeled} edge categories are taken into account.
+\textit{Mode} refers to the number of occurrences of the most frequent UCCA category
+to match the UD relation, according to Table~\ref{tab:confusion_matrix}.
 \label{tab:fine_grained_results}}
 \end{table*}
+
+Table~\ref{tab:fine_grained_results} displays
+fine-grained evaluation by UD relations.
+
 
 %Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
 %against gold-annotated UCCA graphs, of converted gold-standard and parsed UD.
@@ -1322,19 +1337,13 @@ A total of 89.5\% of all UD relations matched gold-standard UCCA units
 %and gold-standard UD or a more accurate parser are expected to yield even more similar graphs.
 %
 %Finally,
-Table~\ref{tab:fine_grained_results} displays
 %\textit{labeled} F1 score for TUPA
 %on the UCCA test sets,
 %using both the standard primary/remote
 %split\footnote{Note that the primary and remote scores are not directly comparable to previous work
-%on UCCA parsing \cite{hershcovich2017a,hershcovich2018multitask},
+%on UCCA parsing \cite{hershcovich2017a,hershcovich2018multitask}.
 %as we used newer versions of the annotated corpora.}
-%and the
-fine-grained evaluation by UD relations.
 %(gold-standard UD for English EWT, and parsed by UDPipe for the other test sets).
-
-
-
 
 %\begin{table}[t]
 %\centering
