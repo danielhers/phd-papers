@@ -1369,6 +1369,8 @@ Copulas are also harder to label correctly,
 due to the ambiguity between identity and attribution (\S\ref{sec:misc}):
 while in 92\% of cases in the gold data are of attribution
 (annotating the copula as a Function), TUPA is only correct 67\% of the time.
+Indirect objects are usually short, and always correspond to participants,
+but TUPA only sometimes succeeds in parsing them correctly.
 Case markers and coordinating conjunctions are moderately deterministic,
 but TUPA does less well on labeling them.
 The latter may be due to domain shift: most coordinating conjunctions
@@ -1378,7 +1380,11 @@ For adverbial and adjectival modifiers, discourse markers, and markers,
 the low number of correct labelings reflects the variability in the gold-standard.
 
 \paragraph{Low unlabeled performance.}
-
+Longer yields ($>1.5$~words on average) are evidently more difficult for TUPA to delineate.
+They correspond to adjectival and adverbial clauses, appositions,
+(open) clausal subjects and complements, conjuncts, list elements, nominal and numerical modifiers,
+objects, obliques, parataxis and vocatives.
+TUPA especially struggles with parsing clauses, failing to label them as Parallel Scenes.
 
 
 %Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
