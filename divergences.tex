@@ -1349,19 +1349,37 @@ the UCCA category is, given the UD relation,
 and \textit{Mean {\#}Words} shows how long units are on average
 (intuitively, the more words a unit contains, the harder it is to match its terminal yield exactly).
 
+\paragraph{High labeled performance.}
 As could be expected, in both unlabeled and labeled evaluation,
 TUPA does very well on determiners (\texttt{det}),
 as they are almost always single words with the Elaborator category.
+
+\paragraph{High unlabeled, low labeled.}
 For a large subset of relations (adverbial and adjectival modifiers,
 auxiliaries, case markers, coordinating conjunctions,
 copulas, discourse markers, expletives, markers and nominal subjects),
 TUPA also manages to find the correct yield
-($>85\%$ unlabeled precision and recall),
+($>85\%$~unlabeled precision and recall),
 but encounters more difficulty determining the correct category:
 while auxiliaries and nominal subjects are relatively deterministic
 and accurately labeled,
 expletives should always be labeled as Function,
-and TUPA struggles to learn it.
+and TUPA struggles to learn it, due to the surface similarity to subjects.
+Copulas are also harder to label correctly,
+due to the ambiguity between identity and attribution (\S\ref{sec:misc}):
+while in 92\% of cases in the gold data are of attribution
+(annotating the copula as a Function), TUPA is only correct 67\% of the time.
+Case markers and coordinating conjunctions are moderately deterministic,
+but TUPA does less well on labeling them.
+The latter may be due to domain shift: most coordinating conjunctions
+in EWT are between Scenes, but Wikipedia has a larger ratio of non-Scene linkage
+(nominal coordination).
+For adverbial and adjectival modifiers, discourse markers, and markers,
+the low number of correct labelings reflects the variability in the gold-standard.
+
+\paragraph{Low unlabeled performance.}
+
+
 
 %Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
 %against gold-annotated UCCA graphs, of converted gold-standard and parsed UD.
