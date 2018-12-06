@@ -169,8 +169,8 @@
   
 
   We begin by carefully examining the structures captured by each of the annotation schemes, to find distinctions made by one but not the other. 
-  We annotate 11K tokens from the English web treebank with gold standard UCCA trees, so as to have a doubly gold-annotated set.
-  As UD uses bilexical trees (i.e., nodes correspond to tokens) and UCCA uses constituency-like DAGs (i.e., leaves correspond to tokens), 
+  We annotate 11K tokens from the English Web Treebank with gold-standard UCCA, so as to have a doubly gold-annotated set.
+  As UD uses bi-lexical trees (i.e., nodes correspond to tokens) and UCCA uses constituency-like DAGs (i.e., leaves correspond to tokens), 
   we losslessly convert the UD structures into constituency-like graphs by inserting non-terminal nodes (\S\ref{sec:methodology}). 
   
   Using the shared formalism, we align the nodes of the UD and UCCA trees, and identify which nodes have no match on the other side. 
@@ -178,32 +178,28 @@
   
 %   \begin{enumerate}
 %     \item 
-%         Structurally convert bilexical dependency graphs into constituency-like graphs by inserting non-terminal nodes and \textit{head} edges .
+%         Structurally convert bi-lexical dependency graphs into constituency-like graphs by inserting non-terminal nodes and \textit{head} edges .
 %     \item 
 %         Translate UD relations into UCCA edge labels by a deterministic mapping (\S\ref{sec:conversion}).
 %   \end{enumerate}
   
    We find that most content differences between the schemes are due to the following
-   factors (\S\ref{sec:analysis}):\daniel{add interesting example---scene-evoking noun or auxiliary verb
-   \\\url{https://github.com/danielhers/UCCA_English-EWT/blob/v1-guidelines-ud/26394003.conllu} \\\url{https://github.com/danielhers/UCCA_English-EWT/blob/v1-guidelines-images/26394003.svg}}
+   factors (\S\ref{sec:analysis}):
 
   \begin{enumerate}[noitemsep]
       \item UCCA's central distinction is whether a phrase evoke a Scene (event),
         whereas UD's is based on part of speech. % (\S\ref{sec:scenes}).
-      \item UCCA distinguishes Participants and secondary relations, such
-        as  from adjuncts, as opposed to UD's core/non-core distinction. % (\S\ref{sec:arguments}).
-        \daniel{primary, secondary and participants}
+      \item UCCA distinguishes between primary relations, secondary relations
+      and Participants, as opposed to UD's core/non-core distinction. % (\S\ref{sec:arguments}).
       \item Multi-word expressions are handled differently,
         where UCCA has a stronger tendency to group multiple 
         words into a single unit. % (\S\ref{sec:mwe}).
-      \item UCCA conflates several syntactic realizations of inter-clause linkage that UD sets apart,
-        treating them as one semantic phenomenon. % (\S\ref{sec:linkage}).
-        \daniel{handled differently... on the other hand, distinguishes between linkage types}
+      \item Linkage is handled differently. While UCCA conflates several syntactic realizations of inter-clause linkage,
+      it distinguishes between semantically different constructions
+      (e.g., infinitive vs. purposive ``to''). % (\S\ref{sec:linkage}).
    \end{enumerate}
     
-  \oa{what was wrong with what I wrote before?}
-    
-   Other divergences stem from a different treatment of coordination, apposition and copulas (\S\ref{sec:misc}).
+   Other divergences stem from a different treatment of coordination, apposition and copulas.% (\S\ref{sec:misc}).
   
   %  We further extend the structural converter built as part of our analysis to
   %  get a full labeled converter (\S\ref{sec:conversion}),
@@ -374,7 +370,7 @@
 
 
 
-\begin{figure}[!ht]
+\begin{figure}[th]
   \centering
     \begin{tikzpicture}[level distance=9mm, sibling distance=14mm, ->,
         every circle node/.append style={fill=black}]
@@ -406,19 +402,18 @@
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Universal Dependencies.}\label{sec:ud}
-UD \cite{nivre2016universal} has quickly become
+\paragraph{Universal Dependencies}\label{sec:ud}
+\cite[UD; ][]{nivre2016universal} is
 the dominant dependency scheme for
 syntactic  annotation in many languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
-annotation. Formally, UD uses bilexical trees, with edge labels 
+annotation. Formally, UD uses bi-lexical trees, with edge labels 
 representing syntactic relations between words.
 Figure~\ref{fig:original_example_ud} shows an example UD tree.
 %and Table \ref{} gives a short description of each UD category.  % supp. material (footnote above)
 Henceforth in this paper, UD relation labels are written in \texttt{typewriter} font.
 
-\begin{figure}[!ht]
-
+\begin{figure}[th]
 \fbox{\begin{subfigure}{0.47\textwidth}
   \centering
     \begin{dependency}[text only label, label style={above,font=\tt}, font=\small]
@@ -655,7 +650,7 @@ as ``when'', ``if'', ``after'') as siblings to their conjuncts.
 %  conjuncts (word with an incoming \texttt{conj} relation).
 %  \item \texttt{mark} is attached to the following \texttt{advcl}.
 %\end{itemize}
-%These rules are applied to the bilexical graph after the conversion process.
+%These rules are applied to the bi-lexical graph after the conversion process.
 
 
 
