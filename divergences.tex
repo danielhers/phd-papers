@@ -200,6 +200,8 @@
         treating them as one semantic phenomenon. % (\S\ref{sec:linkage}).
    \end{enumerate}
     
+  \oa{what was wrong with what I wrote before?}
+    
    Other divergences stem from a different treatment of coordination, apposition and copulas (\S\ref{sec:misc}).
   
   %  We further extend the structural converter built as part of our analysis to
@@ -1570,59 +1572,55 @@ TUPA especially struggles with parsing clauses, failing to label them as Paralle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
 
-\newcite{reddy2016transforming} introduce a method for converting dependency
+Few works have attempted an empirical study of the differences between syntactic and semantic 
+schemes. 
+\newcite{zhang2017evaluation} evaluate PreddPatt \citep{white2016universal},
+a pattern-based framework for predicate-argument extraction from UD,
+on a large set of high-quality annotations converted from PropBank.
+They evaluate the extracted predicate-argument relations using both
+gold-standard and parsed UD.
+\newcite{szubert2018structured} proposed a method for aligning AMR and UD structures,
+finding that 97\% of AMR edges are evoked by words or syntactic relations.
+\newcite{damonte-17} suggested fine-grained evaluation measures
+for AMR parsing, using sub-tasks of the AMR parsing task or UD labels to evaluate on.
+Similarly, our conversion protocol allows fine-grained evaluation of UCCA parsing.
+
+A related line of work tackles the transduction of syntactic structures into semantic ones.
+\newcite{reddy2016transforming} introduced a method for converting dependency
 structures to logical forms using lambda calculus.
 They map syntactic dependency relations directly to logical relations,
 assuming the predicate-argument structure is isomorphic to the dependency structure,
 but handling exceptions by rules relating to specific linguistic constructions,
 namely prepositional phrases, conjunction, relatives clauses, and wh-questions.
-
-\newcite{zhang2017evaluation} evaluate PreddPatt \cite{white2016universal},
-a pattern-based framework for predicate-argument extraction from UD,
-on a large set of high-quality annotations converted from PropBank.
-They evaluate the extracted predicate-argument relations using both
-gold-standard and parsed UD.
-
-\newcite{stanovsky2016getting} convert Stanford dependency trees into
+\newcite{stanovsky2016getting} converted Stanford Dependencies trees into
 proposition structures ({\sc PropS}), abstracting away from some syntactic detail to
 achieve a more semantically-oriented representation.
-While {\sc PropS} can be viewed as a step between syntax and more semantic representations,
-UCCA does not attempt to model
-the syntax-semantics interface and is thus less coupled with syntax.
 
-\paragraph{AMR parsing.}
+% \citep{wang2015transition,wang-xue-pradhan:2015:ACL-IJCNLP,wang-EtAl:2016:SemEval,goodman2016noise,wang2017getting}
+% presented a transition-based AMR parser, CAMR, which requires a
+% syntactic dependency tree as input.
+% It operates on the input tree, transforming it into an AMR graph
+% by a sequence of transitions.
+% The accuracy of the underlying syntactic dependency parser is important,
+% as shown by \newcite{wang-xue-pradhan:2015:ACL-IJCNLP},
+% who achieved the best results using the Charniak parser trained on a
+% much larger and more diverse dataset---the full OntoNotes corpus,
+% rather than the Stanford parser trained on the Penn TreeBank.
+%
 
-\newcite{wang2015transition,wang-xue-pradhan:2015:ACL-IJCNLP,wang-EtAl:2016:SemEval,goodman2016noise,wang2017getting}
-presented a transition-based AMR parser, CAMR, which requires a
-syntactic dependency tree as input.
-It operates on the input tree, transforming it into an AMR graph
-by a sequence of transitions.
-The accuracy of the underlying syntactic dependency parser is important,
-as shown by \newcite{wang-xue-pradhan:2015:ACL-IJCNLP},
-who achieved the best results using the Charniak parser trained on a
-much larger and more diverse dataset---the full OntoNotes corpus,
-rather than the Stanford parser trained on the Penn TreeBank.
-
-\newcite{szubert2018structured} showed that when comparing AMR to Universal Dependencies (UD),
-97\% of AMR edges are evoked by words or syntactic relations.
-
-\newcite{damonte-17,szubert2018structured} suggested fine-grained evaluation measures
-for AMR parsing, using sub-tasks of the AMR parsing task or UD labels to evaluate on.
-Similarly, our conversion protocol allows fine-grained evaluation of UCCA parsing.
-
-\paragraph{Semantic role labeling.}
-
-\newcite{swayamdipta2018syntactic} used multitask learning to improve semantic role labeling and coreference resolution
-by also learning unlabeled syntactic bracketing as an auxiliary task.
-
-Much effort has been devoted to joint learning of syntactic
-and semantic parsing, including
-two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll}.
-%on joint syntactic parsing and semantic role labeling.
-Despite their conceptual and practical appeal, such joint models rarely outperform
-the pipeline approach %of basing semantic parsing on the output of syntactic parsers
-\cite{lluis2008joint,henderson2013multilingual,D15-1169,swayamdipta-EtAl:2016:CoNLL,swayamdipta2017frame}.
-
+% \paragraph{Semantic role labeling.}
+%
+% \newcite{swayamdipta2018syntactic} used multitask learning to improve semantic role labeling and coreference resolution
+% by also learning unlabeled syntactic bracketing as an auxiliary task.
+%
+% Much effort has been devoted to joint learning of syntactic
+% and semantic parsing, including
+% two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll}.
+% %on joint syntactic parsing and semantic role labeling.
+% Despite their conceptual and practical appeal, such joint models rarely outperform
+% the pipeline approach %of basing semantic parsing on the output of syntactic parsers
+% \cite{lluis2008joint,henderson2013multilingual,D15-1169,swayamdipta-EtAl:2016:CoNLL,swayamdipta2017frame}.
+%
 %\paragraph{UCCA parsing.}
 %
 %\newcite{hershcovich2018multitask} improved UCCA parsing with multitask learning, sharing parameters
@@ -1633,8 +1631,18 @@ the pipeline approach %of basing semantic parsing on the output of syntactic par
 
 \section{Conclusion}\label{sec:conclusion}
 
-We carefully examine similarities and divergences between UD and UCCA,
-and develop a converter whose accuracy is on par with a UCCA parser.
+We carefully examine similarities and divergences in the content encoded by UD and UCCA. We have annotated ...\oa{fill in}
+sentences from the English Web Treebank corpus with gold standard UCCA structures, and used an automated methodology to
+evaluate how well the two schemes aline with one another. A converter was developed to abstract away from superficial structural
+differences. Our findings provide a detailed picture of the content differences between the schemes, placing most of them
+in one of four major categories. We further demonstrate that the comparison methodology can be used for fine-grained
+evaluation of UCCA parsers, and find concrete paths for advancement in UCCA parsing, either by relying more directly on 
+information already encoded by UD, or by relying on other existing resources for information not encoded in UD (e.g.,
+the distinction between eventive and non-eventive nouns and identifying light verbs and idioms).
+
+\oa{we should mention exciting future work}
+
+
 
 
 \bibliography{references}
