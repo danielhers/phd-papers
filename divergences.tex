@@ -916,9 +916,9 @@ especially where they are compositional.
 
 \subsection{Clause Linkage}\label{sec:linkage}
 
-\daniel{Explain unmatched units: no unit for the whole top level; the conjunction is attached.
-Also need a more high-level explanation with actual content (not technical differences).
-Maybe an example with ``at the moment of''}
+%\daniel{Explain unmatched units: no unit for the whole top level; the conjunction is attached.
+%Also need a more high-level explanation with actual content (not technical differences).
+%Maybe an example with ``at the moment of''}
 
 UD categorizes clause linkage into coordination,
 subordination, argumenthood (complementation),
@@ -932,37 +932,30 @@ has to select one of the clauses to be the head, and the other to be the depende
 which is arguably an inherently flat structure, this may yield scope ambiguities issues for UD. 
 For instance, ...
 
+Where matched, adverbial clauses and parataxis (\texttt{advcl}, \texttt{parataxis})
+are almost exclusively Parallel Scenes.
+For example, ``We called few companies before \textit{we decided to hire them}''
+and ``Check out The Willow Lounge, \textit{you'll be happy}'').
+We note that while in UD the dependent \texttt{mark}, e.g. ``before'',
+is attached to the following adverbial clause,
+in UCCA linkage is a flat structure.
+This is a convention difference that we fixed with local modifications
+(\S\ref{sec:local})---otherwise most \texttt{advcl} instances would be unmatched,
+containing the linker which is outside the scene in UCCA..
 
-\paragraph{Adverbial Clauses and Parataxis (\texttt{advcl}, \texttt{parataxis}).}
-      Where matched, these two linkage types are almost excl adverbial clauses and parataxis are almost exclusively Parallel Scenes
-      (e.g., ``We called few companies before \textit{we decided to hire them}''
-      and ``Check out The Willow Lounge, \textit{you'll be happy}'')\footnote{Note
-      that while in UD the dependent \texttt{mark}, e.g. ``before'',
-      is attached to the following adverbial clause,
-      in UCCA linkage is a flat structure.
-      This is a convention difference that we fixed with local modifications
-      (\S\ref{sec:local})---otherwise most \texttt{advcl} instances would be unmatched,
-      containing the linker which is outside the scene in UCCA.}.
-      The fairly large number of unmatched (45--46\% of the units for each category) is
-      due to a long tail of differences in how UD and UCCA construe linkage.
-      
-      ``Victim of hard times and I suspect failing corporate management''
-      
-      Consider ``... he would know that {\it Nick only charges 13\$ for a haircut 
-      which is pretty much industry standard}''. UD annotates 
-      the entire expression in italics as a complement of ``know'', while 
-      in UCCA only ``Nick only charges 13\$ for a haircut'' is a Participant of ``know'', while
-      ``which is pretty much industry standard'' is at the top level. This is motivated semantically,
-      as 
-      
+Many of the unmatched units of these types are due to cases where our converter was not able to detect the conjunction 
+and raise it. 
+For instance, the word ``to'' is ambiguous in UD between inter-scene linkage, such as the purposive``to'', and
+the infinitive marker ``to''. UCCA annotates the former as a Linker, but the latter as a Function.
+Another case is the wh-pronouns which are again ambiguous between Linkers (``he was willing to budge a little on the price {\it which} means a lot to me''),
+and other uses, such as in question words or free relative clauses.
 
-\paragraph{Conjunctions  (\texttt{mark}).}
-      UCCA distinguishes between the infinitive marker ``to'', annotated as Function,
-      and the use of markers for inter-scene linkage, such as purposive ``to'',
-      annotated as Linker
-      (e.g., in ``how much they want me \textit{to} pay \textit{to} fix this thing'',
-      the first \textit{to} is a Function and the second is a Linker).\daniel{still
-      struggling to find an R mark that shouldn't actually be an L}
+Other mismatches cannot be easily categorized, and can be said to result from the long tail of differences in how UD and UCCA construe linkage.
+Consider, ``From the moment you enter the restaurant, you know you are some place special''. ``From the moment'' is in UCCA
+a Linker between ``you enter the restaurant'' and ``you know ... special'', while UD treats ``you enter the restaurant'' as a relative
+clause over ``moment''.
+
+
     
 
 \subsection{Other Differences}\label{sec:misc}
