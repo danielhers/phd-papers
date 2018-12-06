@@ -47,8 +47,7 @@
 
 \hyphenation{SemEval}
 \hyphenation{English}
-\hyphenation{French}
-\hyphenation{German}
+\hyphenation{PredPatt}
 
 
 %\lstset{basicstyle=\ttfamily}
@@ -1411,12 +1410,13 @@ assisting in selecting the correct unit boundaries.
 
 Few works have attempted an empirical study of the differences between syntactic and semantic 
 schemes. 
-\newcite{zhang2017evaluation} evaluate PreddPatt \citep{white2016universal},
+\newcite{zhang2017evaluation} evaluate PredPatt \citep{white2016universal},
 a pattern-based framework for predicate-argument extraction from UD,
 on a large set of high-quality annotations converted from PropBank.
 They evaluate the extracted predicate-argument relations using both
 gold-standard and parsed UD.
-\newcite{szubert2018structured} proposed a method for aligning AMR and UD structures,
+\newcite{szubert2018structured} proposed a method for aligning AMR
+\cite{banarescu2013abstract} and UD subgraphs,
 finding that 97\% of AMR edges are evoked by words or syntactic relations.
 \newcite{damonte-17} suggested fine-grained evaluation measures
 for AMR parsing, using sub-tasks of the AMR parsing task or UD labels to evaluate on.
@@ -1432,38 +1432,6 @@ namely prepositional phrases, conjunction, relatives clauses, and wh-questions.
 \newcite{stanovsky2016getting} converted Stanford Dependencies trees into
 proposition structures ({\sc PropS}), abstracting away from some syntactic detail to
 achieve a more semantically-oriented representation.
-
-% \citep{wang2015transition,wang-xue-pradhan:2015:ACL-IJCNLP,wang-EtAl:2016:SemEval,goodman2016noise,wang2017getting}
-% presented a transition-based AMR parser, CAMR, which requires a
-% syntactic dependency tree as input.
-% It operates on the input tree, transforming it into an AMR graph
-% by a sequence of transitions.
-% The accuracy of the underlying syntactic dependency parser is important,
-% as shown by \newcite{wang-xue-pradhan:2015:ACL-IJCNLP},
-% who achieved the best results using the Charniak parser trained on a
-% much larger and more diverse dataset---the full OntoNotes corpus,
-% rather than the Stanford parser trained on the Penn TreeBank.
-%
-
-% \paragraph{Semantic role labeling.}
-%
-% \newcite{swayamdipta2018syntactic} used multitask learning to improve semantic role labeling and coreference resolution
-% by also learning unlabeled syntactic bracketing as an auxiliary task.
-%
-% Much effort has been devoted to joint learning of syntactic
-% and semantic parsing, including
-% two CoNLL shared tasks \cite{surdeanu2008conll,hajivc2009conll}.
-% %on joint syntactic parsing and semantic role labeling.
-% Despite their conceptual and practical appeal, such joint models rarely outperform
-% the pipeline approach %of basing semantic parsing on the output of syntactic parsers
-% \cite{lluis2008joint,henderson2013multilingual,D15-1169,swayamdipta-EtAl:2016:CoNLL,swayamdipta2017frame}.
-%
-%\paragraph{UCCA parsing.}
-%
-%\newcite{hershcovich2018multitask} improved UCCA parsing with multitask learning, sharing parameters
-%between UCCA and other semantic parsing tasks, as well as Universal Dependency Parsing.
-%We perform a similar experiment, but instead of a multitask model,
-%we use UD data converted to UCCA and train on it with the same single-task model (\S\ref{sec:experiments}).
 
 
 \section{Conclusion}\label{sec:conclusion}
