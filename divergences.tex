@@ -936,7 +936,10 @@ of Parallel Scenes.
 Another difference is that UCCA tends to use flat structures where UD, being a dependency scheme,
 has to select one of the clauses to be the head, and the other to be the dependent. For coordination,
 which is arguably an inherently flat structure, this may yield scope ambiguities issues for UD. 
-For instance, ...
+For instance, ``unique gifts and cards'' is ambiguous in UD between the (correct) interpretation 
+that ``unique'' applies to ``gifts and cards'' and the one where it applies only to gifts (in both
+cases ``unique'' is dependent of ``gifts''). UCCA, which allows non-terminal nodes, disambiguates
+this case.
 
 Where matched, adverbial clauses and parataxis (\texttt{advcl}, \texttt{parataxis})
 are almost exclusively Parallel Scenes.
@@ -991,12 +994,15 @@ clause over ``moment''.
     to the speech event or to the opinion of the speaker. Examples include ``\textit{no}, Warwick in New Jersey'' and ``\textit{Please} visit my website''.
     On the other hand, discourse elements that relate one Scene to the other 
     are as Linkers (e.g., ``I am sure, \textit{well}, she says'').
-    \oa{add an example for a complete scene}
 
     \item[Vocatives (\texttt{vocative}).]
-    Vocatives are annotated as Ground, but also as Participants if they correspond to arguments in a scene.
-    For example, ``Thanks \textit{Mark}''. (UCCA allows marking more than one category over an edge, although this
-    functionality is not often used in English)
+    Vocatives as both Ground and as Participants if they both participate in the scene and are the party addressed.
+    For example, ``Mark'' in ``Thanks \textit{Mark}'' is both the person addressed and the one 
+    being thanked.\footnote{UCCA allows marking more than one category over an edge, although this
+    functionality is not used often for English.}
+
+    
+    
     
     \item[Expletives and Subjects (\texttt{expl} and \texttt{nsubj}).]
     Expletives are generally Functions in UCCA.
