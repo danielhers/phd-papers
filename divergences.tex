@@ -1372,48 +1372,35 @@ and $\sfrac{\text{Train Mode}}{\text{Match}}\%$ in the training Wiki corpus.
 \textit{Mean {\#}Words} indicates how long units are on average
 (intuitively, the more words a unit contains, the harder it is to match its terminal yield exactly).
 
-\paragraph{High labeled performance.}
-As could be expected, in both unlabeled and labeled evaluation,
-TUPA does very well on determiners (\texttt{det}),
+TUPA does best on \texttt{det},
 as they are almost always single words with the Elaborator category.
+It performs reasonably well on \texttt{nsubj} too,
+but labels them correctly only 87\% of the times when their yield is correct,
+even though 95\% of gold \texttt{nsubj}s are Participants.
+This could be explained by the distribution in the Wiki training set,
+where only 88\% are Participants.
+In this case, domain adaptation techniques could adjust it to the target distribution.
+A similar situation happens with \texttt{cc} and \texttt{cop},
+where TUPA is severely ``confused'' by the training distribution,
+despite the peaked test distribution (they are mostly Linkers and Functions in EWT,
+respectively).
+For \texttt{aux}, \texttt{mark} and \texttt{nummod}, however,
+labels are correct more often than could be expected from the test distribution.
+In these cases the syntactic relations are not the only factor determining
+the semantics, and TUPA learns a lexical consideration to distinguish,
+e.g., between modals (Adverbials) and auxiliary verbs (Functions),
+though they are both \texttt{aux}.
 
-\paragraph{High unlabeled, low labeled.}
-For a large subset of relations (adverbial and adjectival modifiers,
-auxiliaries, case markers, coordinating conjunctions,
-copulas, discourse markers, expletives, markers and nominal subjects),
-TUPA also manages to find the correct yield
-($>85\%$~unlabeled precision and recall),
-but encounters more difficulty determining the correct category:
-while auxiliaries and nominal subjects are relatively deterministic
-and accurately labeled,
-expletives should always be labeled as Function,
-and TUPA struggles to learn it, due to the surface similarity to subjects.
-Copulas are also harder to label correctly,
-due to the ambiguity between identity and attribution (\S\ref{sec:misc}):
-while in 92\% of cases in the gold data are of attribution
-(annotating the copula as a Function), TUPA is only correct 67\% of the time.
-Indirect objects are usually short, and always correspond to participants,
-but TUPA only sometimes succeeds in parsing them correctly.
-Case markers and coordinating conjunctions are moderately deterministic,
-but TUPA does less well on labeling them.
-The latter may be due to domain shift: most coordinating conjunctions
-in EWT are between Scenes, but Wikipedia has a larger ratio of non-Scene linkage
-(nominal coordination).
-For adverbial and adjectival modifiers, discourse markers, and markers,
-the low number of correct labelings reflects the variability in the gold-standard.
-
-\paragraph{Low unlabeled performance.}
-Longer yields ($>1.5$~words on average) are evidently more difficult for TUPA to delineate.
-They correspond to adjectival and adverbial clauses, appositions,
-(open) clausal subjects and complements, conjuncts, list elements, nominal and numerical modifiers,
-objects, obliques, parataxis and vocatives.
-TUPA especially struggles with parsing clauses, failing to label them as Parallel Scenes.
-
-\daniel{1. where it does well and where not? 
-2. where it doesn't do well, link to the content differences we found, and say that future work in UCCA parsing should target these
-3. check "easy" cases that it doesn't do well (cc and cop) and compare to training mode. if different, say DA could help; if same, say maybe encoding the syntax in these cases more directly could help
-4. describe cases where it seems that syntax gives us the unit boundaries more reliably than the parser does, and again claim it could rely better on syntax than it does}
-
+TUPA does worst on \texttt{discourse}, \texttt{vocative} and \texttt{appos},
+but these relations are rare,
+and so would not contribute much to the overall parser score.
+Several types of inter-clause linkage, which TUPA also struggles with,
+are quite common: \texttt{parataxis}, \texttt{xcomp}, \texttt{advcl},
+\texttt{conj} and \texttt{ccomp}.
+Although the matching beteween UCCA and UD is not perfect in these cases,
+it is overall better than TUPA's unlabeled performance.
+It seems that encoding syntax more directly could benefit it,
+assisting in selecting the correct unit boundaries.
 
 
 %Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
