@@ -1380,10 +1380,12 @@ even though 95\% of gold \texttt{nsubj}s are Participants.
 This could be explained by the distribution in the Wiki training set,
 where only 88\% are Participants.
 In this case, domain adaptation techniques could adjust it to the target distribution.
-A similar situation happens with \texttt{cc} and \texttt{cop},
+A similar situation happens with \texttt{cc}, \texttt{conj} and \texttt{cop},
 where TUPA is severely ``confused'' by the training distribution,
-despite the peaked test distribution (they are mostly Linkers and Functions in EWT,
-respectively).
+despite the peaked test distribution---they are mostly Linkers, Parallel Scenes
+and Functions in EWT, respectively.
+For \texttt{cc} and \texttt{conj} this is a Scene/non-Scene distinction,
+while for \texttt{cop} it is between identity and attribution.
 For \texttt{aux}, \texttt{mark} and \texttt{nummod}, however,
 labels are correct more often than could be expected from the test distribution.
 In these cases the syntactic relations are not the only factor determining
@@ -1401,179 +1403,6 @@ Although the matching beteween UCCA and UD is not perfect in these cases,
 it is overall better than TUPA's unlabeled performance.
 It seems that encoding syntax more directly could benefit it,
 assisting in selecting the correct unit boundaries.
-
-
-%Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
-%against gold-annotated UCCA graphs, of converted gold-standard and parsed UD.
-%When comparing the performance on primary edges to the corresponding TUPA outputs,
-%the converted trees are more similar to gold UCCA graphs
-%in EWT, which is an out-of-domain situation for TUPA (trained on Wiki),
-%and in French 20K, where TUPA is trained only on 15 sentences.
-%The Wiki and 20K test sets are out-of-domain for UDPipe too,
-%and gold-standard UD or a more accurate parser are expected to yield even more similar graphs.
-%
-%Finally,
-%\textit{labeled} F1 score for TUPA
-%on the UCCA test sets,
-%using both the standard primary/remote
-%split\footnote{Note that the primary and remote scores are not directly comparable to previous work
-%on UCCA parsing \cite{hershcovich2017a,hershcovich2018multitask}.
-%as we used newer versions of the annotated corpora.}
-%(gold-standard UD for English EWT, and parsed by UDPipe for the other test sets).
-
-%\begin{table}[t]
-%\centering
-%\begin{tabular}{l|lll|lll}
-%& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
-%& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
-%& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
-%\hline
-%\multicolumn{4}{l|}{\small \bf English EWT (shared)} & \\
-%\footnotesize UD 2.3
-%& 59.6 & 64.5 & 62 & 21.2 & 19.6 & 20.4 \\
-%\footnotesize TUPA
-%& 61.4 & 60.8 & 61.1 & 46.4 & 18.6 & 26.6 \\
-%\multicolumn{4}{l|}{\small \bf English Wiki test} & \\
-%\footnotesize UDPipe
-%& 59.1 & 62.6 & 60.8 & -- & -- & -- \\
-%\footnotesize TUPA
-%& 74.4 & 72.2 & 73.3 & 49.7 & 45.1 & 47.3 \\
-%\multicolumn{4}{l|}{\small \bf English 20K} & \\
-%\footnotesize UDPipe
-%& 61.1 & 65.6 & 63.3 & -- & -- & -- \\
-%\footnotesize TUPA
-%& 68 & 68.5 & 68.2 & 45.5 & 16.1 & 23.7 \\
-%\multicolumn{4}{l|}{\small \bf French 20K test} & \\
-%\footnotesize UDPipe
-%& 59.3 & 63.4 & 61.3 & -- & -- & -- \\
-%\footnotesize TUPA
-%& 49.7 & 49.5 & 49.6 & 17.6 & 1.3 & 2.4 \\
-%\multicolumn{4}{l|}{\small \bf German 20K test} & \\
-%\footnotesize UDPipe
-%& 58.1 & 61.5 & 59.7 & -- & -- & -- \\
-%\footnotesize TUPA
-%& 79.7 & 79.5 & 79.6 & 67.3 & 53.9 & 59.9
-%\end{tabular}
-%\caption{
-%Labeled precision, recall and F1 (in~\%) for primary and remote edges.
-%UD 2.3 is after conversion including label mapping.
-%\label{tab:conversion_results_labeled}}
-%\end{table}
-
-%Labeled evaluation results, after applying the label mapping,
-%appear in Table~\ref{tab:conversion_results_labeled}.
-
-%Despite the simple conversion protocol, the scores are quite high:
-%strikingly, conversion from UD performs better on primary edges than
-%TUPA, a parser trained specifically on UCCA parsing,
-%for the English EWT and French 20K sets.
-%TUPA underperforms on English EWT likely due to domain shift,
-%and on French 20K it is trained just on 15 sentences.
-%
-%For comparison, the unlabeled evaluation (Table~\ref{tab:conversion_results_unlabeled})
-%serves as an oracle experiment for the labeled conversion,
-%and is an upper bound given a fixed structural conversion.
-
-
-%\begin{table}[t]
-%\centering
-%\small
-%\setlength\tabcolsep{3pt}
-%\begin{tabular}{l|lll|lll}
-%& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
-%& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
-%& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
-%\hline
-%\multicolumn{4}{l|}{\small \bf English (Wiki, in-domain)} & \\
-%\footnotesize HAR18 Single
-%& 74.4 & 72.9 & 73.6 & 53 & 50 & 51.5 \\
-%\footnotesize HAR18 MTL UD$^{++}$
-%& 75 & 73.2 & 74.1 & 49 & 52.7 & 50.8 \\
-%\footnotesize Converted UD aux.
-%\\
-%\hline\\
-%\multicolumn{4}{l|}{\small \bf English (20K, out-of-domain)} & \\
-%\footnotesize HAR18 Single
-%& 69 & 69 & 69 & 41.2 & 19.8 & 26.7 \\
-%\footnotesize HAR18 MTL UD$^{++}$
-%& 69.6 & 69.8 & 69.7 & 41.4 & 22 & 28.7 \\
-%\footnotesize Converted UD aux.
-%\\
-%\hline\\
-%\multicolumn{4}{l|}{\small \bf French (20K, in-domain)} & \\
-%\small HAR18 Single & 68.2 & 67 & 67.6 & 26 & \enskip 9.4 & 13.9 \\
-%\small HAR18 MTL UD & 70.3 & 70 & 70.1 & 43.8 & 13.2 & 20.3 \\
-%\footnotesize Converted UD aux.
-%\\
-%\hline\\
-%\multicolumn{4}{l|}{\small \bf German (20K, in-domain)} & \\
-%\small HAR18 Single & 73.3 & 71.7 & 72.5 & 57.1 & 17.7 & 27.1 \\
-%\small HAR18 MTL UD & 73.7 & 72.6 & 73.2 & 61.8 & 24.9 & 35.5 \\
-%\footnotesize Converted UD aux.
-%\\
-%\end{tabular}
-%\caption{
-%Labeled precision, recall and F1 (in~\%) for primary and remote edges,
-%on the Wiki and 20K test sets.
-%HAR18: \protect\newcite{hershcovich2018multitask}.}\label{tab:aux_results}
-%\end{table}
-%
-%\paragraph{Using converted UD as ``silver-standard'' data.}
-%
-%Table~\ref{tab:aux_results} shows the results of this experiment.
-
-%
-%\paragraph{Fine-grained evaluation of UCCA parsing.}
-%
-%Our conversion protocol allows fine-grained evaluation of UCCA parsing.
-%Table~\ref{tab:fine_grained_ucca} shows fine-grained evaluation according to UCCA categories, and
-%Table~\ref{tab:fine_grained_ud} shows fine-grained evaluation according to UD relations.
-%
-%
-%\begin{table}[t]
-%\centering
-%\tiny
-%\setlength\tabcolsep{2pt}
-%\begin{tabular}{l|ccccccccccccc}
-%& A & C & D & E & F & G & H & L & N & P & R & S \\
-%\hline
-%\textbf{en EWT} & 3017 & 1760 & 1091 & 1727 & 983 & 82 & 1655 & 602 & 78 & 1301 & 618 & 954 \\
-%\hline
-%\textbf{en Wiki} &  \\
-%\hline
-%\textbf{en 20K} & 2848 & 2788 & 904 & 3116 & 622 & 98 & 1091 & 461 & 162 & 1277 & 1370 & 352 \\
-%TUPA & 56.1 & 75.7 & 52.7 & 73.8 & 70.1 & 7.4 & 50.6 & 64.3 & 75.9 & 65.7 & 84.4 & 20.1 \\
-%\hline
-%\textbf{fr 20K} & \\
-%\hline
-%\textbf{de 20K} & 
-%\end{tabular}
-%\caption{
-%Fine-grained labeled F1 according to UCCA categories,
-%as well as the number of edges per category in the gold-standard.}
-%\label{tab:fine_grained_ucca}
-%\end{table}
-%
-%\begin{table*}[t]
-%\centering
-%\tiny
-%\setlength\tabcolsep{2pt}
-%\begin{tabular}{l|ccccccccccccccccccccccccccccccc}
-%&  \\
-%\hline
-%\end{tabular}
-%\caption{
-%Fine-grained labeled F1 according to gold UD relations (for EWT)
-%or as parsed by UDPipe (for the other datasets),
-%as well as the number of arcs per relation in UD,
-%and the number of matched UCCA units in the gold-standard UCCA.
-%Some relations omitted for brevity.}
-%\label{tab:fine_grained_ud}
-%\end{table*}
-
-
-
-%\section{Discussion}\label{sec:discussion}
 
 
 
