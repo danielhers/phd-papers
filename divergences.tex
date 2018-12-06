@@ -1402,6 +1402,12 @@ Although the matching beteween UCCA and UD is not perfect in these cases,
 it is overall better than TUPA's unlabeled performance.
 It seems that encoding syntax more directly could benefit it,
 assisting in selecting the correct unit boundaries.
+In the case of \texttt{nmod}, however, non-syntactic information
+could improve TUPA's ability to distinguish between eventive (Scene-evoking)
+and non-eventive nouns
+(and similarly for \texttt{cc}, \texttt{conj}, \texttt{amod} and \texttt{obl}).
+Resources for identifying light verbs and idioms would improve
+both unlabeled and labeled performance for \texttt{compound}.
 
 
 
@@ -1436,14 +1442,15 @@ achieve a more semantically-oriented representation.
 
 \section{Conclusion}\label{sec:conclusion}
 
-We carefully examine similarities and divergences in the content encoded by UD and UCCA. We have annotated ...\oa{fill in}
-sentences from the English Web Treebank corpus with gold standard UCCA structures, and used an automated methodology to
-evaluate how well the two schemes aline with one another. A converter was developed to abstract away from superficial structural
+We carefully examine similarities and divergences in the content encoded by UD and UCCA. We have annotated 804
+sentences from the English Web Treebank corpus with gold-standard UCCA,
+and used an automated methodology to
+evaluate how well the two schemes aline, developing
+a converter to abstract away from superficial structural
 differences. Our findings provide a detailed picture of the content differences between the schemes, placing most of them
 in one of four major categories. We further demonstrate that the comparison methodology can be used for fine-grained
 evaluation of UCCA parsers, and find concrete paths for advancement in UCCA parsing, either by relying more directly on 
-information already encoded by UD, or by relying on other existing resources for information not encoded in UD (e.g.,
-the distinction between eventive and non-eventive nouns and identifying light verbs and idioms).
+information already encoded by UD, or by relying on other existing resources for information not encoded in UD.
 
 \oa{we should mention exciting future work}
 
