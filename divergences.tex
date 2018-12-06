@@ -193,11 +193,13 @@
         whereas UD's is based on part of speech. % (\S\ref{sec:scenes}).
       \item UCCA distinguishes Participants and secondary relations, such
         as  from adjuncts, as opposed to UD's core/non-core distinction. % (\S\ref{sec:arguments}).
+        \daniel{primary, secondary and participants}
       \item Multi-word expressions are handled differently,
         where UCCA has a stronger tendency to group multiple 
         words into a single unit. % (\S\ref{sec:mwe}).
       \item UCCA conflates several syntactic realizations of inter-clause linkage that UD sets apart,
         treating them as one semantic phenomenon. % (\S\ref{sec:linkage}).
+        \daniel{handled differently... on the other hand, distinguishes between linkage types}
    \end{enumerate}
     
   \oa{what was wrong with what I wrote before?}
@@ -1394,6 +1396,10 @@ They correspond to adjectival and adverbial clauses, appositions,
 objects, obliques, parataxis and vocatives.
 TUPA especially struggles with parsing clauses, failing to label them as Parallel Scenes.
 
+\daniel{1. where it does well and where not? 
+2. where it doesn't do well, link to the content differences we found, and say that future work in UCCA parsing should target these
+3. check "easy" cases that it doesn't do well (cc and cop) and compare to training mode. if different, say DA could help; if same, say maybe encoding the syntax in these cases more directly could help
+4. describe cases where it seems that syntax gives us the unit boundaries more reliably than the parser does, and again claim it could rely better on syntax than it does}
 
 %Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
 %against gold-annotated UCCA graphs, of converted gold-standard and parsed UD.
