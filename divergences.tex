@@ -326,9 +326,7 @@ To facilitate comparison between UCCA and UD,
 we first assimilate the graphs by abstracting away from formalism differences,
 obtaining a similar graph format for both schemes.
 We then match pairs of nodes in the converted UD and UCCA trees
-if they share the same set of terminals in their yields.
-In case of UCCA units sharing terminal yields (unary children),
-we take the lowest unit.
+if they share all terminals in their yields.
 
 One obvious difference is that UD annotates bi-lexical dependency trees,
 while UCCA graphs contain non-terminal nodes.
@@ -457,31 +455,21 @@ we turn to discussing the content differences between UCCA and UD.
 
 \subsection{Confusion Matrix}\label{sec:confusion}
 
-%Using the standard UCCA evaluation
-%script,\footnote{\url{http://github.com/huji-nlp/ucca/blob/master/scripts/evaluate_standard.py}}
 Table~\ref{tab:confusion_matrix} presents the confusion matrix between the edge tags in converted UD trees
-and the annotated UCCA graphs.
-%Using the standard UCCA evaluation
-%script,\footnote{\url{http://github.com/huji-nlp/ucca/blob/master/scripts/evaluate_standard.py}}
-%we create a confusion matrix between the edge tags in converted UD trees
-%and the annotated UCCA graphs (see Table~\ref{tab:confusion_matrix}).
+and the annotated UCCA graphs from the shared EWT corpus
+(see \S\ref{sec:shared}).
 In case of multiple units with the same terminal yield (i.e., any unit with a single non-remote child),
 we take the top category only to avoid double-counting.
-We perform this analysis on gold-standard UD and UCCA from the shared EWT corpus
-(see \S\ref{sec:shared}),
-after conversion to the unified DAG format.
-Excluding punctuation, this results in 12893 yields in UCCA and
-13294 in UD.
-Of these, 11541 are common, meaning that an oracle UCCA ``parser'' developed this way
+Excluding punctuation, this results in 12,893 yields in UCCA and
+13,294 in UD.
+Of these, 11,541 are common, meaning that an oracle UCCA ``parser'' developed this way
 would get a very high F1 score
-of 88.1\% if it had the gold UCCA label for every edge on conversion.
+of 88.1\% given the gold UCCA label for every edge on conversion.
 
 Examining the {\it head} row in Table \ref{tab:confusion_matrix} allows
 us to contrast UCCA's and UD's notions of a head. 
 {\it head}-labeled units cover units that have at least
 one dependent in UD (technically, they are non-terminals added by the converter).
-%About 70\% of them correspond to UCCA Processes, States,  Parallel Scenes or Centers,
-%which are UCCA's notions of semantic heads.
 77.5\% correspond to UCCA Processes, States, Linked Scenes or Centers,
 which are UCCA's notions of semantic heads.
 12.1\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
