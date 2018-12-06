@@ -313,7 +313,6 @@ We refer to this set as \textit{shared} henceforth.
 
 The data contains 11,103 tokens---4\% of the full UD English\_EWT treebank,
 and 20\% of its \textit{reviews} section.
-%(see Table~\ref{tab:corpora}).
 Of the UCCA-annotated sentences, 622 belong to the UD training set,
 192 to the development set and 153 to the test set.
 %\daniel{Add inter-annotator agreement}
@@ -547,16 +546,15 @@ as a Scene can be evoked by a verb, an eventive or stative
 noun (``negotiation'', ``fatigue''),
 an adjective or even a preposition (``this is \textit{for} John'').
 
-\paragraph{Core Arguments.}
-      Core syntactic arguments are usually UCCA Participants (e.g., ``\textit{Wine} was excellent'').
-      However, when describing a Scene such a phrase is a Process/State
+\paragraph{Core Syntactic Arguments.}
+      Usually UCCA Participants (e.g., ``\textit{Wine} was excellent'').
+      However, when describing a Scene, such a phrase is a Process/State
       (e.g., ``But \textit{service} is very poor'').
       Some wh-pronouns are the subjects or objects of a relative clause, but
       are Linkers or Relators in UCCA,
       depending on whether they link Scenes or non-Scenes, respectively.
       For example, ``who'' in ``Overall, Joe is a happy camper \textit{who} has found a great spot'' is a UD
       subject, but a UCCA Linker.
-      Adjectival modifiers of nominals are Adverbials or Elaborators,
 
 \paragraph{Adjectival Modifiers} are Adverbials when they modify Scene-evoking
     nouns (``\textit{romantic} dinner''), States when they describe the state of
@@ -617,32 +615,31 @@ prepositional phrases (``with disrespect''),
 as well as modals, adjectives and adverbs.
 
 \paragraph{Adverbial Modifiers and Obliques.}
-    While in the majority of cases
-    adverbial modifiers correspond to UCCA Adverbials (e.g., ``I \textit{sometimes} go''),
-    they may be Participants, mostly in the case of semantic arguments describing location (e.g., ``here'').
+    Adverbial modifiers mostly correspond to UCCA Adverbials (e.g., ``I \textit{sometimes} go''),
+    but they may be Participants, mostly in the case of semantic arguments describing location (e.g., ``here'').
     Obliques generally correspond in English to prepositional phrases, and may be
     Participants (e.g., ``wait \textit{for Nick})), Time (e.g., ``for over 7 years'') 
     or Adverbials, covering mostly manner adjuncts (``by far'').
 
-\paragraph{Clausal Arguments}
-    are in most cases Participant Scenes
+\paragraph{Clausal Arguments.}
+    Usually Participant Scenes
     (e.g., ``it was great \textit{that they did not charge a service fee}'',
     ``did not really know \textit{what I wanted}'' or
     ``I asked them \textit{to change it}'').
     However, when serving as complements to a secondary verb, they
     will not match any UCCA unit, as UCCA places secondary verbs on the 
     same level as their primary relation. 
-    For example, ``to pay'' is an \texttt{xcomp} in ``they have to pay'', while in UCCA
-    this corresponds to a flat structure, where ``have to'' is an Adverbial and ``pay'' a Process.
-    Clausal arguments may correspond to a UCCA State or Process where
-    they are single-worded, as in ``this seems \textit{great}''.
+    For example, ``to pay'' is an \texttt{xcomp} in ``they have to pay'', while
+    the UCCA structure is flat, where ``have to'' is an Adverbial and ``pay'' a Process.
+    Single-worded clausal arguments may correspond to a UCCA State or Process,
+    as in ``this seems \textit{great}''.
 
-\paragraph{Auxiliary Verbs} are Functions (e.g., ``\textit{do} not forget''),
+\paragraph{Auxiliary Verbs.} Functions (e.g., ``\textit{do} not forget''),
     or Adverbials when they are modals (e.g., ``you \textit{can} graduate''). Semi-modals 
     in UD are treated as clausal heads, which take a clausal complement. 
     For example, in ``able to do well'', UD treats ``able'' as the head,
     which takes ``do well'' as an \texttt{xcomp}. UCCA, on the other hand,
-    treats it as an Adverbial, which creates a mismatch for the \texttt{xcomp}.
+    treats it as an Adverbial, creating a mismatch for \texttt{xcomp}.
     
 
 \subsection{Multi-Word Expressions}\label{sec:mwe}
@@ -653,9 +650,9 @@ UCCA treats names and grammaticalized MWEs as unanalyzable units,
 but also a range of semantically opaque constructions
 (e.g., light verbs and idioms).
 On the other hand, compounds are not necessarily unanalyzable in UCCA,
-especially where they are compositional.
+especially if compositional.
 
-\paragraph{Compounds} in English are mostly noun compounds,
+\paragraph{Compounds.} English compounds are mostly nominal,
         and are a very heterogeneous category.
         Most compounds correspond to Elaborators (e.g., ``\textit{industry} standard''),
         or Elaborator Scenes (e.g., ``\textit{out-of-place} flat-screen TV''),
@@ -673,7 +670,7 @@ especially where they are compositional.
       MWEs involving a verb and its argument(s) just like any other clause, and therefore
       lacks this semantic content. Examples include light verbs (e.g., ``give {\it a try}''),
       idioms (``bites {\it the dust}''), and figures of speech (e.g., ``when \textit{it} comes to''),
-      which are all treated as single units in UCCA.
+      treated as single UCCA units.
       
 \paragraph{Complex Prepositions.} Some complex prepositions, such as ``according to'' or ``on top of''
       are unanalyzable in UCCA, but are not encoded as MWEs in UD.
@@ -691,9 +688,9 @@ of Parallel Scenes.
 Another difference is that UCCA tends to use flat structures where UD, being a dependency scheme,
 has to select one of the clauses to be the head, and the other to be the dependent. For coordination,
 which is arguably an inherently flat structure, this may yield scope ambiguities issues for UD. 
-For instance, ``unique gifts and cards'' is ambiguous in UD between the (correct) interpretation 
+For instance, ``unique gifts and cards'' is ambiguous in UD between the interpretation 
 that ``unique'' applies to ``gifts and cards'' and the one where it applies only to gifts (in both
-cases ``unique'' is dependent of ``gifts''). UCCA, which allows non-terminal nodes, disambiguates
+cases ``unique'' is dependent of ``gifts''). UCCA, allowing non-terminal nodes, disambiguates
 this case.
 
 Where matched, adverbial clauses and parataxis (\texttt{advcl}, \texttt{parataxis})
@@ -705,18 +702,18 @@ is attached to the following adverbial clause,
 in UCCA linkage is a flat structure.
 This is a convention difference that we fixed with local modifications
 (\S\ref{sec:local})---otherwise most \texttt{advcl} instances would be unmatched,
-containing the linker which is outside the Scene in UCCA..
+containing the linker which is outside the Scene in UCCA.
 
 Many of the unmatched units of these types are due to cases where our converter was not able to detect the conjunction 
 and raise it. 
-For instance, the word ``to'' is ambiguous in UD between inter-Scene linkage, such as the purposive``to'', and
+For instance, the word ``to'' is ambiguous in UD between inter-Scene linkage, such as the purposive ``to'', and
 the infinitive marker ``to''. UCCA annotates the former as a Linker, but the latter as a Function.
-Another case is the wh-pronouns which are again ambiguous between Linkers (``he was willing to budge a little on the price {\it which} means a lot to me''),
+Another case is the wh-pronouns, which are again ambiguous between Linkers (``he was willing to budge a little on the price {\it which} means a lot to me''),
 and other uses, such as in question words or free relative clauses.
 
 Other mismatches cannot be easily categorized, and can be said to result from the long tail of differences in how UD and UCCA construe linkage.
 Consider, ``From the moment you enter the restaurant, you know you are some place special''. ``From the moment'' is in UCCA
-a Linker between ``you enter the restaurant'' and ``you know ... special'', while UD treats ``you enter the restaurant'' as a relative
+a Linker between ``you enter the restaurant'' and ``you know [...] special'', while UD treats ``you enter the restaurant'' as a relative
 clause over ``moment''.
 
 
@@ -747,32 +744,28 @@ clause over ``moment''.
     are as Linkers (e.g., ``I am sure, \textit{well}, she says'').
 
 \paragraph{Vocatives.}
-    Vocatives as both Ground and as Participants if they both participate in the Scene and are the party addressed.
-    For example, ``Mark'' in ``Thanks \textit{Mark}'' is both the person addressed and the one 
-    being thanked.\footnote{UCCA allows marking more than one category over an edge, although this
+    Both Ground and Participants if they participate in the Scene \textit{and} are the party addressed.
+    For example, ``Mark'' in ``Thanks \textit{Mark}'' is both the person addressed and the one thanked.\footnote{UCCA allows marking more than one category over an edge, although this
     functionality is not used often for English.}
-
-    
-    
     
 \paragraph{Expletives and Subjects.}
     Expletives are generally Functions in UCCA.
     However, some instances of ``it'' and ``that'' are analyzed as subjects in UD,
     but as expletives in UCCA (e.g., ``\textit{it}'s like driving a new car'').    
 
-
-
+\paragraph{Excluded relations.}
 We exclude the following UD labels,
 as they are irrelevant to the evaluation of content differences:
 
 \begin{description}
+\setlength{\itemsep}{0pt}
   \item[\texttt{root}.] Always matches the entire sentence.
-  \item[\texttt{punct}], as punctuation is not annotated in UCCA.
+  \item[\texttt{punct}.] Punctuation is not annotated in UCCA.
+  \item[\texttt{dep}.] Unspecified dependency.
+  \item[\texttt{orphan}.] Used for gapping, which is represented using remote edges in UCCA. See \S\ref{sec:conversion}.
   \item[\texttt{fixed}, \texttt{flat} and \texttt{goeswith}.] Correspond to parts of unanalyzable units in UCCA,
     and so do not represent units on their own. See \S\ref{sec:local}.
-  \item[\texttt{dep}.] Rare and heterogeneous.
-  \item[\texttt{orphan}.] Used for representing gapping, which is represented using remote edges in UCCA. See \S\ref{sec:conversion}.
-  \item[\texttt{clf}, \texttt{dislocated}, \texttt{reparandum}.] Do not occur in EWT.
+%  \item[\texttt{clf}, \texttt{dislocated}, \texttt{reparandum}.] Not in EWT.
 \end{description}
 
 
@@ -819,6 +812,80 @@ as they are irrelevant to the evaluation of content differences:
 %As can be seen, the primary labeled F1 continues improving substantially even from 90\% to 100\%
 %of the training data. More training data is likely to yield even better performance.
 
+\begin{table*}[th]
+\centering
+\scriptsize
+\setlength\tabcolsep{2.1pt}
+\def\arraystretch{1.5}
+% \scriptsize \bf \rotatebox{90}{Primary}
+\begin{tabular}{l|ccccccccccccccccccccccccccc}
+& \scriptsize \bf \rotatebox{90}{\texttt{acl}}
+& \scriptsize \bf \rotatebox{90}{\texttt{advcl}}
+& \scriptsize \bf \rotatebox{90}{\texttt{advmod}}
+& \scriptsize \bf \rotatebox{90}{\texttt{amod}}
+& \scriptsize \bf \rotatebox{90}{\texttt{appos}}
+& \scriptsize \bf \rotatebox{90}{\texttt{aux}}
+& \scriptsize \bf \rotatebox{90}{\texttt{case}}
+& \scriptsize \bf \rotatebox{90}{\texttt{cc}}
+& \scriptsize \bf \rotatebox{90}{\texttt{ccomp}}
+& \scriptsize \bf \rotatebox{90}{\texttt{compound}}
+& \scriptsize \bf \rotatebox{90}{\texttt{conj}}
+& \scriptsize \bf \rotatebox{90}{\texttt{cop}}
+& \scriptsize \bf \rotatebox{90}{\texttt{csubj}}
+& \scriptsize \bf \rotatebox{90}{\texttt{det}}
+& \scriptsize \bf \rotatebox{90}{\texttt{discourse}}
+& \scriptsize \bf \rotatebox{90}{\texttt{expl}}
+& \scriptsize \bf \rotatebox{90}{\texttt{iobj}}
+& \scriptsize \bf \rotatebox{90}{\texttt{list}}
+& \scriptsize \bf \rotatebox{90}{\texttt{mark}}
+& \scriptsize \bf \rotatebox{90}{\texttt{nmod}}
+& \scriptsize \bf \rotatebox{90}{\texttt{nsubj}}
+& \scriptsize \bf \rotatebox{90}{\texttt{nummod}}
+& \scriptsize \bf \rotatebox{90}{\texttt{obj}}
+& \scriptsize \bf \rotatebox{90}{\texttt{obl}}
+& \scriptsize \bf \rotatebox{90}{\texttt{parataxis}}
+& \scriptsize \bf \rotatebox{90}{\texttt{vocative}}
+& \scriptsize \bf \rotatebox{90}{\texttt{xcomp}} \\
+\hline
+%\small \bf English EWT &  \\
+\footnotesize \bf Total in UD & 176 & 209 & 840 & 528 & 39 & 383 & 727 & 400 & 128 & 406 & 451 & 364 & 10 & 834 & 26 & 24 & 19 & 12 & 400 & 458 & 1083 & 94 & 566 & 496 & 125 & 12 & 178 \\
+\footnotesize \bf Match gold & 127 & 112 & 769 & 467 & 29 & 381 & 652 & 388 & 87 & 239 & 361 & 361 & 2 & 808 & 25 & 22 & 19 & 10 & 382 & 346 & 1046 & 70 & 474 & 364 & 86 & 12 & 62 \\
+\footnotesize \bf Match pred. & 70 & 51 & 697 & 435 & 19 & 363 & 680 & 358 & 61 & 238 & 265 & 354 & 5 & 778 & 25 & 21 & 13 & 5 & 375 & 303 & 959 & 61 & 335 & 234 & 45 & 4 & 60 \\
+\footnotesize \bf Unlabeled & 52 & 40 & 670 & 408 & 15 & 361 & 616 & 347 & 44 & 188 & 234 & 351 & 1 & 759 & 24 & 19 & 13 & 5 & 363 & 266 & 941 & 53 & 296 & 194 & 36 & 4 & 34 \\
+\footnotesize \bf Labeled & 38 & 27 & 454 & 180 & 7 & 291 & 465 & 187 & 37 & 122 & 106 & 239 & 0 & 728 & 3 & 13 & 10 & 0 & 230 & 181 & 815 & 44 & 233 & 122 & 8 & 1 & 19 \\
+\hline
+\footnotesize \bf $\sfrac{\text{Labeled}}{\text{Unlabeled}}$ & 73 & 68 & 68 & 44 & 47 & 81 & 75 & 54 & 84 & 65 & 45 & 68 & 0 & 96 & 13 & 68 & 77 & 0 & 63 & 68 & 87 & 83 & 79 & 63 & 22 & 25 & 56 \\
+%mode & 101 & 103 & 524 & 218 & 10 & 285 & 489 & 305 & 78 & 174 & 265 & 333 & 2 & 1 & 13 & 22 & 19 & 8 & 161 & 231 & 993 & 53 & 439 & 247 & 79 & 9 & 44 \\
+\footnotesize \bf $\sfrac{\text{Mode}}{\text{Match gold}}$ & 80 & 92 & 68 & 47 & 34 & 75 & 75 & 79 & 90 & 73 & 73 & 92 & 100 & 96 & 52 & 100 & 100 & 80 & 42 & 67 & 95 & 76 & 93 & 68 & 92 & 75 & 71 \\
+\footnotesize \bf $\sfrac{\text{Train Mode}}{\text{Match}}$ & 78 & 86 & 59 & 83 & 53 & 91 & 90 & 55 & 68 & 82 & 58 & 49 & 86 & 98 & 31 & 87 & 90 & 100 & 46 & 62 & 88 & 80 & 80 & 61 & 83 & 100 & 71 \\
+\footnotesize \bf Mean {\#}Words & 5.1 & 6.0 & 1.2 & 1.2 & 2.9 & 1.0 & 1.0 & 1.0 & 7.4 & 1.2 & 5.3 & 1.0 & 3.3 & 1.0 & 1.0 & 1.0 & 1.1 & 2.0 & 1.0 & 2.4 & 1.6 & 1.2 & 3.1 & 3.8 & 5.7 & 1.6 & 5.8
+%\small \bf English Wiki &  \\
+%\small \bf English 20K &  \\
+%\small \bf French 20K &  \\
+%\small \bf German 20K & 
+\end{tabular}
+\caption{Fine-grained error analysis on the shared EWT annotated corpus.
+UD relations exclude
+%\texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
+\texttt{fixed}, \texttt{flat}, \texttt{goeswith},
+\texttt{dep}, \texttt{orphan}, and \texttt{root}.
+A total of 89.5\% of all UD relations matched gold-standard UCCA units
+(see \S\ref{sec:analysis}).
+\textit{Match gold} is the number of gold-standard UCCA units matching the UD relation units,
+which is the sum of the corresponding row (without \textsc{NoMatch}) from Table~\ref{tab:confusion_matrix}.
+\textit{Match pred.} is the number of matching UCCA units in the graphs predicted by TUPA.
+\textit{Unlabeled} are the matched units in the intersection between the gold-standard and prediction,
+where edge categories are ignored;
+in \textit{Labeled} edge categories are taken into account.
+\textit{Mode} refers to the number of occurrences of the most frequent gold UCCA category
+to match the UD relation, according to Table~\ref{tab:confusion_matrix}
+(for gold-standard UD), or in the Wiki training set that TUPA was trained on
+(using UDPipe-predicted dependencies).
+\textit{Mean {\#}Words} is the average number of terminals in yields corresponding to each relation
+(intuitively, the more words a unit contains, the harder it is to match its terminal yield exactly).
+\label{tab:fine_grained_results}}
+\end{table*}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Fine-Grained UCCA Evaluation}\label{sec:fine_grained}
 
@@ -831,41 +898,41 @@ using gold-standard UD for fine-grained evaluation.
 
 \subsection{Experimental Setup}\label{sec:experiments}
 
-\begin{table}[t]
-\centering
-\small
-\setlength\tabcolsep{3.25pt}
-\begin{tabular}{l|ccc|ccc}
-& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
-& \multicolumn{3}{c}{\footnotesize \bf {\#} sentences} \\
-& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
-& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
-\hline
-%UCCA &&&&&&&&&&&&&&&&&& \\
-\bf English EWT &&& 11,103 &&& 804 \\
-\bf English Wiki & 124,935 & 17,784 & & 4,113 & 514 & \\
-%\bf English Wiki & 124,935 & 17,784 & 15,854 & 4,113 & 514 & 515 \\
-%Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
-%\bf English 20K &&& 12,574 &&& 492 \\
-%\bf French 20K & 618 & 6,374 & 5,962 & 15 & 238 & 239 \\
-%\bf German 20K & 119,872 & 12,334 & 12,325 & 5,211 & 651 & 652
-%\multicolumn{2}{l}{20K 1.0.0/0.9.0} && 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
+%\begin{table}[t]
+%\centering
+%\small
+%\setlength\tabcolsep{3.25pt}
+%\begin{tabular}{l|ccc|ccc}
+%& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
+%& \multicolumn{3}{c}{\footnotesize \bf {\#} sentences} \\
+%& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
+%& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
 %\hline
-%UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
-%\multicolumn{2}{l}{250658} && \multicolumn{2}{l}{14450} && \multicolumn{2}{l}{209131} && 13814 \\
-%\hline
-\end{tabular}
-\caption{Number of tokens and sentences in the training, development and test sets
-we use for each corpus.
-% and language.
-\label{tab:corpora}}
-\end{table}
+%%UCCA &&&&&&&&&&&&&&&&&& \\
+%\bf English EWT &&& 11,103 &&& 804 \\
+%\bf English Wiki & 124,935 & 17,784 & & 4,113 & 514 & \\
+%%\bf English Wiki & 124,935 & 17,784 & 15,854 & 4,113 & 514 & 515 \\
+%%Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
+%%\bf English 20K &&& 12,574 &&& 492 \\
+%%\bf French 20K & 618 & 6,374 & 5,962 & 15 & 238 & 239 \\
+%%\bf German 20K & 119,872 & 12,334 & 12,325 & 5,211 & 651 & 652
+%%\multicolumn{2}{l}{20K 1.0.0/0.9.0} && 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
+%%\hline
+%%UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
+%%\multicolumn{2}{l}{250658} && \multicolumn{2}{l}{14450} && \multicolumn{2}{l}{209131} && 13814 \\
+%%\hline
+%\end{tabular}
+%\caption{Number of tokens and sentences in the training, development and test sets
+%we use for each corpus.
+%% and language.
+%\label{tab:corpora}}
+%\end{table}
 
 \paragraph{Data.}
 
 In addition to the shared gold-standard English\_EWT corpus (\S\ref{sec:shared}),
 we use v1.2.3 of the UCCA English Wikipedia corpus (Wiki),
-with the standard train/dev/test split (see Table~\ref{tab:corpora}).
+with the standard train/dev/test split.
 %and the \textit{Twenty Thousand Leagues Under the Sea} corpora (\textit{20K}),
 %annotated in English (v1.2.2), French (v1.2.2)
 %and German (v1.0.1).\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation}}
@@ -883,7 +950,7 @@ we use the English\_EWT treebank from Universal Dependencies v2.3
 \cite{11234/1-2895},\footnote{\url{http://hdl.handle.net/11234/1-2895}}
 filtering it to get only the 804 sentences that were also annotated in UCCA.
 We additionally use UDPipe v1.2 \cite{udpipe,udpipe:2017},
-trained on the UD v2.3
+trained on
 English\_EWT,\footnote{\url{http://hdl.handle.net/11234/1-2898}}
 to parse the Wiki corpus to UD.
 
@@ -910,17 +977,15 @@ This allows error analysis of UCCA parsing according to syntactic phenomena.
 
 We train a UCCA parser,
 TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
-on the English Wiki training set, using the development set for validation.
-We then apply it to the EWT dataset,
-and perform fine-grained evaluation
+on Wiki, and evaluate it on EWT
 using the gold-standard UD for matched relations.
 While this is an out-of-domain evaluation scenario for TUPA,
 we believe it is valuable,
-as the shared annotation allows accurate evaluation by syntactic
-relations.\footnote{By default, TUPA is trained and tested using syntactic features
+as the shared annotation allows accurate fine-grained
+evaluation.\footnote{By default, TUPA is trained and tested using syntactic features
 predicted by spaCy (\url{http://spacy.io}).
 However, using UDPipe in training and gold UD in testing yielded very similar
-fine-grained evaluation results, so we use the default settings here.}
+results, so we use the default settings.}
 
 
 %\paragraph{UCCA evaluation by automatically parsed UD.}
@@ -992,96 +1057,20 @@ fine-grained evaluation results, so we use the default settings here.}
 
 \subsection{Results}\label{sec:results}
 
-\begin{table*}[th]
-\centering
-\scriptsize
-\setlength\tabcolsep{2.1pt}
-\def\arraystretch{1.5}
-% \scriptsize \bf \rotatebox{90}{Primary}
-\begin{tabular}{l|ccccccccccccccccccccccccccc}
-& \scriptsize \bf \rotatebox{90}{\texttt{acl}}
-& \scriptsize \bf \rotatebox{90}{\texttt{advcl}}
-& \scriptsize \bf \rotatebox{90}{\texttt{advmod}}
-& \scriptsize \bf \rotatebox{90}{\texttt{amod}}
-& \scriptsize \bf \rotatebox{90}{\texttt{appos}}
-& \scriptsize \bf \rotatebox{90}{\texttt{aux}}
-& \scriptsize \bf \rotatebox{90}{\texttt{case}}
-& \scriptsize \bf \rotatebox{90}{\texttt{cc}}
-& \scriptsize \bf \rotatebox{90}{\texttt{ccomp}}
-& \scriptsize \bf \rotatebox{90}{\texttt{compound}}
-& \scriptsize \bf \rotatebox{90}{\texttt{conj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{cop}}
-& \scriptsize \bf \rotatebox{90}{\texttt{csubj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{det}}
-& \scriptsize \bf \rotatebox{90}{\texttt{discourse}}
-& \scriptsize \bf \rotatebox{90}{\texttt{expl}}
-& \scriptsize \bf \rotatebox{90}{\texttt{iobj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{list}}
-& \scriptsize \bf \rotatebox{90}{\texttt{mark}}
-& \scriptsize \bf \rotatebox{90}{\texttt{nmod}}
-& \scriptsize \bf \rotatebox{90}{\texttt{nsubj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{nummod}}
-& \scriptsize \bf \rotatebox{90}{\texttt{obj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{obl}}
-& \scriptsize \bf \rotatebox{90}{\texttt{parataxis}}
-& \scriptsize \bf \rotatebox{90}{\texttt{vocative}}
-& \scriptsize \bf \rotatebox{90}{\texttt{xcomp}} \\
-\hline
-%\small \bf English EWT &  \\
-\footnotesize \bf Total in UD & 176 & 209 & 840 & 528 & 39 & 383 & 727 & 400 & 128 & 406 & 451 & 364 & 10 & 834 & 26 & 24 & 19 & 12 & 400 & 458 & 1083 & 94 & 566 & 496 & 125 & 12 & 178 \\
-\footnotesize \bf Match gold & 127 & 112 & 769 & 467 & 29 & 381 & 652 & 388 & 87 & 239 & 361 & 361 & 2 & 808 & 25 & 22 & 19 & 10 & 382 & 346 & 1046 & 70 & 474 & 364 & 86 & 12 & 62 \\
-\footnotesize \bf Match pred. & 70 & 51 & 697 & 435 & 19 & 363 & 680 & 358 & 61 & 238 & 265 & 354 & 5 & 778 & 25 & 21 & 13 & 5 & 375 & 303 & 959 & 61 & 335 & 234 & 45 & 4 & 60 \\
-\footnotesize \bf Unlabeled & 52 & 40 & 670 & 408 & 15 & 361 & 616 & 347 & 44 & 188 & 234 & 351 & 1 & 759 & 24 & 19 & 13 & 5 & 363 & 266 & 941 & 53 & 296 & 194 & 36 & 4 & 34 \\
-\footnotesize \bf Labeled & 38 & 27 & 454 & 180 & 7 & 291 & 465 & 187 & 37 & 122 & 106 & 239 & 0 & 728 & 3 & 13 & 10 & 0 & 230 & 181 & 815 & 44 & 233 & 122 & 8 & 1 & 19 \\
-\hline
-\footnotesize \bf $\sfrac{\text{Labeled}}{\text{Unlabeled}}$ & 73 & 68 & 68 & 44 & 47 & 81 & 75 & 54 & 84 & 65 & 45 & 68 & 0 & 96 & 13 & 68 & 77 & 0 & 63 & 68 & 87 & 83 & 79 & 63 & 22 & 25 & 56 \\
-%mode & 101 & 103 & 524 & 218 & 10 & 285 & 489 & 305 & 78 & 174 & 265 & 333 & 2 & 1 & 13 & 22 & 19 & 8 & 161 & 231 & 993 & 53 & 439 & 247 & 79 & 9 & 44 \\
-\footnotesize \bf $\sfrac{\text{Mode}}{\text{Match gold}}$ & 80 & 92 & 68 & 47 & 34 & 75 & 75 & 79 & 90 & 73 & 73 & 92 & 100 & 96 & 52 & 100 & 100 & 80 & 42 & 67 & 95 & 76 & 93 & 68 & 92 & 75 & 71 \\
-\footnotesize \bf $\sfrac{\text{Train Mode}}{\text{Match}}$ & 78 & 86 & 59 & 83 & 53 & 91 & 90 & 55 & 68 & 82 & 58 & 49 & 86 & 98 & 31 & 87 & 90 & 100 & 46 & 62 & 88 & 80 & 80 & 61 & 83 & 100 & 71 \\
-\footnotesize \bf Mean {\#}Words & 5.1 & 6.0 & 1.2 & 1.2 & 2.9 & 1.0 & 1.0 & 1.0 & 7.4 & 1.2 & 5.3 & 1.0 & 3.3 & 1.0 & 1.0 & 1.0 & 1.1 & 2.0 & 1.0 & 2.4 & 1.6 & 1.2 & 3.1 & 3.8 & 5.7 & 1.6 & 5.8
-%\small \bf English Wiki &  \\
-%\small \bf English 20K &  \\
-%\small \bf French 20K &  \\
-%\small \bf German 20K & 
-\end{tabular}
-\caption{Fine-grained error analysis on the shared EWT annotated corpus.
-UD relations exclude
-\texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
-\texttt{fixed}, \texttt{flat}, \texttt{goeswith},
-\texttt{dep}, \texttt{orphan}, and \texttt{root}.
-A total of 89.5\% of all UD relations matched gold-standard UCCA units
-(see \S\ref{sec:analysis}).
-\textit{Match gold} is the number of gold-standard UCCA units matching the UD relation units,
-which is the sum of the corresponding row (without \textsc{NoMatch}) from Table~\ref{tab:confusion_matrix}.
-\textit{Match pred.} is the number of matching UCCA units in the graphs predicted by TUPA.
-\textit{Unlabeled} are the matched units in the intersection between the gold-standard and prediction,
-where edge categories are ignored;
-in \textit{Labeled} edge categories are taken into account.
-\textit{Mode} refers to the number of occurrences of the most frequent gold UCCA category
-to match the UD relation, according to Table~\ref{tab:confusion_matrix}
-(for gold-standard UD), or in the Wiki training set that TUPA was trained on
-(using UDPipe-predicted dependencies).
-\textit{Mean {\#}Words} is the average number of terminals in yields corresponding to each relation.
-\label{tab:fine_grained_results}}
-\end{table*}
-
 Table~\ref{tab:fine_grained_results} displays
 fine-grained evaluation by UD relations.
-Out of the total number of dependencies in the UD trees for the shared sentences,
-we can see how many relations matched any gold-standard UCCA unit (\textit{Match gold}), and
-UCCA unit predicted by TUPA (\textit{Match pred.}).
-Out of the predicted UCCA units with a correct terminal yield (\textit{Unlabeled}),
-we can also see how many were given the correct category (\textit{Labeled}).
-For comparison, $\sfrac{\text{Mode}}{\text{Match gold}}\%$ measures how ``deterministic''
-the UCCA category is in the test EWT corpus, given the UD relation,
-and $\sfrac{\text{Train Mode}}{\text{Match}}\%$ in the training Wiki corpus.
-\textit{Mean {\#}Words} indicates how long units are on average
-(intuitively, the more words a unit contains, the harder it is to match its terminal yield exactly).
-
-TUPA does best on \texttt{det},
-as they are almost always single words with the Elaborator category.
+%Out of the total number of dependencies in the UD trees for the shared sentences,
+%we can see how many relations matched any gold-standard UCCA unit (\textit{Match gold}), and
+%UCCA unit predicted by TUPA (\textit{Match pred.}).
+%Out of the predicted UCCA units with a correct terminal yield (\textit{Unlabeled}),
+%we can also see how many were given the correct category (\textit{Labeled}).
+%For comparison, $\sfrac{\text{Mode}}{\text{Match gold}}\%$ measures how ``deterministic''
+%the UCCA category is in the test EWT corpus, given the UD relation,
+%and $\sfrac{\text{Train Mode}}{\text{Match}}\%$ in the training Wiki corpus.
+%\textit{Mean {\#}Words} indicates how long units are on average.
+TUPA does best on \texttt{det}---almost always a single word with the Elaborator category.
 It performs reasonably well on \texttt{nsubj} too,
-but labels them correctly only 87\% of the times when their yield is correct,
+but the label is correct only 87\% of the times when the yield is correct,
 even though 95\% of gold \texttt{nsubj}s are Participants.
 This could be explained by the distribution in the Wiki training set,
 where only 88\% are Participants.
@@ -1092,10 +1081,9 @@ despite the peaked test distribution---they are mostly Linkers, Parallel Scenes
 and Functions in EWT, respectively.
 For \texttt{cc} and \texttt{conj} this is a Scene/non-Scene distinction,
 while for \texttt{cop} it is between identity and attribution.
-For \texttt{aux}, \texttt{mark} and \texttt{nummod}, however,
-labels are correct more often than could be expected from the test distribution.
-In these cases the syntactic relations are not the only factor determining
-the semantics, and TUPA learns a lexical consideration to distinguish,
+For \texttt{aux}, \texttt{mark} and \texttt{nummod},
+it does well despite the varied test distribution,
+possibly by learning a lexical consideration to distinguish,
 e.g., between modals (Adverbials) and auxiliary verbs (Functions),
 though they are both \texttt{aux}.
 
@@ -1113,7 +1101,7 @@ In the case of \texttt{nmod}, however, non-syntactic information
 could improve TUPA's ability to distinguish between eventive (Scene-evoking)
 and non-eventive nouns
 (and similarly for \texttt{cc}, \texttt{conj}, \texttt{amod} and \texttt{obl}).
-Resources for identifying light verbs and idioms would improve
+Identifying light verbs and idioms would improve
 both unlabeled and labeled performance for \texttt{compound}.
 
 
@@ -1160,10 +1148,10 @@ evaluation of UCCA parsers, and find concrete paths for advancement in UCCA pars
 information already encoded by UD, or by relying on other existing resources for information not encoded in UD.
 
 Future work will extend our conversion protocol to a full labeled conversion,
-using either the most frequent category for each source relation,
+using the most frequent category for each source relation,
 or more sophisticated mechanisms.
-The converter can be used as an alternative UCCA parser (assuming UD parser
-is accurate enough), or for generating extra training data for TUPA.
+The converter can be used as a UCCA parser,
+or for generating extra training data for TUPA.
 
 
 
