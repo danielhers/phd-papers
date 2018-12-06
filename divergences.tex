@@ -911,36 +911,55 @@ especially where they are compositional.
 \end{description}
 
 
-\subsection{Linkage}\label{sec:linkage}
+\subsection{Clause Linkage}\label{sec:linkage}
 
 \daniel{Explain unmatched units: no unit for the whole top level; the conjunction is attached.
 Also need a more high-level explanation with actual content (not technical differences).
 Maybe an example with ``at the moment of''}
-\oa{this section may require a diagram}
+
 UD categorizes clause linkage into coordination,
 subordination, argumenthood (complementation),
 and parataxis (a residual category).
 UCCA only distinguishes between argumenthood 
-and largely conflates clausal coordination, subordination and parataxis.
-\begin{description}
-    \item[Conjunctions  (mark).]
-    UCCA distinguishes between the infinitive marker ``to'', annotated as Function,
-    and the use of markers for inter-scene linkage, such as purposive ``to'',
-    annotated as Linker
-    (e.g., in ``how much they want me \textit{to} pay \textit{to} fix this thing'',
-    the first \textit{to} is a Function and the second is a Linker).\daniel{still
-    struggling to find an R mark that shouldn't actually be an L}
-    \item[advcl and parataxis.]
-    Both adverbial clauses and parataxis almost exclusively  Parallel Scene
-    (e.g., ``We called few companies before \textit{we decided to hire them}''
-    and ``Check out The Willow Lounge, \textit{you'll be happy}'')\footnote{Note
-    that while in UD the dependent \texttt{mark}, e.g. ``before'',
-    is attached to the following adverbial clause,
-    in UCCA linkage is a flat structure.
-    This is a convention difference that we fixed with local modifications
-    (\S\ref{sec:local})---otherwise most \texttt{advcl} instances would be unmatched,
-    containing the linker which is outside the scene in UCCA.}.
-\end{description}
+and largely conflates clausal coordination, subordination and parataxis into the notion
+of Parallel Scenes.
+
+Another difference is that UCCA tends to use flat structures where UD, being a dependency scheme,
+has to select one of the clauses to be the head, and the other to be the dependent. For coordination,
+which is arguably an inherently flat structure, this may yield scope ambiguities issues for UD. 
+For instance, ...
+
+
+\paragraph{Adverbial Clauses and Parataxis (advcl, parataxis).}
+      Where matched, these two linkage types are almost excl adverbial clauses and parataxis are almost exclusively Parallel Scenes
+      (e.g., ``We called few companies before \textit{we decided to hire them}''
+      and ``Check out The Willow Lounge, \textit{you'll be happy}'')\footnote{Note
+      that while in UD the dependent \texttt{mark}, e.g. ``before'',
+      is attached to the following adverbial clause,
+      in UCCA linkage is a flat structure.
+      This is a convention difference that we fixed with local modifications
+      (\S\ref{sec:local})---otherwise most \texttt{advcl} instances would be unmatched,
+      containing the linker which is outside the scene in UCCA.}.
+      The fairly large number of unmatched (45--46\% of the units for each category) is
+      due to a long tail of differences in how UD and UCCA construe linkage.
+      
+      ``Victim of hard times and I suspect failing corporate management''
+      
+      Consider ``... he would know that {\it Nick only charges 13\$ for a haircut 
+      which is pretty much industry standard}''. UD annotates 
+      the entire expression in italics as a complement of ``know'', while 
+      in UCCA only ``Nick only charges 13\$ for a haircut'' is a Participant of ``know'', while
+      ``which is pretty much industry standard'' is at the top level. This is motivated semantically,
+      as 
+      
+
+\paragraph{Conjunctions  (mark).}
+      UCCA distinguishes between the infinitive marker ``to'', annotated as Function,
+      and the use of markers for inter-scene linkage, such as purposive ``to'',
+      annotated as Linker
+      (e.g., in ``how much they want me \textit{to} pay \textit{to} fix this thing'',
+      the first \textit{to} is a Function and the second is a Linker).\daniel{still
+      struggling to find an R mark that shouldn't actually be an L}
     
 
 \subsection{Other Differences}\label{sec:misc}
