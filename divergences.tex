@@ -93,7 +93,7 @@
   %We emprically evaluate in what cases the two schemes converge and diverge in their content,
   After abstracting away from differences of convention or formalism,
   we find that most content divergences can ascribed to: 
-  (1) UCCA's distinction between a scene and a non-scene; % as opposed to UD's POS-based distinctions;
+  (1) UCCA's distinction between a Scene and a non-Scene; % as opposed to UD's POS-based distinctions;
   (2) UCCA's distinction between primary relations, secondary ones and participants; %, not accounted for by UD; 
   (3) different treatment of multi-word expressions, and
   (4) different treatment of inter-clause linkage.
@@ -206,7 +206,8 @@
   and cognitive linguistic theory.
   It aims to represent the main semantic phenomena in the text, abstracting away from syntactic forms.
   UCCA has been shown to be preserved remarkably well across translations \citep{sulem2015conceptual} and has also been applied to
-  improve text simplification \citep{sulem2018simple} used text-to-text generation evaluation \citep{birch2016hume,choshen2018usim,sulem2018samsa}.
+  improve text simplification \citep{sulem2018simple},
+  as well as text-to-text generation evaluation \citep{birch2016hume,choshen2018usim,sulem2018samsa}.
 
   Formally, UCCA structures are directed acyclic graphs whose nodes (or {\it units}) correspond either to the leaves of the graph %(including the words of the text)%
   or to several elements viewed as a single entity according to some semantic or cognitive consideration.
@@ -237,26 +238,6 @@
   Primary edges form a tree, whereas remote edges enable reentrancy, forming a DAG.
   %Table~\ref{} gives a short description of each UCCA category.  % supp. material (footnote above)
 
-
-
-
-  %UCCA's foundational layer \cite{abend2013universal} (UCCA, for brevity) 
-  %is a coarse-grained semantic annotation scheme, which focuses
-  %on predicate argument structures, the linkage between them, and the notion of a semantic head.
-  %UCCA structures as directed acyclic graphs (DAGs), where terminal (childless) nodes
-  %correspond to the text tokens, and non-terminal nodes to semantic units that participate
-  %in some super-ordinate relation.
-  
-
-  %Nodes and edges belong to one of several \textit{layers}, each corresponding
-  %to a ``module'' of semantic distinctions.
-  %UCCA's \textit{foundational layer} (the only layer for which annotated data exists)
-  %mostly covers predicate-argument structure, semantic heads and inter-Scene relations.
-  
-  
-
-
-
 \begin{figure}[th]
   \centering
     \begin{tikzpicture}[level distance=9mm, sibling distance=14mm, ->,
@@ -283,9 +264,7 @@
       \draw[dashed,->] (graduation) to node [above] {\scriptsize $A$} (John);
     \end{tikzpicture}
 \caption{\label{fig:example_ucca}
- Example UCCA graph. Dashed: a remote edge.
-%  Pre-terminal nodes and edges are omitted for brevity.
-  }
+ Example UCCA graph. Dashed: a remote edge.}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -301,7 +280,6 @@ Figure~\ref{fig:original_example_ud} shows an example UD tree.
 Henceforth in this paper, UD relation labels are written in \texttt{typewriter} font.
 
 \begin{figure}[th]
-\fbox{\begin{subfigure}{0.47\textwidth}
   \centering
     \begin{dependency}[text only label, label style={above,font=\tt}, font=\small]
     \begin{deptext}[column sep=.8em,ampersand replacement=\^]
@@ -315,10 +293,52 @@ Henceforth in this paper, UD relation labels are written in \texttt{typewriter} 
         \deproot[edge unit distance=1.5ex]{5}{root}
         \depedge[edge unit distance=1.5ex]{5}{7}{obl}
     \end{dependency}
-  \caption{UD \label{fig:original_example_ud}}
-\end{subfigure}}
+\caption{Example UD tree.\label{fig:original_example_ud}}
+\end{figure}
 
-\fbox{\begin{subfigure}{0.47\textwidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Shared Gold Standard Corpus}\label{sec:shared}
+
+We annotate 163 English passages, containing 804 sentences
+from the \textit{reviews} section of the 
+English Web Treebank \cite[EWT; ][]{bies2012english}.
+The sentences are annotated by two UCCA annotators
+according to v2.0 of the UCCA
+guidelines\footnote{\tiny\url{github.com/UniversalConceptualCognitiveAnnotation/docs}}
+and cross-reviewed.\footnote{The data will be released upon publication.}
+As these sentences are included in the Universal Dependencies 
+English\_EWT treebank, we have both gold-standard UCCA and UD for them. 
+We refer to this set as \textit{shared} henceforth.
+
+The data contains 11,103 tokens---4\% of the full UD English\_EWT treebank,
+and 20\% of its \textit{reviews} section.
+%(see Table~\ref{tab:corpora}).
+Of the UCCA-annotated sentences, 622 belong to the UD training set,
+192 to the development set and 153 to the test set.
+%\daniel{Add inter-annotator agreement}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Comparison Methodology}\label{sec:methodology}
+
+To facilitate comparison between UCCA and UD,
+we first assimilate the graphs by abstracting away from formalism differences,
+obtaining a similar graph format for both schemes.
+We then match pairs of nodes in the converted UD and UCCA trees
+if they share the same set of terminals in their yields.
+In case of UCCA units sharing terminal yields (unary children),
+we take the lowest unit.
+
+One obvious difference is that UD annotates bi-lexical dependency trees,
+while UCCA graphs contain non-terminal nodes.
+In \S\ref{sec:conversion}, we outline the unified DAG converter by
+\citet{hershcovich2018multitask,hershcovich2018universal},\footnote{\url{http://github.com/huji-nlp/semstr}}
+which we use to reach a common format.
+In \S\ref{sec:local}, we describe a number of extensions
+to the converter, which abstract away from further non-content differences.
+
+\begin{figure}[th]
   \centering
   \scalebox{.95}{
   \begin{tikzpicture}[level distance=15mm, ->,
@@ -354,86 +374,10 @@ Henceforth in this paper, UD relation labels are written in \texttt{typewriter} 
       \draw (ROOT) to node {nsubj} (John);
       \draw (ROOT) to node {head} (moved);
   \end{tikzpicture}}
-  \captionof{figure}{UD}\label{fig:converted_example_ud}
-\end{subfigure}}
-
-\caption{Figure \ref{fig:original_example_ud} presents a UD tree.
-  Edge labels express syntactic relations.
-Figure~\ref{fig:converted_example_ud} presents a converted UD graph.
-%(with pre-terminals omitted: each terminal drawn in place of its parent).
-Intermediate non-terminals and \textit{head} edges are introduced.
-%While converted UD graphs form trees, enhanced++ UD graphs may not.
-}\label{fig:ud_examples}
+\caption{Converted UD tree.
+Intermediate non-terminals and \textit{head} edges are introduced by the unified DAG converter.
+}\label{fig:converted_example_ud}
 \end{figure}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
-\section{Shared Gold Standard Corpus}\label{sec:shared}
-
-We annotate 163 English passages, containing 804 sentences
-from the \textit{reviews} section of the 
-English Web Treebank \cite[EWT; ][]{bies2012english}.
-The sentences are annotated by two UCCA annotators
-according to v2.0 of the UCCA
-guidelines\footnote{{\scriptsize \url{github.com/UniversalConceptualCognitiveAnnotation/docs}}}
-and cross-reviewed.\footnote{The data will be released upon publication.}
-As these sentences are included in the Universal Dependencies 
-English\_EWT treebank, we have both gold-standard UCCA and UD for them. 
-We refer to this set as \textit{shared} henceforth.
-
-The data contains 11,103 tokens, constituting 4\% of the full UD English\_EWT treebank,
-and 20\% of its \textit{reviews} section.
-%(see Table~\ref{tab:corpora}).
-Of the UCCA-annotated sentences, 622 belong to the UD training set,
-192 to the development set and 153 to the test set.\daniel{Add inter-annotator agreement}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
-\section{Comparison Methodology}\label{sec:methodology}
-
-To facilitate comparison between UCCA and UD,
-we first assimilate the graphs by abstracting away from formalism differences,
-obtaining a similar graph format for both schemes,
-over the tokens of the sentence.
-We then match pairs of nodes in the converted UD and UCCA trees
-if they share the same set of terminals in their yields.\oa{maybe explain about unary expansions?} % (\S\ref{sec:analysis}).
-
-One obvious difference is that UD annotates bi-lexical dependency graphs,
-while UCCA graphs contain non-terminal nodes.
-To reach a common format, we use the unified DAG converter by
-\citet{hershcovich2018multitask,hershcovich2018universal},\footnote{\url{http://github.com/huji-nlp/semstr}}
-outlined in \S\ref{sec:conversion}.
-Then, in \S\ref{sec:local}, we describe a number of extensions
-to the converter, which abstract away from further non-content differences between the converted
-UD and UCCA graphs.
-
-
-
-
-
-%<<<<<<< HEAD
-%\cite{SCHUSTER16.779} representing case information, elided predicates,
-%and shared argumenthood due to coordination, control, raising and relative clauses.
-%They provide richer information to downstream semantic applications,
-%making UD better suited for text understanding.
-%Enhanced UD has a more restricted notion of shared arguments than UCCA's,
-%which includes the class of implicit arguments termed {\it Constructional
-%Null Instantiation} in FrameNet. For instance, in ``to win, you have to find the key'',
-%UCCA would add a remote 
-%=======
-%as part of the dependency graph,
-%representing elided predicates,
-%and shared arguments due to coordination, control, raising and relative clauses.
-% case information
-%They provide richer information to downstream semantic applications,
-%making UD better suited for text understanding.
-%Enhanced UD has a more restricted notion of shared arguments than UCCA's.
-%\daniel{reviews-220214-0002: ``First of all, if you call for an appointment they won't tell you to call back a month later so you can then make one'',
-%weblog-blogspot.com\_rigorousintuition\_20060511134300\_ENG\_20060511\_134300-0106:
-%``The Pentagon is bypassing official US intelligence channels and turning to a dangerous and unruly cast of characters in order to create strife in Iran in preparation for any possible attack, former and current intelligence officials say...''.}
-
-
-
 
 
 \subsection{Basic Conversion}\label{sec:conversion}
@@ -444,54 +388,33 @@ and attaches the pre-terminals according to the original dependency edges:
 traversing the tree from the root down, for each head token it creates a non-terminal
 parent with the edge label {\it head}, and adds the node's dependents as children of 
 the created non-terminal node.
-%Any \textit{enhanced}
-%heads beyond the normal head of a node are converted to remote edges in the unified DAG format.
 In the conversion process, any language-specific relation subtypes are stripped,
 leaving only the universal relations.
-For example, the language-specific label for definite artciles
+For example, the language-specific label for definite articles
 \texttt{det:def} is replaced by the universal relation \texttt{det}.
 
-In the UCCA format, edges are labeled (but not nodes),
-and are divided into \textit{primary} and \textit{remote} edges
-(e.g., the dashed edge in Figure~\ref{fig:example_ucca}),
-where the primary edges form a tree (all nodes have at most one primary parent,
-and the root has none).
-Remote edges enable reentrancy, and thus together with primary edges form a DAG.
-UD includes \textit{enhanced dependencies}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
-\cite{SCHUSTER16.779}, which form (bi-lexical) DAG structures, representing phenomena
+Remote edges in UCCA enable reentrancy, and thus together with primary edges form a DAG (see \S\ref{sec:representations}).
+UD allows reentrancy too, as it includes \textit{enhanced dependencies}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
+\cite{SCHUSTER16.779}, which form (bi-lexical) graphs, representing phenomena
 such as predicate ellipsis (e.g., gapping),
 and shared arguments due to coordination, control, raising and relative clauses.
 
 UCCA is more inclusive in its use of remote edges, and accounts for 
 the entire class of implicit arguments termed {\it Constructional Null Instantiation} in FrameNet \citep{Ruppenhofer:16}.
 For example, UCCA adds a remote edge to mark the shared argumenthood of ``bypassing'' and
-``create'' in ``The Pentagon is bypassing official US intelligence channels ... in order to create strife ...'' (from EWT). 
-Another example is ``... if you call for an appointment they won't tell you to call back a month later so you can then make one'',
-where UCCA will use a remote edge to indicate that ``one'' refers to appointment.
-Both cases are not covered by enhanced UD.
+``create'' in ``The Pentagon is bypassing official US intelligence channels [...] in order to create strife'' (from EWT). 
+Another example is ``if you call for an appointment they won't tell you to call back a month later so you can then make one'',
+where a remote edge in UCCA indicates that ``one'' refers to ``appointment''.
+Neither is covered by enhanced UD.
 
 In order to facilitate comparison, we remove remote edges and enhanced dependencies in the conversion process.
-We thus compare UD and UCCA trees. We defer a more complete comparison of UCCA and enhanced UD to future work.
-
-
-%In the UCCA format, edges are labeled (but not nodes),
-%and are divided into \textit{primary} and \textit{remote} edges,
-%where the primary edges form a tree (all nodes have at most one primary parent,
-%and the root has none). Remote edges enable reentrancy, and thus together with primary edges
-%form a DAG. In order to facilitate comparison, and as UD does not support reentrancy,\footnote{Reentracy is supported by enhanced UD \cite{SCHUSTER16.779}.} We remove remote edges in the conversion process.
-%Figure~\ref{fig:converted_example_ud} shows an example for a converted graph.
-
-
-
-%\oa{move this paragraph some place else}
-%  UCCA graphs are converted into trees by removing ``remote edges''.
-%  Remote edges in UCCA encode shared argumenthood by assigning multiple parents to the same node. Such phenomena are largely ignored in UD, %which uses trees. See \S\ref{sec:analysis}.
+We thus compare basic UD and UCCA trees. We defer a more complete comparison of UCCA and enhanced UD to future work.
 
 
 
 \subsection{Extensions to the Converter}\label{sec:local}
 
-We extend the converter to remove further non-content differences.
+We extend the unified DAG converter to remove further non-content differences.
 
 \paragraph{Unanalyzable units.}
 Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
@@ -509,45 +432,68 @@ as the original dependency yield of its head terminal
 (e.g., in Figure~\ref{fig:converted_example_ud}, the yield of the non-terminal
 headed by ``graduation'' is ``After graduation'', the same as the yield of ``graduation''
 in Figure~\ref{fig:original_example_ud}).
-%selecting for each terminal $t$ the lowest non-terminal of which $t$
-%is the head terminal to be its parent.
 
 Since UD attaches subordinating and coordinating conjunctions to the following conjunct,
 this results in them being positioned as part
-of the conjuncts they relate (e.g., ``and'' will be included in the second conjunct in ``John and Mary''; 
-``after'' will be included in the first conjunct in ``After arriving home, John went to sleep'').
-In contrast, UCCA places conjunctions as siblings to their conjuncts (e.g., ``[John] [and] [Mary]'' or
-``[After] [arriving home], [John went to sleep''). 
+of the conjuncts they relate (e.g.,
+``After'' will be included in the first conjunct in ``After arriving home, John went to sleep'';
+``and'' will be included in the second conjunct in ``John and Mary'').
+In contrast, UCCA places conjunctions as siblings to their conjuncts (e.g.,
+``[After] [arriving home], [John went to sleep'' and ``[John] [and] [Mary]''). 
 
 To abstract away from these convention differences,
 we extend the conversion protocol to place 
 the dependents of coordinating and subordinating conjunctions 
 (i.e., \texttt{cc}-labeled units, and \texttt{mark}-labeled units with an \texttt{advcl} head such 
-as ``when'', ``if'', ``after'') as siblings to their conjuncts.
-%as there is a systematic mapping between the UCCA and UD guidelines
-%and it is different from the default low-attaching behavior.
-
-
-%Some conjunctions are placed in UCCA as siblings of the units they link,
-%while in UD they are dependents of the dependent unit. For instance, coordinating
-%conjunctions (e.g., ``and'' in ``John and Mary'') are in UCCA siblings of the conjuncts 
-%Selecting a forward-attaching behavior instead:
-%\begin{itemize}
-%  \item Conjunctions (\texttt{cc} in UD) attach to the following
-%  conjuncts (word with an incoming \texttt{conj} relation).
-%  \item \texttt{mark} is attached to the following \texttt{advcl}.
-%\end{itemize}
-%These rules are applied to the bi-lexical graph after the conversion process.
-
-
+as ``when'', ``if'', ``after'') as siblings of their conjuncts.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Analysis of Divergences}\label{sec:analysis}
 
-We turn to discussing the content differences between UCCA and UD.
-%as quantified in a \textit{confusion matrix} between the schemes (\S\ref{sec:confusion}).
+Using the shared format,
+we turn to discussing the content differences between UCCA and UD.
 
+
+\subsection{Confusion Matrix}\label{sec:confusion}
+
+%Using the standard UCCA evaluation
+%script,\footnote{\url{http://github.com/huji-nlp/ucca/blob/master/scripts/evaluate_standard.py}}
+Table~\ref{tab:confusion_matrix} presents the confusion matrix between the edge tags in converted UD trees
+and the annotated UCCA graphs.
+%Using the standard UCCA evaluation
+%script,\footnote{\url{http://github.com/huji-nlp/ucca/blob/master/scripts/evaluate_standard.py}}
+%we create a confusion matrix between the edge tags in converted UD trees
+%and the annotated UCCA graphs (see Table~\ref{tab:confusion_matrix}).
+In case of multiple units with the same terminal yield (i.e., any unit with a single non-remote child),
+we take the top category only to avoid double-counting.
+We perform this analysis on gold-standard UD and UCCA from the shared EWT corpus
+(see \S\ref{sec:shared}),
+after conversion to the unified DAG format.
+Excluding punctuation, this results in 12893 yields in UCCA and
+13294 in UD.
+Of these, 11541 are common, meaning that an oracle UCCA ``parser'' developed this way
+would get a very high F1 score
+of 88.1\% if it had the gold UCCA label for every edge on conversion.
+
+Examining the {\it head} row in Table \ref{tab:confusion_matrix} allows
+us to contrast UCCA's and UD's notions of a head. 
+{\it head}-labeled units cover units that have at least
+one dependent in UD (technically, they are non-terminals added by the converter).
+%About 70\% of them correspond to UCCA Processes, States,  Parallel Scenes or Centers,
+%which are UCCA's notions of semantic heads.
+77.5\% correspond to UCCA Processes, States, Linked Scenes or Centers,
+which are UCCA's notions of semantic heads.
+12.1\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
+UD but not in UCCA (\S\ref{sec:mwe}).
+Another source of unmatched units is inter-Scene linkage, which tends to be flatter in
+UCCA (see \S\ref{sec:linkage}).
+The remaining cases (10.4\%) are mostly due to a head swap (e.g., ``\textit{all} of Dallas'', where \textit{all} 
+is an Elaborator of ``Dallas'' in UCCA, but the syntactic head in UD).
+
+In the following subsections, we review the main content differences between the schemes,
+as reflected in the confusion matrix, and categorize them according to the UD relations
+involved.
 
 \begin{table}[t]
 \centering
@@ -602,52 +548,12 @@ that do not match any UCCA (UD) unit.\daniel{Update to include Time and Quanitif
 \label{tab:confusion_matrix}}
 \end{table}
 
-\subsection{Confusion Matrix}\label{sec:confusion}
-
-%Using the standard UCCA evaluation
-%script,\footnote{\url{http://github.com/huji-nlp/ucca/blob/master/scripts/evaluate_standard.py}}
-Table~\ref{tab:confusion_matrix} presents the confusion matrix between the edge tags in converted UD trees
-and the annotated UCCA graphs.
-%Using the standard UCCA evaluation
-%script,\footnote{\url{http://github.com/huji-nlp/ucca/blob/master/scripts/evaluate_standard.py}}
-%we create a confusion matrix between the edge tags in converted UD trees
-%and the annotated UCCA graphs (see Table~\ref{tab:confusion_matrix}).
-In case of multiple units with the same terminal yield (i.e., any unit with a single non-remote child),
-we take the top category only to avoid double-counting.
-We perform this analysis on gold-standard UD and UCCA from the shared EWT corpus
-(see \S\ref{sec:shared}),
-after conversion to the unified DAG format.
-Excluding punctuation, this results in 12893 yields in UCCA and
-13294 in UD.
-Of these, 11541 are common, meaning that an oracle UCCA ``parser'' developed this way
-would get a very high F1 score
-of 88.1\% if it had the gold UCCA label for every edge on conversion.
-
-Examining the {\it head} row in Table \ref{tab:confusion_matrix} allows
-us to contrast UCCA's and UD's notions of a head. 
-{\it head}-labeled units cover units that have at least
-one dependent in UD (technically, they are non-terminals added by the converter).
-%About 70\% of them correspond to UCCA Processes, States,  Parallel Scenes or Centers,
-%which are UCCA's notions of semantic heads.
-77.5\% correspond to UCCA Processes, States, Linked Scenes or Centers,
-which are UCCA's notions of semantic heads.
-12.1\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
-UD but not in UCCA (\S\ref{sec:mwe}).
-Another source of unmatched units is inter-scene linkage, which tends to be flatter in
-UCCA (see \S\ref{sec:linkage}).
-The remaining cases (10.4\%) are mostly due to a head swap (e.g., ``\textit{all} of Dallas'', where \textit{all} 
-is an Elaborator of ``Dallas'' in UCCA, but the syntactic head in UD).
-
-In the following subsections, we review the main content differences between the schemes,
-as reflected in the confusion matrix, and categorize them according to the UD relations
-involved.
-
 %categorize UD relations according to their
 %treatment in UCCA, focusing of the main content differences between the schemes.
 
-\subsection{Scenes vs. Non-scenes}\label{sec:scenes}
+\subsection{Scenes vs. Non-Scenes}\label{sec:s}
 
-UCCA distinguishes between Scenes and Non-scenes. 
+UCCA distinguishes between Scenes and Non-Scenes. 
 This distinction cuts across UD categories,
 as a Scene can be evoked by a verb, an eventive or stative
 noun (``negotiation'', ``fatigue''),
@@ -656,24 +562,24 @@ an adjective or even a preposition (``this is \textit{for} John'').
 \begin{description}
     \item[Core Arguments (\texttt{iobj}, \texttt{nsubj}, and \texttt{obj}).] 
       Core syntactic arguments are usually UCCA Participants (e.g., ``\textit{Wine} was excellent'').
-      However, when describing a scene\oa{are scenes always capitalized?}, such a phrase is a Process/State
+      However, when describing a Scene such a phrase is a Process/State
       (e.g., ``But \textit{service} is very poor'').
       Some wh-pronouns are the subjects or objects of a relative clause, but
       are Linkers or Relators in UCCA,
-      depending on whether they link scenes or non-scenes, respectively.
+      depending on whether they link Scenes or non-Scenes, respectively.
       For example, ``who'' in ``Overall, Joe is a happy camper \textit{who} has found a great spot'' is a UD
       subject, but a UCCA Linker.
       Adjectival modifiers of nominals are Adverbials or Elaborators,
 
-    \item[Adjectival Modifiers (\texttt{amod})] are Adverbials when they modify scene-evoking
+    \item[Adjectival Modifiers (\texttt{amod})] are Adverbials when they modify Scene-evoking
     nouns (``\textit{romantic} dinner''), States when they describe the state of
-    a non-scene (``\textit{beautiful} hotel'') or when used predicatively (``such a \textit{convinient} location'').
-    They are Elaborators where they define an inherent property of a non-scene (``\textit{medical} school'').
+    a non-Scene (``\textit{beautiful} hotel'') or when used predicatively (``such a \textit{convinient} location'').
+    They are Elaborators where they define an inherent property of a non-Scene (``\textit{medical} school'').
 
     \item[Nominal and Clausal Modifiers (\texttt{nmod}, \texttt{acl}).] 
     Nominal and clausal modifiers of nominals
     are mostly split between UCCA Participants and Elaborators,
-    depending on whether the noun they modify evokes a scene. For instance, 
+    depending on whether the noun they modify evokes a Scene. For instance, 
     ``discount \textit{on services}'' and
     ``our decision \textit{to buy when we did}'' are Participants,
     but ``\textit{my car's} gears and brakes'' and ``Some of the younger kids \textit{that work there}'' are Elaborators.
@@ -684,8 +590,8 @@ an adjective or even a preposition (``this is \textit{for} John'').
 
     \item[Case Markers (\texttt{case}).]
       While most case markers are Relators
-      modifying non-scene units (e.g., ``the team \textit{at} Bradley Chevron''),
-      some are Linkers as they linker two scenes together 
+      modifying non-Scene units (e.g., ``the team \textit{at} Bradley Chevron''),
+      some are Linkers as they linker two Scenes together 
       (e.g., ``Very informative website \textit{with} a lot of good work'').
       Others are Elaborators (e.g., ``\textit{over} a year'') or Processes and States
       when used as the main relation in verbless or copula clauses
@@ -702,11 +608,11 @@ an adjective or even a preposition (``this is \textit{for} John'').
     
 
     \item[Coordination (\texttt{cc}, \texttt{conj}).]
-      Coordinating conjunctions are UCCA Connectors where they coordinate non-scenes
+      Coordinating conjunctions are UCCA Connectors where they coordinate non-Scenes
       (e.g., ``Mercedes \textit{and} Dan'')
-      or UCCA Linkers where they coordinate scenes (e.g., ``outdated \textit{but} not bad'').
-      Similarly, conjuncts and list elements are Centers when coordinating scenes,
-      but Parallel Scenes (H) when coordinating non-scenes.\footnote{While in UD 
+      or UCCA Linkers where they coordinate Scenes (e.g., ``outdated \textit{but} not bad'').
+      Similarly, conjuncts and list elements are Centers when coordinating Scenes,
+      but Parallel Scenes (H) when coordinating non-Scenes.\footnote{While in UD 
       the conjunction \texttt{cc} is attached to the following conjunct,
       in UCCA coordination is a flat structure.
       This is a convention difference that we normalize (\S\ref{sec:local}).}
@@ -714,9 +620,9 @@ an adjective or even a preposition (``this is \textit{for} John'').
       %containing the coordinating conjunction which is outside the unit in UCCA.
 
     \item [Determiners (\texttt{det}).]
-      Articles are UCCA Elabarators, and so are determiners that modify non-scenes 
+      Articles are UCCA Elabarators, and so are determiners that modify non-Scenes 
       (e.g., ``I will never recommend this gym to \textit{any} woman'').
-      However, where determiners modify scenes (mostly negation),
+      However, where determiners modify Scenes (mostly negation),
       they are marked as Adverbials. For example, ``\textit{no} feathers in stock'', ``\textit{what} a mistake'',
       and ``the rear window had \textit{some} leakage'' are all Adverbials.
 
@@ -745,7 +651,7 @@ as well as modals, adjectives and adverbs.
     or Adverbials, covering mostly manner adjuncts (``by far'').
 
     \item[Clausal Arguments (\texttt{csubj}, \texttt{ccomp} and \texttt{xcomp})] 
-    are in most cases Participant scenes
+    are in most cases Participant Scenes
     (e.g., ``it was great \textit{that they did not charge a service fee}'',
     ``did not really know \textit{what I wanted}'' or
     ``I asked them \textit{to change it}'').
@@ -781,9 +687,9 @@ especially where they are compositional.
     \item[Compounds (\texttt{compound})] in English are mostly noun compounds,
         and are a very heterogeneous category.
         Most compounds correspond to Elaborators (e.g., ``\textit{industry} standard''),
-        or Elaborator scenes (e.g., ``\textit{out-of-place} flat-screen TV''),
+        or Elaborator Scenes (e.g., ``\textit{out-of-place} flat-screen TV''),
         and many are unanalyzable expressions (e.g., ``\textit{mark} up'').
-        Where the head noun evokes a scene, the dependent is often a Participant
+        Where the head noun evokes a Scene, the dependent is often a Participant
         (e.g., ``\textit{food} craving''), but can also be an Adverbial 
         (e.g., ``\textit{first time} buyers'') depending on its semantic category.
         %In cases where t UCCA annotates both parts  may be a co-Center (e.g., ``\textit{sweet potato} tempura'').
@@ -841,11 +747,11 @@ is attached to the following adverbial clause,
 in UCCA linkage is a flat structure.
 This is a convention difference that we fixed with local modifications
 (\S\ref{sec:local})---otherwise most \texttt{advcl} instances would be unmatched,
-containing the linker which is outside the scene in UCCA..
+containing the linker which is outside the Scene in UCCA..
 
 Many of the unmatched units of these types are due to cases where our converter was not able to detect the conjunction 
 and raise it. 
-For instance, the word ``to'' is ambiguous in UD between inter-scene linkage, such as the purposive``to'', and
+For instance, the word ``to'' is ambiguous in UD between inter-Scene linkage, such as the purposive``to'', and
 the infinitive marker ``to''. UCCA annotates the former as a Linker, but the latter as a Function.
 Another case is the wh-pronouns which are again ambiguous between Linkers (``he was willing to budge a little on the price {\it which} means a lot to me''),
 and other uses, such as in question words or free relative clauses.
@@ -881,13 +787,13 @@ clause over ``moment''.
    %,\oa{could you add a case with a nominal head?} where the copula is annotated as Function.
 
     \item[Discourse Markers and Interjections (\texttt{discourse}).] 
-    UCCA marks discourse markers and interjections as Ground, i.e., units that relate the scene 
+    UCCA marks discourse markers and interjections as Ground, i.e., units that relate the Scene 
     to the speech event or to the opinion of the speaker. Examples include ``\textit{no}, Warwick in New Jersey'' and ``\textit{Please} visit my website''.
     On the other hand, discourse elements that relate one Scene to the other 
     are as Linkers (e.g., ``I am sure, \textit{well}, she says'').
 
     \item[Vocatives (\texttt{vocative}).]
-    Vocatives as both Ground and as Participants if they both participate in the scene and are the party addressed.
+    Vocatives as both Ground and as Participants if they both participate in the Scene and are the party addressed.
     For example, ``Mark'' in ``Thanks \textit{Mark}'' is both the person addressed and the one 
     being thanked.\footnote{UCCA allows marking more than one category over an edge, although this
     functionality is not used often for English.}
