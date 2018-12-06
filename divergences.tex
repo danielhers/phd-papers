@@ -1352,7 +1352,16 @@ and \textit{Mean {\#}Words} shows how long units are on average
 As could be expected, in both unlabeled and labeled evaluation,
 TUPA does very well on determiners (\texttt{det}),
 as they are almost always single words with the Elaborator category.
-
+For a large subset of relations (adverbial and adjectival modifiers,
+auxiliaries, case markers, coordinating conjunctions,
+copulas, discourse markers, expletives, markers and nominal subjects),
+TUPA also manages to find the correct yield
+($>85\%$ unlabeled precision and recall),
+but encounters more difficulty determining the correct category:
+while auxiliaries and nominal subjects are relatively deterministic
+and accurately labeled,
+expletives should always be labeled as Function,
+and TUPA struggles to learn it.
 
 %Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
 %against gold-annotated UCCA graphs, of converted gold-standard and parsed UD.
