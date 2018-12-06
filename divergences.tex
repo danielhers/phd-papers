@@ -1318,14 +1318,19 @@ which is the sum of the corresponding row (without \textsc{NoMatch}) from Table~
 \textit{Unlabeled} are the matched units in the intersection between the gold-standard and prediction,
 where edge categories are ignored;
 in \textit{Labeled} edge categories are taken into account.
-\textit{Mode} refers to the number of occurrences of the most frequent UCCA category
+\textit{Mode} refers to the number of occurrences of the most frequent gold UCCA category
 to match the UD relation, according to Table~\ref{tab:confusion_matrix}.
 \label{tab:fine_grained_results}}
 \end{table*}
 
 Table~\ref{tab:fine_grained_results} displays
 fine-grained evaluation by UD relations.
-
+Out of the total number of dependencies in the UD trees for the shared sentences,
+we can see how many relations matched any gold-standard UCCA unit (\textit{Matched gold}), and
+UCCA unit predicted by TUPA (\textit{Matched pred.}).
+Out of the predicted UCCA units with a correct terminal yield (\textit{Unlabeled}),
+we can also see how many were given the correct category (\textit{Labeled}).
+For comparison, $\sfrac{\text{Mode}}{\text{Matched gold}}\%$ measures how 
 
 %Table~\ref{tab:conversion_results_unlabeled} shows unlabeled evaluation,
 %against gold-annotated UCCA graphs, of converted gold-standard and parsed UD.
