@@ -429,23 +429,22 @@ We thus compare basic UD and UCCA trees. We defer a more complete comparison of 
 
 \subsection{Extensions to the Converter}\label{sec:local}
 
-We extend the unified DAG converter to remove further non-content differences.
+We add rules the unified DAG converter to remove further non-content differences.
 
 \paragraph{Unanalyzable units.}
 Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
-As for multi-word expressions (MWEs) in UD, each word after the first is attached to the previous word,
-with the \texttt{flat}, \texttt{fixed} or \texttt{goeswith} relations
-(depending on whether the phrase is a name or a title, a fixed grammaticalized MWE
-or whether it is one word split by error).
-During conversion, we remove edges of both relations and group the corresponding terminals to one unit.
+In multi-word expressions (MWEs) in UD, each word after the first is attached to the previous word,
+with the \texttt{flat}, \texttt{fixed} or \texttt{goeswith} relations.
+(depending on whether the expression is grammaticalized, or split by error).
+We remove edges of these relations and group the corresponding terminals to one unit.
 %Multi-word expressions also include compounds, discussed in \S\ref{sec:mwe}.
 
 \paragraph{Promotion of conjunctions.}
-The basic conversion protocol generally attaches low so as to preserve terminal yields:
+The basic conversion generally preserves terminal yields:
 the set of terminals spanned by a non-terminal is the same
 as the original dependency yield of its head terminal
 (e.g., in Figure~\ref{fig:converted_example_ud}, the yield of the non-terminal
-headed by ``graduation'' is ``After graduation'', the same as the yield of ``graduation''
+headed by ``graduation'' is ``After graduation'', the same as that of ``graduation''
 in Figure~\ref{fig:original_example_ud}).
 
 Since UD attaches subordinating and coordinating conjunctions to the following conjunct,
@@ -457,8 +456,8 @@ In contrast, UCCA places conjunctions as siblings to their conjuncts (e.g.,
 ``[After] [arriving home], [John went to sleep'' and ``[John] [and] [Mary]''). 
 
 To abstract away from these convention differences,
-we extend the conversion protocol to place 
-the dependents of coordinating and subordinating conjunctions 
+we place 
+coordinating and subordinating conjunctions 
 (i.e., \texttt{cc}-labeled units, and \texttt{mark}-labeled units with an \texttt{advcl} head such 
 as ``when'', ``if'', ``after'') as siblings of their conjuncts.
 
