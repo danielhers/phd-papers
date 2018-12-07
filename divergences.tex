@@ -202,34 +202,38 @@
   
 
 
-\paragraph{UCCA}\label{sec:ucca}
-  \citep[Universal Cognitive Conceptual Annotation;][]{abend2013universal} is a semantic annotation scheme rooted in typological 
+\paragraph{UCCA.}\label{sec:ucca}
+%  \citep[Universal Cognitive Conceptual Annotation;][]{abend2013universal} is a
+  Semantic annotation scheme rooted in typological 
   and cognitive linguistic theory.
-  It aims to represent the main semantic phenomena in the text, abstracting away from syntactic forms.
-  UCCA has been shown to be preserved remarkably well across translations \citep{sulem2015conceptual} and has also been applied to
+  It aims to represent the main semantic phenomena in text, abstracting away from syntactic forms.
+  Shown to be preserved remarkably well across translations \citep{sulem2015conceptual}, it has been applied to
   improve text simplification \citep{sulem2018simple},
-  as well as text-to-text generation evaluation \citep{birch2016hume,choshen2018usim,sulem2018samsa}.
+  and text-to-text generation evaluation \citep{birch2016hume,choshen2018usim,sulem2018samsa}.
 
-  Formally, UCCA structures are directed acyclic graphs whose nodes (or {\it units}) correspond either to the leaves of the graph %(including the words of the text)%
-  or to several elements viewed as a single entity according to some semantic or cognitive consideration.
+  Formally, UCCA structures are directed acyclic graphs (DAGs) whose nodes (or {\it units}) correspond either to words,
+  or to elements viewed as a single entity according to some semantic or cognitive consideration.
   Edges are labeled, indicating the role of a child in the relation the parent represents.
   A {\it Scene} is UCCA's notion of an event or a frame, and is a description of a movement, an action or a state which persists in time. 
-  Every Scene contains one main relation, which can be either a Process or a State. 
+  Every Scene contains one primary relation, which can be either a Process or a State. 
   Scenes may contain any number of Participants, a category which also includes abstract participants and locations.
   They may also contain secondary relations (Adverbials), which cover semantic distinctions such as manner, modality and aspect,
   and temporal relations (Time).
 
-  Scenes may be linked to one another in several ways. First, a Scene can provide additional information about some entity,
-  in which case it will be marked as an Elaborator. This often occurs in the case of participles or relative clauses.
-  For example, ``(child) who went to school'' is an Elaborator (Scene)
+  Scenes may be \textit{linked} to one another in several ways.
+  First, a Scene can provide information about some entity,
+  in which case it is marked as an Elaborator.
+  This often occurs in the case of participles or relative clauses.
+  For example, ``(child) who went to school'' is an Elaborator Scene
   in ``The child who went to school is John''.
   A Scene may also be a Participant in another Scene. For example, ``John went to school'' in the sentence: ``He said John went to school''. 
   In other cases, Scenes are annotated as Parallel Scenes (H), which are flat structures and may include a Linker (L), 
   as in:  ``When$_L$ [he arrives]$_H$, [he will call them]$_H$''.
 
-  With respect to non-Scene units, the category Center denotes their semantic head, which determine their type. 
-  Other elements in non-Scene units include Quantifiers (such as ``{\bf dozens} of people''), Connectors (mostly
-  coordinating conjunctions, and Relators, that in English correspond to prepositions.
+  The category Center denotes the semantic head of non-Scene units,
+  which determines their type. 
+  Other elements in non-Scene units include Quantifiers (such as ``{\it dozens} of people''), Connectors (mostly
+  coordinating conjunctions, and Relators, that in English correspond to prepositions).
   Other modifiers to the Center are marked as Elaborators.
   
   UCCA distinguishes \textit{primary} edges, corresponding 
@@ -269,9 +273,9 @@
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Universal Dependencies}\label{sec:ud}
-\cite[UD; ][]{nivre2016universal} is
-the dominant dependency scheme for
+\paragraph{UD.}\label{sec:ud}
+%\cite[UD; ][]{nivre2016universal} is
+The dominant dependency scheme for
 syntactic  annotation in many languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
 annotation. Formally, UD uses bi-lexical trees, with edge labels 
