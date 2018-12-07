@@ -132,36 +132,33 @@
   the differences and commonalities between syntactic and semantic representations.
   Understanding such content differences can enable better ways to leverage content overlap between schemes, 
   as well as point at semantic distinctions unlikely to be resolved by syntax.
-  A methodology for comparing syntactic and semantic treebanks can also support fine-grained error 
-  analysis of semantic parsers, as demonstrated by \citet{szubert2018structured} 
-  for AMR \citep{banarescu2013abstract}.
    
-   This paper addresses this gap, taking the syntactic Universal Dependencies (UD),
-  and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal} schemes as a test case. 
-  We focus on {\it content} differences, which cannot be resolved by simple
-  conversion rules. 
-  
-  Comparing these relatively similar schemes allows
-  us to focus on content, and abstract away from convention differences.
-  One similar aspect is UD's preference of lexical (rather than functional) heads.
-%  unlike other dependency schemes that prefer functional ones.
-  For example, in auxiliary verb constructions (e.g., ``is eating''), UD
-  marks the lexical verb (``eating'') as the head, while other dependency schemes
-  may select the auxiliary (``is'') instead.
-  While the approaches are largely inter-translatable
-  \citep{Schwartz:12}, lexical head schemes are more similar in form to semantic schemes,
-   such as UCCA and semantic dependencies \citep{oepen2016towards}.
-   This facilitates their comparison.
+  This paper aims to address this gap,
+  focusing on {\it content} differences, which cannot be resolved by simple
+  conversion.
+  As a test case, we compare relatively similar schemes (\S\ref{sec:representations}):
+%  to focus on content and abstract away from convention differences:
+  the syntactic Universal Dependencies (UD),
+  and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal}.
   %Selecting more distant schemes for comparison could have potentially confounded our results.
 
-  We begin by carefully examining the categories in each annotation schemes, to find distinctions made by one but not the other.
-  We annotate 11K tokens from the English Web Treebank with gold-standard UCCA, to have a doubly gold-annotated set.
-  As UD uses bi-lexical trees (i.e., nodes correspond to tokens) and UCCA uses constituency-like DAGs (i.e., leaves correspond to tokens), 
-  we losslessly convert UD into constituency-like graphs by inserting non-terminal nodes (\S\ref{sec:methodology}).
-  
-  Using the shared formalism, we align the nodes of the UD and UCCA trees, and identify which nodes have no match on the other side. 
-  For the aligned nodes, we construct a ``confusion matrix'' to identify which UCCA categories are aligned with each UD relation and vice versa. 
-  
+  For reliable comparison data,
+  we annotate 11K tokens from the English Web Treebank with gold-standard UCCA (\S\ref{sec:shared}).
+%  As UD uses bi-lexical trees
+%  (i.e., nodes correspond to tokens)
+%  and UCCA uses constituency-like DAGs
+%  (i.e., leaves correspond to tokens),
+%  we losslessly convert UD into constituency-like graphs by inserting non-terminal nodes
+  As UD and UCCA use formally different graph structures,
+  we develop conversion rules to assimilate them
+   (\S\ref{sec:methodology}).
+%    We then carefully examine the categories in each scheme, to find distinctions made by one but not the other:
+  Using the shared formalism, we align UD and UCCA nodes,
+%  and identify which nodes have no match on the other side.
+%  For the aligned nodes, we
+%  and construct a ``confusion matrix'' to 
+  and identify which UCCA categories match which UD relation,
+  and which nodes have no match.
    We find that most content differences between the schemes are due to the following
    factors (\S\ref{sec:analysis}):
 
@@ -179,12 +176,16 @@
    \end{enumerate}
     
    Other divergences stem from a different treatment of coordination, apposition and copulas.% (\S\ref{sec:misc}).
-   
+  
+  
+  A methodology for comparing syntactic and semantic treebanks can also support fine-grained error 
+  analysis of semantic parsers, as illustrated by \citet{szubert2018structured} 
+  for AMR \citep{banarescu2013abstract}.
   To demonstrate the utility of our comparison methodology,
   we perform fine-grained error analysis on UCCA parsing results
   according to UD relations (\S\ref{sec:fine_grained}).
-  We show that this analysis both highlights challenges for existing UCCA parsing technology,
-  as well suggests where the parsers may benefit from relying on the syntactic structure more directly.
+  This analysis highlights challenges for existing UCCA parsing technology,
+  and suggests where the parsers may benefit from relying on the syntactic structure more directly.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -275,6 +276,15 @@ syntactic  annotation in many languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
 annotation. Formally, UD uses bi-lexical trees, with edge labels 
 representing syntactic relations between words.
+  One aspect of UD similar to UCCA is its preference of lexical (rather than functional) heads.
+%  unlike other dependency schemes that prefer functional ones.
+  For example, in auxiliary verb constructions (e.g., ``is eating''), UD
+  marks the lexical verb (``eating'') as the head, while other dependency schemes
+  may select the auxiliary (``is'') instead.
+  While the approaches are largely inter-translatable
+  \citep{Schwartz:12}, lexical head schemes are more similar in form to semantic schemes,
+   such as UCCA and semantic dependencies \citep{oepen2016towards}.
+   This facilitates their comparison.
 Figure~\ref{fig:original_example_ud} shows an example UD tree.
 %and Table \ref{} gives a short description of each UD category.  % supp. material (footnote above)
 Henceforth in this paper, UD relation labels are written in \texttt{typewriter} font.
