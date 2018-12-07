@@ -112,48 +112,52 @@
 
 \section{Introduction}\label{sec:introduction}
   
-  The use of syntactic parsing as a proxy for semantic structure has a long tradition in NLP.
-  Indeed, syntactic parses have been leveraged by semantic parsers in a variety of ways,
-  including pruning the space of possible predictions \cite{xue2004calibrating}, 
-  encoding syntactic features \cite{gildea2002automatic,N15-1007,E17-1045}, 
-  joint syntactic and semantic parsing \cite{surdeanu2008conll,hajivc2009conll} and
-  multi-task learning \cite{strubell2018linguistically,swayamdipta2018syntactic}.
+%  The use of syntactic parsing as a proxy for semantic structure has a long tradition in NLP.
+%  Indeed,
+  Semantic parsers leverage syntax in various ways,
+  including output space pruning \cite{xue2004calibrating}, 
+  syntactic features \cite{gildea2002automatic,N15-1007,E17-1045}, and
+  joint parsing or multi-task learning \cite{surdeanu2008conll,hajivc2009conll,strubell2018linguistically,swayamdipta2018syntactic}.
   Some syntactic representation approaches, such as CCG \cite{Steedman:00} and UD
-  \citep{nivre2016universal}, directly reflect the underlying semantics, and have been used to
+  \citep{nivre2016universal},
+%  directly reflect the underlying semantics, and
+  have been used to
   transduce skeletal semantic forms using rule-based systems \cite{Basile:12,white2016universal,reddy2017universal}.
+%  However, strong performance recently achieved without explicitly modeling syntax \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}
+%  has questioned its impact on semantics.
   Other works have contested the importance of syntax to semantics,
   by achieving strong performance without explicitly modeling syntax \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}.
     
   Despite the centrality of this discussion, it has so far been little informed by empirical studies of
-  the differences and commonalities between syntactic and semantic structures.
+  the differences and commonalities between syntactic and semantic representations.
   Understanding such content differences can enable better ways to leverage content overlap between schemes, 
-  as well as point at semantic distinctions that are unlikely to be resolved by syntax.
+  as well as point at semantic distinctions unlikely to be resolved by syntax.
   A methodology for comparing syntactic and semantic treebanks can also support fine-grained error 
   analysis of semantic parsers, as demonstrated by \citet{szubert2018structured} 
   for AMR \citep{banarescu2013abstract}.
    
-   This paper aims to address this gap, taking the syntactic Universal Dependencies,
+   This paper addresses this gap, taking the syntactic Universal Dependencies (UD),
   and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal} schemes as a test case. 
-  The paper focuses on {\it content} differences, i.e., differences that cannot be resolved by simple
+  We focus on {\it content} differences, which cannot be resolved by simple
   conversion rules. 
   
-  Selecting two relatively similar schemes, such as UD and UCCA, allows
-  us to focus on content, and abstract away from differences of convention.
-  One source of similarity is UD's preference of lexical heads,
-  unlike other dependency schemes that prefer functional ones.
-  For example, where auxiliary verbs are present (e.g., ``is eating''), UD
-  marks the lexical verb ``eating'' as the head, while other schemes
-  may select the inflected ``is'' as the head instead.
-  While the two approaches are largely inter-translatable
+  Comparing these relatively similar schemes allows
+  us to focus on content, and abstract away from convention differences.
+  One similar aspect is UD's preference of lexical (rather than functional) heads.
+%  unlike other dependency schemes that prefer functional ones.
+  For example, in auxiliary verb constructions (e.g., ``is eating''), UD
+  marks the lexical verb (``eating'') as the head, while other dependency schemes
+  may select the auxiliary (``is'') instead.
+  While the approaches are largely inter-translatable
   \citep{Schwartz:12}, lexical head schemes are more similar in form to semantic schemes,
-   such as UCCA and broad-coverage semantic dependencies \citep{oepen2016towards},
-   which facilitates their comparison.
-  %Selecting more distant schemes for comparison could have potentially confounded our results.  
+   such as UCCA and semantic dependencies \citep{oepen2016towards}.
+   This facilitates their comparison.
+  %Selecting more distant schemes for comparison could have potentially confounded our results.
 
-  We begin by carefully examining the structures captured by each of the annotation schemes, to find distinctions made by one but not the other. 
-  We annotate 11K tokens from the English Web Treebank with gold-standard UCCA, so as to have a doubly gold-annotated set.
+  We begin by carefully examining the categories in each annotation schemes, to find distinctions made by one but not the other.
+  We annotate 11K tokens from the English Web Treebank with gold-standard UCCA, to have a doubly gold-annotated set.
   As UD uses bi-lexical trees (i.e., nodes correspond to tokens) and UCCA uses constituency-like DAGs (i.e., leaves correspond to tokens), 
-  we losslessly convert the UD structures into constituency-like graphs by inserting non-terminal nodes (\S\ref{sec:methodology}). 
+  we losslessly convert UD into constituency-like graphs by inserting non-terminal nodes (\S\ref{sec:methodology}).
   
   Using the shared formalism, we align the nodes of the UD and UCCA trees, and identify which nodes have no match on the other side. 
   For the aligned nodes, we construct a ``confusion matrix'' to identify which UCCA categories are aligned with each UD relation and vice versa. 
