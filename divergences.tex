@@ -471,16 +471,15 @@ we turn to discussing the content differences between UCCA and UD.
 
 \subsection{Confusion Matrix}\label{sec:confusion}
 
-Table~\ref{tab:confusion_matrix} presents the confusion matrix between the edge tags in converted UD trees
-and the annotated UCCA graphs from the shared EWT corpus
-(see \S\ref{sec:shared}).
-In case of multiple units with the same terminal yield (i.e., any unit with a single non-remote child),
-we take the top category only to avoid double-counting.
+Table~\ref{tab:confusion_matrix} presents the confusion matrix of categories between converted UD
+and the UCCA, in the shared EWT corpus.
+In case of multiple units with the same terminal yield (i.e., unit with a single non-remote child),
+we take the top category only, to avoid double-counting.
 Excluding punctuation, this results in 12,893 yields in UCCA and
 13,294 in UD.
-Of these, 11,541 are common, meaning that an oracle UCCA ``parser'' developed this way
+Of these, 11,541 are common, meaning that a UCCA ``parser'' developed this way
 would get a very high F1 score
-of 88.1\% given the gold UCCA label for every edge on conversion.
+of 88.1\%, if given the gold UCCA label for every converted edge.
 
 Examining the {\it head} row in Table \ref{tab:confusion_matrix} allows
 us to contrast UCCA's and UD's notions of a head. 
@@ -491,7 +490,7 @@ which are UCCA's notions of semantic heads.
 12.1\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
 UD but not in UCCA (\S\ref{sec:mwe}).
 Another source of unmatched units is inter-Scene linkage, which tends to be flatter in
-UCCA (see \S\ref{sec:linkage}).
+UCCA (\S\ref{sec:linkage}).
 The remaining cases (10.4\%) are mostly due to a head swap (e.g., ``\textit{all} of Dallas'', where \textit{all} 
 is a Quantifier of ``Dallas'' in UCCA, but the syntactic head in UD).
 
@@ -557,8 +556,8 @@ that do not match any UCCA (UD) unit.
 
 \subsection{Scenes vs. Non-Scenes}\label{sec:s}
 
-UCCA distinguishes between Scenes and Non-Scenes. 
-This distinction cuts across UD categories,
+UCCA distinguishes between Scenes and non-Scenes,
+This cuts across UD categories,
 as a Scene can be evoked by a verb, an eventive or stative
 noun (``negotiation'', ``fatigue''),
 an adjective or even a preposition (``this is \textit{for} John'').
