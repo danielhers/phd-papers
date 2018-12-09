@@ -106,12 +106,10 @@
 
 \section{Introduction}\label{sec:introduction}
   
-  % syntactic structure is important for semantics
-  
   The promise of semantic representations stems from 
   their ability to transparently reflect distinctions relevant for text understanding
   applications. For example, syntactic representations
-  are usually sensitive to POS-based distinctions, such as the distinction between compounds
+  are usually sensitive to distinctions based on POS (part of speech), such as between compounds
   and possessives. Semantic schemes are  less likely to make
   this distinction since a possessive can often be paraphrased as a compound
   and vice versa (e.g., ``US president''/``president of the US''),
@@ -119,7 +117,7 @@
   where a syntactic scheme would not.
 
   Nevertheless, little empirical study has been done on what distinguishes semantic schemes from
-  syntactic ones, who are still in many cases the backbones of text understanding systems. 
+  syntactic ones, which are still in many cases the backbone of text understanding systems. 
   Such studies are essential for 
   (1) determining whether and to what extent semantic methods should be adopted for text understanding applications;
   (2) defining better inductive biases for parsers, and allowing better use of the information encoded in syntax;
@@ -129,14 +127,6 @@
   play in semantic parsing, if any \cite{swayamdipta2018syntactic,strubell2018linguistically,P18-1192,C18-1233}.
   See \S\ref{sec:related_work}.
   %share much in terms of content \cite{abend2017state}.
-  %For use in text understanding, their transparent semantic distinctions are likely to be
-  %more beneficial than syntactic (e.g., POS-based) ones.
-  
-  %Despite the centrality of this discussion, it has so far been little informed by an empirical
-  %comparison of the two approaches,
-  %which can enable better ways to leverage content overlap.
-  %Understanding the differences can also
-  %.
 
   This paper aims to address this gap,
   focusing on {\it content} differences.
@@ -144,24 +134,24 @@
   the syntactic Universal Dependencies \cite[UD; ][]{nivre2016universal},
   and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal}.
   
-  We annotate 804 UD-anntoated sentences with UCCA structures (\S\ref{sec:shared}),
+  We annotate 804 UD-annotated sentences with UCCA (\S\ref{sec:shared}),
   and develop a converter to assimilate UD and UCCA,
   as they use formally different graph structures
   (\S\ref{sec:methodology}).
   We then align their nodes, and identify which UCCA categories match which UD relations,
   and which are unmatched.
 
-  We find that most content differences are due to these factors (\S\ref{sec:analysis}):
-
-  \begin{enumerate}[noitemsep]
-      \item The central distinction in UCCA is whether a phrase evoke a Scene (event),
-        whereas in UD it is based on POS tags (mainly clauses and noun phrases). % (\S\ref{sec:s}).
-      \item UCCA distinguishes between primary relations, secondary relations
-        and Participants, whereas UD's distinctions are again based on POS tags. % (\S\ref{sec:arguments}).
-      \item Multi-word expressions are handled differently,
+  Most content differences are due to (\S\ref{sec:analysis}):
+  \begin{enumerate}[noitemsep,leftmargin=*,topsep=0pt]
+      \item UCCA's distinction whether a phrase evoke a Scene (event),
+        as opposed to UD's POS-based distinction (predicates, nominals). % (\S\ref{sec:s}).
+      \item UCCA's distinction between primary relations, secondary relations
+        and Participants, as opposed to UD's core/non-core distinction. % (\S\ref{sec:arguments}).
+      \item Different treatment of multi-word expressions (MWEs),
         where UCCA has a stronger tendency to identify them in the text. % (\S\ref{sec:mwe}).
-      \item UCCA conflates several syntactic realizations of inter-clause linkage,
-        but disambiguates other cases which UD does not (e.g., infinitive vs. purposive \textit{to}). % (\S\ref{sec:linkage}).
+      \item UCCA's conflation of several syntactic realizations of inter-clause linkage,
+        and disambiguation of other cases that UD does not.
+        % (e.g., infinitive vs. purposive \textit{to}). % (\S\ref{sec:linkage}).
    \end{enumerate}
 
   Our findings suggest that the differences between the schemes are substantial, underscoring
