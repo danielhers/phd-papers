@@ -411,20 +411,20 @@ and shared arguments due to coordination, control, raising and relative clauses.
 
 UCCA is more inclusive in its use of remote edges, and accounts for 
 the entire class of implicit arguments termed {\it Constructional Null Instantiation} in FrameNet \citep{Ruppenhofer:16}.
-For example, UCCA adds a remote edge to mark the shared argument of \textit{bypassing} and
+For example, a UCCA remote edge marks the shared argument of \textit{bypassing} and
 \textit{create} in ``The Pentagon is bypassing official US intelligence channels [...] in order to create strife'' (from EWT). 
-Another example is ``if you call for an appointment they won't tell you to call back a month later so you can then make one'',
+Another example is ``if you call for an appointment [...] so you can then make one'',
 where a remote edge in UCCA indicates that \textit{one} refers to \textit{appointment}.
 Neither is covered by enhanced UD.
 
 In order to facilitate comparison, we remove remote edges and enhanced dependencies in the conversion process.
-We thus compare basic UD and UCCA trees. We defer a more complete comparison of UCCA and enhanced UD to future work.
+We thus compare basic UD and UCCA trees, deferring a comparison of UCCA and enhanced UD to future work.
 
 
 
 \subsection{Extensions to the Converter}\label{sec:local}
 
-We add rules the unified DAG converter to remove further non-content differences.
+We extend the unified DAG converter to remove further non-content differences.
 
 \paragraph{Unanalyzable units.}
 Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
@@ -443,12 +443,11 @@ headed by \textit{graduation} is ``After graduation'', the same as that of ``gra
 in Figure~\ref{fig:original_example_ud}).
 
 Since UD attaches subordinating and coordinating conjunctions to the following conjunct,
-this results in them being positioned as part
-of the conjuncts they relate (e.g.,
+this results in them being positioned in the same conjunct they relate (e.g.,
 \textit{After} will be included in the first conjunct in ``After arriving home, John went to sleep'';
 \textit{and} will be included in the second conjunct in ``John and Mary'').
 In contrast, UCCA places conjunctions as siblings to their conjuncts (e.g.,
-``[After] [arriving home], [John went to sleep'' and ``[John] [and] [Mary]''). 
+``[After] [arriving home], [John went to sleep]'' and ``[John] [and] [Mary]''). 
 
 To abstract away from these convention differences,
 we place 
@@ -476,12 +475,12 @@ Of these, 11,541 are common, meaning that a UCCA ``parser'' developed this way
 would get a very high F1 score
 of 88.1\%, if given the gold UCCA label for every converted edge.
 
-Only 84\% of syntactic arguments
+Notably, only 84\% of syntactic arguments
 (\texttt{ccomp}, \texttt{csubj}, \texttt{iobj}, \texttt{nsubj}, \texttt{obj}, \texttt{obl} and \texttt{xcomp})
 are Participants,
 and only 81\% of Participants are syntactic arguments---a difference stemming from
 the Scene/non-Scene (\S\ref{sec:s}) and argument/adjunct (\S\ref{sec:arguments}) distinctions.
-Notably, this does not include the different treatment of shared arguments (\S\ref{sec:conversion}).
+%, this does not include the different treatment of shared arguments (\S\ref{sec:conversion}).
 
 Examining the {\it head} row in Table~\ref{tab:confusion_matrix} allows
 us to contrast the schemes' notions of a head. 
