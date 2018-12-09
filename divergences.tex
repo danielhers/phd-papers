@@ -951,6 +951,11 @@ as they are irrelevant to the evaluation of content differences:
 & \scriptsize \bf \rotatebox{90}{\texttt{xcomp}} \\
 \hline
 %\small \bf English EWT &  \\
+\footnotesize \bf Labeled F1
+\\
+\footnotesize \bf Unlabeled F1
+\\
+\hline
 \footnotesize \bf Total in UD & 176 & 209 & 840 & 528 & 39 & 383 & 727 & 400 & 128 & 406 & 451 & 364 & 10 & 834 & 26 & 24 & 19 & 12 & 400 & 458 & 1083 & 94 & 566 & 496 & 125 & 12 & 178 \\
 \footnotesize \bf Match gold & 127 & 112 & 769 & 467 & 29 & 381 & 652 & 388 & 87 & 239 & 361 & 361 & 2 & 808 & 25 & 22 & 19 & 10 & 382 & 346 & 1046 & 70 & 474 & 364 & 86 & 12 & 62 \\
 \footnotesize \bf Match pred. & 70 & 51 & 697 & 435 & 19 & 363 & 680 & 358 & 61 & 238 & 265 & 354 & 5 & 778 & 25 & 21 & 13 & 5 & 375 & 303 & 959 & 61 & 335 & 234 & 45 & 4 & 60 \\
@@ -1201,8 +1206,7 @@ it is overall better than TUPA's unlabeled performance.
 The same pattern recurs when using gold standard syntax as features for TUPA.
 TUPA is a transition-based parser, which uses UD parses as features. Our
 results, however, suggest that encoding syntax more directly, perhaps through syntactic
-scaffolding \citep{swayamdipta2018syntactic} could benefit it,
-and assist in predicting the unit's boundaries.
+scaffolding \citep{swayamdipta2018syntactic}, could assist in predicting the unit's boundaries.
 
 In other cases, TUPA fails to disambiguate cases which are not disambiguated
 in UD. For example, TUPA does poorly on distinguishing between \texttt{nmod}s that modify
@@ -1245,8 +1249,7 @@ on a large set of high-quality annotations converted from PropBank.
 \newcite{szubert2018structured} proposed a method for aligning AMR
 \cite{banarescu2013abstract} and UD subgraphs,
 finding that 97\% of AMR edges are evoked by words or syntactic relations.
-\newcite{damonte-17} suggested fine-grained evaluation measures
-for AMR parsing, using sub-tasks of the AMR parsing task or UD labels to evaluate on.\oa{what?}
+\newcite{damonte-17} suggested refining AMR evaluation by UD labels.
 Similarly, our conversion protocol allows fine-grained evaluation of UCCA parsing.
 
 A related line of work tackles the transduction of syntactic structures into semantic ones.
