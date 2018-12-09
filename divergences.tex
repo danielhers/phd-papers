@@ -112,57 +112,76 @@
 
 \section{Introduction}\label{sec:introduction}
   
-  Semantic representations share much in terms of content \cite{abend2017state}.
-  For use in text understanding, their transparent semantic distinctions are likely to be
-  more beneficial than syntactic (e.g., POS-based) ones.
-  Nevertheless, semantic parsers leverage syntax in various ways,
-  including output space pruning \cite{xue2004calibrating}, 
-  syntactic features \cite{gildea2002automatic,N15-1007,E17-1045}, and
-  multi-task learning \cite{swayamdipta2016greedy,swayamdipta2018syntactic,strubell2018linguistically}.
-  Recently, the importance of syntax to semantics has been put in question
-  by strong performance without explicit syntactic representation
-  \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}.
+  % syntactic structure is important for semantics
+  
+  The promise of semantic representations stems from 
+  their ability to transparently reflect distinctions relevant for text understanding
+  applications. For example, syntactic representations
+  are usually sensitive to POS-based distinctions, such as the distinction between a compound
+  and a possessive construction. Semantic schemes are  less likely to make
+  this distinction since a possessive can often be paraphrased as a compound
+  and vice versa (e.g., ``United States president'' / ``president of the United States''),
+  but may distinguish between different senses of the possessive construction (e.g., ``some of the presidents'' and ``inauguration of the presidents''),
+  where a syntactic scheme would not.
 
-  Despite the centrality of this discussion, it has so far been little informed by an empirical
-  comparison of the two approaches,
-  which can enable better ways to leverage content overlap.
-  Understanding the differences can also
-  point at semantic distinctions unlikely to be resolved by syntax.
+  Nevertheless, little empirical study has been done on what distinguishes semantic schemes from
+  syntactic ones, who are still in many cases the backbones of text understanding systems. 
+  Such studies are essential for 
+  (1) determining whether and to what extent semantic methods should be adopted for text understanding applications;
+  (2) defining better inductive biases for parsers, and allowing better use of the information encoded in syntax;
+  (3) pointing at semantic distinctions unlikely to be resolved by syntax.
+
+  The importance of such an empirical study is emphasized by the ongoing discussion as to what role syntax should
+  play in semantic parsing, if any \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}, 
+  and by the variety of methods that leverage syntax for semantic parsing.
+  Examples of such methods include multi-task learning \cite{swayamdipta2016greedy,swayamdipta2018syntactic,strubell2018linguistically},
+  syntactic features \cite{gildea2002automatic,N15-1007,E17-1045}, and  
+  output space pruning \cite{xue2004calibrating}, among others.
+  
+  %share much in terms of content \cite{abend2017state}.
+  %For use in text understanding, their transparent semantic distinctions are likely to be
+  %more beneficial than syntactic (e.g., POS-based) ones.
+  
+  %Despite the centrality of this discussion, it has so far been little informed by an empirical
+  %comparison of the two approaches,
+  %which can enable better ways to leverage content overlap.
+  %Understanding the differences can also
+  %.
 
   This paper aims to address this gap,
   focusing on {\it content} differences.
-%  which cannot be resolved by simple conversion.
   As a test case, we compare relatively similar schemes (\S\ref{sec:representations}):
   the syntactic Universal Dependencies \cite[UD; ][]{nivre2016universal},
   and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal}.
-
-  After annotating a shared corpus with UCCA (\S\ref{sec:shared}),
-  we develop a converter to assimilate UD and UCCA,
+  
+  We annotate 804 UD-anntoated sentences with UCCA structures (\S\ref{sec:shared}),
+  and develop a converter to assimilate UD and UCCA,
   as they use formally different graph structures
   (\S\ref{sec:methodology}).
-  We then align their nodes,
-  and identify which UCCA categories match which UD relation,
+  We then align their nodes, and identify which UCCA categories match which UD relations,
   and which are unmatched.
-  We find that only 84\% of UD verb arguments are UCCA Participants,
-  and only 81\% the other way around.
-  Most content differences are due to these
-  factors (\S\ref{sec:analysis}):
+
+  We find that most content differences are due to these factors (\S\ref{sec:analysis}):
 
   \begin{enumerate}[noitemsep]
       \item The central distinction in UCCA is whether a phrase evoke a Scene (event),
-        whereas in UD it is based on part of speech. % (\S\ref{sec:s}).
+        whereas in UD it is based on POS tags (mainly clauses and noun phrases). % (\S\ref{sec:s}).
       \item UCCA distinguishes between primary relations, secondary relations
-      and Participants, as opposed to UD's core/non-core distinction. % (\S\ref{sec:arguments}).
+        and Participants, whereas UD's distinctions are again based on POS tags. % (\S\ref{sec:arguments}).
       \item Multi-word expressions are handled differently,
-        where UCCA has a stronger tendency to group multiple 
-        words into a single unit. % (\S\ref{sec:mwe}).
+        where UCCA has a stronger tendency to identify them in the text. % (\S\ref{sec:mwe}).
       \item UCCA conflates several syntactic realizations of inter-clause linkage,
-      but distinguishes between semantically different constructions
-      (e.g., infinitive vs. purposive \textit{to}). % (\S\ref{sec:linkage}).
+        but disambiguates other cases which UD does not (e.g., infinitive vs. purposive \textit{to}). % (\S\ref{sec:linkage}).
    \end{enumerate}
+
+  Our findings suggest that the differences between the schemes are substantial, underscoring
+  the potential contribution of UCCA parsing in particular and semantic parsing in general to
+  downstream text understand applications.
+  For example, only 81\% of UCCA's participants are UD clausal arguments, and 84\% the other way around,
+  suggesting that many semantic participants cannot be recovered from UD.\footnote{This excludes cases of shared 
+    argumenthood, which are partially covered by extended UD. See \S\ref{}.}
     
-   Other divergences stem from a different treatment of coordination, apposition and copulas.% (\S\ref{sec:misc}).
-  
+  %   Other divergences stem from a different treatment of coordination, apposition and copulas.% (\S\ref{sec:misc}).
   
   A methodology for comparing syntactic and semantic treebanks can also support fine-grained error 
   analysis of semantic parsers, as illustrated by \citet{szubert2018structured} 
@@ -171,7 +190,7 @@
   we perform fine-grained error analysis on UCCA parsing results
   according to UD relations (\S\ref{sec:fine_grained}).
   This analysis highlights challenges for existing UCCA parsing technology,
-  and suggests where the parsers may benefit from relying on the syntactic structure more directly.
+  and exposes cases where UCCA parsers may benefit from modeling syntactic structure more directly.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
