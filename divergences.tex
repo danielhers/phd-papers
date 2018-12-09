@@ -112,6 +112,8 @@
 
 \section{Introduction}\label{sec:introduction}
   
+  \cite{abend2017state}
+  
   %%%%%%%%%%%%%%%% Moved some of this text to Related Work %%%%%%%%%%%%%
   Semantic parsers leverage syntax in various ways,
   including output space pruning \cite{xue2004calibrating}, 
@@ -158,7 +160,7 @@
 
   \begin{enumerate}[noitemsep]
       \item UCCA's central distinction is whether a phrase evoke a Scene (event),
-        whereas UD's is based on part of speech. % (\S\ref{sec:scenes}).
+        whereas UD's is based on part of speech. % (\S\ref{sec:s}).
       \item UCCA distinguishes between primary relations, secondary relations
       and Participants, as opposed to UD's core/non-core distinction. % (\S\ref{sec:arguments}).
       \item Multi-word expressions are handled differently,
@@ -474,6 +476,13 @@ Excluding punctuation, this results in 12,893 yields in UCCA and
 Of these, 11,541 are common, meaning that a UCCA ``parser'' developed this way
 would get a very high F1 score
 of 88.1\%, if given the gold UCCA label for every converted edge.
+
+Only 84\% of syntactic arguments
+(\texttt{ccomp}, \texttt{csubj}, \texttt{iobj}, \texttt{nsubj}, \texttt{obj}, \texttt{obl} and \texttt{xcomp})
+are Participants,
+and only 81\% of Participants are syntactic arguments---a difference stemming from
+the Scene/non-Scene (\S\ref{sec:s}) and argument/adjunct (\S\ref{sec:arguments}) distinctions.
+Notably, this does not include the different treatment of shared arguments (\S\ref{sec:conversion}).
 
 Examining the {\it head} row in Table~\ref{tab:confusion_matrix} allows
 us to contrast the schemes' notions of a head. 
