@@ -652,7 +652,7 @@ as well as modals, adjectives and adverbs.
 \subsection{Multi-Word Expressions}\label{sec:mwe}
 
 UD and UCCA treat MWEs differently.
-MWEs in UD include names, compounds and grammaticalized fixed expressions.
+In UD they include names, compounds and grammaticalized fixed expressions.
 UCCA treats names and grammaticalized MWEs as unanalyzable units,
 but also a range of semantically opaque constructions
 (e.g., light verbs and idioms).
@@ -668,10 +668,10 @@ especially if compositional.
         (e.g., ``\textit{food} craving''), but can also be an Adverbial 
         (e.g., ``\textit{first time} buyers'') depending on its semantic category.
         %In cases where t UCCA annotates both parts  may be a co-Center (e.g., ``\textit{sweet potato} tempura'').
-        Other compounds in UD are phrasal verbs (e.g., ``figure out'', ``cleaned up''),
+        Other compounds in UD are phrasal verbs (e.g., ``figure \textit{out}'', ``cleaned \textit{up}''),
         which UCCA treats as unanalyzable (leading to an unmatched unit). 
             
-\paragraph{Subjects and Objects.}
+\paragraph{Core Arguments.}
       A significant number of subjects and objects are left unmatched as they
       form parts of MWEs marked in UCCA as unanalyzable. UD annotates
       MWEs involving a verb and its argument(s) just like any other clause, and therefore
@@ -679,8 +679,8 @@ especially if compositional.
       idioms (``bites {\it the dust}''), and figures of speech (e.g., ``when \textit{it} comes to''),
       treated as single UCCA units.
       
-\paragraph{Complex Prepositions.} Some complex prepositions, such as ``according to'' or ``on top of''
-      are unanalyzable in UCCA, but are not encoded as MWEs in UD.
+\paragraph{Complex Prepositions.} Some complex prepositions (e.g., \textit{according to} or \textit{on top of}),
+      not encoded as MWEs in UD, are unanalyzable in UCCA.
 
 
 \subsection{Clause Linkage}\label{sec:linkage}
@@ -694,7 +694,7 @@ of Parallel Scenes.
 
 Another difference is that UCCA tends to use flat structures where UD, being a dependency scheme,
 has to select one of the clauses to be the head, and the other to be the dependent. For coordination,
-which is arguably an inherently flat structure, this may yield scope ambiguities issues for UD. 
+arguably an inherently flat structure, this may yield scope ambiguities for UD. 
 For instance, ``unique gifts and cards'' is ambiguous in UD between the interpretation 
 that ``unique'' applies to ``gifts and cards'' and the one where it applies only to gifts (in both
 cases ``unique'' is dependent of ``gifts''). UCCA, allowing non-terminal nodes, disambiguates
