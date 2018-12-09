@@ -201,9 +201,9 @@
   
 
 
-\paragraph{UCCA.}\label{sec:ucca}
+\paragraph{UCCA}\label{sec:ucca}
 %  \citep[Universal Cognitive Conceptual Annotation;][]{abend2013universal} is a
-  Semantic annotation scheme rooted in typological 
+  is a semantic annotation scheme rooted in typological 
   and cognitive linguistic theory.
   It aims to represent the main semantic phenomena in text, abstracting away from syntactic forms.
   Shown to be preserved remarkably well across translations \citep{sulem2015conceptual}, it has been applied to
@@ -216,8 +216,8 @@
   A {\it Scene} is UCCA's notion of an event or a frame, and is a description of a movement, an action or a state which persists in time. 
   Every Scene contains one primary relation, which can be either a Process or a State. 
   Scenes may contain any number of Participants, a category which also includes abstract participants and locations.
-  They may also contain secondary relations (Adverbials), which cover semantic distinctions such as manner, modality and aspect,
-  and temporal relations (Time).
+  They may also contain temporal relations (Time), and secondary relations (Adverbials), 
+  which cover semantic distinctions such as manner, modality and aspect.
 
   Scenes may be \textit{linked} to one another in several ways.
   First, a Scene can provide information about some entity,
@@ -227,7 +227,7 @@
   in ``The child who went to school is John''.
   A Scene may also be a Participant in another Scene. For example, ``John went to school'' in the sentence: ``He said John went to school''. 
   In other cases, Scenes are annotated as Parallel Scenes (H), which are flat structures and may include a Linker (L), 
-  as in:  ``When$_L$ [he arrives]$_H$, [he will call them]$_H$''.
+  as in: ``When$_L$ [he arrives]$_H$, [he will call them]$_H$''.
 
   The category Center denotes the semantic head of non-Scene units,
   which determines their type. 
@@ -273,9 +273,9 @@
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{UD.}\label{sec:ud}
+\paragraph{UD}\label{sec:ud}
 %\cite[UD; ][]{nivre2016universal} is
-Syntactic dependency scheme used in many languages,
+is a syntactic dependency scheme used in many languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
 annotation. Formally, UD uses bi-lexical trees, with edge labels 
 representing syntactic relations between words.
@@ -316,7 +316,7 @@ UD relations are henceforth written in \texttt{typewriter} font.
 \section{Shared Gold Standard Corpus}\label{sec:shared}
 
 We annotate 163 English passages, containing 804 sentences
-from the \textit{reviews} section of the 
+from the reviews section of the 
 English Web Treebank \cite[EWT; ][]{bies2012english}.
 The sentences are annotated by two UCCA annotators
 according to v2.0 of the UCCA
@@ -327,7 +327,7 @@ English\_EWT treebank, this is a \textit{shared} gold-standard UCCA and UD
 annotated corpus.
 
 The data contains 11,103 tokens---4\% of the full UD English\_EWT treebank,
-and 20\% of its \textit{reviews} section.
+and 20\% of its reviews section.
 Of the UCCA-annotated sentences, 622 belong to the UD training set,
 192 to the development set and 153 to the test set.
 %\daniel{Add inter-annotator agreement}
