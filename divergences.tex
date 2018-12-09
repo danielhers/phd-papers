@@ -184,7 +184,8 @@
   to support rapid annotation and to be suitable for downstream language understanding
   applications. This section provides a brief introduction to each of the schemes, whereas
   the next sections discuss their content in further
-  detail.\footnote{See Supplementary Material for a definition of each category in both schemes.}
+  detail.\footnote{See Supplementary Material for a definition of each category in both schemes,
+  and their abbreviations.}
   
 
 
@@ -219,8 +220,10 @@
   Non-Scene units are headed by units of the category Center,
   denoting the type of entity or thing described by the whole unit.
   Other elements in non-Scene units include Quantifiers (such as ``{\it dozens} of people''), Connectors (mostly
-  coordinating conjunctions, and Relators, which in English correspond to prepositions).
+  coordinating conjunctions).
   Other modifiers to the Center are marked as Elaborators.
+  
+%  Relators correspond in English mostly to preposition
   
   UCCA distinguishes \textit{primary} edges, corresponding 
   to explicit relations, from \textit{remote} edges,
@@ -481,7 +484,7 @@ the Scene/non-Scene (\S\ref{sec:s}) and argument/adjunct (\S\ref{sec:arguments})
 Examining the {\it head} row in Table~\ref{tab:confusion_matrix} allows
 us to contrast the schemes' notions of a head. 
 {\it head}-labeled units cover units that have at least
-one dependent in UD (technically, they are non-terminals added by the converter).
+one dependent in UD, or single-clause sentences (technically, they are non-terminals added by the converter).
 77.5\% correspond to Processes, States, Parallel Scenes or Centers,
 which are UCCA's notions of semantic heads.
 12.1\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
