@@ -232,6 +232,7 @@
 
 \begin{figure}[th]
   \centering
+  \scalebox{.8}{
     \begin{tikzpicture}[level distance=9mm, sibling distance=14mm, ->,
         every circle node/.append style={fill=black}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
@@ -255,6 +256,7 @@
         ;
       \draw[dashed,->] (graduation) to node [above] {\scriptsize $A$} (John);
     \end{tikzpicture}
+    }
 \caption{\label{fig:example_ucca}
  Example UCCA graph. Dashed: a remote edge.}
 \end{figure}
@@ -340,7 +342,7 @@ to the converter, which abstract away from further non-content differences.
 
 \begin{figure}[th]
   \centering
-  \scalebox{.95}{
+  \scalebox{.8}{
   \begin{tikzpicture}[level distance=15mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\tt},
       level 1/.style={sibling distance=13mm},
