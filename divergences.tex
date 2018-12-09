@@ -103,12 +103,6 @@
   for fine-grained evaluation of UCCA parsing.
 \end{abstract}
 
-% For camera-ready: add this to the UCCA-annotated set
-% 1	unique	unique	ADJ	JJ	Degree=Pos	2	amod	_	_
-% 2	gifts	gift	NOUN	NNS	Number=Plur	0	root	_	_
-% 3	and	and	CCONJ	CC	_	4	cc	_	_
-% 4	cards	card	NOUN	NNS	Number=Plur	2	conj	_	_
-
 
 \section{Introduction}\label{sec:introduction}
   
@@ -683,22 +677,64 @@ especially if compositional.
       not encoded as MWEs in UD, are unanalyzable in UCCA.
 
 
-\subsection{Clause Linkage}\label{sec:linkage}
+\subsection{Linkage}\label{sec:linkage}
 
 UD categorizes clause linkage into coordination,
 subordination, argumenthood (complementation),
-and parataxis (a residual category).
+and parataxis. %(a residual category).
 UCCA only distinguishes between argumenthood 
-and largely conflates clausal coordination, subordination and parataxis into the notion
-of Parallel Scenes.
+and the other cases, which are largely conflated into the notion
+of Parallel Scene.
 
-Another difference is that UCCA tends to use flat structures where UD, being a dependency scheme,
-has to select one of the clauses to be the head, and the other to be the dependent. For coordination,
-arguably an inherently flat structure, this may yield scope ambiguities for UD. 
-For instance, ``unique gifts and cards'' is ambiguous in UD between the interpretation 
-that ``unique'' applies to ``gifts and cards'' and the one where it applies only to gifts (in both
-cases ``unique'' is dependent of ``gifts''). UCCA, allowing non-terminal nodes, disambiguates
-this case.
+Furthermore, UCCA tends to flatten linkage, where UD, being a dependency scheme,
+has to select a head and dependent.
+This yields scope ambiguities for coordination, an inherently flat structure. 
+For instance, ``unique gifts and cards'' is ambiguous in UD as to whether
+\textit{unique} applies only to \textit{gifts} or to the whole phrase---both
+annotated as in Figure~\ref{fig:conj_ud}.
+UCCA, allowing non-terminal nodes, disambiguates this case (Figure~\ref{fig:conj_ucca}).
+
+% For camera-ready: add this to the UCCA-annotated set
+% 1	unique	unique	ADJ	JJ	Degree=Pos	2	amod	_	_
+% 2	gifts	gift	NOUN	NNS	Number=Plur	0	root	_	_
+% 3	and	and	CCONJ	CC	_	4	cc	_	_
+% 4	cards	card	NOUN	NNS	Number=Plur	2	conj	_	_
+
+\begin{figure}[th]
+  \centering
+\begin{subfigure}{.45\columnwidth}
+    \begin{dependency}[text only label, label style={above,font=\tt}, font=\small, edge unit distance=2ex]
+    \begin{deptext}[column sep=.1em,ampersand replacement=\^]
+    unique \^ gifts \^ and \^ cards \\
+    \end{deptext}
+        \depedge{2}{1}{amod}
+        \deproot{2}{root}
+        \depedge{4}{3}{cc}
+        \depedge{2}{4}{conj}
+    \end{dependency}
+    \caption{UD.\label{fig:conj_ud}}
+\end{subfigure}
+\hfill
+\begin{subfigure}{.45\columnwidth}
+    \scalebox{.8}{
+    \begin{tikzpicture}[level distance=9mm, sibling distance=14mm, ->,
+        every circle node/.append style={fill=black}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node [word] {unique} edge from parent node[left] {\scriptsize $E$}}
+        child {node [circle] {}
+        {
+          child {node [word] {gifts} edge from parent node[left] {\scriptsize $C$}}
+          child {node [word] {and} edge from parent node[left] {\scriptsize $N$}}
+          child {node [word] {cards} edge from parent node[right] {\scriptsize $C$}}
+        } edge from parent node[right] {\scriptsize $C$} }
+        ;
+    \end{tikzpicture}
+    }
+    \caption{UCCA.\label{fig:conj_ucca}}
+ \end{subfigure}
+ \caption{Example for coordination in UD and UCCA.\label{fig:conj}}
+\end{figure}
 
 Where matched, adverbial clauses and parataxis (\texttt{advcl}, \texttt{parataxis})
 are almost exclusively Parallel Scenes.
