@@ -736,16 +736,16 @@ UCCA, allowing non-terminal nodes, disambiguates this case (Figure~\ref{fig:conj
  \caption{Example for coordination in UD and UCCA.\label{fig:conj}}
 \end{figure}
 
-Where matched, adverbial clauses and parataxis (\texttt{advcl}, \texttt{parataxis})
-are almost exclusively Parallel Scenes.
-For example, ``We called few companies before \textit{we decided to hire them}''
+Adverbial clauses and parataxis
+are almost exclusively Parallel Scenes
+(e.g., ``We called few companies before \textit{we decided to hire them}''
 and ``Check out The Willow Lounge, \textit{you'll be happy}'').
-We note that while in UD the dependent \texttt{mark}, e.g. ``before'',
-is attached to the following adverbial clause,
-in UCCA linkage is a flat structure.
-This is a convention difference that we fixed with local modifications
-(\S\ref{sec:local})---otherwise most \texttt{advcl} instances would be unmatched,
-containing the linker which is outside the Scene in UCCA.
+Note that while in UD, \texttt{mark} (e.g., \textit{before})
+is attached to the dependent clause,
+a UCCA Linker lies outside the linked Scenes.
+To reduce unmatched \texttt{advcl} instances,
+this convention difference is fixed by local modifications
+(\S\ref{sec:local}).
 
 Many of the unmatched units of these types are due to cases where our converter was not able to detect the conjunction 
 and raise it. 
