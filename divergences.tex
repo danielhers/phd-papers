@@ -760,25 +760,76 @@ are almost exclusively Parallel Scenes
 (e.g., ``We called few companies before \textit{we decided to hire them}''
 and ``Check out The Willow Lounge, \textit{you'll be happy}'').
 Note that while in UD, \texttt{mark} (e.g., \textit{before})
-is attached to the dependent clause,
+is attached to the dependent adverbial clause,
 a UCCA Linker lies outside the linked Scenes.
 To reduce unmatched \texttt{advcl} instances,
 this convention difference is fixed by local modifications
 (\S\ref{sec:local}).
-
-Many of the unmatched units of these types are due to cases where our converter was not able to detect the conjunction 
-and raise it. 
-For instance, the word ``to'' is ambiguous in UD between inter-Scene linkage, such as the purposive ``to'', and
-the infinitive marker ``to''. UCCA annotates the former as a Linker, but the latter as a Function.
-Another case is the wh-pronouns, which are again ambiguous between Linkers (``he was willing to budge a little on the price {\it which} means a lot to me''),
+However,
+many unmatched units are due to conjunctions we could not reliably raise.
+For instance, the word \textit{to} is ambiguous between Linker
+(purposive \textit{to}) and Function (infinitive marker).
+Another case is wh-pronouns, which are again ambiguous between Linkers
+(``he was willing to budge a little on the price {\it which} means a lot to me''),
 and other uses, such as in question words or free relative clauses.
 
-Other mismatches cannot be easily categorized, and can be said to result from the long tail of differences in how UD and UCCA construe linkage.
-Consider, ``From the moment you enter the restaurant, you know you are some place special''. ``From the moment'' is in UCCA
-a Linker between ``you enter the restaurant'' and ``you know [...] special'', while UD treats ``you enter the restaurant'' as a relative
-clause over ``moment''.
+Other mismatches result from the long tail of differences in how UD and UCCA construe linkage.
+Consider the sentence in Figure~\ref{fig:linkage}.
+While \textit{moment} is an oblique dependent of \textit{know},
+\textit{From the moment} is analyzed as Linker.
 
+\begin{figure}[th]
+\begin{subfigure}{\columnwidth}
+  \centering
+    \begin{dependency}[text only label, label style={above,font=\tt}, font=\small, edge unit distance=2ex]
+    \begin{deptext}[column sep=.7em,ampersand replacement=\^]
+    From \^ the \^ moment \^ you \^ enter \^ , \^ you \^ know \\
+    \end{deptext}
+        \depedge[edge unit distance=2.4ex]{3}{1}{case}
+        \depedge{3}{2}{det}
+        \depedge[edge unit distance=1ex]{8}{3}{obl}
+        \depedge[edge unit distance=1.5ex]{3}{5}{acl}
+        \depedge[edge unit distance=1ex]{5}{4}{nsubj}
+        \depedge[edge unit distance=1.5ex]{8}{6}{punct}
+        \depedge[edge start x offset=-3pt,edge unit distance=1ex]{8}{7}{nsubj}
+        \deproot{8}{root}
+    \end{dependency}
+    \caption{UD.\label{fig:linkage_ud}}
+\end{subfigure}
 
+\begin{subfigure}{\columnwidth}
+  \centering
+    \scalebox{.8}{
+    \begin{tikzpicture}[level distance=9mm, sibling distance=31mm, ->,
+        level 2/.style={sibling distance=11mm},
+        every circle node/.append style={fill=black}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node [circle] {}
+        {
+          child {node [word] {From} edge from parent node[left] {\scriptsize $R$}}
+          child {node [word] {the} edge from parent node[left] {\scriptsize $E$}}
+          child {node [word] {\quad moment} edge from parent node[right] {\scriptsize $C$}}
+        } edge from parent node[above] {\scriptsize $L$} }
+        child {node [circle] {}
+        {
+          child {node [word] {you} edge from parent node[left] {\scriptsize $A$}}
+          child {node [word] {enter} edge from parent node[right] {\scriptsize $P$}}
+        } edge from parent node[left] {\scriptsize $H$} }
+        child {node [circle] {}
+        {
+          child {node (comma) [word] {,} edge from parent [draw=none]}
+          child {node [word] {you} edge from parent node[left] {\scriptsize $A$}}
+          child {node [word] {know} edge from parent node[right] {\scriptsize $S$}}
+        } edge from parent node[above] {\scriptsize $H$} }
+        ;
+      \draw[->] (ROOT) to node [right] {\scriptsize $U$} (comma);
+    \end{tikzpicture}
+    }
+    \caption{UCCA.\label{fig:linkage_ucca}}
+ \end{subfigure}
+ \caption{Example for clause linkage in UD and UCCA.\label{fig:linkage}}
+\end{figure}
     
 
 \subsection{Other Differences}\label{sec:misc}
