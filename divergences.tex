@@ -111,11 +111,11 @@
   The promise of semantic representations stems from 
   their ability to transparently reflect distinctions relevant for text understanding
   applications. For example, syntactic representations
-  are usually sensitive to POS-based distinctions, such as the distinction between a compound
-  and a possessive construction. Semantic schemes are  less likely to make
+  are usually sensitive to POS-based distinctions, such as the distinction between compounds
+  and possessives. Semantic schemes are  less likely to make
   this distinction since a possessive can often be paraphrased as a compound
-  and vice versa (e.g., ``United States president'' / ``president of the United States''),
-  but may distinguish between different senses of the possessive construction (e.g., ``some of the presidents'' and ``inauguration of the presidents''),
+  and vice versa (e.g., ``US president''/``president of the US''),
+  but may distinguish different senses of possessives (e.g., ``some of the presidents'' and ``inauguration of the presidents''),
   where a syntactic scheme would not.
 
   Nevertheless, little empirical study has been done on what distinguishes semantic schemes from
@@ -126,12 +126,8 @@
   (3) pointing at semantic distinctions unlikely to be resolved by syntax.
 
   The importance of such an empirical study is emphasized by the ongoing discussion as to what role syntax should
-  play in semantic parsing, if any \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}, 
-  and by the variety of methods that leverage syntax for semantic parsing.
-  Examples of such methods include multi-task learning \cite{swayamdipta2016greedy,swayamdipta2018syntactic,strubell2018linguistically},
-  syntactic features \cite{gildea2002automatic,N15-1007,E17-1045}, and  
-  output space pruning \cite{xue2004calibrating}, among others.
-  
+  play in semantic parsing, if any \cite{swayamdipta2018syntactic,strubell2018linguistically,P18-1192,C18-1233}.
+  See \S\ref{sec:related_work}.
   %share much in terms of content \cite{abend2017state}.
   %For use in text understanding, their transparent semantic distinctions are likely to be
   %more beneficial than syntactic (e.g., POS-based) ones.
@@ -173,7 +169,7 @@
   downstream text understand applications.
   For example, only 81\% of UCCA's participants are UD clausal arguments, and 84\% the other way around,
   suggesting that many semantic participants cannot be recovered from UD.\footnote{This excludes cases of shared 
-    argumenthood, which are partially covered by extended UD. See \S\ref{}.}
+    argumenthood, which are partially covered by extended UD. See \S\ref{sec:conversion}.}
     
   %   Other divergences stem from a different treatment of coordination, apposition and copulas.% (\S\ref{sec:misc}).
   
