@@ -112,19 +112,11 @@
 
 \section{Introduction}\label{sec:introduction}
   
-%  The use of syntactic parsing as a proxy for semantic structure has a long tradition in NLP.
-%  Indeed,
+  %%%%%%%%%%%%%%%% Moved some of this text to Related Work %%%%%%%%%%%%%
   Semantic parsers leverage syntax in various ways,
   including output space pruning \cite{xue2004calibrating}, 
   syntactic features \cite{gildea2002automatic,N15-1007,E17-1045}, and
-  joint parsing or multi-task learning \cite{surdeanu2008conll,hajivc2009conll,strubell2018linguistically,swayamdipta2018syntactic}.
-  Some syntactic representation approaches, such as CCG \cite{Steedman:00} and UD
-  \citep{nivre2016universal},
-%  directly reflect the underlying semantics, and
-  have been used to
-  transduce skeletal semantic forms using rule-based systems \cite{Basile:12,white2016universal,reddy2017universal}.
-%  However, strong performance recently achieved without explicitly modeling syntax \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}
-%  has questioned its impact on semantics.
+  multi-task learning \cite{swayamdipta2016greedy,swayamdipta2018syntactic,strubell2018linguistically}.
   Other works have contested the importance of syntax to semantics,
   by achieving strong performance without explicitly modeling syntax \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}.
     
@@ -137,26 +129,15 @@
   focusing on {\it content} differences, which cannot be resolved by simple
   conversion.
   As a test case, we compare relatively similar schemes (\S\ref{sec:representations}):
-%  to focus on content and abstract away from convention differences:
-  the syntactic Universal Dependencies (UD),
+  the syntactic Universal Dependencies \cite[UD; ][]{nivre2016universal},
   and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal}.
-  %Selecting more distant schemes for comparison could have potentially confounded our results.
 
   For reliable comparison data,
   we annotate 11K tokens from the English Web Treebank with gold-standard UCCA (\S\ref{sec:shared}).
-%  As UD uses bi-lexical trees
-%  (i.e., nodes correspond to tokens)
-%  and UCCA uses constituency-like DAGs
-%  (i.e., leaves correspond to tokens),
-%  we losslessly convert UD into constituency-like graphs by inserting non-terminal nodes
   As UD and UCCA use formally different graph structures,
   we develop conversion rules to assimilate them
    (\S\ref{sec:methodology}).
-%    We then carefully examine the categories in each scheme, to find distinctions made by one but not the other:
   Using the shared formalism, we align UD and UCCA nodes,
-%  and identify which nodes have no match on the other side.
-%  For the aligned nodes, we
-%  and construct a ``confusion matrix'' to 
   and identify which UCCA categories match which UD relation,
   and which nodes have no match.
    We find that most content differences between the schemes are due to the following
@@ -1123,8 +1104,23 @@ both unlabeled and labeled performance for \texttt{compound}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}\label{sec:related_work}
 
-Few works have attempted an empirical study of the differences between syntactic and semantic 
-schemes. 
+The use of syntactic parsing as a proxy for semantic structure has a long tradition in NLP.
+Indeed, semantic parsers leverage syntax in various ways,
+including output space pruning \cite{xue2004calibrating}, 
+syntactic features \cite{gildea2002automatic,N15-1007,E17-1045}, and
+multi-task learning \cite{swayamdipta2016greedy,swayamdipta2018syntactic,strubell2018linguistically}.
+Two CoNLL shared tasks on joint syntactic and semantic dependency parsing
+\cite{surdeanu2008conll,hajivc2009conll}
+explored the connection between syntactic dependencies and
+semantic annotations built on top of them.
+Some syntactic representation approaches, such as CCG \cite{Steedman:00},
+directly reflect the underlying semantics, and have been used to
+transduce skeletal semantic forms using rule-based systems \cite{Basile:12}.
+%Other works have contested the importance of syntax to semantics,
+%by achieving strong performance without explicitly modeling syntax \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}.
+  
+However, few works have attempted an empirical study of
+the differences between syntactic and semantic schemes. 
 \newcite{zhang2017evaluation} evaluate PredPatt \citep{white2016universal},
 a pattern-based framework for predicate-argument extraction from UD,
 on a large set of high-quality annotations converted from PropBank.
