@@ -122,53 +122,40 @@
   Recently, the importance of syntax to semantics has been put in question
   by strong performance without explicit syntactic representation
   \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}.
-  
-%\begin{figure}[th]
-%  \centering
-%    \begin{tikzpicture}[->]
-%      \node (syntax) at (0,1.3) {Syntax};
-%      \node (semantics) at (2,1.3) {Semantics};
-%      \node (understanding) at (1.1,0) {Text understanding};
-%      \draw (syntax) to node [above] {?} (semantics);
-%      \draw (syntax) to node [left] {?} (understanding);
-%      \draw (semantics) to node [right] {?} (understanding);
-%    \end{tikzpicture}
-%\caption{\label{fig:illustration}}
-%\end{figure}
 
-  Despite the centrality of this discussion, it has so far been little informed by empirical studies of
-  the differences and commonalities between syntactic and semantic representations.
-  Understanding such content differences can enable better ways to leverage content overlap between schemes, 
-  as well as point at semantic distinctions unlikely to be resolved by syntax.
+  Despite the centrality of this discussion, it has so far been little informed by an empirical
+  comparison of the two approaches,
+  which can enable better ways to leverage content overlap.
+  Understanding the differences can also
+  point at semantic distinctions unlikely to be resolved by syntax.
 
   This paper aims to address this gap,
-  focusing on {\it content} differences, which cannot be resolved by simple
-  conversion.
+  focusing on {\it content} differences.
+%  which cannot be resolved by simple conversion.
   As a test case, we compare relatively similar schemes (\S\ref{sec:representations}):
   the syntactic Universal Dependencies \cite[UD; ][]{nivre2016universal},
   and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal}.
 
-  For reliable comparison data,
-  we annotate 11K tokens from the English Web Treebank with gold-standard UCCA (\S\ref{sec:shared}).
-  As UD and UCCA use formally different graph structures,
-  we develop conversion rules to assimilate them
-   (\S\ref{sec:methodology}).
-  Using the shared formalism, we align UD and UCCA nodes,
+  After annotating a shared corpus with UCCA (\S\ref{sec:shared}),
+  we develop a converter to assimilate UD and UCCA,
+  as they use formally different graph structures
+  (\S\ref{sec:methodology}).
+  We then align UD and UCCA nodes,
   and identify which UCCA categories match which UD relation,
   and which nodes have no match.
    We find that most content differences between the schemes are due to the following
    factors (\S\ref{sec:analysis}):
 
   \begin{enumerate}[noitemsep]
-      \item UCCA's central distinction is whether a phrase evoke a Scene (event),
-        whereas UD's is based on part of speech. % (\S\ref{sec:s}).
+      \item The central distinction in UCCA is whether a phrase evoke a Scene (event),
+        whereas in UD it is based on part of speech. % (\S\ref{sec:s}).
       \item UCCA distinguishes between primary relations, secondary relations
       and Participants, as opposed to UD's core/non-core distinction. % (\S\ref{sec:arguments}).
       \item Multi-word expressions are handled differently,
         where UCCA has a stronger tendency to group multiple 
         words into a single unit. % (\S\ref{sec:mwe}).
-      \item Linkage is handled differently. While UCCA conflates several syntactic realizations of inter-clause linkage,
-      it distinguishes between semantically different constructions
+      \item UCCA conflates several syntactic realizations of inter-clause linkage,
+      but distinguishes between semantically different constructions
       (e.g., infinitive vs. purposive \textit{to}). % (\S\ref{sec:linkage}).
    \end{enumerate}
     
