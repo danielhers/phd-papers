@@ -142,7 +142,7 @@
 
   Most content differences are due to (\S\ref{sec:analysis}):
   \begin{enumerate}[noitemsep,leftmargin=*,topsep=0pt]
-      \item UCCA's distinction whether a phrase evoke a Scene (event),
+      \item UCCA's distinction whether a phrase evokes a Scene (event),
         as opposed to UD's POS-based distinction (predicates, nominals). % (\S\ref{sec:s}).
       \item UCCA's distinction between primary relations, secondary relations
         and Participants, as opposed to UD's core/non-core distinction. % (\S\ref{sec:arguments}).
@@ -216,10 +216,10 @@
   In other cases, Scenes are annotated as Parallel Scenes (H), which are flat structures and may include a Linker (L), 
   as in: ``When$_L$ [he arrives]$_H$, [he will call them]$_H$''.
 
-  The category Center denotes the semantic head of non-Scene units,
-  which determines their type. 
+  Non-Scene units are headed by units of the category Center,
+  denoting the type of entity or thing described by the whole unit.
   Other elements in non-Scene units include Quantifiers (such as ``{\it dozens} of people''), Connectors (mostly
-  coordinating conjunctions, and Relators, that in English correspond to prepositions).
+  coordinating conjunctions, and Relators, which in English correspond to prepositions).
   Other modifiers to the Center are marked as Elaborators.
   
   UCCA distinguishes \textit{primary} edges, corresponding 
@@ -384,7 +384,8 @@ Intermediate non-terminals and \textit{head} edges are introduced by the unified
 
 \subsection{Basic Conversion}\label{sec:conversion}
 
-Figure~\ref{fig:converted_example_ud} presents an example UD tree conversion.
+Figure~\ref{fig:converted_example_ud} present the same tree from Figure~\ref{fig:original_example_ud}
+after conversion.
 The converter adds pre-terminals per token,
 and attaches them according to the original dependency tree:
 traversing it from the root, for each head it creates a non-terminal
@@ -404,8 +405,10 @@ and shared arguments due to coordination, control, raising and relative clauses.
 
 UCCA is more inclusive in its use of remote edges, and accounts for 
 the entire class of implicit arguments termed {\it Constructional Null Instantiation} in FrameNet \citep{Ruppenhofer:16}.
-For example, a UCCA remote edge marks the shared argument of \textit{bypassing} and
-\textit{create} in ``The Pentagon is bypassing official US intelligence channels [...] in order to create strife'' (from EWT). 
+For example, in
+``The Pentagon is bypassing official US intelligence channels [...] in order to create strife'' (from EWT),
+remote edges mark \textit{Pentagon} as a shared argument of \textit{bypassing} and
+\textit{create}. 
 Another example is ``if you call for an appointment [...] so you can then make one'',
 where a remote edge in UCCA indicates that \textit{one} refers to \textit{appointment}.
 Neither is covered by enhanced UD.
