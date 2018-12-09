@@ -966,6 +966,7 @@ as they are irrelevant to the evaluation of content differences:
 %mode & 101 & 103 & 524 & 218 & 10 & 285 & 489 & 305 & 78 & 174 & 265 & 333 & 2 & 1 & 13 & 22 & 19 & 8 & 161 & 231 & 993 & 53 & 439 & 247 & 79 & 9 & 44 \\
 \footnotesize \bf $\sfrac{\text{Mode}}{\text{Match gold}}$ & 80 & 92 & 68 & 47 & 34 & 75 & 75 & 79 & 90 & 73 & 73 & 92 & 100 & 96 & 52 & 100 & 100 & 80 & 42 & 67 & 95 & 76 & 93 & 68 & 92 & 75 & 71 \\
 \footnotesize \bf $\sfrac{\text{Train Mode}}{\text{Match}}$ & 78 & 86 & 59 & 83 & 53 & 91 & 90 & 55 & 68 & 82 & 58 & 49 & 86 & 98 & 31 & 87 & 90 & 100 & 46 & 62 & 88 & 80 & 80 & 61 & 83 & 100 & 71 \\
+\hline
 \footnotesize \bf Mean {\#}Words & 5.1 & 6.0 & 1.2 & 1.2 & 2.9 & 1.0 & 1.0 & 1.0 & 7.4 & 1.2 & 5.3 & 1.0 & 3.3 & 1.0 & 1.0 & 1.0 & 1.1 & 2.0 & 1.0 & 2.4 & 1.6 & 1.2 & 3.1 & 3.8 & 5.7 & 1.6 & 5.8
 %\small \bf English Wiki &  \\
 %\small \bf English 20K &  \\
@@ -978,7 +979,7 @@ UD relations exclude
 \texttt{fixed}, \texttt{flat}, \texttt{goeswith},
 \texttt{dep}, \texttt{orphan}, and \texttt{root}.
 A total of 89.5\% of all UD relations matched gold-standard UCCA units
-(see \S\ref{sec:analysis}).
+(see Table \ref{tab:confusion_matrix}).
 \textit{Match gold} is the number of gold-standard UCCA units matching the UD relation units,
 which is the sum of the corresponding row (without \textsc{NoMatch}) from Table~\ref{tab:confusion_matrix}.
 \textit{Match pred.} is the number of matching UCCA units in the graphs predicted by TUPA.
@@ -1181,8 +1182,7 @@ It performs reasonably well on \texttt{nsubj} too,
 but the label is correct only 87\% of the times when the yield is correct,
 even though 95\% of gold \texttt{nsubj}s are Participants.
 This could be explained by the distribution in the Wiki training set,
-where only 88\% are Participants.
-In this case, domain adaptation techniques could adjust it to the target distribution.
+where only 88\% are Participants, suggesting that domain adaptation techniques may help.
 A similar situation happens with \texttt{cc}, \texttt{conj} and \texttt{cop},
 where TUPA is severely ``confused'' by the training distribution,
 despite the peaked test distribution---they are mostly Linkers, Parallel Scenes
@@ -1191,8 +1191,8 @@ For \texttt{cc} and \texttt{conj} this is a Scene/non-Scene distinction,
 while for \texttt{cop} it is between identity and attribution.
 For \texttt{aux}, \texttt{mark} and \texttt{nummod},
 it does well despite the varied test distribution,
-possibly by learning a lexical consideration to distinguish,
-e.g., between modals (Adverbials) and auxiliary verbs (Functions),
+possibly by learning to lexically distinguish,
+e.g., between modals (Adverbials) and auxiliaries (Functions),
 though they are both \texttt{aux}.
 
 TUPA does worst on \texttt{discourse}, \texttt{vocative} and \texttt{appos},
@@ -1203,15 +1203,21 @@ are quite common: \texttt{parataxis}, \texttt{xcomp}, \texttt{advcl},
 \texttt{conj} and \texttt{ccomp}.
 Although the matching beteween UCCA and UD is not perfect in these cases,
 it is overall better than TUPA's unlabeled performance.
-It seems that encoding syntax more directly could benefit it,
-assisting in selecting the correct unit boundaries.
-In the case of \texttt{nmod}, however, non-syntactic information
-could improve TUPA's ability to distinguish between eventive (Scene-evoking)
-and non-eventive nouns
-(and similarly for \texttt{cc}, \texttt{conj}, \texttt{amod} and \texttt{obl}).
-Identifying light verbs and idioms would improve
-both unlabeled and labeled performance for \texttt{compound}.
+The same pattern recurs when using gold standard syntax as features for TUPA.
+TUPA is a transition-based parser, which uses UD parses as features. Our
+results, however, suggest that encoding syntax more directly, perhaps through syntactic
+scaffolding \citep{swayamdipta2018syntactic} could benefit it,
+and assist in predicting the unit's boundaries.
 
+In other cases, TUPA fails to disambiguate cases which are not disambiguated
+in UD. For example, TUPA does poorly on distinguishing between \texttt{nmod}s that modify
+scene-evoking nouns (Participants) and those modifying other nouns (Elaborators). 
+This information is not to be found in UD (selecting the mode in these cases obtains
+roughly the same performance as TUPA).
+Relying on lexical resources that distinguish eventive and relational nouns from concrete 
+nouns could help in this case, and lexical resources for light verbs and idioms could
+help performance in the similar case of \texttt{compound}s.
+%and similarly for \texttt{cc}, \texttt{conj}, \texttt{amod} and \texttt{obl}).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1220,61 +1226,60 @@ both unlabeled and labeled performance for \texttt{compound}.
 The use of syntactic parsing as a proxy for semantic structure has a long tradition in NLP.
 Indeed, semantic parsers have leveraged syntax
 for output space pruning \cite{xue2004calibrating}, 
-syntactic features \cite{gildea2002automatic,N15-1007,E17-1045}, and
+syntactic features \cite{gildea2002automatic,N15-1007,E17-1045}, 
+joint modeling \cite{surdeanu2008conll,hajivc2009conll}, and
 multi-task learning \cite{swayamdipta2016greedy,swayamdipta2018syntactic,strubell2018linguistically}.
-Two CoNLL shared tasks on joint syntactic and semantic dependency parsing
-\cite{surdeanu2008conll,hajivc2009conll}
-explored the connection between syntactic dependencies and
-semantic annotations built on top of them.
-Some syntactic representation approaches, such as CCG \cite{Steedman:00},
+Some syntactic representation approaches, notably CCG \cite{Steedman:00},
 directly reflect the underlying semantics, and have been used to
-transduce skeletal semantic forms using rule-based systems \cite{Basile:12}.
+transduce semantic forms using rule-based systems \cite{Basile:12}.
+
+%Two CoNLL shared tasks on joint syntactic and semantic dependency parsing
+
+%explored the connection between syntactic dependencies and
+%semantic annotations built on top of them.
 %Other works have contested the importance of syntax to semantics,
 %by achieving strong performance without explicitly modeling syntax \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}.
   
-However, few works have attempted an empirical study of
+However, only few works have attempted an empirical study of
 the differences between syntactic and semantic schemes. 
-\newcite{zhang2017evaluation} evaluate PredPatt \citep{white2016universal},
-a pattern-based framework for predicate-argument extraction from UD,
+\newcite{zhang2017evaluation} evaluated PredPatt \citep{white2016universal},
+a framework for extracting predicate-argument structures from UD,
 on a large set of high-quality annotations converted from PropBank.
-They evaluate the extracted predicate-argument relations using both
-gold-standard and parsed UD.
+%They evaluated the extracted predicate-argument relations using both
+%gold-standard and parsed UD.
 \newcite{szubert2018structured} proposed a method for aligning AMR
 \cite{banarescu2013abstract} and UD subgraphs,
 finding that 97\% of AMR edges are evoked by words or syntactic relations.
 \newcite{damonte-17} suggested fine-grained evaluation measures
-for AMR parsing, using sub-tasks of the AMR parsing task or UD labels to evaluate on.
+for AMR parsing, using sub-tasks of the AMR parsing task or UD labels to evaluate on.\oa{what?}
 Similarly, our conversion protocol allows fine-grained evaluation of UCCA parsing.
 
 A related line of work tackles the transduction of syntactic structures into semantic ones.
-\newcite{reddy2016transforming} introduced a method for converting dependency
-structures to logical forms using lambda calculus.
-They map syntactic dependency relations directly to logical relations,
-assuming the predicate-argument structure is isomorphic to the dependency structure,
-but handling exceptions by rules relating to specific linguistic constructions,
-namely prepositional phrases, conjunction, relatives clauses, and wh-questions.
+\newcite{reddy2016transforming} proposed rule-based a method for converting UD
+to logical forms. 
+%They map syntactic dependency relations directly to logical relations,
+%assuming the predicate-argument structure is isomorphic to the dependency structure,
+%but handling exceptions by rules relating to specific linguistic constructions,
+%namely prepositional phrases, conjunction, relatives clauses, and wh-questions.
 \newcite{stanovsky2016getting} converted Stanford Dependencies trees into
-proposition structures ({\sc PropS}), abstracting away from some syntactic detail to
-achieve a more semantically-oriented representation.
+proposition structures ({\sc PropS}), abstracting away from some syntactic detail.
+% to achieve a more semantically-oriented representation.
 
 
 \section{Conclusion}\label{sec:conclusion}
 
-We carefully examine similarities and divergences in the content encoded by UD and UCCA. We have annotated 804
-sentences from the English Web Treebank corpus with gold-standard UCCA,
-and used an automated methodology to
-evaluate how well the two schemes aline, developing
+We evaluate the similarities and divergences in the content encoded by UD and UCCA. 
+We have annotated 804 sentences from the English Web Treebank corpus with gold-standard UCCA,
+and used an automated methodology to evaluate how well the two schemes align, developing
 a converter to abstract away from superficial structural
 differences. Our findings provide a detailed picture of the content differences between the schemes, placing most of them
 in one of four major categories. We further demonstrate that the comparison methodology can be used for fine-grained
 evaluation of UCCA parsers, and find concrete paths for advancement in UCCA parsing, either by relying more directly on 
-information already encoded by UD, or by relying on other existing resources for information not encoded in UD.
+information already encoded by UD, or by relying on other existing resources for information not encoded in UD.\oa{this needs to turn into more exciting}
 
-Future work will extend our conversion protocol to a full labeled conversion,
-using the most frequent category for each source relation,
-or more sophisticated mechanisms.
-The converter can be used as a UCCA parser,
-or for generating extra training data for TUPA.
+%Future work will extend our conversion protocol to a full labeled conversion,
+%using .
+%The converter can be used as a UCCA parser, or for generating extra training data for TUPA.
 
 %%%%% Acknowledgments %%%%
 % Jakob Prange, Nathan Schneider
