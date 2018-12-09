@@ -686,14 +686,8 @@ especially if compositional.
 
 \subsection{Linkage}\label{sec:linkage}
 
-UD categorizes clause linkage into coordination,
-subordination, argumenthood (complementation),
-and parataxis. %(a residual category).
-UCCA only distinguishes between argumenthood 
-and the other cases, which are largely conflated into the notion
-of Parallel Scene.
-
-Furthermore, UCCA tends to flatten linkage, where UD, being a dependency scheme,
+\paragraph{Head selection.}
+UCCA tends to flatten linkage, where UD, being a dependency scheme,
 has to select a head and dependent.
 This yields scope ambiguities for coordination, an inherently flat structure. 
 For instance, ``unique gifts and cards'' is ambiguous in UD as to whether
@@ -743,29 +737,34 @@ UCCA, allowing non-terminal nodes, disambiguates this case (Figure~\ref{fig:conj
  \caption{Example for coordination in UD and UCCA.\label{fig:conj}}
 \end{figure}
 
-\texttt{Clausal dependents.}
-Adverbial clauses and parataxis
-are almost exclusively Parallel Scenes
+
+\paragraph{Clausal dependents.}
+UD categorizes clause linkage into coordination,
+subordination, argumenthood (complementation),
+and parataxis. %(a residual category).
+UCCA distinguishes argumenthood 
+but conflates the other cases into Parallel Scenes,
+which both adverbial clauses and parataxis
+are almost exclusively marked as
 (e.g., ``We called few companies before \textit{we decided to hire them}''
 and ``Check out The Willow Lounge, \textit{you'll be happy}'').
+
 Note that while in UD, \texttt{mark} (e.g., \textit{before})
 is attached to the dependent adverbial clause,
 a UCCA Linker lies outside the linked Scenes.
 To reduce unmatched \texttt{advcl} instances,
 this convention difference is fixed by local modifications
 (\S\ref{sec:local}).
-However,
-many unmatched units are due to conjunctions we could not reliably raise.
-For instance, the word \textit{to} is ambiguous between Linker
+Many remaining unmatched units are due to conjunctions we could not reliably raise.
+For instance, the marker \textit{to} introducing an \texttt{xcomp} is ambiguous between Linker
 (purposive \textit{to}) and Function (infinitive marker).
-Another case is wh-pronouns, which are again ambiguous between Linkers
+Similarly, wh-pronouns may be Linkers
 (``he was willing to budge a little on the price {\it which} means a lot to me''),
-and other uses, such as in question words or free relative clauses.
-
+but have other uses in questions and free relative clauses.
 Other mismatches result from the long tail of differences in how UD and UCCA construe linkage.
 Consider the sentence in Figure~\ref{fig:linkage}.
-While \textit{moment} is an oblique dependent of \textit{know},
-\textit{From the moment} is analyzed as Linker.
+While \textit{moment} is an oblique argument of \textit{know} in UD,
+\textit{From the moment} is analyzed as Linker in UCCA.
 
 \begin{figure}[th]
 \begin{subfigure}{\columnwidth}
