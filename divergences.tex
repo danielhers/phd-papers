@@ -92,7 +92,7 @@
   We target this gap, and take Universal Dependencies (UD) and UCCA as a test case.
   %We emprically evaluate in what cases the two schemes converge and diverge in their content,
   After abstracting away from differences of convention or formalism,
-  we find that most content divergences can ascribed to: 
+  we find that most content divergences can be ascribed to: 
   (1) UCCA's distinction between a Scene and a non-Scene; % as opposed to UD's POS-based distinctions;
   (2) UCCA's distinction between primary relations, secondary ones and participants; %, not accounted for by UD; 
   (3) different treatment of multi-word expressions, and
@@ -270,7 +270,7 @@
 is a syntactic dependency scheme used in many languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
 annotation. Formally, UD uses bi-lexical trees, with edge labels 
-representing syntactic relations between words.
+representing syntactic relations.
 
   One aspect of UD similar to UCCA is its preference of lexical (rather than functional) heads.
 %  unlike other dependency schemes that prefer functional ones.
@@ -571,9 +571,9 @@ an adjective or even a preposition (``this is \textit{for} John'').
       depending on whether they link Scenes or non-Scenes, respectively.
       For example, ``who'' in ``Overall, Joe is a happy camper \textit{who} has found a great spot'' is an \texttt{nsubj}, but a Linker.
 
-\paragraph{Adjectival modifiers.} Adverbials when modifying Scenes
-    (``\textit{romantic} dinner''), States when describing the state of
-    non-Scenes (``\textit{beautiful} hotel'') or when used predicatively (``such a \textit{convinient} location''), or
+\paragraph{Adjectival modifiers} are Adverbials when modifying Scenes
+    (``\textit{romantic} dinner''), States when describing non-Scenes (``\textit{beautiful} hotel'') 
+    or when used predicatively (``such a \textit{convinient} location''), or
     Elaborators where defining inherent properties of non-Scenes (``\textit{medical} school'').
 
 \paragraph{Nominal and clausal modifiers.}
@@ -618,11 +618,11 @@ an adjective or even a preposition (``this is \textit{for} John'').
 \subsection{Primary and Secondary Relations}\label{sec:arguments}
 
 UD distinguishes core arguments, adverbial modifiers,
-and obliques, which in English UD correspond to prepositional arguments.
+and obliques, which in English UD correspond to prepositional dependents of a verb.
 UCCA distinguishes Participants, including locations and abstract entities,
 from secondary relations (Adverbials), 
 which cover manner, aspect and modality.
-Secondary relations can be verbs (e.g., \textit{begin}, \textit{fail}),
+Adverbials can be verbs (e.g., \textit{begin}, \textit{fail}),
 prepositional phrases (\textit{with disrespect}),
 as well as modals, adjectives and adverbs.
 
@@ -632,7 +632,7 @@ as well as modals, adjectives and adverbs.
     Obliques
 %   generally correspond in English to prepositional phrases, and
     may be
-    Participants (e.g., ``wait \textit{for Nick})), Time (e.g., ``for over 7 years'') 
+    Participants (e.g., ``wait \textit{for Nick}''), Time (e.g., ``for over 7 years'') 
     or Adverbials---mostly manner adjuncts (``by far'').
 
 \paragraph{Clausal arguments.}
@@ -759,7 +759,7 @@ Note that while in UD, \texttt{mark} (e.g., \textit{before})
 is attached to the dependent adverbial clause,
 a UCCA Linker lies outside the linked Scenes.
 To reduce unmatched \texttt{advcl} instances,
-this convention difference is fixed by local modifications
+this convention difference is fixed by the converter
 (\S\ref{sec:local}).
 Many remaining unmatched units are due to conjunctions we could not reliably raise.
 For instance, the marker \textit{to} introducing an \texttt{xcomp} is ambiguous between Linker
@@ -850,8 +850,8 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
     On the other hand, discourse elements that relate one Scene to the other 
     are Linkers (e.g., ``I am sure, \textit{well}, she says'').
 
-\paragraph{Vocatives.}
-    Both Ground and Participants if they participate in the Scene \textit{and} are the party addressed.
+\paragraph{Vocatives}
+    are both Ground and Participants if they participate in the Scene \textit{and} are the party addressed.
     For example, \textit{Mark} in ``Thanks \textit{Mark}'' is both the person addressed and the one thanked.\footnote{UCCA allows marking more than one category over an edge, although this
     functionality is not used often for English.}
     
@@ -862,7 +862,7 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
 
 \paragraph{Excluded relations.}
 We exclude the following UD labels,
-as they are irrelevant to the evaluation of content differences:
+as they are irrelevant to our evaluation:
 \texttt{root} (always matches the entire sentence);
 \texttt{punct} (punctuation is not annotated in UCCA);
 \texttt{dep} (unspecified dependency),
