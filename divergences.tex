@@ -835,6 +835,87 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
  \end{subfigure}
  \caption{Example for clause linkage in UD and UCCA.\label{fig:linkage}}
 \end{figure}
+
+\begin{table*}[ht]
+\centering
+\scriptsize
+\setlength\tabcolsep{2pt}
+\def\arraystretch{1.5}
+\vspace{-8mm}
+% \scriptsize \bf \rotatebox{90}{Primary}
+\begin{tabular}{l|ccccccccccccccccccccccccccc}
+& \scriptsize \bf \rotatebox{90}{\texttt{acl}}
+& \scriptsize \bf \rotatebox{90}{\texttt{advcl}}
+& \scriptsize \bf \rotatebox{90}{\texttt{advmod}}
+& \scriptsize \bf \rotatebox{90}{\texttt{amod}}
+& \scriptsize \bf \rotatebox{90}{\texttt{appos}}
+& \scriptsize \bf \rotatebox{90}{\texttt{aux}}
+& \scriptsize \bf \rotatebox{90}{\texttt{case}}
+& \scriptsize \bf \rotatebox{90}{\texttt{cc}}
+& \scriptsize \bf \rotatebox{90}{\texttt{ccomp}}
+& \scriptsize \bf \rotatebox{90}{\texttt{compound}}
+& \scriptsize \bf \rotatebox{90}{\texttt{conj}}
+& \scriptsize \bf \rotatebox{90}{\texttt{cop}}
+& \scriptsize \bf \rotatebox{90}{\texttt{csubj}}
+& \scriptsize \bf \rotatebox{90}{\texttt{det}}
+& \scriptsize \bf \rotatebox{90}{\texttt{discourse}}
+& \scriptsize \bf \rotatebox{90}{\texttt{expl}}
+& \scriptsize \bf \rotatebox{90}{\texttt{iobj}}
+& \scriptsize \bf \rotatebox{90}{\texttt{list}}
+& \scriptsize \bf \rotatebox{90}{\texttt{mark}}
+& \scriptsize \bf \rotatebox{90}{\texttt{nmod}}
+& \scriptsize \bf \rotatebox{90}{\texttt{nsubj}}
+& \scriptsize \bf \rotatebox{90}{\texttt{nummod}}
+& \scriptsize \bf \rotatebox{90}{\texttt{obj}}
+& \scriptsize \bf \rotatebox{90}{\texttt{obl}}
+& \scriptsize \bf \rotatebox{90}{\texttt{parataxis}}
+& \scriptsize \bf \rotatebox{90}{\texttt{vocative}}
+& \scriptsize \bf \rotatebox{90}{\texttt{xcomp}} \\
+\hline
+%\small \bf English EWT &  \\
+\footnotesize \bf Unlabeled F1
+& 53 & 49 & 91 & 90 & 63 & 97 & 92 & 93 & 59 & 79 & 75 & 98 & 29 & 96 & 96 & 88 & 81 & 67 & 96 & 82 & 94 & 81 & 73 & 65 & 55 & 50 & 56 \\
+\footnotesize \bf Labeled F1
+& 39 & 33 & 62 & 40 & 29 & 78 & 70 & 50 & 50 & 51 & 34 & 67 & -- & 92 & 12 & 60 & 63 & -- & 61 & 56 & 81 & 67 & 58 & 41 & 12 & 13 & 31 \\
+\hline
+\footnotesize \bf Total in UD & 176 & 209 & 840 & 528 & 39 & 383 & 727 & 400 & 128 & 406 & 451 & 364 & 10 & 834 & 26 & 24 & 19 & 12 & 400 & 458 & 1083 & 94 & 566 & 496 & 125 & 12 & 178 \\
+\footnotesize \bf Match gold & 127 & 112 & 769 & 467 & 29 & 381 & 652 & 388 & 87 & 239 & 361 & 361 & 2 & 808 & 25 & 22 & 19 & 10 & 382 & 346 & 1046 & 70 & 474 & 364 & 86 & 12 & 62 \\
+\footnotesize \bf Match pred. & 70 & 51 & 697 & 435 & 19 & 363 & 680 & 358 & 61 & 238 & 265 & 354 & 5 & 778 & 25 & 21 & 13 & 5 & 375 & 303 & 959 & 61 & 335 & 234 & 45 & 4 & 60 \\
+\footnotesize \bf Unlabeled & 52 & 40 & 670 & 408 & 15 & 361 & 616 & 347 & 44 & 188 & 234 & 351 & 1 & 759 & 24 & 19 & 13 & 5 & 363 & 266 & 941 & 53 & 296 & 194 & 36 & 4 & 34 \\
+\footnotesize \bf Labeled & 38 & 27 & 454 & 180 & 7 & 291 & 465 & 187 & 37 & 122 & 106 & 239 & 0 & 728 & 3 & 13 & 10 & 0 & 230 & 181 & 815 & 44 & 233 & 122 & 8 & 1 & 19 \\
+\hline
+\footnotesize \bf $\sfrac{\text{Labeled}}{\text{Unlabeled}}$\% & 73 & 68 & 68 & 44 & 47 & 81 & 75 & 54 & 84 & 65 & 45 & 68 & 0 & 96 & 13 & 68 & 77 & 0 & 63 & 68 & 87 & 83 & 79 & 63 & 22 & 25 & 56 \\
+%mode & 101 & 103 & 524 & 218 & 10 & 285 & 489 & 305 & 78 & 174 & 265 & 333 & 2 & 1 & 13 & 22 & 19 & 8 & 161 & 231 & 993 & 53 & 439 & 247 & 79 & 9 & 44 \\
+\footnotesize \bf $\sfrac{\text{Mode}}{\text{Match gold}}$\% & 80 & 92 & 68 & 47 & 34 & 75 & 75 & 79 & 90 & 73 & 73 & 92 & 100 & 96 & 52 & 100 & 100 & 80 & 42 & 67 & 95 & 76 & 93 & 68 & 92 & 75 & 71 \\
+\footnotesize \bf $\sfrac{\text{Train Mode}}{\text{Match}}$\% & 78 & 86 & 59 & 83 & 53 & 91 & 90 & 55 & 68 & 82 & 58 & 49 & 86 & 98 & 31 & 87 & 90 & 100 & 46 & 62 & 88 & 80 & 80 & 61 & 83 & 100 & 71 \\
+\hline
+\footnotesize \bf Mean {\#}Words & 5.1 & 6.0 & 1.2 & 1.2 & 2.9 & 1.0 & 1.0 & 1.0 & 7.4 & 1.2 & 5.3 & 1.0 & 3.3 & 1.0 & 1.0 & 1.0 & 1.1 & 2.0 & 1.0 & 2.4 & 1.6 & 1.2 & 3.1 & 3.8 & 5.7 & 1.6 & 5.8
+%\small \bf English Wiki &  \\
+%\small \bf English 20K &  \\
+%\small \bf French 20K &  \\
+%\small \bf German 20K & 
+\end{tabular}
+\caption{Fine-grained error analysis on the shared EWT annotated corpus.
+UD relations exclude
+%\texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
+\texttt{fixed}, \texttt{flat}, \texttt{goeswith},
+\texttt{dep}, \texttt{orphan}, and \texttt{root}.
+A total of 89.5\% of all UD relations matched gold-standard UCCA units
+(see Table \ref{tab:confusion_matrix}).
+\textit{Match gold} is the number of gold-standard UCCA units matching the UD relation units,
+which is the sum of the corresponding row (without \textsc{NoMatch}) from Table~\ref{tab:confusion_matrix}.
+\textit{Match pred.} is the number of matching UCCA units in the graphs predicted by TUPA.
+\textit{Unlabeled} are the matched units in the intersection between the gold-standard and prediction,
+where edge categories are ignored;
+in \textit{Labeled} edge categories are taken into account.
+\textit{Mode} refers to the number of occurrences of the most frequent gold UCCA category
+to match the UD relation, according to Table~\ref{tab:confusion_matrix}
+(for gold-standard UD), or in the Wiki training set that TUPA was trained on
+(using UDPipe-predicted dependencies).
+\textit{Mean {\#}Words} is the average number of terminals in yields corresponding to each relation
+(intuitively, the more words a unit contains, the harder it is to match its terminal yield exactly).
+\label{tab:fine_grained_results}}
+\end{table*}
     
 
 \subsection{Other Differences}\label{sec:misc}
@@ -923,87 +1004,6 @@ as they are irrelevant to our evaluation:
 %trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki development set.
 %As can be seen, the primary labeled F1 continues improving substantially even from 90\% to 100\%
 %of the training data. More training data is likely to yield even better performance.
-
-\begin{table*}[th]
-\centering
-\scriptsize
-\setlength\tabcolsep{2pt}
-\def\arraystretch{1.5}
-\vspace{-8mm}
-% \scriptsize \bf \rotatebox{90}{Primary}
-\begin{tabular}{l|ccccccccccccccccccccccccccc}
-& \scriptsize \bf \rotatebox{90}{\texttt{acl}}
-& \scriptsize \bf \rotatebox{90}{\texttt{advcl}}
-& \scriptsize \bf \rotatebox{90}{\texttt{advmod}}
-& \scriptsize \bf \rotatebox{90}{\texttt{amod}}
-& \scriptsize \bf \rotatebox{90}{\texttt{appos}}
-& \scriptsize \bf \rotatebox{90}{\texttt{aux}}
-& \scriptsize \bf \rotatebox{90}{\texttt{case}}
-& \scriptsize \bf \rotatebox{90}{\texttt{cc}}
-& \scriptsize \bf \rotatebox{90}{\texttt{ccomp}}
-& \scriptsize \bf \rotatebox{90}{\texttt{compound}}
-& \scriptsize \bf \rotatebox{90}{\texttt{conj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{cop}}
-& \scriptsize \bf \rotatebox{90}{\texttt{csubj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{det}}
-& \scriptsize \bf \rotatebox{90}{\texttt{discourse}}
-& \scriptsize \bf \rotatebox{90}{\texttt{expl}}
-& \scriptsize \bf \rotatebox{90}{\texttt{iobj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{list}}
-& \scriptsize \bf \rotatebox{90}{\texttt{mark}}
-& \scriptsize \bf \rotatebox{90}{\texttt{nmod}}
-& \scriptsize \bf \rotatebox{90}{\texttt{nsubj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{nummod}}
-& \scriptsize \bf \rotatebox{90}{\texttt{obj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{obl}}
-& \scriptsize \bf \rotatebox{90}{\texttt{parataxis}}
-& \scriptsize \bf \rotatebox{90}{\texttt{vocative}}
-& \scriptsize \bf \rotatebox{90}{\texttt{xcomp}} \\
-\hline
-%\small \bf English EWT &  \\
-\footnotesize \bf Unlabeled F1
-& 53 & 49 & 91 & 90 & 63 & 97 & 92 & 93 & 59 & 79 & 75 & 98 & 29 & 96 & 96 & 88 & 81 & 67 & 96 & 82 & 94 & 81 & 73 & 65 & 55 & 50 & 56 \\
-\footnotesize \bf Labeled F1
-& 39 & 33 & 62 & 40 & 29 & 78 & 70 & 50 & 50 & 51 & 34 & 67 & -- & 92 & 12 & 60 & 63 & -- & 61 & 56 & 81 & 67 & 58 & 41 & 12 & 13 & 31 \\
-\hline
-\footnotesize \bf Total in UD & 176 & 209 & 840 & 528 & 39 & 383 & 727 & 400 & 128 & 406 & 451 & 364 & 10 & 834 & 26 & 24 & 19 & 12 & 400 & 458 & 1083 & 94 & 566 & 496 & 125 & 12 & 178 \\
-\footnotesize \bf Match gold & 127 & 112 & 769 & 467 & 29 & 381 & 652 & 388 & 87 & 239 & 361 & 361 & 2 & 808 & 25 & 22 & 19 & 10 & 382 & 346 & 1046 & 70 & 474 & 364 & 86 & 12 & 62 \\
-\footnotesize \bf Match pred. & 70 & 51 & 697 & 435 & 19 & 363 & 680 & 358 & 61 & 238 & 265 & 354 & 5 & 778 & 25 & 21 & 13 & 5 & 375 & 303 & 959 & 61 & 335 & 234 & 45 & 4 & 60 \\
-\footnotesize \bf Unlabeled & 52 & 40 & 670 & 408 & 15 & 361 & 616 & 347 & 44 & 188 & 234 & 351 & 1 & 759 & 24 & 19 & 13 & 5 & 363 & 266 & 941 & 53 & 296 & 194 & 36 & 4 & 34 \\
-\footnotesize \bf Labeled & 38 & 27 & 454 & 180 & 7 & 291 & 465 & 187 & 37 & 122 & 106 & 239 & 0 & 728 & 3 & 13 & 10 & 0 & 230 & 181 & 815 & 44 & 233 & 122 & 8 & 1 & 19 \\
-\hline
-\footnotesize \bf $\sfrac{\text{Labeled}}{\text{Unlabeled}}$\% & 73 & 68 & 68 & 44 & 47 & 81 & 75 & 54 & 84 & 65 & 45 & 68 & 0 & 96 & 13 & 68 & 77 & 0 & 63 & 68 & 87 & 83 & 79 & 63 & 22 & 25 & 56 \\
-%mode & 101 & 103 & 524 & 218 & 10 & 285 & 489 & 305 & 78 & 174 & 265 & 333 & 2 & 1 & 13 & 22 & 19 & 8 & 161 & 231 & 993 & 53 & 439 & 247 & 79 & 9 & 44 \\
-\footnotesize \bf $\sfrac{\text{Mode}}{\text{Match gold}}$\% & 80 & 92 & 68 & 47 & 34 & 75 & 75 & 79 & 90 & 73 & 73 & 92 & 100 & 96 & 52 & 100 & 100 & 80 & 42 & 67 & 95 & 76 & 93 & 68 & 92 & 75 & 71 \\
-\footnotesize \bf $\sfrac{\text{Train Mode}}{\text{Match}}$\% & 78 & 86 & 59 & 83 & 53 & 91 & 90 & 55 & 68 & 82 & 58 & 49 & 86 & 98 & 31 & 87 & 90 & 100 & 46 & 62 & 88 & 80 & 80 & 61 & 83 & 100 & 71 \\
-\hline
-\footnotesize \bf Mean {\#}Words & 5.1 & 6.0 & 1.2 & 1.2 & 2.9 & 1.0 & 1.0 & 1.0 & 7.4 & 1.2 & 5.3 & 1.0 & 3.3 & 1.0 & 1.0 & 1.0 & 1.1 & 2.0 & 1.0 & 2.4 & 1.6 & 1.2 & 3.1 & 3.8 & 5.7 & 1.6 & 5.8
-%\small \bf English Wiki &  \\
-%\small \bf English 20K &  \\
-%\small \bf French 20K &  \\
-%\small \bf German 20K & 
-\end{tabular}
-\caption{Fine-grained error analysis on the shared EWT annotated corpus.
-UD relations exclude
-%\texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
-\texttt{fixed}, \texttt{flat}, \texttt{goeswith},
-\texttt{dep}, \texttt{orphan}, and \texttt{root}.
-A total of 89.5\% of all UD relations matched gold-standard UCCA units
-(see Table \ref{tab:confusion_matrix}).
-\textit{Match gold} is the number of gold-standard UCCA units matching the UD relation units,
-which is the sum of the corresponding row (without \textsc{NoMatch}) from Table~\ref{tab:confusion_matrix}.
-\textit{Match pred.} is the number of matching UCCA units in the graphs predicted by TUPA.
-\textit{Unlabeled} are the matched units in the intersection between the gold-standard and prediction,
-where edge categories are ignored;
-in \textit{Labeled} edge categories are taken into account.
-\textit{Mode} refers to the number of occurrences of the most frequent gold UCCA category
-to match the UD relation, according to Table~\ref{tab:confusion_matrix}
-(for gold-standard UD), or in the Wiki training set that TUPA was trained on
-(using UDPipe-predicted dependencies).
-\textit{Mean {\#}Words} is the average number of terminals in yields corresponding to each relation
-(intuitively, the more words a unit contains, the harder it is to match its terminal yield exactly).
-\label{tab:fine_grained_results}}
-\end{table*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Fine-Grained UCCA Evaluation}\label{sec:fine_grained}
