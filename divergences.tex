@@ -48,6 +48,7 @@
 \hyphenation{SemEval}
 \hyphenation{English}
 \hyphenation{PredPatt}
+\setlength{\belowcaptionskip}{-10pt}
 
 
 %\lstset{basicstyle=\ttfamily}
@@ -236,7 +237,7 @@
 \begin{figure}[th]
   \centering
   \scalebox{.8}{
-    \begin{tikzpicture}[level distance=9mm, sibling distance=14mm, ->,
+    \begin{tikzpicture}[level distance=9mm, sibling distance=19mm, ->,
         every circle node/.append style={fill=black}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
@@ -263,6 +264,8 @@
 \caption{\label{fig:example_ucca}
  Example UCCA graph. Dashed: a remote edge.}
 \end{figure}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{UD}\label{sec:ud}
@@ -348,8 +351,8 @@ to the converter, which abstract away from further non-content differences.
   \scalebox{.8}{
   \begin{tikzpicture}[level distance=15mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\tt},
-      level 1/.style={sibling distance=13mm},
-      level 2/.style={sibling distance=1cm}]
+      level 1/.style={sibling distance=17mm},
+      level 2/.style={sibling distance=12mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
     \node (ROOT) [fill=black,circle] {}
       child {node (after) [fill=black,circle] {}
@@ -711,7 +714,7 @@ UCCA, allowing non-terminal nodes, disambiguates this case (Figure~\ref{fig:conj
 \begin{figure}[th]
   \centering
 \begin{subfigure}{.45\columnwidth}
-    \begin{dependency}[text only label, label style={above,font=\tt}, font=\small, edge unit distance=2ex]
+    \begin{dependency}[text only label, label style={above,font=\tt}, font=\small, edge unit distance=1.5ex]
     \begin{deptext}[column sep=.1em,ampersand replacement=\^]
     unique \^ gifts \^ and \^ cards \\
     \end{deptext}
@@ -720,7 +723,7 @@ UCCA, allowing non-terminal nodes, disambiguates this case (Figure~\ref{fig:conj
         \depedge{4}{3}{cc}
         \depedge{2}{4}{conj}
     \end{dependency}
-    \caption{UD.\label{fig:conj_ud}}
+    \caption{UD\label{fig:conj_ud}}
 \end{subfigure}
 \hfill
 \begin{subfigure}{.45\columnwidth}
@@ -739,7 +742,7 @@ UCCA, allowing non-terminal nodes, disambiguates this case (Figure~\ref{fig:conj
         ;
     \end{tikzpicture}
     }
-    \caption{UCCA.\label{fig:conj_ucca}}
+    \caption{UCCA\label{fig:conj_ucca}}
  \end{subfigure}
  \caption{Example for coordination in UD and UCCA.\label{fig:conj}}
 \end{figure}
@@ -775,28 +778,35 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
 
 \begin{figure}[th]
 \begin{subfigure}{\columnwidth}
-  \centering
-    \begin{dependency}[text only label, label style={above,font=\tt}, font=\small, edge unit distance=2ex]
-    \begin{deptext}[column sep=.7em,ampersand replacement=\^]
+  \begin{minipage}[c]{.12\textwidth}
+    \caption{UD\label{fig:linkage_ud}}
+  \end{minipage}
+  \begin{minipage}[c]{.8\textwidth}
+    \begin{dependency}[text only label, label style={above,font=\tt}, font=\small, edge unit distance=1.8ex]
+    \begin{deptext}[column sep=.25em,ampersand replacement=\^]
     From \^ the \^ moment \^ you \^ enter \^ , \^ you \^ know \\
     \end{deptext}
         \depedge[edge unit distance=2.4ex]{3}{1}{case}
         \depedge{3}{2}{det}
         \depedge[edge unit distance=1ex]{8}{3}{obl}
         \depedge[edge unit distance=1.5ex]{3}{5}{acl}
-        \depedge[edge unit distance=1ex]{5}{4}{nsubj}
+        \depedge[edge start x offset=-5pt,edge unit distance=1ex]{5}{4}{nsubj}
         \depedge[edge unit distance=1.5ex]{8}{6}{punct}
-        \depedge[edge start x offset=-3pt,edge unit distance=1ex]{8}{7}{nsubj}
+        \depedge[edge start x offset=-10pt,edge unit distance=1ex]{8}{7}{nsubj}
         \deproot{8}{root}
     \end{dependency}
-    \caption{UD.\label{fig:linkage_ud}}
+  \end{minipage}
 \end{subfigure}
 
 \begin{subfigure}{\columnwidth}
-  \centering
+  \begin{minipage}[c]{.17\textwidth}
+    \caption{UCCA\label{fig:linkage_ucca}}
+  \end{minipage}
+  \hspace{-8mm}
+  \begin{minipage}[c]{.8\textwidth}
     \scalebox{.8}{
-    \begin{tikzpicture}[level distance=9mm, sibling distance=31mm, ->,
-        level 2/.style={sibling distance=11mm},
+    \begin{tikzpicture}[level distance=9mm, sibling distance=28mm, ->,
+        level 2/.style={sibling distance=9mm},
         every circle node/.append style={fill=black}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
@@ -804,24 +814,24 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
         {
           child {node [word] {From} edge from parent node[left] {\scriptsize $R$}}
           child {node [word] {the} edge from parent node[left] {\scriptsize $E$}}
-          child {node [word] {\quad moment} edge from parent node[right] {\scriptsize $C$}}
+          child {node [word] {{\color{white}F}moment} edge from parent node[right] {\scriptsize $C$}}
         } edge from parent node[above] {\scriptsize $L$} }
         child {node [circle] {}
         {
-          child {node [word] {you} edge from parent node[left] {\scriptsize $A$}}
-          child {node [word] {enter} edge from parent node[right] {\scriptsize $P$}}
+          child {node [word] {you{\color{white}k}} edge from parent node[left] {\scriptsize $A$}}
+          child {node [word] {{\color{white}y}enter} edge from parent node[right] {\scriptsize $P$}}
         } edge from parent node[left] {\scriptsize $H$} }
         child {node [circle] {}
         {
           child {node (comma) [word] {,} edge from parent [draw=none]}
-          child {node [word] {you} edge from parent node[left] {\scriptsize $A$}}
-          child {node [word] {know} edge from parent node[right] {\scriptsize $S$}}
+          child {node [word] {you{\color{white}k}} edge from parent node[left] {\scriptsize $A$}}
+          child {node [word] {{\color{white}y}know} edge from parent node[right] {\scriptsize $S$}}
         } edge from parent node[above] {\scriptsize $H$} }
         ;
       \draw[->] (ROOT) to node [right] {\scriptsize $U$} (comma);
     \end{tikzpicture}
     }
-    \caption{UCCA.\label{fig:linkage_ucca}}
+  \end{minipage}
  \end{subfigure}
  \caption{Example for clause linkage in UD and UCCA.\label{fig:linkage}}
 \end{figure}
