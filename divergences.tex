@@ -1152,13 +1152,12 @@ fine-grained evaluation by UD relations.
 %the UCCA category is in the test EWT corpus, given the UD relation,
 %and $\sfrac{\text{Train Mode}}{\text{Match}}\%$ in the training Wiki corpus.
 %\textit{Mean {\#}Words} indicates how long units are on average.
-TUPA does best on determiners, almost always single words marked as Elaborators.
-
+TUPA does best on determiners, which are mostly single-worded Elaborators.
 For nominal subjects,
 TUPA correctly categorizes only 87\% of the correctly delineated units,
-although 95\% of gold subjects are Participants, possibly since in the training set
-only 88\% are.
-This suggests domain adaptation techniques may help.
+although 95\% of gold subjects are Participants.
+This is possibly since their training set ratio is only 88\%,
+suggesting possible improvements may be made with domain adaptation techniques.
 
 Copulas, coordinating conjunctions and conjuncts
 undergo similar distribution shift.
@@ -1182,17 +1181,19 @@ it is overall better than TUPA's unlabeled performance.
 The same pattern recurs when using gold standard syntax as features for TUPA.
 TUPA is a transition-based parser, which uses UD parses as features. Our
 results, however, suggest that encoding syntax more directly, perhaps through syntactic
-scaffolding \citep{swayamdipta2018syntactic}, could assist in predicting the unit's boundaries.
+scaffolding \citep{swayamdipta2018syntactic}
+or guided attention \cite{strubell2018linguistically},
+could assist in predicting the unit boundaries.
 
-In other cases, TUPA fails to disambiguate cases which are not disambiguated
-in UD. For example, TUPA does poorly on distinguishing between \texttt{nmod}s that modify
-scene-evoking nouns (Participants) and those modifying other nouns (Elaborators). 
-This information is not to be found in UD (selecting the mode in these cases obtains
-roughly the same performance as TUPA).
-Relying on lexical resources that distinguish eventive and relational nouns from concrete 
-nouns could help in this case, and lexical resources for light verbs and idioms could
-help performance in the similar case of \texttt{compound}s.
-%and similarly for \texttt{cc}, \texttt{conj}, \texttt{amod} and \texttt{obl}).
+Finally, TUPA often fails to make distinctions that are not encoded
+in UD. For example, it does poorly on distinguishing between noun modifiers of
+scene-evoking nouns (Participants) and those modifying other nouns (Elaborators),
+obtaining roughly the same performance as 
+a majority baseline based on the UD relation.
+Lexical resources that distinguish eventive and relational nouns from concrete 
+nouns could ameliorate this problem.
+In the similar case of compounds, lexical resources for light verbs and idioms could
+help performance.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
