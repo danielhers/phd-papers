@@ -477,12 +477,16 @@ Of these, 11,541 are common, meaning that a UCCA ``parser'' developed this way
 would get a very high F1 score
 of 88.1\%, if given the gold UCCA label for every converted edge.
 
-Notably, only 73\% of syntactic arguments
+Only 73\% of syntactic arguments
 (\texttt{ccomp}, \texttt{csubj}, \texttt{iobj}, \texttt{nsubj}, \texttt{obj}, \texttt{obl} and \texttt{xcomp})
 are Participants,
 and only 73\% of Participants are syntactic arguments---a difference stemming from
 the Scene/non-Scene (\S\ref{sec:s}) and argument/adjunct (\S\ref{sec:arguments}) distinctions.
 %, this does not include the different treatment of shared arguments (\S\ref{sec:conversion}).
+Furthermore, if we identify predicates as words having at least one argument
+and Scenes as units with at least one Participant,
+then only 86\% of UD predicates correspond to Scenes,
+and only 79\% of Scenes to predicates.
 
 Examining the {\it head} row in Table~\ref{tab:confusion_matrix} allows
 us to contrast the schemes' notions of a head. 
