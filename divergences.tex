@@ -839,69 +839,31 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
 \begin{table*}[ht]
 \centering
 \scriptsize
-\setlength\tabcolsep{2pt}
+\setlength\tabcolsep{1.6pt}
 \def\arraystretch{1.5}
 \vspace{-8mm}
 % \scriptsize \bf \rotatebox{90}{Primary}
 \begin{tabular}{l|ccccccccccccccccccccccccccc}
-& \scriptsize \bf \rotatebox{90}{\texttt{acl}}
-& \scriptsize \bf \rotatebox{90}{\texttt{advcl}}
-& \scriptsize \bf \rotatebox{90}{\texttt{advmod}}
-& \scriptsize \bf \rotatebox{90}{\texttt{amod}}
-& \scriptsize \bf \rotatebox{90}{\texttt{appos}}
-& \scriptsize \bf \rotatebox{90}{\texttt{aux}}
-& \scriptsize \bf \rotatebox{90}{\texttt{case}}
-& \scriptsize \bf \rotatebox{90}{\texttt{cc}}
-& \scriptsize \bf \rotatebox{90}{\texttt{ccomp}}
-& \scriptsize \bf \rotatebox{90}{\texttt{compound}}
-& \scriptsize \bf \rotatebox{90}{\texttt{conj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{cop}}
-& \scriptsize \bf \rotatebox{90}{\texttt{csubj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{det}}
-& \scriptsize \bf \rotatebox{90}{\texttt{discourse}}
-& \scriptsize \bf \rotatebox{90}{\texttt{expl}}
-& \scriptsize \bf \rotatebox{90}{\texttt{iobj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{list}}
-& \scriptsize \bf \rotatebox{90}{\texttt{mark}}
-& \scriptsize \bf \rotatebox{90}{\texttt{nmod}}
-& \scriptsize \bf \rotatebox{90}{\texttt{nsubj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{nummod}}
-& \scriptsize \bf \rotatebox{90}{\texttt{obj}}
-& \scriptsize \bf \rotatebox{90}{\texttt{obl}}
-& \scriptsize \bf \rotatebox{90}{\texttt{parataxis}}
-& \scriptsize \bf \rotatebox{90}{\texttt{vocative}}
-& \scriptsize \bf \rotatebox{90}{\texttt{xcomp}} \\
+ & \scriptsize \bf \rotatebox{90}{det} & \scriptsize \bf \rotatebox{90}{nsubj} & \scriptsize \bf \rotatebox{90}{aux} & \scriptsize \bf \rotatebox{90}{case} & \scriptsize \bf \rotatebox{90}{nummod} & \scriptsize \bf \rotatebox{90}{cop} & \scriptsize \bf \rotatebox{90}{iobj} & \scriptsize \bf \rotatebox{90}{advmod} & \scriptsize \bf \rotatebox{90}{mark} & \scriptsize \bf \rotatebox{90}{expl} & \scriptsize \bf \rotatebox{90}{obj} & \scriptsize \bf \rotatebox{90}{nmod} & \scriptsize \bf \rotatebox{90}{compound} & \scriptsize \bf \rotatebox{90}{cc} & \scriptsize \bf \rotatebox{90}{ccomp} & \scriptsize \bf \rotatebox{90}{obl} & \scriptsize \bf \rotatebox{90}{amod} & \scriptsize \bf \rotatebox{90}{acl} & \scriptsize \bf \rotatebox{90}{conj} & \scriptsize \bf \rotatebox{90}{advcl} & \scriptsize \bf \rotatebox{90}{xcomp} & \scriptsize \bf \rotatebox{90}{appos} & \scriptsize \bf \rotatebox{90}{vocative} & \scriptsize \bf \rotatebox{90}{parataxis} & \scriptsize \bf \rotatebox{90}{discourse} & \scriptsize \bf \rotatebox{90}{csubj} & \scriptsize \bf \rotatebox{90}{list} \\
 \hline
-%\small \bf English EWT &  \\
-\footnotesize \bf Unlabeled F1
-& 53 & 49 & 91 & 90 & 63 & 97 & 92 & 93 & 59 & 79 & 75 & 98 & 29 & 96 & 96 & 88 & 81 & 67 & 96 & 82 & 94 & 81 & 73 & 65 & 55 & 50 & 56 \\
-\footnotesize \bf Labeled F1
-& 39 & 33 & 62 & 40 & 29 & 78 & 70 & 50 & 50 & 51 & 34 & 67 & -- & 92 & 12 & 60 & 63 & -- & 61 & 56 & 81 & 67 & 58 & 41 & 12 & 13 & 31 \\
+\footnotesize \bf Labeled F1 \% & 92 & 81 & 78 & 70 & 67 & 67 & 63 & 62 & 61 & 60 & 58 & 56 & 51 & 50 & 50 & 41 & 40 & 39 & 34 & 33 & 31 & 29 & 13 & 12 & 12 & -- & -- \\
+\footnotesize \bf Unlabeled F1 \% & 96 & 94 & 97 & 92 & 81 & 98 & 81 & 91 & 96 & 88 & 73 & 82 & 79 & 93 & 59 & 65 & 90 & 53 & 75 & 49 & 56 & 63 & 50 & 55 & 96 & 29 & 67 \\
 \hline
-\footnotesize \bf Total in UD & 176 & 209 & 840 & 528 & 39 & 383 & 727 & 400 & 128 & 406 & 451 & 364 & 10 & 834 & 26 & 24 & 19 & 12 & 400 & 458 & 1083 & 94 & 566 & 496 & 125 & 12 & 178 \\
-\footnotesize \bf Match gold & 127 & 112 & 769 & 467 & 29 & 381 & 652 & 388 & 87 & 239 & 361 & 361 & 2 & 808 & 25 & 22 & 19 & 10 & 382 & 346 & 1046 & 70 & 474 & 364 & 86 & 12 & 62 \\
-\footnotesize \bf Match pred. & 70 & 51 & 697 & 435 & 19 & 363 & 680 & 358 & 61 & 238 & 265 & 354 & 5 & 778 & 25 & 21 & 13 & 5 & 375 & 303 & 959 & 61 & 335 & 234 & 45 & 4 & 60 \\
-\footnotesize \bf Unlabeled & 52 & 40 & 670 & 408 & 15 & 361 & 616 & 347 & 44 & 188 & 234 & 351 & 1 & 759 & 24 & 19 & 13 & 5 & 363 & 266 & 941 & 53 & 296 & 194 & 36 & 4 & 34 \\
-\footnotesize \bf Labeled & 38 & 27 & 454 & 180 & 7 & 291 & 465 & 187 & 37 & 122 & 106 & 239 & 0 & 728 & 3 & 13 & 10 & 0 & 230 & 181 & 815 & 44 & 233 & 122 & 8 & 1 & 19 \\
+\footnotesize \bf Total in UD \# & 834 & 1083 & 383 & 727 & 94 & 364 & 19 & 840 & 400 & 24 & 566 & 458 & 406 & 400 & 128 & 496 & 528 & 176 & 451 & 209 & 178 & 39 & 12 & 125 & 26 & 10 & 12 \\
+\footnotesize \bf Match Gold \# & 808 & 1046 & 381 & 652 & 70 & 361 & 19 & 769 & 382 & 22 & 474 & 346 & 239 & 388 & 87 & 364 & 467 & 127 & 361 & 112 & 62 & 29 & 12 & 86 & 25 & 2 & 10 \\
+\footnotesize \bf Match Predicted \# & 778 & 959 & 363 & 680 & 61 & 354 & 13 & 697 & 375 & 21 & 335 & 303 & 238 & 358 & 61 & 234 & 435 & 70 & 265 & 51 & 60 & 19 & 4 & 45 & 25 & 5 & 5 \\
+\footnotesize \bf Labeled Correct \# & 728 & 815 & 291 & 465 & 44 & 239 & 10 & 454 & 230 & 13 & 233 & 181 & 122 & 187 & 37 & 122 & 180 & 38 & 106 & 27 & 19 & 7 & 1 & 8 & 3 & 0 & 0 \\
+\footnotesize \bf Unlabeled Correct \# & 759 & 941 & 361 & 616 & 53 & 351 & 13 & 670 & 363 & 19 & 296 & 266 & 188 & 347 & 44 & 194 & 408 & 52 & 234 & 40 & 34 & 15 & 4 & 36 & 24 & 1 & 5 \\
 \hline
-\footnotesize \bf $\sfrac{\text{Labeled}}{\text{Unlabeled}}$\% & 73 & 68 & 68 & 44 & 47 & 81 & 75 & 54 & 84 & 65 & 45 & 68 & 0 & 96 & 13 & 68 & 77 & 0 & 63 & 68 & 87 & 83 & 79 & 63 & 22 & 25 & 56 \\
-%mode & 101 & 103 & 524 & 218 & 10 & 285 & 489 & 305 & 78 & 174 & 265 & 333 & 2 & 1 & 13 & 22 & 19 & 8 & 161 & 231 & 993 & 53 & 439 & 247 & 79 & 9 & 44 \\
-\footnotesize \bf $\sfrac{\text{Mode}}{\text{Match gold}}$\% & 80 & 92 & 68 & 47 & 34 & 75 & 75 & 79 & 90 & 73 & 73 & 92 & 100 & 96 & 52 & 100 & 100 & 80 & 42 & 67 & 95 & 76 & 93 & 68 & 92 & 75 & 71 \\
-\footnotesize \bf $\sfrac{\text{Train Mode}}{\text{Match}}$\% & 78 & 86 & 59 & 83 & 53 & 91 & 90 & 55 & 68 & 82 & 58 & 49 & 86 & 98 & 31 & 87 & 90 & 100 & 46 & 62 & 88 & 80 & 80 & 61 & 83 & 100 & 71 \\
+\footnotesize \bf Labeled/Unlabeled \% & 96 & 87 & 81 & 75 & 83 & 68 & 77 & 68 & 63 & 68 & 79 & 68 & 65 & 54 & 84 & 63 & 44 & 73 & 45 & 68 & 56 & 47 & 25 & 22 & 13 & 0 & 0 \\
+\footnotesize \bf Mode/Match Gold \% & 96 & 95 & 75 & 75 & 76 & 92 & 100 & 68 & 42 & 100 & 93 & 67 & 73 & 79 & 90 & 68 & 47 & 80 & 73 & 92 & 71 & 34 & 75 & 92 & 52 & 100 & 80 \\
+\footnotesize \bf Train Mode/Match \% & 98 & 88 & 91 & 90 & 80 & 49 & 90 & 59 & 46 & 87 & 80 & 62 & 82 & 55 & 68 & 61 & 83 & 78 & 58 & 86 & 71 & 53 & 100 & 83 & 31 & 86 & 100 \\
 \hline
-\footnotesize \bf Mean {\#}Words & 5.1 & 6.0 & 1.2 & 1.2 & 2.9 & 1.0 & 1.0 & 1.0 & 7.4 & 1.2 & 5.3 & 1.0 & 3.3 & 1.0 & 1.0 & 1.0 & 1.1 & 2.0 & 1.0 & 2.4 & 1.6 & 1.2 & 3.1 & 3.8 & 5.7 & 1.6 & 5.8
-%\small \bf English Wiki &  \\
-%\small \bf English 20K &  \\
-%\small \bf French 20K &  \\
-%\small \bf German 20K & 
+\footnotesize \bf Average Words \# & 1.0 & 1.6 & 1.0 & 1.0 & 1.2 & 1.0 & 1.1 & 1.2 & 1.0 & 1.0 & 3.1 & 2.4 & 1.2 & 1.0 & 7.4 & 3.8 & 1.2 & 5.1 & 5.3 & 6.0 & 5.8 & 2.9 & 1.6 & 5.7 & 1.0 & 3.3 & 2.0
 \end{tabular}
-\caption{Fine-grained error analysis on the shared EWT annotated corpus.
-UD relations exclude
-%\texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
-\texttt{fixed}, \texttt{flat}, \texttt{goeswith},
-\texttt{dep}, \texttt{orphan}, and \texttt{root}.
-A total of 89.5\% of all UD relations matched gold-standard UCCA units
-(see Table \ref{tab:confusion_matrix}).
+\caption{Fine-grained evaluation of TUPA on EWT.
+Columns are sorted by labeled F1, which measures performance on each subset of edges.
+Unlabeled F1 ignores edge categories.
 \textit{Match gold} is the number of gold-standard UCCA units matching the UD relation units,
 which is the sum of the corresponding row (without \textsc{NoMatch}) from Table~\ref{tab:confusion_matrix}.
 \textit{Match pred.} is the number of matching UCCA units in the graphs predicted by TUPA.
@@ -914,6 +876,11 @@ to match the UD relation, according to Table~\ref{tab:confusion_matrix}
 (using UDPipe-predicted dependencies).
 \textit{Mean {\#}Words} is the average number of terminals in yields corresponding to each relation
 (intuitively, the more words a unit contains, the harder it is to match its terminal yield exactly).
+%UD relations exclude
+%\texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
+%\texttt{fixed}, \texttt{flat}, \texttt{goeswith},
+%\texttt{dep}, \texttt{orphan}, and \texttt{root}.
+%Of all UD relations, 89.5\%  match gold-standard UCCA units (see Table \ref{tab:confusion_matrix}).
 \label{tab:fine_grained_results}}
 \end{table*}
     
@@ -1027,11 +994,11 @@ using gold-standard UD for fine-grained evaluation.
 %& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
 %& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
 %\hline
-%%UCCA &&&&&&&&&&&&&&&&&& \\
+%%UCCA &&&&&&&&&&&&&&&&&\\
 %\bf English EWT &&& 11,103 &&& 804 \\
-%\bf English Wiki & 124,935 & 17,784 & & 4,113 & 514 & \\
+%\bf English Wiki & 124,935 & 17,784 & & 4,113 & 514 \\
 %%\bf English Wiki & 124,935 & 17,784 & 15,854 & 4,113 & 514 & 515 \\
-%%Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&& \\
+%%Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&\\
 %%\bf English 20K &&& 12,574 &&& 492 \\
 %%\bf French 20K & 618 & 6,374 & 5,962 & 15 & 238 & 239 \\
 %%\bf German 20K & 119,872 & 12,334 & 12,325 & 5,211 & 651 & 652
@@ -1137,27 +1104,27 @@ This allows error analysis of UCCA parsing according to syntactic phenomena.
 %& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
 %& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
 %\hline
-%\multicolumn{4}{l|}{\small \bf English EWT (shared)} & \\
+%\multicolumn{4}{l|}{\small \bf English EWT (shared)} \\
 %\footnotesize UD 2.3
 %& 82.8 & 88.4 & 85.5 & 21 & 17.8 & 19.3 \\
 %\footnotesize TUPA
 %& 80.8 & 77.8 & 79.3 & 10.2 & 18.6 & 13.2 \\
-%\multicolumn{4}{l|}{\small \bf English Wiki test} & \\
+%\multicolumn{4}{l|}{\small \bf English Wiki test} \\
 %\footnotesize UDPipe
 %& 76.7 & 81 & 78.8 & -- & -- & -- \\
 %\footnotesize TUPA
 %& 87.6 & 84.9 & 86.2 & 50.9 & 52.7 & 51.8 \\
-%\multicolumn{4}{l|}{\small \bf English 20K} & \\
+%\multicolumn{4}{l|}{\small \bf English 20K} \\
 %\footnotesize UDPipe
 %& 79.9 & 84.7 & 82.3 & -- & -- & -- \\
 %\footnotesize TUPA
 %& 83.4 & 84.4 & 83.9 & 50.8 & 24 & 32.7 \\
-%\multicolumn{4}{l|}{\small \bf French 20K test} & \\
+%\multicolumn{4}{l|}{\small \bf French 20K test} \\
 %\footnotesize UDPipe
 %& 78.5 & 83.4 & 80.9 & -- & -- & -- \\
 %\footnotesize TUPA
 %& 72 & 72.5 & 72.2 & 21.9 & 3 & 5.3 \\
-%\multicolumn{4}{l|}{\small \bf German 20K test} & \\
+%\multicolumn{4}{l|}{\small \bf German 20K test} \\
 %\footnotesize UDPipe
 %& 81.5 & 85.3 & 83.4 & -- & -- & -- \\
 %\footnotesize TUPA
