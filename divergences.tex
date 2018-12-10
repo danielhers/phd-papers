@@ -1072,7 +1072,17 @@ trained on
 English\_EWT,\footnote{\url{http://hdl.handle.net/11234/1-2898}}
 to parse the Wiki corpus to UD.
 
+\paragraph{Parser.}
 
+We train a UCCA parser,
+TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
+on Wiki, and evaluate it on EWT.
+While this is out-of-domain scenario,
+the shared annotation allows accurate fine-grained evaluation, which is
+valuable.\footnote{By default, TUPA is trained and tested using syntactic features
+predicted by spaCy (\url{http://spacy.io}).
+However, using UDPipe in training and gold UD in testing yielded very similar
+results, so we use the default settings.}
 
 %\paragraph{Evaluation of the comparison methodology.}
 %
@@ -1085,25 +1095,13 @@ to parse the Wiki corpus to UD.
 %%We then apply the label mapping to get fully labeled converted UCCA graphs.
 
 
-\paragraph{UCCA evaluation by gold-standard UD.}
+\paragraph{Evaluation by gold-standard UD.}
 
 We extend the standard UCCA evaluation to perform a fine-grained division
 of both gold-standard and predicted edges,
-according to the relations of the UD edges they match by terminal yield
-(using converted UD with our extended converter; see \S\ref{sec:local}).
+according to the UD relations they match by terminal yield
+(using our extended converter; see \S\ref{sec:local}).
 This allows error analysis of UCCA parsing according to syntactic phenomena.
-
-We train a UCCA parser,
-TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
-on Wiki, and evaluate it on EWT
-using the gold-standard UD for matched relations.
-While this is an out-of-domain evaluation scenario for TUPA,
-we believe it is valuable,
-as the shared annotation allows accurate fine-grained
-evaluation.\footnote{By default, TUPA is trained and tested using syntactic features
-predicted by spaCy (\url{http://spacy.io}).
-However, using UDPipe in training and gold UD in testing yielded very similar
-results, so we use the default settings.}
 
 
 %\paragraph{UCCA evaluation by automatically parsed UD.}
