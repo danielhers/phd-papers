@@ -157,7 +157,7 @@
   Our findings suggest that the differences between the schemes are substantial, underscoring
   the potential contribution of UCCA parsing in particular and semantic parsing in general to
   downstream text understand applications.
-  For example, only 81\% of UCCA's participants are UD clausal arguments, and 84\% the other way around,
+  For example, only 73\% of UCCA's participants are UD clausal arguments, and 73\% the other way around,
   suggesting that many semantic participants cannot be recovered from UD.\footnote{This excludes cases of shared 
   argumenthood, which are partially covered by \textit{enhanced UD}. See \S\ref{sec:conversion}.}
   Our results are relevant to other semantic representations, as they
@@ -477,10 +477,10 @@ Of these, 11,541 are common, meaning that a UCCA ``parser'' developed this way
 would get a very high F1 score
 of 88.1\%, if given the gold UCCA label for every converted edge.
 
-Notably, only 84\% of syntactic arguments
+Notably, only 73\% of syntactic arguments
 (\texttt{ccomp}, \texttt{csubj}, \texttt{iobj}, \texttt{nsubj}, \texttt{obj}, \texttt{obl} and \texttt{xcomp})
 are Participants,
-and only 81\% of Participants are syntactic arguments---a difference stemming from
+and only 73\% of Participants are syntactic arguments---a difference stemming from
 the Scene/non-Scene (\S\ref{sec:s}) and argument/adjunct (\S\ref{sec:arguments}) distinctions.
 %, this does not include the different treatment of shared arguments (\S\ref{sec:conversion}).
 
@@ -1253,8 +1253,7 @@ evaluation of UCCA parsers, and find concrete paths for advancement in UCCA pars
 information already encoded by UD, or by relying on other existing resources for information not encoded in UD.\oa{this needs to turn into more exciting}
 
 %Future work will extend our conversion protocol to a full labeled conversion,
-%using .
-%The converter can be used as a UCCA parser, or for generating extra training data for TUPA.
+%which can be used as a UCCA parser, or for training data augmentation.
 
 %%%%% Acknowledgments %%%%
 % Jakob Prange, Nathan Schneider
