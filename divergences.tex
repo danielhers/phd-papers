@@ -1152,31 +1152,32 @@ fine-grained evaluation by UD relations.
 %the UCCA category is in the test EWT corpus, given the UD relation,
 %and $\sfrac{\text{Train Mode}}{\text{Match}}\%$ in the training Wiki corpus.
 %\textit{Mean {\#}Words} indicates how long units are on average.
-TUPA does best on \texttt{det}---almost always a single word with the Elaborator category.
-It performs reasonably well on \texttt{nsubj} too,
-but the label is correct only 87\% of the times when the yield is correct,
-even though 95\% of gold \texttt{nsubj}s are Participants.
-This could be explained by the distribution in the Wiki training set,
-where only 88\% are Participants, suggesting that domain adaptation techniques may help.
-A similar situation happens with \texttt{cc}, \texttt{conj} and \texttt{cop},
-where TUPA is severely ``confused'' by the training distribution,
-despite the peaked test distribution---they are mostly Linkers, Parallel Scenes
-and Functions in EWT, respectively.
-For \texttt{cc} and \texttt{conj} this is a Scene/non-Scene distinction,
-while for \texttt{cop} it is between identity and attribution.
-For \texttt{aux}, \texttt{mark} and \texttt{nummod},
-TUPA does well despite the varied test distribution,
-possibly by learning to lexically distinguish,
-e.g., between modals (Adverbials) and auxiliaries (Functions),
-though they are both \texttt{aux}.
+TUPA does best on determiners, almost always single words marked as Elaborators.
 
-TUPA does worst on \texttt{discourse}, \texttt{vocative} and \texttt{appos},
-but these relations are rare,
-and so would not contribute much to the overall parser score.
-Several types of inter-clause linkage, which TUPA also struggles with,
-are quite common: \texttt{parataxis}, \texttt{xcomp}, \texttt{advcl},
-\texttt{conj} and \texttt{ccomp}.
-Although the matching beteween UCCA and UD is not perfect in these cases,
+For nominal subjects,
+TUPA correctly categorizes only 87\% of the correctly delineated units,
+although 95\% of gold subjects are Participants, possibly since in the training set
+only 88\% are.
+This suggests domain adaptation techniques may help.
+
+Copulas, coordinating conjunctions and conjuncts
+undergo similar distribution shift.
+They are mostly Functions, Linkers and Parallel Scenes in EWT, respectively,
+while the distribution in Wiki is less peaked, with more of the units annotated as
+States, Connectors and Centers.
+This is a distinction between identity and attribution for copulas,
+and between Scenes/non-Scenes for coordination.
+
+TUPA does relatively well on auxiliaries, numerical modifiers and markers,
+despite the varied test distribution (see~Table~\ref{tab:confusion_matrix}),
+possibly by learning lexical distinctions
+(e.g., modals and auxiliary verbs are both auxiliaries syntactically,
+but are annotated as Adverbials and Functions respectively).
+
+The worst performance is on relatively rare relations,
+which do not contribute much to the overall parser score.
+However, inter-clause linkage, which TUPA also struggles with, is quite common.
+Although the matching between UCCA and UD is not perfect in these cases,
 it is overall better than TUPA's unlabeled performance.
 The same pattern recurs when using gold standard syntax as features for TUPA.
 TUPA is a transition-based parser, which uses UD parses as features. Our
