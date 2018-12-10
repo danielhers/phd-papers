@@ -142,7 +142,7 @@
   and which are unmatched.
 
   Most content differences are due to (\S\ref{sec:analysis}):
-  \begin{enumerate}[noitemsep,leftmargin=*,topsep=0pt]
+  \begin{enumerate}[noitemsep]%,leftmargin=*,topsep=0pt]
       \item UCCA's distinction whether a phrase evokes a Scene (event),
         as opposed to UD's POS-based distinction (predicates, nominals). % (\S\ref{sec:s}).
       \item UCCA's distinction between primary relations, secondary relations
@@ -159,8 +159,8 @@
   downstream text understand applications.
   For example, only 81\% of UCCA's participants are UD clausal arguments, and 84\% the other way around,
   suggesting that many semantic participants cannot be recovered from UD.\footnote{This excludes cases of shared 
-  argumenthood, which are partially covered by extended UD. See \S\ref{sec:conversion}.}
-  Our findings are likely to be relevant to other semantic representations, as they
+  argumenthood, which are partially covered by \textit{enhanced UD}. See \S\ref{sec:conversion}.}
+  Our results are relevant to other semantic representations, as they
   share much in terms of content \cite{abend2017state}.
     
   %   Other divergences stem from a different treatment of coordination, apposition and copulas.% (\S\ref{sec:misc}).
@@ -1243,8 +1243,8 @@ proposition structures ({\sc PropS}), abstracting away from some syntactic detai
 
 \section{Conclusion}\label{sec:conclusion}
 
-We evaluate the similarities and divergences in the content encoded by UD and UCCA. 
-We have annotated 804 sentences from the English Web Treebank corpus with gold-standard UCCA,
+We evaluated the similarities and divergences in the content encoded by UD and UCCA. 
+We annotated 804 sentences from the English Web Treebank corpus with gold-standard UCCA,
 and used an automated methodology to evaluate how well the two schemes align, developing
 a converter to abstract away from superficial structural
 differences. Our findings provide a detailed picture of the content differences between the schemes, placing most of them
