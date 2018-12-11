@@ -174,7 +174,7 @@
   we perform fine-grained error analysis on UCCA parsing,
   according to UD relations (\S\ref{sec:fine_grained}).
   Results highlight challenges for current parsing technology,
-  and exposes cases where UCCA parsers may benefit from modeling syntactic structure more directly.
+  and expose cases where UCCA parsers may benefit from modeling syntactic structure more directly.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -222,8 +222,8 @@
 
   Non-Scene units are headed by units of the category Center,
   denoting the type of entity or thing described by the whole unit.
-  Other elements in non-Scene units include Quantifiers (such as ``{\it dozens} of people''), Connectors (mostly
-  coordinating conjunctions).
+  Elements in non-Scene units include Quantifiers (such as ``{\it dozens} of people'') and
+  Connectors (mostly coordinating conjunctions).
   Other modifiers to the Center are marked as Elaborators.
   
 %  Relators correspond in English mostly to preposition
@@ -324,8 +324,8 @@ annotated corpus.
 
 The data contains 11,103 tokens---4\% of the full UD English\_EWT treebank,
 and 20\% of its reviews section.
-Of the UCCA-annotated sentences, 622 belong to the UD training set,
-192 to the development set and 153 to the test set.
+Of the UCCA-annotated sentences, 546 belong to the UD training set,
+143 to the development set and 115 to the test set.
 %\daniel{Add inter-annotator agreement}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -341,7 +341,7 @@ if they share all terminals in their yields.
 UD annotates bi-lexical dependency trees,
 while UCCA graphs contain non-terminal nodes.
 In \S\ref{sec:conversion}, we outline the unified DAG converter by
-\citet{hershcovich2018multitask,hershcovich2018universal},\footnote{\url{http://github.com/huji-nlp/semstr}}
+\citet{hershcovich2018multitask,hershcovich2018universal},\footnote{\url{github.com/huji-nlp/semstr}}
 which we use to reach a common format.
 In \S\ref{sec:local}, we describe a number of extensions
 to the converter, which abstract away from further non-content differences.
@@ -404,7 +404,7 @@ For example, the language-specific definite article label
 
 \paragraph{Reentrancies.}
 Remote edges in UCCA enable reentrancy, forming a DAG together with primary edges.
-UD allows reentrancy when including \textit{enhanced dependencies}\footnote{\url{http://universaldependencies.org/u/overview/enhanced-syntax.html}}
+UD allows reentrancy when including \textit{enhanced dependencies}\footnote{\url{universaldependencies.org/u/overview/enhanced-syntax.html}}
 \cite{SCHUSTER16.779}, which form (bi-lexical) graphs, representing phenomena
 such as predicate ellipsis (e.g., gapping),
 and shared arguments due to coordination, control, raising and relative clauses.
@@ -1027,7 +1027,7 @@ we use the UCCA English Wikipedia corpus v1.2.3 (Wiki),
 %with the standard train/dev/test split.
 %and the \textit{Twenty Thousand Leagues Under the Sea} corpora (\textit{20K}),
 %annotated in English (v1.2.2), French (v1.2.2)
-%and German (v1.0.1).\footnote{\url{http://github.com/UniversalConceptualCognitiveAnnotation}}
+%and German (v1.0.1).\footnote{\url{github.com/UniversalConceptualCognitiveAnnotation}}
 %As in previous work, we use English 20K only as an out-of-domain test set.
 %For comparability with previous work \cite{hershcovich2017a,hershcovich2018multitask},
 %we also perform our experiments on Wiki v1.2.0 \cite{abend2013universal},
@@ -1035,14 +1035,14 @@ we use the UCCA English Wikipedia corpus v1.2.3 (Wiki),
 %and on 20K v0.9.0 in German.
 %For UD, we use the English\_EWT, French\_GSD and German\_GSD
 %treebanks from Universal Dependencies v2.3
-%\cite{11234/1-2895}.\footnote{\url{http://hdl.handle.net/11234/1-2895}}
+%\cite{11234/1-2895}.\footnote{\url{hdl.handle.net/11234/1-2895}}
 %These are the largest freely-available UD treebanks for these languages.
 and the UD v2.3 English\_EWT treebank
-\cite{11234/1-2895},\footnote{\url{http://hdl.handle.net/11234/1-2895}}
+\cite{11234/1-2895},\footnote{\url{hdl.handle.net/11234/1-2895}}
 filtering it to get only the 804 sentences that were also annotated in UCCA.
 We additionally use UDPipe v1.2 \cite{udpipe,udpipe:2017},
 trained on
-English\_EWT,\footnote{\url{http://hdl.handle.net/11234/1-2898}}
+English\_EWT,\footnote{\url{hdl.handle.net/11234/1-2898}}
 to parse Wiki to UD.
 We apply the extended converter to UD as before (\S\ref{sec:local}).
 
@@ -1054,7 +1054,7 @@ on Wiki, and evaluate it on EWT.
 We evaluate this out-of-domain scenario as
 we have both UCCA and UD gold-standard annotations for this test set.
 By default, TUPA is trained and tested using syntactic features
-predicted by spaCy.\footnote{\url{http://spacy.io}}
+predicted by spaCy.\footnote{\url{spacy.io}}
 As using UDPipe in training and gold UD in testing yielded very similar
 results, we only report the default setting.
 
@@ -1090,7 +1090,7 @@ to the labels of the UD relations whose dependents have the same terminal yield 
 %we use UDPipe v1.2 \cite{udpipe,udpipe:2017}, trained on the UD v2.3 treebanks,
 %to parse the Wiki and 20K test sets in English, French and German.
 %We use the official UDPipe models trained on the English\_EWT, French\_GSD and German\_GSD
-%treebanks, respectively\footnote{\url{http://hdl.handle.net/11234/1-2898}}.
+%treebanks, respectively\footnote{\url{hdl.handle.net/11234/1-2898}}.
 
 
 %\paragraph{Baselines.}
@@ -1100,7 +1100,7 @@ to the labels of the UD relations whose dependents have the same terminal yield 
 %and 20K for French and German).
 %For equal conditions,
 %we train and test TUPA using features predicted by UDPipe,
-%yielding slightly lower scores than previously reported using spaCy.%\footnote{\url{https://spacy.io}}
+%yielding slightly lower scores than previously reported using spaCy.%\footnote{\url{spacy.io}}
 
 %\paragraph{Using converted UD as ``silver-standard'' data.}
 %
