@@ -121,7 +121,7 @@
   syntactic ones, which are still in many cases the backbone of text understanding systems. 
   Such studies are essential for 
   (1) determining whether and to what extent semantic methods should be adopted for text understanding applications;
-  (2) defining better inductive biases for parsers, and allowing better use of the information encoded in syntax;
+  (2) defining better inductive biases for semantic parsers, and allowing better use of information encoded in syntax;
   (3) pointing at semantic distinctions unlikely to be resolved by syntax.
 
   The importance of such an empirical study is emphasized by the ongoing discussion as to what role syntax should
@@ -142,13 +142,13 @@
   and which are unmatched.
 
   Most content differences are due to (\S\ref{sec:analysis}):
-  \begin{enumerate}[noitemsep,leftmargin=*]
-      \item UCCA's distinguishes between words and phrases that evoke a Scene (event) and ones that do not.
+  \begin{enumerate}[itemsep=0.159mm,leftmargin=5.95mm]
+      \item UCCA's distinction between words and phrases that evoke Scenes (events) and ones that do not.
         For example, eventive and non-eventive nouns are treated differently in UCCA, but similarly in UD.
         %THis distinction that cuts across grammatical categories
         %as opposed to UD's POS-based distinction (predicates, nominals). % (\S\ref{sec:s}).
       \item UCCA's distinction between primary relations, secondary relations
-        and Participants, contrasts with UD's core/adjunct distinction. % (\S\ref{sec:arguments}).
+        and Participants, in contrast to UD's core/non-core distinction. % (\S\ref{sec:arguments}).
       \item Different treatment of multi-word expressions (MWEs),
         where UCCA has a stronger tendency to explicitly mark them. % (\S\ref{sec:mwe}).
       \item UCCA's conflation of several syntactic realizations of inter-clause linkage,
