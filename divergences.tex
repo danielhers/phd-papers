@@ -49,7 +49,7 @@
 \hyphenation{English}
 \hyphenation{PredPatt}
 \setlength{\belowcaptionskip}{-10pt}
-
+\setlength{\parskip}{-0.085mm}
 
 %\lstset{basicstyle=\ttfamily}
 
@@ -107,7 +107,7 @@
 
 \section{Introduction}\label{sec:introduction}
   
-  The promise of semantic representations stems from 
+  Semantic representations hold promise due to
   their ability to transparently reflect distinctions relevant for text understanding
   applications. For example, syntactic representations
   are usually sensitive to distinctions based on POS (part of speech), such as between compounds
@@ -142,7 +142,7 @@
   and which are unmatched.
 
   Most content differences are due to (\S\ref{sec:analysis}):
-  \begin{enumerate}[noitemsep]%,leftmargin=*,topsep=0pt]
+  \begin{enumerate}[noitemsep,leftmargin=*]
       \item UCCA's distinguishes between words and phrases that evoke a Scene (event) and ones that do not.
         For example, eventive and non-eventive nouns are treated differently in UCCA, but similarly in UD.
         %THis distinction that cuts across grammatical categories
@@ -308,9 +308,8 @@ UD relations will be written in \texttt{typewriter} font.
 \caption{Example UD tree.\label{fig:original_example_ud}}
 \end{figure}
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Shared Gold Standard Corpus}\label{sec:shared}
+\section{Shared gold-standard Corpus}\label{sec:shared}
 
 We annotate 163 English passages, containing 804 sentences
 from the reviews section of the 
@@ -328,7 +327,6 @@ and 20\% of its reviews section.
 Of the UCCA-annotated sentences, 622 belong to the UD training set,
 192 to the development set and 153 to the test set.
 %\daniel{Add inter-annotator agreement}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Comparison Methodology}\label{sec:methodology}
@@ -488,7 +486,7 @@ the Scene/non-Scene (\S\ref{sec:s}) and argument/adjunct (\S\ref{sec:arguments})
 Moreover, if we identify predicates as words having at least one argument
 and Scenes as units with at least one Participant,
 then only 86\% of UD predicates correspond to Scenes (many of which are secondary relations within one scene; see \S\ref{sec:arguments}),
-and only 79\% of the Scenes correspond to predicates.
+and only 79\% of Scenes correspond to predicates (e.g., due to eventive nouns).
 
 Examining the {\it head} row in Table~\ref{tab:confusion_matrix} allows
 us to contrast the schemes' notions of a head. 
@@ -557,7 +555,7 @@ head & 125 & 1,402 & 152 & 37 & 91 & 18 & 652 & 2 & 1 & 961 & 18 & 9 & 353 & 1 &
 \caption{UD-UCCA confusion matrix calculated from EWT
 gold-standard annotations (\S\ref{sec:shared}),
 after converting UD to the unified DAG format,
-by matching UD edges and UCCA units with the same terminal yield.
+by matching UD vertices and UCCA units with the same terminal yield.
 The last column (row), labeled {\sc NoMatch}, shows the number of edges of each UD (UCCA) category
 that do not match any UCCA (UD) unit.
 \label{tab:confusion_matrix}}
@@ -705,8 +703,8 @@ especially if compositional.
 \subsection{Linkage}\label{sec:linkage}
 
 \paragraph{Head selection.}
-UCCA tends to flatten linkage, where UD, being a dependency scheme,
-selects a head and dependent.
+UCCA tends to flatten linkage, where UD, as a dependency scheme,
+selects a head and dependent per relation.
 This yields scope ambiguities for coordination, an inherently flat structure. 
 For instance, ``unique gifts and cards'' is ambiguous in UD as to whether
 \textit{unique} applies only to \textit{gifts} or to the whole phrase---both
@@ -761,7 +759,7 @@ UD categorizes clause linkage into coordination,
 subordination, argumenthood (complementation),
 and parataxis. %(a residual category).
 UCCA distinguishes argumenthood 
-but conflates the others into the category Parallel Scenes.
+but conflates the others into the Parallel Scene category.
 For example,
 ``We called few companies before \textit{we decided to hire them}''
 and ``Check out The Willow Lounge, \textit{you'll be happy}'' are Parallel Scenes.
@@ -842,55 +840,6 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
  \end{subfigure}
  \caption{Example for clause linkage in UD and UCCA.\label{fig:linkage}}
 \end{figure}
-
-\begin{table*}[ht]
-\centering
-\scriptsize
-\setlength\tabcolsep{1.6pt}
-\def\arraystretch{1.5}
-\vspace{-8mm}
-\hspace{-2mm}
-% \scriptsize \bf \rotatebox{90}{Primary}
-\begin{tabular}{cl|ccccccccccccccccccccccccccc}
-&& \scriptsize \bf \rotatebox{90}{det} & \scriptsize \bf \rotatebox{90}{nsubj} & \scriptsize \bf \rotatebox{90}{aux} & \scriptsize \bf \rotatebox{90}{case} & \scriptsize \bf \rotatebox{90}{nummod} & \scriptsize \bf \rotatebox{90}{cop} & \scriptsize \bf \rotatebox{90}{iobj} & \scriptsize \bf \rotatebox{90}{advmod} & \scriptsize \bf \rotatebox{90}{mark} & \scriptsize \bf \rotatebox{90}{expl} & \scriptsize \bf \rotatebox{90}{obj} & \scriptsize \bf \rotatebox{90}{nmod} & \scriptsize \bf \rotatebox{90}{compound} & \scriptsize \bf \rotatebox{90}{cc} & \scriptsize \bf \rotatebox{90}{ccomp} & \scriptsize \bf \rotatebox{90}{obl} & \scriptsize \bf \rotatebox{90}{amod} & \scriptsize \bf \rotatebox{90}{acl} & \scriptsize \bf \rotatebox{90}{conj} & \scriptsize \bf \rotatebox{90}{advcl} & \scriptsize \bf \rotatebox{90}{xcomp} & \scriptsize \bf \rotatebox{90}{appos} & \scriptsize \bf \rotatebox{90}{vocative} & \scriptsize \bf \rotatebox{90}{parataxis} & \scriptsize \bf \rotatebox{90}{discourse} & \scriptsize \bf \rotatebox{90}{csubj} & \scriptsize \bf \rotatebox{90}{list} \\
-\hline
-\multirow{2}{*}{\footnotesize (a)}
-& \scriptsize \bf Labeled F1 \% & 92 & 81 & 78 & 70 & 67 & 67 & 63 & 62 & 61 & 60 & 58 & 56 & 51 & 50 & 50 & 41 & 40 & 39 & 34 & 33 & 31 & 29 & 13 & 12 & 12 & 0 & 0 \\
-& \scriptsize \bf Unlabeled F1 \% & 96 & 94 & 97 & 92 & 81 & 98 & 81 & 91 & 96 & 88 & 73 & 82 & 79 & 93 & 59 & 65 & 90 & 53 & 75 & 49 & 56 & 63 & 50 & 55 & 96 & 29 & 67 \\
-\hline
-\multirow{5}{*}{\footnotesize (b)}
-& \scriptsize \bf Total in UD \# & 834 & 1083 & 383 & 727 & 94 & 364 & 19 & 840 & 400 & 24 & 566 & 458 & 406 & 400 & 128 & 496 & 528 & 176 & 451 & 209 & 178 & 39 & 12 & 125 & 26 & 10 & 12 \\
-& \scriptsize \bf Match Gold \# & 808 & 1046 & 381 & 652 & 70 & 361 & 19 & 769 & 382 & 22 & 474 & 346 & 239 & 388 & 87 & 364 & 467 & 127 & 361 & 112 & 62 & 29 & 12 & 86 & 25 & 2 & 10 \\
-& \scriptsize \bf Match Predicted \# & 778 & 959 & 363 & 680 & 61 & 354 & 13 & 697 & 375 & 21 & 335 & 303 & 238 & 358 & 61 & 234 & 435 & 70 & 265 & 51 & 60 & 19 & 4 & 45 & 25 & 5 & 5 \\
-& \scriptsize \bf Labeled Correct \# & 728 & 815 & 291 & 465 & 44 & 239 & 10 & 454 & 230 & 13 & 233 & 181 & 122 & 187 & 37 & 122 & 180 & 38 & 106 & 27 & 19 & 7 & 1 & 8 & 3 & 0 & 0 \\
-& \scriptsize \bf Unlabeled Correct \# & 759 & 941 & 361 & 616 & 53 & 351 & 13 & 670 & 363 & 19 & 296 & 266 & 188 & 347 & 44 & 194 & 408 & 52 & 234 & 40 & 34 & 15 & 4 & 36 & 24 & 1 & 5 \\
-\hline
-\multirow{3}{*}{\footnotesize (c)}
-& \scriptsize \bf Labeled/Unlabeled \% & 96 & 87 & 81 & 75 & 83 & 68 & 77 & 68 & 63 & 68 & 79 & 68 & 65 & 54 & 84 & 63 & 44 & 73 & 45 & 68 & 56 & 47 & 25 & 22 & 13 & 0 & 0 \\
-& \scriptsize \bf Majority Gold \% & 96 & 95 & 75 & 75 & 76 & 92 & 100 & 68 & 42 & 100 & 93 & 67 & 73 & 79 & 90 & 68 & 47 & 80 & 73 & 92 & 71 & 34 & 75 & 92 & 52 & 100 & 80 \\
-& \scriptsize \bf Majority Train \% & 98 & 88 & 91 & 90 & 80 & 49 & 90 & 59 & 46 & 87 & 80 & 62 & 82 & 55 & 68 & 61 & 83 & 78 & 58 & 86 & 71 & 53 & 100 & 83 & 31 & 86 & 100 \\
-\hline
-\footnotesize (d)
-& \scriptsize \bf Average Words \# & 1.0 & 1.6 & 1.0 & 1.0 & 1.2 & 1.0 & 1.1 & 1.2 & 1.0 & 1.0 & 3.1 & 2.4 & 1.2 & 1.0 & 7.4 & 3.8 & 1.2 & 5.1 & 5.3 & 6.0 & 5.8 & 2.9 & 1.6 & 5.7 & 1.0 & 3.3 & 2.0
-\end{tabular}
-\caption{Fine-grained evaluation of TUPA on EWT.
-(a) Columns are sorted by labeled F1, measuring performance on each subset of edges.
-Unlabeled F1 ignores edge categories, evaluating unit boundaries only.
-(b) Instances of each UD relation;
-of them, matching UCCA units in gold-standard and in TUPA's predictions;
-their intersection, with/without regard to categories.
-(c) 
-Percentage of correctly categorized edges;
-for comparison, percentage of most frequent category in gold (see~Table~\ref{tab:confusion_matrix})
-and in the Wiki training set (using UDPipe-predicted dependencies).
-(d) Average number of words in corresponding terminal yields.
-%UD relations exclude
-%\texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
-%\texttt{fixed}, \texttt{flat}, \texttt{goeswith},
-%\texttt{dep}, \texttt{orphan}, and \texttt{root}.
-%Of all UD relations, 89.5\%  match gold-standard UCCA units (see Table \ref{tab:confusion_matrix}).
-\label{tab:fine_grained_results}}
-\end{table*}
     
 
 \subsection{Other Differences}\label{sec:misc}
@@ -923,7 +872,7 @@ and in the Wiki training set (using UDPipe-predicted dependencies).
 \paragraph{Expletives and subjects.}
     Expletives are generally Functions,
     but some instances of \textit{it} and \textit{that} are analyzed as subjects in UD
-    and as Function in UCCA (e.g., ``\textit{it}'s like driving a new car'').    
+    and as Function in UCCA (e.g., ``\textit{it}'s like driving a new car'').
 
 \paragraph{Excluded relations.}
 We exclude the following UD labels,
@@ -979,6 +928,55 @@ as they are irrelevant to our evaluation:
 %trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki development set.
 %As can be seen, the primary labeled F1 continues improving substantially even from 90\% to 100\%
 %of the training data. More training data is likely to yield even better performance.
+
+\begin{table*}[ht]
+\centering
+\scriptsize
+\setlength\tabcolsep{1.7pt}
+\def\arraystretch{1.5}
+\vspace{-8mm}
+\hspace{-2mm}
+% \scriptsize \bf \rotatebox{90}{Primary}
+\begin{tabular}{cl|ccccccccccccccccccccccccccc}
+&& \scriptsize \bf \rotatebox{90}{det} & \scriptsize \bf \rotatebox{90}{nsubj} & \scriptsize \bf \rotatebox{90}{aux} & \scriptsize \bf \rotatebox{90}{case} & \scriptsize \bf \rotatebox{90}{nummod} & \scriptsize \bf \rotatebox{90}{cop} & \scriptsize \bf \rotatebox{90}{iobj} & \scriptsize \bf \rotatebox{90}{advmod} & \scriptsize \bf \rotatebox{90}{mark} & \scriptsize \bf \rotatebox{90}{expl} & \scriptsize \bf \rotatebox{90}{obj} & \scriptsize \bf \rotatebox{90}{nmod} & \scriptsize \bf \rotatebox{90}{compound} & \scriptsize \bf \rotatebox{90}{cc} & \scriptsize \bf \rotatebox{90}{ccomp} & \scriptsize \bf \rotatebox{90}{obl} & \scriptsize \bf \rotatebox{90}{amod} & \scriptsize \bf \rotatebox{90}{acl} & \scriptsize \bf \rotatebox{90}{conj} & \scriptsize \bf \rotatebox{90}{advcl} & \scriptsize \bf \rotatebox{90}{xcomp} & \scriptsize \bf \rotatebox{90}{appos} & \scriptsize \bf \rotatebox{90}{vocative} & \scriptsize \bf \rotatebox{90}{parataxis} & \scriptsize \bf \rotatebox{90}{discourse} & \scriptsize \bf \rotatebox{90}{csubj} & \scriptsize \bf \rotatebox{90}{list} \\
+\hline
+\multirow{2}{*}{\footnotesize (a)}
+& \scriptsize \bf Labeled F1 \% & 92 & 81 & 78 & 70 & 67 & 67 & 63 & 62 & 61 & 60 & 58 & 56 & 51 & 50 & 50 & 41 & 40 & 39 & 34 & 33 & 31 & 29 & 13 & 12 & 12 & 0 & 0 \\
+& \scriptsize \bf Unlabeled F1 \% & 96 & 94 & 97 & 92 & 81 & 98 & 81 & 91 & 96 & 88 & 73 & 82 & 79 & 93 & 59 & 65 & 90 & 53 & 75 & 49 & 56 & 63 & 50 & 55 & 96 & 29 & 67 \\
+\hline
+\multirow{5}{*}{\footnotesize (b)}
+& \scriptsize \bf Total in UD \# & 834 & 1083 & 383 & 727 & 94 & 364 & 19 & 840 & 400 & 24 & 566 & 458 & 406 & 400 & 128 & 496 & 528 & 176 & 451 & 209 & 178 & 39 & 12 & 125 & 26 & 10 & 12 \\
+& \scriptsize \bf Match Gold \# & 808 & 1046 & 381 & 652 & 70 & 361 & 19 & 769 & 382 & 22 & 474 & 346 & 239 & 388 & 87 & 364 & 467 & 127 & 361 & 112 & 62 & 29 & 12 & 86 & 25 & 2 & 10 \\
+& \scriptsize \bf Match Predicted \# & 778 & 959 & 363 & 680 & 61 & 354 & 13 & 697 & 375 & 21 & 335 & 303 & 238 & 358 & 61 & 234 & 435 & 70 & 265 & 51 & 60 & 19 & 4 & 45 & 25 & 5 & 5 \\
+& \scriptsize \bf Labeled Correct \# & 728 & 815 & 291 & 465 & 44 & 239 & 10 & 454 & 230 & 13 & 233 & 181 & 122 & 187 & 37 & 122 & 180 & 38 & 106 & 27 & 19 & 7 & 1 & 8 & 3 & 0 & 0 \\
+& \scriptsize \bf Unlabeled Correct \# & 759 & 941 & 361 & 616 & 53 & 351 & 13 & 670 & 363 & 19 & 296 & 266 & 188 & 347 & 44 & 194 & 408 & 52 & 234 & 40 & 34 & 15 & 4 & 36 & 24 & 1 & 5 \\
+\hline
+\multirow{3}{*}{\footnotesize (c)}
+& \scriptsize \bf Labeled/Unlabeled \% & 96 & 87 & 81 & 75 & 83 & 68 & 77 & 68 & 63 & 68 & 79 & 68 & 65 & 54 & 84 & 63 & 44 & 73 & 45 & 68 & 56 & 47 & 25 & 22 & 13 & 0 & 0 \\
+& \scriptsize \bf Majority Gold \% & 96 & 95 & 75 & 75 & 76 & 92 & 100 & 68 & 42 & 100 & 93 & 67 & 73 & 79 & 90 & 68 & 47 & 80 & 73 & 92 & 71 & 34 & 75 & 92 & 52 & 100 & 80 \\
+& \scriptsize \bf Majority Train \% & 98 & 88 & 91 & 90 & 80 & 49 & 90 & 59 & 46 & 87 & 80 & 62 & 82 & 55 & 68 & 61 & 83 & 78 & 58 & 86 & 71 & 53 & 100 & 83 & 31 & 86 & 100 \\
+\hline
+\footnotesize (d)
+& \scriptsize \bf Average Words \# & 1.0 & 1.6 & 1.0 & 1.0 & 1.2 & 1.0 & 1.1 & 1.2 & 1.0 & 1.0 & 3.1 & 2.4 & 1.2 & 1.0 & 7.4 & 3.8 & 1.2 & 5.1 & 5.3 & 6.0 & 5.8 & 2.9 & 1.6 & 5.7 & 1.0 & 3.3 & 2.0
+\end{tabular}
+\caption{Fine-grained evaluation of TUPA on EWT.
+(a) Columns are sorted by labeled F1, measuring performance on each subset of edges.
+Unlabeled F1 ignores edge categories, evaluating unit boundaries only.
+(b) Instances of each UD relation;
+of them, matching UCCA units in gold-standard and in TUPA's predictions;
+their intersection, with/without regard to categories.
+(c) 
+Percentage of correctly categorized edges;
+for comparison, percentage of most frequent category in gold (see~Table~\ref{tab:confusion_matrix})
+and in the Wiki training set (using UDPipe-predicted dependencies).
+(d) Average number of words in corresponding terminal yields.
+%UD relations exclude
+%\texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
+%\texttt{fixed}, \texttt{flat}, \texttt{goeswith},
+%\texttt{dep}, \texttt{orphan}, and \texttt{root}.
+%Of all UD relations, 89.5\%  match gold-standard UCCA units (see Table \ref{tab:confusion_matrix}).
+\label{tab:fine_grained_results}}
+\end{table*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Fine-Grained UCCA Evaluation}\label{sec:fine_grained}
@@ -1053,8 +1051,8 @@ We apply the extended converter to UD as before (\S\ref{sec:local}).
 We train a UCCA parser,
 TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
 on Wiki, and evaluate it on EWT.
-We evaluate this out-of-domain scenario as 
-we have both UCCA and UD gold standard structures for this text set. 
+We evaluate this out-of-domain scenario as
+we have both UCCA and UD gold-standard annotations for this test set.
 By default, TUPA is trained and tested using syntactic features
 predicted by spaCy.\footnote{\url{http://spacy.io}}
 As using UDPipe in training and gold UD in testing yielded very similar
@@ -1073,11 +1071,11 @@ results, we only report the default setting.
 
 \paragraph{Evaluation by gold-standard UD.}
 
-UCCA evaluation is generally carried out by considering a predicted unit as matched if there
-is a gold unit that matches it in its terminal yield and labels. Precision, Recall and F-score
-are computed accordingly. 
-For the fine-grained analysis, we split the gold standard, predicted and matched UCCA units according 
-to the labels of the UD units that have the same terminal yield (if any).
+UCCA evaluation is generally carried out by considering a predicted unit as correct if there
+is a gold unit that matches it in terminal yield and labels. Precision, Recall and F-score (F1)
+are computed accordingly.
+For the fine-grained analysis, we split the gold-standard, predicted and matched UCCA units according
+to the labels of the UD relations whose dependents have the same terminal yield (if any).
 
 %evaluation of both gold-standard and predicted edges
 %according to the UD relations they match by terminal yield
@@ -1170,7 +1168,7 @@ For nominal subjects,
 TUPA correctly categorizes only 87\% of the correctly delineated units,
 although 95\% of gold subjects are Participants.
 This is possibly since their training set ratio is only 88\%,
-suggesting domain adaptation may be applicable.
+suggesting domain adaptation techniques may be applicable.
 
 Copulas, coordinating conjunctions and conjuncts
 undergo similar distribution shift.
@@ -1191,7 +1189,7 @@ which do not contribute much to the overall parser score.
 However, inter-clause linkage, which TUPA also struggles with, is quite common.
 Although the match between UCCA and UD is not perfect in these cases,
 it is overall better than TUPA's unlabeled performance.
-The same pattern recurs when using gold standard syntax as features for TUPA.
+The same pattern recurs when using gold-standard syntax as features for TUPA.
 TUPA is a transition-based parser, which uses UD parses as features. Our
 results then suggest that encoding syntax more directly, perhaps using syntactic
 scaffolding \citep{swayamdipta2018syntactic}
@@ -1200,7 +1198,7 @@ may assist in predicting unit boundaries.
 
 Finally, TUPA often fails to make distinctions that are not encoded
 in UD. For example, it does poorly on distinguishing between noun modifiers of
-scene-evoking nouns (Participants) and modifiers of other nouns (Elaborators),
+Scene-evoking nouns (Participants) and modifiers of other nouns (Elaborators),
 obtaining roughly the same performance as 
 a majority baseline based on the UD relation.
 Lexical resources that distinguish eventive and relational nouns from concrete 
@@ -1229,7 +1227,7 @@ transduce semantic forms using rule-based systems \cite{Basile:12}.
 %by achieving strong performance without explicitly modeling syntax \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}.
   
 However, empirical study of
-the differences between syntactic and semantic schemes is still scarce. 
+the differences between syntactic and semantic schemes is still scarce.
 \newcite{zhang2017evaluation} evaluated PredPatt \citep{white2016universal},
 a framework for extracting predicate-argument structures from UD,
 on a large set of converted PropBank annotations.
@@ -1260,11 +1258,11 @@ After annotating a portion of the English Web Treebank with UCCA,
   abstracting away from differences of convention.
 We provide a detailed picture of the content differences between the schemes.
 Notably, we quantify the difference between the notions of semantic and syntactic heads 
-  and the notions of syntactic and semantic arguments, finding substatial divergence between
-  the schemes.
+  and of syntactic and semantic arguments, finding substantial divergence between
+  them.
 Our findings highlight the potential utility of using semantic parsers for text understanding applications
   (over their syntactic counterparts), but also exposes challenges semantic parsers must address.
-  
+
 
 %Finally, we demonstrated the utility of the proposed comparison methodology for fine-grained
 %  evaluation of UCCA parsers, and exposed concrete paths for advancement in UCCA parsing.
