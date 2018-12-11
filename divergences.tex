@@ -690,14 +690,14 @@ especially if compositional.
         (e.g., ``\textit{first time} buyers'') depending on its semantic category.
         %In cases where t UCCA annotates both parts  may be a co-Center (e.g., ``\textit{sweet potato} tempura'').
         Other compounds in UD are phrasal verbs (e.g., ``figure \textit{out}'', ``cleaned \textit{up}''),
-        which UCCA treats as unanalyzable (leading to an unmatched unit). 
+        which UCCA treats as unanalyzable (leading to unmatched units). 
             
 \paragraph{Core arguments.}
       A significant number of subjects and objects are left unmatched as they
       form parts of MWEs marked in UCCA as unanalyzable. UD annotates
       MWEs involving a verb and its argument(s) just like any other clause, and therefore
       lacks this semantic content. Examples include light verbs (e.g., ``give {\it a try}''),
-      idioms (``bites {\it the dust}''), and figures of speech (e.g., ``when \textit{it} comes to'', ``offer a taste (of)''),
+      idioms (``bites {\it the dust}''), and figures of speech (e.g., ``when \textit{it} comes to'', ``offer \textit{a taste} (of)''),
       all are UCCA units.
       
 \paragraph{Complex prepositions.} Some complex prepositions (e.g., \textit{according to} or \textit{on top of}),
@@ -875,7 +875,7 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
     
 \paragraph{Expletives and subjects.}
     Expletives are generally Functions,
-    but some instances of \textit{it} and \textit{that} are analyzed as subjects in UD
+    but some instances of \textit{it} and \textit{that} are analyzed as \texttt{nsubj} in UD
     and as Function in UCCA (e.g., ``\textit{it}'s like driving a new car'').
 
 \paragraph{Excluded relations.}
@@ -972,7 +972,7 @@ their intersection, with/without regard to categories.
 (c) 
 Percentage of correctly categorized edges;
 for comparison, percentage of most frequent category in gold (see~Table~\ref{tab:confusion_matrix})
-and in the Wiki training set (using UDPipe-predicted dependencies).
+and in the Wiki training set (by UDPipe-predicted dependencies).
 (d) Average number of words in corresponding terminal yields.
 %UD relations exclude
 %\texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
@@ -1186,7 +1186,7 @@ TUPA does relatively well on auxiliaries, numerical modifiers and markers,
 despite the heterogeneous test distribution (Table~\ref{tab:confusion_matrix}),
 possibly by making lexical distinctions
 (e.g., modals and auxiliary verbs are both UD auxiliaries,
-but are annotated as Adverbials and Functions respectively).
+but are annotated as Adverbials and Functions, respectively).
 
 The worst performance is on relatively rare relations,
 which do not contribute much to the overall parser score.
@@ -1243,7 +1243,7 @@ finding that 97\% of AMR edges are evoked by words or syntactic relations.
 Similarly, our conversion protocol allows fine-grained evaluation of UCCA parsing.
 
 A related line of work tackles the transduction of syntactic structures into semantic ones.
-\newcite{reddy2016transforming} proposed rule-based a method for converting UD
+\newcite{reddy2016transforming} proposed a rule-based method for converting UD
 to logical forms. 
 %They map syntactic dependency relations directly to logical relations,
 %assuming the predicate-argument structure is isomorphic to the dependency structure,
