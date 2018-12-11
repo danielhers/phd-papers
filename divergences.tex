@@ -349,34 +349,37 @@ to the converter, which abstract away from further non-content differences.
 \begin{figure}[th]
   \centering
   \scalebox{.8}{
-  \begin{tikzpicture}[level distance=15mm, ->,
+  \begin{tikzpicture}[level distance=12mm, ->,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\tt},
-      level 1/.style={sibling distance=17mm},
-      level 2/.style={sibling distance=12mm}]
+      level 2/.style={sibling distance=17mm,level distance=9mm},
+      level 3/.style={sibling distance=12mm,level distance=14mm}]
     \tikzstyle{word} = [font=\rmfamily,color=black]
-    \node (ROOT) [fill=black,circle] {}
-      child {node (after) [fill=black,circle] {}
+    \node [fill=black,circle] {}
+      child {node (ROOT) [fill=black,circle] {}
       {
-        child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
-        child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
-      } edge from parent node {obl}}
-      child {node {}
-      {
-        child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node {}
-      {
-        child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node {}
-      {
-        child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
-      } edge from parent [draw=none]}
-      child {node (to) [fill=black,circle] {}
-      {
-          child {node [word] {to{\color{white}g}} edge from parent node {case}}
-          child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
-      } edge from parent node {obl}}
+        child {node (after) [fill=black,circle] {}
+        {
+          child {node [word] {After{\color{white}g}\quad\quad} edge from parent node {case}}
+          child {node [word] {\quad graduation\quad\quad} edge from parent node {head}}
+        } edge from parent node {obl}}
+        child {node {}
+        {
+          child {node [word] (comma) {\quad,{\color{white}g}} edge from parent [draw=none]}
+        } edge from parent [draw=none]}
+        child {node {}
+        {
+          child {node [word] (John) {John{\color{white}g}} edge from parent [draw=none]}
+        } edge from parent [draw=none]}
+        child {node {}
+        {
+          child {node [word] (moved) {moved{\color{white}g}} edge from parent [draw=none]}
+        } edge from parent [draw=none]}
+        child {node (to) [fill=black,circle] {}
+        {
+            child {node [word] {to{\color{white}g}} edge from parent node {case}}
+            child {node [word] {Paris{\color{white}g}} edge from parent node {head}}
+        } edge from parent node {obl}}
+      } edge from parent node {head}}
       ;
       \draw (ROOT) to node {punct} (comma);
       \draw (ROOT) to node {nsubj} (John);
@@ -390,7 +393,7 @@ Intermediate non-terminals and \textit{head} edges are introduced by the unified
 
 \subsection{Basic Conversion}\label{sec:conversion}
 
-Figure~\ref{fig:converted_example_ud} present the same tree from Figure~\ref{fig:original_example_ud}
+Figure~\ref{fig:converted_example_ud} presents the same tree from Figure~\ref{fig:original_example_ud}
 after conversion.
 The converter adds pre-terminals per token,
 and attaches them according to the original dependency tree:
