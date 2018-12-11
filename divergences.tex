@@ -114,8 +114,8 @@
   and possessives. Semantic schemes are  less likely to make
   this distinction since a possessive can often be paraphrased as a compound
   and vice versa (e.g., ``US president''/``president of the US''),
-  but may distinguish different senses of possessives (e.g., ``some of the presidents'' and ``inauguration of the presidents''),
-  where a syntactic scheme would not.
+  but may distinguish different senses of possessives (e.g., ``some of the presidents'' and ``inauguration of the presidents'').
+%  where a syntactic scheme would not.
 
   Nevertheless, little empirical study has been done on what distinguishes semantic schemes from
   syntactic ones, which are still in many cases the backbone of text understanding systems. 
@@ -143,25 +143,27 @@
 
   Most content differences are due to (\S\ref{sec:analysis}):
   \begin{enumerate}[noitemsep]%,leftmargin=*,topsep=0pt]
-      \item UCCA's distinction whether a phrase evokes a Scene (event),
-        as opposed to UD's POS-based distinction (predicates, nominals). % (\S\ref{sec:s}).
+      \item UCCA's distinguishes between words and phrases that evoke a Scene (event) and ones that do not.
+        For example, eventive and non-eventive nouns are treated differently in UCCA, but similarly in UD.
+        %THis distinction that cuts across grammatical categories
+        %as opposed to UD's POS-based distinction (predicates, nominals). % (\S\ref{sec:s}).
       \item UCCA's distinction between primary relations, secondary relations
-        and Participants, as opposed to UD's core/non-core distinction. % (\S\ref{sec:arguments}).
+        and Participants, contrasts with UD's core/adjunct distinction. % (\S\ref{sec:arguments}).
       \item Different treatment of multi-word expressions (MWEs),
-        where UCCA has a stronger tendency to identify them in the text. % (\S\ref{sec:mwe}).
+        where UCCA has a stronger tendency to explicitly mark them. % (\S\ref{sec:mwe}).
       \item UCCA's conflation of several syntactic realizations of inter-clause linkage,
-        and disambiguation of other cases that UD does not.
+        and disambiguation of other cases that UD treats similarly.
         % (e.g., infinitive vs. purposive \textit{to}). % (\S\ref{sec:linkage}).
    \end{enumerate}
 
-  Our findings show that the differences between the schemes are substantial, suggesting
-  UCCA parsing in particular and semantic parsing in general may have real benefit
-  for downstream text understanding applications.
-  For example, only 73\% of arguments are shared between the UCCA and UD,
-  suggesting that many semantic participants cannot be recovered from UD.\footnote{This excludes cases of shared 
+  We show that the differences between the schemes are substantial, and suggest that
+  UCCA parsing in particular and semantic parsing in general are likely to benefit
+  downstream text understanding applications.
+  For example, only 73\% of arguments are shared between UCCA and UD,
+  i.e., many semantic participants cannot be recovered from UD.\footnote{This excludes cases of shared 
   argumenthood, which are partially covered by \textit{enhanced UD}. See \S\ref{sec:conversion}.}
-  Our results are relevant to other semantic representations, as they
-  share much in terms of content \cite{abend2017state}.
+  Our findings are relevant to other semantic representations, given their 
+  significant overlap in content \cite{abend2017state}.
     
   %   Other divergences stem from a different treatment of coordination, apposition and copulas.% (\S\ref{sec:misc}).
   
@@ -169,9 +171,9 @@
   analysis of semantic parsers, as illustrated by \citet{szubert2018structured} 
   for AMR \citep{banarescu2013abstract}.
   To demonstrate the utility of our comparison methodology,
-  we perform fine-grained error analysis on UCCA parsing results
+  we perform fine-grained error analysis on UCCA parsing,
   according to UD relations (\S\ref{sec:fine_grained}).
-  This analysis highlights challenges for existing UCCA parsing technology,
+  Results highlight challenges for current parsing technology,
   and exposes cases where UCCA parsers may benefit from modeling syntactic structure more directly.
 
 
@@ -180,9 +182,9 @@
 \section{Representations}\label{sec:representations}
 
   The conceptual and formal similarity between UD and UCCA can be traced back
-  to their shared design principles.
-  Both schemes are designed to be applicable across languages and domains, 
-  to support rapid annotation and to be suitable for downstream language understanding
+  to their shared design principles:
+  both are designed to be applicable across languages and domains, 
+  to enable rapid annotation and to support text understanding
   applications. This section provides a brief introduction to each of the schemes, whereas
   the next sections discuss their content in further
   detail.\footnote{See Supplementary Material for a definition of each category in both schemes,
@@ -285,9 +287,9 @@ representing syntactic relations.
    such as UCCA and semantic dependencies \citep{oepen2016towards}.
 %   This facilitates their comparison.
    
-See example UD tree in Figure~\ref{fig:original_example_ud}.
+An example UD tree is given in Figure~\ref{fig:original_example_ud}.
 %and Table~\ref{} gives a short description of each UD category.  % supp. material (footnote above)
-UD relations are henceforth written in \texttt{typewriter} font.
+UD relations will be written in \texttt{typewriter} font.
 
 \begin{figure}[th]
   \centering
@@ -313,7 +315,7 @@ UD relations are henceforth written in \texttt{typewriter} font.
 We annotate 163 English passages, containing 804 sentences
 from the reviews section of the 
 English Web Treebank \cite[EWT; ][]{bies2012english}.
-The sentences are annotated by two UCCA annotators
+Text is annotated by two UCCA annotators
 according to v2.0 of the UCCA
 guidelines\footnote{\tiny\url{github.com/UniversalConceptualCognitiveAnnotation/docs}}
 and cross-reviewed.\footnote{The data will be released upon publication.}
