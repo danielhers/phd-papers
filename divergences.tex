@@ -433,7 +433,7 @@ We extend the unified DAG converter to remove further non-content differences.
 \paragraph{Unanalyzable units.}
 Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
 In multi-word expressions (MWEs) in UD, each word after the first is attached to the previous word,
-with the \texttt{flat}, \texttt{fixed} or \texttt{goeswith} relations.
+with the \texttt{flat}, \texttt{fixed} or \texttt{goeswith} relations
 (depending on whether the expression is grammaticalized, or split by error).
 We remove edges of these relations and group the corresponding terminals to one unit.
 %Multi-word expressions also include compounds, discussed in \S\ref{sec:mwe}.
@@ -464,14 +464,14 @@ as \textit{when}, \textit{if}, \textit{after}) as siblings of their conjuncts.
 \section{Analysis of Divergences}\label{sec:analysis}
 
 Using the shared format,
-we turn to discussing the content differences between UCCA and UD.
+we turn to analyzing the content differences between UCCA and UD.
 
 
 \subsection{Confusion Matrix}\label{sec:confusion}
 
 Table~\ref{tab:confusion_matrix} presents the confusion matrix of categories between converted UD
 and the UCCA, in the shared EWT corpus.
-In case of multiple units with the same terminal yield (i.e., unit with a single non-remote child),
+In case of multiple UCCA units with the same terminal yield (i.e., units with a single non-remote child),
 we take the top category only, to avoid double-counting.
 Excluding punctuation, this results in 12,893 yields in UCCA and
 13,294 in UD.
@@ -485,10 +485,10 @@ are Participants,
 and only 73\% of Participants are syntactic arguments---a difference stemming from
 the Scene/non-Scene (\S\ref{sec:s}) and argument/adjunct (\S\ref{sec:arguments}) distinctions.
 %, this does not include the different treatment of shared arguments (\S\ref{sec:conversion}).
-Furthermore, if we identify predicates as words having at least one argument
+Moreover, if we identify predicates as words having at least one argument
 and Scenes as units with at least one Participant,
-then only 86\% of UD predicates correspond to Scenes,
-and only 79\% of Scenes to predicates.
+then only 86\% of UD predicates correspond to Scenes (many of which are secondary relations within one scene; see \S\ref{sec:arguments}),
+and only 79\% of the Scenes correspond to predicates.
 
 Examining the {\it head} row in Table~\ref{tab:confusion_matrix} allows
 us to contrast the schemes' notions of a head. 
@@ -557,7 +557,7 @@ head & 125 & 1,402 & 152 & 37 & 91 & 18 & 652 & 2 & 1 & 961 & 18 & 9 & 353 & 1 &
 \caption{UD-UCCA confusion matrix calculated from EWT
 gold-standard annotations (\S\ref{sec:shared}),
 after converting UD to the unified DAG format,
-by comparing incoming edge labels for units with the same terminal yields.
+by matching UD edges and UCCA units with the same terminal yield.
 The last column (row), labeled {\sc NoMatch}, shows the number of edges of each UD (UCCA) category
 that do not match any UCCA (UD) unit.
 \label{tab:confusion_matrix}}
@@ -573,12 +573,14 @@ an adjective or even a preposition (``this is \textit{for} John'').
 
 \paragraph{Core syntactic arguments.}
       Subjects and objects are usually Participants (e.g., ``\textit{wine} was excellent'').
-      However, when describing a Scene, such a phrase is a Process/State
+      However, when describing a Scene, the subject may be a Process/State
       (e.g., ``But \textit{service} is very poor'').
       Some wh-pronouns are the subjects or objects of a relative clause, but
       are Linkers or Relators,
       depending on whether they link Scenes or non-Scenes, respectively.
       For example, ``who'' in ``Overall, Joe is a happy camper \textit{who} has found a great spot'' is an \texttt{nsubj}, but a Linker.
+      Other arguments are Adverbials or Time (see \S\ref{sec:arguments}), and
+      some do match any UCCA unit, especially when they are parts of MWEs (see \S\ref{sec:mwe}).
 
 \paragraph{Adjectival modifiers} are Adverbials when modifying Scenes
     (``\textit{romantic} dinner''), States when describing non-Scenes (``\textit{beautiful} hotel'') 
@@ -627,7 +629,7 @@ an adjective or even a preposition (``this is \textit{for} John'').
 \subsection{Primary and Secondary Relations}\label{sec:arguments}
 
 UD distinguishes core arguments, adverbial modifiers,
-and obliques, which in English UD correspond to prepositional dependents of a verb.
+and obliques, which in English UD mostly correspond to prepositional dependents of a verb.
 UCCA distinguishes Participants, including locations and abstract entities,
 from secondary relations (Adverbials), 
 which cover manner, aspect and modality.
@@ -693,8 +695,8 @@ especially if compositional.
       form parts of MWEs marked in UCCA as unanalyzable. UD annotates
       MWEs involving a verb and its argument(s) just like any other clause, and therefore
       lacks this semantic content. Examples include light verbs (e.g., ``give {\it a try}''),
-      idioms (``bites {\it the dust}''), and figures of speech (e.g., ``when \textit{it} comes to''),
-      treated as single UCCA units.
+      idioms (``bites {\it the dust}''), and figures of speech (e.g., ``when \textit{it} comes to'', ``offer a taste (of)''),
+      all are UCCA units.
       
 \paragraph{Complex prepositions.} Some complex prepositions (e.g., \textit{according to} or \textit{on top of}),
       not encoded as MWEs in UD, are unanalyzable in UCCA.
@@ -704,7 +706,7 @@ especially if compositional.
 
 \paragraph{Head selection.}
 UCCA tends to flatten linkage, where UD, being a dependency scheme,
-has to select a head and dependent.
+selects a head and dependent.
 This yields scope ambiguities for coordination, an inherently flat structure. 
 For instance, ``unique gifts and cards'' is ambiguous in UD as to whether
 \textit{unique} applies only to \textit{gifts} or to the whole phrase---both
@@ -759,11 +761,10 @@ UD categorizes clause linkage into coordination,
 subordination, argumenthood (complementation),
 and parataxis. %(a residual category).
 UCCA distinguishes argumenthood 
-but conflates the other cases into Parallel Scenes,
-which both adverbial clauses and parataxis
-are almost exclusively marked as
-(e.g., ``We called few companies before \textit{we decided to hire them}''
-and ``Check out The Willow Lounge, \textit{you'll be happy}'').
+but conflates the others into the category Parallel Scenes.
+For example,
+``We called few companies before \textit{we decided to hire them}''
+and ``Check out The Willow Lounge, \textit{you'll be happy}'' are Parallel Scenes.
 
 Note that while in UD, \texttt{mark} (e.g., \textit{before})
 is attached to the dependent adverbial clause,
@@ -780,7 +781,7 @@ but have other uses in questions and free relative clauses.
 Other mismatches result from the long tail of differences in how UD and UCCA construe linkage.
 Consider the sentence in Figure~\ref{fig:linkage}.
 While \textit{moment} is an oblique argument of \textit{know} in UD,
-\textit{From the moment} is analyzed as Linker in UCCA.
+\textit{From the moment} is analyzed as a Linker in UCCA.
 
 \begin{figure}[th]
 \begin{subfigure}{\columnwidth}
@@ -848,29 +849,29 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
 \setlength\tabcolsep{1.6pt}
 \def\arraystretch{1.5}
 \vspace{-8mm}
-\hspace{-7mm}
+\hspace{-2mm}
 % \scriptsize \bf \rotatebox{90}{Primary}
 \begin{tabular}{cl|ccccccccccccccccccccccccccc}
 && \scriptsize \bf \rotatebox{90}{det} & \scriptsize \bf \rotatebox{90}{nsubj} & \scriptsize \bf \rotatebox{90}{aux} & \scriptsize \bf \rotatebox{90}{case} & \scriptsize \bf \rotatebox{90}{nummod} & \scriptsize \bf \rotatebox{90}{cop} & \scriptsize \bf \rotatebox{90}{iobj} & \scriptsize \bf \rotatebox{90}{advmod} & \scriptsize \bf \rotatebox{90}{mark} & \scriptsize \bf \rotatebox{90}{expl} & \scriptsize \bf \rotatebox{90}{obj} & \scriptsize \bf \rotatebox{90}{nmod} & \scriptsize \bf \rotatebox{90}{compound} & \scriptsize \bf \rotatebox{90}{cc} & \scriptsize \bf \rotatebox{90}{ccomp} & \scriptsize \bf \rotatebox{90}{obl} & \scriptsize \bf \rotatebox{90}{amod} & \scriptsize \bf \rotatebox{90}{acl} & \scriptsize \bf \rotatebox{90}{conj} & \scriptsize \bf \rotatebox{90}{advcl} & \scriptsize \bf \rotatebox{90}{xcomp} & \scriptsize \bf \rotatebox{90}{appos} & \scriptsize \bf \rotatebox{90}{vocative} & \scriptsize \bf \rotatebox{90}{parataxis} & \scriptsize \bf \rotatebox{90}{discourse} & \scriptsize \bf \rotatebox{90}{csubj} & \scriptsize \bf \rotatebox{90}{list} \\
 \hline
-\multirow{2}{*}{\normalsize (a)}
-& \footnotesize \bf Labeled F1 \% & 92 & 81 & 78 & 70 & 67 & 67 & 63 & 62 & 61 & 60 & 58 & 56 & 51 & 50 & 50 & 41 & 40 & 39 & 34 & 33 & 31 & 29 & 13 & 12 & 12 & 0 & 0 \\
-& \footnotesize \bf Unlabeled F1 \% & 96 & 94 & 97 & 92 & 81 & 98 & 81 & 91 & 96 & 88 & 73 & 82 & 79 & 93 & 59 & 65 & 90 & 53 & 75 & 49 & 56 & 63 & 50 & 55 & 96 & 29 & 67 \\
+\multirow{2}{*}{\footnotesize (a)}
+& \scriptsize \bf Labeled F1 \% & 92 & 81 & 78 & 70 & 67 & 67 & 63 & 62 & 61 & 60 & 58 & 56 & 51 & 50 & 50 & 41 & 40 & 39 & 34 & 33 & 31 & 29 & 13 & 12 & 12 & 0 & 0 \\
+& \scriptsize \bf Unlabeled F1 \% & 96 & 94 & 97 & 92 & 81 & 98 & 81 & 91 & 96 & 88 & 73 & 82 & 79 & 93 & 59 & 65 & 90 & 53 & 75 & 49 & 56 & 63 & 50 & 55 & 96 & 29 & 67 \\
 \hline
-\multirow{5}{*}{\normalsize (b)}
-& \footnotesize \bf Total in UD \# & 834 & 1083 & 383 & 727 & 94 & 364 & 19 & 840 & 400 & 24 & 566 & 458 & 406 & 400 & 128 & 496 & 528 & 176 & 451 & 209 & 178 & 39 & 12 & 125 & 26 & 10 & 12 \\
-& \footnotesize \bf Match Gold \# & 808 & 1046 & 381 & 652 & 70 & 361 & 19 & 769 & 382 & 22 & 474 & 346 & 239 & 388 & 87 & 364 & 467 & 127 & 361 & 112 & 62 & 29 & 12 & 86 & 25 & 2 & 10 \\
-& \footnotesize \bf Match Predicted \# & 778 & 959 & 363 & 680 & 61 & 354 & 13 & 697 & 375 & 21 & 335 & 303 & 238 & 358 & 61 & 234 & 435 & 70 & 265 & 51 & 60 & 19 & 4 & 45 & 25 & 5 & 5 \\
-& \footnotesize \bf Labeled Correct \# & 728 & 815 & 291 & 465 & 44 & 239 & 10 & 454 & 230 & 13 & 233 & 181 & 122 & 187 & 37 & 122 & 180 & 38 & 106 & 27 & 19 & 7 & 1 & 8 & 3 & 0 & 0 \\
-& \footnotesize \bf Unlabeled Correct \# & 759 & 941 & 361 & 616 & 53 & 351 & 13 & 670 & 363 & 19 & 296 & 266 & 188 & 347 & 44 & 194 & 408 & 52 & 234 & 40 & 34 & 15 & 4 & 36 & 24 & 1 & 5 \\
+\multirow{5}{*}{\footnotesize (b)}
+& \scriptsize \bf Total in UD \# & 834 & 1083 & 383 & 727 & 94 & 364 & 19 & 840 & 400 & 24 & 566 & 458 & 406 & 400 & 128 & 496 & 528 & 176 & 451 & 209 & 178 & 39 & 12 & 125 & 26 & 10 & 12 \\
+& \scriptsize \bf Match Gold \# & 808 & 1046 & 381 & 652 & 70 & 361 & 19 & 769 & 382 & 22 & 474 & 346 & 239 & 388 & 87 & 364 & 467 & 127 & 361 & 112 & 62 & 29 & 12 & 86 & 25 & 2 & 10 \\
+& \scriptsize \bf Match Predicted \# & 778 & 959 & 363 & 680 & 61 & 354 & 13 & 697 & 375 & 21 & 335 & 303 & 238 & 358 & 61 & 234 & 435 & 70 & 265 & 51 & 60 & 19 & 4 & 45 & 25 & 5 & 5 \\
+& \scriptsize \bf Labeled Correct \# & 728 & 815 & 291 & 465 & 44 & 239 & 10 & 454 & 230 & 13 & 233 & 181 & 122 & 187 & 37 & 122 & 180 & 38 & 106 & 27 & 19 & 7 & 1 & 8 & 3 & 0 & 0 \\
+& \scriptsize \bf Unlabeled Correct \# & 759 & 941 & 361 & 616 & 53 & 351 & 13 & 670 & 363 & 19 & 296 & 266 & 188 & 347 & 44 & 194 & 408 & 52 & 234 & 40 & 34 & 15 & 4 & 36 & 24 & 1 & 5 \\
 \hline
-\multirow{3}{*}{\normalsize (c)}
-& \footnotesize \bf Labeled/Unlabeled \% & 96 & 87 & 81 & 75 & 83 & 68 & 77 & 68 & 63 & 68 & 79 & 68 & 65 & 54 & 84 & 63 & 44 & 73 & 45 & 68 & 56 & 47 & 25 & 22 & 13 & 0 & 0 \\
-& \footnotesize \bf Majority Gold \% & 96 & 95 & 75 & 75 & 76 & 92 & 100 & 68 & 42 & 100 & 93 & 67 & 73 & 79 & 90 & 68 & 47 & 80 & 73 & 92 & 71 & 34 & 75 & 92 & 52 & 100 & 80 \\
-& \footnotesize \bf Majority Train \% & 98 & 88 & 91 & 90 & 80 & 49 & 90 & 59 & 46 & 87 & 80 & 62 & 82 & 55 & 68 & 61 & 83 & 78 & 58 & 86 & 71 & 53 & 100 & 83 & 31 & 86 & 100 \\
+\multirow{3}{*}{\footnotesize (c)}
+& \scriptsize \bf Labeled/Unlabeled \% & 96 & 87 & 81 & 75 & 83 & 68 & 77 & 68 & 63 & 68 & 79 & 68 & 65 & 54 & 84 & 63 & 44 & 73 & 45 & 68 & 56 & 47 & 25 & 22 & 13 & 0 & 0 \\
+& \scriptsize \bf Majority Gold \% & 96 & 95 & 75 & 75 & 76 & 92 & 100 & 68 & 42 & 100 & 93 & 67 & 73 & 79 & 90 & 68 & 47 & 80 & 73 & 92 & 71 & 34 & 75 & 92 & 52 & 100 & 80 \\
+& \scriptsize \bf Majority Train \% & 98 & 88 & 91 & 90 & 80 & 49 & 90 & 59 & 46 & 87 & 80 & 62 & 82 & 55 & 68 & 61 & 83 & 78 & 58 & 86 & 71 & 53 & 100 & 83 & 31 & 86 & 100 \\
 \hline
-\normalsize (d)
-& \footnotesize \bf Average Words \# & 1.0 & 1.6 & 1.0 & 1.0 & 1.2 & 1.0 & 1.1 & 1.2 & 1.0 & 1.0 & 3.1 & 2.4 & 1.2 & 1.0 & 7.4 & 3.8 & 1.2 & 5.1 & 5.3 & 6.0 & 5.8 & 2.9 & 1.6 & 5.7 & 1.0 & 3.3 & 2.0
+\footnotesize (d)
+& \scriptsize \bf Average Words \# & 1.0 & 1.6 & 1.0 & 1.0 & 1.2 & 1.0 & 1.1 & 1.2 & 1.0 & 1.0 & 3.1 & 2.4 & 1.2 & 1.0 & 7.4 & 3.8 & 1.2 & 5.1 & 5.3 & 6.0 & 5.8 & 2.9 & 1.6 & 5.7 & 1.0 & 3.3 & 2.0
 \end{tabular}
 \caption{Fine-grained evaluation of TUPA on EWT.
 (a) Columns are sorted by labeled F1, measuring performance on each subset of edges.
@@ -922,7 +923,7 @@ and in the Wiki training set (using UDPipe-predicted dependencies).
 \paragraph{Expletives and subjects.}
     Expletives are generally Functions,
     but some instances of \textit{it} and \textit{that} are analyzed as subjects in UD
-    and as expletives in UCCA (e.g., ``\textit{it}'s like driving a new car'').    
+    and as Function in UCCA (e.g., ``\textit{it}'s like driving a new car'').    
 
 \paragraph{Excluded relations.}
 We exclude the following UD labels,
@@ -1044,19 +1045,20 @@ filtering it to get only the 804 sentences that were also annotated in UCCA.
 We additionally use UDPipe v1.2 \cite{udpipe,udpipe:2017},
 trained on
 English\_EWT,\footnote{\url{http://hdl.handle.net/11234/1-2898}}
-to parse the Wiki corpus to UD.
+to parse Wiki to UD.
+We apply the extended converter to UD as before (\S\ref{sec:local}).
 
 \paragraph{Parser.}
 
 We train a UCCA parser,
 TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
 on Wiki, and evaluate it on EWT.
-While this is out-of-domain scenario,
-the shared annotation allows accurate fine-grained evaluation, which is
-valuable.\footnote{By default, TUPA is trained and tested using syntactic features
-predicted by spaCy (\url{http://spacy.io}).
-However, using UDPipe in training and gold UD in testing yielded very similar
-results, so we use the default settings.}
+We evaluate this out-of-domain scenario as 
+we have both UCCA and UD gold standard structures for this text set. 
+By default, TUPA is trained and tested using syntactic features
+predicted by spaCy.\footnote{\url{http://spacy.io}}
+As using UDPipe in training and gold UD in testing yielded very similar
+results, we only report the default setting.
 
 %\paragraph{Evaluation of the comparison methodology.}
 %
@@ -1071,11 +1073,16 @@ results, so we use the default settings.}
 
 \paragraph{Evaluation by gold-standard UD.}
 
-We extend the standard UCCA evaluation to perform a fine-grained division
-of both gold-standard and predicted edges,
-according to the UD relations they match by terminal yield
-(using our extended converter; see \S\ref{sec:local}).
-This allows error analysis of UCCA parsing according to syntactic phenomena.
+UCCA evaluation is generally carried out by considering a predicted unit as matched if there
+is a gold unit that matches it in its terminal yield and labels. Precision, Recall and F-score
+are computed accordingly. 
+For the fine-grained analysis, we split the gold standard, predicted and matched UCCA units according 
+to the labels of the UD units that have the same terminal yield (if any).
+
+%evaluation of both gold-standard and predicted edges
+%according to the UD relations they match by terminal yield
+%(using our extended converter; .
+%This allows error analysis of UCCA parsing according to syntactic phenomena.
 
 
 %\paragraph{UCCA evaluation by automatically parsed UD.}
@@ -1158,12 +1165,12 @@ fine-grained evaluation by UD relations.
 %the UCCA category is in the test EWT corpus, given the UD relation,
 %and $\sfrac{\text{Train Mode}}{\text{Match}}\%$ in the training Wiki corpus.
 %\textit{Mean {\#}Words} indicates how long units are on average.
-TUPA does best on determiners, which are mostly single-worded Elaborators.
+TUPA does best on determiners, which are mostly one word Elaborators.
 For nominal subjects,
 TUPA correctly categorizes only 87\% of the correctly delineated units,
 although 95\% of gold subjects are Participants.
 This is possibly since their training set ratio is only 88\%,
-suggesting possible improvements may be made with domain adaptation techniques.
+suggesting domain adaptation may be applicable.
 
 Copulas, coordinating conjunctions and conjuncts
 undergo similar distribution shift.
@@ -1174,32 +1181,31 @@ This is a distinction between identity and attribution for copulas,
 and between Scenes/non-Scenes for coordination.
 
 TUPA does relatively well on auxiliaries, numerical modifiers and markers,
-despite the varied test distribution (see~Table~\ref{tab:confusion_matrix}),
-possibly by learning lexical distinctions
-(e.g., modals and auxiliary verbs are both auxiliaries syntactically,
+despite the heterogeneous test distribution (Table~\ref{tab:confusion_matrix}),
+possibly by making lexical distinctions
+(e.g., modals and auxiliary verbs are both UD auxiliaries,
 but are annotated as Adverbials and Functions respectively).
 
 The worst performance is on relatively rare relations,
 which do not contribute much to the overall parser score.
 However, inter-clause linkage, which TUPA also struggles with, is quite common.
-Although the matching between UCCA and UD is not perfect in these cases,
+Although the match between UCCA and UD is not perfect in these cases,
 it is overall better than TUPA's unlabeled performance.
 The same pattern recurs when using gold standard syntax as features for TUPA.
 TUPA is a transition-based parser, which uses UD parses as features. Our
-results, however, suggest that encoding syntax more directly, perhaps through syntactic
+results then suggest that encoding syntax more directly, perhaps using syntactic
 scaffolding \citep{swayamdipta2018syntactic}
-or guided attention \cite{strubell2018linguistically},
-could assist in predicting the unit boundaries.
+or guided attention \citep{strubell2018linguistically},
+may assist in predicting unit boundaries.
 
 Finally, TUPA often fails to make distinctions that are not encoded
 in UD. For example, it does poorly on distinguishing between noun modifiers of
-scene-evoking nouns (Participants) and those modifying other nouns (Elaborators),
+scene-evoking nouns (Participants) and modifiers of other nouns (Elaborators),
 obtaining roughly the same performance as 
 a majority baseline based on the UD relation.
 Lexical resources that distinguish eventive and relational nouns from concrete 
-nouns could ameliorate this problem.
-In the similar case of compounds, lexical resources for light verbs and idioms could
-help performance.
+nouns may alleviate this problem.
+In the similar case of compounds, lexical resources for light verbs and idioms may increase performance.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1222,17 +1228,16 @@ transduce semantic forms using rule-based systems \cite{Basile:12}.
 %Other works have contested the importance of syntax to semantics,
 %by achieving strong performance without explicitly modeling syntax \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}.
   
-However, only few works have attempted an empirical study of
-the differences between syntactic and semantic schemes. 
+However, empirical study of
+the differences between syntactic and semantic schemes is still scarce. 
 \newcite{zhang2017evaluation} evaluated PredPatt \citep{white2016universal},
 a framework for extracting predicate-argument structures from UD,
-on a large set of high-quality annotations converted from PropBank.
+on a large set of converted PropBank annotations.
 %They evaluated the extracted predicate-argument relations using both
 %gold-standard and parsed UD.
-\newcite{szubert2018structured} proposed a method for aligning AMR
-\cite{banarescu2013abstract} and UD subgraphs,
+\newcite{szubert2018structured} proposed a method for aligning AMR and UD subgraphs,
 finding that 97\% of AMR edges are evoked by words or syntactic relations.
-\newcite{damonte-17} suggested refining AMR evaluation by UD labels.
+\newcite{damonte-17} refined AMR evaluation by UD labels.
 Similarly, our conversion protocol allows fine-grained evaluation of UCCA parsing.
 
 A related line of work tackles the transduction of syntactic structures into semantic ones.
@@ -1250,16 +1255,19 @@ proposition structures ({\sc PropS}), abstracting away from some syntactic detai
 \section{Conclusion}\label{sec:conclusion}
 
 We evaluated the similarities and divergences in the content encoded by UD and UCCA. 
-After annotating 804 sentences from the English Web Treebank with UCCA,
-we used an automated methodology to evaluate how well the two schemes align,
-abstracting away from superficial structural differences.
-Our findings provide a detailed picture of the content differences.
-Notably, only 73\% of participants are preserved between the schemes;
-86\% of the UD predicates are UCCA Scenes, and only 79\% the other way around.
+After annotating a portion of the English Web Treebank with UCCA,
+  we used an automated methodology to evaluate how well the two schemes align,
+  abstracting away from differences of convention.
+We provide a detailed picture of the content differences between the schemes.
+Notably, we quantify the difference between the notions of semantic and syntactic heads 
+  and the notions of syntactic and semantic arguments, finding substatial divergence between
+  the schemes.
+Our findings highlight the potential utility of using semantic parsers for text understanding applications
+  (over their syntactic counterparts), but also exposes challenges semantic parsers must address.
+  
 
-We further demonstrated that the comparison methodology can be used for fine-grained
-evaluation of UCCA parsers, and found concrete paths for advancement in UCCA parsing, either by relying more directly on 
-information encoded by UD, or by relying on other existing resources.
+%Finally, we demonstrated the utility of the proposed comparison methodology for fine-grained
+%  evaluation of UCCA parsers, and exposed concrete paths for advancement in UCCA parsing.
 
 %Future work will extend our conversion protocol to a full labeled conversion,
 %which can be used as a UCCA parser, or for training data augmentation.
