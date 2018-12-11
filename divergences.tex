@@ -432,7 +432,7 @@ We thus compare basic UD and UCCA trees, deferring a comparison of UCCA and enha
 We extend the unified DAG converter to remove further non-content differences.
 
 \paragraph{Unanalyzable units.}
-Unanalyzable phrases are represented in UCCA as a single unit covering multiple terminals.
+An unanalyzable phrase is represented in UCCA as a single unit covering multiple terminals.
 In multi-word expressions (MWEs) in UD, each word after the first is attached to the previous word,
 with the \texttt{flat}, \texttt{fixed} or \texttt{goeswith} relations
 (depending on whether the expression is grammaticalized, or split by error).
@@ -468,47 +468,8 @@ Using the shared format,
 we turn to analyzing the content differences between UCCA and UD.
 
 
-\subsection{Confusion Matrix}\label{sec:confusion}
-
-Table~\ref{tab:confusion_matrix} presents the confusion matrix of categories between converted UD
-and the UCCA, in the shared EWT corpus.
-In case of multiple UCCA units with the same terminal yield (i.e., units with a single non-remote child),
-we take the top category only, to avoid double-counting.
-Excluding punctuation, this results in 12,893 yields in UCCA and
-13,294 in UD.
-Of these, 11,541 are common, meaning that a UCCA ``parser'' developed this way
-would get a very high F1 score
-of 88.1\%, if given the gold UCCA label for every converted edge.
-
-Only 73\% of syntactic arguments
-(\texttt{ccomp}, \texttt{csubj}, \texttt{iobj}, \texttt{nsubj}, \texttt{obj}, \texttt{obl} and \texttt{xcomp})
-are Participants,
-and only 73\% of Participants are syntactic arguments---a difference stemming from
-the Scene/non-Scene (\S\ref{sec:s}) and argument/adjunct (\S\ref{sec:arguments}) distinctions.
-%, this does not include the different treatment of shared arguments (\S\ref{sec:conversion}).
-Moreover, if we identify predicates as words having at least one argument
-and Scenes as units with at least one Participant,
-then only 86\% of UD predicates correspond to Scenes (many of which are secondary relations within one scene; see \S\ref{sec:arguments}),
-and only 79\% of Scenes correspond to predicates (e.g., due to eventive nouns).
-
-Examining the {\it head} row in Table~\ref{tab:confusion_matrix} allows
-us to contrast the schemes' notions of a head. 
-{\it head}-labeled units cover units that have at least
-one dependent in UD, or single-clause sentences (technically, they are non-terminals added by the converter).
-77.5\% correspond to Processes, States, Parallel Scenes or Centers,
-which are UCCA's notions of semantic heads.
-12.1\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
-UD but not in UCCA (\S\ref{sec:mwe}).
-Another source of unmatched units is inter-Scene linkage, which tends to be flatter in
-UCCA (\S\ref{sec:linkage}).
-The rest (10.4\%) are mostly due to head swap (e.g., ``\textit{all} of Dallas'', where \textit{all}
-is a Quantifier of \textit{Dallas} in UCCA, but the head in UD).
-
-In the following subsections, we review the main content differences between the schemes,
-as reflected in the confusion matrix, and categorize them according to the UD relations
-involved.
-
 \begin{table}[t]
+\vspace{-3mm}
 \centering
 \scriptsize
 \setlength\tabcolsep{1pt}
@@ -557,12 +518,52 @@ head & 125 & 1,402 & 152 & 37 & 91 & 18 & 652 & 2 & 1 & 961 & 18 & 9 & 353 & 1 &
 \end{tabular}
 \caption{UD-UCCA confusion matrix calculated from EWT
 gold-standard annotations (\S\ref{sec:shared}),
-after converting UD to the unified DAG format,
+after applying our extended converter to UD (\S\ref{sec:methodology}),
 by matching UD vertices and UCCA units with the same terminal yield.
 The last column (row), labeled {\sc NoMatch}, shows the number of edges of each UD (UCCA) category
 that do not match any UCCA (UD) unit.
 \label{tab:confusion_matrix}}
 \end{table}
+
+\subsection{Confusion Matrix}\label{sec:confusion}
+
+Table~\ref{tab:confusion_matrix} presents the confusion matrix of categories between
+the converted UD and UCCA, in the shared EWT corpus.
+In case of multiple UCCA units with the same terminal yield (i.e., units with a single non-remote child),
+we take the top category only, to avoid double-counting.
+Excluding punctuation, this results in 12,893 yields in UCCA and
+13,294 in UD.
+Of these, 11,541 are common, meaning that a UCCA ``parser'' developed this way
+would get a very high F1 score
+of 88.1\%, if given the gold UCCA label for every converted edge.
+
+Only 73\% of syntactic arguments
+(\texttt{ccomp}, \texttt{csubj}, \texttt{iobj}, \texttt{nsubj}, \texttt{obj}, \texttt{obl} and \texttt{xcomp})
+are Participants,
+and only 73\% of Participants are syntactic arguments---a difference stemming from
+the Scene/non-Scene (\S\ref{sec:s}) and argument/adjunct (\S\ref{sec:arguments}) distinctions.
+%, this does not include the different treatment of shared arguments (\S\ref{sec:conversion}).
+Moreover, if we identify predicates as words having at least one argument
+and Scenes as units with at least one Participant,
+then only 86\% of UD predicates correspond to Scenes (many of which are secondary relations within one scene; see \S\ref{sec:arguments}),
+and only 79\% of Scenes correspond to predicates (e.g., due to eventive nouns).
+
+Examining the {\it head} row in Table~\ref{tab:confusion_matrix} allows
+us to contrast the schemes' notions of a head. 
+{\it head}-labeled units cover units that have at least
+one dependent in UD, or single-clause sentences (technically, they are non-terminals added by the converter).
+77.5\% correspond to Processes, States, Parallel Scenes or Centers,
+which are UCCA's notions of semantic heads.
+12.1\% of the {\it head} units are left unmatched, mostly due to MWEs analyzed in
+UD but not in UCCA (\S\ref{sec:mwe}).
+Another source of unmatched units is inter-Scene linkage, which tends to be flatter in
+UCCA (\S\ref{sec:linkage}).
+The rest (10.4\%) are mostly due to head swap (e.g., ``\textit{all} of Dallas'', where \textit{all}
+is a Quantifier of \textit{Dallas} in UCCA, but the head in UD).
+
+In the following subsections, we review the main content differences between the schemes,
+as reflected in the confusion matrix, and categorize them according to the UD relations
+involved.
 
 \subsection{Scenes vs. Non-Scenes}\label{sec:s}
 
@@ -575,13 +576,13 @@ an adjective or even a preposition (``this is \textit{for} John'').
 \paragraph{Core syntactic arguments.}
       Subjects and objects are usually Participants (e.g., ``\textit{wine} was excellent'').
       However, when describing a Scene, the subject may be a Process/State
-      (e.g., ``But \textit{service} is very poor'').
+      (e.g., ``but \textit{service} is very poor'').
       Some wh-pronouns are the subjects or objects of a relative clause, but
       are Linkers or Relators,
       depending on whether they link Scenes or non-Scenes, respectively.
       For example, ``who'' in ``Overall, Joe is a happy camper \textit{who} has found a great spot'' is an \texttt{nsubj}, but a Linker.
       Other arguments are Adverbials or Time (see \S\ref{sec:arguments}), and
-      some do match any UCCA unit, especially when they are parts of MWEs (see \S\ref{sec:mwe}).
+      some do not match any UCCA unit, especially when they are parts of MWEs (see \S\ref{sec:mwe}).
 
 \paragraph{Adjectival modifiers} are Adverbials when modifying Scenes
     (``\textit{romantic} dinner''), States when describing non-Scenes (``\textit{beautiful} hotel'') 
