@@ -3,7 +3,7 @@
 % File divergences.tex
 
 
-\documentclass[11pt,a4paper]{article}
+\documentclass[11pt,a4paper,table]{article}
 %\usepackage[draft]{hyperref}  % removing this line sometimes causes errors, but we should remove it still
 \usepackage[hyperref]{naaclhlt2019}
 \usepackage{times}
@@ -33,6 +33,9 @@
 \usepackage{etoolbox}
 \usepackage{xr}
 \usepackage{xfrac}
+\usepackage{pgf}
+\usepackage{collcell}
+\usepackage{booktabs}
 %\usepackage{listings}
 
 \makeatletter
@@ -55,6 +58,16 @@
 
 
 \usetikzlibrary{shapes,shapes.misc}
+
+
+% for confusion matrix
+\newcommand{\ApplyGradient}[1]{%
+  \pgfmathsetmacro{\PercentColor}{(#1-0)/14.02}%
+  \pgfmathsetmacro{\PercentInverse}{ifthenelse(\PercentColor > 70, 0, 100)}%
+  %\textcolor{black!\PercentColor}{#1}
+  \edef\x{\noexpand\cellcolor{red!\PercentColor}}\x\textcolor{black!\PercentInverse}{#1}%
+}
+\newcolumntype{R}{>{\collectcell\ApplyGradient}{c}<{\endcollectcell}}
 
 
 \title{Content Differences in Syntactic and Semantic Representations}
@@ -469,52 +482,49 @@ Using the shared format,
 we turn to analyzing the content differences between UCCA and UD.
 
 
-\begin{table}[t]
-\vspace{-3mm}
+\begin{table*}[t]
 \centering
-\scriptsize
-\setlength\tabcolsep{1pt}
-\begin{tabular}{l|cccccccccccccc|c}
- & \bf \rotatebox{90}{Participant (A)} & \bf \rotatebox{90}{Center (C)}
- & \bf \rotatebox{90}{Adverbial (D)} & \bf \rotatebox{90}{Elaborator (E)}
- & \bf \rotatebox{90}{Function (F)} & \bf \rotatebox{90}{Ground (G)}
- & \bf \rotatebox{90}{ Parallel Scene (H)} & \bf \rotatebox{90}{Linker (L)}
- & \bf \rotatebox{90}{Connector (N)} & \bf \rotatebox{90}{Process (P)}
- & \bf \rotatebox{90}{Quantifier (Q)} & \bf \rotatebox{90}{Relator (R)}
- & \bf \rotatebox{90}{State (S)} & \bf \rotatebox{90}{Time (T)}
- & \rotatebox{90}{{\sc NoMatch}} \\
-\hline
-\bf \tt \tiny acl & 8 &&& 101 & 2 && 15 &&&&&& 1 && 49 \\
-\bf \tt \tiny advcl & 2 & 2 &&&&& 103 & 1 && 4 &&&&& 97 \\
-\bf \tt \tiny advmod & 61 & 9 & 399 & 51 & 12 & 33 & 3 & 61 && 2 & 10 & 6 & 5 & 117 & 71 \\
-\bf \tt \tiny amod & 1 & 33 & 99 & 197 & 2 && 7 &&& 3 & 27 && 97 & 2 & 60 \\
-\bf \tt \tiny appos & 1 & 10 && 8 &&& 5 &&&& 1 && 4 && 10 \\
-\bf \tt \tiny aux &&& 96 && 285 &&&&&&&&&& 2 \\
-\bf \tt \tiny case & 1 & 5 & 2 & 14 & 34 &&& 48 & 6 & 1 & 1 & 489 & 50 && 75 \\
-\bf \tt \tiny cc &&& 1 &&&&& 305 & 71 && 1 & 1 &&& 11 \\
-\bf \tt \tiny ccomp & 78 &&&&&& 8 &&&&&& 1 && 41 \\
-\bf \tt \tiny compound & 23 & 24 & 8 & 176 & 2 &&&&& 1 & 1 & 1 & 3 & 3 & 164 \\
-\bf \tt \tiny conj & 2 & 88 & 1 &&&& 265 &&& 2 &&& 3 && 90 \\
-\bf \tt \tiny cop &&&&& 333 &&&&& 3 && 1 & 24 && 3 \\
-\bf \tt \tiny csubj & 2 &&&&&&&&&&&&&& 8 \\
-\bf \tt \tiny dep &&&&&&&&&&&& 1 &&&\\
-\bf \tt \tiny det & 2 & 1 & 19 & 763 & 1 & 1 &&&&& 19 & 2 &&& 26 \\
-\bf \tt \tiny discourse && 1 &&& 1 & 6 & 13 & 3 &&&&& 1 && 1 \\
-\bf \tt \tiny expl &&&&& 22 &&&&&&&&&& 2 \\
-\bf \tt \tiny iobj & 19 &&&&&&&&&&&&&&\\
-\bf \tt \tiny list && 2 &&&&& 8 &&&&&&&& 2 \\
-\bf \tt \tiny mark && 2 & 3 && 186 & 1 && 134 & 1 &&& 53 & 1 & 1 & 18 \\
-\bf \tt \tiny nmod & 100 & 1 & 1 & 233 &&& 6 &&&&&& 3 & 4 & 110 \\
-\bf \tt \tiny nsubj & 993 &&&& 14 && 2 & 9 && 3 && 24 & 1 && 37 \\
-\bf \tt \tiny nummod & 4 & 7 && 6 &&& 3 &&&& 50 &&&& 24 \\
-\bf \tt \tiny obj & 439 & 7 & 5 & 1 & 1 && 1 & 1 && 8 & 1 & 6 && 4 & 92 \\
-\bf \tt \tiny obl & 247 & 1 & 21 & 7 & 2 & 4 & 4 & 4 &&& 3 & 2 && 69 & 132 \\
-\bf \tt \tiny orphan & 1 &&&&&&&&&&&&&& 1 \\
-\bf \tt \tiny parataxis & 1 &&& 1 && 2 & 79 &&& 1 &&& 2 && 39 \\
-\bf \tt \tiny vocative & 9 &&&&& 3 &&&&&&&&&\\
-\bf \tt \tiny xcomp & 44 & 1 & 2 & 2 &&& 1 &&& 5 &&& 7 && 116 \\
-\hline
-head & 125 & 1,402 & 152 & 37 & 91 & 18 & 652 & 2 & 1 & 961 & 18 & 9 & 353 & 1 & 524 \\
+\setlength\tabcolsep{5pt}
+\def\arraystretch{.855}
+\begin{tabular}{lRRRRRRRRRRRRRRR}
+ & \multicolumn{1}{c}{\bf \rotatebox{90}{Participant (A)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Center (C)}}
+ & \multicolumn{1}{c}{\bf \rotatebox{90}{Adverbial (D)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Elaborator (E)}}
+ & \multicolumn{1}{c}{\bf \rotatebox{90}{Function (F)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Ground (G)}}
+ & \multicolumn{1}{c}{\bf \rotatebox{90}{ Parallel Scene (H)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Linker (L)}}
+ & \multicolumn{1}{c}{\bf \rotatebox{90}{Connector (N)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Process (P)}}
+ & \multicolumn{1}{c}{\bf \rotatebox{90}{Quantifier (Q)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Relator (R)}}
+ & \multicolumn{1}{c}{\bf \rotatebox{90}{State (S)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Time (T)}}
+ & \multicolumn{1}{c}{\rotatebox{90}{{\sc NoMatch}}} \\
+\tt acl & 8 &&& 101 & 2 && 15 &&&&&& 1 && 49 \\
+\tt advcl & 2 & 2 &&&&& 103 & 1 && 4 &&&&& 97 \\
+\tt advmod & 61 & 9 & 399 & 51 & 12 & 33 & 3 & 61 && 2 & 10 & 6 & 5 & 117 & 71 \\
+\tt amod & 1 & 33 & 99 & 197 & 2 && 7 &&& 3 & 27 && 97 & 2 & 60 \\
+\tt appos & 1 & 10 && 8 &&& 5 &&&& 1 && 4 && 10 \\
+\tt aux &&& 96 && 285 &&&&&&&&&& 2 \\
+\tt case & 1 & 5 & 2 & 14 & 34 &&& 48 & 6 & 1 & 1 & 489 & 50 && 75 \\
+\tt cc &&& 1 &&&&& 305 & 71 && 1 & 1 &&& 11 \\
+\tt ccomp & 78 &&&&&& 8 &&&&&& 1 && 41 \\
+\tt compound & 23 & 24 & 8 & 176 & 2 &&&&& 1 & 1 & 1 & 3 & 3 & 164 \\
+\tt conj & 2 & 88 & 1 &&&& 265 &&& 2 &&& 3 && 90 \\
+\tt cop &&&&& 333 &&&&& 3 && 1 & 24 && 3 \\
+\tt csubj & 2 &&&&&&&&&&&&&& 8 \\
+\tt dep &&&&&&&&&&&& 1 &&&\\
+\tt det & 2 & 1 & 19 & 763 & 1 & 1 &&&&& 19 & 2 &&& 26 \\
+\tt discourse && 1 &&& 1 & 6 & 13 & 3 &&&&& 1 && 1 \\
+\tt expl &&&&& 22 &&&&&&&&&& 2 \\
+\tt iobj & 19 &&&&&&&&&&&&&&\\
+\tt list && 2 &&&&& 8 &&&&&&&& 2 \\
+\tt mark && 2 & 3 && 186 & 1 && 134 & 1 &&& 53 & 1 & 1 & 18 \\
+\tt nmod & 100 & 1 & 1 & 233 &&& 6 &&&&&& 3 & 4 & 110 \\
+\tt nsubj & 993 &&&& 14 && 2 & 9 && 3 && 24 & 1 && 37 \\
+\tt nummod & 4 & 7 && 6 &&& 3 &&&& 50 &&&& 24 \\
+\tt obj & 439 & 7 & 5 & 1 & 1 && 1 & 1 && 8 & 1 & 6 && 4 & 92 \\
+\tt obl & 247 & 1 & 21 & 7 & 2 & 4 & 4 & 4 &&& 3 & 2 && 69 & 132 \\
+\tt orphan & 1 &&&&&&&&&&&&&& 1 \\
+\tt parataxis & 1 &&& 1 && 2 & 79 &&& 1 &&& 2 && 39 \\
+\tt vocative & 9 &&&&& 3 &&&&&&&&&\\
+\tt xcomp & 44 & 1 & 2 & 2 &&& 1 &&& 5 &&& 7 && 116 \\
+head & 125 & 1402 & 152 & 37 & 91 & 18 & 652 & 2 & 1 & 961 & 18 & 9 & 353 & 1 & 524 \\
 \sc NoMatch & 329 & 172 & 34 & 56 & 6 & 5 & 466 & 29 && 141 & 27 & 7 & 98 & 11
 \end{tabular}
 \caption{UD-UCCA confusion matrix calculated from EWT
@@ -525,7 +535,7 @@ The last column (row), labeled {\sc NoMatch}, shows the number of edges of each 
 that do not match any UCCA (UD) unit.
 Zero counts are omitted.
 \label{tab:confusion_matrix}}
-\end{table}
+\end{table*}
 
 \subsection{Confusion Matrix}\label{sec:confusion}
 
@@ -940,30 +950,28 @@ as they are irrelevant to our evaluation:
 \scriptsize
 \setlength\tabcolsep{1.7pt}
 \def\arraystretch{1.5}
-\vspace{-8mm}
 \hspace{-2mm}
-% \scriptsize \bf \rotatebox{90}{Primary}
 \begin{tabular}{cl|ccccccccccccccccccccccccccc}
-&& \scriptsize \bf \rotatebox{90}{det} & \scriptsize \bf \rotatebox{90}{nsubj} & \scriptsize \bf \rotatebox{90}{aux} & \scriptsize \bf \rotatebox{90}{case} & \scriptsize \bf \rotatebox{90}{nummod} & \scriptsize \bf \rotatebox{90}{cop} & \scriptsize \bf \rotatebox{90}{iobj} & \scriptsize \bf \rotatebox{90}{advmod} & \scriptsize \bf \rotatebox{90}{mark} & \scriptsize \bf \rotatebox{90}{expl} & \scriptsize \bf \rotatebox{90}{obj} & \scriptsize \bf \rotatebox{90}{nmod} & \scriptsize \bf \rotatebox{90}{compound} & \scriptsize \bf \rotatebox{90}{cc} & \scriptsize \bf \rotatebox{90}{ccomp} & \scriptsize \bf \rotatebox{90}{obl} & \scriptsize \bf \rotatebox{90}{amod} & \scriptsize \bf \rotatebox{90}{acl} & \scriptsize \bf \rotatebox{90}{conj} & \scriptsize \bf \rotatebox{90}{advcl} & \scriptsize \bf \rotatebox{90}{xcomp} & \scriptsize \bf \rotatebox{90}{appos} & \scriptsize \bf \rotatebox{90}{vocative} & \scriptsize \bf \rotatebox{90}{parataxis} & \scriptsize \bf \rotatebox{90}{discourse} & \scriptsize \bf \rotatebox{90}{csubj} & \scriptsize \bf \rotatebox{90}{list} \\
+&& \tt \rotatebox{90}{det} & \tt \rotatebox{90}{nsubj} & \tt \rotatebox{90}{aux} & \tt \rotatebox{90}{case} & \tt \rotatebox{90}{nummod} & \tt \rotatebox{90}{cop} & \tt \rotatebox{90}{iobj} & \tt \rotatebox{90}{advmod} & \tt \rotatebox{90}{mark} & \tt \rotatebox{90}{expl} & \tt \rotatebox{90}{obj} & \tt \rotatebox{90}{nmod} & \tt \rotatebox{90}{compound} & \tt \rotatebox{90}{cc} & \tt \rotatebox{90}{ccomp} & \tt \rotatebox{90}{obl} & \tt \rotatebox{90}{amod} & \tt \rotatebox{90}{acl} & \tt \rotatebox{90}{conj} & \tt \rotatebox{90}{advcl} & \tt \rotatebox{90}{xcomp} & \tt \rotatebox{90}{appos} & \tt \rotatebox{90}{vocative} & \tt \rotatebox{90}{parataxis} & \tt \rotatebox{90}{discourse} & \tt \rotatebox{90}{csubj} & \tt \rotatebox{90}{list} \\
 \hline
 \multirow{2}{*}{\footnotesize (a)}
-& \scriptsize \bf Labeled F1 \% & 92 & 81 & 78 & 70 & 67 & 67 & 63 & 62 & 61 & 60 & 58 & 56 & 51 & 50 & 50 & 41 & 40 & 39 & 34 & 33 & 31 & 29 & 13 & 12 & 12 & 0 & 0 \\
-& \scriptsize \bf Unlabeled F1 \% & 96 & 94 & 97 & 92 & 81 & 98 & 81 & 91 & 96 & 88 & 73 & 82 & 79 & 93 & 59 & 65 & 90 & 53 & 75 & 49 & 56 & 63 & 50 & 55 & 96 & 29 & 67 \\
+& \bf Labeled F1 \% & 92 & 81 & 78 & 70 & 67 & 67 & 63 & 62 & 61 & 60 & 58 & 56 & 51 & 50 & 50 & 41 & 40 & 39 & 34 & 33 & 31 & 29 & 13 & 12 & 12 & 0 & 0 \\
+& \bf Unlabeled F1 \% & 96 & 94 & 97 & 92 & 81 & 98 & 81 & 91 & 96 & 88 & 73 & 82 & 79 & 93 & 59 & 65 & 90 & 53 & 75 & 49 & 56 & 63 & 50 & 55 & 96 & 29 & 67 \\
 \hline
 \multirow{5}{*}{\footnotesize (b)}
-& \scriptsize \bf Total in UD \# & 834 & 1083 & 383 & 727 & 94 & 364 & 19 & 840 & 400 & 24 & 566 & 458 & 406 & 400 & 128 & 496 & 528 & 176 & 451 & 209 & 178 & 39 & 12 & 125 & 26 & 10 & 12 \\
-& \scriptsize \bf Match Gold \# & 808 & 1046 & 381 & 652 & 70 & 361 & 19 & 769 & 382 & 22 & 474 & 346 & 239 & 388 & 87 & 364 & 467 & 127 & 361 & 112 & 62 & 29 & 12 & 86 & 25 & 2 & 10 \\
-& \scriptsize \bf Match Predicted \# & 778 & 959 & 363 & 680 & 61 & 354 & 13 & 697 & 375 & 21 & 335 & 303 & 238 & 358 & 61 & 234 & 435 & 70 & 265 & 51 & 60 & 19 & 4 & 45 & 25 & 5 & 5 \\
-& \scriptsize \bf Labeled Correct \# & 728 & 815 & 291 & 465 & 44 & 239 & 10 & 454 & 230 & 13 & 233 & 181 & 122 & 187 & 37 & 122 & 180 & 38 & 106 & 27 & 19 & 7 & 1 & 8 & 3 & 0 & 0 \\
-& \scriptsize \bf Unlabeled Correct \# & 759 & 941 & 361 & 616 & 53 & 351 & 13 & 670 & 363 & 19 & 296 & 266 & 188 & 347 & 44 & 194 & 408 & 52 & 234 & 40 & 34 & 15 & 4 & 36 & 24 & 1 & 5 \\
+& \bf Total in UD \# & 834 & 1083 & 383 & 727 & 94 & 364 & 19 & 840 & 400 & 24 & 566 & 458 & 406 & 400 & 128 & 496 & 528 & 176 & 451 & 209 & 178 & 39 & 12 & 125 & 26 & 10 & 12 \\
+& \bf Match Gold \# & 808 & 1046 & 381 & 652 & 70 & 361 & 19 & 769 & 382 & 22 & 474 & 346 & 239 & 388 & 87 & 364 & 467 & 127 & 361 & 112 & 62 & 29 & 12 & 86 & 25 & 2 & 10 \\
+& \bf Match Predicted \# & 778 & 959 & 363 & 680 & 61 & 354 & 13 & 697 & 375 & 21 & 335 & 303 & 238 & 358 & 61 & 234 & 435 & 70 & 265 & 51 & 60 & 19 & 4 & 45 & 25 & 5 & 5 \\
+& \bf Labeled Correct \# & 728 & 815 & 291 & 465 & 44 & 239 & 10 & 454 & 230 & 13 & 233 & 181 & 122 & 187 & 37 & 122 & 180 & 38 & 106 & 27 & 19 & 7 & 1 & 8 & 3 & 0 & 0 \\
+& \bf Unlabeled Correct \# & 759 & 941 & 361 & 616 & 53 & 351 & 13 & 670 & 363 & 19 & 296 & 266 & 188 & 347 & 44 & 194 & 408 & 52 & 234 & 40 & 34 & 15 & 4 & 36 & 24 & 1 & 5 \\
 \hline
 \multirow{3}{*}{\footnotesize (c)}
-& \scriptsize \bf Labeled/Unlabeled \% & 96 & 87 & 81 & 75 & 83 & 68 & 77 & 68 & 63 & 68 & 79 & 68 & 65 & 54 & 84 & 63 & 44 & 73 & 45 & 68 & 56 & 47 & 25 & 22 & 13 & 0 & 0 \\
-& \scriptsize \bf Majority Gold \% & 96 & 95 & 75 & 75 & 76 & 92 & 100 & 68 & 42 & 100 & 93 & 67 & 73 & 79 & 90 & 68 & 47 & 80 & 73 & 92 & 71 & 34 & 75 & 92 & 52 & 100 & 80 \\
-& \scriptsize \bf Majority Train \% & 98 & 88 & 91 & 90 & 80 & 49 & 90 & 59 & 46 & 87 & 80 & 62 & 82 & 55 & 68 & 61 & 83 & 78 & 58 & 86 & 71 & 53 & 100 & 83 & 31 & 86 & 100 \\
+& \bf Labeled/Unlabeled \% & 96 & 87 & 81 & 75 & 83 & 68 & 77 & 68 & 63 & 68 & 79 & 68 & 65 & 54 & 84 & 63 & 44 & 73 & 45 & 68 & 56 & 47 & 25 & 22 & 13 & 0 & 0 \\
+& \bf Majority Gold \% & 96 & 95 & 75 & 75 & 76 & 92 & 100 & 68 & 42 & 100 & 93 & 67 & 73 & 79 & 90 & 68 & 47 & 80 & 73 & 92 & 71 & 34 & 75 & 92 & 52 & 100 & 80 \\
+& \bf Majority Train \% & 98 & 88 & 91 & 90 & 80 & 49 & 90 & 59 & 46 & 87 & 80 & 62 & 82 & 55 & 68 & 61 & 83 & 78 & 58 & 86 & 71 & 53 & 100 & 83 & 31 & 86 & 100 \\
 \hline
 \footnotesize (d)
-& \scriptsize \bf Average Words \# & 1.0 & 1.6 & 1.0 & 1.0 & 1.2 & 1.0 & 1.1 & 1.2 & 1.0 & 1.0 & 3.1 & 2.4 & 1.2 & 1.0 & 7.4 & 3.8 & 1.2 & 5.1 & 5.3 & 6.0 & 5.8 & 2.9 & 1.6 & 5.7 & 1.0 & 3.3 & 2.0
+& \bf Average Words \# & 1.0 & 1.6 & 1.0 & 1.0 & 1.2 & 1.0 & 1.1 & 1.2 & 1.0 & 1.0 & 3.1 & 2.4 & 1.2 & 1.0 & 7.4 & 3.8 & 1.2 & 5.1 & 5.3 & 6.0 & 5.8 & 2.9 & 1.6 & 5.7 & 1.0 & 3.3 & 2.0
 \end{tabular}
 \caption{Fine-grained evaluation of TUPA on EWT.
 (a) Columns are sorted by labeled F1, measuring performance on each subset of edges.
