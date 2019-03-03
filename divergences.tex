@@ -87,25 +87,15 @@
 \maketitle
 
 \begin{abstract}
-  %1. performance gains of syntax for semantics
-  %2. but, an ongoing debate
-  %3. the development of "better" methods is hindered by lack of studies
-  %4. we address the gap
-
   Syntactic analysis plays an important role in semantic parsing,
   but this role remains a topic of ongoing debate.
   The debate has been constrained by the scarcity of empirical comparative studies between syntactic and semantic schemes,
   which hinders the development of parsing methods informed by the details of target schemes and constructions.
-%  as demonstrated by methods such as multi-task learning and syntactic features.
-%  However, the scarcity of empirical comparative studies between syntactic and semantic schemes
-  %results in existing methods being almost invariably generic,
-  %  This is partly due to 
   We target this gap, and take Universal Dependencies (UD) and UCCA as a test case.
-  %We emprically evaluate in what cases the two schemes converge and diverge in their content,
   After abstracting away from differences of convention or formalism,
   we find that most content divergences can be ascribed to: 
-  (1) UCCA's distinction between a Scene and a non-Scene; % as opposed to UD's POS-based distinctions;
-  (2) UCCA's distinction between primary relations, secondary ones and participants; %, not accounted for by UD; 
+  (1) UCCA's distinction between a Scene and a non-Scene;
+  (2) UCCA's distinction between primary relations, secondary ones and participants;
   (3) different treatment of multi-word expressions, and
   (4) different treatment of inter-clause linkage.
   We further discuss the long tail of cases where the two schemes take markedly
