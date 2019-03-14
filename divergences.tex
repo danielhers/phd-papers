@@ -88,7 +88,7 @@
 
 \begin{abstract}
   Syntactic analysis plays an important role in semantic parsing,
-  but this role remains a topic of ongoing debate.
+  but the nature of this role remains a topic of ongoing debate.
   The debate has been constrained by the scarcity of empirical comparative studies between syntactic and semantic schemes,
   which hinders the development of parsing methods informed by the details of target schemes and constructions.
   We target this gap, and take Universal Dependencies (UD) and UCCA as a test case.
@@ -281,7 +281,7 @@ is a syntactic dependency scheme used in many languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
 annotation. Formally, UD uses bi-lexical trees, with edge labels 
 representing syntactic relations.
-Being a dependency representation, UD is thus underspecified:
+Being a dependency representation, UD is structurally underspecified in an important way:
 ​it is not possible in UD to mark the distinction between an element modifying the head of
 the phrase and the same element modifying the whole phrase
 \cite{doi:10.1146/annurev-linguistics-011718-011842}.
@@ -988,7 +988,7 @@ and in the Wiki training set (by UDPipe-predicted dependencies).
 \end{table*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Fine-Grained UCCA Evaluation}\label{sec:fine_grained}
+\section{Fine-Grained UCCA Parsing Evaluation}\label{sec:fine_grained}
 
 In \S\ref{sec:analysis} we used our comparison methodology,
 consisting of the conversion to a shared format and matching units by terminal yield,
@@ -1295,7 +1295,7 @@ Notably, we quantified the differences between the notions of syntactic and sema
   and arguments, finding substantial divergence between them.
 Our findings highlight the potential utility of using semantic parsers for text understanding applications
   (over their syntactic counterparts), but also expose challenges semantic parsers must address,
-  and potential sources for improvement.
+  and potential approaches for addressing them.
 
 
 %Finally, we demonstrated the utility of the proposed comparison methodology for fine-grained
