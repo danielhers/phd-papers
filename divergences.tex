@@ -325,8 +325,8 @@ from the reviews section of the
 English Web Treebank \cite[EWT; ][]{bies2012english}.
 Text is annotated by two UCCA annotators
 according to v2.0 of the UCCA
-guidelines\footnote{\scriptsize\url{github.com/UniversalConceptualCognitiveAnnotation/docs}}
-and cross-reviewed.\footnote{\url{github.com/danielhers/UCCA_English-EWT}}
+guidelines\footnote{\url{https://github.com/UniversalConceptualCognitiveAnnotation/docs}}
+and cross-reviewed.\footnote{\url{https://github.com/danielhers/UCCA_English-EWT}}
 As these sentences are included in the UD
 English\_EWT treebank, this is a \textit{shared} gold-standard UCCA and UD
 annotated corpus.
@@ -350,7 +350,7 @@ if they share all terminals in their yields.
 UD annotates bi-lexical dependency trees,
 while UCCA graphs contain non-terminal nodes.
 In \S\ref{sec:conversion}, we outline the unified DAG converter by
-\citet{hershcovich2018multitask,hershcovich2018universal},\footnote{\url{github.com/huji-nlp/semstr}}
+\citet{hershcovich2018multitask,hershcovich2018universal},\footnote{\url{https://github.com/huji-nlp/semstr}}
 which we use to reach a common format.
 In \S\ref{sec:local}, we describe a number of extensions
 to the converter, which abstract away from further non-content differences.
@@ -416,7 +416,7 @@ For example, the language-specific definite article label
 
 \paragraph{Reentrancies.}
 Remote edges in UCCA enable reentrancy, forming a DAG together with primary edges.
-UD allows reentrancy when including \textit{enhanced dependencies}\footnote{\url{universaldependencies.org/u/overview/enhanced-syntax.html}}
+UD allows reentrancy when including \textit{enhanced dependencies}\footnote{\url{https://universaldependencies.org/u/overview/enhanced-syntax.html}}
 \cite{SCHUSTER16.779}, which form (bi-lexical) graphs, representing phenomena
 such as predicate ellipsis (e.g., gapping),
 and shared arguments due to coordination, control, raising and relative clauses.
@@ -480,7 +480,7 @@ we turn to analyzing the content differences between UCCA and UD.
 \begin{table*}[t]
 \centering
 \setlength\tabcolsep{5pt}
-\def\arraystretch{.855}
+\def\arraystretch{.815}
 \begin{tabular}{lRRRRRRRRRRRRRRR}
  & \multicolumn{1}{c}{\bf \rotatebox{90}{Participant (A)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Center (C)}}
  & \multicolumn{1}{c}{\bf \rotatebox{90}{Adverbial (D)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Elaborator (E)}}
@@ -944,7 +944,7 @@ as they are irrelevant to our evaluation:
 \centering
 \scriptsize
 \setlength\tabcolsep{1.7pt}
-\def\arraystretch{1.5}
+\def\arraystretch{1.2}
 \hspace{-2mm}
 \begin{tabular}{cl|ccccccccccccccccccccccccccc}
 && \tt \rotatebox{90}{det} & \tt \rotatebox{90}{nsubj} & \tt \rotatebox{90}{aux} & \tt \rotatebox{90}{case} & \tt \rotatebox{90}{nummod} & \tt \rotatebox{90}{cop} & \tt \rotatebox{90}{iobj} & \tt \rotatebox{90}{advmod} & \tt \rotatebox{90}{mark} & \tt \rotatebox{90}{expl} & \tt \rotatebox{90}{obj} & \tt \rotatebox{90}{nmod} & \tt \rotatebox{90}{compound} & \tt \rotatebox{90}{cc} & \tt \rotatebox{90}{ccomp} & \tt \rotatebox{90}{obl} & \tt \rotatebox{90}{amod} & \tt \rotatebox{90}{acl} & \tt \rotatebox{90}{conj} & \tt \rotatebox{90}{advcl} & \tt \rotatebox{90}{xcomp} & \tt \rotatebox{90}{appos} & \tt \rotatebox{90}{vocative} & \tt \rotatebox{90}{parataxis} & \tt \rotatebox{90}{discourse} & \tt \rotatebox{90}{csubj} & \tt \rotatebox{90}{list} \\
@@ -1036,7 +1036,7 @@ we use the UCCA English Wikipedia corpus v1.2.3 (Wiki),
 %with the standard train/dev/test split.
 %and the \textit{Twenty Thousand Leagues Under the Sea} corpora (\textit{20K}),
 %annotated in English (v1.2.2), French (v1.2.2)
-%and German (v1.0.1).\footnote{\url{github.com/UniversalConceptualCognitiveAnnotation}}
+%and German (v1.0.1).\footnote{\url{https://github.com/UniversalConceptualCognitiveAnnotation}}
 %As in previous work, we use English 20K only as an out-of-domain test set.
 %For comparability with previous work \cite{hershcovich2017a,hershcovich2018multitask},
 %we also perform our experiments on Wiki v1.2.0 \cite{abend2013universal},
@@ -1044,14 +1044,14 @@ we use the UCCA English Wikipedia corpus v1.2.3 (Wiki),
 %and on 20K v0.9.0 in German.
 %For UD, we use the English\_EWT, French\_GSD and German\_GSD
 %treebanks from Universal Dependencies v2.3
-%\cite{11234/1-2895}.\footnote{\url{hdl.handle.net/11234/1-2895}}
+%\cite{11234/1-2895}.\footnote{\url{https://hdl.handle.net/11234/1-2895}}
 %These are the largest freely-available UD treebanks for these languages.
 and the UD v2.3 English\_EWT treebank
-\cite{11234/1-2895},\footnote{\url{hdl.handle.net/11234/1-2895}}
+\cite{11234/1-2895},\footnote{\url{https://hdl.handle.net/11234/1-2895}}
 filtering it to get only the 804 sentences that were also annotated in UCCA.
 We additionally use UDPipe v1.2 \cite{udpipe,udpipe:2017},
 trained on
-English\_EWT,\footnote{\url{hdl.handle.net/11234/1-2898}}
+English\_EWT,\footnote{\url{https://hdl.handle.net/11234/1-2898}}
 to parse Wiki to UD.
 We apply the extended converter to UD as before (\S\ref{sec:local}).
 
@@ -1063,7 +1063,7 @@ on Wiki, and evaluate it on EWT.
 We evaluate this out-of-domain scenario as
 we have both UCCA and UD gold-standard annotations for this test set.
 By default, TUPA is trained and tested using syntactic features
-predicted by spaCy.\footnote{\url{spacy.io}}
+predicted by spaCy.\footnote{\url{https://spacy.io}}
 As using UDPipe in training and gold UD in testing yielded very similar
 results, we only report the default setting.
 
@@ -1099,7 +1099,7 @@ to the labels of the UD relations whose dependents have the same terminal yield 
 %we use UDPipe v1.2 \cite{udpipe,udpipe:2017}, trained on the UD v2.3 treebanks,
 %to parse the Wiki and 20K test sets in English, French and German.
 %We use the official UDPipe models trained on the English\_EWT, French\_GSD and German\_GSD
-%treebanks, respectively\footnote{\url{hdl.handle.net/11234/1-2898}}.
+%treebanks, respectively\footnote{\url{https://hdl.handle.net/11234/1-2898}}.
 
 
 %\paragraph{Baselines.}
@@ -1109,7 +1109,7 @@ to the labels of the UD relations whose dependents have the same terminal yield 
 %and 20K for French and German).
 %For equal conditions,
 %we train and test TUPA using features predicted by UDPipe,
-%yielding slightly lower scores than previously reported using spaCy.%\footnote{\url{spacy.io}}
+%yielding slightly lower scores than previously reported using spaCy.%\footnote{\url{https://spacy.io}}
 
 %\paragraph{Using converted UD as ``silver-standard'' data.}
 %
