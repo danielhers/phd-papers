@@ -138,7 +138,7 @@
   the syntactic Universal Dependencies \cite[UD; ][]{nivre2016universal},
   and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal}.
   
-  We annotate 804 UD-annotated sentences with UCCA (\S\ref{sec:shared}),
+  We annotate 3,813 UD-annotated sentences with UCCA (\S\ref{sec:shared}),
   and develop a converter to assimilate UD and UCCA,
   as they use formally different graph structures
   (\S\ref{sec:methodology}).
@@ -319,10 +319,10 @@ UD relations will be written in \texttt{typewriter} font.
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Shared gold-standard Corpus}\label{sec:shared}
+\section{Shared Gold-standard Corpus}\label{sec:shared}
 
-We annotate 163 English passages, containing 804 sentences
-from the reviews section of the 
+We annotate 723 English passages (3,813 sentences; 52,721 tokens),
+comprising the reviews section of the 
 English Web Treebank \cite[EWT; ][]{bies2012english}.
 Text is annotated by two UCCA annotators
 according to v2.0 of the UCCA
@@ -331,12 +331,20 @@ and cross-reviewed.
 As these sentences are included in the UD
 English\_EWT treebank, this is a \textit{shared} gold-standard UCCA and UD
 annotated corpus.\footnote{Our data is available at \url{https://github.com/UniversalConceptualCognitiveAnnotation/UCCA_English-EWT}.}
+We use the standard train/dev/test split,
+shown in Table~\ref{tab:data}.
 
-The data contains 11,103 tokens---4\% of the full UD English\_EWT treebank,
-and 20\% of its reviews section.
-Of the UCCA-annotated sentences, 546 belong to the UD training set,
-143 to the development set and 115 to the test set.
-%\daniel{Add inter-annotator agreement}
+\begin{table}[t]
+\centering
+\begin{tabular}{l|ccc}
+& \bf Train & \bf Dev & \bf Test \\
+\hline
+\# Passages & \hphantom{00,}347 & \hphantom{0,}192 & \hphantom{0,}184 \\
+\# Sentences & \hphantom{0}2,723 & \hphantom{0,}554 & \hphantom{0,}535 \\
+\# Tokens & 44,804 & 5,394 & 5,381 \\
+\end{tabular}
+\caption{Data split for the shared gold-standard corpus.\label{tab:data}}
+\end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Comparison Methodology}\label{sec:methodology}
@@ -479,6 +487,7 @@ we turn to analyzing the content differences between UCCA and UD.
 
 
 \begin{table*}[t]
+\vspace{-7mm}
 \centering
 \setlength\tabcolsep{5pt}
 \def\arraystretch{.815}
@@ -942,6 +951,7 @@ as they are irrelevant to our evaluation:
 %of the training data. More training data is likely to yield even better performance.
 
 \begin{table*}[ht]
+\vspace{-1mm}
 \centering
 \scriptsize
 \setlength\tabcolsep{1.7pt}
@@ -1288,7 +1298,7 @@ proposition structures ({\sc PropS}), abstracting away from some syntactic detai
 \section{Conclusion}\label{sec:conclusion}
 
 We evaluated the similarities and divergences in the content encoded by UD and UCCA. 
-After annotating a portion of the English Web Treebank with UCCA,
+After annotating the reviews section of the English Web Treebank with UCCA,
   we used an automated methodology to evaluate how well the two schemes align,
   abstracting away from differences of mere convention.
 We provided a detailed picture of the content differences between the schemes.
