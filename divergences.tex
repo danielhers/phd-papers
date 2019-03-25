@@ -59,7 +59,7 @@
 
 % for confusion matrix
 \newcommand{\ApplyGradient}[1]{%
-  \pgfmathsetmacro{\PercentColor}{(#1-0)/14.02}%
+  \pgfmathsetmacro{\PercentColor}{(#1-0)/63.88}%
   \pgfmathsetmacro{\PercentInverse}{ifthenelse(\PercentColor > 70, 0, 100)}%
   %\textcolor{black!\PercentColor}{#1}
   \edef\x{\noexpand\cellcolor{red!\PercentColor}}\x\textcolor{black!\PercentInverse}{#1}%
@@ -205,10 +205,37 @@
   Shown to be preserved remarkably well across translations \citep{sulem2015conceptual}, it has been applied to
   improve text simplification \citep{sulem2018simple},
   and text-to-text generation evaluation \citep{birch2016hume,choshen2018usim,sulem2018samsa}.
+  
+  \begin{table}
+  \centering
+  \begin{tabular}{lc}
+    Participant & A \\
+    Center & C \\
+    Adverbial & D \\
+    Elaborator & E \\
+    Function & F \\
+    Ground & G \\
+    Parallel Scene & H
+ \end{tabular}
+ \hfill
+ \vrule
+ \hfill
+ \begin{tabular}{lc}
+    Linker & L \\
+    Connector & N \\
+    Process & P \\
+    Quantifier & Q \\
+    Relator & R \\
+    State & S \\
+    Time & T
+ \end{tabular}
+ \caption{Legend of UCCA categories (edge labels).\label{fig:legend}}
+ \end{table}
 
   Formally, UCCA structures are directed acyclic graphs (DAGs) whose nodes (or {\it units}) correspond either to words,
   or to elements viewed as a single entity according to some semantic or cognitive consideration.
   Edges are labeled, indicating the role of a child in the relation the parent represents.
+  Figure~\ref{fig:legend} shows a legend of UCCA abbreviations.
   A {\it Scene} is UCCA's notion of an event or a frame, and is a description of a movement, an action or a state which persists in time. 
   Every Scene contains one primary relation, which can be either a Process or a State. 
   Scenes may contain any number of Participants, a category which also includes abstract participants and locations.
@@ -488,55 +515,65 @@ we turn to analyzing the content differences between UCCA and UD.
 
 \begin{table*}[t]
 \vspace{-7mm}
-\centering
+\hspace{-5mm}
+\scalebox{.78}{
 \setlength\tabcolsep{5pt}
 \def\arraystretch{.815}
-\begin{tabular}{lRRRRRRRRRRRRRRR}
- & \multicolumn{1}{c}{\bf \rotatebox{90}{Participant (A)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Center (C)}}
- & \multicolumn{1}{c}{\bf \rotatebox{90}{Adverbial (D)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Elaborator (E)}}
- & \multicolumn{1}{c}{\bf \rotatebox{90}{Function (F)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Ground (G)}}
- & \multicolumn{1}{c}{\bf \rotatebox{90}{ Parallel Scene (H)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Linker (L)}}
- & \multicolumn{1}{c}{\bf \rotatebox{90}{Connector (N)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Process (P)}}
- & \multicolumn{1}{c}{\bf \rotatebox{90}{Quantifier (Q)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Relator (R)}}
- & \multicolumn{1}{c}{\bf \rotatebox{90}{State (S)}} & \multicolumn{1}{c}{\bf \rotatebox{90}{Time (T)}}
- & \multicolumn{1}{c}{\rotatebox{90}{{\sc NoMatch}}} \\
-\tt acl & 8 &&& 101 & 2 && 15 &&&&&& 1 && 49 \\
-\tt advcl & 2 & 2 &&&&& 103 & 1 && 4 &&&&& 97 \\
-\tt advmod & 61 & 9 & 399 & 51 & 12 & 33 & 3 & 61 && 2 & 10 & 6 & 5 & 117 & 71 \\
-\tt amod & 1 & 33 & 99 & 197 & 2 && 7 &&& 3 & 27 && 97 & 2 & 60 \\
-\tt appos & 1 & 10 && 8 &&& 5 &&&& 1 && 4 && 10 \\
-\tt aux &&& 96 && 285 &&&&&&&&&& 2 \\
-\tt case & 1 & 5 & 2 & 14 & 34 &&& 48 & 6 & 1 & 1 & 489 & 50 && 75 \\
-\tt cc &&& 1 &&&&& 305 & 71 && 1 & 1 &&& 11 \\
-\tt ccomp & 78 &&&&&& 8 &&&&&& 1 && 41 \\
-\tt compound & 23 & 24 & 8 & 176 & 2 &&&&& 1 & 1 & 1 & 3 & 3 & 164 \\
-\tt conj & 2 & 88 & 1 &&&& 265 &&& 2 &&& 3 && 90 \\
-\tt cop &&&&& 333 &&&&& 3 && 1 & 24 && 3 \\
-\tt csubj & 2 &&&&&&&&&&&&&& 8 \\
-\tt dep &&&&&&&&&&&& 1 &&&\\
-\tt det & 2 & 1 & 19 & 763 & 1 & 1 &&&&& 19 & 2 &&& 26 \\
-\tt discourse && 1 &&& 1 & 6 & 13 & 3 &&&&& 1 && 1 \\
-\tt expl &&&&& 22 &&&&&&&&&& 2 \\
-\tt iobj & 19 &&&&&&&&&&&&&&\\
-\tt list && 2 &&&&& 8 &&&&&&&& 2 \\
-\tt mark && 2 & 3 && 186 & 1 && 134 & 1 &&& 53 & 1 & 1 & 18 \\
-\tt nmod & 100 & 1 & 1 & 233 &&& 6 &&&&&& 3 & 4 & 110 \\
-\tt nsubj & 993 &&&& 14 && 2 & 9 && 3 && 24 & 1 && 37 \\
-\tt nummod & 4 & 7 && 6 &&& 3 &&&& 50 &&&& 24 \\
-\tt obj & 439 & 7 & 5 & 1 & 1 && 1 & 1 && 8 & 1 & 6 && 4 & 92 \\
-\tt obl & 247 & 1 & 21 & 7 & 2 & 4 & 4 & 4 &&& 3 & 2 && 69 & 132 \\
-\tt orphan & 1 &&&&&&&&&&&&&& 1 \\
-\tt parataxis & 1 &&& 1 && 2 & 79 &&& 1 &&& 2 && 39 \\
-\tt vocative & 9 &&&&& 3 &&&&&&&&&\\
-\tt xcomp & 44 & 1 & 2 & 2 &&& 1 &&& 5 &&& 7 && 116 \\
-head & 125 & 1402 & 152 & 37 & 91 & 18 & 652 & 2 & 1 & 961 & 18 & 9 & 353 & 1 & 524 \\
-\sc NoMatch & 329 & 172 & 34 & 56 & 6 & 5 & 466 & 29 && 141 & 27 & 7 & 98 & 11
+\begin{tabular}{lRRRRRRRRRRRRRRRRR}
+ &&&&&&&&&&&&&&&&& \multicolumn{1}{c}{\sc No} \\
+ & \multicolumn{1}{c}{\bf A}
+ & \multicolumn{1}{c}{\bf A\big|P} & \multicolumn{1}{c}{\bf A\big|S}
+ & \multicolumn{1}{c}{\bf C}
+ & \multicolumn{1}{c}{\bf D}
+ & \multicolumn{1}{c}{\bf E}
+ & \multicolumn{1}{c}{\bf F}
+ & \multicolumn{1}{c}{\bf G}
+ & \multicolumn{1}{c}{\bf H}
+ & \multicolumn{1}{c}{\bf L}
+ & \multicolumn{1}{c}{\bf N}
+ & \multicolumn{1}{c}{\bf P}
+ & \multicolumn{1}{c}{\bf Q}
+ & \multicolumn{1}{c}{\bf R}
+ & \multicolumn{1}{c}{\bf S}
+ & \multicolumn{1}{c}{\bf T}
+ & \multicolumn{1}{c}{\sc Match} \\
+\tt acl & 58 &  &  & 1 & 4 & 249 & 1 &  & 48 &  &  & 6 &  &  & 1 & 1 & 409 \\
+\tt advcl & 14 &  &  & 12 & 2 & 2 &  & 6 & 512 & 4 &  & 11 &  &  &  &  & 423 \\
+\tt advmod & 225 &  & 1 & 69 & 1778 & 332 & 27 & 135 & 14 & 258 & 2 & 2 & 15 & 44 & 9 & 368 & 273 \\
+\tt amod & 25 &  &  & 134 & 647 & 837 &  & 1 & 28 &  &  & 7 & 130 & 3 & 269 & 25 & 176 \\
+\tt appos & 21 &  &  & 39 & 2 & 34 &  &  & 18 &  &  &  &  &  & 8 &  & 33 \\
+\tt aux &  &  &  &  & 384 & 2 & 1335 &  &  & 2 &  & 1 &  & 1 &  &  & 17 \\
+\tt case & 11 &  &  & 31 & 27 & 25 & 123 &  &  & 213 & 26 & 11 & 1 & 2629 & 154 & 1 & 262 \\
+\tt cc &  &  &  & 8 & 4 & 1 & 4 & 1 & 1 & 1567 & 381 &  & 6 & 12 &  &  & 52 \\
+\tt ccomp & 345 &  &  & 1 &  & 1 &  &  & 36 &  &  & 2 &  &  & 1 & 1 & 166 \\
+\tt compound & 225 &  &  & 116 & 67 & 586 & 21 &  & 2 &  &  & 32 & 19 & 1 & 12 & 24 & 683 \\
+\tt conj & 10 &  &  & 449 & 4 & 5 &  & 1 & 1262 & 1 &  & 6 & 2 &  & 10 &  & 497 \\
+\tt cop &  &  &  & 1 &  &  & 1312 &  &  & 1 &  & 9 &  & 10 & 178 &  & 7 \\
+\tt csubj & 13 &  &  &  &  &  &  &  & 3 &  &  &  &  &  &  &  & 46 \\
+\tt det & 10 &  &  & 17 & 119 & 440 & 2963 &  &  &  & 1 &  & 129 & 16 & 1 &  & 124 \\
+\tt discourse & 1 &  &  & 2 & 1 &  & 25 & 29 & 27 & 16 &  &  &  &  & 5 &  & 19 \\
+\tt expl & 21 &  &  & 1 &  &  & 98 &  &  &  &  &  &  &  & 17 &  & 3 \\
+\tt iobj & 131 &  &  & 1 &  &  & 1 &  &  &  &  &  &  &  &  &  & 10 \\
+\tt list & 3 &  &  & 7 & 2 & 1 &  &  & 27 &  &  &  &  &  & 1 &  & 6 \\
+\tt mark &  &  &  & 9 & 7 & 1 & 531 & 1 &  & 654 &  &  &  & 407 & 1 & 5 & 143 \\
+\tt nmod & 844 & 1 & 1 & 20 & 9 & 786 & 8 & 4 & 12 & 1 & 1 & 20 & 2 & 2 & 11 & 27 & 488 \\
+\tt nsubj & 4296 & 7 & 21 & 25 & 3 & 2 & 55 & 1 & 5 & 61 &  & 58 & 1 & 80 & 14 & 4 & 247 \\
+\tt nummod & 2 &  &  & 33 & 12 & 17 &  & 4 &  & 4 &  &  & 334 &  &  &  & 64 \\
+\tt obj & 1845 &  & 1 & 54 & 21 & 6 & 11 & 1 & 4 & 23 &  & 52 & 1 & 23 & 3 & 11 & 583 \\
+\tt obl & 1195 &  &  & 19 & 115 & 41 & 1 & 17 & 39 & 34 &  & 6 & 6 & 26 & 7 & 302 & 611 \\
+\tt parataxis & 6 &  & 1 & 5 &  & 4 &  & 6 & 285 &  &  &  &  &  & 3 &  & 180 \\
+\tt vocative & 17 &  &  &  &  &  &  & 8 &  &  &  &  &  &  &  &  &  \\
+\tt xcomp & 121 &  &  & 4 & 25 &  &  &  & 8 &  &  & 38 &  &  & 38 &  & 526 \\
+head & 445 & 48 & 159 & 6388 & 717 & 142 & 564 & 83 & 2462 & 42 & 1 & 4163 & 120 & 52 & 1547 & 32 & 2235 \\
+\sc No Match & 1421 & 37 & 58 & 640 & 417 & 291 & 14 & 33 & 2291 & 146 & 6 & 802 & 94 & 52 & 369 & 96 & 
 \end{tabular}
-\caption{UD-UCCA confusion matrix calculated from EWT
-gold-standard annotations (\S\ref{sec:shared}),
+}
+\caption{UD-UCCA confusion matrix calculated based on EWT
+gold-standard annotations from the training and development sets
+(\S\ref{sec:shared}),
 after applying our extended converter to UD (\S\ref{sec:methodology}),
 by matching UD vertices and UCCA units with the same terminal yield.
-The last column (row), labeled {\sc NoMatch}, shows the number of edges of each UD (UCCA) category
+The last column (row), labeled {\sc No Match}, shows the number of edges of each UD (UCCA) category
 that do not match any UCCA (UD) unit.
 Zero counts are omitted.
 \label{tab:confusion_matrix}}
@@ -545,7 +582,11 @@ Zero counts are omitted.
 \subsection{Confusion Matrix}\label{sec:confusion}
 
 Table~\ref{tab:confusion_matrix} presents the confusion matrix of categories between
-the converted UD and UCCA, in the shared EWT corpus.
+the converted UD and UCCA, calculated over all sentences in the training and
+development sets of the shared EWT reviews corpus.
+We leave the test set out of this evaluation to avoid contamination for future
+parsing experiments.
+
 In case of multiple UCCA units with the same terminal yield (i.e., units with a single non-remote child),
 we take the top category only, to avoid double-counting.
 Excluding punctuation, this results in 12,893 yields in UCCA and
@@ -731,12 +772,6 @@ For instance, ``unique gifts and cards'' is ambiguous in UD as to whether
 \textit{unique} applies only to \textit{gifts} or to the whole phrase---both
 annotated as in Figure~\ref{fig:conj_ud}.
 UCCA, allowing non-terminal nodes, disambiguates this case (Figure~\ref{fig:conj_ucca}).
-
-% For camera-ready: add this to the UCCA-annotated set
-% 1	unique	unique	ADJ	JJ	Degree=Pos	2	amod	_	_
-% 2	gifts	gift	NOUN	NNS	Number=Plur	0	root	_	_
-% 3	and	and	CCONJ	CC	_	4	cc	_	_
-% 4	cards	card	NOUN	NNS	Number=Plur	2	conj	_	_
 
 \begin{figure}[th]
   \centering
