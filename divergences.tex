@@ -14,12 +14,6 @@
 \aclfinalcopy % Uncomment this line for the final submission
 \def\aclpaperid{287} %  Enter the acl Paper ID here
 
-%\setlength\titlebox{5cm}
-% You can expand the titlebox if you need extra space
-% to show all the authors. Please do not make the titlebox
-% smaller than 5cm (the original size); we will check this
-% in the camera-ready version and ask you to change it back.
-
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{enumitem}
@@ -149,15 +143,12 @@
   \begin{enumerate}[itemsep=0.159mm,leftmargin=5.95mm]
       \item UCCA's distinction between words and phrases that evoke Scenes (events) and ones that do not.
         For example, eventive and non-eventive nouns are treated differently in UCCA, but similarly in UD.
-        %THis distinction that cuts across grammatical categories
-        %as opposed to UD's POS-based distinction (predicates, nominals). % (\S\ref{sec:s}).
       \item UCCA's distinction between primary relations, secondary relations
-        and Participants, in contrast to UD's core/non-core distinction. % (\S\ref{sec:arguments}).
+        and Participants, in contrast to UD's core/non-core distinction.
       \item Different treatment of multi-word expressions (MWEs),
-        where UCCA has a stronger tendency to explicitly mark them. % (\S\ref{sec:mwe}).
+        where UCCA has a stronger tendency to explicitly mark them.
       \item UCCA's conflation of several syntactic realizations of inter-clause linkage,
         and disambiguation of other cases that UD treats similarly.
-        % (e.g., infinitive vs. purposive \textit{to}). % (\S\ref{sec:linkage}).
    \end{enumerate}
 
   We show that the differences between the schemes are substantial, and suggest that
@@ -168,9 +159,7 @@
   argumenthood, which are partially covered by \textit{enhanced UD}. See \S\ref{sec:conversion}.}
   Our findings are relevant to other semantic representations, given their 
   significant overlap in content \cite{abend2017state}.
-    
-  %   Other divergences stem from a different treatment of coordination, apposition and copulas.% (\S\ref{sec:misc}).
-  
+      
   A methodology for comparing syntactic and semantic treebanks can also support fine-grained error 
   analysis of semantic parsers, as illustrated by \citet{szubert2018structured} 
   for AMR \citep{banarescu2013abstract}.
@@ -259,15 +248,12 @@
   Connectors (mostly coordinating conjunctions).
   Other modifiers to the Center are marked as Elaborators.
   
-%  Relators correspond in English mostly to preposition
-  
   UCCA distinguishes \textit{primary} edges, corresponding 
   to explicit relations, from \textit{remote} edges,
   which allow for a unit to participate
   in several super-ordinate relations.
   See example in Figure~\ref{fig:example_ucca}.
   Primary edges form a tree, whereas remote edges (dashed) enable reentrancy, forming a DAG.
-  %Table~\ref{} gives a short description of each UCCA category.  % supp. material (footnote above)
 
 \begin{figure}[th]
   \centering
@@ -304,7 +290,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{UD}\label{sec:ud}
-%\cite[UD; ][]{nivre2016universal} is
 is a syntactic dependency scheme used in many languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
 annotation. Formally, UD uses bi-lexical trees, with edge labels 
@@ -315,17 +300,14 @@ the phrase and the same element modifying the whole phrase
 \cite{doi:10.1146/annurev-linguistics-011718-011842}.
 
   One aspect of UD similar to UCCA is its preference of lexical (rather than functional) heads.
-%  unlike other dependency schemes that prefer functional ones.
   For example, in auxiliary verb constructions (e.g., ``is eating''), UD
   marks the lexical verb (\textit{eating}) as the head, while other dependency schemes
   may select the auxiliary \textit{is} instead.
   While the approaches are largely inter-translatable
   \citep{Schwartz:12}, lexical head schemes are more similar in form to semantic schemes,
    such as UCCA and semantic dependencies \citep{oepen2016towards}.
-%   This facilitates their comparison.
    
 An example UD tree is given in Figure~\ref{fig:original_example_ud}.
-%and Table~\ref{} gives a short description of each UD category.  % supp. material (footnote above)
 UD relations will be written in \texttt{typewriter} font.
 
 \begin{figure}[th]
@@ -382,7 +364,6 @@ obtaining a similar graph format for both schemes.
 We then match pairs of nodes in the converted UD and UCCA trees
 if they share all terminals in their yields.
 
-%One obvious difference is that
 UD annotates bi-lexical dependency trees,
 while UCCA graphs contain non-terminal nodes.
 In \S\ref{sec:conversion}, we outline the unified DAG converter by
@@ -482,7 +463,6 @@ In multi-word expressions (MWEs) in UD, each word after the first is attached to
 with the \texttt{flat}, \texttt{fixed} or \texttt{goeswith} relations
 (depending on whether the expression is grammaticalized, or split by error).
 We remove edges of these relations and group the corresponding terminals to one unit.
-%Multi-word expressions also include compounds, discussed in \S\ref{sec:mwe}.
 
 \paragraph{Promotion of conjunctions.}
 The basic conversion generally preserves terminal yields:
@@ -600,7 +580,6 @@ Only 73\% of syntactic arguments
 are Participants,
 and only 73\% of Participants are syntactic arguments---a difference stemming from
 the Scene/non-Scene (\S\ref{sec:s}) and argument/adjunct (\S\ref{sec:arguments}) distinctions.
-%, this does not include the different treatment of shared arguments (\S\ref{sec:conversion}).
 Moreover, if we identify predicates as words having at least one argument
 and Scenes as units with at least one Participant,
 then only 86\% of UD predicates correspond to Scenes (many of which are secondary relations within one scene; see \S\ref{sec:arguments}),
@@ -701,7 +680,6 @@ as well as modals, adjectives and adverbs.
     Most UD adverb modifiers are Adverbials (e.g., ``I \textit{sometimes} go''),
     but they may be Participants, mostly in the case of semantic arguments describing location (e.g., \textit{here}).
     Obliques
-%   generally correspond in English to prepositional phrases, and
     may be
     Participants (e.g., ``wait \textit{for Nick}''), Time (e.g., ``for \textit{over 7 years}'') 
     or Adverbials---mostly manner adjuncts (\textit{by far}).
@@ -746,7 +724,6 @@ especially if compositional.
         Where the head noun evokes a Scene, the dependent is often a Participant
         (e.g., ``\textit{food} craving''), but can also be an Adverbial 
         (e.g., ``\textit{first time} buyers'') depending on its semantic category.
-        %In cases where t UCCA annotates both parts  may be a co-Center (e.g., ``\textit{sweet potato} tempura'').
         Other compounds in UD are phrasal verbs (e.g., ``figure \textit{out}'', ``cleaned \textit{up}''),
         which UCCA treats as unanalyzable (leading to unmatched units). 
             
@@ -939,51 +916,6 @@ as they are irrelevant to our evaluation:
 \texttt{orphan} (used for gapping, which is represented using remote edges in UCCA---see \S\ref{sec:conversion});
 \texttt{fixed}, \texttt{flat} and \texttt{goeswith} (correspond to parts of unanalyzable units in UCCA,
     and so do not represent units on their own---see \S\ref{sec:local}).
-%  \item[\texttt{clf}, \texttt{dislocated}, \texttt{reparandum}.] Not in EWT.
-
-
-
-
-%\section{Improving UCCA Parsing with UD}\label{sec:silver}
-
-%Syntactic dependency parsers require many training examples to achieve
-%state-of-the-art results.
-%Even after around 500K tokens, the learning curves do not seem to saturate
-%\cite{de2017old,velldal2017joint}.
-%
-%Whereas the largest UCCA training set (English Wiki) contains 128K tokens,
-%The largest joined English UD training set (EWT) contains 177K tokens.
-%In French UCCA has just 10K training tokens whereas UD has 295K,
-%and in German UCCA has 80K and UD 228K.
-%
-%\begin{table}[t]
-%\centering
-%\begin{tabular}{l|lll|lll}
-%& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
-%& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
-%& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
-%\hline
-%\footnotesize 10\% & 65.1 & 65.2 & 65.1 & 38.4 & 24.3 & 29.8\\
-%\footnotesize 20\% & 68.9 & 68.3 & 68.6 & 47.1 & 28.0 & 35.2\\
-%\footnotesize 30\% & 70.2 & 70.1 & 70.2 & 47.2 & 45.5 & 46.3\\
-%\footnotesize 40\% & 71.5 & 71.3 & 71.4 & 52.5 & 46.1 & 49.1\\
-%\footnotesize 50\% & 71.9 & 71.9 & 71.9 & 51.3 & 48.6 & 49.9\\
-%\footnotesize 60\% & 71.3 & 72.4 & 71.9 & 52.9 & 45.5 & 48.9\\
-%\footnotesize 70\% & 73.1 & 72.7 & 72.9 & 50.8 & 50.5 & 50.6\\
-%\footnotesize 80\% & 73.5 & 72.6 & 73.0 & 52.8 & 47.0 & 49.8\\
-%\footnotesize 90\% & 73.9 & 73.1 & 73.5 & 52.3 & 48.6 & 50.4\\
-%\footnotesize 100\% & 74.7 & 74.8 & 74.8 & 48.5 & 51.2 & 49.8\\
-%\end{tabular}
-%\caption{
-%Development scores for TUPA \protect\cite{hershcovich2017a} when trained on increasing amount of training data
-%(English Wiki corpus).
-%\label{tab:partial_data_results}}
-%\end{table}
-%
-%Table~\ref{tab:partial_data_results} shows results for TUPA,
-%trained on 10\%, 20\% etc. of the Wiki training set and tested on the Wiki development set.
-%As can be seen, the primary labeled F1 continues improving substantially even from 90\% to 100\%
-%of the training data. More training data is likely to yield even better performance.
 
 \begin{table*}[ht]
 \vspace{-1mm}
@@ -1025,11 +957,6 @@ Percentage of correctly categorized edges;
 for comparison, percentage of most frequent category in gold (see~Table~\ref{tab:confusion_matrix})
 and in the Wiki training set (by UDPipe-predicted dependencies).
 (d) Average number of words in corresponding terminal yields.
-%UD relations exclude
-%\texttt{clf}, \texttt{dislocated}, \texttt{reparandum},
-%\texttt{fixed}, \texttt{flat}, \texttt{goeswith},
-%\texttt{dep}, \texttt{orphan}, and \texttt{root}.
-%Of all UD relations, 89.5\%  match gold-standard UCCA units (see Table \ref{tab:confusion_matrix}).
 \label{tab:fine_grained_results}}
 \end{table*}
 
@@ -1041,57 +968,13 @@ consisting of the conversion to a shared format and matching units by terminal y
 to compare gold-standard UD and UCCA.
 In this section we apply the same methodology to parser outputs,
 using gold-standard UD for fine-grained evaluation.
-%using both gold-standard and parsed UD for fine-grained evaluation.
 
 \subsection{Experimental Setup}\label{sec:experiments}
-
-%\begin{table}[t]
-%\centering
-%\small
-%\setlength\tabcolsep{3.25pt}
-%\begin{tabular}{l|ccc|ccc}
-%& \multicolumn{3}{c|}{\footnotesize \bf {\#} tokens}
-%& \multicolumn{3}{c}{\footnotesize \bf {\#} sentences} \\
-%& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test
-%& \footnotesize \bf train & \footnotesize \bf dev & \footnotesize \bf test \\
-%\hline
-%%UCCA &&&&&&&&&&&&&&&&&\\
-%\bf English EWT &&& 11,103 &&& 804 \\
-%\bf English Wiki & 124,935 & 17,784 & & 4,113 & 514 \\
-%%\bf English Wiki & 124,935 & 17,784 & 15,854 & 4,113 & 514 & 515 \\
-%%Wiki 1.2.0 & 128444 & 14676 & 15313 & 4268 & 454 & 503 &&&&&&&&&&&\\
-%%\bf English 20K &&& 12,574 &&& 492 \\
-%%\bf French 20K & 618 & 6,374 & 5,962 & 15 & 238 & 239 \\
-%%\bf German 20K & 119,872 & 12,334 & 12,325 & 5,211 & 651 & 652
-%%\multicolumn{2}{l}{20K 1.0.0/0.9.0} && 12339 &&& 506 & 10047 & 1558 & 1324 & 413 & 67 & 67 & 79894 & 10059 & 42366 & 3429 & 561 & 2164 \\
-%%\hline
-%%UD 2.3 & \multicolumn{2}{l}{152141} && \multicolumn{2}{l}{12543} &&
-%%\multicolumn{2}{l}{250658} && \multicolumn{2}{l}{14450} && \multicolumn{2}{l}{209131} && 13814 \\
-%%\hline
-%\end{tabular}
-%\caption{Number of tokens and sentences in the training, development and test sets
-%we use for each corpus.
-%% and language.
-%\label{tab:corpora}}
-%\end{table}
 
 \paragraph{Data.}
 
 In addition to the UCCA EWT data (\S\ref{sec:shared}),
 we use the UCCA English Wikipedia corpus v1.2.3 (Wiki),
-%with the standard train/dev/test split.
-%and the \textit{Twenty Thousand Leagues Under the Sea} corpora (\textit{20K}),
-%annotated in English (v1.2.2), French (v1.2.2)
-%and German (v1.0.1).\footnote{\url{https://github.com/UniversalConceptualCognitiveAnnotation}}
-%As in previous work, we use English 20K only as an out-of-domain test set.
-%For comparability with previous work \cite{hershcovich2017a,hershcovich2018multitask},
-%we also perform our experiments on Wiki v1.2.0 \cite{abend2013universal},
-%on 20K v1.0.0 in English and French \cite{sulem2015conceptual},
-%and on 20K v0.9.0 in German.
-%For UD, we use the English\_EWT, French\_GSD and German\_GSD
-%treebanks from Universal Dependencies v2.3
-%\cite{11234/1-2895}.\footnote{\url{https://hdl.handle.net/11234/1-2895}}
-%These are the largest freely-available UD treebanks for these languages.
 and the UD v2.3 English\_EWT treebank
 \cite{11234/1-2895},\footnote{\url{https://hdl.handle.net/11234/1-2895}}
 filtering it to get only the 804 sentences that were also annotated in UCCA.
@@ -1113,16 +996,6 @@ predicted by spaCy.\footnote{\url{https://spacy.io}}
 As using UDPipe in training and gold UD in testing yielded very similar
 results, we only report the default setting.
 
-%\paragraph{Evaluation of the comparison methodology.}
-%
-%To quantitatively assess our conversion protocol (\S\ref{sec:methodology}),
-%we begin by applying it to
-%the gold-standard UD trees of the English\_EWT shared sentences,
-%and evaluate the \textit{unlabeled} precision, recall and F1 score
-%with the gold-standard UCCA for the same sentences.
-%We use standard UCCA evaluation, matching units by their terminal yields.
-%%We then apply the label mapping to get fully labeled converted UCCA graphs.
-
 
 \paragraph{Evaluation by gold-standard UD.}
 
@@ -1132,92 +1005,11 @@ are computed accordingly.
 For the fine-grained analysis, we split the gold-standard, predicted and matched UCCA units according
 to the labels of the UD relations whose dependents have the same terminal yield (if any).
 
-%evaluation of both gold-standard and predicted edges
-%according to the UD relations they match by terminal yield
-%(using our extended converter; .
-%This allows error analysis of UCCA parsing according to syntactic phenomena.
-
-
-%\paragraph{UCCA evaluation by automatically parsed UD.}
-%
-%To demonstrate the applicability of fine-grained analysis on UCCA data
-%without gold-standard UD,
-%we use UDPipe v1.2 \cite{udpipe,udpipe:2017}, trained on the UD v2.3 treebanks,
-%to parse the Wiki and 20K test sets in English, French and German.
-%We use the official UDPipe models trained on the English\_EWT, French\_GSD and German\_GSD
-%treebanks, respectively\footnote{\url{https://hdl.handle.net/11234/1-2898}}.
-
-
-%\paragraph{Baselines.}
-%
-%As a point of comparison, we evaluate TUPA \cite{hershcovich2017a} on the test sets,
-%after training it on the UCCA training set for each language (Wiki for English,
-%and 20K for French and German).
-%For equal conditions,
-%we train and test TUPA using features predicted by UDPipe,
-%yielding slightly lower scores than previously reported using spaCy.%\footnote{\url{https://spacy.io}}
-
-%\paragraph{Using converted UD as ``silver-standard'' data.}
-%
-%Using our conversion protocol (\S\ref{sec:conversion}),
-%we convert the gold-standard UD graphs into UCCA.
-%We use the converted UD data as ``silver-standard'' data \cite{W17-7306,N18-1104}
-%and add it to the UCCA training set for training TUPA.
-
-%\begin{table}[t]
-%\centering
-%\begin{tabular}{l|lll|lll}
-%& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
-%& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF}
-%& \footnotesize \textbf{UP} & \footnotesize \textbf{UR} & \footnotesize \textbf{UF} \\
-%\hline
-%\multicolumn{4}{l|}{\small \bf English EWT (shared)} \\
-%\footnotesize UD 2.3
-%& 82.8 & 88.4 & 85.5 & 21 & 17.8 & 19.3 \\
-%\footnotesize TUPA
-%& 80.8 & 77.8 & 79.3 & 10.2 & 18.6 & 13.2 \\
-%\multicolumn{4}{l|}{\small \bf English Wiki test} \\
-%\footnotesize UDPipe
-%& 76.7 & 81 & 78.8 & -- & -- & -- \\
-%\footnotesize TUPA
-%& 87.6 & 84.9 & 86.2 & 50.9 & 52.7 & 51.8 \\
-%\multicolumn{4}{l|}{\small \bf English 20K} \\
-%\footnotesize UDPipe
-%& 79.9 & 84.7 & 82.3 & -- & -- & -- \\
-%\footnotesize TUPA
-%& 83.4 & 84.4 & 83.9 & 50.8 & 24 & 32.7 \\
-%\multicolumn{4}{l|}{\small \bf French 20K test} \\
-%\footnotesize UDPipe
-%& 78.5 & 83.4 & 80.9 & -- & -- & -- \\
-%\footnotesize TUPA
-%& 72 & 72.5 & 72.2 & 21.9 & 3 & 5.3 \\
-%\multicolumn{4}{l|}{\small \bf German 20K test} \\
-%\footnotesize UDPipe
-%& 81.5 & 85.3 & 83.4 & -- & -- & -- \\
-%\footnotesize TUPA
-%& 90.8 & 89.7 & 90.2 & 69.4 & 52.6 & 59.8
-%\end{tabular}
-%\caption{
-%Unlabeled precision, recall and F1 (in~\%) for primary and remote edges.
-%UD 2.3 is the gold-standard UD after conversion to the unified DAG format,
-%and other rows correspond to automatically parsed UD after conversion (UDPipe)
-%or directly parsed UCCA (TUPA).
-%\label{tab:conversion_results_unlabeled}}
-%\end{table}
 
 \subsection{Results}\label{sec:results}
 
 Table~\ref{tab:fine_grained_results} shows
 fine-grained evaluation by UD relations.
-%Out of the total number of dependencies in the UD trees for the shared sentences,
-%we can see how many relations matched any gold-standard UCCA unit (\textit{Match gold}), and
-%UCCA unit predicted by TUPA (\textit{Match pred.}).
-%Out of the predicted UCCA units with a correct terminal yield (\textit{Unlabeled}),
-%we can also see how many were given the correct category (\textit{Labeled}).
-%For comparison, $\sfrac{\text{Mode}}{\text{Match gold}}\%$ measures how ``deterministic''
-%the UCCA category is in the test EWT corpus, given the UD relation,
-%and $\sfrac{\text{Train Mode}}{\text{Match}}\%$ in the training Wiki corpus.
-%\textit{Mean {\#}Words} indicates how long units are on average.
 TUPA does best on determiners, which are mostly one word Elaborators.
 For nominal subjects,
 TUPA correctly categorizes only 87\% of the correctly delineated units,
@@ -1297,21 +1089,12 @@ multi-task learning \cite{swayamdipta2016greedy,swayamdipta2018syntactic,strubel
 Some syntactic representation approaches, notably CCG \cite{Steedman:00},
 directly reflect the underlying semantics, and have been used to
 transduce semantic forms using rule-based systems \cite{Basile:12}.
-
-%Two CoNLL shared tasks on joint syntactic and semantic dependency parsing
-
-%explored the connection between syntactic dependencies and
-%semantic annotations built on top of them.
-%Other works have contested the importance of syntax to semantics,
-%by achieving strong performance without explicitly modeling syntax \cite{Peng-EtAl:2018:NAACL,P18-2077,P18-1192,C18-1233}.
   
 However, empirical study of
 the differences between syntactic and semantic schemes is still scarce.
 \newcite{zhang2017evaluation} evaluated PredPatt \citep{white2016universal},
 a framework for extracting predicate-argument structures from UD,
 on a large set of converted PropBank annotations.
-%They evaluated the extracted predicate-argument relations using both
-%gold-standard and parsed UD.
 \newcite{szubert2018structured} proposed a method for aligning AMR and UD subgraphs,
 finding that 97\% of AMR edges are evoked by one or more
 words or syntactic relations.
@@ -1320,14 +1103,9 @@ Similarly, our conversion protocol allows fine-grained evaluation of UCCA parsin
 
 A related line of work tackles the transduction of syntactic structures into semantic ones.
 \newcite{reddy2016transforming} proposed a rule-based method for converting UD
-to logical forms. 
-%They map syntactic dependency relations directly to logical relations,
-%assuming the predicate-argument structure is isomorphic to the dependency structure,
-%but handling exceptions by rules relating to specific linguistic constructions,
-%namely prepositional phrases, conjunction, relatives clauses, and wh-questions.
+to logical forms.
 \newcite{stanovsky2016getting} converted Stanford dependency trees into
 proposition structures ({\sc PropS}), abstracting away from some syntactic detail.
-% to achieve a more semantically-oriented representation.
 
 
 \section{Conclusion}\label{sec:conclusion}
@@ -1342,13 +1120,6 @@ Notably, we quantified the differences between the notions of syntactic and sema
 Our findings highlight the potential utility of using semantic parsers for text understanding applications
   (over their syntactic counterparts), but also expose challenges semantic parsers must address,
   and potential approaches for addressing them.
-
-
-%Finally, we demonstrated the utility of the proposed comparison methodology for fine-grained
-%  evaluation of UCCA parsers, and exposed concrete paths for advancement in UCCA parsing.
-
-%Future work will extend our conversion protocol to a full labeled conversion,
-%which can be used as a UCCA parser, or for training data augmentation.
 
 \section*{Acknowledgments}
 
