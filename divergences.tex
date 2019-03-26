@@ -154,7 +154,7 @@
   We show that the differences between the schemes are substantial, and suggest that
   UCCA parsing in particular and semantic parsing in general are likely to benefit
   downstream text understanding applications.
-  For example, only 73\% of arguments are shared between UCCA and UD,
+  For example, only 72.9\% of UCCA Participants are UD syntactic arguments,
   i.e., many semantic participants cannot be recovered from UD.\footnote{This excludes cases of shared 
   argumenthood, which are partially covered by \textit{enhanced UD}. See \S\ref{sec:conversion}.}
   Our findings are relevant to other semantic representations, given their 
@@ -196,6 +196,7 @@
   and text-to-text generation evaluation \citep{birch2016hume,choshen2018usim,sulem2018samsa}.
   
   \begin{table}
+  \small
   \centering
   \begin{tabular}{lc}
     Participant & A \\
@@ -294,10 +295,6 @@ is a syntactic dependency scheme used in many languages,
 aiming for cross-linguistically consistent and coarse-grained treebank
 annotation. Formally, UD uses bi-lexical trees, with edge labels 
 representing syntactic relations.
-Being a dependency representation, UD is structurally underspecified in an important way:
-​it is not possible in UD to mark the distinction between an element modifying the head of
-the phrase and the same element modifying the whole phrase
-\cite{doi:10.1146/annurev-linguistics-011718-011842}.
 
   One aspect of UD similar to UCCA is its preference of lexical (rather than functional) heads.
   For example, in auxiliary verb constructions (e.g., ``is eating''), UD
@@ -306,6 +303,11 @@ the phrase and the same element modifying the whole phrase
   While the approaches are largely inter-translatable
   \citep{Schwartz:12}, lexical head schemes are more similar in form to semantic schemes,
    such as UCCA and semantic dependencies \citep{oepen2016towards}.
+   
+Being a dependency representation, UD is structurally underspecified in an important way:
+​it is not possible in UD to mark the distinction between an element modifying the head of
+the phrase and the same element modifying the whole phrase
+\cite{doi:10.1146/annurev-linguistics-011718-011842}.
    
 An example UD tree is given in Figure~\ref{fig:original_example_ud}.
 UD relations will be written in \texttt{typewriter} font.
@@ -421,7 +423,7 @@ Intermediate non-terminals and \textit{head} edges are introduced by the unified
 
 Figure~\ref{fig:converted_example_ud} presents the same tree from Figure~\ref{fig:original_example_ud}
 after conversion.
-The converter adds pre-terminals per token,
+The converter adds one pre-terminal per token,
 and attaches them according to the original dependency tree:
 traversing it from the root, for each head it creates a non-terminal
 parent with the edge label {\it head}, and adds the dependents as children of 
@@ -433,8 +435,8 @@ For example, the language-specific definite article label
 
 \paragraph{Reentrancies.}
 Remote edges in UCCA enable reentrancy, forming a DAG together with primary edges.
-UD allows reentrancy when including \textit{enhanced dependencies}\footnote{\url{https://universaldependencies.org/u/overview/enhanced-syntax.html}}
-\cite{SCHUSTER16.779}, which form (bi-lexical) graphs, representing phenomena
+UD allows reentrancy when including \textit{enhanced dependencies}
+\cite{SCHUSTER16.779},\footnote{\url{https://universaldependencies.org/u/overview/enhanced-syntax.html}} which form (bi-lexical) graphs, representing phenomena
 such as predicate ellipsis (e.g., gapping),
 and shared arguments due to coordination, control, raising and relative clauses.
 
@@ -462,7 +464,7 @@ An unanalyzable phrase is represented in UCCA as a single unit covering multiple
 In multi-word expressions (MWEs) in UD, each word after the first is attached to the previous word,
 with the \texttt{flat}, \texttt{fixed} or \texttt{goeswith} relations
 (depending on whether the expression is grammaticalized, or split by error).
-We remove edges of these relations and group the corresponding terminals to one unit.
+We remove edges of these relations and join the corresponding pre-terminals to one unit.
 
 \paragraph{Promotion of conjunctions.}
 The basic conversion generally preserves terminal yields:
@@ -472,7 +474,7 @@ as the original dependency yield of its head terminal
 headed by \textit{graduation} is ``After graduation'', the same as that of ``graduation''
 in Figure~\ref{fig:original_example_ud}).
 
-Since UD attaches subordinating and coordinating conjunctions to the following conjunct,
+Since UD attaches subordinating and coordinating conjunctions to the subsequent conjunct,
 this results in them being positioned in the same conjunct they relate (e.g.,
 \textit{After} will be included in the first conjunct in ``After arriving home, John went to sleep'';
 \textit{and} will be included in the second conjunct in ``John and Mary'').
@@ -569,21 +571,22 @@ parsing experiments.
 
 In case of multiple UCCA units with the same terminal yield (i.e., units with a single non-remote child),
 we take the top category only, to avoid double-counting.
-Excluding punctuation, this results in 12,893 yields in UCCA and
-13,294 in UD.
-Of these, 11,541 are common, meaning that a UCCA ``parser'' developed this way
+Excluding punctuation, this results in 60,434 yields in UCCA and
+58,992 in UD.
+Of these, 52,280 are common, meaning that a UCCA ``parser'' developed this way
 would get a very high F1 score
-of 88.1\%, if given the gold UCCA label for every converted edge.
+of 87.6\%, if it is provided with the gold UCCA label for every converted edge.
 
-Only 73\% of syntactic arguments
+Only 82.6\% of syntactic arguments
 (\texttt{ccomp}, \texttt{csubj}, \texttt{iobj}, \texttt{nsubj}, \texttt{obj}, \texttt{obl} and \texttt{xcomp})
 are Participants,
-and only 73\% of Participants are syntactic arguments---a difference stemming from
+and only 72.9\% of Participants are syntactic arguments---a difference stemming from
 the Scene/non-Scene (\S\ref{sec:s}) and argument/adjunct (\S\ref{sec:arguments}) distinctions.
 Moreover, if we identify predicates as words having at least one argument
 and Scenes as units with at least one Participant,
-then only 86\% of UD predicates correspond to Scenes (many of which are secondary relations within one scene; see \S\ref{sec:arguments}),
-and only 79\% of Scenes correspond to predicates (e.g., due to eventive nouns).
+then only 92.1\% of UD predicates correspond to Scenes (many of which are secondary relations within one scene; see \S\ref{sec:analysis}),
+and only 80\% of Scenes correspond to predicates (e.g., due to eventive nouns,
+which are not syntactic predicates).
 
 Examining the {\it head} row in Table~\ref{tab:confusion_matrix} allows
 us to contrast the schemes' notions of a head. 
