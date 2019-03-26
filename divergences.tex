@@ -974,27 +974,21 @@ using gold-standard UD for fine-grained evaluation.
 \paragraph{Data.}
 
 In addition to the UCCA EWT data (\S\ref{sec:shared}),
-we use the UCCA English Wikipedia corpus v1.2.3 (Wiki),
-and the UD v2.3 English\_EWT treebank
-\cite{11234/1-2895},\footnote{\url{https://hdl.handle.net/11234/1-2895}}
-filtering it to get only the 804 sentences that were also annotated in UCCA.
+we use the reviews section of the UD v2.3 English\_EWT treebank
+\cite{11234/1-2895}.\footnote{\url{https://hdl.handle.net/11234/1-2895}}
 We additionally use UDPipe v1.2 \cite{udpipe,udpipe:2017},
 trained on
 English\_EWT,\footnote{\url{https://hdl.handle.net/11234/1-2898}}
-to parse Wiki to UD.
+for feature extraction.
 We apply the extended converter to UD as before (\S\ref{sec:local}).
 
 \paragraph{Parser.}
 
-We train a UCCA parser,
-TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask},
-on Wiki, and evaluate it on EWT.
-We evaluate this out-of-domain scenario as
-we have both UCCA and UD gold-standard annotations for this test set.
-By default, TUPA is trained and tested using syntactic features
-predicted by spaCy.\footnote{\url{https://spacy.io}}
-As using UDPipe in training and gold UD in testing yielded very similar
-results, we only report the default setting.
+We train TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask}
+on the UCCA EWT data.
+TUPA uses POS tags and syntactic dependencies as features.
+We experiment both with using gold UD for feature extraction,
+and with using UDPipe.
 
 
 \paragraph{Evaluation by gold-standard UD.}
