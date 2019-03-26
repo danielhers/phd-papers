@@ -45,7 +45,7 @@
 \hyphenation{SemEval}
 \hyphenation{English}
 \hyphenation{PredPatt}
-\setlength{\belowcaptionskip}{-10pt}
+\setlength{\belowcaptionskip}{-6pt}  % adjust this to fit page limit
 
 
 \usetikzlibrary{shapes,shapes.misc}
@@ -910,8 +910,9 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
 
 \paragraph{Vocatives}
     are both Ground and Participants if they participate in the Scene \textit{and} are the party addressed.
-    For example, \textit{Mark} in ``Thanks \textit{Mark}'' is both the person addressed and the one thanked.\footnote{UCCA allows marking more than one category over an edge, although this
-    functionality is not used often for English.}
+    For example, \textit{Mark} in ``Thanks \textit{Mark}'' is both the person addressed and the one thanked.\footnote{The {\bf A\big|G} column is omitted from
+    Table~\ref{tab:confusion_matrix} as this category combination
+    occurs in only 0.02\% of edges in the corpus.}
     
 \paragraph{Expletives and subjects.}
     Expletives are generally Functions,
