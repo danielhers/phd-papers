@@ -923,11 +923,12 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
 We exclude the following UD labels,
 as they are irrelevant to our evaluation:
 \texttt{root} (always matches the entire sentence);
-\texttt{punct} (punctuation is not annotated in UCCA);
+\texttt{punct} (punctuation is ignored in UCCA evaluation);
 \texttt{dep} (unspecified dependency),
 \texttt{orphan} (used for gapping, which is represented using remote edges in UCCA---see \S\ref{sec:conversion});
 \texttt{fixed}, \texttt{flat} and \texttt{goeswith} (correspond to parts of unanalyzable units in UCCA,
-    and so do not represent units on their own---see \S\ref{sec:local}).
+    and so do not represent units on their own---see \S\ref{sec:local});
+    \texttt{reparandum} and \texttt{dislocated} (too rare in EWT).
 
 \begin{table*}[ht]
 \vspace{-1mm}
