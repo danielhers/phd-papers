@@ -342,13 +342,13 @@ and cross-reviewed.
 As these sentences are included in the UD
 English\_EWT treebank, this is a \textit{shared} gold-standard UCCA and UD
 annotated corpus.\footnote{Our data is available at \url{https://github.com/UniversalConceptualCognitiveAnnotation/UCCA_English-EWT}.}
-We use the standard train/dev/test split,
+We use the standard train/development/test split,
 shown in Table~\ref{tab:data}.
 
 \begin{table}[t]
 \centering
 \begin{tabular}{l|ccc}
-& \bf Train & \bf Dev & \bf Test \\
+& \bf \footnotesize Train & \bf \footnotesize Dev & \bf \footnotesize Test \\
 \hline
 \# Passages & \hphantom{00,}347 & \hphantom{0,}192 & \hphantom{0,}184 \\
 \# Sentences & \hphantom{0}2,723 & \hphantom{0,}554 & \hphantom{0,}535 \\
@@ -929,6 +929,74 @@ as they are irrelevant to our evaluation:
 \texttt{fixed}, \texttt{flat} and \texttt{goeswith} (correspond to parts of unanalyzable units in UCCA,
     and so do not represent units on their own---see \S\ref{sec:local});
     \texttt{reparandum} and \texttt{dislocated} (too rare in EWT).
+    
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fine-Grained UCCA Parsing Evaluation}\label{sec:fine_grained}
+
+In \S\ref{sec:analysis} we used our comparison methodology,
+consisting of the conversion to a shared format and matching units by terminal yield,
+to compare gold-standard UD and UCCA.
+In this section we apply the same methodology to parser outputs,
+using gold-standard UD for fine-grained evaluation.
+
+\subsection{Experimental Setup}\label{sec:experiments}
+
+\paragraph{Data.}
+
+In addition to the UCCA EWT data (\S\ref{sec:shared}),
+we use the reviews section of the UD v2.3 English\_EWT treebank
+\cite{11234/1-2895},\footnote{\url{https://hdl.handle.net/11234/1-2895}}
+annotated over the exact same sentences.
+We additionally use UDPipe v1.2 \cite{udpipe,udpipe:2017},
+trained on
+English\_EWT,\footnote{\url{https://hdl.handle.net/11234/1-2898}}
+for feature extraction.
+We apply the extended converter to UD as before (\S\ref{sec:local}).
+
+\paragraph{Parser.}
+
+We train TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask}
+on the UCCA EWT data, with the standard train/development/test split.
+TUPA uses POS tags and syntactic dependencies as features.
+We experiment both with using gold UD for feature extraction,
+and with using UDPipe.
+
+\begin{table}[t]
+\def\arraystretch{.89}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{@{}llll|lll@{}}
+& \multicolumn{3}{c|}{\footnotesize \bf Primary} & \multicolumn{3}{c}{\footnotesize \bf Remote} \\
+\multicolumn{1}{l}{\footnotesize \bf Features}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF}
+& \footnotesize \textbf{LP} & \footnotesize \textbf{LR} & \footnotesize \textbf{LF} \\
+\hline
+\multicolumn{4}{@{}l|}{\footnotesize Development} \\
+\multicolumn{1}{l}{\footnotesize Gold UD}
+ &&&&& \\
+\multicolumn{1}{l}{\footnotesize UDPipe} 
+ &&&&& \\
+\hline
+\multicolumn{4}{@{}l|}{\footnotesize Test} \\
+\multicolumn{1}{l}{\footnotesize Gold UD}
+ & 69.2 & 67.7 & 68.4 & 56.2 & 36.7 & 44.4 \\
+\multicolumn{1}{l}{\footnotesize UDPipe} 
+ &&&&&
+\end{tabular}}
+\caption{
+Labeled precision, recall and F1 (in~\%) for primary and
+remote edges output by TUPA on the UCCA EWT development (top) and test (bottom)
+sets, using either gold-standard UD or UDPipe for TUPA features.\label{tab:results}}
+\end{table}
+
+
+\paragraph{Evaluation by gold-standard UD.}
+
+UCCA evaluation is generally carried out by considering a predicted unit as correct if there
+is a gold unit that matches it in terminal yield and labels. Precision, Recall and F-score (F1)
+are computed accordingly.
+For the fine-grained analysis, we split the gold-standard, predicted and matched UCCA units according
+to the labels of the UD relations whose dependents have the same terminal yield (if any).
 
 \begin{table*}[ht]
 \vspace{-1mm}
@@ -971,50 +1039,11 @@ for comparison, percentage of most frequent category (see~Table~\ref{tab:confusi
 \label{tab:fine_grained_results}}
 \end{table*}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Fine-Grained UCCA Parsing Evaluation}\label{sec:fine_grained}
-
-In \S\ref{sec:analysis} we used our comparison methodology,
-consisting of the conversion to a shared format and matching units by terminal yield,
-to compare gold-standard UD and UCCA.
-In this section we apply the same methodology to parser outputs,
-using gold-standard UD for fine-grained evaluation.
-
-\subsection{Experimental Setup}\label{sec:experiments}
-
-\paragraph{Data.}
-
-In addition to the UCCA EWT data (\S\ref{sec:shared}),
-we use the reviews section of the UD v2.3 English\_EWT treebank
-\cite{11234/1-2895},\footnote{\url{https://hdl.handle.net/11234/1-2895}}
-annotated over the exact same sentences.
-We additionally use UDPipe v1.2 \cite{udpipe,udpipe:2017},
-trained on
-English\_EWT,\footnote{\url{https://hdl.handle.net/11234/1-2898}}
-for feature extraction.
-We apply the extended converter to UD as before (\S\ref{sec:local}).
-
-\paragraph{Parser.}
-
-We train TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask}
-on the UCCA EWT data, with the standard train/dev/test split.
-TUPA uses POS tags and syntactic dependencies as features.
-We experiment both with using gold UD for feature extraction,
-and with using UDPipe.
-
-
-\paragraph{Evaluation by gold-standard UD.}
-
-UCCA evaluation is generally carried out by considering a predicted unit as correct if there
-is a gold unit that matches it in terminal yield and labels. Precision, Recall and F-score (F1)
-are computed accordingly.
-For the fine-grained analysis, we split the gold-standard, predicted and matched UCCA units according
-to the labels of the UD relations whose dependents have the same terminal yield (if any).
-
 
 \subsection{Results}\label{sec:results}
 
-Table~\ref{tab:fine_grained_results} shows
+Table~\ref{tab:results} presents TUPA's scores on the UCCA EWT development
+and test sets, and Table~\ref{tab:fine_grained_results} shows
 fine-grained evaluation by UD relations.
 TUPA does best on determiners, which are mostly one word Elaborators.
 For nominal subjects,
