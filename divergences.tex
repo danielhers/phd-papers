@@ -957,7 +957,7 @@ We train TUPA v1.3 \cite{hershcovich2017a,hershcovich2018multitask}
 on the UCCA EWT data, with the standard train/development/test split.
 TUPA uses POS tags and syntactic dependencies as features.
 We experiment both with using gold UD for feature extraction,
-and with using UDPipe.
+and with using UDPipe outputs.
 
 \begin{table}[b]
 \def\arraystretch{.89}
@@ -1032,7 +1032,10 @@ for comparison, percentage of most frequent category (see~Table~\ref{tab:confusi
 \subsection{Results}\label{sec:results}
 
 Table~\ref{tab:results} presents TUPA's scores on the UCCA EWT development
-and test sets, and Table~\ref{tab:fine_grained_results} shows
+and test sets. Surprisingly, using UDPipe for feature extraction results in
+better scores than gold syntactic tags and dependencies.
+
+Table~\ref{tab:fine_grained_results} shows
 fine-grained evaluation by UD relations.
 TUPA does best on determiners, which are mostly one word Elaborators.
 For nominal subjects,
