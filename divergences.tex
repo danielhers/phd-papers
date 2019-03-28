@@ -490,7 +490,9 @@ as \textit{when}, \textit{if}, \textit{after}) as siblings of their conjuncts.
 \section{Analysis of Divergences}\label{sec:analysis}
 
 Using the shared format,
-we turn to analyzing the content differences between UCCA and UD.
+we turn to analyzing the content differences between UCCA and UD.\footnote{See
+\url{http://bit.ly/uccaud} for a detailed explanation of each example in
+this section.}
 
 
 \begin{table*}[t]
@@ -960,7 +962,23 @@ TUPA uses POS tags and syntactic dependencies as features.
 We experiment both with using gold UD for feature extraction,
 and with using UDPipe outputs.
 
-\begin{table}[b]
+
+\paragraph{Evaluation by gold-standard UD.}
+
+UCCA evaluation is generally carried out by considering a predicted unit as correct if there
+is a gold unit that matches it in terminal yield and labels. Precision, Recall and F-score (F1)
+are computed accordingly.
+For the fine-grained analysis, we split the gold-standard, predicted and matched UCCA units according
+to the labels of the UD relations whose dependents have the same terminal yield (if any).
+
+
+\subsection{Results}\label{sec:results}
+
+Table~\ref{tab:results} presents TUPA's scores on the UCCA EWT development
+and test sets. Surprisingly, using UDPipe for feature extraction results in
+better scores than gold syntactic tags and dependencies.
+
+\begin{table}[h]
 \def\arraystretch{.89}
 \resizebox{\columnwidth}{!}{
 \begin{tabular}{@{}llll|lll@{}}
@@ -986,15 +1004,6 @@ Labeled precision, recall and F1 (in~\%) for primary and
 remote edges output by TUPA on the UCCA EWT development (top) and test (bottom)
 sets, using either gold-standard UD or UDPipe for TUPA features.\label{tab:results}}
 \end{table}
-
-
-\paragraph{Evaluation by gold-standard UD.}
-
-UCCA evaluation is generally carried out by considering a predicted unit as correct if there
-is a gold unit that matches it in terminal yield and labels. Precision, Recall and F-score (F1)
-are computed accordingly.
-For the fine-grained analysis, we split the gold-standard, predicted and matched UCCA units according
-to the labels of the UD relations whose dependents have the same terminal yield (if any).
 
 \begin{table*}[t]
 \vspace{-1mm}
@@ -1029,17 +1038,10 @@ for comparison, percentage of most frequent category (see~Table~\ref{tab:confusi
 (d) Average number of words in corresponding terminal yields.\label{tab:fine_grained_results}}
 \end{table*}
 
-
-\subsection{Results}\label{sec:results}
-
-Table~\ref{tab:results} presents TUPA's scores on the UCCA EWT development
-and test sets. Surprisingly, using UDPipe for feature extraction results in
-better scores than gold syntactic tags and dependencies.
-
 Table~\ref{tab:fine_grained_results} shows
 fine-grained evaluation by UD relations.
 TUPA does best on auxiliaries and determiners,
-despite the heterogeneous distribution of corresponding UCCA categories
+despite the heterogeneity of corresponding UCCA categories
 (see Table~\ref{tab:confusion_matrix}),
 possibly by making lexical distinctions
 (e.g., modals and auxiliary verbs are both UD auxiliaries,
@@ -1076,16 +1078,16 @@ In the similar case of compounds, lexical resources for light verbs and idioms m
 
 NLP tasks
 often require semantic distinctions that are difficult to extract from syntactic representations.
-As a case in point, consider the example sentence
+Consider the example
 ``after graduation, John moved to Paris'' again.
-While the word \textit{graduation} evokes a Scene, as annotated in UCCA
+While \textit{graduation} evokes a Scene
 (Figure~\ref{fig:example_ucca}), in UD it is an oblique modifier of \textit{moved},
 just like \textit{Paris} is (Figure~\ref{fig:original_example_ud}).
 The Scene/non-Scene distinction (\S\ref{sec:s})
-would benefit structural text simplification systems,
-which should preferably paraphrase the sentence to
+would assist structural text simplification systems
+to paraphrase this to
 ``John graduated. (Then,) John moved to Paris'',
-such that each Scene would occupy a single sentence \cite{sulem2018samsa}.
+such that each sentence contains one Scenes \cite{sulem2018samsa}.
 
 Another example is machine translation---translating the same sentence into Hebrew,
 which does not have a word for \textit{graduation},
@@ -1103,10 +1105,6 @@ for output space pruning \cite{xue2004calibrating},
 syntactic features \cite{gildea2002automatic,hershcovich2017a}, 
 joint modeling \cite{surdeanu2008conll,hajivc2009conll}, and
 multi-task learning \cite{swayamdipta2016greedy,swayamdipta2018syntactic,hershcovich2018multitask}.
-Some syntactic representation approaches, notably CCG \cite{Steedman:00},
-directly reflect the underlying semantics, and have been used to
-transduce semantic forms using rule-based systems \cite{Basile:12}.
-  
 Empirical comparison between syntactic and semantic schemes, however,
 is still scarce.
 \newcite{W14-2908} mapped Stanford Dependencies
@@ -1121,6 +1119,9 @@ words or syntactic relations.
 \newcite{damonte-17} refined AMR evaluation by UD labels,
 similar to our fine-grained evaluation of UCCA parsing.
 
+Some syntactic representation approaches, notably CCG \cite{Steedman:00},
+directly reflect the underlying semantics, and have been used to
+transduce semantic forms using rule-based systems \cite{Basile:12}.
 A related line of work tackles the transduction of syntactic structures into semantic ones.
 \newcite{reddy2016transforming} proposed a rule-based method for converting UD
 to logical forms.
