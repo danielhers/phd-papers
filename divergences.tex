@@ -263,28 +263,27 @@
         every circle node/.append style={fill=black}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
-        child {node (After) [word] {After} edge from parent node[above] {\scriptsize $L$}}
+        child {node (After) [word] {After} edge from parent node[above] {\scriptsize L}}
         child {node (graduation) [circle] {}
         {
-          child {node [word] {graduation} edge from parent node[left] {\scriptsize $P$}}
-        } edge from parent node[right] {\scriptsize $H$} }
-        child {node [word] {,} edge from parent node[below] {\scriptsize $U$}}
+          child {node [word] {graduation} edge from parent node[left] {\scriptsize P}}
+        } edge from parent node[right] {\scriptsize H} }
+        child {node [word] {,} edge from parent node[below] {\scriptsize U}}
         child {node (moved) [circle] {}
         {
-          child {node (John) [word] {John} edge from parent node[left] {\scriptsize $A$}}
-          child {node [word] {moved} edge from parent node[left] {\scriptsize $P$}}
+          child {node (John) [word] {John} edge from parent node[above] {\scriptsize A}}
+          child {node [word] {moved} edge from parent node[left] {\scriptsize P}}
           child {node [circle] {}
           {
-            child {node [word] {to} edge from parent node[left] {\scriptsize $R$}}
-            child {node [word] {Paris} edge from parent node[right] {\scriptsize $C$}}
-          } edge from parent node[above] {\scriptsize $A$} }
-        } edge from parent node[right] {\scriptsize $H$} }
+            child {node [word] {to} edge from parent node[left] {\scriptsize R}}
+            child {node [word] {Paris} edge from parent node[right] {\scriptsize C}}
+          } edge from parent node[above] {\scriptsize A} }
+        } edge from parent node[above] {\scriptsize H} }
         ;
-      \draw[dashed,->] (graduation) to node [above] {\scriptsize $A$} (John);
+      \draw[dashed,->] (graduation) to node [above] {\scriptsize A} (John);
     \end{tikzpicture}
     }
-\caption{\label{fig:example_ucca}
- Example UCCA graph. Dashed: a remote edge.}
+\caption{Example UCCA graph. Dashed: a remote edge.\label{fig:example_ucca}}
 \end{figure}
 
 
@@ -414,8 +413,7 @@ to the converter, which abstract away from further non-content differences.
       \draw (ROOT) to node {head} (moved);
   \end{tikzpicture}}
 \caption{Converted UD tree.
-Intermediate non-terminals and \textit{head} edges are introduced by the unified DAG converter.
-}\label{fig:converted_example_ud}
+Intermediate non-terminals and \textit{head} edges are introduced by the unified DAG converter.\label{fig:converted_example_ud}}
 \end{figure}
 
 
@@ -559,8 +557,7 @@ after applying our extended converter to UD (\S\ref{sec:methodology}),
 by matching UD vertices and UCCA units with the same terminal yield.
 The last column (row), labeled {\sc No Match}, shows the number of edges of each UD (UCCA) category
 that do not match any UCCA (UD) unit.
-Zero counts are omitted.
-\label{tab:confusion_matrix}}
+Zero counts are omitted.\label{tab:confusion_matrix}}
 \end{table*}
 
 \subsection{Confusion Matrix}\label{sec:confusion}
@@ -782,13 +779,13 @@ UCCA, allowing non-terminal nodes, disambiguates this case (Figure~\ref{fig:conj
         every circle node/.append style={fill=black}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
-        child {node [word] {unique} edge from parent node[left] {\scriptsize $E$}}
+        child {node [word] {unique} edge from parent node[left] {\scriptsize E}}
         child {node [circle] {}
         {
-          child {node [word] {gifts} edge from parent node[left] {\scriptsize $C$}}
-          child {node [word] {and} edge from parent node[left] {\scriptsize $N$}}
-          child {node [word] {cards} edge from parent node[right] {\scriptsize $C$}}
-        } edge from parent node[right] {\scriptsize $C$} }
+          child {node [word] {gifts} edge from parent node[left] {\scriptsize C}}
+          child {node [word] {and} edge from parent node[left] {\scriptsize N}}
+          child {node [word] {cards} edge from parent node[right] {\scriptsize C}}
+        } edge from parent node[right] {\scriptsize C} }
         ;
     \end{tikzpicture}
     }
@@ -861,23 +858,23 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
       \node (ROOT) [circle] {}
         child {node [circle] {}
         {
-          child {node [word] {From} edge from parent node[left] {\scriptsize $R$}}
-          child {node [word] {the} edge from parent node[left] {\scriptsize $E$}}
-          child {node [word] {{\color{white}F}moment} edge from parent node[right] {\scriptsize $C$}}
-        } edge from parent node[above] {\scriptsize $L$} }
+          child {node [word] {From} edge from parent node[left] {\scriptsize R}}
+          child {node [word] {the} edge from parent node[left] {\scriptsize E}}
+          child {node [word] {{\color{white}F}moment} edge from parent node[right] {\scriptsize C}}
+        } edge from parent node[above] {\scriptsize L} }
         child {node [circle] {}
         {
-          child {node [word] {you{\color{white}k}} edge from parent node[left] {\scriptsize $A$}}
-          child {node [word] {{\color{white}y}enter} edge from parent node[right] {\scriptsize $P$}}
-        } edge from parent node[left] {\scriptsize $H$} }
+          child {node [word] {you{\color{white}k}} edge from parent node[left] {\scriptsize A}}
+          child {node [word] {{\color{white}y}enter} edge from parent node[right] {\scriptsize P}}
+        } edge from parent node[left] {\scriptsize H} }
         child {node [circle] {}
         {
           child {node (comma) [word] {,} edge from parent [draw=none]}
-          child {node [word] {you{\color{white}k}} edge from parent node[left] {\scriptsize $A$}}
-          child {node [word] {{\color{white}y}know} edge from parent node[right] {\scriptsize $S$}}
-        } edge from parent node[above] {\scriptsize $H$} }
+          child {node [word] {you{\color{white}k}} edge from parent node[left] {\scriptsize A}}
+          child {node [word] {{\color{white}y}know} edge from parent node[right] {\scriptsize S}}
+        } edge from parent node[above] {\scriptsize H} }
         ;
-      \draw[->] (ROOT) to node [right] {\scriptsize $U$} (comma);
+      \draw[->] (ROOT) to node [right] {\scriptsize U} (comma);
     \end{tikzpicture}
     }
   \end{minipage}
@@ -1022,14 +1019,13 @@ to the labels of the UD relations whose dependents have the same terminal yield 
 EWT development set.
 (a) Columns are sorted by labeled F1, measuring performance on each subset of edges.
 Unlabeled F1 ignores edge categories, evaluating unit boundaries only.
-(b) Instances of each UD relation;
+(b) Total number of instances of each UD relation;
 of them, matching UCCA units in gold-standard and in TUPA's predictions;
 their intersection, with/without regard to categories.
 (c) 
 Percentage of correctly categorized edges;
 for comparison, percentage of most frequent category (see~Table~\ref{tab:confusion_matrix}).
-(d) Average number of words in corresponding terminal yields.
-\label{tab:fine_grained_results}}
+(d) Average number of words in corresponding terminal yields.\label{tab:fine_grained_results}}
 \end{table*}
 
 
