@@ -1037,46 +1037,36 @@ better scores than gold syntactic tags and dependencies.
 
 Table~\ref{tab:fine_grained_results} shows
 fine-grained evaluation by UD relations.
-TUPA does best on determiners, which are mostly one word Elaborators.
-For nominal subjects,
-TUPA correctly categorizes only 87\% of the correctly delineated units,
-although 95\% of gold subjects are Participants.
-This is possibly since their training set ratio is only 88\%,
-suggesting domain adaptation techniques may be applicable.
-
-Copulas, coordinating conjunctions and conjuncts
-undergo similar distribution shift.
-They are mostly Functions, Linkers and Parallel Scenes in EWT, respectively,
-while the distribution in Wiki is less peaked, with more of the units annotated as
-States, Connectors and Centers.
-This is a distinction between identity and attribution for copulas,
-and between Scenes/non-Scenes for coordination.
-
-TUPA does relatively well on auxiliaries, numerical modifiers and markers,
-despite the heterogeneous test distribution (Table~\ref{tab:confusion_matrix}),
+TUPA does best on auxiliaries and determiners,
+despite the heterogeneous distribution of corresponding UCCA categories
+(see Table~\ref{tab:confusion_matrix}),
 possibly by making lexical distinctions
 (e.g., modals and auxiliary verbs are both UD auxiliaries,
 but are annotated as Adverbials and Functions, respectively).
 
-The worst performance is on relatively rare relations,
-which do not contribute much to the overall parser score.
-However, inter-clause linkage, which TUPA also struggles with, is quite common.
+Copulas and coordinating conjunctions may pose a harder distinction,
+since the same lexical items may have different categories depending on the
+context: State/Function for copulas,
+due to the distinction between identity and attribution, and
+Connector/Linker for conjunctions,
+due to the distinction between Scenes and non-Scenes.
+However, the reviews domain imposes a strong prior for both (Function and Linker,
+respectively), which TUPA learns successfully.
+
+Inter-clause linkage, which TUPA struggles with, is quite common.
 Although the match between UCCA and UD is not perfect in these cases,
-it is overall better than TUPA's unlabeled performance.
-The same pattern recurs when using gold-standard syntax as features for TUPA.
-TUPA is a transition-based parser, which uses UD parses as features. Our
-results then suggest that encoding syntax more directly, perhaps using syntactic
+it is overall better than TUPA's unlabeled performance,
+even though we use gold-standard syntax as features for TUPA in this experiment.
+Our results then suggest that encoding syntax more directly, perhaps using syntactic
 scaffolding \citep{swayamdipta2018syntactic}
 or guided attention \citep{strubell2018linguistically},
 may assist in predicting unit boundaries.
-
-Finally, TUPA often fails to make distinctions that are not encoded
-in UD. For example, it does poorly on distinguishing between noun modifiers of
+However, TUPA often succeeds at making distinctions that are not even encoded in UD.
+For example, it does reasonably well (71\%) on distinguishing between noun modifiers of
 Scene-evoking nouns (Participants) and modifiers of other nouns (Elaborators),
-obtaining roughly the same performance as 
-a majority baseline based on the UD relation.
+surpassing a majority baseline based on the UD relation (51\%).
 Lexical resources that distinguish eventive and relational nouns from concrete 
-nouns may alleviate this problem.
+nouns may allow improving it even further.
 In the similar case of compounds, lexical resources for light verbs and idioms may increase performance.
 
 
