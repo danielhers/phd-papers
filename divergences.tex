@@ -1002,29 +1002,21 @@ to the labels of the UD relations whose dependents have the same terminal yield 
 \vspace{-1mm}
 \centering
 \scriptsize
-\setlength\tabcolsep{1.7pt}
+\setlength\tabcolsep{.9pt}
 \def\arraystretch{1.2}
 \hspace{-2mm}
-\begin{tabular}{cl|ccccccccccccccccccccccccccc}
-&& \tt \rotatebox{90}{det} & \tt \rotatebox{90}{nsubj} & \tt \rotatebox{90}{aux} & \tt \rotatebox{90}{case} & \tt \rotatebox{90}{nummod} & \tt \rotatebox{90}{cop} & \tt \rotatebox{90}{iobj} & \tt \rotatebox{90}{advmod} & \tt \rotatebox{90}{mark} & \tt \rotatebox{90}{expl} & \tt \rotatebox{90}{obj} & \tt \rotatebox{90}{nmod} & \tt \rotatebox{90}{compound} & \tt \rotatebox{90}{cc} & \tt \rotatebox{90}{ccomp} & \tt \rotatebox{90}{obl} & \tt \rotatebox{90}{amod} & \tt \rotatebox{90}{acl} & \tt \rotatebox{90}{conj} & \tt \rotatebox{90}{advcl} & \tt \rotatebox{90}{xcomp} & \tt \rotatebox{90}{appos} & \tt \rotatebox{90}{vocative} & \tt \rotatebox{90}{parataxis} & \tt \rotatebox{90}{discourse} & \tt \rotatebox{90}{csubj} & \tt \rotatebox{90}{list} \\
-\hline
-\multirow{2}{*}{\footnotesize (a)}
-& \bf Labeled F1 \% & 92 & 81 & 78 & 70 & 67 & 67 & 63 & 62 & 61 & 60 & 58 & 56 & 51 & 50 & 50 & 41 & 40 & 39 & 34 & 33 & 31 & 29 & 13 & 12 & 12 & 0 & 0 \\
-& \bf Unlabeled F1 \% & 96 & 94 & 97 & 92 & 81 & 98 & 81 & 91 & 96 & 88 & 73 & 82 & 79 & 93 & 59 & 65 & 90 & 53 & 75 & 49 & 56 & 63 & 50 & 55 & 96 & 29 & 67 \\
-\hline
-\multirow{5}{*}{\footnotesize (b)}
-& \bf Total in UD \# & 834 & 1083 & 383 & 727 & 94 & 364 & 19 & 840 & 400 & 24 & 566 & 458 & 406 & 400 & 128 & 496 & 528 & 176 & 451 & 209 & 178 & 39 & 12 & 125 & 26 & 10 & 12 \\
-& \bf Match Gold \# & 808 & 1046 & 381 & 652 & 70 & 361 & 19 & 769 & 382 & 22 & 474 & 346 & 239 & 388 & 87 & 364 & 467 & 127 & 361 & 112 & 62 & 29 & 12 & 86 & 25 & 2 & 10 \\
-& \bf Match Predicted \# & 778 & 959 & 363 & 680 & 61 & 354 & 13 & 697 & 375 & 21 & 335 & 303 & 238 & 358 & 61 & 234 & 435 & 70 & 265 & 51 & 60 & 19 & 4 & 45 & 25 & 5 & 5 \\
-& \bf Labeled Correct \# & 728 & 815 & 291 & 465 & 44 & 239 & 10 & 454 & 230 & 13 & 233 & 181 & 122 & 187 & 37 & 122 & 180 & 38 & 106 & 27 & 19 & 7 & 1 & 8 & 3 & 0 & 0 \\
-& \bf Unlabeled Correct \# & 759 & 941 & 361 & 616 & 53 & 351 & 13 & 670 & 363 & 19 & 296 & 266 & 188 & 347 & 44 & 194 & 408 & 52 & 234 & 40 & 34 & 15 & 4 & 36 & 24 & 1 & 5 \\
-\hline
-\multirow{2}{*}{\footnotesize (c)}
-& \bf Labeled/Unlabeled \% & 96 & 87 & 81 & 75 & 83 & 68 & 77 & 68 & 63 & 68 & 79 & 68 & 65 & 54 & 84 & 63 & 44 & 73 & 45 & 68 & 56 & 47 & 25 & 22 & 13 & 0 & 0 \\
-& \bf Majority \% & 96 & 95 & 75 & 75 & 76 & 92 & 100 & 68 & 42 & 100 & 93 & 67 & 73 & 79 & 90 & 68 & 47 & 80 & 73 & 92 & 71 & 34 & 75 & 92 & 52 & 100 & 80 \\
-\hline
-\footnotesize (d)
-& \bf Average Words \# & 1.0 & 1.6 & 1.0 & 1.0 & 1.2 & 1.0 & 1.1 & 1.2 & 1.0 & 1.0 & 3.1 & 2.4 & 1.2 & 1.0 & 7.4 & 3.8 & 1.2 & 5.1 & 5.3 & 6.0 & 5.8 & 2.9 & 1.6 & 5.7 & 1.0 & 3.3 & 2.0
+\begin{tabular}{cl|rrrrrrrrrrrrrrrrrrrrrrrrrrr}
+ &  & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{aux}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{det}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{cop}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{cc}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{expl}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{iobj}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{nsubj}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{case}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{list}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{advmod}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{amod}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{nummod}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{mark}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{vocative}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{compound}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{obj}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{nmod}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{conj}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{advcl}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{obl}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{xcomp}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{discourse}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{ccomp}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{parataxis}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{appos}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{acl}} & \multicolumn{1}{c}{\scriptsize \tt \rotatebox{90}{csubj}} \\ \hline
+\multirow{2}{*}{\footnotesize (a)} & \scriptsize \bf Labeled F1 \% & 94 & 93 & 89 & 86 & 83 & 83 & 80 & 76 & 76 & 72 & 71 & 71 & 70 & 62 & 59 & 57 & 55 & 50 & 49 & 48 & 41 & 38 & 29 & 23 & 21 & 20 & 0 \\
+ & \scriptsize \bf Unlabeled F1 \% & 99 & 99 & 100 & 99 & 100 & 83 & 84 & 95 & 76 & 95 & 95 & 86 & 97 & 92 & 84 & 65 & 77 & 61 & 51 & 61 & 63 & 95 & 29 & 36 & 48 & 37 & 33 \\ \hline
+\multirow{5}{*}{\footnotesize (b)} & \scriptsize \bf Total in UD \# & 916 & 1,846 & 593 & 801 & 87 & 46 & 2,143 & 2,015 & 75 & 1,317 & 1,251 & 272 & 784 & 21 & 1,110 & 1,234 & 1,239 & 920 & 364 & 1,150 & 370 & 123 & 228 & 240 & 175 & 394 & 40 \\
+ & \scriptsize \bf Match Gold \# & 156 & 385 & 187 & 206 & 12 & 6 & 468 & 305 & 12 & 359 & 361 & 33 & 111 & 7 & 146 & 187 & 198 & 210 & 40 & 162 & 28 & 10 & 20 & 48 & 17 & 56 & 4 \\
+ & \scriptsize \bf Match Predicted \# & 154 & 388 & 187 & 203 & 12 & 6 & 446 & 313 & 9 & 345 & 339 & 32 & 113 & 6 & 136 & 163 & 183 & 177 & 30 & 147 & 26 & 11 & 15 & 30 & 12 & 36 & 2 \\
+ & \scriptsize \bf Labeled Correct \# & 145 & 361 & 166 & 175 & 10 & 5 & 365 & 236 & 8 & 253 & 248 & 23 & 78 & 4 & 83 & 99 & 104 & 96 & 17 & 74 & 11 & 4 & 5 & 9 & 3 & 9 & 0 \\
+ & \scriptsize \bf Unlabeled Correct \# & 154 & 381 & 187 & 203 & 12 & 5 & 386 & 293 & 8 & 336 & 334 & 28 & 109 & 6 & 118 & 113 & 147 & 119 & 18 & 94 & 17 & 10 & 5 & 14 & 7 & 17 & 1 \\ \hline
+\multirow{2}{*}{\footnotesize (c)} & \scriptsize \bf Labeled/Unlabeled \% & 94 & 95 & 89 & 86 & 83 & 100 & 95 & 81 & 100 & 75 & 74 & 82 & 72 & 67 & 70 & 88 & 71 & 81 & 94 & 79 & 65 & 40 & 100 & 64 & 43 & 53 & 0 \\
+ & \scriptsize \bf Mode/Match Gold \% & 79 & 82 & 86 & 75 & 58 & 100 & 86 & 79 & 83 & 50 & 34 & 85 & 45 & 14 & 53 & 83 & 48 & 70 & 88 & 65 & 4 & 30 & 85 & 98 & 41 & 68 & 100 \\ \hline
+\footnotesize (d) & \scriptsize \bf Average Words \# & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 & 1.1 & 1.6 & 1.0 & 2.2 & 1.2 & 1.2 & 1.1 & 1.0 & 1.6 & 1.2 & 3.0 & 2.4 & 5.8 & 6.6 & 3.8 & 6.0 & 1.1 & 9.0 & 6.7 & 4.0 & 5.6 & 7.5
 \end{tabular}
 \caption{Fine-grained evaluation of TUPA (with gold-standard UD features) on the
 EWT development set.
