@@ -1074,9 +1074,8 @@ In the similar case of compounds, lexical resources for light verbs and idioms m
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}\label{sec:discussion}
 
-NLP tasks, such as paraphrasing, text simplification, machine translation, and question answering,
+NLP tasks
 often require semantic distinctions that are difficult to extract from syntactic representations.
-
 As a case in point, consider the example sentence
 ``after graduation, John moved to Paris'' again.
 While the word \textit{graduation} evokes a Scene, as annotated in UCCA
@@ -1101,30 +1100,32 @@ and we would benefit from breaking the utterance into two Scenes.
 The use of syntactic parsing as a proxy for semantic structure has a long tradition in NLP.
 Indeed, semantic parsers have leveraged syntax
 for output space pruning \cite{xue2004calibrating}, 
-syntactic features \cite{gildea2002automatic,N15-1007,E17-1045}, 
+syntactic features \cite{gildea2002automatic,hershcovich2017a}, 
 joint modeling \cite{surdeanu2008conll,hajivc2009conll}, and
-multi-task learning \cite{swayamdipta2016greedy,swayamdipta2018syntactic,strubell2018linguistically}.
+multi-task learning \cite{swayamdipta2016greedy,swayamdipta2018syntactic,hershcovich2018multitask}.
 Some syntactic representation approaches, notably CCG \cite{Steedman:00},
 directly reflect the underlying semantics, and have been used to
 transduce semantic forms using rule-based systems \cite{Basile:12}.
   
-However, empirical study of
-the differences between syntactic and semantic schemes is still scarce.
-\newcite{zhang2017evaluation} evaluated PredPatt \citep{white2016universal},
+Empirical comparison between syntactic and semantic schemes, however,
+is still scarce.
+\newcite{W14-2908} mapped Stanford Dependencies
+(precursor to UD) to Hobbsian Logical Form, identifying semantic gaps in the former.
+PredPatt \citep{white2016universal},
 a framework for extracting predicate-argument structures from UD,
+was evaluated by \newcite{zhang2017evaluation}
 on a large set of converted PropBank annotations.
 \newcite{szubert2018structured} proposed a method for aligning AMR and UD subgraphs,
 finding that 97\% of AMR edges are evoked by one or more
 words or syntactic relations.
-\newcite{damonte-17} refined AMR evaluation by UD labels.
-Similarly, our conversion protocol allows fine-grained evaluation of UCCA parsing.
+\newcite{damonte-17} refined AMR evaluation by UD labels,
+similar to our fine-grained evaluation of UCCA parsing.
 
 A related line of work tackles the transduction of syntactic structures into semantic ones.
 \newcite{reddy2016transforming} proposed a rule-based method for converting UD
 to logical forms.
 \newcite{stanovsky2016getting} converted Stanford dependency trees into
 proposition structures ({\sc PropS}), abstracting away from some syntactic detail.
-
 
 \section{Conclusion}\label{sec:conclusion}
 
