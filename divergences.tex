@@ -132,7 +132,9 @@
   the syntactic Universal Dependencies \cite[UD; ][]{nivre2016universal},
   and the semantic Universal Conceptual Cognitive Annotation \cite[UCCA; ][]{abend2013universal}.
   
-  We annotate 3,813 UD-annotated sentences with UCCA (\S\ref{sec:shared}),
+  We UCCA-annotate
+  the entire web reviews section (3,813 sentences) from the UD EWT corpus
+  (\S\ref{sec:shared}),
   and develop a converter to assimilate UD and UCCA,
   as they use formally different graph structures
   (\S\ref{sec:methodology}).
@@ -1047,7 +1049,7 @@ possibly by making lexical distinctions
 (e.g., modals and auxiliary verbs are both UD auxiliaries,
 but are annotated as Adverbials and Functions, respectively).
 
-Copulas and coordinating conjunctions may pose a harder distinction,
+Copulas and coordinating conjunctions pose a more difficult distinction,
 since the same lexical items may have different categories depending on the
 context: State/Function for copulas,
 due to the distinction between identity and attribution, and
@@ -1056,11 +1058,13 @@ due to the distinction between Scenes and non-Scenes.
 However, the reviews domain imposes a strong prior for both (Function and Linker,
 respectively), which TUPA learns successfully.
 
-Inter-clause linkage, which TUPA struggles with, is quite common.
+Inter-clause linkage (\texttt{conj}, \texttt{advcl}, \texttt{xcomp},
+\texttt{ccomp}, \texttt{parataxis}, \texttt{acl} and \texttt{csubj})
+is a common source of error for TUPA.
 Although the match between UCCA and UD is not perfect in these cases,
 it is overall better than TUPA's unlabeled performance,
 even though we use gold-standard syntax as features for TUPA in this experiment.
-Our results then suggest that encoding syntax more directly, perhaps using syntactic
+Our results thus suggest that encoding syntax more directly, perhaps using syntactic
 scaffolding \citep{swayamdipta2018syntactic}
 or guided attention \citep{strubell2018linguistically},
 may assist in predicting unit boundaries.
