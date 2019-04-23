@@ -1,16 +1,12 @@
-\documentclass[a0,portrait]{a0poster}
-
-\usepackage{multicol}
-\columnsep=100pt
-\columnseprule=3pt
+\documentclass[extrafontsizes,60pt,twocolumn]{memoir}
+\setstocksize{48in}{96in}
+\settrimmedsize{48in}{96in}{*}
+\setlrmarginsandblock{1in}{1in}{*}
+\setulmarginsandblock{1.4in}{20mm}{*}
 
 \usepackage[svgnames]{xcolor}
-
-\usepackage{times}
-\usepackage{palatino}
 \usepackage[none]{hyphenat}
 \usepackage{graphicx}
-\graphicspath{{figures/}}
 \usepackage{booktabs}
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{amsfonts, amsmath, amsthm, amssymb}
@@ -19,65 +15,60 @@
 \usepackage[absolute,overlay]{textpos}
 \usepackage{multirow}
 \usepackage{titlesec}
+\usepackage{cuted}
 \usepackage[inline]{enumitem}
 \usepackage{url}
 \usepackage{tikz,pgfplots,pgfplotstable}
 \usepackage{tikz-dependency}
 \usepackage[most]{tcolorbox}
 \usepackage[charter]{mathdesign}
-\def\rmdefault{bch} % not scaled
-\def\ttdefault{blg}
-\def\scdefault{sc}
 \usetikzlibrary{arrows.meta}
 \captionsetup{labelformat=empty}
+\graphicspath{{figures/}}
 
 \begin{document}
 
-\begin{center}
-	\veryHuge \color{NavyBlue}
-	\textbf{Content Differences in \\ Syntactic and Semantic Representations}
-\end{center}
-\begin{minipage}[b]{0.57\linewidth}
-\LARGE \textbf{Daniel Hershcovich}\textsuperscript{1,2} \&
+\begin{strip}
+  \begin{center}
+    \HUGE\color{NavyBlue}
+    \textbf{Content Differences in Syntactic and Semantic Representations}
+  \end{center}
+  \hfill
+  \begin{minipage}[b]{0.4\linewidth}
+    {\large \textbf{Daniel Hershcovich}\textsuperscript{1,2} \&
 	   \textbf{Omri Abend}\textsuperscript{2} \&
-	   \textbf{Ari Rappoport}\textsuperscript{2} \\[0.5cm]
-\large $^1$The Edmond and Lily Safra Center for Brain Sciences \\
-  $^2$School of Computer Science and Engineering
-  \setlength{\columnseprule}{0pt}
-  \setlength\multicolsep{-20pt}
-  \begin{multicols}{2}
-  The Hebrew University of Jerusalem \\
-  \texttt{\{danielh,oabend,arir\}@cs.huji.ac.il}
-  \end{multicols}
-\end{minipage}
-\hfill
-\begin{minipage}[b]{.1\linewidth}
-\includegraphics[width=\linewidth]{elsc_logo.png}
-\end{minipage}
-\begin{minipage}[b]{.18\linewidth}
-\includegraphics[width=\linewidth]{huji_banner.png}
-\includegraphics[width=1.04\linewidth]{cse_banner.jpg}
-\end{minipage}
-\begin{minipage}[b]{.07\linewidth}
-\includegraphics[width=\linewidth]{huji_logo.jpg}
-\end{minipage}
-
-\vspace{1cm}
-\titlespacing*{\section}{0pt}{8mm}{5mm}
+	   \textbf{Ari Rappoport}\textsuperscript{2} \\[0.5cm]}
+    $^1$The Edmond and Lily Safra Center for Brain Sciences \\
+      $^2$School of Computer Science and Engineering \\
+      \setlength{\columnseprule}{0pt}
+      The Hebrew University of Jerusalem \\
+      \texttt{\{danielh,oabend,arir\}@cs.huji.ac.il}
+  \end{minipage}
+  \begin{minipage}[b]{.06\linewidth}
+    \includegraphics[width=\linewidth]{elsc_logo.png}
+  \end{minipage}
+  \begin{minipage}[b]{.13\linewidth}
+    \includegraphics[width=\linewidth]{huji_banner.png}
+    \includegraphics[width=1.04\linewidth]{cse_banner.jpg}
+  \end{minipage}
+  \begin{minipage}[b]{.04\linewidth}
+    \includegraphics[width=\linewidth]{huji_logo.jpg}
+  \end{minipage}
+  \hfill
+  \vspace{1cm}
+  \titlespacing*{\section}{0pt}{8mm}{5mm}
+  \begin{adjustbox}{margin=5mm,frame,minipage=.71\linewidth,center}
+    \Large\color{Navy}\centering
+    Learning to parse \textbf{enhanced dependencies} jointly with basic Universal Dependency Parsing.
+  \end{adjustbox}
+  \begin{center}
+    \url{https://danielhers.github.io/ucca/divergences}
+  \end{center}
+\end{strip}
 
 %----------------------------------------------------------------------------------------
 
 
-\begin{adjustbox}{margin=5mm,frame,minipage=.71\linewidth,center}
-\Large\color{Navy}
-Learning to parse \textbf{enhanced dependencies} jointly with basic Universal Dependency Parsing.
-\end{adjustbox}
-
-\begin{center}
-\url{github.com/CoNLL-UD-2018/HUJI}
-\end{center}
-
-\begin{multicols}{2}
 
 
 \color{Black}
@@ -155,7 +146,7 @@ Example:
 	\draw[color=gray,fill=white] (3,0) rectangle (16,1);
 	\node[anchor=west] at (3,.45) {\ttfamily We were made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,.45) {};
-	\node[anchor=west] at (10,-.8) {\bf\small\textsc{Shift}};
+	\node[anchor=west] at (10,-.8) {\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small]
@@ -166,7 +157,7 @@ Example:
 	\draw[color=gray,fill=white] (5,0) rectangle (16,1);
 	\node[anchor=west] at (5,.45) {\ttfamily were made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,.45) {};
-	\node[anchor=west] at (10,-.9) {\bf\small\textsc{Right-Edge\textsubscript {nsubj}}};
+	\node[anchor=west] at (10,-.9) {\small\textsc{Right-Edge\textsubscript {nsubj}}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.2) -- (9,-1.4);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
@@ -178,7 +169,7 @@ Example:
 	\node[anchor=west] at (5,.45) {\ttfamily were made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,1.4) {}
 	  child {node[font=\scriptsize] {\ttfamily We} edge from parent [red] node[font=\scriptsize,left] {\textsc{nsubj}}};
-	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
+	\node[anchor=west] at (10,-1.2) {\small\textsc{Reduce}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
@@ -189,7 +180,7 @@ Example:
 	\node[anchor=west] at (5,.45) {\ttfamily were made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,1.4) {}
 	  child {node[font=\scriptsize] {\ttfamily We} edge from parent node[font=\scriptsize,left] {\textsc{nsubj}}};
-	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Shift}};
+	\node[anchor=west] at (10,-1.2) {\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
@@ -201,7 +192,7 @@ Example:
 	\node[anchor=west] at (5.5,.45) {\ttfamily made to feel very welcome .};
 	\node[fill=cyan, circle] at (18.5,1.4) {}
 	  child {node[font=\scriptsize] {\ttfamily were} edge from parent node[font=\scriptsize,left] {\textsc{nsubj}}};
-	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Node\textsubscript {aux}}};
+	\node[anchor=west] at (10,-1.2) {\small\textsc{Node\textsubscript {aux}}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=15mm, sibling distance=4cm, font=\small, -{Latex[length=3mm]}]
@@ -216,7 +207,7 @@ Example:
 	  child {node[font=\scriptsize] {\ttfamily We} edge from parent node[font=\scriptsize,left] {\textsc{nsubj}}};
 	\node[fill=orange, draw=red, circle] at (18.3,1.4) {}
 	  child {node[font=\scriptsize] {\ttfamily were} edge from parent [red] node[font=\scriptsize,right] {\textsc{aux}}};
-	\node[anchor=west] at (10,-1.2) {\bf\small\textsc{Reduce}};
+	\node[anchor=west] at (10,-1.2) {\small\textsc{Reduce}};
 	\draw[arrows={-[line width=2pt,length=4mm,width=6mm]}] (9,-.6) -- (9,-1.7);
 	\draw[arrows={-[line width=2pt,length=4mm,width=6mm]}] (9,-1.7) -- (20.1,-1.7);
 	\end{tikzpicture}
@@ -241,7 +232,7 @@ Example:
 	  child {node[font=\scriptsize] {\ttfamily We} edge from parent node[font=\scriptsize,left] {\textsc{nsubj}}};
 	\node[fill=orange, circle] at (16.2,1.4) {}
 	  child {node[font=\scriptsize] {\ttfamily were} edge from parent node[font=\scriptsize,right] {\textsc{aux}}};
-	\node[anchor=west] at (6,-1.2) {\bf\small\textsc{Right-Edge\textsubscript {head}}};
+	\node[anchor=west] at (6,-1.2) {\small\textsc{Right-Edge\textsubscript {head}}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-.6) -- (5,-1.7);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=13mm, sibling distance=3cm, font=\small, -{Latex[length=3mm]}]
@@ -257,7 +248,7 @@ Example:
      {
        child {node[font=\scriptsize] {\ttfamily were} edge from parent [->] node[font=\scriptsize,right] {\textsc{aux}}}
      } edge from parent [->] node[font=\scriptsize,right] {\textsc{head}} };
-	\node[anchor=west] at (6,-2.5) {\bf\small\textsc{Shift}};
+	\node[anchor=west] at (6,-2.5) {\small\textsc{Shift}};
 	\draw[arrows={->[line width=2pt,length=4mm,width=6mm]}] (5,-1.9) -- (5,-3);
 	\end{tikzpicture}
 	\begin{tikzpicture}[level distance=15mm, sibling distance=3cm, font=\small, -{Latex[length=3mm]}]
@@ -319,7 +310,7 @@ We convert UD into a UCCA-like format supported by TUPA, by inserting non-termin
 
 \begin{minipage}{.42\columnwidth}
   \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
-      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\ttfamily},
       sibling distance=34mm, ->,
         every circle node/.append style={fill=DarkBlue},
         level 1/.style={level distance=37mm},
@@ -356,7 +347,7 @@ We convert UD into a UCCA-like format supported by TUPA, by inserting non-termin
 \begin{minipage}{.48\columnwidth}
     \scalebox{.8}{
 	\begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
-      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\bf\ttfamily},
+      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\ttfamily},
       level distance=41mm,
 	  level 1/.style={sibling distance=115mm},
 	  level 2/.style={sibling distance=42mm},
@@ -420,7 +411,7 @@ Nodes are scenes/concepts.
   \begin{center}
   \scalebox{.8}{
     \begin{tikzpicture}[level distance=38mm,sibling distance=33mm, -{Latex[length=5mm]}, line width=2pt,
-        every node/.append style={font=\large\bf\ttfamily},
+        every node/.append style={font=\large\ttfamily},
         every circle node/.append style={fill=Indigo}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
@@ -446,7 +437,7 @@ Nodes are scenes/concepts.
   \begin{center}
   \scalebox{.8}{
     \begin{tikzpicture}[level distance=28mm, sibling distance=35mm, -{Latex[length=5mm]}, line width=2pt,
-        every node/.append style={font=\large\bf\ttfamily},
+        every node/.append style={font=\large\ttfamily},
         every circle node/.append style={fill=Indigo}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
@@ -475,7 +466,7 @@ Nodes are scenes/concepts.
   \begin{center}
   \begin{adjustbox}{margin=2mm,frame,scale=.75,bgcolor=white}
   \color{Indigo}
-  \begin{tabular}{>{\bf\ttfamily}cl}
+  \begin{tabular}{>{\ttfamily}cl}
 	  P & process \\
 	  S & state \\
 	  A & participant \\
@@ -502,7 +493,7 @@ Some UD treebanks contain enhanced graphs with additional or augmented edges \ci
 Conjoined predicates and arguments:
 
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
-        text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
+        text only label, label style={above, color=DarkBlue, font=\ttfamily}, font=\small]
     \begin{deptext}[column sep=1em,ampersand replacement=\^]
     he \^ went \^ straight \^ to \^ work \^ and \^ finished \^ the \^ job \^ efficiently \^ and \^ promptly \^ ! \\
     \end{deptext}
@@ -527,7 +518,7 @@ Conjoined predicates and arguments:
 Null nodes due to elided predicates, case information:
 
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
-        text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
+        text only label, label style={above, color=DarkBlue, font=\ttfamily}, font=\small]
     \begin{deptext}[column sep=1.2em,ampersand replacement=\^]
     I \^ wish \^ all \^ happy \^ holidays \^ , \^ and \^ moreso \^ , \^ \textbf{E9.1} \^ peace \^ on \^ earth \^ . \\
     \end{deptext}
@@ -556,7 +547,7 @@ Null nodes due to elided predicates, case information:
 Raising:
 
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
-        text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
+        text only label, label style={above, color=DarkBlue, font=\ttfamily}, font=\small]
    \begin{deptext}[column sep=.2em,ampersand replacement=\^]
     We \^ were \^ made \^ to \^ feel \^ very \^ welcome \^ . \\
     \end{deptext}
@@ -576,7 +567,7 @@ Raising:
 Relative clause:
 
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
-        text only label, label style={above, color=DarkBlue, font=\bf\ttfamily}, font=\small]
+        text only label, label style={above, color=DarkBlue, font=\ttfamily}, font=\small]
     \begin{deptext}[column sep=.1em,ampersand replacement=\^]
     He \^ had \^ a \^ robe \^ that \^ was \^ made \^ back \^ in \^ the \^ '60s \^ . \\
     \end{deptext}
@@ -605,8 +596,8 @@ Relative clause:
 
 \begin{minipage}{.5\columnwidth}
 	\begin{tabular}{lccc}
-	& \bf TUPA & \bf TUPA & \bf UDPipe \\
-	& \bf \small(official) & \bf \small(unofficial) & \bf \small(baseline) \\
+	&  TUPA &  TUPA &  UDPipe \\
+	&  \small(official) &  \small(unofficial) &  \small(baseline) \\
 	All treebanks & 53.69 & 58.48 & 65.80 \\
 	Big treebanks & 62.07 & 67.36 & 74.14 \\
 	PUD treebanks & 56.35 & 56.82 & 66.63 \\
@@ -614,16 +605,15 @@ Relative clause:
 	Low-resource & 8.53 & 12.68 & 17.17
 	\end{tabular}
 	\captionsetup{justification=centering}
-	\captionof{table}{Macro-averaged \textbf{LAS-F1} on test treebanks.\\
-    (\textit{Unofficial}: after some bug fixes.)}
+	\captionof{table}{Macro-averaged \textbf{LAS-F1} on test treebanks.}
     \vspace{5mm}
     \textbf{\color{DarkBlue} TUPA: first general parser for enhanced UD.}
 \end{minipage}
 \hfill
 \begin{minipage}{.45\columnwidth}
 	\begin{tabular}{lcc}
-	& \multirow{2}{*}{\bf LAS-F1} & \bf Enhanced \\
-	& & \bf LAS-F1 \\
+	& \multirow{2}{*}{ LAS-F1} &  Enhanced \\
+	& &  LAS-F1 \\
 	TUPA (unofficial) & 72.10 & 57.13 \\
 	$-$NER & 71.82 & 54.65\\ 
 	$-$POS & 69.23 & 49.12\\ 
@@ -634,8 +624,7 @@ Relative clause:
 	UDPipe + CoreNLP & 76.66 & 21.68
 	\end{tabular}
 	\captionsetup{justification=centering}
-	\captionof{table}{Ablation + baselines on \textbf{English EWT} dev.\\
-	(\textit{CoreNLP}: English-specific rule-based postprocessor for enhanced dependencies.)}
+	\captionof{table}{Ablation + baselines on \textbf{English EWT} dev.}
 \end{minipage}
 
 
@@ -643,7 +632,6 @@ Relative clause:
 {
 \setlength{\columnsep}{5mm}
 \setlength{\columnseprule}{0pt}
-\begin{multicols}{2}
 \color{DarkSlateGray}
 \tiny\titleformat*{\section}{\small}
 \bibliographystyle{plain}
@@ -652,136 +640,11 @@ Relative clause:
 \color{Black}
 \begin{adjustbox}{margin=3mm,frame,minipage=1.15\columnwidth}
 \centering\large
-Please join SemEval 2019 Task 1: \\
-Cross-lingual Semantic Parsing with UCCA
-
-
-\begin{minipage}{.3\textwidth}\includegraphics[width=\textwidth]{qr}\end{minipage}
-\hfill
-\begin{minipage}{.6\textwidth}\Large\url{tinyurl.com/semeval-ucca}\end{minipage}
+Please join the CoNLL 2019 Shared Task: \\
+Cross-Framework Meaning Representation Parsing
+\Large\url{http://mrp.nlpl.eu}
 \end{adjustbox}
-\end{multicols}
 }
 
-\end{multicols}
-
-\catcode`\_=12
-\pgfplotstableread{
-corpus
-af_afribooms
-grc_perseus
-grc_proiel
-ar_padt
-hy_armtdp
-eu_bdt
-br_keb
-bg_btb
-bxr_bdt
-ca_ancora
-hr_set
-cs_cac
-cs_fictree
-cs_pdt
-cs_pud
-da_ddt
-nl_alpino
-nl_lassysmall
-en_ewt
-en_gum
-en_lines
-en_pud
-et_edt
-fo_oft
-fi_ftb
-fi_pud
-fi_tdt
-fr_gsd
-fr_sequoia
-fr_spoken
-gl_ctg
-gl_treegal
-de_gsd
-got_proiel
-el_gdt
-he_htb
-hi_hdtb
-hu_szeged
-zh_gsd
-id_gsd
-ga_idt
-it_isdt
-it_postwita
-ja_gsd
-ja_modern
-kk_ktb
-ko_gsd
-ko_kaist
-kmr_mg
-la_ittb
-la_perseus
-la_proiel
-lv_lvtb
-pcm_nsc
-sme_giella
-no_bokmaal
-no_nynorsk
-no_nynorsklia
-fro_srcmf
-cu_proiel
-fa_seraji
-pl_lfg
-pl_sz
-pt_bosque
-ro_rrt
-ru_syntagrus
-ru_taiga
-sr_set
-sk_snk
-sl_ssj
-sl_sst
-es_ancora
-sv_lines
-sv_pud
-sv_talbanken
-th_pud
-tr_imst
-uk_iu
-hsb_ufal
-ur_udtb
-ug_udt
-vi_vtb
-}\corpus
-\hspace{-4cm}
-    \begin{tikzpicture}
-    \begin{axis}[
-    ybar=0pt,  
-    enlarge x limits={0.01},
-    enlarge y limits={value=0.14,upper},
-    ymin=0,
-    width=1.1\textwidth,
-    height=18cm,
-    bar width=11pt,
-    xtick=data,
-    xticklabels from table={\corpus}{corpus},
-    xticklabel style={font=\footnotesize,rotate=90,anchor=east},
-    xtick align=inside,
-    xticklabel pos=left,
-    yticklabels=none,
-    tickwidth=0pt,
-    legend style={at={(axis cs:-.8,98)},anchor=north west},
-    legend cell align={left},
-    nodes near coords={
-     \scalebox{.6}{\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}}
-    },
-    every node near coord/.append style={rotate=90,anchor=west},
-    axis background/.style={fill=lightgray!50}
-    ]
-    \addplot[fill=red]table[x expr=\coordindex,meta=corpus,y=test]{udst2018scores.txt};
-    \addplot[fill=blue]table[x expr=\coordindex,meta=corpus,y=enhanced]{udst2018scores.txt};
-    \legend{LAS-F1,Enhanced LAS-F1}
-    \end{axis}
-    \end{tikzpicture}
-\catcode`\_=8
-\captionof{figure}{LAS-F1 and Enhanced LAS-F1 for TUPA on test treebanks (unofficial).}
 
 \end{document}
