@@ -72,11 +72,90 @@
 
 %----------------------------------------------------------------------------------------
 
-{\LARGE\texttt{bit.ly/{\color{blue}ucca}{\color{red}ud}}}
 
-\section*{Unified DAG Format}
+\textbf{UCCA} (Universal Conceptual Cognitive Annotation): cross-lingual semantic representation  \cite{abend2013universal}.
 
-We convert UD into a UCCA-like format supported by TUPA, by inserting non-terminal nodes.
+Nodes are scenes/concepts.
+\textit{Primary edges} form a tree. \textit{Remote edges} (dashed) allow reentrancy.
+
+\begin{minipage}{.44\columnwidth}
+  \color{Indigo}
+  \begin{center}
+  \scalebox{.8}{
+    \begin{tikzpicture}[level distance=38mm,sibling distance=33mm, -{Latex[length=5mm]}, line width=2pt,
+        every node/.append style={font=\large\ttfamily},
+        every circle node/.append style={fill=Indigo}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node (We) [word] {We} edge from parent node[above] {A}}
+        child {node [word] {were} edge from parent node[below] {F}}
+        child {node [word] {made} edge from parent node[right] {D}}
+        child {node [word] {to} edge from parent node[right] {F}}
+        child {node [word] {feel} edge from parent node[below] {P}}
+        child {node (verywelcome) [circle] {}
+        {
+          child {node [word] {very} edge from parent node[left] {D}}
+          child {node [word] {welcome} edge from parent node[right] {S}}
+          child {node [word] {.} edge from parent node[right] {U}}
+        } edge from parent node[above] {A} }
+      ;
+      \draw[dashed,->,bend left] (verywelcome) to node [below] {A} (We);
+    \end{tikzpicture}
+  }
+  \end{center}
+\end{minipage}
+\begin{minipage}{.41\columnwidth}
+  \color{Indigo}
+  \begin{center}
+  \scalebox{.8}{
+    \begin{tikzpicture}[level distance=28mm, sibling distance=35mm, -{Latex[length=5mm]}, line width=2pt,
+        every node/.append style={font=\large\ttfamily},
+        every circle node/.append style={fill=Indigo}]
+      \tikzstyle{word} = [font=\rmfamily,color=black]
+      \node (ROOT) [circle] {}
+        child {node (After) [word] {After} edge from parent node[above] {L}}
+        child {node (graduation) [circle] {}
+        {
+          child {node [word] {graduation} edge from parent node[left] {P}}
+        } edge from parent node[right] {H} }
+        child {node [word] {,} edge from parent node[below] {U}}
+        child {node (moved) [circle] {}
+        {
+          child {node (John) [word] {John} edge from parent node[left] {A}}
+          child {node [word] {moved} edge from parent node[left] {P}}
+          child {node [circle] {}
+          {
+            child {node [word] {to} edge from parent node[left] {R}}
+            child {node [word] {Paris} edge from parent node[right] {C}}
+          } edge from parent node[above] {A} }
+        } edge from parent node[above] {H} }
+        ;
+      \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [above] {A} (John);
+    \end{tikzpicture}}
+  \end{center}
+\end{minipage}
+\begin{minipage}{.1\columnwidth}
+  \begin{center}
+  \begin{adjustbox}{margin=2mm,frame,scale=.75,bgcolor=white}
+  \color{Indigo}
+  \begin{tabular}{>{\ttfamily}cl}
+	  P & process \\
+	  S & state \\
+	  A & participant \\
+	  L & linker \\
+	  H & linked scene \\
+	  C & center \\
+	  D & adverbial \\
+	  R & relator \\
+	  U & punctuation \\
+	  F & function \\
+  \end{tabular}
+  \end{adjustbox}
+  \end{center}
+\end{minipage}
+
+
+We convert UD into a UCCA-like format by inserting non-terminal nodes.
 
 \begin{minipage}{.42\columnwidth}
   \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
@@ -168,91 +247,6 @@ We convert UD into a UCCA-like format supported by TUPA, by inserting non-termin
 	  \draw[dashed,red,->] (1_7) to node [midway,above,sloped] {\scriptsize ref} (1_15);
 	\end{tikzpicture}}
 \end{minipage}
-
-\begin{tcolorbox}
-{\color{Indigo}
-\textbf{UCCA} (Universal Conceptual Cognitive Annotation): cross-lingual semantic representation  \cite{abend2013universal}.
-Nodes are scenes/concepts.
-\textit{Primary edges} form a tree. \textit{Remote edges} (dashed) allow reentrancy.
-}
-
-\begin{minipage}{.44\columnwidth}
-  \color{Indigo}
-  \begin{center}
-  \scalebox{.8}{
-    \begin{tikzpicture}[level distance=38mm,sibling distance=33mm, -{Latex[length=5mm]}, line width=2pt,
-        every node/.append style={font=\large\ttfamily},
-        every circle node/.append style={fill=Indigo}]
-      \tikzstyle{word} = [font=\rmfamily,color=black]
-      \node (ROOT) [circle] {}
-        child {node (We) [word] {We} edge from parent node[above] {A}}
-        child {node [word] {were} edge from parent node[below] {F}}
-        child {node [word] {made} edge from parent node[right] {D}}
-        child {node [word] {to} edge from parent node[right] {F}}
-        child {node [word] {feel} edge from parent node[below] {P}}
-        child {node (verywelcome) [circle] {}
-        {
-          child {node [word] {very} edge from parent node[left] {D}}
-          child {node [word] {welcome} edge from parent node[right] {S}}
-          child {node [word] {.} edge from parent node[right] {U}}
-        } edge from parent node[above] {A} }
-      ;
-      \draw[dashed,->,bend left] (verywelcome) to node [below] {A} (We);
-    \end{tikzpicture}
-  }
-  \end{center}
-\end{minipage}
-\begin{minipage}{.41\columnwidth}
-  \color{Indigo}
-  \begin{center}
-  \scalebox{.8}{
-    \begin{tikzpicture}[level distance=28mm, sibling distance=35mm, -{Latex[length=5mm]}, line width=2pt,
-        every node/.append style={font=\large\ttfamily},
-        every circle node/.append style={fill=Indigo}]
-      \tikzstyle{word} = [font=\rmfamily,color=black]
-      \node (ROOT) [circle] {}
-        child {node (After) [word] {After} edge from parent node[above] {L}}
-        child {node (graduation) [circle] {}
-        {
-          child {node [word] {graduation} edge from parent node[left] {P}}
-        } edge from parent node[right] {H} }
-        child {node [word] {,} edge from parent node[below] {U}}
-        child {node (moved) [circle] {}
-        {
-          child {node (John) [word] {John} edge from parent node[left] {A}}
-          child {node [word] {moved} edge from parent node[left] {P}}
-          child {node [circle] {}
-          {
-            child {node [word] {to} edge from parent node[left] {R}}
-            child {node [word] {Paris} edge from parent node[right] {C}}
-          } edge from parent node[above] {A} }
-        } edge from parent node[above] {H} }
-        ;
-      \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [above] {A} (John);
-    \end{tikzpicture}}
-  \end{center}
-\end{minipage}
-\begin{minipage}{.1\columnwidth}
-  \begin{center}
-  \begin{adjustbox}{margin=2mm,frame,scale=.75,bgcolor=white}
-  \color{Indigo}
-  \begin{tabular}{>{\ttfamily}cl}
-	  P & process \\
-	  S & state \\
-	  A & participant \\
-	  L & linker \\
-	  H & linked scene \\
-	  C & center \\
-	  D & adverbial \\
-	  R & relator \\
-	  U & punctuation \\
-	  F & function \\
-  \end{tabular}
-  \end{adjustbox}
-  \end{center}
-\end{minipage}
-
-\end{tcolorbox}
 
 Conjoined predicates and arguments:
 
@@ -359,15 +353,19 @@ Relative clause:
 \section*{Results}
 
 
+\begin{center}
+\LARGE\texttt{bit.ly/{\color{blue}ucca}{\color{red}ud}}
+\end{center}
 
-\begin{minipage}{.5\columnwidth}
+\begin{minipage}{.4\columnwidth}
 \color{DarkSlateGray}
 \tiny
 \setlength\bibitemsep{0pt}
 \bibliographystyle{plain}
 \bibliography{references}
 \end{minipage}
-\begin{minipage}{.5\columnwidth}
+\hspace{1in}
+\begin{minipage}{.475\columnwidth}
 \color{Black}
 \begin{adjustbox}{margin=3mm,frame,minipage=1.15\columnwidth}
 \centering\Large
