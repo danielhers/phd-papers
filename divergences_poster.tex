@@ -84,7 +84,7 @@
 
 \begin{minipage}{.4\columnwidth}
 \textbf{UD} (Universal Dependencies):
-framework for cross-linguistically consistent grammatical annotation \cite{nivre2016universal}.
+cross-linguistically consistent grammatical dependency annotation \cite{nivre2016universal}.
 
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=red, line width=2pt},
         text only label, label style={above, color=red, font=\ttfamily}, font=\small]
@@ -164,18 +164,7 @@ cross-lingual semantic representation.
 \section*{Shared Corpus}
 
 \begin{center}
-\setlength{\tabcolsep}{1in}
-\begin{tabular}{l|ccc}
-& \textbf{Train} & \textbf{Dev} & \textbf{Test} \\
-\hline
-\# Passages & \hphantom{00,}347 & \hphantom{0,}192 & \hphantom{0,}184 \\
-\# Sentences & \hphantom{0}2,723 & \hphantom{0,}554 & \hphantom{0,}535 \\
-\# Tokens & 44,804 & 5,394 & 5,381 \\
-\end{tabular}
-\end{center}
-
-\begin{center}
-\def\arraystretch{.4}
+%\def\arraystretch{.9}
 \scalebox{.55}{
 \begin{tabular}{lRRRRRRRRRRRRRRRR|R}
  &&&&&&&&&&&&&&&&& \multicolumn{1}{|c}{\textsc{No}} \\
@@ -230,7 +219,18 @@ head & 445 & 48 & 159 & 6388 & 717 & 142 & 564 & 83 & 2462 & 42 & 1 & 4163 & 120
 \end{center}
 \end{minipage}
 \begin{minipage}{.5\columnwidth}
-\section*{UCCA Parsing Results}
+\begin{center}
+\setlength{\tabcolsep}{1in}
+\begin{tabular}{l|ccc}
+& \textbf{Train} & \textbf{Dev} & \textbf{Test} \\
+\hline
+\# Passages & \hphantom{00,}347 & \hphantom{0,}192 & \hphantom{0,}184 \\
+\# Sentences & \hphantom{0}2,723 & \hphantom{0,}554 & \hphantom{0,}535 \\
+\# Tokens & 44,804 & 5,394 & 5,381 \\
+\end{tabular}
+\end{center}
+
+UCCA parsing results with TUPA \cite{hershcovich2017a}:
 
 \begin{center}
 \setlength{\tabcolsep}{.5in}
@@ -240,7 +240,7 @@ head & 445 & 48 & 159 & 6388 & 717 & 142 & 564 & 83 & 2462 & 42 & 1 & 4163 & 120
 & \textbf{LP} & \textbf{LR} & \textbf{LF}
 & \textbf{LP} & \textbf{LR} & \textbf{LF} \\
 \hline
-\multicolumn{4}{@{}l|}{Development} \\
+\multicolumn{4}{@{}l|}{Dev} \\
 \multicolumn{1}{l}{Gold UD}
  & 72.1 & 71.2 & 71.7 & 61.2 & 38.1 & 47.0 \\
 \multicolumn{1}{l}{UDPipe} 
