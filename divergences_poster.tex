@@ -32,8 +32,7 @@
 \begin{strip}
   \begin{center}
   \scalebox{1.75}{
-    \HUGE\color{NavyBlue}
-    \textbf{Content Differences in Syntactic and Semantic Representations}}
+    \HUGE\textbf{Content Differences in Syntactic and Semantic Representations}}
   \end{center}
   \begin{center}
   \hspace{6in}
@@ -49,7 +48,7 @@
     \vspace{.7in}
     \titlespacing*{\section}{0pt}{8mm}{.5in}
     \begin{adjustbox}{margin=.5in,frame,minipage=.95\linewidth,center}
-      \centering\color{Navy}\Large
+      \centering\Large
       Does grammatical annotation capture semantics? \hfill
       Shared corpus and comparison of \\
       \LARGE
@@ -79,12 +78,12 @@ Nodes are scenes/concepts.
 \textit{Primary edges} form a tree. \textit{Remote edges} (dashed) allow reentrancy.
 
 \begin{minipage}{.44\columnwidth}
-  \color{Indigo}
+  \color{blue}
   \begin{center}
   \scalebox{.8}{
     \begin{tikzpicture}[level distance=3in,sibling distance=3in, -{Latex[length=.5in]}, line width=2pt,
         every node/.append style={font=\large\ttfamily},
-        every circle node/.append style={fill=Indigo}]
+        every circle node/.append style={fill=blue}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
         child {node (We) [word] {We} edge from parent node[above] {A}}
@@ -105,12 +104,12 @@ Nodes are scenes/concepts.
   \end{center}
 \end{minipage}
 \begin{minipage}{.41\columnwidth}
-  \color{Indigo}
+  \color{blue}
   \begin{center}
   \scalebox{.8}{
     \begin{tikzpicture}[level distance=2.8in, sibling distance=3.5in, -{Latex[length=.5in]}, line width=2pt,
         every node/.append style={font=\large\ttfamily},
-        every circle node/.append style={fill=Indigo}]
+        every circle node/.append style={fill=blue}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
         child {node (After) [word] {After} edge from parent node[above] {L}}
@@ -137,7 +136,7 @@ Nodes are scenes/concepts.
 \begin{minipage}{.1\columnwidth}
   \begin{center}
   \begin{adjustbox}{margin=2mm,frame,scale=.75,bgcolor=white}
-  \color{Indigo}
+  \color{blue}
   \begin{tabular}{>{\ttfamily}cl}
 	  P & process \\
 	  S & state \\
@@ -158,10 +157,10 @@ Nodes are scenes/concepts.
 We convert UD into a UCCA-like format by inserting non-terminal nodes.
 
 \begin{minipage}{.42\columnwidth}
-  \begin{tikzpicture}[-{Latex[length=.5in]}, color=DarkBlue, line width=2pt,
+  \begin{tikzpicture}[-{Latex[length=.5in]}, color=red, line width=2pt,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\ttfamily},
       sibling distance=3.4in, ->,
-        every circle node/.append style={fill=DarkBlue},
+        every circle node/.append style={fill=red},
         level 1/.style={level distance=3.7in},
         level 2/.style={level distance=3.2in},
         level 3/.style={level distance=3.7in}]
@@ -195,14 +194,14 @@ We convert UD into a UCCA-like format by inserting non-terminal nodes.
 \end{minipage}
 \begin{minipage}{.48\columnwidth}
     \scalebox{.8}{
-	\begin{tikzpicture}[-{Latex[length=.5in]}, color=DarkBlue, line width=2pt,
+	\begin{tikzpicture}[-{Latex[length=.5in]}, color=red, line width=2pt,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\ttfamily},
       level distance=3.1in,
 	  level 1/.style={sibling distance=11.5in},
 	  level 2/.style={sibling distance=4.2in},
 	  level 3/.style={sibling distance=2.1in},
 	  level 4/.style={sibling distance=1.9in},
-	  every circle node/.append style={fill=DarkBlue}]
+	  every circle node/.append style={fill=red}]
 	  \tikzstyle{word} = [font=\rmfamily,color=black]
 	  \node (1_1) [circle] {}
 	  {
@@ -250,8 +249,8 @@ We convert UD into a UCCA-like format by inserting non-terminal nodes.
 
 Conjoined predicates and arguments:
 
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
-        text only label, label style={above, color=DarkBlue, font=\ttfamily}, font=\small]
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=red, line width=2pt},
+        text only label, label style={above, color=red, font=\ttfamily}, font=\small]
     \begin{deptext}[column sep=1em,ampersand replacement=\^]
     he \^ went \^ straight \^ to \^ work \^ and \^ finished \^ the \^ job \^ efficiently \^ and \^ promptly \^ ! \\
     \end{deptext}
@@ -275,8 +274,8 @@ Conjoined predicates and arguments:
 \vfill
 Null nodes due to elided predicates, case information:
 
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
-        text only label, label style={above, color=DarkBlue, font=\ttfamily}, font=\small]
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=red, line width=2pt},
+        text only label, label style={above, color=red, font=\ttfamily}, font=\small]
     \begin{deptext}[column sep=1.2em,ampersand replacement=\^]
     I \^ wish \^ all \^ happy \^ holidays \^ , \^ and \^ moreso \^ , \^ \textbf{E9.1} \^ peace \^ on \^ earth \^ . \\
     \end{deptext}
@@ -304,8 +303,8 @@ Null nodes due to elided predicates, case information:
 \begin{minipage}{.5\columnwidth}
 Raising:
 
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
-        text only label, label style={above, color=DarkBlue, font=\ttfamily}, font=\small]
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=red, line width=2pt},
+        text only label, label style={above, color=red, font=\ttfamily}, font=\small]
    \begin{deptext}[column sep=.2em,ampersand replacement=\^]
     We \^ were \^ made \^ to \^ feel \^ very \^ welcome \^ . \\
     \end{deptext}
@@ -324,8 +323,8 @@ Raising:
 \begin{minipage}{.5\columnwidth}
 Relative clause:
 
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=DarkBlue, line width=2pt},
-        text only label, label style={above, color=DarkBlue, font=\ttfamily}, font=\small]
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=red, line width=2pt},
+        text only label, label style={above, color=red, font=\ttfamily}, font=\small]
     \begin{deptext}[column sep=.1em,ampersand replacement=\^]
     He \^ had \^ a \^ robe \^ that \^ was \^ made \^ back \^ in \^ the \^ '60s \^ . \\
     \end{deptext}
