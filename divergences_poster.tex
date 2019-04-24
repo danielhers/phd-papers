@@ -87,7 +87,7 @@
 cross-linguistically consistent grammatical dependency annotation \cite{nivre2016universal}.
 
     \begin{dependency}[edge style={-{Latex[length=4mm]}, color=red, line width=2pt},
-        text only label, label style={above, color=red, font=\ttfamily}, font=\small]
+        text only label, label style={above, color=red, font=\ttfamily}]
    \begin{deptext}[column sep=1em,ampersand replacement=\^]
     We \^ were \^ made \^ to \^ feel \^ very \^ welcome \^ . \\
     \end{deptext}
@@ -264,6 +264,82 @@ UCCA parsing results with TUPA \cite{hershcovich2017a}:
 \section*{Analysis of Divergences}
 
 \subsection*{Scenes/Non-Scenes}
+
+\begin{minipage}{.2\columnwidth}
+\begin{dependency}[edge style={-{Latex[length=4mm]}, color=red, line width=2pt},
+        text only label, label style={above, color=red, font=\ttfamily}]
+\begin{deptext}
+% sent_id = reviews-305187-0005
+% text = Wine was excellent.
+Wine \& was \& excellent \& .     \\
+\end{deptext}
+\depedge{3}{1}{nsubj}
+\depedge{3}{2}{cop}
+\deproot{3}{root}
+\depedge{3}{4}{punct}
+\end{dependency}
+\end{minipage}
+\begin{minipage}{.2\columnwidth}
+\color{blue}
+\begin{tikzpicture}[->,level distance=2in,
+  level 1/.style={sibling distance=4in},
+  level 2/.style={sibling distance=4in},
+  level 3/.style={sibling distance=4in},
+  every node/.append style={font=\large\ttfamily},
+  every circle node/.append style={fill=blue}]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
+  \node (1_1) [circle] {}
+  {
+  child {node (1_2) [circle] {}
+    {
+    child {node (1_4) [word] {Wine}  edge from parent node[auto]  {A}}
+    child {node (1_5) [word] {was}  edge from parent node[auto]  {F}}
+    child {node (1_6) [word] {excellent}  edge from parent node[auto]  {S}}
+    child {node (1_7) [word] {.}  edge from parent node[auto]  {U}}
+    } edge from parent node[auto]  {H}}
+  };
+\end{tikzpicture}
+\end{minipage}
+\begin{minipage}{.2\columnwidth}
+\begin{dependency}
+\begin{deptext}
+% sent_id = reviews-079007-0002
+% text = But service is very poor.
+But   \& service \& is  \& very \& poor \& .     \\
+CCONJ \& NOUN    \& AUX \& ADV  \& ADJ  \& PUNCT \\
+\end{deptext}
+\depedge{5}{1}{cc}
+\depedge{5}{2}{nsubj}
+\depedge{5}{3}{cop}
+\depedge{5}{4}{advmod}
+\deproot{5}{root}
+\depedge{5}{6}{punct}
+\end{dependency}
+\end{minipage}
+\begin{minipage}{.2\columnwidth}\begin{tikzpicture}[->,level distance=1cm,
+  level 1/.style={sibling distance=4cm},
+  level 2/.style={sibling distance=15mm},
+  level 3/.style={sibling distance=15mm},
+  every circle node/.append style={fill=black}]
+  \tikzstyle{word} = [font=\rmfamily,color=black]
+  \node (1_1) [circle] {}
+  {
+  child {node (1_2) [word] {But}  edge from parent node[auto]  {\scriptsize $L$}}
+  child {node (1_3) [circle] {}
+    {
+    child {node (1_5) [word] {\textbf{IMPLICIT}}  edge from parent node[auto]  {\scriptsize $A$}}
+    child {node (1_6) [word] {service}  edge from parent node[auto]  {\scriptsize $P$}}
+    child {node (1_7) [word] {is}  edge from parent node[auto]  {\scriptsize $F$}}
+    child {node (1_8) [circle] {}
+      {
+      child {node (1_9) [word] {very}  edge from parent node[auto]  {\scriptsize $E$}}
+      child {node (1_10) [word] {poor}  edge from parent node[auto]  {\scriptsize $C$}}
+      child {node (1_11) [word] {.}  edge from parent node[auto]  {\scriptsize $U$}}
+      } edge from parent node[auto]  {\scriptsize $D$}}
+    } edge from parent node[auto]  {\scriptsize $H$}}
+  };
+\end{tikzpicture}
+\end{minipage}
 
 \subsection*{Primary/Secondary Relations}
 
