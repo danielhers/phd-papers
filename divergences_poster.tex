@@ -47,7 +47,7 @@
     \HUGE\textbf{Daniel Hershcovich} \& \textbf{Omri Abend} \& \textbf{Ari Rappoport}
     
     \vspace{.7in}
-    \titlespacing*{\section}{0pt}{8mm}{5mm}
+    \titlespacing*{\section}{0pt}{8mm}{.5in}
     \begin{adjustbox}{margin=.5in,frame,minipage=.95\linewidth,center}
       \centering\color{Navy}\Large
       Does grammatical annotation capture semantics? \hfill
@@ -82,7 +82,7 @@ Nodes are scenes/concepts.
   \color{Indigo}
   \begin{center}
   \scalebox{.8}{
-    \begin{tikzpicture}[level distance=38mm,sibling distance=33mm, -{Latex[length=5mm]}, line width=2pt,
+    \begin{tikzpicture}[level distance=3in,sibling distance=3in, -{Latex[length=.5in]}, line width=2pt,
         every node/.append style={font=\large\ttfamily},
         every circle node/.append style={fill=Indigo}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
@@ -108,7 +108,7 @@ Nodes are scenes/concepts.
   \color{Indigo}
   \begin{center}
   \scalebox{.8}{
-    \begin{tikzpicture}[level distance=28mm, sibling distance=35mm, -{Latex[length=5mm]}, line width=2pt,
+    \begin{tikzpicture}[level distance=2.8in, sibling distance=3.5in, -{Latex[length=.5in]}, line width=2pt,
         every node/.append style={font=\large\ttfamily},
         every circle node/.append style={fill=Indigo}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
@@ -130,7 +130,7 @@ Nodes are scenes/concepts.
           } edge from parent node[above] {A} }
         } edge from parent node[above] {H} }
         ;
-      \draw[dashed,-{Latex[length=5mm]}] (graduation) to node [above] {A} (John);
+      \draw[dashed,-{Latex[length=.5in]}] (graduation) to node [above] {A} (John);
     \end{tikzpicture}}
   \end{center}
 \end{minipage}
@@ -158,13 +158,13 @@ Nodes are scenes/concepts.
 We convert UD into a UCCA-like format by inserting non-terminal nodes.
 
 \begin{minipage}{.42\columnwidth}
-  \begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
+  \begin{tikzpicture}[-{Latex[length=.5in]}, color=DarkBlue, line width=2pt,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\ttfamily},
-      sibling distance=34mm, ->,
+      sibling distance=3.4in, ->,
         every circle node/.append style={fill=DarkBlue},
-        level 1/.style={level distance=37mm},
-        level 2/.style={level distance=32mm},
-        level 3/.style={level distance=37mm}]
+        level 1/.style={level distance=3.7in},
+        level 2/.style={level distance=3.2in},
+        level 3/.style={level distance=3.7in}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
       \node (ROOT) [circle] {}
         child {node (We) [word] {We} edge from parent node[midway,above,sloped] {\scriptsize nsubj}}
@@ -195,13 +195,13 @@ We convert UD into a UCCA-like format by inserting non-terminal nodes.
 \end{minipage}
 \begin{minipage}{.48\columnwidth}
     \scalebox{.8}{
-	\begin{tikzpicture}[-{Latex[length=5mm]}, color=DarkBlue, line width=2pt,
+	\begin{tikzpicture}[-{Latex[length=.5in]}, color=DarkBlue, line width=2pt,
       every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\ttfamily},
-      level distance=41mm,
-	  level 1/.style={sibling distance=115mm},
-	  level 2/.style={sibling distance=42mm},
-	  level 3/.style={sibling distance=21mm},
-	  level 4/.style={sibling distance=19mm},
+      level distance=3.1in,
+	  level 1/.style={sibling distance=11.5in},
+	  level 2/.style={sibling distance=4.2in},
+	  level 3/.style={sibling distance=2.1in},
+	  level 4/.style={sibling distance=1.9in},
 	  every circle node/.append style={fill=DarkBlue}]
 	  \tikzstyle{word} = [font=\rmfamily,color=black]
 	  \node (1_1) [circle] {}
