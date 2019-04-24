@@ -82,63 +82,37 @@
 
 %----------------------------------------------------------------------------------------
 
-
-\textbf{UCCA} (Universal Conceptual Cognitive Annotation): cross-lingual semantic representation  \cite{abend2013universal}.
-
-Nodes are scenes/concepts.
-\textit{Primary edges} form a tree. \textit{Remote edges} (dashed) allow reentrancy.
-
-\begin{minipage}{.1\columnwidth}
-  \begin{adjustbox}{margin=.5in,frame,scale=.75,bgcolor=white}
-  \begin{tabular}{>{\ttfamily}c@{\hskip 1in}l}
-	  A & Participant \\
-	  C & Center \\
-	  D & Adverbial \\
-	  E & Elaborator \\
-	  F & Function \\
-	  G & Ground \\
-	  H & Parallel scene \\
-	  L & Linker \\
-	  P & Process \\
-	  Q & Quantifier \\
-	  R & Relator \\
-	  S & State \\
-	  T & Time \\
-	  U & Punctuation
-  \end{tabular}
-  \end{adjustbox}
-\end{minipage}
 \begin{minipage}{.4\columnwidth}
-  \color{blue}
-  \begin{center}
-  \scalebox{.8}{
-    \begin{tikzpicture}[level distance=3in,sibling distance=3in, -{Latex[length=.5in]}, line width=2pt,
-        every node/.append style={font=\large\ttfamily},
-        every circle node/.append style={fill=blue}]
-      \tikzstyle{word} = [font=\rmfamily,color=black]
-      \node (ROOT) [circle] {}
-        child {node (We) [word] {We} edge from parent node[above] {A}}
-        child {node [word] {were} edge from parent node[below] {F}}
-        child {node [word] {made} edge from parent node[right] {D}}
-        child {node [word] {to} edge from parent node[right] {F}}
-        child {node [word] {feel} edge from parent node[below] {P}}
-        child {node (verywelcome) [circle] {}
-        {
-          child {node [word] {very} edge from parent node[left] {D}}
-          child {node [word] {welcome} edge from parent node[right] {S}}
-          child {node [word] {.} edge from parent node[right] {U}}
-        } edge from parent node[above] {A} }
-      ;
-      \draw[dashed,->,bend left] (verywelcome) to node [below] {A} (We);
-    \end{tikzpicture}
-  }
-  \end{center}
+\textbf{UD} (Universal Dependencies):
+framework for cross-linguistically consistent grammatical annotation \cite{nivre2016universal}.
+
+    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=red, line width=2pt},
+        text only label, label style={above, color=red, font=\ttfamily}, font=\small]
+   \begin{deptext}[column sep=1em,ampersand replacement=\^]
+    We \^ were \^ made \^ to \^ feel \^ very \^ welcome \^ . \\
+    \end{deptext}
+        \depedge[edge start x offset=1pt]{3}{1}{nsubj:pass}
+        \depedge[edge below,dashed,red,edge unit distance=.65ex,edge end x offset=4pt]{5}{1}{\color{red}nsubj:xsubj}
+        \depedge[edge below,dashed,red,edge unit distance=.9ex,edge end x offset=-3pt]{7}{1}{\color{red}nsubj:xsubj}
+        \depedge[edge start x offset=-3pt]{3}{2}{aux:pass}
+        \deproot[edge unit distance=3.4ex]{3}{root}
+        \depedge{5}{4}{mark}
+        \depedge[edge start x offset=3pt]{3}{5}{xcomp}
+        \depedge{7}{6}{advmod}
+        \depedge{5}{7}{xcomp}
+        \depedge[edge unit distance=2ex,edge start x offset=-1pt]{3}{8}{punct}
+    \end{dependency}
 \end{minipage}
-\begin{minipage}{.3\columnwidth}
+\hfill
+\begin{minipage}{.4\columnwidth}
+\textbf{UCCA} (Universal Conceptual Cognitive Annotation):
+cross-lingual semantic representation.
+\textit{Primary edges} form a tree. \textit{Remotes} (dashed) allow reentrancy \cite{abend2013universal}.
+
   \color{blue}
   \begin{center}
   \scalebox{.8}{
-    \begin{tikzpicture}[level distance=2.8in, sibling distance=3.5in, -{Latex[length=.5in]}, line width=2pt,
+    \begin{tikzpicture}[level distance=2.6in, sibling distance=5in, -{Latex[length=.5in]}, line width=2pt,
         every node/.append style={font=\large\ttfamily},
         every circle node/.append style={fill=blue}]
       \tikzstyle{word} = [font=\rmfamily,color=black]
@@ -164,6 +138,27 @@ Nodes are scenes/concepts.
     \end{tikzpicture}}
   \end{center}
 \end{minipage}
+\hfill
+\begin{minipage}{.13\columnwidth}
+  \begin{adjustbox}{margin=.5in,frame,scale=.75,bgcolor=white}
+  \begin{tabular}{>{\ttfamily}c@{\hskip 1in}l}
+    A & Participant \\
+    C & Center \\
+    D & Adverbial \\
+    E & Elaborator \\
+    F & Function \\
+    G & Ground \\
+    H & Parallel scene \\
+    L & Linker \\
+    P & Process \\
+    Q & Quantifier \\
+    R & Relator \\
+    S & State \\
+    T & Time \\
+    U & Punctuation
+  \end{tabular}
+  \end{adjustbox}
+\end{minipage}
 
 \begin{minipage}{.5\columnwidth}
 \section*{Shared Corpus}
@@ -180,6 +175,7 @@ Nodes are scenes/concepts.
 \end{center}
 
 \begin{center}
+\def\arraystretch{.4}
 \scalebox{.55}{
 \begin{tabular}{lRRRRRRRRRRRRRRRR|R}
  &&&&&&&&&&&&&&&&& \multicolumn{1}{|c}{\textsc{No}} \\
@@ -233,97 +229,34 @@ head & 445 & 48 & 159 & 6388 & 717 & 142 & 564 & 83 & 2462 & 42 & 1 & 4163 & 120
 \end{tabular}}
 \end{center}
 \end{minipage}
+\begin{minipage}{.5\columnwidth}
+\section*{UCCA Parsing Results}
 
-
-\begin{minipage}{.42\columnwidth}
-  \begin{tikzpicture}[-{Latex[length=.5in]}, color=red, line width=2pt,
-      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\ttfamily},
-      sibling distance=3.4in, ->,
-        every circle node/.append style={fill=red},
-        level 1/.style={level distance=3.7in},
-        level 2/.style={level distance=3.2in},
-        level 3/.style={level distance=3.7in}]
-      \tikzstyle{word} = [font=\rmfamily,color=black]
-      \node (ROOT) [circle] {}
-        child {node (We) [word] {We} edge from parent node[midway,above,sloped] {\scriptsize nsubj}}
-        child {node {}
-        {
-	        child {node (weremade) [circle] {}
-	        {
-	          child {node [word] {were} edge from parent node[midway,above,sloped] {\scriptsize aux}}
-	          child {node [word] {made} edge from parent node[midway,above,sloped] {\scriptsize head}}
-	        } edge from parent [draw=none]}
-        } edge from parent [draw=none]}
-        child {node [word] {to} edge from parent node[midway,above,sloped] {\scriptsize mark}}
-        child {node (feelverywelcome) [circle] {}
-        {
-          child {node [word] {feel} edge from parent node[midway,above,sloped] {\scriptsize head}}
-          child {node (verywelcome) [circle] {}
-          {
-            child {node [word] {very} edge from parent node[midway,above,sloped] {\scriptsize advmod}}
-            child {node [word] {welcome} edge from parent node[midway,above,sloped] {\scriptsize head}}
-            child {node [word] {.} edge from parent node[midway,above,sloped] {\scriptsize punct}}
-          } edge from parent node[midway,above,sloped] {\scriptsize xcomp} }
-        } edge from parent node[midway,above,sloped] {\scriptsize xcomp} }
-      ;
-      \draw[->] (ROOT) to node [midway,above,sloped] {\scriptsize head} (weremade);
-      \draw[dashed,red,->,bend left=25] (verywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
-      \draw[dashed,red,->,bend left=20] (feelverywelcome) to node [midway,below,sloped] {\scriptsize nsubj} (We);
-  \end{tikzpicture}
-\end{minipage}
-\begin{minipage}{.48\columnwidth}
-    \scalebox{.8}{
-	\begin{tikzpicture}[-{Latex[length=.5in]}, color=red, line width=2pt,
-      every node/.append style={sloped,anchor=south,auto=false,font=\scriptsize\ttfamily},
-      level distance=3.1in,
-	  level 1/.style={sibling distance=11.5in},
-	  level 2/.style={sibling distance=4.2in},
-	  level 3/.style={sibling distance=2.1in},
-	  level 4/.style={sibling distance=1.9in},
-	  every circle node/.append style={fill=red}]
-	  \tikzstyle{word} = [font=\rmfamily,color=black]
-	  \node (1_1) [circle] {}
-	  {
-	  child {node (1_2) [circle] {}
-	    {
-	    child {node (1_6) [word] {He}  edge from parent [draw=none]}
-	    child {node (1_3) [word] {had}  edge from parent [draw=none]}
-	    child {node (1_7) [circle] {}
-	      {
-	      child {node (1_14) [word] {a}  edge from parent node[midway,above,sloped]  {\scriptsize det}}
-	      child {node (1_8) [word] {robe}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
-	      } edge from parent node[midway,above,sloped]  {\scriptsize obj}}
-	    } edge from parent node[midway,above,sloped]  {\scriptsize head}}
-	  child {node (1_4) [circle] {}
-	    {
-	    child {node {}
-	    {
-    	    child {node (1_15) [word] {that}  edge from parent [draw=none]}
-    	} edge from parent [draw=none]}
-	    child {node (1_5) [circle] {}
-	      {
-	      child {node (1_9) [word] {was}  edge from parent node[midway,above,sloped]  {\scriptsize aux}}
-	      child {node (1_10) [word] {made}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
-	      } edge from parent node[midway,above,sloped]  {\scriptsize head}}
-	    child {node (1_11) [circle] {}
-	      {
-	      child {node (1_12) [word] {back}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
-	      child {node (1_16) [circle] {}
-	        {
-	        child {node (1_18) [word] {in}  edge from parent node[midway,above,sloped]  {\scriptsize case}}
-	        child {node (1_19) [word] {the}  edge from parent node[midway,above,sloped]  {\scriptsize det}}
-	        child {node (1_17) [word] {'60s}  edge from parent node[midway,above,sloped]  {\scriptsize head}}
-	        child {node (1_20) [word] {.}  edge from parent node[midway,above,sloped]  {\scriptsize punct}}
-	        } edge from parent node[midway,above,sloped]  {\scriptsize obl}}
-	      } edge from parent node[midway,above,sloped]  {\scriptsize advmod}}
-	    } edge from parent node[midway,above,sloped]  {\scriptsize acl}}
-	  };
-	  \draw[->] (1_2) to node [midway,above,sloped] {\scriptsize nsubj} (1_6);
-	  \draw[->] (1_2) to node [midway,above,sloped] {\scriptsize head} (1_3);
-	  \draw[->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_15);
-	  \draw[dashed,red,->] (1_4) to node [midway,above,sloped] {\scriptsize nsubj} (1_7);
-	  \draw[dashed,red,->] (1_7) to node [midway,above,sloped] {\scriptsize ref} (1_15);
-	\end{tikzpicture}}
+\begin{center}
+\setlength{\tabcolsep}{.5in}
+\begin{tabular}{@{}llll|lll@{}}
+& \multicolumn{3}{c|}{\textbf{Primary}} & \multicolumn{3}{c}{\textbf{Remote}} \\
+\multicolumn{1}{l}{\textbf{Features}}
+& \textbf{LP} & \textbf{LR} & \textbf{LF}
+& \textbf{LP} & \textbf{LR} & \textbf{LF} \\
+\hline
+\multicolumn{4}{@{}l|}{Development} \\
+\multicolumn{1}{l}{Gold UD}
+ & 72.1 & 71.2 & 71.7 & 61.2 & 38.1 & 47.0 \\
+\multicolumn{1}{l}{UDPipe} 
+ & 73.0 & 72.1 & 72.5 & 53.7 & 40.8 & 46.4 \\
+\multicolumn{1}{l}{StanfordNLP}
+ & 73.7 & 72.7 & 73.2 & 52.3 & 39.2 & 44.8 \\
+\hline
+\multicolumn{4}{@{}l|}{Test} \\
+\multicolumn{1}{l}{Gold UD}
+ & 72.2 & 71.2 & 71.7 & 60.9 & 36.8 & 45.9 \\
+\multicolumn{1}{l}{UDPipe} 
+ & 72.4 & 71.7 & 72.1 & 60.3 & 38.5 & 47.0 \\
+\multicolumn{1}{l}{StanfordNLP}
+ & 72.7 & 72.4 & 72.6 & 59.6 & 35.4 & 44.4
+\end{tabular}
+\end{center}
 \end{minipage}
 
 
@@ -337,109 +270,6 @@ head & 445 & 48 & 159 & 6388 & 717 & 142 & 564 & 83 & 2462 & 42 & 1 & 4163 & 120
 
 \subsection*{Linkage}
 
-Conjoined predicates and arguments:
-
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=red, line width=2pt},
-        text only label, label style={above, color=red, font=\ttfamily}, font=\small]
-    \begin{deptext}[column sep=1em,ampersand replacement=\^]
-    he \^ went \^ straight \^ to \^ work \^ and \^ finished \^ the \^ job \^ efficiently \^ and \^ promptly \^ ! \\
-    \end{deptext}
-        \depedge[edge start x offset=-2pt]{2}{1}{nsubj}
-        \depedge[edge below,dashed,red,edge unit distance=.5ex,edge end x offset=2pt]{7}{1}{\color{red}nsubj}
-        \deproot[edge unit distance=3ex]{2}{root}
-        \depedge[edge start x offset=15pt]{2}{3}{advmod}
-        \depedge{5}{4}{mark}
-        \depedge[edge unit distance=1.75ex,edge start x offset=10pt]{2}{5}{advcl}
-        \depedge[edge start x offset=-3pt]{7}{6}{cc}
-        \depedge[edge unit distance=1.5ex,edge start x offset=6pt]{2}{7}{conj}
-        \depedge{9}{8}{det}
-        \depedge[edge unit distance=2.5ex,edge start x offset=6pt]{7}{9}{obj}
-        \depedge[edge unit distance=2.5ex,edge start x offset=2pt]{7}{10}{advmod}
-        \depedge{12}{11}{cc}
-        \depedge{10}{12}{conj}
-        \depedge[edge below,dashed,red,edge unit distance=.65ex,edge end x offset=2pt]{7}{12}{\color{red}advmod}
-        \depedge[edge unit distance=1ex,edge start x offset=3pt]{2}{13}{punct}
-    \end{dependency}
-    
-\vfill
-Null nodes due to elided predicates, case information:
-
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=red, line width=2pt},
-        text only label, label style={above, color=red, font=\ttfamily}, font=\small]
-    \begin{deptext}[column sep=1.2em,ampersand replacement=\^]
-    I \^ wish \^ all \^ happy \^ holidays \^ , \^ and \^ moreso \^ , \^ \textbf{E9.1} \^ peace \^ on \^ earth \^ . \\
-    \end{deptext}
-        \depedge[edge start x offset=-2pt]{2}{1}{nsubj}
-        \deproot[edge start x offset=-1pt,edge unit distance=4.4ex]{2}{root}
-        \depedge[edge start x offset=15pt]{2}{3}{iobj}
-        \depedge{5}{4}{amod}
-        \depedge[edge start x offset=12pt]{2}{5}{obj}
-        \depedge[edge start x offset=-2pt,edge unit distance=2ex]{11}{6}{punct}
-        \depedge[edge start x offset=1pt,edge below,dashed,red]{10}{6}{\color{red}punct}
-        \depedge[edge start x offset=-3pt,edge unit distance=1.85ex]{11}{7}{cc}
-        \depedge[edge start x offset=-6pt,edge below,dashed,red]{10}{7}{\color{red}cc}
-        \depedge[edge start x offset=-9pt,edge unit distance=1.5ex]{11}{8}{orphan}
-        \depedge[edge start x offset=-6pt,edge below,dashed,red]{10}{8}{\color{red}advmod}
-        \depedge[edge start x offset=-12pt,edge unit distance=.8ex]{11}{9}{punct}
-        \depedge[edge start x offset=-12pt,edge below,dashed,red]{10}{9}{\color{red}punct}
-        \depedge[edge unit distance=1.45ex,edge start x offset=6pt]{2}{11}{conj}
-        \depedge[edge below,dashed]{10}{11}{obj}
-        \depedge{13}{12}{case}
-        \depedge[edge start x offset=1pt]{11}{13}{nmod{\color{red!50}:on}}
-        \depedge[edge start x offset=3pt,edge unit distance=1.35ex]{2}{14}{punct}
-    \end{dependency}
-    
-\vfill
-\begin{minipage}{.5\columnwidth}
-Raising:
-
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=red, line width=2pt},
-        text only label, label style={above, color=red, font=\ttfamily}, font=\small]
-   \begin{deptext}[column sep=.2em,ampersand replacement=\^]
-    We \^ were \^ made \^ to \^ feel \^ very \^ welcome \^ . \\
-    \end{deptext}
-        \depedge[edge start x offset=1pt]{3}{1}{nsubj:pass}
-        \depedge[edge below,dashed,red,edge unit distance=.65ex,edge end x offset=4pt]{5}{1}{\color{red}nsubj:xsubj}
-        \depedge[edge below,dashed,red,edge unit distance=.9ex,edge end x offset=-3pt]{7}{1}{\color{red}nsubj:xsubj}
-        \depedge[edge start x offset=-3pt]{3}{2}{aux:pass}
-        \deproot[edge unit distance=3.4ex]{3}{root}
-        \depedge{5}{4}{mark}
-        \depedge[edge start x offset=3pt]{3}{5}{xcomp}
-        \depedge{7}{6}{advmod}
-        \depedge{5}{7}{xcomp}
-        \depedge[edge unit distance=2ex,edge start x offset=-1pt]{3}{8}{punct}
-    \end{dependency}
-\end{minipage}
-\begin{minipage}{.5\columnwidth}
-Relative clause:
-
-    \begin{dependency}[edge style={-{Latex[length=4mm]}, color=red, line width=2pt},
-        text only label, label style={above, color=red, font=\ttfamily}, font=\small]
-    \begin{deptext}[column sep=.1em,ampersand replacement=\^]
-    He \^ had \^ a \^ robe \^ that \^ was \^ made \^ back \^ in \^ the \^ '60s \^ . \\
-    \end{deptext}
-        \depedge[edge start x offset=-3pt]{2}{1}{nsubj}
-        \deproot[edge start x offset=-1pt,edge unit distance=3.355ex]{2}{root}
-        \depedge[edge start x offset=-3pt]{4}{3}{det}
-        \depedge[edge start x offset=6pt]{2}{4}{obj}
-        \depedge[edge start x offset=-3pt,edge unit distance=1.5ex,edge below,dashed,red]{7}{4}{\color{red}nsubj:pass}
-        \depedge[edge start x offset=-3pt]{7}{5}{nsubj:pass}
-        \depedge[edge start x offset=4pt,edge below,dashed,red]{4}{5}{\color{red}ref}
-        \depedge[edge start x offset=-9pt,edge unit distance=2ex]{7}{6}{aux:pass}
-        \depedge[edge start x offset=3pt,edge unit distance=2.75ex]{4}{7}{acl:relcl}
-        \depedge[edge start x offset=3pt]{7}{8}{advmod}
-        \depedge{11}{9}{case}
-        \depedge[edge start x offset=-3pt]{11}{10}{det}
-        \depedge[edge unit distance=1ex,edge below,dashed,red]{8}{11}{\color{red}obl}
-        \depedge[edge start x offset=3pt,edge unit distance=1.2ex]{2}{12}{punct}
-    \end{dependency}
-\end{minipage}
-
-\vfill
-\hrule
-
-
-\section*{Results}
 
 
 \begin{center}
