@@ -88,8 +88,8 @@ cross-linguistically consistent grammatical dependency annotation \cite{nivre201
 
     \begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},
         text only label, label style={above, color=red, font=\ttfamily}]
-   \begin{deptext}[column sep=1em,ampersand replacement=\^]
-    We \^ were \^ made \^ to \^ feel \^ very \^ welcome \^ . \\
+   \begin{deptext}[column sep=1em]
+    We \& were \& made \& to \& feel \& very \& welcome \& . \\
     \end{deptext}
         \depedge[edge start x offset=1pt]{3}{1}{nsubj:pass}
         \depedge[edge below,dashed,red,edge unit distance=.65ex,edge end x offset=4pt]{5}{1}{\color{red}nsubj:xsubj}
@@ -263,23 +263,34 @@ UCCA parsing results with TUPA \cite{hershcovich2017a}:
 
 \section*{Analysis of Divergences}
 
-\subsection*{Scenes/Non-Scenes}
+\subsection*{Scenes/\\Non-Scenes}
 
-\scalebox{.7}{
+\vspace{-4in}
+
+\scalebox{.75}{
 \begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},
         text only label, label style={above, color=red, font=\ttfamily}]
-\begin{deptext}
+\begin{deptext}[column sep=1in]
 % sent_id = reviews-305187-0005
 % text = Wine was excellent.
-Wine \& was \& excellent \& .     \\
+Wine \& was \& excellent \& , \&
+% sent_id = reviews-079007-0002
+% text = But service is very poor.
+but   \& service \& is  \& very \& poor \& .     \\
 \end{deptext}
-\depedge{3}{1}{nsubj}
-\depedge{3}{2}{cop}
+\depedge[edge start x offset=-.5in]{3}{1}{nsubj}
+\depedge[edge start x offset=-.7in]{3}{2}{cop}
 \deproot{3}{root}
-\depedge{3}{4}{punct}
+\depedge[edge start x offset=1.1in]{3}{4}{punct}
+\depedge[edge start x offset=-.3in]{9}{5}{cc}
+\depedge[edge start x offset=-.5in]{9}{6}{nsubj}
+\depedge[edge start x offset=-.7in]{9}{7}{cop}
+\depedge[edge start x offset=-.9in]{9}{8}{advmod}
+\depedge[edge start x offset=.9in]{3}{9}{conj}
+\depedge[edge start x offset=.7in]{3}{10}{punct}
 \end{dependency}
 \begin{tikzpicture}[->, -{Latex[length=.5in]},level distance=3in,
-  level 1/.style={sibling distance=4in},
+  level 1/.style={sibling distance=8in},
   level 2/.style={sibling distance=4in},
   level 3/.style={sibling distance=4in},
   every node/.append style={font=\large\ttfamily},
@@ -292,32 +303,8 @@ Wine \& was \& excellent \& .     \\
     child {node (1_4) [word] {Wine}  edge from parent node[auto]  {A}}
     child {node (1_5) [word] {was}  edge from parent node[auto]  {F}}
     child {node (1_6) [word] {excellent}  edge from parent node[auto]  {S}}
-    child {node (1_7) [word] {.}  edge from parent node[auto]  {U}}
+    child {node (1_7) [word] {,}  edge from parent node[auto]  {U}}
     } edge from parent node[auto]  {H}}
-  };
-\end{tikzpicture}
-\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},
-        text only label, label style={above, color=red, font=\ttfamily}]
-\begin{deptext}
-% sent_id = reviews-079007-0002
-% text = But service is very poor.
-But   \& service \& is  \& very \& poor \& .     \\
-\end{deptext}
-\depedge{5}{1}{cc}
-\depedge{5}{2}{nsubj}
-\depedge{5}{3}{cop}
-\depedge{5}{4}{advmod}
-\deproot{5}{root}
-\depedge{5}{6}{punct}
-\end{dependency}
-\begin{tikzpicture}[->, -{Latex[length=.5in]},level distance=3in,
-  level 1/.style={sibling distance=4in},
-  level 2/.style={sibling distance=4in},
-  level 3/.style={sibling distance=4in},
-  every circle node/.append style={fill=blue},color=blue]
-  \tikzstyle{word} = [font=\rmfamily,color=black]
-  \node (1_1) [circle] {}
-  {
   child {node (1_2) [word] {But}  edge from parent node[auto]  {L}}
   child {node (1_3) [circle] {}
     {
@@ -344,7 +331,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 
 
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 295491-0007
 %% text = Overall, Joe is a happy camper who has found a great spot.
 %Overall \& ,     \& Joe   \& is  \& a   \& happy \& camper \& who  \& has \& found \& a   \& great \& spot \& .     \\
@@ -366,7 +353,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 305187-0007
 %% text = A perfect place for a romantic dinner.
 %A   \& perfect \& place \& for \& a   \& romantic \& dinner \& .     \\
@@ -382,7 +369,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 073356-0001
 %% text = Beautiful hotel!
 %Beautiful \& hotel \& !     \\
@@ -393,7 +380,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 303922-0005
 %% text = Such a convenient location as well with coffee shop and bradley food and beverage right around corner.
 %Such \& a   \& convenient \& location \& as  \& well \& with  \& coffee \& shop \& and   \& bradley \& food  \& and   \& beverage \& right \& around \& corner \& .     \\
@@ -419,7 +406,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 071650-0007
 %% text = Back to my poor rating - I was excepted to medical school and went in to cancel my membership as I was told I could do since I was moving away.
 %Back \& to  \& my   \& poor \& rating \& -     \& I    \& was \& excepted \& to  \& medical \& school \& and   \& went \& in  \& to   \& cancel \& my   \& membership \& as    \& I    \& was \& told \& I    \& could \& do   \& since \& I    \& was \& moving \& away \& .     \\
@@ -459,7 +446,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 247226-0005
 %% text = Going back after graduating your told you get a discount on services nope you dont.
 %Going \& back \& after \& graduating \& you  \& r   \& told \& you  \& get  \& a   \& discount \& on  \& services \& nope \& you  \& do  \& nt   \& .     \\
@@ -485,7 +472,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 095040-0004
 %% text = Stephanie's knowledge of the market and properties in our price range, made us feel secure in our decision to buy when we did.
 %Stephanie \& 's   \& knowledge \& of  \& the \& market \& and   \& properties \& in  \& our  \& price \& range \& ,     \& made \& us   \& feel \& secure \& in  \& our  \& decision \& to   \& buy  \& when \& we   \& did \& .     \\
@@ -519,7 +506,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 295288-0006
 %% text = Now my cars gears and brakes have never run so well... ever its like driving a new car.
 %Now \& my   \& car  \& s    \& gears \& and   \& brakes \& have \& never \& run  \& so  \& well \& ...   \& ever \& it   \& s    \& like  \& driving \& a   \& new \& car  \& .     \\
@@ -549,7 +536,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 241739-0005
 %% text = Some of the younger kids that work there are a bit sub par, but if you wait for Nick... you'll be good.
 %Some \& of  \& the \& younger \& kids \& that \& work \& there \& are \& a   \& bit  \& sub \& par \& ,     \& but   \& if    \& you  \& wait \& for \& Nick  \& ...   \& you  \& 'll \& be  \& good \& .     \\
@@ -583,7 +570,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 024385-0004
 %% text = The prices were worth what I got.
 %The \& prices \& were \& worth \& what \& I    \& got  \& .     \\
@@ -599,7 +586,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 303922-0003
 %% text = The team at Bradley Chevron kept my car running for well past its expected death!
 %The \& team \& at  \& Bradley \& Chevron \& kept \& my   \& car  \& running \& for \& well \& past \& its  \& expected \& death \& !     \\
@@ -623,7 +610,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 295935-0001
 %% text = Very Informative website with alot of good work
 %Very \& Informative \& website \& with \& a   \& lot  \& of  \& good \& work \\
@@ -640,7 +627,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 095040-0003
 %% text = She worked with us for over a year, helping us find our perfect home.
 %She  \& worked \& with \& us   \& for \& over \& a   \& year \& ,     \& helping \& us   \& find \& our  \& perfect \& home \& .     \\
@@ -664,7 +651,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 034501-0003
 %% text = It is right on the hustle and bustle of Wisconsin Ave but some might miss it as it is nestled in between Subway Sandwiches and Modell's.
 %It   \& is  \& right \& on  \& the \& hustle \& and   \& bustle \& of  \& Wisconsin \& Ave   \& but   \& some \& might \& miss \& it   \& as    \& it   \& is  \& nestled \& in  \& between \& Subway \& Sandwiches \& and   \& Modell \& 's   \& .     \\
@@ -700,7 +687,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 023926-0002
 %% text = Mercedes and Dan are very thorough and on top of everything!
 %Mercedes \& and   \& Dan   \& are \& very \& thorough \& and   \& on  \& top  \& of  \& everything \& !     \\
@@ -720,7 +707,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 299148-0001
 %% text = Outdated but not bad
 %Outdated \& but   \& not \& bad \\
@@ -732,7 +719,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 071650-0013
 %% text = I will never recommend this gym to any woman.
 %I    \& will \& never \& recommend \& this \& gym  \& to  \& any \& woman \& .     \\
@@ -750,7 +737,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 252791-0001
 %% text = no feathers in stock!!!!
 %no  \& feathers \& in  \& stock \& !!!!  \\
@@ -763,7 +750,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 243799-0002
 %% text = went in there and got my dog groomed came home to an uneven dog then took him back to get evened up what a mistake!
 %went \& in  \& there \& and   \& got  \& my   \& dog  \& groomed \& came \& home \& to  \& an  \& uneven \& dog  \& then \& took \& him  \& back \& to   \& get \& evened \& up  \& what \& a   \& mistake \& !     \\
@@ -797,7 +784,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 349020-0002
 %% text = The night I drove back home, I found that the rear window has some leakage.
 %The \& night \& I    \& drove \& back \& home \& ,     \& I    \& found \& that  \& the \& rear \& window \& has  \& some \& leakage \& .     \\
@@ -822,7 +809,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 241855-0002
 %% text = I sometimes go into this store just for something to do on a sunday afternoon.
 %I    \& sometimes \& go   \& into \& this \& store \& just \& for \& something \& to   \& do   \& on  \& a   \& sunday \& afternoon \& .     \\
@@ -846,7 +833,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 047007-0002
 %% text = I will never come here again.
 %I    \& will \& never \& come \& here \& again \& .     \\
@@ -861,7 +848,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 307250-0002
 %% text = Worst buffet period by far.
 %Worst \& buffet \& period \& by  \& far \& .     \\
@@ -875,7 +862,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 071518-0008
 %% text = And it was great that they did not charge a service fee to diagnose the problem - an added bonus!!
 %And   \& it   \& was \& great \& that  \& they \& did \& not  \& charge \& a   \& service \& fee  \& to   \& diagnose \& the \& problem \& -     \& an  \& added \& bonus \& !!    \\
@@ -904,7 +891,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 245160-0003
 %% text = i was looking for a car but did not really know what i wanted and they were very helpful and took the time to first figure out what my needs were and showing me various options to meet those needs.
 %i    \& was \& looking \& for \& a   \& car  \& but   \& did \& not  \& really \& know \& what \& i    \& wanted \& and   \& they \& were \& very \& helpful \& and   \& took \& the \& time \& to   \& first \& figure \& out \& what \& my   \& needs \& were \& and   \& showing \& me   \& various \& options \& to   \& meet \& those \& needs \& .     \\
@@ -953,7 +940,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 068436-0005
 %% text = I asked them to change it but they rudely said that it was okay.
 %I    \& asked \& them \& to   \& change \& it   \& but   \& they \& rudely \& said \& that  \& it   \& was \& okay \& .     \\
@@ -976,7 +963,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 247226-0004
 %% text = You have to bring in your own models and they have to pay for you to use them if you dont then you can graduate!
 %You  \& have \& to   \& bring \& in  \& your \& own \& models \& and   \& they \& have \& to   \& pay  \& for   \& you  \& to   \& use  \& them \& if    \& you  \& do  \& nt   \& then \& you  \& can \& graduate \& !     \\
@@ -1011,7 +998,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 254908-0002
 %% text = The price they gave was good so I said hey this seems great.
 %The \& price \& they \& gave \& was \& good \& so  \& I    \& said \& hey  \& this \& seems \& great \& .     \\
@@ -1033,7 +1020,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 105518-0004
 %% text = If you are on the lookout for a pure breed pup don't forget to check out the shelters!
 %If    \& you  \& are \& on  \& the \& lookout \& for \& a   \& pure \& breed \& pup  \& do  \& n't  \& forget \& to   \& check \& out \& the \& shelters \& !     \\
@@ -1061,7 +1048,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 247226-0004
 %% text = You have to bring in your own models and they have to pay for you to use them if you dont then you can graduate!
 %You  \& have \& to   \& bring \& in  \& your \& own \& models \& and   \& they \& have \& to   \& pay  \& for   \& you  \& to   \& use  \& them \& if    \& you  \& do  \& nt   \& then \& you  \& can \& graduate \& !     \\
@@ -1096,7 +1083,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 241739-0002
 %% text = Firstly, the other reviewer clearly has never been to Nick's, or he would know that Nick only charges $13 for a haircut which is pretty much industry standard.
 %Firstly \& ,     \& the \& other \& reviewer \& clearly \& has \& never \& been \& to  \& Nick  \& 's   \& ,     \& or    \& he   \& would \& know \& that  \& Nick  \& only \& charges \& \$   \& 13  \& for \& a   \& haircut \& which \& is  \& pretty \& much \& industry \& standard \& .     \\
@@ -1137,7 +1124,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 070730-0006
 %% text = The service is solicitous, the atmosphere is nice and mod except the out-of-place flat-screen TV playing football.
 %The \& service \& is  \& solicitous \& ,     \& the \& atmosphere \& is  \& nice \& and   \& mod \& except \& the \& out \& -     \& of  \& -     \& place \& flat \& -     \& screen \& TV   \& playing \& football \& .     \\
@@ -1170,7 +1157,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 081796-0005
 %% text = The mark up is minimal considering that the clothing is hard to find and often shipped for Europe.
 %The \& mark \& up   \& is  \& minimal \& considering \& that  \& the \& clothing \& is   \& hard \& to   \& find \& and   \& often \& shipped \& for \& Europe \& .     \\
@@ -1197,7 +1184,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 363685-0020
 %% text = If you go later, it's all cleaned up.
 %If    \& you  \& go   \& later \& ,     \& it   \& 's  \& all \& cleaned \& up  \& .     \\
@@ -1216,7 +1203,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 247097-0003
 %% text = Before treatment, my food cravings were "out of control" which caused me to be stressed out.
 %Before \& treatment \& ,     \& my   \& food \& cravings \& were \& "     \& out \& of  \& control \& "     \& which \& caused \& me   \& to   \& be  \& stressed \& out \& .     \\
@@ -1244,7 +1231,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 095040-0002
 %% text = As first-time home buyers, my husband and I found Stephanie Fairchild at Prudential Steamboat Realty, extremely helpful.
 %As  \& first \& -     \& time \& home \& buyers \& ,     \& my   \& husband \& and   \& I    \& found \& Stephanie \& Fairchild \& at  \& Prudential \& Steamboat \& Realty \& ,     \& extremely \& helpful \& .     \\
@@ -1274,7 +1261,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 114941-0001
 %% text = Give them a try!
 %Give \& them \& a   \& try  \& !     \\
@@ -1287,7 +1274,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 024385-0001
 %% text = Another great business bites the dust!
 %Another \& great \& business \& bites \& the \& dust \& !     \\
@@ -1302,7 +1289,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 345455-0003
 %% text = I'ma soccer mom so I wasn't sure what I was looking for when it comes to dancewear.
 %I    \& 'm  \& a   \& soccer \& mom  \& so  \& I    \& was \& n't  \& sure \& what \& I    \& was \& looking \& for \& when \& it   \& comes \& to  \& dancewear \& .     \\
@@ -1331,7 +1318,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 052884-0001
 %% text = unique gifts and cards
 %unique \& gifts \& and   \& cards \\
@@ -1343,7 +1330,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 084373-0003
 %% text = We called few companies before we decide to hire them.
 %We   \& called \& few \& companies \& before \& we   \& decide \& to   \& hire \& them \& .     \\
@@ -1362,7 +1349,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 069995-0007
 %% text = Check out The Willow Lounge, youll be happy!
 %Check \& out \& The \& Willow \& Lounge \& ,     \& you  \& ll  \& be  \& happy \& !     \\
@@ -1381,7 +1368,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 083454-0001
 %% text = I didn't end up buying my car here, but I did think the guy who worked with me was pretty cool - he was willing to budge a little on the price which means a lot to me.
 %I    \& did \& n't  \& end  \& up  \& buying \& my   \& car  \& here \& ,     \& but   \& I    \& did \& think \& the \& guy  \& who  \& worked \& with \& me   \& was \& pretty \& cool \& -     \& he   \& was \& willing \& to   \& budge \& a   \& little \& on  \& the \& price \& which \& means \& a   \& lot  \& to  \& me   \& .     \\
@@ -1430,7 +1417,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 292997-0002
 %% text = From the moment you enter the restaurant, you know you are some place special.
 %From \& the \& moment \& you  \& enter \& the \& restaurant \& ,     \& you  \& know \& you  \& are \& some \& place \& special \& .     \\
@@ -1454,7 +1441,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 351058-0002
 %% text = This place and its sister store Peking Garden are the worst places to order from.
 %This \& place \& and   \& its  \& sister \& store \& Peking \& Garden \& are \& the \& worst \& places \& to   \& order \& from \& .     \\
@@ -1478,7 +1465,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 291046-0002
 %% text = This is the original Ham's restaurant, expanded into a regional chain in the late 80's -- but this one is no more.
 %This \& is  \& the \& original \& Ham   \& 's   \& restaurant \& ,     \& expanded \& into \& a   \& regional \& chain \& in  \& the \& late \& 80's \& --    \& but   \& this \& one  \& is  \& no  \& more \& .     \\
@@ -1511,7 +1498,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 063347-0003
 %% text = Excellent chefs are in the kitchen preparing memorable breakfasts.
 %Excellent \& chefs \& are \& in  \& the \& kitchen \& preparing \& memorable \& breakfasts \& .     \\
@@ -1529,7 +1516,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 351561-0004
 %% text = They say no, Warwick in New Jersey, Call New Jersey.
 %They \& say  \& no   \& ,     \& Warwick \& in  \& New   \& Jersey \& ,     \& Call \& New   \& Jersey \& .     \\
@@ -1550,7 +1537,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 007403-0006
 %% text = Please visit my website to learn more about my practice at www.veraakulov.com.
 %Please \& visit \& my   \& website \& to   \& learn \& more \& about \& my   \& practice \& at  \& www.veraakulov.com \& .     \\
@@ -1571,7 +1558,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 024132-0004
 %% text = Thanks Mark.
 %Thanks \& Mark  \& .     \\
@@ -1582,7 +1569,7 @@ But   \& service \& is  \& very \& poor \& .     \\
 %\end{dependency}
 %
 %\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},text only label,label style={above,color=red,font=\ttfamily}]
-%\begin{deptext}
+%\begin{deptext}[column sep=1in]
 %% sent_id = 295288-0006
 %% text = Now my cars gears and brakes have never run so well... ever its like driving a new car.
 %Now \& my   \& car  \& s    \& gears \& and   \& brakes \& have \& never \& run  \& so  \& well \& ...   \& ever \& it   \& s    \& like  \& driving \& a   \& new \& car  \& .     \\
