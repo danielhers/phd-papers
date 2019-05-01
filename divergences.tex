@@ -45,7 +45,7 @@
 \hyphenation{SemEval}
 \hyphenation{English}
 \hyphenation{PredPatt}
-\setlength{\belowcaptionskip}{-6pt}  % adjust this to fit page limit
+\setlength{\belowcaptionskip}{-9pt}  % adjust this to fit page limit
 
 
 \usetikzlibrary{shapes,shapes.misc}
@@ -1088,9 +1088,8 @@ While \textit{graduation} evokes a Scene
 just like \textit{Paris} is (Figure~\ref{fig:original_example_ud}).
 The Scene/non-Scene distinction (\S\ref{sec:s})
 would assist structural text simplification systems
-to paraphrase this to
-``John graduated. (Then,) John moved to Paris'',
-such that each sentence contains one Scene \cite{sulem2018samsa}.
+in paraphrasing this sentence to two sentences, each one
+containing one Scene \cite{sulem2018samsa}.
 
 Another example is machine translation---translating the same sentence into Hebrew,
 which does not have a word for \textit{graduation},
@@ -1134,8 +1133,8 @@ proposition structures ({\sc PropS}), abstracting away from some syntactic detai
 \section{Conclusion}\label{sec:conclusion}
 
 We evaluated the similarities and divergences in the content encoded by UD and UCCA. 
-After annotating the reviews section of the English Web Treebank with UCCA,
-  we used an automated methodology to evaluate how well the two schemes align,
+We annotated the reviews section of the English Web Treebank with UCCA,
+  and used an automated methodology to evaluate how well the two schemes align,
   abstracting away from differences of mere convention.
 We provided a detailed picture of the content differences between the schemes.
 Notably, we quantified the differences between the notions of syntactic and semantic heads
