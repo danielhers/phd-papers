@@ -285,7 +285,7 @@
       \draw[dashed,->] (graduation) to node [above] {\scriptsize A} (John);
     \end{tikzpicture}
     }
-\caption{Example UCCA graph. Dashed: a remote edge.\label{fig:example_ucca}}
+\caption{UCCA graph. Dashed: remote edge.\label{fig:example_ucca}}
 \end{figure}
 
 
@@ -327,7 +327,7 @@ UD relations will be written in \texttt{typewriter} font.
         \deproot[edge unit distance=1.5ex]{5}{root}
         \depedge[edge unit distance=1.5ex]{5}{7}{obl}
     \end{dependency}
-\caption{Example UD tree.\label{fig:original_example_ud}}
+\caption{UD tree.\label{fig:original_example_ud}}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -415,7 +415,7 @@ to the converter, which abstract away from further non-content differences.
       \draw (ROOT) to node {head} (moved);
   \end{tikzpicture}}
 \caption{Converted UD tree.
-Intermediate non-terminals and \textit{head} edges are introduced by the unified DAG converter.\label{fig:converted_example_ud}}
+Non-terminals and \textit{head} edges are introduced by the unified DAG converter.\label{fig:converted_example_ud}}
 \end{figure}
 
 
@@ -498,8 +498,9 @@ this section.}
 
 
 \begin{table*}[t]
-\scalebox{.78}{
-\setlength\tabcolsep{4.25pt}
+\centering
+\scalebox{.68}{
+\setlength\tabcolsep{6.7pt}
 \def\arraystretch{.815}
 \begin{tabular}{lRRRRRRRRRRRRRRRR|R}
  &&&&&&&&&&&&&&&&& \multicolumn{1}{|c}{\sc No} \\
@@ -591,8 +592,8 @@ and only 72.9\% of the Participants are syntactic arguments---a difference stemm
 the Scene/non-Scene (\S\ref{sec:s}) and argument/adjunct (\S\ref{sec:arguments}) distinctions.
 Moreover, if we identify predicates as words having at least one argument
 and Scenes as units with at least one Participant,
-then only 92.1\% of UD's predicates correspond to Scenes (many of which are secondary relations within one scene; see \S\ref{sec:analysis}),
-and only 80\% of the Scenes correspond to predicates (e.g., due to eventive nouns,
+then only 92.1\% of UD's predicates correspond to Scenes (many are secondary relations within one scene),
+and only 80\% of Scenes correspond to predicates (e.g., eventive nouns,
 which are not syntactic predicates).
 
 Examining the {\it head} row in Table~\ref{tab:confusion_matrix} allows
@@ -794,7 +795,7 @@ UCCA, allowing non-terminal nodes, disambiguates this case (Figure~\ref{fig:conj
     }
     \caption{UCCA\label{fig:conj_ucca}}
  \end{subfigure}
- \caption{Example for coordination in UD and UCCA.\label{fig:conj}}
+ \caption{Coordination in UD and UCCA.\label{fig:conj}}
 \end{figure}
 
 
@@ -882,7 +883,7 @@ While \textit{moment} is an oblique argument of \textit{know} in UD,
     }
   \end{minipage}
  \end{subfigure}
- \caption{Example for clause linkage in UD and UCCA.\label{fig:linkage}}
+ \caption{Clause linkage in UD and UCCA.\label{fig:linkage}}
 \end{figure}
     
 
