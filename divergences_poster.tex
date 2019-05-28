@@ -7,6 +7,7 @@
 \usepackage[svgnames,table]{xcolor}
 \usepackage[none]{hyphenat}
 \usepackage{graphicx}
+\usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage[font=small,labelfont=bf]{caption}
 \usepackage{amsfonts, amsmath, amsthm, amssymb}
@@ -27,7 +28,13 @@
 \captionsetup{labelformat=empty}
 \graphicspath{{figures/}}
 \renewcommand{\chapter}[2]{}
-\setlength{\columnseprule}{0.4pt}
+\DeclareMathOperator*{\wine}{\textbf{wine}}
+\DeclareMathOperator*{\service}{\textbf{service}}
+\DeclareMathOperator*{\here}{\textbf{here}}
+\DeclareMathOperator*{\again}{\textbf{again}}
+\DeclareMathOperator*{\food}{\textbf{food}}
+\DeclareMathOperator*{\out}{\textbf{out}}
+\DeclareMathOperator*{\moment}{\textbf{moment}}
 
 % for confusion matrix
 \newcommand{\ApplyGradient}[1]{%
@@ -39,6 +46,10 @@
 \newcolumntype{R}{>{\collectcell\ApplyGradient}{c}<{\endcollectcell}}
 
 \begin{document}
+
+\setlength{\columnseprule}{0.4pt}
+\setlength{\abovedisplayskip}{3pt}
+\setlength{\belowdisplayskip}{3pt}
 
 \begin{strip}
   \begin{center}
@@ -181,14 +192,14 @@ cross-lingual semantic representation.
 \end{minipage}
 \hspace{-.6in}
 
-\section*{Shared Corpus}
+\section*{Shared Corpus\hfill\normalsize\url{https://github.com/UniversalConceptualCognitiveAnnotation/UCCA_English-EWT}}
 
 \begin{minipage}{.5\columnwidth}
 English Web Treebank (EWT) reviews section.
 
 \begin{center}
 \setlength{\tabcolsep}{20pt}
-\renewcommand{\arraystretch}{.8}
+\renewcommand{\arraystretch}{.7}
 \scalebox{.55}{
 \begin{tabular}{lRRRRRRRRRRRRRRRR|R}
  &&&&&&&&&&&&&&&&& \multicolumn{1}{|c}{\textsc{No}} \\
@@ -258,6 +269,7 @@ UCCA parsing results with TUPA \cite{hershcovich2017a}:
 
 \begin{center}
 \setlength{\tabcolsep}{.5in}
+\renewcommand{\arraystretch}{.8}
 \begin{tabular}{@{}llll|lll@{}}
 & \multicolumn{3}{c|}{\textbf{Primary}} & \multicolumn{3}{c}{\textbf{Remote}} \\
 \multicolumn{1}{l}{\textbf{Features}}
@@ -283,19 +295,39 @@ UCCA parsing results with TUPA \cite{hershcovich2017a}:
 \end{center}
 \end{minipage}
 
+\hrule
 
+\section*{Comparison\hfill\HUGE\texttt{bit.ly/{\color{blue}ucca}{\color{red}ud}}}
 
-\section*{Comparison}
+\vspace{-.9in}
 
 \begin{minipage}{.5\columnwidth}
-Scenes/Non-Scenes
+\textbf{\color{orange}Scenes/Non-Scenes
+}\[
+\wine_\text{\color{blue}A}^{\texttt{\color{red}nsubj}}\text{ was excellent, but }
+\service_\text{\color{blue}P}^{\texttt{\color{red}nsubj}}\text{ is very poor}
+\]
 
-Primary/Secondary Relations
+\textbf{\color{purple}Primary/Secondary Relations
+}\[
+\text{I will never come }
+\here_\text{\color{blue}A}^{\texttt{\color{red}advmod}}
+\again_\text{\color{blue}D}^{\texttt{\color{red}advmod}}
+\]
 \end{minipage}
 \begin{minipage}{.5\columnwidth}
-Multi-Word Expressions
+\textbf{\color{olive}Multi-Word Expressions
+}\[
+\text{my }\food_\text{\color{blue}A}^{\texttt{\color{red}compound}}
+\text{ cravings caused me to be }
+{\color{blue}\underbrace{\strut\color{black}\text{stressed }\out^{\texttt{\color{red}compound}}}}
+\]
 
-Linkage
+\textbf{\color{teal}Linkage}
+\[
+{\color{blue}\underbrace{\strut\color{black}\text{from the }\moment^{\texttt{\color{red}obl}}}_\text{\strut\color{blue}L}}
+\text{ you enter, you know}
+\]
 \end{minipage}
 
 %\vspace{-3.5in}\hspace{.5in}
@@ -3990,18 +4022,14 @@ Linkage
 
 
 
-\begin{center}
-\LARGE\texttt{bit.ly/{\color{blue}ucca}{\color{red}ud}}
-\end{center}
-
-\begin{minipage}{.4\columnwidth}
+\begin{minipage}{.42\columnwidth}
 \color{DarkSlateGray}
 \tiny
 \setlength\bibitemsep{0pt}
 \bibliographystyle{plain}
 \bibliography{references}
 \end{minipage}
-\hspace{1in}
+\hspace{.3in}
 \begin{minipage}{.475\columnwidth}
 \color{Black}
 \begin{adjustbox}{margin=3mm,padding=9mm,frame,minipage=1.15\columnwidth}
