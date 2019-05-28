@@ -64,11 +64,10 @@
     \titlespacing*{\section}{0pt}{8mm}{.5in}
     \begin{adjustbox}{margin=.5in,frame,minipage=\textwidth,center}
       \centering\huge
-      Does grammatical annotation capture semantics? \hfill
-      Shared corpus and comparison of \\
-      \HUGE
-      \textbf{\color{red} Universal Dependencies (UD)} \hfill and \hfill
-      \textbf{\color{blue} Universal Conceptual Cognitive Annotation (UCCA)}
+      How semantic are \textbf{\HUGE \color{red} Universal Dependencies (UD)}?
+      \hfill We present a shared corpus and \\
+      \hfill comparison with
+      \textbf{\HUGE \color{blue} Universal Conceptual Cognitive Annotation (UCCA)}
     \end{adjustbox}
   \end{minipage}
   \hfill
@@ -82,65 +81,87 @@
 
 %----------------------------------------------------------------------------------------
 
-\begin{minipage}{.4\columnwidth}
-\textbf{UD} (Universal Dependencies):
+\textbf{\color{red} UD}:
 cross-linguistically consistent grammatical dependency annotation \cite{nivre2016universal}.
 
-    \begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},
-        text only label, label style={above, color=red, font=\ttfamily}]
-   \begin{deptext}[column sep=1em]
-    We \& were \& made \& to \& feel \& very \& welcome \& . \\
-    \end{deptext}
-        \depedge[edge start x offset=1pt]{3}{1}{nsubj:pass}
-        \depedge[edge below,dashed,red,edge unit distance=.65ex,edge end x offset=4pt]{5}{1}{\color{red}nsubj:xsubj}
-        \depedge[edge below,dashed,red,edge unit distance=.9ex,edge end x offset=-3pt]{7}{1}{\color{red}nsubj:xsubj}
-        \depedge[edge start x offset=-3pt]{3}{2}{aux:pass}
-        \deproot[edge unit distance=3.4ex]{3}{root}
-        \depedge{5}{4}{mark}
-        \depedge[edge start x offset=3pt]{3}{5}{xcomp}
-        \depedge{7}{6}{advmod}
-        \depedge{5}{7}{xcomp}
-        \depedge[edge unit distance=2ex,edge start x offset=-1pt]{3}{8}{punct}
-    \end{dependency}
-\end{minipage}
-\hfill
-\begin{minipage}{.4\columnwidth}
-\textbf{UCCA} (Universal Conceptual Cognitive Annotation):
+\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=5pt},
+text only label, label style={above, color=red, font=\Large\ttfamily}]
+\begin{deptext}[column sep=1em]
+% sent_id = reviews-086839-0003
+% text = We took our vehicle in for a repair to the air conditioning.
+We   \& took \& our  \& vehicle \& in  \& for \& a   \& repair \& to  \& the \& air  \& conditioning \& .     \\
+PRON \& VERB \& PRON \& NOUN    \& ADV \& ADP \& DET \& NOUN   \& ADP \& DET \& NOUN \& NOUN         \& PUNCT \\
+\end{deptext}
+\depedge[edge start x offset=-6]{2}{1}{nsubj}
+\deproot[edge unit distance=150]{2}{root}
+\depedge[edge start x offset=-10]{4}{3}{nmod:poss}
+\depedge[edge start x offset=20]{2}{4}{obj}
+\depedge[edge start x offset=15]{2}{5}{advmod}
+\depedge{8}{6}{case}
+\depedge{8}{7}{det}
+\depedge[edge start x offset=10,edge end x offset=10]{2}{8}{obl}
+\depedge{12}{9}{case}
+\depedge{12}{10}{det}
+\depedge{12}{11}{compound}
+\depedge[edge start x offset=20,edge end x offset=15]{8}{12}{nmod}
+\depedge[edge unit distance=50,edge start x offset=5]{2}{13}{punct}
+\end{dependency}
+
+\begin{minipage}{.83\columnwidth}
+\textbf{\color{blue} UCCA}:
 cross-lingual semantic representation.
 \textit{Primary edges} form a tree. \textit{Remotes} (dashed) allow reentrancy \cite{abend2013universal}.
 
   \begin{center}
-  \scalebox{.8}{
-    \begin{tikzpicture}[level distance=2.6in, sibling distance=5in, -{Latex[length=.5in]}, line width=2pt,
-        every node/.append style={font=\large\ttfamily},
+  \scalebox{.8}{\large
+    \begin{tikzpicture}[level distance=4in, sibling distance=11in, -{Latex[length=.5in]}, line width=5pt,
+        level 2/.style={sibling distance=10in},
+        level 3/.style={sibling distance=4in},
+        every node/.append style={font=\huge\ttfamily},
         every circle node/.append style={fill=blue},color=blue]
       \tikzstyle{word} = [font=\rmfamily,color=black]
-      \node (ROOT) [circle] {}
-        child {node (After) [word] {After} edge from parent node[above] {L}}
-        child {node (graduation) [circle] {}
+  \node (1_1) [circle] {}
+  {
+  child {node (1_2) [circle] {}
+    {
+    child {node (1_13) [word] {We}  edge from parent node[above]  {A}}
+    child {node (1_14) [word] {took}  edge from parent node[auto]  {P}}
+    child {node (1_15) [circle,style={sibling distance=1in}] {}
+      {
+      child {node (1_17) [circle] {}
         {
-          child {node [word] {graduation} edge from parent node[left] {P}}
-        } edge from parent node[right] {H} }
-        child {node [word] {,} edge from parent node[below] {U}}
-        child {node (moved) [circle] {}
-        {
-          child {node (John) [word] {John} edge from parent node[left] {A}}
-          child {node [word] {moved} edge from parent node[left] {P}}
-          child {node [circle] {}
-          {
-            child {node [word] {to} edge from parent node[left] {R}}
-            child {node [word] {Paris} edge from parent node[right] {C}}
-          } edge from parent node[above] {A} }
-        } edge from parent node[above] {H} }
-        ;
-      \draw[dashed,-{Latex[length=.5in]}] (graduation) to node [above] {A} (John);
+        child {node (1_19) [word] {our}  edge from parent node[left]  {A|S}}
+        } edge from parent node[left]  {E}}
+      child {node (1_18) [word] {vehicle}  edge from parent node[auto]  {C}}
+      } edge from parent node[below]  {A}}
+    child {node (1_16) [word] {in}  edge from parent node[auto]  {D}}
+    } edge from parent node[above]  {H}}
+  child {node (1_3) [word] {for}  edge from parent node[auto]  {L}}
+  child {node (1_4) [circle] {}
+    {
+    child {node (1_6) [circle] {}
+      {
+      child {node (1_11) [word] {a}  edge from parent node[auto]  {F}}
+      child {node (1_12) [word] {repair}  edge from parent node[auto]  {C}}
+      } edge from parent node[auto]  {P}}
+    child {node (1_7) [circle] {}
+      {
+      child {node (1_8) [word] {to}  edge from parent node[above]  {R}}
+      child {node (1_9) [word] {the\quad{\color{white}g}}  edge from parent node[left]  {F}}
+      child {node (1_10) [word] {air conditioning}  edge from parent node[left]  {C}}
+      child {node (1_20) [word] {.}  edge from parent node[auto]  {U}}
+      } edge from parent node[auto]  {A}}
+    } edge from parent node[auto]  {H}}
+  };
+  \draw[dashed,->] (1_17) to node [below] {A} (1_18);
     \end{tikzpicture}}
   \end{center}
 \end{minipage}
 \hfill
 \begin{minipage}{.13\columnwidth}\color{white}
+\renewcommand{\arraystretch}{1.5}
   \begin{adjustbox}{margin=.5in,frame,scale=.75,bgcolor=Navy}
-  \begin{tabular}{>{\ttfamily}c@{\hskip 1in\bfseries}l}
+  \begin{tabular}{>{\ttfamily\LARGE}c@{\hskip 1in\bfseries}l}
     A & Participant \\
     C & Center \\
     D & Adverbial \\
@@ -160,12 +181,14 @@ cross-lingual semantic representation.
 \end{minipage}
 \hspace{-.6in}
 
-\hrule
-\begin{minipage}{.5\columnwidth}
 \section*{Shared Corpus}
 
+\begin{minipage}{.5\columnwidth}
+English Web Treebank (EWT) reviews section.
+
 \begin{center}
-%\def\arraystretch{.9}
+\setlength{\tabcolsep}{20pt}
+\renewcommand{\arraystretch}{.8}
 \scalebox{.55}{
 \begin{tabular}{lRRRRRRRRRRRRRRRR|R}
  &&&&&&&&&&&&&&&&& \multicolumn{1}{|c}{\textsc{No}} \\
@@ -262,63 +285,74 @@ UCCA parsing results with TUPA \cite{hershcovich2017a}:
 
 
 
-\subsection*{Scenes/\\Non-Scenes}
+\section*{Comparison}
 
-\vspace{-3.5in}\hspace{.5in}
+\begin{minipage}{.5\columnwidth}
+Scenes/Non-Scenes
 
-\scalebox{.75}{
-\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},
-        text only label, label style={above, color=red, font=\ttfamily}]
-\begin{deptext}[column sep=1in]
-% sent_id = reviews-305187-0005
-% text = Wine was excellent.
-Wine \& was \& excellent \& , \&
-% sent_id = reviews-079007-0002
-% text = But service is very poor.
-but   \& service \& is  \& very \& poor \& .     \\
-\end{deptext}
-\depedge[edge start x offset=-.5in]{3}{1}{nsubj}
-\depedge[edge start x offset=-.7in]{3}{2}{cop}
-\deproot{3}{root}
-\depedge[edge start x offset=1.1in]{3}{4}{punct}
-\depedge[edge start x offset=-.3in]{9}{5}{cc}
-\depedge[edge start x offset=-.5in]{9}{6}{nsubj}
-\depedge[edge start x offset=-.7in]{9}{7}{cop}
-\depedge[edge start x offset=-.9in]{9}{8}{advmod}
-\depedge[edge start x offset=.9in]{3}{9}{conj}
-\depedge[edge start x offset=.7in]{3}{10}{punct}
-\end{dependency}
-\begin{tikzpicture}[->, -{Latex[length=.5in]},level distance=3in,
-  level 1/.style={sibling distance=8in},
-  level 2/.style={sibling distance=4in},
-  level 3/.style={sibling distance=4in},
-  every node/.append style={font=\large\ttfamily},
-  every circle node/.append style={fill=blue},color=blue]
-  \tikzstyle{word} = [font=\rmfamily,color=black]
-  \node (1_1) [circle] {}
-  {
-  child {node (1_2) [circle] {}
-    {
-    child {node (1_4) [word] {Wine}  edge from parent node[above]  {A}}
-    child {node (1_5) [word] {was}  edge from parent node[auto]  {F}}
-    child {node (1_6) [word] {excellent}  edge from parent node[right]  {S}}
-    child {node (1_7) [word] {,}  edge from parent node[auto]  {U}}
-    } edge from parent node[auto]  {H}}
-  child {node (1_2) [word] {But}  edge from parent node[auto]  {L}}
-  child {node (1_3) [circle] {}
-    {
-    child {node (1_6) [word] {service}  edge from parent node[auto]  {P}}
-    child {node (1_7) [word] {is}  edge from parent node[auto]  {F}}
-    child {node (1_8) [circle] {}
-      {
-      child {node (1_9) [word] {very}  edge from parent node[auto]  {E}}
-      child {node (1_10) [word] {poor}  edge from parent node[auto]  {C}}
-      child {node (1_11) [word] {.}  edge from parent node[auto]  {U}}
-      } edge from parent node[auto]  {D}}
-    } edge from parent node[auto]  {H}}
-  };
-\end{tikzpicture}
-}
+Primary/Secondary Relations
+\end{minipage}
+\begin{minipage}{.5\columnwidth}
+Multi-Word Expressions
+
+Linkage
+\end{minipage}
+
+%\vspace{-3.5in}\hspace{.5in}
+%
+%\scalebox{.75}{
+%\begin{dependency}[edge style={-{Latex[length=.5in]}, color=red, line width=2pt},
+%        text only label, label style={above, color=red, font=\ttfamily}]
+%\begin{deptext}[column sep=1in]
+%% sent_id = reviews-305187-0005
+%% text = Wine was excellent.
+%Wine \& was \& excellent \& , \&
+%% sent_id = reviews-079007-0002
+%% text = But service is very poor.
+%but   \& service \& is  \& very \& poor \& .     \\
+%\end{deptext}
+%\depedge[edge start x offset=-.5in]{3}{1}{nsubj}
+%\depedge[edge start x offset=-.7in]{3}{2}{cop}
+%\deproot{3}{root}
+%\depedge[edge start x offset=1.1in]{3}{4}{punct}
+%\depedge[edge start x offset=-.3in]{9}{5}{cc}
+%\depedge[edge start x offset=-.5in]{9}{6}{nsubj}
+%\depedge[edge start x offset=-.7in]{9}{7}{cop}
+%\depedge[edge start x offset=-.9in]{9}{8}{advmod}
+%\depedge[edge start x offset=.9in]{3}{9}{conj}
+%\depedge[edge start x offset=.7in]{3}{10}{punct}
+%\end{dependency}
+%\begin{tikzpicture}[->, -{Latex[length=.5in]},level distance=3in,
+%  level 1/.style={sibling distance=8in},
+%  level 2/.style={sibling distance=4in},
+%  level 3/.style={sibling distance=4in},
+%  every node/.append style={font=\large\ttfamily},
+%  every circle node/.append style={fill=blue},color=blue]
+%  \tikzstyle{word} = [font=\rmfamily,color=black]
+%  \node (1_1) [circle] {}
+%  {
+%  child {node (1_2) [circle] {}
+%    {
+%    child {node (1_4) [word] {Wine}  edge from parent node[above]  {A}}
+%    child {node (1_5) [word] {was}  edge from parent node[auto]  {F}}
+%    child {node (1_6) [word] {excellent}  edge from parent node[right]  {S}}
+%    child {node (1_7) [word] {,}  edge from parent node[auto]  {U}}
+%    } edge from parent node[auto]  {H}}
+%  child {node (1_2) [word] {But}  edge from parent node[auto]  {L}}
+%  child {node (1_3) [circle] {}
+%    {
+%    child {node (1_6) [word] {service}  edge from parent node[auto]  {P}}
+%    child {node (1_7) [word] {is}  edge from parent node[auto]  {F}}
+%    child {node (1_8) [circle] {}
+%      {
+%      child {node (1_9) [word] {very}  edge from parent node[auto]  {E}}
+%      child {node (1_10) [word] {poor}  edge from parent node[auto]  {C}}
+%      child {node (1_11) [word] {.}  edge from parent node[auto]  {U}}
+%      } edge from parent node[auto]  {D}}
+%    } edge from parent node[auto]  {H}}
+%  };
+%\end{tikzpicture}
+%}
 
 
 
@@ -3956,14 +3990,6 @@ but   \& service \& is  \& very \& poor \& .     \\
 
 
 
-\subsection*{Primary/Secondary Relations}
-
-\subsection*{Multi-Word Expressions}
-
-\subsection*{Linkage}
-
-
-
 \begin{center}
 \LARGE\texttt{bit.ly/{\color{blue}ucca}{\color{red}ud}}
 \end{center}
@@ -3978,11 +4004,13 @@ but   \& service \& is  \& very \& poor \& .     \\
 \hspace{1in}
 \begin{minipage}{.475\columnwidth}
 \color{Black}
-\begin{adjustbox}{margin=3mm,frame,minipage=1.15\columnwidth}
+\begin{adjustbox}{margin=3mm,padding=9mm,frame,minipage=1.15\columnwidth}
 \centering\Large
 Please participate in the CoNLL 2019 Shared Task: \\
 Cross-Framework Meaning Representation Parsing \\
+\quad SDP, EDS, AMR and UCCA \hfill
 \Large\texttt{{\color{violet}mrp}.{\color{red}nlpl}.{\color{blue}eu}}
+\hfill {\color{white}|}
 \end{adjustbox}
 \end{minipage}
 
